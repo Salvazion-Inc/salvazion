@@ -1,6 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import BottomNav from '@/components/BottomNav';
 import { Devotional, UserProfile } from '@/lib/types';
 import { loadProfile, calculateAge, getLifeStage } from '@/lib/store/profile';
 import { logAction, getPointsForAction } from '@/lib/scoring/engine';
@@ -69,24 +72,40 @@ export default function DevotionalPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#040404] text-[#D8E1D9] p-4 md:p-8">
-      <div className="max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-10 h-10 rounded-full border border-[#00F511]/40 flex items-center justify-center">
-            <span className="text-[#00F511] text-lg">🦁</span>
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-[#00F511]">
-              Devocional Personalizado
-            </h1>
-            <p className="text-sm text-[#B7F7AC]/70">Motor de IA Salvazion · v1</p>
+    <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
+      {/* Top bar with back */}
+      <header className="flex items-center justify-between px-4 pt-5 pb-2">
+        <Link
+          href="/hub/dashboard"
+          className="flex items-center gap-2 text-sm text-[#00F511] hover:opacity-80"
+        >
+          <span>←</span>
+          <span>Inicio</span>
+        </Link>
+        <div className="flex items-center gap-2">
+          <div className="w-9 h-9 rounded-full border border-[#00F511]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+            <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
           </div>
         </div>
+      </header>
+
+      <div className="flex-1 px-4 md:px-8 pb-28 overflow-y-auto">
+        <div className="max-w-2xl mx-auto">
+          {/* Header */}
+          <div className="flex items-center gap-3 mb-6 mt-2">
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight text-[#00F511]">
+                Devocional Personalizado
+              </h1>
+              <p className="text-sm text-[#B7F7AC]/70">Motor de IA Salvazion · v1</p>
+            </div>
+          </div>
 
         {/* León Verde nudge */}
         <div className="glass rounded-xl px-4 py-3 mb-6 flex items-start gap-3 border border-[#00F511]/20">
-          <span className="text-lg flex-shrink-0">🦁</span>
+          <div className="w-9 h-9 rounded-full border border-[#00F511]/40 flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
+            <Image src="/logo-icon.png" alt="León Verde" width={36} height={36} className="object-cover" />
+          </div>
           <p className="text-xs text-[#D8E1D9]/80 leading-relaxed">
             {getLionShortNudge('salvation')}
           </p>
@@ -257,7 +276,10 @@ export default function DevotionalPage() {
             <p className="text-sm mt-2">El motor elige según tus focos, madurez y situación familiar.</p>
           </div>
         )}
+        </div>
       </div>
+
+      <BottomNav variant="default" />
     </div>
   );
 }

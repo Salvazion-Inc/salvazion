@@ -1,0 +1,11 @@
+{
+  "book": "Apocalipsis",
+  "bookId": "rev",
+  "chapter": 5,
+  "verses": [
+    { "number": 5, "text": "Y uno de los ancianos me dijo: No llores. He aquí que el León de la tribu de Judá, la raíz de David, ha vencido para abrir el libro y desatar sus siete sellos." },
+    { "number": 6, "text": "Y miré, y vi que en medio del trono y de los cuatro seres vivientes, y en medio de los ancianos, estaba en pie un Cordero como inmolado..." },
+    { "number": 9, "text": "Y cantaban un nuevo cántico, diciendo: Digno eres de tomar el libro y de abrir sus sellos; porque tú fuiste inmolado, y con tu sangre nos has redimido para Dios, de todo linaje y lengua y pueblo y nación;" },
+    { "number": 12, "text": "que decían a gran voz: El Cordero que fue inmolado es digno de tomar el poder, las riquezas, la sabiduría, la fortaleza, la honra, la gloria y la alabanza." }
+  ]
+}

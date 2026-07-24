@@ -1,0 +1,16 @@
+{
+  "book": "Genesis",
+  "bookId": "gen",
+  "chapter": 1,
+  "verses": [
+    { "number": 1, "text": "In the beginning God created the heaven and the earth." },
+    { "number": 2, "text": "And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters." },
+    { "number": 3, "text": "And God said, Let there be light: and there was light." },
+    { "number": 4, "text": "And God saw the light, that it was good: and God divided the light from the darkness." },
+    { "number": 5, "text": "And God called the light Day, and the darkness he called Night. And the evening and the morning were the first day." },
+    { "number": 26, "text": "And God said, Let us make man in our image, after our likeness: and let them have dominion over the fish of the sea, and over the fowl of the air, and over the cattle, and over all the earth, and over every creeping thing that creepeth upon the earth." },
+    { "number": 27, "text": "So God created man in his own image, in the image of God created he him; male and female created he them." },
+    { "number": 28, "text": "And God blessed them, and God said unto them, Be fruitful, and multiply, and replenish the earth, and subdue it: and have dominion over the fish of the sea, and over the fowl of the air, and over every living thing that moveth upon the earth." },
+    { "number": 31, "text": "And God saw every thing that he had made, and, behold, it was very good. And the evening and the morning were the sixth day." }
+  ]
+}

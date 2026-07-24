@@ -1,0 +1,16 @@
+{
+  "book": "Génesis",
+  "bookId": "gen",
+  "chapter": 1,
+  "verses": [
+    { "number": 1, "text": "En el principio creó Dios los cielos y la tierra." },
+    { "number": 2, "text": "Y la tierra estaba desordenada y vacía, y las tinieblas estaban sobre la faz del abismo, y el Espíritu de Dios se movía sobre la faz de las aguas." },
+    { "number": 3, "text": "Y dijo Dios: Sea la luz; y fue la luz." },
+    { "number": 4, "text": "Y vio Dios que la luz era buena; y separó Dios la luz de las tinieblas." },
+    { "number": 5, "text": "Y llamó Dios a la luz Día, y a las tinieblas llamó Noche. Y fue la tarde y la mañana un día." },
+    { "number": 26, "text": "Entonces dijo Dios: Hagamos al hombre a nuestra imagen, conforme a nuestra semejanza; y señoree en los peces del mar, en las aves de los cielos, en las bestias, en toda la tierra, y en todo animal que se arrastra sobre la tierra." },
+    { "number": 27, "text": "Y creó Dios al hombre a su imagen, a imagen de Dios lo creó; varón y hembra los creó." },
+    { "number": 28, "text": "Y los bendijo Dios, y les dijo: Fructificad y multiplicaos; llenad la tierra, y sojuzgadla, y señoread en los peces del mar, en las aves de los cielos, y en todas las bestias que se mueven sobre la tierra." },
+    { "number": 31, "text": "Y vio Dios todo lo que había hecho, y he aquí que era bueno en gran manera. Y fue la tarde y la mañana el día sexto." }
+  ]
+}

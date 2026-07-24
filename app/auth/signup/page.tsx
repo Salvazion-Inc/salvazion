@@ -59,7 +59,9 @@ export default function SignupPage() {
     return (
       <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col items-center justify-center px-5">
         <div className="w-full max-w-sm text-center glass rounded-2xl p-8">
-          <div className="text-4xl mb-4">🦁</div>
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[#00F511]/40 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+            <Image src="/logo-icon.png" alt="Salvazion" width={64} height={64} className="object-cover" />
+          </div>
           <h1 className="text-xl font-bold text-[#00F511] mb-2">Revisa tu correo</h1>
           <p className="text-sm text-[#B7F7AC]/80 leading-relaxed">
             Te enviamos un enlace de confirmación. Actívalo y vuelve aquí para entrar a la Phalanx.

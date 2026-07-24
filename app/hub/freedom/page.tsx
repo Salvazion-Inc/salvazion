@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import BottomNav from '@/components/BottomNav';
 import { loadProfile, getLifeStageLabel } from '@/lib/store/profile';
 import { UserProfile } from '@/lib/types';
 import { computeScores, logAction } from '@/lib/scoring/engine';
@@ -96,10 +98,10 @@ export default function FreedomPage() {
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
       <header className="px-5 pt-6 pb-3 border-b border-[#00B10C]/20">
         <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <Link href="/hub/dashboard" className="text-[#B7F7AC]/60 text-sm">←</Link>
-            <div className="w-8 h-8 rounded-full border border-[#00F511]/40 flex items-center justify-center">
-              <span className="text-sm">🦁</span>
+            <div className="w-9 h-9 rounded-full border border-[#00F511]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+              <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
             </div>
             <div>
               <h1 className="text-lg font-bold text-[#00F511]">Freedom</h1>
@@ -132,7 +134,9 @@ export default function FreedomPage() {
 
       <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto">
         <div className="glass rounded-xl px-4 py-3 mb-5 flex items-start gap-3 border border-[#00F511]/20">
-          <span className="text-lg">🦁</span>
+          <div className="w-9 h-9 rounded-full border border-[#00F511]/40 flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
+            <Image src="/logo-icon.png" alt="León Verde" width={36} height={36} className="object-cover" />
+          </div>
           <p className="text-xs text-[#D8E1D9]/80 leading-relaxed">
             {coach?.pillarFocus === 'freedom' && coach.body ? coach.body : getLionShortNudge('freedom', stage)}
           </p>
@@ -259,15 +263,7 @@ export default function FreedomPage() {
         <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-[#00F511] text-[#040404] text-sm font-semibold">{toast}</div>
       )}
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-[#040404]/95 border-t border-[#00B10C]/25 px-4 py-3">
-        <div className="flex justify-between max-w-md mx-auto">
-          <Link href="/hub/dashboard" className="flex flex-col items-center gap-0.5"><span className="text-xl opacity-50">🏠</span><span className="text-[10px] text-[#B7F7AC]/50">Home</span></Link>
-          <Link href="/hub/health" className="flex flex-col items-center gap-0.5"><span className="text-xl opacity-50">⚡</span><span className="text-[10px] text-[#B7F7AC]/50">Health</span></Link>
-          <Link href="/hub/freedom" className="flex flex-col items-center gap-0.5"><span className="text-xl">📚</span><span className="text-[10px] text-[#00F511]">Freedom</span></Link>
-          <Link href="/hub/calendar" className="flex flex-col items-center gap-0.5"><span className="text-xl opacity-50">📅</span><span className="text-[10px] text-[#B7F7AC]/50">Agenda</span></Link>
-          <Link href="/hub/badges" className="flex flex-col items-center gap-0.5"><span className="text-xl opacity-50">🏅</span><span className="text-[10px] text-[#B7F7AC]/50">Insignias</span></Link>
-        </div>
-      </nav>
+      <BottomNav variant="freedom" />
     </div>
   );
 }

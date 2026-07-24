@@ -38,6 +38,8 @@ function fromDb(row: any): Partial<UserProfile> {
     birthDate: row.birth_date ?? '',
     hasAcceptedLionCoach: row.has_accepted_lion_coach ?? false,
     onboardingCompleted: row.onboarding_completed ?? false,
+    // familyLinks / friendsLinks live primarily in localStorage for now
+    // (schema does not yet persist the social graph). Callers must merge.
     familyLinks: [],
     friendsLinks: [],
   };
@@ -95,8 +97,10 @@ function loadLocal(): Partial<UserProfile> {
 /**
  * Load profile (async).
  * Source of truth: Supabase when authenticated. Local cache as fallback / offline.
+ * familyLinks & friendsLinks are merged from localStorage (not yet in DB schema).
  */
 export async function loadProfileAsync(): Promise<Partial<UserProfile>> {
+  const local = loadLocal();
   try {
     const supabase = createClient();
     const {
@@ -112,6 +116,9 @@ export async function loadProfileAsync(): Promise<Partial<UserProfile>> {
 
       if (!error && data) {
         const profile = fromDb(data);
+        // Preserve local social graph until we add a proper links table
+        profile.familyLinks = local.familyLinks ?? [];
+        profile.friendsLinks = local.friendsLinks ?? [];
         saveLocal(profile);
         return profile;
       }
@@ -119,7 +126,7 @@ export async function loadProfileAsync(): Promise<Partial<UserProfile>> {
   } catch (e) {
     console.warn('[Salvazion] Supabase profile load failed, using local', e);
   }
-  return loadLocal();
+  return local;
 }
 
 /** Sync load for existing components (reads local cache). Prefer loadProfileAsync when possible. */

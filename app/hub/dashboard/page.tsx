@@ -3,12 +3,14 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { loadProfile, loadProfileAsync, calculateAge, getLifeStage, getLifeStageLabel } from '@/lib/store/profile';
 import { UserProfile } from '@/lib/types';
 import { computeScores, logAction, ACTION_CATALOG, resetScores, getPointsForAction, syncScoresFromServer } from '@/lib/scoring/engine';
 import { ComputedScores } from '@/lib/scoring/types';
 import { generateCoachGuidance, CoachMessage } from '@/lib/coach/engine';
 import { evaluateBadges, getBadgeProgress, getEarnedBadgesDetailed, BadgeDef } from '@/lib/badges/engine';
+import BottomNav from '@/components/BottomNav';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -81,12 +83,12 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
       {/* Top bar */}
       <header className="flex items-center justify-between px-5 pt-6 pb-2">
-        <div className="flex items-center gap-2">
-          <div className="w-9 h-9 rounded-full border border-[#00F511]/40 flex items-center justify-center lion-glow">
-            <span className="text-lg">🦁</span>
+        <div className="flex items-center gap-2.5">
+          <div className="w-10 h-10 rounded-full border border-[#00F511]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+            <Image src="/logo-icon.png" alt="Salvazion" width={40} height={40} className="object-cover" />
           </div>
           <div>
-            <p className="text-xs text-[#B7F7AC]/60">Salvazion</p>
+            <p className="text-xs text-[#B7F7AC]/60 tracking-wide">Salvazion</p>
             <p className="text-sm font-medium leading-tight">
               {profile.name || 'Hermano'}
               {profile.birthDate && calculateAge(profile.birthDate) !== null && (
@@ -108,8 +110,8 @@ export default function DashboardPage() {
         {/* ===== LEÓN VERDE COACH ===== */}
         <div className={`w-full max-w-sm glass rounded-2xl p-4 mb-5 border ${toneStyles[coach.tone]}`}>
           <div className="flex items-start gap-3">
-            <div className="w-11 h-11 rounded-full border border-[#00F511]/50 flex items-center justify-center flex-shrink-0 lion-glow bg-[#00F511]/5">
-              <span className="text-xl">🦁</span>
+            <div className="w-11 h-11 rounded-full border border-[#00F511]/50 flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
+              <Image src="/logo-icon.png" alt="León Verde" width={44} height={44} className="object-cover" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-[10px] uppercase tracking-wider text-[#00F511] mb-0.5">
@@ -331,16 +333,7 @@ export default function DashboardPage() {
         )}
       </main>
 
-      {/* Bottom nav */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-[#040404]/95 border-t border-[#00B10C]/25 backdrop-blur-md px-6 py-3">
-        <div className="flex justify-between items-center max-w-md mx-auto">
-          <NavItem href="/hub/dashboard" label="Home" icon="🏠" active />
-          <NavItem href="/hub/bible" label="Bible" icon="📖" />
-          <NavItem href="/hub/health" label="Health" icon="⚡" />
-          <NavItem href="/hub/freedom" label="Freedom" icon="📚" />
-          <NavItem href="/hub/profile" label="Profile" icon="👤" />
-        </div>
-      </nav>
+      <BottomNav variant="default" />
     </div>
   );
 }
@@ -358,14 +351,5 @@ function ScoreCard({
         </p>
       )}
     </div>
-  );
-}
-
-function NavItem({ href, label, icon, active }: { href: string; label: string; icon: string; active?: boolean }) {
-  return (
-    <Link href={href} className="flex flex-col items-center gap-0.5">
-      <span className={`text-xl ${active ? 'opacity-100' : 'opacity-50'}`}>{icon}</span>
-      <span className={`text-[10px] ${active ? 'text-[#00F511]' : 'text-[#B7F7AC]/50'}`}>{label}</span>
-    </Link>
   );
 }

@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
+import BottomNav from '@/components/BottomNav';
 import {
   loadProfileAsync,
   saveProfile,
@@ -62,9 +64,9 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
       {/* Header */}
       <header className="flex items-center justify-between px-5 pt-6 pb-2">
-        <div className="flex items-center gap-2">
-          <div className="w-9 h-9 rounded-full border border-[#00F511]/40 flex items-center justify-center lion-glow">
-            <span className="text-lg">🦁</span>
+        <div className="flex items-center gap-2.5">
+          <div className="w-10 h-10 rounded-full border border-[#00F511]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+            <Image src="/logo-icon.png" alt="Salvazion" width={40} height={40} className="object-cover" />
           </div>
           <div>
             <p className="text-xs text-[#B7F7AC]/60">Salvazion</p>
@@ -79,8 +81,8 @@ export default function ProfilePage() {
       <main className="flex-1 px-5 pt-6 pb-28 max-w-md mx-auto w-full">
         {/* Avatar + name */}
         <div className="text-center mb-8">
-          <div className="w-20 h-20 mx-auto mb-4 rounded-full border-2 border-[#00F511]/50 flex items-center justify-center lion-glow bg-[#00F511]/5">
-            <span className="text-4xl">🦁</span>
+          <div className="w-20 h-20 mx-auto mb-4 rounded-full border-2 border-[#00F511]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+            <Image src="/logo-icon.png" alt="Green Lion King" width={80} height={80} className="object-cover" />
           </div>
           <h1 className="text-2xl font-bold text-white">{profile.name || 'Hermano'}</h1>
           {age !== null && (
@@ -197,6 +199,49 @@ export default function ProfilePage() {
           )}
         </div>
 
+        {/* Phalanx / Familia */}
+        <div className="glass rounded-2xl p-5 mb-6">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-medium text-[#00F511]">Tu Phalanx Personal</h3>
+            <span className="text-[11px] text-[#B7F7AC]/50">
+              {(profile.familyLinks?.length || 0) + (profile.friendsLinks?.length || 0)} vínculos
+            </span>
+          </div>
+          {[...(profile.familyLinks || []), ...(profile.friendsLinks || [])].length === 0 ? (
+            <p className="text-xs text-[#B7F7AC]/50 leading-relaxed">
+              Aún no has invitado a nadie. Vuelve al onboarding o invita desde aquí pronto.
+              La familia es el núcleo de la civilización occidental cristiana.
+            </p>
+          ) : (
+            <div className="space-y-2">
+              {[...(profile.familyLinks || []), ...(profile.friendsLinks || [])].map((l) => (
+                <div
+                  key={l.id}
+                  className="flex items-center justify-between text-sm py-1.5 border-b border-[#00B10C]/15 last:border-0"
+                >
+                  <div>
+                    <span className="text-[#D8E1D9]">{l.name}</span>
+                    <span className="text-[11px] text-[#B7F7AC]/50 ml-2">
+                      {
+                        {
+                          spouse: 'Cónyuge',
+                          child: 'Hijo/a',
+                          family: 'Familia',
+                          friend: 'Amigo/a',
+                          faith_community: 'Comunidad de fe',
+                        }[l.relation]
+                      }
+                    </span>
+                  </div>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full border border-[#00F511]/30 text-[#B7F7AC]">
+                    {l.status === 'invited' ? 'Invitado' : l.status}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* Privacy note */}
         <div className="glass rounded-2xl p-4 mb-6 text-xs text-[#B7F7AC]/70 leading-relaxed">
           <p className="font-medium text-[#00F511] mb-1">Privacidad y datos</p>
@@ -252,16 +297,7 @@ export default function ProfilePage() {
         </div>
       </main>
 
-      {/* Bottom nav */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-[#040404]/95 border-t border-[#00B10C]/25 backdrop-blur-md px-6 py-3">
-        <div className="flex justify-between items-center max-w-md mx-auto">
-          <NavItem href="/hub/dashboard" label="Home" icon="🏠" />
-          <NavItem href="/hub/bible" label="Bible" icon="📖" />
-          <NavItem href="/hub/health" label="Health" icon="⚡" />
-          <NavItem href="/hub/freedom" label="Freedom" icon="📚" />
-          <NavItem href="/hub/profile" label="Profile" icon="👤" active />
-        </div>
-      </nav>
+      <BottomNav variant="default" />
     </div>
   );
 }
@@ -272,26 +308,5 @@ function Row({ label, value }: { label: string; value: string }) {
       <span className="text-[#B7F7AC]/60 shrink-0">{label}</span>
       <span className="text-right text-[#D8E1D9] line-clamp-2">{value}</span>
     </div>
-  );
-}
-
-function NavItem({
-  href,
-  label,
-  icon,
-  active,
-}: {
-  href: string;
-  label: string;
-  icon: string;
-  active?: boolean;
-}) {
-  return (
-    <Link href={href} className="flex flex-col items-center gap-0.5">
-      <span className={`text-xl ${active ? 'opacity-100' : 'opacity-50'}`}>{icon}</span>
-      <span className={`text-[10px] ${active ? 'text-[#00F511]' : 'text-[#B7F7AC]/50'}`}>
-        {label}
-      </span>
-    </Link>
   );
 }

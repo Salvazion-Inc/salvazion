@@ -1,0 +1,12 @@
+{
+  "book": "Romanos",
+  "bookId": "rom",
+  "chapter": 12,
+  "verses": [
+    { "number": 1, "text": "Así que, hermanos, os ruego por las misericordias de Dios, que presentéis vuestros cuerpos en sacrificio vivo, santo, agradable a Dios, que es vuestro culto racional." },
+    { "number": 2, "text": "No os conforméis a este siglo, sino transformaos por medio de la renovación de vuestro entendimiento, para que comprobéis cuál sea la buena voluntad de Dios, agradable y perfecta." },
+    { "number": 9, "text": "El amor sea sin fingimiento. Aborreced lo malo, seguid lo bueno." },
+    { "number": 12, "text": "Gozosos en la esperanza; sufridos en la tribulación; constantes en la oración." },
+    { "number": 21, "text": "No seas vencido de lo malo, sino vence con el bien el mal." }
+  ]
+}

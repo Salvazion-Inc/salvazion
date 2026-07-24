@@ -2,7 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getBooks, getChapter, getAvailableChapters, markChapterRead, isChapterRead } from '@/lib/bible/engine';
+import Image from 'next/image';
+import BottomNav from '@/components/BottomNav';
+import {
+  getBooks,
+  getChapter,
+  getAvailableChapters,
+  markChapterRead,
+  isChapterRead,
+  getReadCount,
+  getTotalChapters,
+} from '@/lib/bible/engine';
 import { BibleLanguage, BibleChapter } from '@/lib/bible/types';
 import { logAction, getPointsForAction } from '@/lib/scoring/engine';
 import { loadProfile, calculateAge, getLifeStage } from '@/lib/store/profile';
@@ -14,16 +24,33 @@ export default function BiblePage() {
   const [selectedBook, setSelectedBook] = useState('gen');
   const [selectedChapter, setSelectedChapter] = useState(1);
   const [chapter, setChapter] = useState<BibleChapter | null>(null);
+  const [loadingChapter, setLoadingChapter] = useState(false);
   const [read, setRead] = useState(false);
   const [justLogged, setJustLogged] = useState(false);
+  const [readCount, setReadCount] = useState(0);
 
   const availableChapters = getAvailableChapters(selectedBook, language);
+  const totalChapters = getTotalChapters();
 
   useEffect(() => {
-    const ch = getChapter(selectedBook, selectedChapter, language);
-    setChapter(ch);
-    setRead(isChapterRead(selectedBook, selectedChapter));
-    setJustLogged(false);
+    let cancelled = false;
+    setLoadingChapter(true);
+    setChapter(null);
+
+    (async () => {
+      const ch = await getChapter(selectedBook, selectedChapter, language);
+      if (!cancelled) {
+        setChapter(ch);
+        setRead(isChapterRead(selectedBook, selectedChapter));
+        setJustLogged(false);
+        setReadCount(getReadCount());
+        setLoadingChapter(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [selectedBook, selectedChapter, language]);
 
   const handleMarkRead = () => {
@@ -32,6 +59,7 @@ export default function BiblePage() {
     logAction('bible_chapter');
     setRead(true);
     setJustLogged(true);
+    setReadCount(getReadCount());
   };
 
   const bookMeta = books.find(b => b.id === selectedBook);
@@ -41,12 +69,17 @@ export default function BiblePage() {
       {/* Header */}
       <header className="px-5 pt-6 pb-3 border-b border-[#00B10C]/20">
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <Link href="/hub/dashboard" className="text-[#B7F7AC]/60 text-sm">←</Link>
-            <div className="w-8 h-8 rounded-full border border-[#00F511]/40 flex items-center justify-center">
-              <span className="text-sm">🦁</span>
+            <div className="w-9 h-9 rounded-full border border-[#00F511]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+              <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
             </div>
-            <h1 className="text-lg font-bold text-[#00F511]">Biblia</h1>
+            <div>
+              <h1 className="text-lg font-bold text-[#00F511] leading-tight">Biblia</h1>
+              <p className="text-[10px] text-[#B7F7AC]/50">
+                {readCount} / {totalChapters} capítulos · 66 libros
+              </p>
+            </div>
           </div>
         </div>
 
@@ -82,11 +115,24 @@ export default function BiblePage() {
             }}
             className="flex-1 bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm"
           >
-            {books.map(b => (
-              <option key={b.id} value={b.id}>
-                {language === 'en' ? b.name : b.nameEs}
-              </option>
-            ))}
+            <optgroup label={language === 'en' ? 'Old Testament' : 'Antiguo Testamento'}>
+              {books
+                .filter(b => b.testament === 'OT')
+                .map(b => (
+                  <option key={b.id} value={b.id}>
+                    {language === 'en' ? b.name : b.nameEs}
+                  </option>
+                ))}
+            </optgroup>
+            <optgroup label={language === 'en' ? 'New Testament' : 'Nuevo Testamento'}>
+              {books
+                .filter(b => b.testament === 'NT')
+                .map(b => (
+                  <option key={b.id} value={b.id}>
+                    {language === 'en' ? b.name : b.nameEs}
+                  </option>
+                ))}
+            </optgroup>
           </select>
 
           <select
@@ -107,8 +153,10 @@ export default function BiblePage() {
 
       {/* Lion nudge */}
       <div className="px-5 py-3">
-        <div className="glass rounded-xl px-4 py-2.5 flex items-start gap-2 border border-[#00F511]/15">
-          <span className="text-sm">🦁</span>
+        <div className="glass rounded-xl px-4 py-2.5 flex items-start gap-2.5 border border-[#00F511]/15">
+          <div className="w-8 h-8 rounded-full border border-[#00F511]/40 flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
+            <Image src="/logo-icon.png" alt="León Verde" width={32} height={32} className="object-cover" />
+          </div>
           <p className="text-xs text-[#D8E1D9]/75 leading-relaxed">
             {getLionShortNudge('salvation')}
           </p>
@@ -117,7 +165,12 @@ export default function BiblePage() {
 
       {/* Content */}
       <main className="flex-1 px-5 pb-32 overflow-y-auto">
-        {chapter ? (
+        {loadingChapter ? (
+          <div className="flex flex-col items-center justify-center py-20 text-[#B7F7AC]/60">
+            <div className="w-8 h-8 border-2 border-[#00F511]/40 border-t-[#00F511] rounded-full animate-spin mb-4" />
+            <p className="text-sm">Cargando capítulo…</p>
+          </div>
+        ) : chapter ? (
           <div className="max-w-lg mx-auto">
             <div className="mb-4">
               <h2 className="text-xl font-bold text-white">
@@ -167,36 +220,12 @@ export default function BiblePage() {
           </div>
         ) : (
           <div className="text-center py-16 text-[#B7F7AC]/40">
-            <p>Este capítulo aún no está en la muestra local.</p>
-            <p className="text-sm mt-2">
-              En producción se cargará el texto completo desde fuentes confiables.
-            </p>
-            <p className="text-xs mt-4 text-[#B7F7AC]/30">
-              Capítulos disponibles en demo: Génesis 1, Salmos 23, Juan 1, Romanos 12, Apocalipsis 5
-            </p>
+            <p>No se pudo cargar el capítulo.</p>
           </div>
         )}
       </main>
 
-      {/* Bottom nav */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-[#040404]/95 border-t border-[#00B10C]/25 backdrop-blur-md px-6 py-3">
-        <div className="flex justify-between items-center max-w-md mx-auto">
-          <NavItem href="/hub/dashboard" label="Home" icon="🏠" />
-          <NavItem href="/hub/bible" label="Bible" icon="📖" active />
-          <NavItem href="/hub/devotional" label="Devocional" icon="✝️" />
-          <NavItem href="/hub/health" label="Health" icon="⚡" />
-          <NavItem href="/hub/profile" label="Profile" icon="👤" />
-        </div>
-      </nav>
+      <BottomNav variant="default" />
     </div>
-  );
-}
-
-function NavItem({ href, label, icon, active }: { href: string; label: string; icon: string; active?: boolean }) {
-  return (
-    <Link href={href} className="flex flex-col items-center gap-0.5">
-      <span className={`text-xl ${active ? 'opacity-100' : 'opacity-50'}`}>{icon}</span>
-      <span className={`text-[10px] ${active ? 'text-[#00F511]' : 'text-[#B7F7AC]/50'}`}>{label}</span>
-    </Link>
   );
 }

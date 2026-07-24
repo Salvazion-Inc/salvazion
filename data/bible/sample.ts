@@ -1,24 +1,91 @@
 import { BibleChapter, BibleBook } from '@/lib/bible/types';
 
 /**
- * Muestra curada de textos bíblicos confiables para el MVP.
- * 
+ * Biblia completa — catálogo canónico protestante (66 libros).
+ *
+ * Estructura lista para dataset offline completo.
+ * Textos de muestra (SAMPLE_CHAPTERS) = pasajes clave curados.
+ * El motor ya soporta los 1189 capítulos; cuando no hay sample
+ * muestra un placeholder respetuoso hasta integrar el JSON completo.
+ *
  * Fuentes de referencia (producción):
- * - Español: Reina Valera 1960 (uso extendido; verificar licencia regional)
+ * - Español: Reina Valera 1960 (verificar licencia regional)
  * - Inglés: King James Version (public domain)
  * - Original: Westminster Leningrad Codex (Hebreo) + SBLGNT (Griego) — open data
- * 
- * En producción se reemplaza este sample por datasets completos o API confiable.
+ *
+ * Canon: Antiguo Testamento 39 + Nuevo Testamento 27.
+ * Esta es la Biblia de la civilización occidental cristiana.
  */
 
 export const BIBLE_BOOKS: BibleBook[] = [
+  // —— Antiguo Testamento ——
   { id: 'gen', name: 'Genesis', nameEs: 'Génesis', testament: 'OT', chapters: 50 },
+  { id: 'exo', name: 'Exodus', nameEs: 'Éxodo', testament: 'OT', chapters: 40 },
+  { id: 'lev', name: 'Leviticus', nameEs: 'Levítico', testament: 'OT', chapters: 27 },
+  { id: 'num', name: 'Numbers', nameEs: 'Números', testament: 'OT', chapters: 36 },
+  { id: 'deu', name: 'Deuteronomy', nameEs: 'Deuteronomio', testament: 'OT', chapters: 34 },
+  { id: 'jos', name: 'Joshua', nameEs: 'Josué', testament: 'OT', chapters: 24 },
+  { id: 'jdg', name: 'Judges', nameEs: 'Jueces', testament: 'OT', chapters: 21 },
+  { id: 'rut', name: 'Ruth', nameEs: 'Rut', testament: 'OT', chapters: 4 },
+  { id: '1sa', name: '1 Samuel', nameEs: '1 Samuel', testament: 'OT', chapters: 31 },
+  { id: '2sa', name: '2 Samuel', nameEs: '2 Samuel', testament: 'OT', chapters: 24 },
+  { id: '1ki', name: '1 Kings', nameEs: '1 Reyes', testament: 'OT', chapters: 22 },
+  { id: '2ki', name: '2 Kings', nameEs: '2 Reyes', testament: 'OT', chapters: 25 },
+  { id: '1ch', name: '1 Chronicles', nameEs: '1 Crónicas', testament: 'OT', chapters: 29 },
+  { id: '2ch', name: '2 Chronicles', nameEs: '2 Crónicas', testament: 'OT', chapters: 36 },
+  { id: 'ezr', name: 'Ezra', nameEs: 'Esdras', testament: 'OT', chapters: 10 },
+  { id: 'neh', name: 'Nehemiah', nameEs: 'Nehemías', testament: 'OT', chapters: 13 },
+  { id: 'est', name: 'Esther', nameEs: 'Ester', testament: 'OT', chapters: 10 },
+  { id: 'job', name: 'Job', nameEs: 'Job', testament: 'OT', chapters: 42 },
   { id: 'psa', name: 'Psalms', nameEs: 'Salmos', testament: 'OT', chapters: 150 },
   { id: 'pro', name: 'Proverbs', nameEs: 'Proverbios', testament: 'OT', chapters: 31 },
+  { id: 'ecc', name: 'Ecclesiastes', nameEs: 'Eclesiastés', testament: 'OT', chapters: 12 },
+  { id: 'sng', name: 'Song of Solomon', nameEs: 'Cantares', testament: 'OT', chapters: 8 },
   { id: 'isa', name: 'Isaiah', nameEs: 'Isaías', testament: 'OT', chapters: 66 },
+  { id: 'jer', name: 'Jeremiah', nameEs: 'Jeremías', testament: 'OT', chapters: 52 },
+  { id: 'lam', name: 'Lamentations', nameEs: 'Lamentaciones', testament: 'OT', chapters: 5 },
+  { id: 'ezk', name: 'Ezekiel', nameEs: 'Ezequiel', testament: 'OT', chapters: 48 },
+  { id: 'dan', name: 'Daniel', nameEs: 'Daniel', testament: 'OT', chapters: 12 },
+  { id: 'hos', name: 'Hosea', nameEs: 'Oseas', testament: 'OT', chapters: 14 },
+  { id: 'jol', name: 'Joel', nameEs: 'Joel', testament: 'OT', chapters: 3 },
+  { id: 'amo', name: 'Amos', nameEs: 'Amós', testament: 'OT', chapters: 9 },
+  { id: 'oba', name: 'Obadiah', nameEs: 'Abdías', testament: 'OT', chapters: 1 },
+  { id: 'jon', name: 'Jonah', nameEs: 'Jonás', testament: 'OT', chapters: 4 },
+  { id: 'mic', name: 'Micah', nameEs: 'Miqueas', testament: 'OT', chapters: 7 },
+  { id: 'nam', name: 'Nahum', nameEs: 'Nahúm', testament: 'OT', chapters: 3 },
+  { id: 'hab', name: 'Habakkuk', nameEs: 'Habacuc', testament: 'OT', chapters: 3 },
+  { id: 'zep', name: 'Zephaniah', nameEs: 'Sofonías', testament: 'OT', chapters: 3 },
+  { id: 'hag', name: 'Haggai', nameEs: 'Hageo', testament: 'OT', chapters: 2 },
+  { id: 'zec', name: 'Zechariah', nameEs: 'Zacarías', testament: 'OT', chapters: 14 },
+  { id: 'mal', name: 'Malachi', nameEs: 'Malaquías', testament: 'OT', chapters: 4 },
+
+  // —— Nuevo Testamento ——
   { id: 'mat', name: 'Matthew', nameEs: 'Mateo', testament: 'NT', chapters: 28 },
+  { id: 'mrk', name: 'Mark', nameEs: 'Marcos', testament: 'NT', chapters: 16 },
+  { id: 'luk', name: 'Luke', nameEs: 'Lucas', testament: 'NT', chapters: 24 },
   { id: 'jhn', name: 'John', nameEs: 'Juan', testament: 'NT', chapters: 21 },
+  { id: 'act', name: 'Acts', nameEs: 'Hechos', testament: 'NT', chapters: 28 },
   { id: 'rom', name: 'Romans', nameEs: 'Romanos', testament: 'NT', chapters: 16 },
+  { id: '1co', name: '1 Corinthians', nameEs: '1 Corintios', testament: 'NT', chapters: 16 },
+  { id: '2co', name: '2 Corinthians', nameEs: '2 Corintios', testament: 'NT', chapters: 13 },
+  { id: 'gal', name: 'Galatians', nameEs: 'Gálatas', testament: 'NT', chapters: 6 },
+  { id: 'eph', name: 'Ephesians', nameEs: 'Efesios', testament: 'NT', chapters: 6 },
+  { id: 'php', name: 'Philippians', nameEs: 'Filipenses', testament: 'NT', chapters: 4 },
+  { id: 'col', name: 'Colossians', nameEs: 'Colosenses', testament: 'NT', chapters: 4 },
+  { id: '1th', name: '1 Thessalonians', nameEs: '1 Tesalonicenses', testament: 'NT', chapters: 5 },
+  { id: '2th', name: '2 Thessalonians', nameEs: '2 Tesalonicenses', testament: 'NT', chapters: 3 },
+  { id: '1ti', name: '1 Timothy', nameEs: '1 Timoteo', testament: 'NT', chapters: 6 },
+  { id: '2ti', name: '2 Timothy', nameEs: '2 Timoteo', testament: 'NT', chapters: 4 },
+  { id: 'tit', name: 'Titus', nameEs: 'Tito', testament: 'NT', chapters: 3 },
+  { id: 'phm', name: 'Philemon', nameEs: 'Filemón', testament: 'NT', chapters: 1 },
+  { id: 'heb', name: 'Hebrews', nameEs: 'Hebreos', testament: 'NT', chapters: 13 },
+  { id: 'jas', name: 'James', nameEs: 'Santiago', testament: 'NT', chapters: 5 },
+  { id: '1pe', name: '1 Peter', nameEs: '1 Pedro', testament: 'NT', chapters: 5 },
+  { id: '2pe', name: '2 Peter', nameEs: '2 Pedro', testament: 'NT', chapters: 3 },
+  { id: '1jn', name: '1 John', nameEs: '1 Juan', testament: 'NT', chapters: 5 },
+  { id: '2jn', name: '2 John', nameEs: '2 Juan', testament: 'NT', chapters: 1 },
+  { id: '3jn', name: '3 John', nameEs: '3 Juan', testament: 'NT', chapters: 1 },
+  { id: 'jud', name: 'Jude', nameEs: 'Judas', testament: 'NT', chapters: 1 },
   { id: 'rev', name: 'Revelation', nameEs: 'Apocalipsis', testament: 'NT', chapters: 22 },
 ];
 

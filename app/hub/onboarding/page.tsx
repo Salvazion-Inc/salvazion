@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { UserProfile, LinkedProfile } from '@/lib/types';
 import { saveProfile, calculateAge, getLifeStage, getLifeStageLabel } from '@/lib/store/profile';
 
@@ -46,6 +47,12 @@ export default function OnboardingPage() {
     preferredBibleVersion: 'rv1960'
   });
 
+  // Invite modal state
+  const [inviteOpen, setInviteOpen] = useState(false);
+  const [inviteRelation, setInviteRelation] = useState<LinkedProfile['relation'] | null>(null);
+  const [inviteName, setInviteName] = useState('');
+  const [inviteCopied, setInviteCopied] = useState(false);
+
   const update = (fields: Partial<UserProfile>) => {
     setProfile(prev => ({ ...prev, ...fields }));
   };
@@ -56,6 +63,74 @@ export default function OnboardingPage() {
       update({ currentFocus: current.filter(t => t !== id) });
     } else {
       update({ currentFocus: [...current, id] });
+    }
+  };
+
+  const openInvite = (relation: LinkedProfile['relation']) => {
+    setInviteRelation(relation);
+    setInviteName('');
+    setInviteCopied(false);
+    setInviteOpen(true);
+  };
+
+  const closeInvite = () => {
+    setInviteOpen(false);
+    setInviteRelation(null);
+    setInviteName('');
+    setInviteCopied(false);
+  };
+
+  const addLinkedMember = () => {
+    if (!inviteRelation || !inviteName.trim()) return;
+    const newLink: LinkedProfile = {
+      id:
+        typeof crypto !== 'undefined' && crypto.randomUUID
+          ? crypto.randomUUID()
+          : `link_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
+      name: inviteName.trim(),
+      relation: inviteRelation,
+      status: 'invited',
+    };
+    const isFamily = ['spouse', 'child', 'family'].includes(inviteRelation);
+    if (isFamily) {
+      const current = profile.familyLinks || [];
+      update({ familyLinks: [...current, newLink] });
+    } else {
+      const current = profile.friendsLinks || [];
+      update({ friendsLinks: [...current, newLink] });
+    }
+    closeInvite();
+  };
+
+  const shareInvite = async () => {
+    const relationLabel =
+      RELATION_OPTIONS.find((r) => r.id === inviteRelation)?.label || 'tu círculo';
+    const text = `¡Únete a mi Phalanx en Salvazion!
+
+Estoy construyendo Salvation, Health y Freedom con el León Verde. Quiero que formes parte de mi círculo (${relationLabel}).
+
+Descarga / entra a la app y crecemos juntos en fe, familia y virtud.
+
+https://salvazion.com
+
+#Salvazion #Phalanx #GreenLionKings`;
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Únete a mi Phalanx — Salvazion',
+          text,
+        });
+      } else {
+        await navigator.clipboard.writeText(text);
+        setInviteCopied(true);
+        setTimeout(() => setInviteCopied(false), 2500);
+      }
+    } catch {
+      try {
+        await navigator.clipboard.writeText(text);
+        setInviteCopied(true);
+        setTimeout(() => setInviteCopied(false), 2500);
+      } catch {}
     }
   };
 
@@ -73,7 +148,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
+    <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col" style={{ colorScheme: 'dark' }}>
       {/* Progress */}
       <div className="px-6 pt-6 pb-2">
         <div className="flex gap-1.5">
@@ -94,8 +169,8 @@ export default function OnboardingPage() {
         {step === 1 && (
           <div className="space-y-6 max-w-md mx-auto">
             <div className="text-center pt-4">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[#00F511]/40 flex items-center justify-center lion-glow">
-                <span className="text-3xl">🦁</span>
+              <div className="w-20 h-20 mx-auto mb-4 rounded-full border border-[#00F511]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+                <Image src="/logo-icon.png" alt="Salvazion" width={80} height={80} className="object-cover" />
               </div>
               <h1 className="text-3xl font-bold text-[#00F511] tracking-tight">
                 Bienvenido a la Phalanx
@@ -113,7 +188,7 @@ export default function OnboardingPage() {
                   value={profile.name || ''}
                   onChange={e => update({ name: e.target.value })}
                   placeholder="Tu nombre completo"
-                  className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511]"
+                  className="w-full bg-[#040404] text-[#D8E1D9] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511] placeholder:text-[#B7F7AC]/40"
                 />
               </div>
 
@@ -124,7 +199,7 @@ export default function OnboardingPage() {
                   value={profile.birthDate || ''}
                   onChange={e => update({ birthDate: e.target.value })}
                   max={new Date().toISOString().slice(0, 10)}
-                  className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511] text-[#D8E1D9]"
+                  className="w-full bg-[#040404] text-[#D8E1D9] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511]"
                 />
                 <p className="text-[11px] text-[#B7F7AC]/40 mt-1">
                   Nos permite personalizar tu experiencia según tu etapa de vida.
@@ -138,7 +213,7 @@ export default function OnboardingPage() {
                   onChange={e => update({ purpose: e.target.value })}
                   placeholder="¿Para qué estás en este mundo? ¿Qué legado quieres dejar?"
                   rows={3}
-                  className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511] resize-none"
+                  className="w-full bg-[#040404] text-[#D8E1D9] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511] resize-none placeholder:text-[#B7F7AC]/40"
                 />
               </div>
 
@@ -150,7 +225,7 @@ export default function OnboardingPage() {
                     value={profile.city || ''}
                     onChange={e => update({ city: e.target.value })}
                     placeholder="Ciudad"
-                    className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511]"
+                    className="w-full bg-[#040404] text-[#D8E1D9] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511] placeholder:text-[#B7F7AC]/40"
                   />
                 </div>
                 <div>
@@ -160,7 +235,7 @@ export default function OnboardingPage() {
                     value={profile.country || ''}
                     onChange={e => update({ country: e.target.value })}
                     placeholder="País"
-                    className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511]"
+                    className="w-full bg-[#040404] text-[#D8E1D9] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511] placeholder:text-[#B7F7AC]/40"
                   />
                 </div>
               </div>
@@ -186,7 +261,7 @@ export default function OnboardingPage() {
               <select
                 value={profile.spiritualMaturity}
                 onChange={e => update({ spiritualMaturity: e.target.value as any })}
-                className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3.5"
+                className="w-full bg-[#040404] text-[#D8E1D9] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511]"
               >
                 <option value="new">Nuevo en la fe</option>
                 <option value="growing">Creciendo</option>
@@ -200,7 +275,7 @@ export default function OnboardingPage() {
               <select
                 value={profile.familyStatus}
                 onChange={e => update({ familyStatus: e.target.value as any })}
-                className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3.5"
+                className="w-full bg-[#040404] text-[#D8E1D9] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511]"
               >
                 <option value="single">Soltero/a</option>
                 <option value="married">Casado/a</option>
@@ -254,17 +329,40 @@ export default function OnboardingPage() {
             </div>
 
             <div className="space-y-3">
-              {RELATION_OPTIONS.map(rel => (
-                <div
-                  key={rel.id}
-                  className="flex items-center justify-between glass rounded-xl px-4 py-3.5"
-                >
-                  <span>{rel.label}</span>
-                  <button className="px-4 py-1.5 rounded-lg border border-[#00F511]/50 text-[#00F511] text-sm hover:bg-[#00F511]/10">
-                    Invitar
-                  </button>
-                </div>
-              ))}
+              {RELATION_OPTIONS.map((rel) => {
+                const links = [
+                  ...(profile.familyLinks || []),
+                  ...(profile.friendsLinks || []),
+                ].filter((l) => l.relation === rel.id);
+                return (
+                  <div
+                    key={rel.id}
+                    className="glass rounded-xl px-4 py-3.5 space-y-2"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span>{rel.label}</span>
+                      <button
+                        onClick={() => openInvite(rel.id)}
+                        className="px-4 py-1.5 rounded-lg border border-[#00F511]/50 text-[#00F511] text-sm hover:bg-[#00F511]/10"
+                      >
+                        Invitar
+                      </button>
+                    </div>
+                    {links.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {links.map((l) => (
+                          <span
+                            key={l.id}
+                            className="text-[11px] px-2 py-0.5 rounded-full bg-[#00F511]/10 border border-[#00F511]/30 text-[#B7F7AC]"
+                          >
+                            {l.name} · {l.status === 'invited' ? 'invitado' : l.status}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             <p className="text-xs text-[#B7F7AC]/40 text-center">
@@ -281,6 +379,58 @@ export default function OnboardingPage() {
               >
                 Continuar
               </button>
+            </div>
+          </div>
+        )}
+
+        {/* Invite Modal */}
+        {inviteOpen && (
+          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 p-4">
+            <div className="w-full max-w-md glass rounded-2xl p-5 border border-[#00F511]/30 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-[#00F511]">
+                  Invitar · {RELATION_OPTIONS.find((r) => r.id === inviteRelation)?.label}
+                </h3>
+                <button
+                  onClick={closeInvite}
+                  className="text-[#B7F7AC]/60 text-sm hover:text-[#00F511]"
+                >
+                  Cerrar
+                </button>
+              </div>
+
+              <div>
+                <label className="block text-sm text-[#B7F7AC] mb-1.5">Nombre de la persona</label>
+                <input
+                  type="text"
+                  value={inviteName}
+                  onChange={(e) => setInviteName(e.target.value)}
+                  placeholder="Ej: María, Juan, etc."
+                  autoFocus
+                  className="w-full bg-[#040404] text-[#D8E1D9] border border-[#00B10C]/40 rounded-xl px-4 py-3 focus:outline-none focus:border-[#00F511] placeholder:text-[#B7F7AC]/40"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={addLinkedMember}
+                  disabled={!inviteName.trim()}
+                  className="w-full py-3 rounded-xl bg-[#00F511] text-[#040404] font-semibold disabled:opacity-40"
+                >
+                  Agregar a mi Phalanx
+                </button>
+                <button
+                  onClick={shareInvite}
+                  className="w-full py-3 rounded-xl border border-[#00F511]/50 text-[#00F511] font-medium hover:bg-[#00F511]/10"
+                >
+                  {inviteCopied ? '✓ Mensaje copiado' : 'Compartir invitación'}
+                </button>
+              </div>
+
+              <p className="text-[11px] text-[#B7F7AC]/40 text-center leading-relaxed">
+                Por ahora los vínculos se guardan en este dispositivo. Pronto podrás
+                conectarlos de verdad dentro de la Phalanx.
+              </p>
             </div>
           </div>
         )}
@@ -344,7 +494,9 @@ export default function OnboardingPage() {
             <div className="relative mx-auto w-48 h-48 flex items-center justify-center">
               <div className="absolute inset-0 rounded-full border border-[#00F511]/20 animate-pulse" />
               <div className="absolute inset-4 rounded-full border border-[#00B10C]/30" />
-              <div className="text-8xl lion-glow">🦁</div>
+              <div className="w-36 h-36 rounded-full overflow-hidden lion-glow flex items-center justify-center bg-[#040404] border border-[#00F511]/40">
+                <Image src="/logo-icon.png" alt="León Verde" width={144} height={144} className="object-cover" />
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-left">

@@ -1,0 +1,14 @@
+{
+  "book": "Juan",
+  "bookId": "jhn",
+  "chapter": 1,
+  "verses": [
+    { "number": 1, "text": "En el principio era el Verbo, y el Verbo era con Dios, y el Verbo era Dios." },
+    { "number": 2, "text": "Este era en el principio con Dios." },
+    { "number": 3, "text": "Todas las cosas por él fueron hechas, y sin él nada de lo que ha sido hecho, fue hecho." },
+    { "number": 4, "text": "En él estaba la vida, y la vida era la luz de los hombres." },
+    { "number": 5, "text": "La luz en las tinieblas resplandece, y las tinieblas no prevalecieron contra ella." },
+    { "number": 12, "text": "Mas a todos los que le recibieron, a los que creen en su nombre, les dio potestad de ser hechos hijos de Dios;" },
+    { "number": 14, "text": "Y aquel Verbo fue hecho carne, y habitó entre nosotros (y vimos su gloria, gloria como del unigénito del Padre), lleno de gracia y de verdad." }
+  ]
+}

@@ -1,0 +1,67 @@
+export type SpiritualMaturity = 'new' | 'growing' | 'mature' | 'leader';
+export type FamilyStatus = 'single' | 'married' | 'parent' | 'widow' | 'family';
+export type Language = 'es' | 'en';
+export type BibleVersion = 'rv1960' | 'kjv' | 'original';
+
+export interface LinkedProfile {
+  id: string;
+  name: string;
+  relation: 'spouse' | 'child' | 'family' | 'friend' | 'faith_community';
+  status: 'pending' | 'connected' | 'invited';
+  avatarUrl?: string;
+}
+
+export interface UserProfile {
+  // Core
+  name: string;
+  language: Language;
+  spiritualMaturity: SpiritualMaturity;
+  familyStatus: FamilyStatus;
+  currentFocus: string[]; // 'fe' | 'familia' | 'proposito' | 'salud' | 'libertad' | 'oracion' | 'liderazgo' | 'perseverancia'
+  struggles?: string[];
+  preferredBibleVersion: BibleVersion;
+
+  // New for onboarding
+  purpose: string;           // Propósito de vida
+  city: string;
+  country: string;
+  birthDate: string;         // YYYY-MM-DD — para calcular edad y personalizar
+
+  // Social graph inside the app
+  familyLinks: LinkedProfile[];
+  friendsLinks: LinkedProfile[];
+
+  // Coach acceptance
+  hasAcceptedLionCoach: boolean;
+  onboardingCompleted: boolean;
+}
+
+export interface Scripture {
+  reference: string;
+  text: string;
+  version: string;
+}
+
+export interface Devotional {
+  id: string;
+  date: string;
+  title: string;
+  scripture: Scripture;
+  reflection: string;
+  prayer: string;
+  action: string;
+  tags: string[];
+  points: number;
+  personalizedFor?: string;
+}
+
+/**
+ * El León Verde — Coach de Virtud y Desarrollo Integral
+ * Característica central: virtud + desarrollo espiritual, físico y mental.
+ */
+export interface GreenLionCoach {
+  name: 'León Verde';
+  role: 'Motivador · Coach · Disciplina';
+  pillars: ['Espiritual', 'Físico', 'Mental'];
+  motto: 'Virtud, constancia y excelencia para que Salvation, Health y Freedom crezcan cada día.';
+}

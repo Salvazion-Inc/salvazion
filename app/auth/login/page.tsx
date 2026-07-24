@@ -17,12 +17,25 @@ function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [mode, setMode] = useState<'password' | 'magic'>('password');
 
-  const supabase = createClient();
+  function getSupabase() {
+    try {
+      return createClient();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Supabase no está configurado.');
+      return null;
+    }
+  }
 
   async function handlePasswordLogin(e: FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    const supabase = getSupabase();
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
 
     const { error: err } = await supabase.auth.signInWithPassword({
       email: email.trim(),
@@ -43,6 +56,12 @@ function LoginForm() {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    const supabase = getSupabase();
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
 
     const { error: err } = await supabase.auth.signInWithOtp({
       email: email.trim(),

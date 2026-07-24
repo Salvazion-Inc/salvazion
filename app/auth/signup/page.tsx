@@ -15,8 +15,6 @@ export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const supabase = createClient();
-
   async function handleSignup(e: FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -24,6 +22,15 @@ export default function SignupPage() {
 
     if (password.length < 8) {
       setError('La contraseña debe tener al menos 8 caracteres.');
+      setLoading(false);
+      return;
+    }
+
+    let supabase;
+    try {
+      supabase = createClient();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Supabase no está configurado.');
       setLoading(false);
       return;
     }

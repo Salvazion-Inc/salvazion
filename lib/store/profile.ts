@@ -1,5 +1,6 @@
 import { UserProfile } from '@/lib/types';
 import { createClient } from '@/lib/supabase/client';
+import { extractXIdentity } from '@/lib/auth/x-oauth';
 
 const STORAGE_KEY = 'salvazion_profile';
 const STORAGE_VERSION = 2;
@@ -37,6 +38,8 @@ function fromDb(row: any): Partial<UserProfile> {
     country: row.country ?? '',
     birthDate: row.birth_date ?? '',
     avatarUrl: row.avatar_url || undefined,
+    xUsername: row.x_username || undefined,
+    xUserId: row.x_user_id || undefined,
     hasAcceptedLionCoach: row.has_accepted_lion_coach ?? false,
     onboardingCompleted: row.onboarding_completed ?? false,
     // familyLinks / friendsLinks live primarily in localStorage for now
@@ -66,6 +69,8 @@ function toDb(profile: Partial<UserProfile>) {
         : profile.avatarUrl && /^https?:\/\//i.test(profile.avatarUrl)
           ? profile.avatarUrl
           : undefined,
+    x_username: profile.xUsername || null,
+    x_user_id: profile.xUserId || null,
     has_accepted_lion_coach: profile.hasAcceptedLionCoach,
     onboarding_completed: profile.onboardingCompleted,
   };
@@ -106,6 +111,84 @@ function loadLocal(): Partial<UserProfile> {
  * Ensure a profiles (+ streaks) row exists for the current user.
  * Covers race conditions when the DB trigger has not run yet, or was missing.
  */
+/**
+ * Merge X OAuth identity into profile fields (name, avatar, handle).
+ * Safe to call on every session start.
+ */
+export async function applyXIdentityToProfile(): Promise<Partial<UserProfile> | null> {
+  try {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return null;
+
+    const x = extractXIdentity(user);
+    if (!x) return null;
+
+    const local = loadLocal();
+    const patch: Partial<UserProfile> = {
+      xUsername: x.username,
+      xUserId: x.userId,
+    };
+
+    // Prefer X display name only when profile name is empty
+    if (!local.name?.trim() && x.displayName) {
+      patch.name = x.displayName;
+    } else if (!local.name?.trim()) {
+      patch.name = x.username;
+    }
+
+    // Prefer X avatar when none set (or previous was also from X/twitter CDN)
+    if (x.avatarUrl) {
+      if (
+        !local.avatarUrl ||
+        /twimg\.com|twitter\.com|pbs\.twimg/i.test(local.avatarUrl)
+      ) {
+        patch.avatarUrl = x.avatarUrl;
+      }
+    }
+
+    // Persist to local immediately
+    saveLocal(patch);
+
+    // Upsert X fields + name/avatar to Supabase
+    const payload: Record<string, unknown> = {
+      id: user.id,
+      x_username: x.username,
+      x_user_id: x.userId || null,
+      updated_at: new Date().toISOString(),
+    };
+    if (patch.name) payload.name = patch.name;
+    if (patch.avatarUrl && /^https?:\/\//i.test(patch.avatarUrl)) {
+      payload.avatar_url = patch.avatarUrl;
+    }
+
+    const { error } = await supabase.from('profiles').upsert(payload);
+    if (error) {
+      // Column may not exist yet — retry without x_* fields
+      if (
+        String(error.message || '').includes('x_username') ||
+        String(error.message || '').includes('x_user_id')
+      ) {
+        delete payload.x_username;
+        delete payload.x_user_id;
+        await supabase.from('profiles').upsert(payload);
+        console.warn(
+          '[Salvazion] profiles.x_username missing — run supabase/x-auth.sql'
+        );
+      } else {
+        console.warn('[Salvazion] applyXIdentity upsert failed', error);
+      }
+    }
+
+    return { ...loadLocal() };
+  } catch (e) {
+    console.warn('[Salvazion] applyXIdentityToProfile failed', e);
+    return null;
+  }
+}
+
 export async function ensureProfileForUser(preferredName?: string): Promise<void> {
   try {
     const supabase = createClient();
@@ -114,36 +197,53 @@ export async function ensureProfileForUser(preferredName?: string): Promise<void
     } = await supabase.auth.getUser();
     if (!user) return;
 
+    const x = extractXIdentity(user);
+
     const { data, error } = await supabase
       .from('profiles')
-      .select('id')
+      .select('id, name, avatar_url, x_username')
       .eq('id', user.id)
       .maybeSingle();
 
     if (error) {
       console.warn('[Salvazion] ensureProfile select failed', error);
+      // still try X apply locally
+      await applyXIdentityToProfile();
       return;
     }
-    if (data) return;
 
     const name =
       preferredName?.trim() ||
+      (data?.name && String(data.name).trim()) ||
+      x?.displayName ||
       (typeof user.user_metadata?.name === 'string' ? user.user_metadata.name : '') ||
+      x?.username ||
       user.email?.split('@')[0] ||
       '';
 
-    const { error: upsertErr } = await supabase.from('profiles').upsert({
-      id: user.id,
-      name,
-      updated_at: new Date().toISOString(),
-    });
-    if (upsertErr) {
-      console.warn('[Salvazion] ensureProfile upsert failed', upsertErr);
-      return;
-    }
+    if (!data) {
+      const insert: Record<string, unknown> = {
+        id: user.id,
+        name,
+        updated_at: new Date().toISOString(),
+      };
+      if (x?.username) insert.x_username = x.username;
+      if (x?.userId) insert.x_user_id = x.userId;
+      if (x?.avatarUrl) insert.avatar_url = x.avatarUrl;
 
-    // streaks row is optional for UI; ignore conflicts
-    await supabase.from('user_streaks').upsert({ user_id: user.id });
+      const { error: upsertErr } = await supabase.from('profiles').upsert(insert);
+      if (upsertErr) {
+        // Retry without x columns if migration not applied
+        delete insert.x_username;
+        delete insert.x_user_id;
+        const { error: e2 } = await supabase.from('profiles').upsert(insert);
+        if (e2) console.warn('[Salvazion] ensureProfile upsert failed', e2);
+      }
+      await supabase.from('user_streaks').upsert({ user_id: user.id });
+    } else {
+      // Existing row: fill empty name / missing X handle from OAuth
+      await applyXIdentityToProfile();
+    }
   } catch (e) {
     console.warn('[Salvazion] ensureProfileForUser failed', e);
   }
@@ -176,15 +276,27 @@ export async function loadProfileAsync(): Promise<Partial<UserProfile>> {
         // Preserve local social graph until we add a proper links table
         profile.familyLinks = local.familyLinks ?? [];
         profile.friendsLinks = local.friendsLinks ?? [];
-        // Prefer server name; if empty, fill from metadata for first onboarding paint
+        // Prefer server name; if empty, fill from metadata / X for first onboarding paint
         if (!profile.name) {
+          const x = extractXIdentity(user);
           const metaName =
             typeof user.user_metadata?.name === 'string' ? user.user_metadata.name : '';
-          profile.name = metaName || user.email?.split('@')[0] || local.name || '';
+          profile.name =
+            metaName || x?.displayName || x?.username || user.email?.split('@')[0] || local.name || '';
+        }
+        // X handle: server first, then identity, then local
+        if (!profile.xUsername) {
+          const x = extractXIdentity(user);
+          profile.xUsername = x?.username || local.xUsername;
+          profile.xUserId = x?.userId || local.xUserId;
         }
         // Keep local data-URL avatar if server has none yet
         if (!profile.avatarUrl && local.avatarUrl) {
           profile.avatarUrl = local.avatarUrl;
+        }
+        // Apply X identity if still missing handle (non-blocking)
+        if (!profile.xUsername) {
+          void applyXIdentityToProfile();
         }
         saveLocal(profile);
         return profile;

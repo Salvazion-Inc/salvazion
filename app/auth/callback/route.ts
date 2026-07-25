@@ -24,8 +24,57 @@ export async function GET(request: Request) {
   if (code) {
     try {
       const supabase = await createClient();
-      const { error } = await supabase.auth.exchangeCodeForSession(code);
+      const { data, error } = await supabase.auth.exchangeCodeForSession(code);
       if (!error) {
+        // Best-effort: stamp X username / avatar on profile after OAuth
+        try {
+          const user = data.session?.user;
+          if (user) {
+            const meta = {
+              ...(user.user_metadata || {}),
+              ...(user.identities?.find(
+                (i) => i.provider === 'twitter' || i.provider === 'x'
+              )?.identity_data || {}),
+            } as Record<string, unknown>;
+            const raw =
+              meta.user_name ||
+              meta.preferred_username ||
+              meta.screen_name ||
+              meta.username;
+            const username =
+              typeof raw === 'string'
+                ? raw.trim().replace(/^@+/, '')
+                : '';
+            if (username) {
+              const displayName =
+                (typeof meta.full_name === 'string' && meta.full_name) ||
+                (typeof meta.name === 'string' && meta.name) ||
+                username;
+              const avatar =
+                (typeof meta.avatar_url === 'string' && meta.avatar_url) ||
+                (typeof meta.picture === 'string' && meta.picture) ||
+                null;
+              const payload: Record<string, unknown> = {
+                id: user.id,
+                x_username: username,
+                updated_at: new Date().toISOString(),
+              };
+              if (displayName) payload.name = displayName;
+              if (avatar) payload.avatar_url = String(avatar).replace('_normal', '_400x400');
+              if (typeof meta.provider_id === 'string') payload.x_user_id = meta.provider_id;
+
+              const { error: upErr } = await supabase.from('profiles').upsert(payload);
+              if (upErr && String(upErr.message || '').includes('x_username')) {
+                delete payload.x_username;
+                delete payload.x_user_id;
+                await supabase.from('profiles').upsert(payload);
+              }
+            }
+          }
+        } catch (stampErr) {
+          console.warn('[auth/callback] X profile stamp failed', stampErr);
+        }
+
         // After recovery links, prefer update-password if that was the next target
         return NextResponse.redirect(`${origin}${next}`);
       }

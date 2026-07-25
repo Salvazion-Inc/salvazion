@@ -14,6 +14,7 @@ import {
   saveInboundInvite,
 } from '@/lib/invite/engine';
 import { tryAcceptPendingInbound } from '@/lib/invite/supabase';
+import XAuthButton from '@/components/auth/XAuthButton';
 
 type Mode = 'password' | 'magic' | 'forgot';
 
@@ -177,6 +178,23 @@ function LoginForm() {
           <p className="text-sm text-[var(--sage)] mt-1">{subtitle}</p>
         </div>
 
+        <div className="glass rounded-2xl p-6 space-y-4">
+          {mode === 'password' && (
+            <>
+              <XAuthButton
+                next={next}
+                onError={(msg) => setError(msg)}
+              />
+              <div className="flex items-center gap-3">
+                <div className="h-px flex-1 bg-[var(--border-soft)]" />
+                <span className="text-[10px] uppercase tracking-wider text-[var(--sage)]">
+                  {t('auth.orEmail')}
+                </span>
+                <div className="h-px flex-1 bg-[var(--border-soft)]" />
+              </div>
+            </>
+          )}
+
         <form
           onSubmit={
             mode === 'password'
@@ -185,7 +203,7 @@ function LoginForm() {
                 ? handleMagicLink
                 : handleForgot
           }
-          className="glass rounded-2xl p-6 space-y-4"
+          className="space-y-4"
         >
           <div>
             <label className="block text-xs text-[var(--sage)] mb-1.5">{t('auth.email')}</label>
@@ -278,6 +296,7 @@ function LoginForm() {
             )}
           </div>
         </form>
+        </div>
 
         <p className="text-center text-sm text-[var(--sage)]/80 mt-6">
           {t('auth.noAccount')}{' '}

@@ -23,6 +23,19 @@
      - `https://TU-DOMINIO.vercel.app/auth/confirm`
      - (opcional wildcards si Vercel Preview) `https://*-tu-equipo.vercel.app/auth/callback`
 
+## 3b. Login con X (Twitter)
+1. SQL Editor → ejecuta **`supabase/x-auth.sql`** (columnas `x_username`, `x_user_id`)
+2. Crea una app en el [X Developer Portal](https://developer.x.com/):
+   - Type: Web App
+   - Callback URL de Supabase (la muestra el dashboard):  
+     `https://TU-PROJECT-REF.supabase.co/auth/v1/callback`
+3. Authentication → Providers → **Twitter** → Enable
+4. Pega **API Key** y **API Secret Key** (OAuth 1.0a) o Client ID/Secret según el flujo que use Supabase en tu proyecto
+5. Guarda. En la app: Login / Signup → **Continuar con X**
+6. El `@usuario` se guarda en el perfil y se muestra en Hub → Perfil
+
+Docs oficiales: https://supabase.com/docs/guides/auth/social-login/auth-twitter
+
 ## 4. Variables de entorno
 
 ### Local

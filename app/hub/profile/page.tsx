@@ -111,6 +111,17 @@ export default function ProfilePage() {
             }}
           />
           <h1 className="text-2xl font-bold text-white mt-2">{profile.name || 'Hermano'}</h1>
+          {profile.xUsername && (
+            <a
+              href={`https://x.com/${profile.xUsername.replace(/^@+/, '')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 mt-1.5 text-sm font-medium text-[#8FD99A] hover:underline"
+            >
+              <span aria-hidden className="text-xs opacity-80">𝕏</span>
+              @{profile.xUsername.replace(/^@+/, '')}
+            </a>
+          )}
           {email && (
             <p className="text-xs text-[var(--sage)]/80 mt-1 break-all">{email}</p>
           )}
@@ -131,6 +142,12 @@ export default function ProfilePage() {
           {!editing ? (
             <>
               {email && <Row label={t('profile.email')} value={email} />}
+              {profile.xUsername && (
+                <Row
+                  label={t('profile.xUsername')}
+                  value={`@${profile.xUsername.replace(/^@+/, '')}`}
+                />
+              )}
               <Row label={t('profile.purpose')} value={profile.purpose || '—'} />
               <Row label={t('profile.city')} value={profile.city || '—'} />
               <Row label={t('profile.country')} value={profile.country || '—'} />

@@ -21,6 +21,8 @@ create table if not exists public.profiles (
   country text default '',
   birth_date date,
   avatar_url text,
+  x_username text,
+  x_user_id text,
   has_accepted_lion_coach boolean not null default false,
   onboarding_completed boolean not null default false,
   created_at timestamptz not null default now(),
@@ -29,6 +31,8 @@ create table if not exists public.profiles (
 
 -- Safe add for existing projects that already ran schema without avatar_url
 alter table public.profiles add column if not exists avatar_url text;
+alter table public.profiles add column if not exists x_username text;
+alter table public.profiles add column if not exists x_user_id text;
 
 -- 2. Score actions (every logged action)
 create table if not exists public.score_actions (

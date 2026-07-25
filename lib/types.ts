@@ -51,6 +51,11 @@ export interface UserProfile {
   /** Profile photo — https URL (Supabase Storage) or compressed data URL (local) */
   avatarUrl?: string;
 
+  /** X (Twitter) username without @ — from OAuth */
+  xUsername?: string;
+  /** X user id from OAuth identity */
+  xUserId?: string;
+
   // Social graph inside the app
   familyLinks: LinkedProfile[];
   friendsLinks: LinkedProfile[];

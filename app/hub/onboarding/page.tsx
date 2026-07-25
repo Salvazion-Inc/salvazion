@@ -1,10 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { UserProfile, LinkedProfile } from '@/lib/types';
-import { saveProfile, calculateAge, getLifeStage, getLifeStageLabel } from '@/lib/store/profile';
+import {
+  saveProfile,
+  loadProfileAsync,
+  ensureProfileForUser,
+  calculateAge,
+  getLifeStage,
+  getLifeStageLabel,
+} from '@/lib/store/profile';
 
 type Step = 1 | 2 | 3 | 4 | 5;
 
@@ -30,6 +37,7 @@ const RELATION_OPTIONS: { id: LinkedProfile['relation']; label: string }[] = [
 export default function OnboardingPage() {
   const router = useRouter();
   const [step, setStep] = useState<Step>(1);
+  const [booting, setBooting] = useState(true);
   const [profile, setProfile] = useState<Partial<UserProfile>>({
     name: '',
     language: 'es',
@@ -52,6 +60,35 @@ export default function OnboardingPage() {
   const [inviteRelation, setInviteRelation] = useState<LinkedProfile['relation'] | null>(null);
   const [inviteName, setInviteName] = useState('');
   const [inviteCopied, setInviteCopied] = useState(false);
+
+  // Prefill from Supabase session / existing partial profile
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        await ensureProfileForUser();
+        const existing = await loadProfileAsync();
+        if (cancelled) return;
+        if (existing?.onboardingCompleted) {
+          router.replace('/hub/dashboard');
+          return;
+        }
+        if (existing && Object.keys(existing).length > 0) {
+          setProfile((prev) => ({
+            ...prev,
+            ...existing,
+            onboardingCompleted: false,
+            hasAcceptedLionCoach: existing.hasAcceptedLionCoach ?? false,
+          }));
+        }
+      } finally {
+        if (!cancelled) setBooting(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [router]);
 
   const update = (fields: Partial<UserProfile>) => {
     setProfile(prev => ({ ...prev, ...fields }));
@@ -146,6 +183,14 @@ https://salvazion.com
     await saveProfile(finalProfile);
     router.push('/hub/dashboard');
   };
+
+  if (booting) {
+    return (
+      <div className="min-h-screen bg-[#040404] flex items-center justify-center">
+        <div className="text-[#00F511] text-lg animate-pulse">El León se prepara...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col" style={{ colorScheme: 'dark' }}>

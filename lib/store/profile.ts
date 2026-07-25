@@ -95,6 +95,53 @@ function loadLocal(): Partial<UserProfile> {
 }
 
 /**
+ * Ensure a profiles (+ streaks) row exists for the current user.
+ * Covers race conditions when the DB trigger has not run yet, or was missing.
+ */
+export async function ensureProfileForUser(preferredName?: string): Promise<void> {
+  try {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.warn('[Salvazion] ensureProfile select failed', error);
+      return;
+    }
+    if (data) return;
+
+    const name =
+      preferredName?.trim() ||
+      (typeof user.user_metadata?.name === 'string' ? user.user_metadata.name : '') ||
+      user.email?.split('@')[0] ||
+      '';
+
+    const { error: upsertErr } = await supabase.from('profiles').upsert({
+      id: user.id,
+      name,
+      updated_at: new Date().toISOString(),
+    });
+    if (upsertErr) {
+      console.warn('[Salvazion] ensureProfile upsert failed', upsertErr);
+      return;
+    }
+
+    // streaks row is optional for UI; ignore conflicts
+    await supabase.from('user_streaks').upsert({ user_id: user.id });
+  } catch (e) {
+    console.warn('[Salvazion] ensureProfileForUser failed', e);
+  }
+}
+
+/**
  * Load profile (async).
  * Source of truth: Supabase when authenticated. Local cache as fallback / offline.
  * familyLinks & friendsLinks are merged from localStorage (not yet in DB schema).
@@ -108,6 +155,8 @@ export async function loadProfileAsync(): Promise<Partial<UserProfile>> {
     } = await supabase.auth.getUser();
 
     if (user) {
+      await ensureProfileForUser();
+
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -119,6 +168,12 @@ export async function loadProfileAsync(): Promise<Partial<UserProfile>> {
         // Preserve local social graph until we add a proper links table
         profile.familyLinks = local.familyLinks ?? [];
         profile.friendsLinks = local.friendsLinks ?? [];
+        // Prefer server name; if empty, fill from metadata for first onboarding paint
+        if (!profile.name) {
+          const metaName =
+            typeof user.user_metadata?.name === 'string' ? user.user_metadata.name : '';
+          profile.name = metaName || user.email?.split('@')[0] || local.name || '';
+        }
         saveLocal(profile);
         return profile;
       }

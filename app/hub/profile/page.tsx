@@ -8,17 +8,18 @@ import BottomNav from '@/components/BottomNav';
 import {
   loadProfileAsync,
   saveProfile,
-  clearProfile,
   signOut,
   calculateAge,
   getLifeStage,
   getLifeStageLabel,
 } from '@/lib/store/profile';
 import { UserProfile } from '@/lib/types';
+import { createClient } from '@/lib/supabase/client';
 
 export default function ProfilePage() {
   const router = useRouter();
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<Partial<UserProfile>>({});
   const [mounted, setMounted] = useState(false);
@@ -27,6 +28,16 @@ export default function ProfilePage() {
   useEffect(() => {
     setMounted(true);
     (async () => {
+      try {
+        const supabase = createClient();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (user?.email) setEmail(user.email);
+      } catch {
+        // ignore — offline / missing env
+      }
+
       const p = await loadProfileAsync();
       if (!p?.onboardingCompleted) {
         router.replace('/hub/onboarding');
@@ -85,6 +96,9 @@ export default function ProfilePage() {
             <Image src="/logo-icon.png" alt="Green Lion King" width={80} height={80} className="object-cover" />
           </div>
           <h1 className="text-2xl font-bold text-white">{profile.name || 'Hermano'}</h1>
+          {email && (
+            <p className="text-xs text-[#B7F7AC]/50 mt-1 break-all">{email}</p>
+          )}
           {age !== null && (
             <p className="text-sm text-[#B7F7AC]/70 mt-1">
               {age} años · {getLifeStageLabel(stage)}
@@ -101,6 +115,7 @@ export default function ProfilePage() {
         <div className="glass rounded-2xl p-5 space-y-4 mb-6">
           {!editing ? (
             <>
+              {email && <Row label="Email" value={email} />}
               <Row label="Propósito" value={profile.purpose || '—'} />
               <Row label="Ciudad" value={profile.city || '—'} />
               <Row label="País" value={profile.country || '—'} />

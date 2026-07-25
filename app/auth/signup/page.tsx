@@ -5,12 +5,15 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
+import { mapAuthError } from '@/lib/auth/paths';
+import { ensureProfileForUser } from '@/lib/store/profile';
 
 export default function SignupPage() {
   const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -22,6 +25,11 @@ export default function SignupPage() {
 
     if (password.length < 8) {
       setError('La contraseña debe tener al menos 8 caracteres.');
+      setLoading(false);
+      return;
+    }
+    if (password !== confirm) {
+      setError('Las contraseñas no coinciden.');
       setLoading(false);
       return;
     }
@@ -40,12 +48,12 @@ export default function SignupPage() {
       password,
       options: {
         data: { name: name.trim() },
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=/hub/onboarding`,
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent('/hub/onboarding')}`,
       },
     });
 
     if (err) {
-      setError(err.message);
+      setError(mapAuthError(err.message));
       setLoading(false);
       return;
     }
@@ -57,7 +65,12 @@ export default function SignupPage() {
       return;
     }
 
-    // Auto-confirmed (dev mode) → go to onboarding
+    // Auto-confirmed (dev / confirm email disabled) → ensure profile + onboarding
+    try {
+      await ensureProfileForUser(name.trim());
+    } catch {
+      // non-blocking
+    }
     router.push('/hub/onboarding');
     router.refresh();
   }
@@ -71,7 +84,8 @@ export default function SignupPage() {
           </div>
           <h1 className="text-xl font-bold text-[#00F511] mb-2">Revisa tu correo</h1>
           <p className="text-sm text-[#B7F7AC]/80 leading-relaxed">
-            Te enviamos un enlace de confirmación. Actívalo y vuelve aquí para entrar a la Phalanx.
+            Te enviamos un enlace de confirmación a <span className="text-[#D8E1D9]">{email.trim()}</span>.
+            Actívalo y vuelve aquí para entrar a la Phalanx.
           </p>
           <Link
             href="/auth/login"
@@ -132,6 +146,20 @@ export default function SignupPage() {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#00F511]"
               placeholder="••••••••"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs text-[#B7F7AC] mb-1.5">Confirmar contraseña</label>
+            <input
+              type="password"
+              required
+              minLength={8}
+              autoComplete="new-password"
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#00F511]"
+              placeholder="Repite la contraseña"
             />
           </div>
 

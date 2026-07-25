@@ -15,16 +15,26 @@
 1. Authentication → Providers → Email → Enable
 2. (Opcional) desactiva “Confirm email” solo en desarrollo para ir más rápido
 3. Authentication → URL Configuration:
-   - Site URL: `http://localhost:3000` (dev) o tu dominio de producción
-   - Redirect URLs: añade `http://localhost:3000/auth/callback` y la de producción
+   - **Site URL (producción):** `https://TU-DOMINIO.vercel.app`
+   - **Redirect URLs** (añade todas):
+     - `http://localhost:3000/auth/callback`
+     - `http://localhost:3000/auth/confirm`
+     - `https://TU-DOMINIO.vercel.app/auth/callback`
+     - `https://TU-DOMINIO.vercel.app/auth/confirm`
+     - (opcional wildcards si Vercel Preview) `https://*-tu-equipo.vercel.app/auth/callback`
 
 ## 4. Variables de entorno
+
+### Local
 ```bash
 cp .env.local.example .env.local
 ```
 Rellena con Project Settings → API:
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+### Vercel
+Project → Settings → Environment Variables → mismas dos keys (Production + Preview).
 
 ## 5. Instalar dependencias
 ```bash
@@ -36,12 +46,22 @@ npm install
 npm run dev
 ```
 
-## Flujo resultante
-- Landing → “Ingresar a Hub” → `/auth/login`
-- Middleware protege todo `/hub/*`
+## Flujo de autenticación
+| Paso | Ruta | Qué hace |
+|------|------|----------|
+| Landing | `/` | CTA → login |
+| Registro | `/auth/signup` | `signUp` + metadata `name` → email confirm o sesión |
+| Login | `/auth/login` | Password, magic link o recuperación |
+| Callback PKCE | `/auth/callback` | `exchangeCodeForSession` → hub / update-password |
+| Confirm token | `/auth/confirm` | `verifyOtp` (plantillas token_hash) |
+| Nueva contraseña | `/auth/update-password` | Tras recovery link |
+| Hub | `/hub/*` | Middleware exige sesión |
+| Onboarding | `/hub/onboarding` | Primera vez si `onboarding_completed = false` |
+
 - Signup crea `auth.users` + trigger crea `profiles` + `user_streaks`
+- Si el trigger falla, la app llama `ensureProfileForUser()` como respaldo
 - Onboarding hace upsert del perfil
-- Profile page: editar + cerrar sesión + borrar local
+- Profile: editar + cerrar sesión
 - RLS: cada usuario solo ve y escribe sus propias filas (`auth.uid() = id/user_id`)
 
 ## Scores (sincronizados)
@@ -54,3 +74,4 @@ npm run dev
 - Migrar badges al mismo patrón.
 - Historial multi-día desde `score_actions`.
 - Leaderboard de la Phalanx (query agregada respetando RLS).
+- OAuth (Google / Apple) con el mismo `/auth/callback`.

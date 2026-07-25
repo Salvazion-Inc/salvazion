@@ -206,6 +206,19 @@ export default function DashboardPage() {
         {/* Quick links */}
         <div className="w-full max-w-sm space-y-3 mb-4">
           <Link
+            href="/hub/swap"
+            className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#00F511]/40 transition-all"
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-xl">◎</span>
+              <div>
+                <p className="text-sm font-medium">Swap Jupiter · $SALVAZION</p>
+                <p className="text-xs text-[#B7F7AC]/50">Solana · mejor ruta on-chain</p>
+              </div>
+            </div>
+            <span className="text-[#00F511]">→</span>
+          </Link>
+          <Link
             href="/hub/devotional"
             className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#00F511]/40 transition-all"
           >

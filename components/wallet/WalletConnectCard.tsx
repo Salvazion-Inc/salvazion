@@ -1,11 +1,11 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import {
-  JUPITER_SWAP_URL,
   SALVAZION_MINT,
   shortenAddress,
 } from '@/lib/solana/config';
@@ -14,17 +14,21 @@ import {
   loadLinkedWallet,
   saveLinkedWallet,
 } from '@/lib/solana/wallet-store';
+import JupiterSwap from '@/components/wallet/JupiterSwap';
 
 type Variant = 'card' | 'compact';
 
 interface WalletConnectCardProps {
   variant?: Variant;
   className?: string;
+  /** Show in-app Jupiter modal trigger (default true for full card) */
+  showJupiter?: boolean;
 }
 
 export default function WalletConnectCard({
   variant = 'card',
   className = '',
+  showJupiter = true,
 }: WalletConnectCardProps) {
   const { connection } = useConnection();
   const { publicKey, connected, connecting, disconnect, wallet } = useWallet();
@@ -212,23 +216,29 @@ export default function WalletConnectCard({
             <p className="text-xs text-amber-400">{balanceError}</p>
           )}
 
-          <div className="flex flex-col sm:flex-row gap-2">
-            <a
-              href={JUPITER_SWAP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 text-center py-2.5 rounded-xl border border-[#00F511]/50 text-[#00F511] text-sm font-medium hover:bg-[#00F511]/10 transition"
-            >
-              Comprar $SALVAZION ↗
-            </a>
-            <button
-              type="button"
-              onClick={handleDisconnect}
-              className="flex-1 py-2.5 rounded-xl border border-red-500/40 text-red-400 text-sm font-medium hover:bg-red-500/10 transition"
-            >
-              Desconectar
-            </button>
-          </div>
+          {showJupiter && (
+            <div className="space-y-2">
+              <JupiterSwap
+                mode="modal"
+                triggerLabel="Swap $SALVAZION con Jupiter"
+                showFallbackLink={false}
+              />
+              <Link
+                href="/hub/swap"
+                className="block text-center text-xs text-[#00F511] hover:underline"
+              >
+                Abrir terminal Jupiter completa →
+              </Link>
+            </div>
+          )}
+
+          <button
+            type="button"
+            onClick={handleDisconnect}
+            className="w-full py-2.5 rounded-xl border border-red-500/40 text-red-400 text-sm font-medium hover:bg-red-500/10 transition"
+          >
+            Desconectar
+          </button>
         </div>
       )}
     </div>

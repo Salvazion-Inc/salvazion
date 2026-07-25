@@ -11,9 +11,19 @@ import {
   DevotionalIcon,
   CalendarIcon,
   BadgesIcon,
+  SwapIcon,
 } from './Icons';
 
-type NavKey = 'home' | 'bible' | 'health' | 'freedom' | 'profile' | 'devotional' | 'calendar' | 'badges';
+type NavKey =
+  | 'home'
+  | 'bible'
+  | 'health'
+  | 'freedom'
+  | 'profile'
+  | 'devotional'
+  | 'calendar'
+  | 'badges'
+  | 'swap';
 
 interface NavItemConfig {
   href: string;
@@ -25,7 +35,7 @@ interface NavItemConfig {
 const DEFAULT: NavItemConfig[] = [
   { href: '/hub/dashboard', label: 'Home', key: 'home', Icon: HomeIcon },
   { href: '/hub/bible', label: 'Bible', key: 'bible', Icon: BibleIcon },
-  { href: '/hub/health', label: 'Health', key: 'health', Icon: HealthIcon },
+  { href: '/hub/swap', label: 'Swap', key: 'swap', Icon: SwapIcon },
   { href: '/hub/freedom', label: 'Freedom', key: 'freedom', Icon: FreedomIcon },
   { href: '/hub/profile', label: 'Profile', key: 'profile', Icon: ProfileIcon },
 ];
@@ -48,10 +58,10 @@ const BADGES: NavItemConfig[] = [
 
 const FREEDOM: NavItemConfig[] = [
   { href: '/hub/dashboard', label: 'Home', key: 'home', Icon: HomeIcon },
-  { href: '/hub/health', label: 'Health', key: 'health', Icon: HealthIcon },
+  { href: '/hub/swap', label: 'Swap', key: 'swap', Icon: SwapIcon },
   { href: '/hub/freedom', label: 'Freedom', key: 'freedom', Icon: FreedomIcon },
   { href: '/hub/calendar', label: 'Agenda', key: 'calendar', Icon: CalendarIcon },
-  { href: '/hub/badges', label: 'Insignias', key: 'badges', Icon: BadgesIcon },
+  { href: '/hub/profile', label: 'Profile', key: 'profile', Icon: ProfileIcon },
 ];
 
 interface BottomNavProps {

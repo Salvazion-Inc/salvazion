@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import WalletConnectCard from '@/components/wallet/WalletConnectCard';
+import JupiterSwap from '@/components/wallet/JupiterSwap';
 
 const SalvazionSite = () => {
   const [language, setLanguage] = useState<'es' | 'en'>('es');
@@ -193,20 +194,15 @@ const SalvazionSite = () => {
             CA: 7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2
           </div>
 
-          <div className="max-w-md mx-auto mb-8 text-left">
-            <p className="text-center text-sm text-[#B7F7AC]/70 mb-3">{t.connectWallet}</p>
-            <WalletConnectCard />
-          </div>
-
-          <div>
-            <a
-              href="https://jup.ag/swap?inputMint=So11111111111111111111111111111111111111112&outputMint=7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-10 py-5 text-xl bg-gradient-to-r from-[#00F511] to-[#00B10C] text-[#040404] font-bold rounded-2xl hover:scale-[1.02] transition-all"
-            >
-              {t.buyToken} ↗
-            </a>
+          <div className="max-w-md mx-auto mb-8 text-left space-y-4">
+            <p className="text-center text-sm text-[#B7F7AC]/70">{t.connectWallet}</p>
+            <WalletConnectCard showJupiter={false} />
+            <div className="glass rounded-2xl p-3">
+              <p className="text-center text-xs text-[#B7F7AC]/60 mb-2 uppercase tracking-wider">
+                Jupiter · Solana
+              </p>
+              <JupiterSwap mode="modal" triggerLabel={t.buyToken} />
+            </div>
           </div>
         </div>
       </section>

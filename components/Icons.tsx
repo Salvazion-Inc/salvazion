@@ -65,6 +65,18 @@ export function FreedomIcon({ size = 24, className = '', active }: IconProps) {
   );
 }
 
+export function SwapIcon({ size = 24, className = '', active }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={`${base(active)} ${className}`}>
+      <path d="M7 8h12" />
+      <path d="M16 5l3 3-3 3" />
+      <path d="M17 16H5" />
+      <path d="M8 13l-3 3 3 3" />
+      <circle cx="12" cy="12" r="1" fill="currentColor" />
+    </svg>
+  );
+}
+
 export function ProfileIcon({ size = 24, className = '', active }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={`${base(active)} ${className}`}>

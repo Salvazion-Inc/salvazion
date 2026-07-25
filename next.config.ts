@@ -29,11 +29,12 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-              "style-src 'self' 'unsafe-inline'",
+              // Jupiter Terminal loads from terminal.jup.ag
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://terminal.jup.ag https://*.jup.ag",
+              "style-src 'self' 'unsafe-inline' https://terminal.jup.ag https://*.jup.ag",
               "img-src 'self' data: blob: https:",
-              "font-src 'self' data:",
-              // Supabase + Solana RPC + wallet endpoints
+              "font-src 'self' data: https://terminal.jup.ag https://*.jup.ag",
+              // Supabase + Solana RPC + wallets + Jupiter APIs
               [
                 "connect-src 'self'",
                 "https://*.supabase.co",
@@ -52,8 +53,19 @@ const nextConfig: NextConfig = {
                 "https://*.solflare.com",
                 "https://jup.ag",
                 "https://*.jup.ag",
+                "https://quote-api.jup.ag",
+                "https://price.jup.ag",
+                "https://api.jup.ag",
+                "https://lite-api.jup.ag",
+                "https://token.jup.ag",
+                "https://stats.jup.ag",
+                "https://cache.jup.ag",
+                "https://worker.jup.ag",
+                "wss://*.jup.ag",
               ].join(" "),
-              "frame-src 'self' https://*.phantom.app https://*.solflare.com",
+              "worker-src 'self' blob:",
+              "child-src 'self' blob:",
+              "frame-src 'self' https://*.phantom.app https://*.solflare.com https://jup.ag https://*.jup.ag https://terminal.jup.ag",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",

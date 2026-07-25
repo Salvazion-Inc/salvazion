@@ -14,7 +14,10 @@ export type WearableCategory =
 export type WearableConnectMode =
   | 'web_bluetooth_hr'
   | 'manual'
+  | 'oauth'
   | 'oauth_planned'
+  | 'healthkit'
+  | 'health_connect'
   | 'health_connect_planned';
 
 export type WearableBrandId =
@@ -83,7 +86,7 @@ export interface WearableMetricSample {
   brandId: WearableBrandId;
   date: string; // YYYY-MM-DD
   recordedAt: string;
-  source: 'ble' | 'manual' | 'import' | 'oauth';
+  source: 'ble' | 'manual' | 'import' | 'oauth' | 'healthkit' | 'health_connect';
   metrics: Partial<Record<WearableMetricKey, number | string>>;
   note?: string;
 }

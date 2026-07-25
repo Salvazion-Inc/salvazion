@@ -534,8 +534,12 @@ function modeLabel(mode: WearableConnectMode, t: (k: string) => string): string 
       return t('wearables.modeBle');
     case 'manual':
       return t('wearables.modeManual');
+    case 'oauth':
     case 'oauth_planned':
       return t('wearables.modeOauth');
+    case 'healthkit':
+      return t('wearables.modeHealthkit');
+    case 'health_connect':
     case 'health_connect_planned':
       return t('wearables.modeOs');
     default:

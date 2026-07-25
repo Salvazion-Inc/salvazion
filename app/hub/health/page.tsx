@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import BottomNav from '@/components/BottomNav';
@@ -51,6 +51,7 @@ import {
 import { generateCoachGuidance, CoachMessage, getLionShortNudge } from '@/lib/coach/engine';
 import PhoneSensorsPanel from '@/components/health/PhoneSensorsPanel';
 import WearablesPanel from '@/components/health/WearablesPanel';
+import CloudNativeSyncPanel from '@/components/health/CloudNativeSyncPanel';
 
 export default function HealthPage() {
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
@@ -255,6 +256,18 @@ export default function HealthPage() {
             setRegularity(getSleepRegularity());
           }}
         />
+
+        <Suspense fallback={null}>
+          <CloudNativeSyncPanel
+            onAutoLog={(actionType, label) => handleLog(actionType, label)}
+            onSleepSynced={(bed, wake) => {
+              setBedTime(bed);
+              setWakeTime(wake);
+              setTodaySleep(getTodaySleep());
+              setRegularity(getSleepRegularity());
+            }}
+          />
+        </Suspense>
 
         {/* SUEÑO CIRCADIANO */}
         <section className="mb-6">
@@ -720,7 +733,7 @@ export default function HealthPage() {
         })}
 
         <p className="text-[10px] text-[var(--sage)]/60 text-center leading-relaxed px-2 mb-4">
-          Fase B: sensores del celular. Fase C: wearables (BLE + entrada manual). Fase D: OAuth / HealthKit / Health Connect.
+          Fase B: sensores · Fase C: BLE/manual · Fase D: OAuth (Fitbit/Oura/WHOOP/Garmin) + HealthKit / Health Connect nativo.
         </p>
       </main>
 

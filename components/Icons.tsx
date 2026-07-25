@@ -2,128 +2,424 @@
 
 import React from 'react';
 
+/**
+ * Salvazion exclusive icon system
+ * Soft mint palette — easy on the eyes, dark-mode friendly.
+ * Motif: soft strokes + subtle constellation nodes (brand DNA).
+ */
+
 interface IconProps {
   size?: number;
   className?: string;
   active?: boolean;
 }
 
-const base = (active?: boolean) =>
-  `transition-all duration-200 ${active ? 'text-[#00F511] drop-shadow-[0_0_6px_rgba(0,245,17,0.7)]' : 'text-[#B7F7AC]/70'}`;
+/** Soft brand colors (not pure neon) */
+const C = {
+  active: '#8FD99A', // soft mint-green
+  idle: '#8AAB8E', // muted sage
+  dim: '#6B8F6E',
+  fillActive: 'rgba(143, 217, 154, 0.18)',
+  fillIdle: 'rgba(138, 171, 142, 0.08)',
+};
+
+function tone(active?: boolean) {
+  return active ? C.active : C.idle;
+}
+
+function baseClass(active?: boolean, className = '') {
+  return [
+    'transition-all duration-200 shrink-0',
+    active ? 'opacity-100' : 'opacity-85',
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
+}
+
+function Node({
+  cx,
+  cy,
+  r = 1.1,
+  active,
+}: {
+  cx: number;
+  cy: number;
+  r?: number;
+  active?: boolean;
+}) {
+  return <circle cx={cx} cy={cy} r={r} fill={tone(active)} opacity={active ? 0.95 : 0.7} />;
+}
+
+/** Shared circular frame — exclusive Salvazion mark */
+function Frame({ active }: { active?: boolean }) {
+  return (
+    <circle
+      cx="12"
+      cy="12"
+      r="10.25"
+      stroke={tone(active)}
+      strokeWidth="1.15"
+      fill={active ? C.fillActive : C.fillIdle}
+      opacity={active ? 1 : 0.9}
+    />
+  );
+}
 
 export function HomeIcon({ size = 24, className = '', active }: IconProps) {
+  const s = tone(active);
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={`${base(active)} ${className}`}>
-      <path d="M3 10.5L12 3l9 7.5" />
-      <path d="M5 9.5V20h14V9.5" />
-      <path d="M9 20v-6h6v6" />
-      <circle cx="12" cy="12" r="1" fill="currentColor" />
-      <circle cx="8" cy="8" r="0.7" fill="currentColor" />
-      <circle cx="16" cy="8" r="0.7" fill="currentColor" />
-      <line x1="12" y1="12" x2="8" y2="8" strokeWidth="1" />
-      <line x1="12" y1="12" x2="16" y2="8" strokeWidth="1" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={baseClass(active, className)}
+      aria-hidden
+    >
+      <Frame active={active} />
+      <path
+        d="M8.2 12.2 12 8.8l3.8 3.4"
+        stroke={s}
+        strokeWidth="1.35"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9.1 11.8V15.6h5.8v-3.8"
+        stroke={s}
+        strokeWidth="1.35"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M10.6 15.6v-2.2h2.8v2.2"
+        stroke={s}
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <Node cx="12" cy="7.2" active={active} r={1} />
     </svg>
   );
 }
 
 export function BibleIcon({ size = 24, className = '', active }: IconProps) {
+  const s = tone(active);
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={`${base(active)} ${className}`}>
-      <path d="M4 4h12a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4z" />
-      <path d="M18 6h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-2" />
-      <path d="M8 8h6" />
-      <path d="M8 12h6" />
-      <path d="M8 16h4" />
-      <circle cx="12" cy="4" r="1" fill="currentColor" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={baseClass(active, className)}
+      aria-hidden
+    >
+      <Frame active={active} />
+      {/* open book */}
+      <path
+        d="M12 8.2c-1.6-1-3.4-1.4-5.2-1.2v7.6c1.8-.2 3.6.2 5.2 1.2 1.6-1 3.4-1.4 5.2-1.2V7c-1.8-.2-3.6.2-5.2 1.2z"
+        stroke={s}
+        strokeWidth="1.3"
+        strokeLinejoin="round"
+      />
+      <path d="M12 8.4v7.4" stroke={s} strokeWidth="1.15" strokeLinecap="round" />
+      {/* soft cross light */}
+      <path d="M12 9.6v2.8M10.6 11h2.8" stroke={s} strokeWidth="1.15" strokeLinecap="round" opacity={0.85} />
+      <Node cx="8.2" cy="8.5" active={active} r={0.85} />
+      <Node cx="15.8" cy="8.5" active={active} r={0.85} />
     </svg>
   );
 }
 
 export function HealthIcon({ size = 24, className = '', active }: IconProps) {
+  const s = tone(active);
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={`${base(active)} ${className}`}>
-      <path d="M12 21s-7-4.5-7-10a5 5 0 0 1 10 0c0 5.5-7 10-7 10z" />
-      <path d="M12 8v4" />
-      <path d="M10 10h4" />
-      <circle cx="12" cy="6" r="0.8" fill="currentColor" />
-      <circle cx="8" cy="14" r="0.6" fill="currentColor" />
-      <circle cx="16" cy="14" r="0.6" fill="currentColor" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={baseClass(active, className)}
+      aria-hidden
+    >
+      <Frame active={active} />
+      {/* leaf / heart hybrid */}
+      <path
+        d="M12 16.6c-2.8-1.8-4.2-3.6-4.2-5.5A2.7 2.7 0 0 1 12 8.6a2.7 2.7 0 0 1 4.2 2.5c0 1.9-1.4 3.7-4.2 5.5z"
+        stroke={s}
+        strokeWidth="1.3"
+        strokeLinejoin="round"
+      />
+      <path d="M12 10v3.2M10.4 11.6h3.2" stroke={s} strokeWidth="1.2" strokeLinecap="round" />
+      <Node cx="12" cy="7.4" active={active} r={0.9} />
     </svg>
   );
 }
 
 export function FreedomIcon({ size = 24, className = '', active }: IconProps) {
+  const s = tone(active);
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={`${base(active)} ${className}`}>
-      <rect x="5" y="11" width="14" height="10" rx="1" />
-      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
-      <circle cx="12" cy="16" r="1.5" fill="currentColor" />
-      <path d="M12 17.5v2" />
-      <circle cx="7" cy="7" r="0.7" fill="currentColor" />
-      <circle cx="17" cy="7" r="0.7" fill="currentColor" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={baseClass(active, className)}
+      aria-hidden
+    >
+      <Frame active={active} />
+      {/* open key / liberty path */}
+      <circle cx="9.2" cy="11.2" r="2.2" stroke={s} strokeWidth="1.3" />
+      <path
+        d="M11.2 11.2h5.6M15.2 11.2v1.6M16.8 11.2v1.2"
+        stroke={s}
+        strokeWidth="1.25"
+        strokeLinecap="round"
+      />
+      <path
+        d="M8.2 14.8c.8.9 1.9 1.4 3.2 1.4 1.5 0 2.7-.7 3.5-1.6"
+        stroke={s}
+        strokeWidth="1.15"
+        strokeLinecap="round"
+        opacity={0.8}
+      />
+      <Node cx="9.2" cy="11.2" active={active} r={0.85} />
     </svg>
   );
 }
 
 export function SwapIcon({ size = 24, className = '', active }: IconProps) {
+  const s = tone(active);
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={`${base(active)} ${className}`}>
-      <path d="M7 8h12" />
-      <path d="M16 5l3 3-3 3" />
-      <path d="M17 16H5" />
-      <path d="M8 13l-3 3 3 3" />
-      <circle cx="12" cy="12" r="1" fill="currentColor" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={baseClass(active, className)}
+      aria-hidden
+    >
+      <Frame active={active} />
+      <path
+        d="M8 10.2h7.2"
+        stroke={s}
+        strokeWidth="1.3"
+        strokeLinecap="round"
+      />
+      <path
+        d="M13.4 7.8 16.2 10.2 13.4 12.6"
+        stroke={s}
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M16 13.8H8.8"
+        stroke={s}
+        strokeWidth="1.3"
+        strokeLinecap="round"
+      />
+      <path
+        d="M10.6 11.4 7.8 13.8 10.6 16.2"
+        stroke={s}
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <Node cx="12" cy="12" active={active} r={0.9} />
     </svg>
   );
 }
 
 export function ProfileIcon({ size = 24, className = '', active }: IconProps) {
+  const s = tone(active);
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={`${base(active)} ${className}`}>
-      <circle cx="12" cy="8" r="4" />
-      <path d="M4 20c0-4 3.5-7 8-7s8 3 8 7" />
-      {/* small crown */}
-      <path d="M9.5 4.5l1 1.2 1.5-0.8 1.5 0.8 1-1.2" strokeWidth="1.2" />
-      <circle cx="12" cy="14" r="0.7" fill="currentColor" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={baseClass(active, className)}
+      aria-hidden
+    >
+      <Frame active={active} />
+      <circle cx="12" cy="10" r="2.4" stroke={s} strokeWidth="1.3" />
+      <path
+        d="M7.6 16.4c.9-2 2.5-3 4.4-3s3.5 1 4.4 3"
+        stroke={s}
+        strokeWidth="1.3"
+        strokeLinecap="round"
+      />
+      {/* soft crown hint */}
+      <path
+        d="M9.6 7.2 11 8.2l1-1.1 1 1.1 1.4-1"
+        stroke={s}
+        strokeWidth="1.1"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        opacity={0.85}
+      />
+      <Node cx="12" cy="10" active={active} r={0.75} />
     </svg>
   );
 }
 
 export function DevotionalIcon({ size = 24, className = '', active }: IconProps) {
+  const s = tone(active);
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={`${base(active)} ${className}`}>
-      <path d="M12 3v18" />
-      <path d="M6 9h12" />
-      <circle cx="12" cy="9" r="1.2" fill="currentColor" />
-      <circle cx="6" cy="9" r="0.7" fill="currentColor" />
-      <circle cx="18" cy="9" r="0.7" fill="currentColor" />
-      <circle cx="12" cy="3" r="0.8" fill="currentColor" />
-      <circle cx="12" cy="21" r="0.8" fill="currentColor" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={baseClass(active, className)}
+      aria-hidden
+    >
+      <Frame active={active} />
+      {/* soft flame */}
+      <path
+        d="M12 7.2c1.6 1.5 2.6 2.8 2.6 4.3a2.6 2.6 0 0 1-5.2 0c0-1.5 1-2.8 2.6-4.3z"
+        stroke={s}
+        strokeWidth="1.3"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12 10.2c.6.6 1 1.2 1 1.8a1 1 0 0 1-2 0c0-.6.4-1.2 1-1.8z"
+        stroke={s}
+        strokeWidth="1.1"
+        strokeLinejoin="round"
+        opacity={0.9}
+      />
+      <path d="M9.5 16.2h5" stroke={s} strokeWidth="1.2" strokeLinecap="round" />
+      <Node cx="12" cy="7" active={active} r={0.85} />
     </svg>
   );
 }
 
 export function CalendarIcon({ size = 24, className = '', active }: IconProps) {
+  const s = tone(active);
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={`${base(active)} ${className}`}>
-      <rect x="3" y="5" width="18" height="16" rx="1.5" />
-      <path d="M3 10h18" />
-      <path d="M8 3v4" />
-      <path d="M16 3v4" />
-      <circle cx="8" cy="14" r="0.8" fill="currentColor" />
-      <circle cx="12" cy="14" r="0.8" fill="currentColor" />
-      <circle cx="16" cy="14" r="0.8" fill="currentColor" />
-      <circle cx="8" cy="18" r="0.8" fill="currentColor" />
-      <circle cx="12" cy="18" r="0.8" fill="currentColor" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={baseClass(active, className)}
+      aria-hidden
+    >
+      <Frame active={active} />
+      <rect
+        x="7.2"
+        y="8"
+        width="9.6"
+        height="8.4"
+        rx="1.4"
+        stroke={s}
+        strokeWidth="1.3"
+      />
+      <path d="M7.2 10.6h9.6" stroke={s} strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M9.4 6.8v2M14.6 6.8v2" stroke={s} strokeWidth="1.2" strokeLinecap="round" />
+      <Node cx="9.6" cy="13.2" active={active} r={0.75} />
+      <Node cx="12" cy="13.2" active={active} r={0.75} />
+      <Node cx="14.4" cy="13.2" active={active} r={0.75} />
     </svg>
   );
 }
 
 export function BadgesIcon({ size = 24, className = '', active }: IconProps) {
+  const s = tone(active);
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={`${base(active)} ${className}`}>
-      <path d="M12 2l2.5 5.5H21l-4.5 3.5 1.5 6L12 14.5 6 17l1.5-6L3 7.5h6.5z" />
-      <circle cx="12" cy="10" r="2" fill="currentColor" stroke="none" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={baseClass(active, className)}
+      aria-hidden
+    >
+      <Frame active={active} />
+      <path
+        d="M12 7.4 13.2 10h2.8l-2.2 1.8.8 2.8L12 13.2 9.4 14.6l.8-2.8L8 10h2.8L12 7.4z"
+        stroke={s}
+        strokeWidth="1.2"
+        strokeLinejoin="round"
+      />
+      <Node cx="12" cy="11.2" active={active} r={0.85} />
+    </svg>
+  );
+}
+
+export function InviteIcon({ size = 24, className = '', active }: IconProps) {
+  const s = tone(active);
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={baseClass(active, className)}
+      aria-hidden
+    >
+      <Frame active={active} />
+      <circle cx="10" cy="10.2" r="2.1" stroke={s} strokeWidth="1.25" />
+      <path
+        d="M6.8 15.4c.7-1.5 2-2.3 3.2-2.3 1.2 0 2.5.8 3.2 2.3"
+        stroke={s}
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+      <path d="M15.2 9.2h3.2M16.8 7.6v3.2" stroke={s} strokeWidth="1.25" strokeLinecap="round" />
+      <Node cx="10" cy="10.2" active={active} r={0.75} />
+    </svg>
+  );
+}
+
+export function SearchIcon({ size = 24, className = '', active }: IconProps) {
+  const s = tone(active);
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={baseClass(active, className)}
+      aria-hidden
+    >
+      <Frame active={active} />
+      <circle cx="11" cy="11" r="3.2" stroke={s} strokeWidth="1.3" />
+      <path d="M13.4 13.4 16.2 16.2" stroke={s} strokeWidth="1.3" strokeLinecap="round" />
+      <Node cx="11" cy="11" active={active} r={0.75} />
+    </svg>
+  );
+}
+
+/** Soft Solana / network mark for wallet surfaces */
+export function NetworkIcon({ size = 24, className = '', active }: IconProps) {
+  const s = tone(active);
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={baseClass(active, className)}
+      aria-hidden
+    >
+      <Frame active={active} />
+      <Node cx="8.2" cy="9" active={active} />
+      <Node cx="12" cy="7.5" active={active} />
+      <Node cx="15.8" cy="9" active={active} />
+      <Node cx="10" cy="13.5" active={active} />
+      <Node cx="14" cy="13.5" active={active} />
+      <Node cx="12" cy="16.2" active={active} r={0.95} />
+      <path
+        d="M8.2 9 12 7.5l3.8 1.5M8.2 9 10 13.5M15.8 9 14 13.5M10 13.5 12 16.2 14 13.5"
+        stroke={s}
+        strokeWidth="1.1"
+        strokeLinecap="round"
+        opacity={0.85}
+      />
     </svg>
   );
 }

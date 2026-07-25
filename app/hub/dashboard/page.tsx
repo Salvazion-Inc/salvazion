@@ -14,6 +14,15 @@ import BottomNav from '@/components/BottomNav';
 import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 import ProfileAvatar from '@/components/profile/ProfileAvatar';
 import { useI18n } from '@/components/I18nProvider';
+import {
+  InviteIcon,
+  SwapIcon,
+  DevotionalIcon,
+  HealthIcon,
+  CalendarIcon,
+  BadgesIcon,
+  FreedomIcon,
+} from '@/components/Icons';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -218,82 +227,82 @@ export default function DashboardPage() {
             className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#00F511]/40 transition-all"
           >
             <div className="flex items-center gap-3">
-              <span className="text-xl">🤝</span>
+              <InviteIcon size={28} active />
               <div>
                 <p className="text-sm font-medium">{t('invite.title')}</p>
                 <p className="text-xs text-[#B7F7AC]/50">{t('invite.subtitle')}</p>
               </div>
             </div>
-            <span className="text-[#00F511]">→</span>
+            <span className="text-[#8FD99A]">→</span>
           </Link>
           <Link
             href="/hub/swap"
-            className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#00F511]/40 transition-all"
+            className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#8AAB8E]/40 transition-all"
           >
             <div className="flex items-center gap-3">
-              <span className="text-xl">◎</span>
+              <SwapIcon size={28} active />
               <div>
                 <p className="text-sm font-medium">{t('dashboard.swapTitle')}</p>
                 <p className="text-xs text-[#B7F7AC]/50">{t('dashboard.swapSub')}</p>
               </div>
             </div>
-            <span className="text-[#00F511]">→</span>
+            <span className="text-[#8FD99A]">→</span>
           </Link>
           <Link
             href="/hub/devotional"
-            className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#00F511]/40 transition-all"
+            className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#8AAB8E]/40 transition-all"
           >
             <div className="flex items-center gap-3">
-              <span className="text-xl">📖</span>
+              <DevotionalIcon size={28} active />
               <div>
                 <p className="text-sm font-medium">{t('dashboard.devotionalTitle')}</p>
                 <p className="text-xs text-[#B7F7AC]/50">{t('dashboard.devotionalSub')}</p>
               </div>
             </div>
-            <span className="text-[#00F511]">→</span>
+            <span className="text-[#8FD99A]">→</span>
           </Link>
 
           <Link
             href="/hub/health"
-            className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#00F511]/40 transition-all"
+            className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#8AAB8E]/40 transition-all"
           >
             <div className="flex items-center gap-3">
-              <span className="text-xl">⚡</span>
+              <HealthIcon size={28} active />
               <div>
                 <p className="text-sm font-medium">Health</p>
                 <p className="text-xs text-[#B7F7AC]/50">Ejercicio · Sol · Sueño · Alimentación</p>
               </div>
             </div>
-            <span className="text-[#00F511]">→</span>
+            <span className="text-[#8FD99A]">→</span>
           </Link>
 
           <Link
             href="/hub/calendar"
-            className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#00F511]/40 transition-all"
+            className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#8AAB8E]/40 transition-all"
           >
             <div className="flex items-center gap-3">
-              <span className="text-xl">📅</span>
+              <CalendarIcon size={28} active />
               <div>
                 <p className="text-sm font-medium">Calendario de disciplina</p>
                 <p className="text-xs text-[#B7F7AC]/50">Salvation · Health · Freedom</p>
               </div>
             </div>
-            <span className="text-[#00F511]">→</span>
+            <span className="text-[#8FD99A]">→</span>
           </Link>
 
 
           <Link
             href="/hub/badges"
-            className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#00F511]/40 transition-all"
+            className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#8AAB8E]/40 transition-all"
           >
             <div className="flex items-center gap-3">
-              <span className="text-xl">🏅</span>
+              <BadgesIcon size={28} active />
               <div>
                 <p className="text-sm font-medium">Insignias</p>
                 <p className="text-xs text-[#B7F7AC]/50">Virtud y constancia</p>
               </div>
             </div>
-            <span className="text-[#00F511]">→</span>
+            <span className="text-[#8FD99A]">→</span>
           </Link>
 
           <button
@@ -301,7 +310,7 @@ export default function DashboardPage() {
             className="w-full flex items-center justify-between glass rounded-xl px-4 py-3.5 text-left"
           >
             <div className="flex items-center gap-3">
-              <span className="text-xl">⚡</span>
+              <FreedomIcon size={28} active={showActions} />
               <div>
                 <p className="text-sm font-medium">Registrar acción</p>
                 <p className="text-xs text-[#B7F7AC]/50">

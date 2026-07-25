@@ -1,11 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --neon-primary: #00F511;
-  --dark-green: #00B10C;
-  --soft-green: #B7F7AC;
+  /* Brand — softened for long dark-mode reading */
+  --neon-primary: #6BCF78; /* was pure #00F511 — less eye strain */
+  --neon-primary-soft: #8FD99A;
+  --dark-green: #3D8A48;
+  --soft-green: #A8D4AE;
+  --sage: #8AAB8E;
   --off-white: #D8E1D9;
   --true-black: #040404;
+  --icon-active: #8FD99A;
+  --icon-idle: #8AAB8E;
   /* 1 = 16px base; TextScaleProvider multiplies via html font-size */
   --app-text-scale: 1;
   color-scheme: dark;
@@ -51,27 +56,28 @@ html[data-text-scale="xxl"] nav.fixed span {
 }
 
 .neon-text {
-  text-shadow: 0 0 8px var(--neon-primary), 0 0 16px rgba(0, 245, 17, 0.4);
+  /* Soft glow — no harsh neon bloom */
+  text-shadow: 0 0 6px rgba(143, 217, 154, 0.28), 0 0 12px rgba(107, 207, 120, 0.12);
+}
+
+.lion-glow {
+  filter: drop-shadow(0 0 10px rgba(143, 217, 154, 0.28));
 }
 
 .glass {
   background: rgba(4, 4, 4, 0.75);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(0, 177, 12, 0.25);
-}
-
-.lion-glow {
-  filter: drop-shadow(0 0 20px #00F511);
+  border: 1px solid rgba(138, 171, 142, 0.22);
 }
 
 .ring-glow {
-  filter: drop-shadow(0 0 12px #00F511);
+  filter: drop-shadow(0 0 8px rgba(143, 217, 154, 0.25));
 }
 
-/* Bible search highlight */
+/* Bible search highlight — soft mint, not pure neon */
 mark {
-  background-color: rgba(0, 245, 17, 0.22);
-  color: #00f511;
+  background-color: rgba(143, 217, 154, 0.18);
+  color: #a8d4ae;
   border-radius: 0.2rem;
   padding: 0 0.1rem;
 }

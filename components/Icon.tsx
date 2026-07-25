@@ -11,6 +11,8 @@ const iconMap: Record<string, string> = {
   devotional: '/icons/devotional.svg',
   calendar: '/icons/calendar.svg',
   badges: '/icons/badges.svg',
+  swap: '/icons/swap.svg',
+  invite: '/icons/invite.svg',
 };
 
 interface IconProps {
@@ -20,16 +22,28 @@ interface IconProps {
   active?: boolean;
 }
 
+/**
+ * Image-based Salvazion icons (soft mint set in /public/icons).
+ * Prefer Icons.tsx React components for nav when possible.
+ */
 export default function Icon({ name, size = 24, className = '', active = false }: IconProps) {
   const src = iconMap[name] || iconMap.home;
   return (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={src}
-      alt={name}
+      alt=""
       width={size}
       height={size}
-      className={`transition-all duration-200 ${active ? 'opacity-100 brightness-125 drop-shadow-[0_0_6px_#00F511]' : 'opacity-60'} ${className}`}
-      style={{ filter: active ? 'drop-shadow(0 0 6px #00F511)' : undefined }}
+      className={`transition-all duration-200 shrink-0 ${
+        active ? 'opacity-100' : 'opacity-80'
+      } ${className}`}
+      style={{
+        // Soft lift only — no harsh neon bloom
+        filter: active
+          ? 'drop-shadow(0 0 4px rgba(143, 217, 154, 0.35))'
+          : 'none',
+      }}
     />
   );
 }

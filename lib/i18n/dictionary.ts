@@ -87,6 +87,12 @@ export const dictionary = {
       continueWithGoogle: 'Continuar con Gmail',
       orEmail: 'o con email',
       xHint: 'Entra o crea tu cuenta con X. Tu @ aparecerá en el perfil.',
+      acceptTermsPrefix: 'He leído y acepto los',
+      acceptTermsAnd: 'y la',
+      termsOfService: 'Términos de Servicio',
+      privacyPolicy: 'Política de Privacidad',
+      acceptTermsRequired:
+        'Debes aceptar los Términos de Servicio y la Política de Privacidad para continuar.',
     },
     profile: {
       title: 'Perfil',
@@ -501,6 +507,12 @@ export const dictionary = {
       continueWithGoogle: 'Continue with Gmail',
       orEmail: 'or with email',
       xHint: 'Sign in or create your account with X. Your @ will show on your profile.',
+      acceptTermsPrefix: 'I have read and agree to the',
+      acceptTermsAnd: 'and the',
+      termsOfService: 'Terms of Service',
+      privacyPolicy: 'Privacy Policy',
+      acceptTermsRequired:
+        'You must accept the Terms of Service and Privacy Policy to continue.',
     },
     profile: {
       title: 'Profile',

@@ -1,18 +1,15 @@
 /**
- * X login via Supabase.
+ * X login via Supabase — OAuth 2.0 only (`provider: 'x'`).
+ * Does NOT redirect to deprecated Twitter OAuth 1.0a.
  *
- * Prefer OAuth 2.0 provider `x`. If it is disabled, or a previous attempt failed
- * with "Error getting user profile from external provider", automatically use
- * legacy `twitter` (OAuth 1.0a) when that provider is enabled — so login works
- * while X OAuth 2.0 app/API access is fixed.
+ * Supabase: Authentication → Providers → “X / Twitter (OAuth 2.0)”
+ * Credentials: Client ID + Client Secret from developer.x.com (OAuth 2.0 section)
  */
 
 import type { Provider, User } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/client';
 import { getOAuthRedirectTo } from '@/lib/auth/oauth-redirect';
 import { fetchExternalProviders } from '@/lib/auth/provider-status';
-
-const LEGACY_FLAG = 'salvazion_x_use_legacy';
 
 export interface XIdentity {
   username: string;
@@ -32,6 +29,7 @@ export function extractXIdentity(user: User | null | undefined): XIdentity | nul
   if (!user) return null;
 
   const identities = user.identities || [];
+  // Prefer modern `x`; still read legacy twitter identities for profile display only
   const xId =
     identities.find((i) => i.provider === 'x') ||
     identities.find((i) => i.provider === 'twitter') ||
@@ -86,121 +84,83 @@ export function xProfileUrl(username: string): string {
   return `https://x.com/${username.replace(/^@+/, '')}`;
 }
 
-/** Call from login page when OAuth returned a profile-fetch failure for X. */
+/** @deprecated No-op — legacy Twitter fallback removed */
 export function markXProfileFetchFailed(): void {
-  if (typeof window === 'undefined') return;
-  try {
-    sessionStorage.setItem(LEGACY_FLAG, '1');
-  } catch {
-    /* ignore */
-  }
+  /* intentionally empty — we no longer switch to Twitter OAuth 1.0a */
 }
 
 export function clearXLegacyFlag(): void {
   if (typeof window === 'undefined') return;
   try {
-    sessionStorage.removeItem(LEGACY_FLAG);
+    sessionStorage.removeItem('salvazion_x_use_legacy');
   } catch {
     /* ignore */
   }
-}
-
-function shouldPreferLegacy(): boolean {
-  if (typeof window === 'undefined') return false;
-  try {
-    if (sessionStorage.getItem(LEGACY_FLAG) === '1') return true;
-  } catch {
-    /* ignore */
-  }
-  const env = (process.env.NEXT_PUBLIC_X_AUTH_PROVIDER || '').toLowerCase();
-  if (env === 'twitter') return true;
-  if ((process.env.NEXT_PUBLIC_X_AUTH_ALLOW_LEGACY || '').toLowerCase() === 'true') {
-    return true;
-  }
-  return false;
-}
-
-function isProviderDisabledError(message: string): boolean {
-  const m = message.toLowerCase();
-  return (
-    m.includes('not enabled') ||
-    m.includes('unsupported provider') ||
-    m.includes('provider is not enabled')
-  );
 }
 
 /**
- * Decide provider order: OAuth 2.0 `x` first unless legacy is required/preferred.
+ * Start X OAuth 2.0 only (Supabase provider `x`).
  */
-async function resolveProviderOrder(): Promise<Provider[]> {
-  const { external, projectRef } = await fetchExternalProviders();
-  const xOn = external.x === true;
-  const twitterOn = external.twitter === true;
-  const preferLegacy = shouldPreferLegacy();
-
-  if (preferLegacy && twitterOn) {
-    return xOn ? (['twitter', 'x'] as Provider[]) : (['twitter'] as Provider[]);
-  }
-  if (xOn && twitterOn) {
-    return ['x', 'twitter'] as Provider[];
-  }
-  if (xOn) return ['x'] as Provider[];
-  if (twitterOn) return ['twitter'] as Provider[];
-
-  // Unknown settings — still try x then twitter
-  void projectRef;
-  return ['x', 'twitter'] as Provider[];
-}
-
 export async function signInWithX(options?: {
   next?: string;
 }): Promise<{ error: string | null }> {
   try {
-    const supabase = createClient();
-    const next = options?.next || '/hub/dashboard';
-    const redirectTo = getOAuthRedirectTo(next);
-    const order = await resolveProviderOrder();
+    clearXLegacyFlag();
 
-    let lastError = '';
-
-    for (const provider of order) {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo,
-          skipBrowserRedirect: true,
-        },
-      });
-
-      if (error) {
-        lastError = error.message;
-        if (isProviderDisabledError(error.message)) {
-          continue;
-        }
-        return { error: error.message };
-      }
-
-      if (data?.url) {
-        // Full navigation so PKCE cookies + redirect stay on the same configured host
-        window.location.assign(data.url);
-        return { error: null };
-      }
-
-      lastError = 'No se recibió URL de autorización de X';
-    }
-
-    if (lastError && isProviderDisabledError(lastError)) {
+    const { external, projectRef } = await fetchExternalProviders();
+    if (external.x === false && Object.keys(external).length > 0) {
       return {
         error:
-          'Ni X (OAuth 2.0) ni Twitter (OAuth 1.0a) están habilitados en Supabase para este proyecto. ' +
-          'Authentication → Providers → activa “X / Twitter (OAuth 2.0)” con Client ID/Secret, ' +
-          'o “Twitter” con API Key/Secret. Ver docs/auth-x.md',
+          `X (OAuth 2.0) no está habilitado en Supabase (proyecto ${projectRef}). ` +
+          `Authentication → Providers → “X / Twitter (OAuth 2.0)” → Enable + ` +
+          `Client ID y Client Secret de developer.x.com → Save. ` +
+          `No uses el provider “Twitter” (OAuth 1.0a, deprecado).`,
       };
     }
 
-    return {
-      error: lastError || 'No se pudo iniciar sesión con X',
-    };
+    const supabase = createClient();
+    const next = options?.next || '/hub/dashboard';
+    const redirectTo = getOAuthRedirectTo(next);
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'x' as Provider,
+      options: {
+        redirectTo,
+        skipBrowserRedirect: true,
+      },
+    });
+
+    if (error) {
+      const m = error.message.toLowerCase();
+      if (m.includes('not enabled') || m.includes('unsupported provider')) {
+        return {
+          error:
+            `X (OAuth 2.0) no está activado en Supabase (${projectRef}). ` +
+            `Providers → “X / Twitter (OAuth 2.0)” → Enable + Client ID/Secret → Save. ` +
+            `No actives el login con el provider Twitter V1 deprecado.`,
+        };
+      }
+      return { error: error.message };
+    }
+
+    if (data?.url) {
+      // Ensure we never open twitter.com OAuth 1.0a authorize endpoints by mistake
+      if (
+        data.url.includes('api.twitter.com/oauth/') ||
+        data.url.includes('api.x.com/oauth/authenticate') ||
+        data.url.includes('/oauth/authenticate')
+      ) {
+        return {
+          error:
+            'Se intentó usar Twitter OAuth 1.0a (deprecado). Revisa que en Supabase solo esté ' +
+            'activo “X / Twitter (OAuth 2.0)” con Client ID/Secret, no el provider Twitter V1.',
+        };
+      }
+      window.location.assign(data.url);
+      return { error: null };
+    }
+
+    return { error: 'No se recibió URL de autorización de X' };
   } catch (e) {
     return {
       error: e instanceof Error ? e.message : 'No se pudo iniciar sesión con X',

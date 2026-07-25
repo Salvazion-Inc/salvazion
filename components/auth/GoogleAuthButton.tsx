@@ -9,6 +9,7 @@ interface Props {
   next?: string;
   className?: string;
   onError?: (msg: string) => void;
+  disabled?: boolean;
 }
 
 /** Login / sign-up with Gmail (Google) via Supabase OAuth */
@@ -16,11 +17,16 @@ export default function GoogleAuthButton({
   next = '/hub/dashboard',
   className = '',
   onError,
+  disabled = false,
 }: Props) {
   const { t } = useI18n();
   const [loading, setLoading] = useState(false);
 
   async function handleClick() {
+    if (disabled) {
+      onError?.(t('auth.acceptTermsRequired'));
+      return;
+    }
     setLoading(true);
     const { error } = await signInWithGoogle({ next });
     if (error) {
@@ -33,7 +39,7 @@ export default function GoogleAuthButton({
     <button
       type="button"
       onClick={() => void handleClick()}
-      disabled={loading}
+      disabled={loading || disabled}
       className={`w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-2xl border border-[var(--border-strong)] bg-white/[0.06] text-[#D8E1D9] text-sm font-semibold hover:bg-[var(--surface-active)] transition disabled:opacity-50 ${className}`}
       aria-label={t('auth.continueWithGoogle')}
     >

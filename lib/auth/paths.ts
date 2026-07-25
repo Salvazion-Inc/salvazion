@@ -70,9 +70,9 @@ export function mapAuthError(message: string | null | undefined): string {
     m.includes('getting user profile')
   ) {
     return (
-      'X OAuth 2.0 no pudo leer el perfil. Pulsa otra vez «Continuar con X»: ' +
-      'la app reintentará con el conector compatible (OAuth 1.0a) si está activo en Supabase. ' +
-      'Para OAuth 2.0 puro: Client ID/Secret correctos + Request email ON. docs/auth-x.md'
+      'X OAuth 2.0 no pudo leer tu perfil. En Supabase activa “X / Twitter (OAuth 2.0)” con ' +
+      'Client ID + Client Secret (no Twitter V1). En developer.x.com: Request email ON, Web App, ' +
+      'callback https://kppylfrsclkdmtpobpxd.supabase.co/auth/v1/callback. docs/auth-x.md'
     );
   }
 

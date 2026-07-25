@@ -15,7 +15,7 @@ import {
 } from '@/lib/invite/engine';
 import { tryAcceptPendingInbound } from '@/lib/invite/supabase';
 import SocialAuthButtons from '@/components/auth/SocialAuthButtons';
-import { markXProfileFetchFailed } from '@/lib/auth/x-oauth';
+import TermsAccept from '@/components/auth/TermsAccept';
 
 type Mode = 'password' | 'magic' | 'forgot';
 
@@ -31,19 +31,12 @@ function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [mode, setMode] = useState<Mode>('password');
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   useEffect(() => {
     const code = searchParams.get('error');
     const mapped = mapQueryAuthError(code);
     const detail = searchParams.get('detail') || '';
-
-    // If X OAuth 2.0 failed to load user profile, next click uses Twitter OAuth 1.0a
-    if (
-      detail.toLowerCase().includes('user profile from external provider') ||
-      detail.toLowerCase().includes('getting user profile')
-    ) {
-      markXProfileFetchFailed();
-    }
 
     if (mapped && detail) {
       setError(`${mapped} (${detail})`);
@@ -79,11 +72,24 @@ function LoginForm() {
     return next === '/hub/dashboard' ? '/hub/dashboard' : next;
   }
 
+  function requireTerms(): boolean {
+    if (!acceptedTerms) {
+      setError(t('auth.acceptTermsRequired'));
+      return false;
+    }
+    return true;
+  }
+
   async function handlePasswordLogin(e: FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError(null);
     setInfo(null);
+
+    if (!requireTerms()) {
+      setLoading(false);
+      return;
+    }
 
     const supabase = getSupabase();
     if (!supabase) {
@@ -119,6 +125,11 @@ function LoginForm() {
     setLoading(true);
     setError(null);
     setInfo(null);
+
+    if (!requireTerms()) {
+      setLoading(false);
+      return;
+    }
 
     const supabase = getSupabase();
     if (!supabase) {
@@ -195,7 +206,18 @@ function LoginForm() {
 
         <div className="glass rounded-2xl p-6 space-y-4">
           {mode === 'password' && (
-            <SocialAuthButtons next={next} onError={(msg) => setError(msg)} />
+            <>
+              <TermsAccept
+                checked={acceptedTerms}
+                onChange={setAcceptedTerms}
+                id="login-accept-terms"
+              />
+              <SocialAuthButtons
+                next={next}
+                onError={(msg) => setError(msg)}
+                enabled={acceptedTerms}
+              />
+            </>
           )}
 
         <form
@@ -208,6 +230,13 @@ function LoginForm() {
           }
           className="space-y-4"
         >
+          {mode !== 'password' && (
+            <TermsAccept
+              checked={acceptedTerms}
+              onChange={setAcceptedTerms}
+              id="login-accept-terms-alt"
+            />
+          )}
           <div>
             <label className="block text-xs text-[var(--sage)] mb-1.5">{t('auth.email')}</label>
             <input
@@ -258,7 +287,7 @@ function LoginForm() {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || (mode !== 'forgot' && !acceptedTerms)}
             className="btn-primary"
           >
             {loading

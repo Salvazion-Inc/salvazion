@@ -17,6 +17,7 @@ import {
 } from '@/lib/invite/engine';
 import { tryAcceptPendingInbound } from '@/lib/invite/supabase';
 import SocialAuthButtons from '@/components/auth/SocialAuthButtons';
+import TermsAccept from '@/components/auth/TermsAccept';
 
 function SignupForm() {
   const router = useRouter();
@@ -30,6 +31,7 @@ function SignupForm() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [inbound, setInbound] = useState<InboundInvite | null>(null);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   useEffect(() => {
     const inv = parseInviteFromSearchParams(searchParams);
@@ -46,6 +48,11 @@ function SignupForm() {
     setLoading(true);
     setError(null);
 
+    if (!acceptedTerms) {
+      setError(t('auth.acceptTermsRequired'));
+      setLoading(false);
+      return;
+    }
     if (password.length < 8) {
       setError(t('auth.passwordMin'));
       setLoading(false);
@@ -155,9 +162,15 @@ function SignupForm() {
         )}
 
         <div className="glass rounded-2xl p-6 space-y-4">
+          <TermsAccept
+            checked={acceptedTerms}
+            onChange={setAcceptedTerms}
+            id="signup-accept-terms"
+          />
           <SocialAuthButtons
             next="/hub/onboarding"
             onError={(msg) => setError(msg)}
+            enabled={acceptedTerms}
           />
 
         <form onSubmit={handleSignup} className="space-y-4">
@@ -220,7 +233,7 @@ function SignupForm() {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !acceptedTerms}
             className="btn-primary"
           >
             {loading ? t('auth.creating') : t('auth.create')}

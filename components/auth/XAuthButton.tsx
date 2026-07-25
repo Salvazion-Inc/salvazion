@@ -12,19 +12,25 @@ interface Props {
   variant?: 'primary' | 'secondary';
   className?: string;
   onError?: (msg: string) => void;
+  disabled?: boolean;
 }
 
-/** Login / sign-up with X (Twitter) via Supabase OAuth */
+/** Login / sign-up with X via Supabase OAuth 2.0 */
 export default function XAuthButton({
   next = '/hub/dashboard',
   variant = 'secondary',
   className = '',
   onError,
+  disabled = false,
 }: Props) {
   const { t } = useI18n();
   const [loading, setLoading] = useState(false);
 
   async function handleClick() {
+    if (disabled) {
+      onError?.(t('auth.acceptTermsRequired'));
+      return;
+    }
     setLoading(true);
     const { error } = await signInWithX({ next });
     if (error) {
@@ -44,7 +50,7 @@ export default function XAuthButton({
     <button
       type="button"
       onClick={() => void handleClick()}
-      disabled={loading}
+      disabled={loading || disabled}
       className={`${base} ${className}`}
       aria-label={t('auth.continueWithX')}
     >

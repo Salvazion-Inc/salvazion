@@ -64,10 +64,11 @@ export function mapAuthError(message: string | null | undefined): string {
     m.includes('getting user profile')
   ) {
     return (
-      'X autorizó, pero Supabase no pudo leer tu perfil. En developer.x.com → tu app → ' +
-      'User authentication settings: activa “Request email from users”, App type Web App, ' +
-      'permissions Read, y guarda. En Keys and tokens usa Client ID + Client Secret (OAuth 2.0) ' +
-      'en Supabase → Providers → X / Twitter (OAuth 2.0), no las API Key de OAuth 1.0a.'
+      'X autorizó, pero Supabase no pudo leer el perfil (API de X). Solución recomendada: ' +
+      '1) En Supabase activa también “Twitter” (OAuth 1.0a) con API Key + API Secret Key de X. ' +
+      '2) En Vercel pon NEXT_PUBLIC_X_AUTH_PROVIDER=twitter y Redeploy. ' +
+      '3) En X: User authentication → Request email ON, Type Web App, callback de Supabase. ' +
+      'Detalle: docs/auth-x.md'
     );
   }
 

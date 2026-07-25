@@ -1,11 +1,14 @@
 /**
  * X (Twitter) OAuth via Supabase Auth.
  *
- * Supabase now has two providers:
- * - `x`      → X / Twitter (OAuth 2.0)  ← recommended
- * - `twitter`→ legacy Twitter (OAuth 1.0a)
+ * Supabase has two separate providers:
+ * - `x`       → X / Twitter (OAuth 2.0)  — uses API v2 /2/users/me
+ * - `twitter` → Twitter (OAuth 1.0a)     — uses /1.1/account/verify_credentials.json
  *
- * We try `x` first, then fall back to `twitter` if only the legacy one is enabled.
+ * "Error getting user profile from external provider" almost always means
+ * OAuth 2.0 tokens were issued but GET /2/users/me failed (email flag, wrong
+ * Client Secret, or API access). In that case enable legacy Twitter (OAuth 1.0a)
+ * with API Key + Secret and set NEXT_PUBLIC_X_AUTH_PROVIDER=twitter.
  */
 
 import type { Provider, User } from '@supabase/supabase-js';
@@ -22,14 +25,10 @@ function cleanUsername(raw: unknown): string | null {
   if (typeof raw !== 'string') return null;
   const u = raw.trim().replace(/^@+/, '');
   if (!u) return null;
-  // X handles: letters, numbers, underscore
   const loose = u.replace(/[^A-Za-z0-9_]/g, '');
   return loose || null;
 }
 
-/**
- * Pull X handle + avatar from Supabase user (identities + user_metadata).
- */
 export function extractXIdentity(user: User | null | undefined): XIdentity | null {
   if (!user) return null;
 
@@ -47,16 +46,10 @@ export function extractXIdentity(user: User | null | undefined): XIdentity | nul
     cleanUsername(meta.preferred_username) ||
     cleanUsername(meta.screen_name) ||
     cleanUsername(meta.username) ||
-    cleanUsername(meta.nickname);
+    cleanUsername(meta.nickname) ||
+    cleanUsername(meta.UserNameKey);
 
-  if (!username) {
-    const isX =
-      user.app_metadata?.provider === 'twitter' ||
-      user.app_metadata?.provider === 'x' ||
-      identities.some((i) => i.provider === 'twitter' || i.provider === 'x');
-    if (!isX) return null;
-    return null;
-  }
+  if (!username) return null;
 
   const displayName =
     (typeof meta.full_name === 'string' && meta.full_name) ||
@@ -105,8 +98,21 @@ function isProviderDisabledError(message: string): boolean {
 }
 
 /**
- * Start X OAuth (login or signup — same flow; Supabase creates account if new).
- * Prefer OAuth 2.0 provider `x`; fall back to legacy `twitter`.
+ * Which Supabase provider to try first.
+ * - `twitter` = OAuth 1.0a (API Key + Secret) — often more reliable on Free tier
+ * - `x` = OAuth 2.0 (Client ID + Secret) — recommended by Supabase docs
+ *
+ * Set NEXT_PUBLIC_X_AUTH_PROVIDER=twitter in Vercel if OAuth 2.0 profile fetch fails.
+ */
+export function preferredXProvider(): 'x' | 'twitter' {
+  const raw = (process.env.NEXT_PUBLIC_X_AUTH_PROVIDER || 'twitter').toLowerCase();
+  return raw === 'x' ? 'x' : 'twitter';
+}
+
+/**
+ * Start X OAuth (login or signup).
+ * Default order: OAuth 1.0a first (twitter), then OAuth 2.0 (x).
+ * Override with NEXT_PUBLIC_X_AUTH_PROVIDER=x|twitter
  */
 export async function signInWithX(options?: {
   next?: string;
@@ -116,48 +122,41 @@ export async function signInWithX(options?: {
     const next = options?.next || '/hub/dashboard';
     const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
 
-    // 1) Preferred: X OAuth 2.0 (Supabase dashboard: "X / Twitter (OAuth 2.0)")
-    // Do NOT override scopes with tweet.read-only sets — Supabase requests the
-    // scopes it needs to fetch /2/users/me. Wrong scopes →
-    // "Error getting user profile from external provider".
-    const primary = await supabase.auth.signInWithOAuth({
-      provider: 'x' as Provider,
-      options: {
-        redirectTo,
-        skipBrowserRedirect: false,
-      },
-    });
+    const first = preferredXProvider();
+    const order: Provider[] =
+      first === 'x' ? (['x', 'twitter'] as Provider[]) : (['twitter', 'x'] as Provider[]);
 
-    if (!primary.error) {
-      return { error: null };
-    }
+    let lastError = '';
 
-    // 2) Fallback: legacy Twitter OAuth 1.0a if only that is enabled
-    if (isProviderDisabledError(primary.error.message)) {
-      const legacy = await supabase.auth.signInWithOAuth({
-        provider: 'twitter' as Provider,
+    for (const provider of order) {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
         options: {
           redirectTo,
           skipBrowserRedirect: false,
+          // Let GoTrue use its built-in scopes for each provider.
+          // Custom scopes can break X Free tier /users/me.
         },
       });
 
-      if (!legacy.error) {
+      if (!error) {
         return { error: null };
       }
 
-      if (isProviderDisabledError(legacy.error.message)) {
-        return {
-          error:
-            'X no está activado en Supabase. En Authentication → Providers habilita ' +
-            '“X / Twitter (OAuth 2.0)” con Client ID y Client Secret de X, y guarda. ' +
-            'Proyecto: kppylfrsclkdmtpobpxd',
-        };
+      lastError = error.message;
+      if (!isProviderDisabledError(error.message)) {
+        // Real auth error (not "disabled") — surface it
+        return { error: error.message };
       }
-      return { error: legacy.error.message };
+      // else try next provider
     }
 
-    return { error: primary.error.message };
+    return {
+      error:
+        lastError ||
+        'X/Twitter no está activado en Supabase. Activa “Twitter (OAuth 1.0a)” con API Key+Secret ' +
+          'y/o “X / Twitter (OAuth 2.0)” con Client ID+Secret. Ver docs/auth-x.md',
+    };
   } catch (e) {
     return {
       error: e instanceof Error ? e.message : 'No se pudo iniciar sesión con X',

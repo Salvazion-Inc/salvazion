@@ -85,6 +85,43 @@ select:-webkit-autofill {
   caret-color: #00F511;
 }
 
+/* Solana wallet-adapter modal — match Salvazion dark neon theme */
+.wallet-adapter-modal-wrapper {
+  background: rgba(4, 4, 4, 0.85) !important;
+}
+.wallet-adapter-modal {
+  background: #0a0a0a !important;
+  border: 1px solid rgba(0, 245, 17, 0.35) !important;
+  border-radius: 1rem !important;
+  color: #d8e1d9 !important;
+  box-shadow: 0 0 40px rgba(0, 245, 17, 0.12) !important;
+}
+.wallet-adapter-modal-title {
+  color: #00f511 !important;
+}
+.wallet-adapter-modal-list li {
+  background: #040404 !important;
+  border: 1px solid rgba(0, 177, 12, 0.3) !important;
+  border-radius: 0.75rem !important;
+}
+.wallet-adapter-modal-list li:hover,
+.wallet-adapter-button:not([disabled]):hover {
+  background: rgba(0, 245, 17, 0.1) !important;
+}
+.wallet-adapter-button {
+  background-color: #00f511 !important;
+  color: #040404 !important;
+  border-radius: 0.75rem !important;
+  font-weight: 600 !important;
+}
+.wallet-adapter-button-trigger {
+  background-color: #00f511 !important;
+  color: #040404 !important;
+}
+.wallet-adapter-modal-button-close {
+  background: rgba(0, 177, 12, 0.2) !important;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

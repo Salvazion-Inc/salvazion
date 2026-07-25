@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Providers from "@/components/Providers";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -34,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="es" className={`dark ${geistSans.variable} ${geistMono.variable}`} style={{ colorScheme: 'dark' }}>
       <body className="bg-[#040404] text-[#D8E1D9] min-h-screen font-sans overflow-x-hidden">
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 
 const SalvazionSite = () => {
   const [language, setLanguage] = useState<'es' | 'en'>('es');
@@ -19,6 +20,7 @@ const SalvazionSite = () => {
       tagline: 'El mundo secular te quita el espíritu, mente, cuerpo y alma.',
       tagline2: 'Salvazion te los devuelve.',
       buyToken: 'Comprar $SALVAZION en Jupiter',
+      connectWallet: 'Conecta tu billetera Solana',
       download: 'Entrar a la App',
       chapter: 'CHAPTER 01',
       salvatorsTitle: 'LOS 12 SALVATORS',
@@ -40,6 +42,7 @@ const SalvazionSite = () => {
       tagline: 'The secular world takes away your spirit, mind, body and soul.',
       tagline2: 'Salvazion gives them back to you.',
       buyToken: 'Buy $SALVAZION on Jupiter',
+      connectWallet: 'Connect your Solana wallet',
       download: 'Enter the App',
       chapter: 'CHAPTER 01',
       salvatorsTitle: 'THE 12 SALVATORS',
@@ -188,6 +191,11 @@ const SalvazionSite = () => {
 
           <div className="font-mono text-xs sm:text-sm bg-zinc-900/80 border border-[#00B10C]/40 p-3 rounded-xl mb-8 inline-block break-all">
             CA: 7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2
+          </div>
+
+          <div className="max-w-md mx-auto mb-8 text-left">
+            <p className="text-center text-sm text-[#B7F7AC]/70 mb-3">{t.connectWallet}</p>
+            <WalletConnectCard />
           </div>
 
           <div>

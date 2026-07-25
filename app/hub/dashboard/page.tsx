@@ -11,6 +11,7 @@ import { ComputedScores } from '@/lib/scoring/types';
 import { generateCoachGuidance, CoachMessage } from '@/lib/coach/engine';
 import { evaluateBadges, getBadgeProgress, getEarnedBadgesDetailed, BadgeDef } from '@/lib/badges/engine';
 import BottomNav from '@/components/BottomNav';
+import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -99,11 +100,7 @@ export default function DashboardPage() {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-xs px-2.5 py-1 rounded-full border border-[#00B10C]/40 text-[#B7F7AC]">
-            Solana
-          </span>
-        </div>
+        <WalletConnectCard variant="compact" />
       </header>
 
       <main className="flex-1 flex flex-col items-center px-5 pt-4 pb-32">

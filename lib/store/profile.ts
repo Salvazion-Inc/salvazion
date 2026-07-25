@@ -224,6 +224,7 @@ export function clearProfile() {
   localStorage.removeItem('salvazion_actions');
   localStorage.removeItem('salvazion_streaks');
   localStorage.removeItem('salvazion_badges');
+  localStorage.removeItem('salvazion_linked_wallet');
 }
 
 export async function signOut() {

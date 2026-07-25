@@ -15,6 +15,7 @@ import {
 } from '@/lib/store/profile';
 import { UserProfile } from '@/lib/types';
 import { createClient } from '@/lib/supabase/client';
+import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -255,6 +256,11 @@ export default function ProfilePage() {
               ))}
             </div>
           )}
+        </div>
+
+        {/* Solana wallet */}
+        <div className="mb-6">
+          <WalletConnectCard />
         </div>
 
         {/* Privacy note */}

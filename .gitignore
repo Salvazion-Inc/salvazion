@@ -40,3 +40,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Capacitor — keep android/ios source; ignore build artifacts & local SDK paths
+/native/capacitor/.init-status.json
+/native/capacitor/plugins/SalvazionHealth/node_modules
+android/app/build
+android/build
+android/.gradle
+android/local.properties
+android/captures
+android/.idea
+*.apk
+*.aab
+ios/App/Pods
+ios/App/App/public
+ios/DerivedData
+ios/App/output

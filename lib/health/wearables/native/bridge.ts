@@ -66,7 +66,7 @@ declare global {
 
 function getPlugin(): SalvazionHealthPlugin | null {
   if (typeof window === 'undefined') return null;
-  // Capacitor 3+ register pattern
+  // Filled by registerCapacitorShell() / Capacitor plugin registry
   const plugins = window.Capacitor?.Plugins;
   if (plugins && 'SalvazionHealth' in plugins) {
     return plugins.SalvazionHealth as SalvazionHealthPlugin;

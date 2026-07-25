@@ -2,62 +2,104 @@
 
 Brings **HealthKit (iOS)** and **Health Connect (Android)** into Salvazion Health.
 
-The Next.js app stays the UI. Capacitor wraps the production URL (or static export) and injects the `SalvazionHealth` plugin.
+The Next.js app stays the UI. Capacitor wraps your deployed URL (Vercel) and loads the `SalvazionHealth` plugin.
 
-## Prerequisites
+## One command init
 
-- Node 20+
-- Xcode 15+ (iOS)
-- Android Studio (Android 14+ recommended for Health Connect)
-- Apple Developer account (HealthKit entitlement)
-- Google Play Console for Health Connect data types declaration
-
-## One-time setup
+From the **repo root**:
 
 ```bash
-# From repo root
-npm install @capacitor/core @capacitor/cli @capacitor/ios @capacitor/android
+# Optional: point the shell at production
+# Windows PowerShell:
+$env:NEXT_PUBLIC_APP_URL="https://your-app.vercel.app"
 
-npx cap init Salvazion com.salvazion.app --web-dir out
-# Or point server.url to your Vercel deploy for live reload style shell:
-
-# capacitor.config.ts is provided in this folder — copy to project root or merge.
+npm run cap:init
 ```
 
-Copy / merge `native/capacitor/capacitor.config.ts` into the app root, then:
+What `cap:init` does:
+
+1. Installs `@capacitor/*` and `@salvazion/capacitor-health`
+2. Builds the local Health plugin
+3. Ensures `capacitor.config.ts` + `native/www`
+4. Runs `cap add android` (and `cap add ios` on macOS)
+5. Runs `cap sync`
+6. Patches Android Health Connect permissions (+ iOS Health usage strings on Mac)
+
+### Options
 
 ```bash
-npx cap add ios
-npx cap add android
+npm run cap:init -- --android-only
+npm run cap:init -- --ios-only          # macOS only
+npm run cap:init -- --force
 ```
 
-### Wire the plugin
+### Scripts
 
-1. Copy `native/capacitor/plugins/SalvazionHealth` into the Capacitor project (or publish as local package).
-2. Register in `MainActivity` / iOS AppDelegate as per Capacitor custom plugin docs.
-3. Enable capabilities:
-   - **iOS**: HealthKit → Read (steps, distance, heart rate, HRV, sleep, SpO2, energy, weight)
-   - **Android**: Health Connect permissions in `AndroidManifest.xml` (see plugin README)
+| Script | Purpose |
+|--------|---------|
+| `npm run cap:init` | Full automated init |
+| `npm run cap:doctor` | Readiness checklist |
+| `npm run cap:sync` | Sync web + plugins → native |
+| `npm run cap:open:android` | Open Android Studio |
+| `npm run cap:open:ios` | Open Xcode (Mac) |
+| `npm run cap:run:android` | Build & run on device/emulator |
+| `npm run cap:plugin:build` | Rebuild Health plugin TS |
 
-### Build
+## Server URL
+
+`capacitor.config.ts` reads (in order):
+
+1. `CAPACITOR_SERVER_URL`
+2. `NEXT_PUBLIC_APP_URL`
+3. else loads local `native/www` placeholder
+
+Set in `.env.local` or your shell before `cap:sync`.
+
+## After init
+
+### Android
 
 ```bash
-# Option A: load remote PWA
-# capacitor.config.ts → server.url = https://your-app.vercel.app
+npm run cap:open:android
+```
 
-# Option B: static export (if you switch next.config output)
-npm run build
-npx cap sync
-npx cap open ios
-npx cap open android
+- Install **Health Connect** on the device/emulator
+- Grant health permissions when prompted
+- Run the app
+
+### iOS (Mac + Xcode)
+
+```bash
+npm run cap:init -- --ios-only
+npm run cap:open:ios
+```
+
+In Xcode:
+
+1. Target → **Signing & Capabilities** → **+ HealthKit**
+2. Confirm `Info.plist` has `NSHealthShareUsageDescription` (auto-patched by init)
+
+## Plugin sources
+
+```
+native/capacitor/plugins/SalvazionHealth/
+  src/                 # TypeScript registerPlugin
+  ios/Sources/...      # HealthKit Swift
+  android/src/main/... # Health Connect Kotlin
+```
+
+Linked into the app as:
+
+```json
+"@salvazion/capacitor-health": "file:native/capacitor/plugins/SalvazionHealth"
 ```
 
 ## Privacy
 
-- Request only read scopes needed for Health pillar.
-- Show purpose strings in App Store / Play listing: *“Salvazion reads activity and sleep to score Health.”*
-- Do not write medical claims; estimates feed Salvation / Health / Freedom gamification.
+- Read-only health data for the Health pillar score
+- No clinical claims
+- App Store / Play listings must declare HealthKit / Health Connect usage
 
-## Env
+## OAuth
 
-Native shell uses the same API backend. Set OAuth redirect URIs to your production domain for Fitbit / Oura / WHOOP / Garmin.
+OAuth (Fitbit/Oura/WHOOP/Garmin) runs in the WebView against your Vercel domain. Configure redirect URIs on that domain (see `docs/wearables-phase-d.md`).

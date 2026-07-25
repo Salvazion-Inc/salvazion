@@ -8,9 +8,22 @@
     "start": "next start",
     "lint": "eslint",
     "bible:build": "node scripts/build-bible.mjs",
-    "db:phalanx": "node scripts/run-phalanx-sql.mjs"
+    "db:phalanx": "node scripts/run-phalanx-sql.mjs",
+    "cap:init": "node scripts/capacitor-init.mjs",
+    "cap:doctor": "node scripts/capacitor-doctor.mjs",
+    "cap:sync": "npx cap sync",
+    "cap:open:android": "npx cap open android",
+    "cap:open:ios": "npx cap open ios",
+    "cap:run:android": "npx cap run android",
+    "cap:run:ios": "npx cap run ios",
+    "cap:plugin:build": "tsc -p native/capacitor/plugins/SalvazionHealth/tsconfig.json"
   },
   "dependencies": {
+    "@capacitor/app": "^7.1.0",
+    "@capacitor/core": "^7.4.2",
+    "@capacitor/splash-screen": "^7.0.3",
+    "@capacitor/status-bar": "^7.0.3",
+    "@salvazion/capacitor-health": "file:native/capacitor/plugins/SalvazionHealth",
     "@solana/wallet-adapter-base": "^0.9.27",
     "@solana/wallet-adapter-phantom": "^0.9.29",
     "@solana/wallet-adapter-react": "^0.15.39",
@@ -25,6 +38,9 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@capacitor/android": "^7.4.2",
+    "@capacitor/cli": "^7.4.2",
+    "@capacitor/ios": "^7.4.2",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
     "@solana/wallet-adapter-react-ui",
     "@solana/wallet-adapter-phantom",
     "@solana/wallet-adapter-solflare",
+    "@salvazion/capacitor-health",
+    "@capacitor/core",
+    "@capacitor/app",
+    "@capacitor/splash-screen",
+    "@capacitor/status-bar",
   ],
   // Security headers — baseline for a production-facing app
   async headers() {

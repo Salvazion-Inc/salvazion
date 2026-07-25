@@ -34,10 +34,16 @@ See `.env.wearables.example`.
 
 Web browsers cannot access system health stores. Use Capacitor:
 
-1. Follow `native/capacitor/README.md`
-2. Install plugin sources under `native/capacitor/plugins/SalvazionHealth`
-3. iOS: HealthKit capability + `Plugin.swift`
-4. Android: Health Connect client + `SalvazionHealthPlugin.kt`
-5. In the app, Health → **Sincronizar desde el sistema de salud**
+```bash
+# From repo root — automated init
+$env:NEXT_PUBLIC_APP_URL="https://your-app.vercel.app"   # PowerShell
+npm run cap:init
+npm run cap:doctor
+npm run cap:open:android   # or cap:open:ios on Mac
+```
 
-The JS bridge is `lib/health/wearables/native/bridge.ts`.
+Details: `native/capacitor/README.md`
+
+- Plugin: `native/capacitor/plugins/SalvazionHealth`
+- Bridge: `lib/health/wearables/native/bridge.ts`
+- In the app: Health → **Sincronizar desde el sistema de salud**

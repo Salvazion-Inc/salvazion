@@ -184,3 +184,6 @@ create trigger streaks_updated_at
 -- 2. Authentication → URL Configuration → add your site URL + /auth/callback
 -- 3. Copy Project URL + anon key into .env.local
 -- ============================================================
+
+-- See also: phalanx.sql for invites/connections between real accounts
+

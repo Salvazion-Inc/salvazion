@@ -9,6 +9,11 @@ import { mapAuthError, mapQueryAuthError, safeNextPath } from '@/lib/auth/paths'
 import { ensureProfileForUser, loadProfileAsync } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
 import LanguageControl from '@/components/settings/LanguageControl';
+import {
+  parseInviteFromSearchParams,
+  saveInboundInvite,
+} from '@/lib/invite/engine';
+import { tryAcceptPendingInbound } from '@/lib/invite/supabase';
 
 type Mode = 'password' | 'magic' | 'forgot';
 
@@ -31,6 +36,9 @@ function LoginForm() {
     if (mapped) setError(mapped);
     const detail = searchParams.get('detail');
     if (detail && !mapped) setError(detail);
+
+    const inv = parseInviteFromSearchParams(searchParams);
+    if (inv) saveInboundInvite(inv);
   }, [searchParams]);
 
   function getSupabase() {
@@ -76,6 +84,13 @@ function LoginForm() {
       setError(mapAuthError(err.message));
       setLoading(false);
       return;
+    }
+
+    // Accept Phalanx invite if present (real Supabase connection)
+    try {
+      await tryAcceptPendingInbound();
+    } catch {
+      // non-blocking
     }
 
     const dest = await resolveDestination();

@@ -15,6 +15,7 @@ import {
   saveInboundInvite,
   type InboundInvite,
 } from '@/lib/invite/engine';
+import { tryAcceptPendingInbound } from '@/lib/invite/supabase';
 
 function SignupForm() {
   const router = useRouter();
@@ -94,6 +95,7 @@ function SignupForm() {
 
     try {
       await ensureProfileForUser(name.trim());
+      await tryAcceptPendingInbound();
     } catch {
       // non-blocking
     }

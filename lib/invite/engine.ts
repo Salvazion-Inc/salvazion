@@ -173,7 +173,7 @@ ${params.inviteUrl}
 }
 
 /**
- * Create an invite, append to profile links, persist locally (+ Supabase profile fields that exist).
+ * Create an invite, append to profile links, persist locally + Supabase phalanx_invites.
  */
 export async function createInvite(
   input: CreateInviteInput,
@@ -184,16 +184,34 @@ export async function createInvite(
     return { error: lang === 'en' ? 'Name is required.' : 'El nombre es obligatorio.' };
   }
 
+  // Dynamic import to avoid circular deps in edge cases
+  const { pushInviteToSupabase } = await import('./supabase');
+
   const profile = loadProfile();
   const inviterName = (input.inviterName || profile.name || 'Salvazion').trim();
   const code = randomCode(8);
+
+  const remote = await pushInviteToSupabase({
+    code,
+    inviteeName: name,
+    inviteeEmail: input.email?.trim(),
+    relation: input.relation,
+    note: input.note?.trim(),
+  });
+
+  if (!remote.ok) {
+    // Soft-fail: still allow local invite if tables missing, but warn
+    console.warn('[Phalanx] Supabase invite not stored:', remote.error);
+  }
+
   const link: LinkedProfile = {
-    id: newLinkId(),
+    id: remote.ok ? remote.id : newLinkId(),
     name,
     relation: input.relation,
     status: 'invited',
     email: input.email?.trim() || undefined,
     inviteCode: code,
+    inviteId: remote.ok ? remote.id : undefined,
     invitedAt: new Date().toISOString(),
     note: input.note?.trim() || undefined,
   };
@@ -218,17 +236,19 @@ export async function createInvite(
     relation: input.relation,
     inviteeName: name,
   });
+  // Also offer login path for existing accounts
+  const inviteUrlLogin = inviteUrl.replace('/auth/signup?', '/auth/login?');
+
   const shareText = buildShareText(
     {
       inviterName,
       inviteeName: name,
       relation: input.relation,
-      inviteUrl,
+      inviteUrl: `${inviteUrl}\n\n${lang === 'en' ? 'Already have an account?' : '¿Ya tienes cuenta?'} ${inviteUrlLogin}`,
     },
     lang
   );
 
-  // Remember outbound invites for this device (accept flow / analytics)
   pushOutboundInvite({
     code,
     inviterName,

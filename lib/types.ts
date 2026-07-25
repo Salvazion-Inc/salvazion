@@ -25,6 +25,11 @@ export interface LinkedProfile {
   inviteCode?: string;
   invitedAt?: string;
   note?: string;
+  /** Supabase auth user id of the other person (when connected) */
+  peerUserId?: string;
+  /** Supabase phalanx_invites.id */
+  inviteId?: string;
+  connectedAt?: string;
 }
 
 export interface UserProfile {

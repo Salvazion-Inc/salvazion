@@ -8,11 +8,18 @@ import {
   categoryLabel,
   createInvite,
   listAllLinks,
+  loadInboundInvite,
   relationLabel,
   removeLink,
   shareInviteText,
   type InviteCategory,
 } from '@/lib/invite/engine';
+import {
+  acceptPhalanxInvite,
+  fetchInvitePreview,
+  syncConnectionsFromServer,
+  tryAcceptPendingInbound,
+} from '@/lib/invite/supabase';
 import { loadProfileAsync } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
 
@@ -34,8 +41,16 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
   const [success, setSuccess] = useState<string | null>(null);
   const [lastUrl, setLastUrl] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | InviteCategory>('all');
+  const [acceptCode, setAcceptCode] = useState('');
+  const [acceptBusy, setAcceptBusy] = useState(false);
+  const [pendingBanner, setPendingBanner] = useState<{
+    code: string;
+    from: string;
+    relation: string;
+  } | null>(null);
 
   const refresh = useCallback(async () => {
+    await syncConnectionsFromServer();
     const p = await loadProfileAsync();
     setProfileName(p.name || '');
     const all = listAllLinks(p);
@@ -44,8 +59,38 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
   }, [onChanged]);
 
   useEffect(() => {
-    void refresh();
-  }, [refresh]);
+    void (async () => {
+      // Auto-accept inbound invite after signup/login
+      const auto = await tryAcceptPendingInbound();
+      if (auto?.ok) {
+        setSuccess(
+          auto.already
+            ? t('invite.alreadyConnected')
+            : t('invite.acceptedWith', { name: auto.inviterName || 'Phalanx' })
+        );
+      }
+      const inbound = loadInboundInvite();
+      if (inbound?.code && !inbound.acceptedAt) {
+        setAcceptCode(inbound.code);
+        setPendingBanner({
+          code: inbound.code,
+          from: inbound.from,
+          relation: relationLabel(inbound.relation, lang),
+        });
+        // enrich with server preview if possible
+        const preview = await fetchInvitePreview(inbound.code);
+        if (preview.ok && preview.inviterName) {
+          setPendingBanner({
+            code: inbound.code,
+            from: preview.inviterName,
+            relation: relationLabel(preview.relation || inbound.relation, lang),
+          });
+        }
+      }
+      await refresh();
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const catDef = INVITE_CATEGORIES.find((c) => c.id === category)!;
 
@@ -98,6 +143,40 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
     await refresh();
   };
 
+  const handleAcceptCode = async (code?: string) => {
+    const c = (code || acceptCode).trim();
+    if (!c) {
+      setError(t('invite.codeRequired'));
+      return;
+    }
+    setAcceptBusy(true);
+    setError(null);
+    setSuccess(null);
+    try {
+      const result = await acceptPhalanxInvite(c);
+      if (!result.ok) {
+        const map: Record<string, string> = {
+          invite_not_found: t('invite.errNotFound'),
+          invite_not_pending: t('invite.errNotPending'),
+          cannot_accept_own: t('invite.errOwn'),
+          not_authenticated: t('invite.errAuth'),
+        };
+        setError(map[result.error || ''] || result.error || t('invite.errGeneric'));
+        return;
+      }
+      setSuccess(
+        result.already
+          ? t('invite.alreadyConnected')
+          : t('invite.acceptedWith', { name: result.inviterName || 'Phalanx' })
+      );
+      setPendingBanner(null);
+      setAcceptCode('');
+      await refresh();
+    } finally {
+      setAcceptBusy(false);
+    }
+  };
+
   const copyLast = async () => {
     if (!lastUrl) return;
     try {
@@ -119,6 +198,46 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
         <span className="text-[11px] px-2.5 py-1 rounded-full border border-[#00F511]/30 text-[#00F511] shrink-0">
           {links.length} {t('invite.count')}
         </span>
+      </div>
+
+      {/* Accept invite (existing account or after signup) */}
+      <div className="rounded-xl border border-[#00F511]/25 bg-[#00F511]/05 p-4 space-y-3">
+        <div>
+          <p className="text-xs font-semibold text-[#00F511]">{t('invite.acceptTitle')}</p>
+          <p className="text-[11px] text-[#B7F7AC]/55 mt-0.5">{t('invite.acceptHint')}</p>
+        </div>
+        {pendingBanner && (
+          <div className="rounded-lg border border-[#00F511]/30 bg-[#040404]/60 px-3 py-2 text-xs text-[#D8E1D9]/90">
+            <span className="text-[#00F511] font-semibold">{pendingBanner.from}</span>{' '}
+            {t('invite.invitedYou')} {t('invite.asRelation')}{' '}
+            <span className="text-[#B7F7AC]">{pendingBanner.relation}</span>.
+            <button
+              type="button"
+              disabled={acceptBusy}
+              onClick={() => handleAcceptCode(pendingBanner.code)}
+              className="mt-2 w-full py-2 rounded-lg bg-[#00F511] text-[#040404] font-semibold text-xs hover:bg-[#B7F7AC] disabled:opacity-50"
+            >
+              {acceptBusy ? t('invite.accepting') : t('invite.acceptNow')}
+            </button>
+          </div>
+        )}
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={acceptCode}
+            onChange={(e) => setAcceptCode(e.target.value.toUpperCase())}
+            placeholder={t('invite.codePlaceholder')}
+            className="flex-1 bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm font-mono tracking-wider focus:outline-none focus:border-[#00F511] uppercase"
+          />
+          <button
+            type="button"
+            disabled={acceptBusy || !acceptCode.trim()}
+            onClick={() => handleAcceptCode()}
+            className="shrink-0 px-4 py-2.5 rounded-xl border border-[#00F511]/50 text-[#00F511] text-xs font-semibold hover:bg-[#00F511]/10 disabled:opacity-50"
+          >
+            {t('invite.accept')}
+          </button>
+        </div>
       </div>
 
       {/* Category grid */}
@@ -262,11 +381,17 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
                   </p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <span className="text-[10px] px-2 py-0.5 rounded-full border border-[#00F511]/30 text-[#B7F7AC]">
+                  <span
+                    className={`text-[10px] px-2 py-0.5 rounded-full border ${
+                      l.status === 'connected'
+                        ? 'border-[#00F511] text-[#00F511] bg-[#00F511]/10'
+                        : 'border-[#00F511]/30 text-[#B7F7AC]'
+                    }`}
+                  >
                     {l.status === 'invited'
                       ? t('invite.statusInvited')
                       : l.status === 'connected'
-                        ? t('invite.statusConnected')
+                        ? t('invite.connectedBadge')
                         : t('invite.statusPending')}
                   </span>
                   <button

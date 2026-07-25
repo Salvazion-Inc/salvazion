@@ -36,7 +36,21 @@ Rellena con Project Settings → API:
 ### Vercel
 Project → Settings → Environment Variables → mismas dos keys (Production + Preview).
 
-## 5. Avatar de perfil (Storage opcional)
+## 5. Phalanx — invitaciones entre cuentas reales
+Ejecuta en SQL Editor el archivo **`supabase/phalanx.sql`** (una vez).
+
+Crea:
+- `phalanx_invites` — invitaciones con código
+- `phalanx_connections` — vínculo bidireccional entre usuarios
+- RPC `accept_phalanx_invite(code)` y `get_phalanx_invite_preview(code)`
+
+Flujo:
+1. Usuario A invita desde Perfil → se guarda en `phalanx_invites` + enlace con `?invite=CODIGO`
+2. Usuario B se registra o inicia sesión con ese enlace
+3. La app llama `accept_phalanx_invite` → ambas cuentas quedan **conectadas**
+4. Al abrir Perfil se sincronizan conexiones desde Supabase
+
+## 6. Avatar de perfil (Storage opcional)
 La foto funciona **offline** (comprimida en el dispositivo). Para multi-dispositivo:
 
 1. SQL Editor — si el proyecto ya existía sin `avatar_url`:
@@ -80,12 +94,12 @@ create policy "Users can delete own avatar"
 
 Sin el bucket, la foto se guarda igual en el dispositivo (localStorage).
 
-## 6. Instalar dependencias
+## 7. Instalar dependencias
 ```bash
 npm install
 ```
 
-## 7. Arrancar
+## 8. Arrancar
 ```bash
 npm run dev
 ```

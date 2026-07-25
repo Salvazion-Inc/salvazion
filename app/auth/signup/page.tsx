@@ -7,9 +7,12 @@ import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 import { mapAuthError } from '@/lib/auth/paths';
 import { ensureProfileForUser } from '@/lib/store/profile';
+import { useI18n } from '@/components/I18nProvider';
+import LanguageControl from '@/components/settings/LanguageControl';
 
 export default function SignupPage() {
   const router = useRouter();
+  const { t } = useI18n();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,12 +27,12 @@ export default function SignupPage() {
     setError(null);
 
     if (password.length < 8) {
-      setError('La contraseña debe tener al menos 8 caracteres.');
+      setError(t('auth.passwordMin'));
       setLoading(false);
       return;
     }
     if (password !== confirm) {
-      setError('Las contraseñas no coinciden.');
+      setError(t('auth.passwordMismatch'));
       setLoading(false);
       return;
     }
@@ -82,16 +85,16 @@ export default function SignupPage() {
           <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[#00F511]/40 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
             <Image src="/logo-icon.png" alt="Salvazion" width={64} height={64} className="object-cover" />
           </div>
-          <h1 className="text-xl font-bold text-[#00F511] mb-2">Revisa tu correo</h1>
+          <h1 className="text-xl font-bold text-[#00F511] mb-2">{t('auth.checkEmail')}</h1>
           <p className="text-sm text-[#B7F7AC]/80 leading-relaxed">
-            Te enviamos un enlace de confirmación a <span className="text-[#D8E1D9]">{email.trim()}</span>.
-            Actívalo y vuelve aquí para entrar a la Phalanx.
+            {t('auth.checkEmailBody')} <span className="text-[#D8E1D9]">{email.trim()}</span>.{' '}
+            {t('auth.activateAndReturn')}
           </p>
           <Link
             href="/auth/login"
             className="inline-block mt-6 text-sm text-[#00F511] hover:underline"
           >
-            Ir a login
+            {t('auth.goLogin')}
           </Link>
         </div>
       </div>
@@ -101,17 +104,20 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col items-center justify-center px-5">
       <div className="w-full max-w-sm">
+        <div className="flex justify-end mb-4">
+          <LanguageControl compact />
+        </div>
         <div className="text-center mb-8">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[#00F511]/40 flex items-center justify-center lion-glow overflow-hidden">
             <Image src="/logo.png" alt="Salvazion" width={64} height={64} className="object-contain" />
           </div>
-          <h1 className="text-2xl font-bold text-[#00F511] tracking-tight">Únete a la Phalanx</h1>
-          <p className="text-sm text-[#B7F7AC]/70 mt-1">Crea tu cuenta Green Lion King</p>
+          <h1 className="text-2xl font-bold text-[#00F511] tracking-tight">{t('auth.signupTitle')}</h1>
+          <p className="text-sm text-[#B7F7AC]/70 mt-1">{t('auth.signupSubtitle')}</p>
         </div>
 
         <form onSubmit={handleSignup} className="glass rounded-2xl p-6 space-y-4">
           <div>
-            <label className="block text-xs text-[#B7F7AC] mb-1.5">Nombre</label>
+            <label className="block text-xs text-[#B7F7AC] mb-1.5">{t('auth.name')}</label>
             <input
               type="text"
               required
@@ -123,7 +129,7 @@ export default function SignupPage() {
           </div>
 
           <div>
-            <label className="block text-xs text-[#B7F7AC] mb-1.5">Email</label>
+            <label className="block text-xs text-[#B7F7AC] mb-1.5">{t('auth.email')}</label>
             <input
               type="email"
               required
@@ -136,7 +142,7 @@ export default function SignupPage() {
           </div>
 
           <div>
-            <label className="block text-xs text-[#B7F7AC] mb-1.5">Contraseña (mín. 8)</label>
+            <label className="block text-xs text-[#B7F7AC] mb-1.5">{t('auth.minPassword')}</label>
             <input
               type="password"
               required
@@ -150,7 +156,7 @@ export default function SignupPage() {
           </div>
 
           <div>
-            <label className="block text-xs text-[#B7F7AC] mb-1.5">Confirmar contraseña</label>
+            <label className="block text-xs text-[#B7F7AC] mb-1.5">{t('auth.confirmPassword')}</label>
             <input
               type="password"
               required
@@ -172,14 +178,14 @@ export default function SignupPage() {
             disabled={loading}
             className="w-full py-3.5 rounded-xl bg-[#00F511] text-[#040404] font-semibold text-sm hover:bg-[#B7F7AC] transition disabled:opacity-50"
           >
-            {loading ? 'Creando…' : 'Crear cuenta'}
+            {loading ? t('auth.creating') : t('auth.create')}
           </button>
         </form>
 
         <p className="text-center text-sm text-[#B7F7AC]/50 mt-6">
-          ¿Ya tienes cuenta?{' '}
+          {t('auth.hasAccount')}{' '}
           <Link href="/auth/login" className="text-[#00F511] hover:underline">
-            Entrar
+            {t('auth.signIn')}
           </Link>
         </p>
       </div>

@@ -13,9 +13,11 @@ import { evaluateBadges, getBadgeProgress, getEarnedBadgesDetailed, BadgeDef } f
 import BottomNav from '@/components/BottomNav';
 import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 import ProfileAvatar from '@/components/profile/ProfileAvatar';
+import { useI18n } from '@/components/I18nProvider';
 
 export default function DashboardPage() {
   const router = useRouter();
+  const { t } = useI18n();
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
   const [scores, setScores] = useState<ComputedScores | null>(null);
   const [coach, setCoach] = useState<CoachMessage | null>(null);
@@ -67,7 +69,7 @@ export default function DashboardPage() {
   if (!mounted || !profile || !scores || !coach) {
     return (
       <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-        <div className="text-[#00F511] text-lg animate-pulse">El León se prepara...</div>
+        <div className="text-[#00F511] text-lg animate-pulse">{t('common.lionPreparing')}</div>
       </div>
     );
   }
@@ -218,8 +220,8 @@ export default function DashboardPage() {
             <div className="flex items-center gap-3">
               <span className="text-xl">◎</span>
               <div>
-                <p className="text-sm font-medium">Swap Jupiter · $SALVAZION</p>
-                <p className="text-xs text-[#B7F7AC]/50">Solana · mejor ruta on-chain</p>
+                <p className="text-sm font-medium">{t('dashboard.swapTitle')}</p>
+                <p className="text-xs text-[#B7F7AC]/50">{t('dashboard.swapSub')}</p>
               </div>
             </div>
             <span className="text-[#00F511]">→</span>
@@ -231,8 +233,8 @@ export default function DashboardPage() {
             <div className="flex items-center gap-3">
               <span className="text-xl">📖</span>
               <div>
-                <p className="text-sm font-medium">Devocional de Hoy</p>
-                <p className="text-xs text-[#B7F7AC]/50">+ Salvation</p>
+                <p className="text-sm font-medium">{t('dashboard.devotionalTitle')}</p>
+                <p className="text-xs text-[#B7F7AC]/50">{t('dashboard.devotionalSub')}</p>
               </div>
             </div>
             <span className="text-[#00F511]">→</span>

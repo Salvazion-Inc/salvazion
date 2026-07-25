@@ -7,12 +7,15 @@ import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 import { mapAuthError, mapQueryAuthError, safeNextPath } from '@/lib/auth/paths';
 import { ensureProfileForUser, loadProfileAsync } from '@/lib/store/profile';
+import { useI18n } from '@/components/I18nProvider';
+import LanguageControl from '@/components/settings/LanguageControl';
 
 type Mode = 'password' | 'magic' | 'forgot';
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useI18n();
   const next = safeNextPath(searchParams.get('next'), '/hub/dashboard');
 
   const [email, setEmail] = useState('');
@@ -107,7 +110,7 @@ function LoginForm() {
     }
 
     setLoading(false);
-    setInfo('Revisa tu correo. Te enviamos el enlace mágico de acceso (válido por unos minutos).');
+    setInfo(t('auth.magicSent'));
   }
 
   async function handleForgot(e: FormEvent) {
@@ -133,24 +136,24 @@ function LoginForm() {
     }
 
     setLoading(false);
-    setInfo('Si ese email tiene cuenta, te enviamos un enlace para restablecer la contraseña.');
+    setInfo(t('auth.recoverSent'));
   }
 
   const title =
     mode === 'forgot'
-      ? 'Recuperar acceso'
+      ? t('auth.recoverTitle')
       : mode === 'magic'
-        ? 'Enlace mágico'
-        : 'Entrar a la Phalanx';
+        ? t('auth.sendMagic')
+        : t('auth.loginTitle');
 
-  const subtitle =
-    mode === 'forgot'
-      ? 'Te enviaremos un enlace seguro a tu correo'
-      : 'Salvazion Hub';
+  const subtitle = mode === 'forgot' ? t('auth.recoverSubtitle') : t('auth.loginSubtitle');
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col items-center justify-center px-5">
       <div className="w-full max-w-sm">
+        <div className="flex justify-end mb-4">
+          <LanguageControl compact />
+        </div>
         <div className="text-center mb-8">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[#00F511]/40 flex items-center justify-center lion-glow overflow-hidden">
             <Image src="/logo.png" alt="Salvazion" width={64} height={64} className="object-contain" />
@@ -170,7 +173,7 @@ function LoginForm() {
           className="glass rounded-2xl p-6 space-y-4"
         >
           <div>
-            <label className="block text-xs text-[#B7F7AC] mb-1.5">Email</label>
+            <label className="block text-xs text-[#B7F7AC] mb-1.5">{t('auth.email')}</label>
             <input
               type="email"
               required
@@ -178,14 +181,14 @@ function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#00F511]"
-              placeholder="tu@email.com"
+              placeholder="you@email.com"
             />
           </div>
 
           {mode === 'password' && (
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs text-[#B7F7AC]">Contraseña</label>
+                <label className="block text-xs text-[#B7F7AC]">{t('auth.password')}</label>
                 <button
                   type="button"
                   onClick={() => {
@@ -195,7 +198,7 @@ function LoginForm() {
                   }}
                   className="text-[11px] text-[#B7F7AC]/60 hover:text-[#00F511]"
                 >
-                  ¿Olvidaste tu contraseña?
+                  {t('auth.forgot')}
                 </button>
               </div>
               <input
@@ -223,12 +226,12 @@ function LoginForm() {
             className="w-full py-3.5 rounded-xl bg-[#00F511] text-[#040404] font-semibold text-sm hover:bg-[#B7F7AC] transition disabled:opacity-50"
           >
             {loading
-              ? 'Procesando…'
+              ? t('auth.processing')
               : mode === 'password'
-                ? 'Entrar'
+                ? t('auth.enter')
                 : mode === 'magic'
-                  ? 'Enviar enlace mágico'
-                  : 'Enviar enlace de recuperación'}
+                  ? t('auth.sendMagic')
+                  : t('auth.sendRecover')}
           </button>
 
           <div className="flex flex-col gap-2 pt-1">
@@ -242,7 +245,7 @@ function LoginForm() {
                 }}
                 className="w-full text-xs text-[#B7F7AC]/60 hover:text-[#00F511]"
               >
-                Volver a contraseña
+                {t('auth.backToPassword')}
               </button>
             )}
             {mode === 'password' && (
@@ -255,23 +258,23 @@ function LoginForm() {
                 }}
                 className="w-full text-xs text-[#B7F7AC]/60 hover:text-[#00F511]"
               >
-                Usar enlace mágico por email
+                {t('auth.magicLink')}
               </button>
             )}
           </div>
         </form>
 
         <p className="text-center text-sm text-[#B7F7AC]/50 mt-6">
-          ¿No tienes cuenta?{' '}
+          {t('auth.noAccount')}{' '}
           <Link href="/auth/signup" className="text-[#00F511] hover:underline">
-            Crear cuenta
+            {t('auth.createAccount')}
           </Link>
         </p>
 
         <p className="text-center text-[11px] text-[#B7F7AC]/40 mt-8 leading-relaxed">
-          Tus datos están protegidos por Row Level Security.
+          {t('auth.rlsNote')}
           <br />
-          Solo tú puedes leer y escribir tu propio perfil y scores.
+          {t('auth.rlsNote2')}
         </p>
       </div>
     </div>

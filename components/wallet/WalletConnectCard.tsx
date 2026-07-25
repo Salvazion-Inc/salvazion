@@ -15,6 +15,7 @@ import {
   saveLinkedWallet,
 } from '@/lib/solana/wallet-store';
 import JupiterSwap from '@/components/wallet/JupiterSwap';
+import { useI18n } from '@/components/I18nProvider';
 
 type Variant = 'card' | 'compact';
 
@@ -30,6 +31,7 @@ export default function WalletConnectCard({
   className = '',
   showJupiter = true,
 }: WalletConnectCardProps) {
+  const { t } = useI18n();
   const { connection } = useConnection();
   const { publicKey, connected, connecting, disconnect, wallet } = useWallet();
   const { setVisible } = useWalletModal();
@@ -120,14 +122,14 @@ export default function WalletConnectCard({
               className="px-3 py-1.5 rounded-full border border-[#00F511]/40 text-xs font-mono text-[#00F511] hover:bg-[#00F511]/10 transition"
               title={publicKey.toBase58()}
             >
-              {copied ? 'Copiado' : shortenAddress(publicKey.toBase58())}
+              {copied ? t('wallet.copied') : shortenAddress(publicKey.toBase58())}
             </button>
             <button
               type="button"
               onClick={handleDisconnect}
               className="text-[11px] text-[#B7F7AC]/50 hover:text-red-400 transition"
             >
-              Desconectar
+              {t('wallet.disconnect')}
             </button>
           </>
         ) : (
@@ -137,7 +139,7 @@ export default function WalletConnectCard({
             onClick={() => setVisible(true)}
             className="px-3 py-1.5 rounded-full bg-[#00F511] text-[#040404] text-xs font-semibold hover:bg-[#B7F7AC] transition disabled:opacity-50"
           >
-            {connecting ? 'Conectando…' : 'Conectar wallet'}
+            {connecting ? t('wallet.connecting') : t('wallet.connectShort')}
           </button>
         )}
       </div>
@@ -149,10 +151,8 @@ export default function WalletConnectCard({
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-wider text-[#B7F7AC]/60">Solana</p>
-          <h3 className="text-lg font-semibold text-[#00F511] mt-0.5">Billetera Web3</h3>
-          <p className="text-xs text-[#B7F7AC]/50 mt-1">
-            Phantom, Solflare y otras wallets de Solana
-          </p>
+          <h3 className="text-lg font-semibold text-[#00F511] mt-0.5">{t('wallet.title')}</h3>
+          <p className="text-xs text-[#B7F7AC]/50 mt-1">{t('wallet.subtitle')}</p>
         </div>
         <div className="w-10 h-10 rounded-full border border-[#00F511]/40 flex items-center justify-center text-lg">
           ◎
@@ -163,7 +163,7 @@ export default function WalletConnectCard({
         <div className="space-y-3">
           {address && !connected && (
             <p className="text-xs text-[#B7F7AC]/50 font-mono">
-              Última vinculada: {shortenAddress(address)}
+              {t('wallet.lastLinked')}: {shortenAddress(address)}
             </p>
           )}
           <button
@@ -172,7 +172,7 @@ export default function WalletConnectCard({
             onClick={() => setVisible(true)}
             className="w-full py-3.5 rounded-xl bg-[#00F511] text-[#040404] font-semibold text-sm hover:bg-[#B7F7AC] transition disabled:opacity-50"
           >
-            {connecting ? 'Conectando…' : 'Conectar billetera Solana'}
+            {connecting ? t('wallet.connecting') : t('wallet.connect')}
           </button>
         </div>
       ) : (
@@ -191,7 +191,7 @@ export default function WalletConnectCard({
               onClick={handleCopy}
               className="shrink-0 text-xs text-[#00F511] hover:underline px-2"
             >
-              {copied ? '✓' : 'Copiar'}
+              {copied ? '✓' : t('wallet.copy')}
             </button>
           </div>
 
@@ -220,14 +220,14 @@ export default function WalletConnectCard({
             <div className="space-y-2">
               <JupiterSwap
                 mode="modal"
-                triggerLabel="Swap $SALVAZION con Jupiter"
+                triggerLabel={t('wallet.swapSalvazion')}
                 showFallbackLink={false}
               />
               <Link
                 href="/hub/swap"
                 className="block text-center text-xs text-[#00F511] hover:underline"
               >
-                Abrir terminal Jupiter completa →
+                {t('wallet.openTerminal')}
               </Link>
             </div>
           )}
@@ -237,7 +237,7 @@ export default function WalletConnectCard({
             onClick={handleDisconnect}
             className="w-full py-2.5 rounded-xl border border-red-500/40 text-red-400 text-sm font-medium hover:bg-red-500/10 transition"
           >
-            Desconectar
+            {t('wallet.disconnect')}
           </button>
         </div>
       )}

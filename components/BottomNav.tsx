@@ -13,6 +13,7 @@ import {
   BadgesIcon,
   SwapIcon,
 } from './Icons';
+import { useI18n } from '@/components/I18nProvider';
 
 type NavKey =
   | 'home'
@@ -27,41 +28,41 @@ type NavKey =
 
 interface NavItemConfig {
   href: string;
-  label: string;
+  labelKey: string;
   key: NavKey;
   Icon: React.FC<{ size?: number; active?: boolean }>;
 }
 
 const DEFAULT: NavItemConfig[] = [
-  { href: '/hub/dashboard', label: 'Home', key: 'home', Icon: HomeIcon },
-  { href: '/hub/bible', label: 'Bible', key: 'bible', Icon: BibleIcon },
-  { href: '/hub/swap', label: 'Swap', key: 'swap', Icon: SwapIcon },
-  { href: '/hub/freedom', label: 'Freedom', key: 'freedom', Icon: FreedomIcon },
-  { href: '/hub/profile', label: 'Profile', key: 'profile', Icon: ProfileIcon },
+  { href: '/hub/dashboard', labelKey: 'nav.home', key: 'home', Icon: HomeIcon },
+  { href: '/hub/bible', labelKey: 'nav.bible', key: 'bible', Icon: BibleIcon },
+  { href: '/hub/swap', labelKey: 'nav.swap', key: 'swap', Icon: SwapIcon },
+  { href: '/hub/freedom', labelKey: 'nav.freedom', key: 'freedom', Icon: FreedomIcon },
+  { href: '/hub/profile', labelKey: 'nav.profile', key: 'profile', Icon: ProfileIcon },
 ];
 
 const EXTENDED: NavItemConfig[] = [
-  { href: '/hub/dashboard', label: 'Home', key: 'home', Icon: HomeIcon },
-  { href: '/hub/bible', label: 'Bible', key: 'bible', Icon: BibleIcon },
-  { href: '/hub/health', label: 'Health', key: 'health', Icon: HealthIcon },
-  { href: '/hub/calendar', label: 'Agenda', key: 'calendar', Icon: CalendarIcon },
-  { href: '/hub/devotional', label: 'Devocional', key: 'devotional', Icon: DevotionalIcon },
+  { href: '/hub/dashboard', labelKey: 'nav.home', key: 'home', Icon: HomeIcon },
+  { href: '/hub/bible', labelKey: 'nav.bible', key: 'bible', Icon: BibleIcon },
+  { href: '/hub/health', labelKey: 'nav.health', key: 'health', Icon: HealthIcon },
+  { href: '/hub/calendar', labelKey: 'nav.calendar', key: 'calendar', Icon: CalendarIcon },
+  { href: '/hub/devotional', labelKey: 'nav.devotional', key: 'devotional', Icon: DevotionalIcon },
 ];
 
 const BADGES: NavItemConfig[] = [
-  { href: '/hub/dashboard', label: 'Home', key: 'home', Icon: HomeIcon },
-  { href: '/hub/health', label: 'Health', key: 'health', Icon: HealthIcon },
-  { href: '/hub/calendar', label: 'Agenda', key: 'calendar', Icon: CalendarIcon },
-  { href: '/hub/badges', label: 'Insignias', key: 'badges', Icon: BadgesIcon },
-  { href: '/hub/devotional', label: 'Devocional', key: 'devotional', Icon: DevotionalIcon },
+  { href: '/hub/dashboard', labelKey: 'nav.home', key: 'home', Icon: HomeIcon },
+  { href: '/hub/health', labelKey: 'nav.health', key: 'health', Icon: HealthIcon },
+  { href: '/hub/calendar', labelKey: 'nav.calendar', key: 'calendar', Icon: CalendarIcon },
+  { href: '/hub/badges', labelKey: 'nav.badges', key: 'badges', Icon: BadgesIcon },
+  { href: '/hub/devotional', labelKey: 'nav.devotional', key: 'devotional', Icon: DevotionalIcon },
 ];
 
 const FREEDOM: NavItemConfig[] = [
-  { href: '/hub/dashboard', label: 'Home', key: 'home', Icon: HomeIcon },
-  { href: '/hub/swap', label: 'Swap', key: 'swap', Icon: SwapIcon },
-  { href: '/hub/freedom', label: 'Freedom', key: 'freedom', Icon: FreedomIcon },
-  { href: '/hub/calendar', label: 'Agenda', key: 'calendar', Icon: CalendarIcon },
-  { href: '/hub/profile', label: 'Profile', key: 'profile', Icon: ProfileIcon },
+  { href: '/hub/dashboard', labelKey: 'nav.home', key: 'home', Icon: HomeIcon },
+  { href: '/hub/swap', labelKey: 'nav.swap', key: 'swap', Icon: SwapIcon },
+  { href: '/hub/freedom', labelKey: 'nav.freedom', key: 'freedom', Icon: FreedomIcon },
+  { href: '/hub/calendar', labelKey: 'nav.calendar', key: 'calendar', Icon: CalendarIcon },
+  { href: '/hub/profile', labelKey: 'nav.profile', key: 'profile', Icon: ProfileIcon },
 ];
 
 interface BottomNavProps {
@@ -70,6 +71,7 @@ interface BottomNavProps {
 
 export default function BottomNav({ variant = 'default' }: BottomNavProps) {
   const pathname = usePathname();
+  const { t } = useI18n();
 
   let items = DEFAULT;
   if (variant === 'extended') items = EXTENDED;
@@ -98,7 +100,7 @@ export default function BottomNav({ variant = 'default' }: BottomNavProps) {
                   active ? 'text-[#00F511]' : 'text-[#B7F7AC]/70'
                 }`}
               >
-                {item.label}
+                {t(item.labelKey)}
               </span>
             </Link>
           );

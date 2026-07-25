@@ -18,11 +18,13 @@ import {
 import { BibleLanguage, BibleChapter } from '@/lib/bible/types';
 import { logAction, getPointsForAction } from '@/lib/scoring/engine';
 import { loadProfile, calculateAge, getLifeStage } from '@/lib/store/profile';
+import { useI18n } from '@/components/I18nProvider';
 
 type MainTab = 'read' | 'explore';
 
 export default function BiblePage() {
   const books = getBooks();
+  const { t, lang: uiLang } = useI18n();
   const [mainTab, setMainTab] = useState<MainTab>('read');
   const [language, setLanguage] = useState<BibleLanguage>('es');
   const [selectedBook, setSelectedBook] = useState('gen');
@@ -138,10 +140,9 @@ export default function BiblePage() {
               <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-[#00F511] leading-tight">Biblia</h1>
+              <h1 className="text-lg font-bold text-[#00F511] leading-tight">{t('bible.title')}</h1>
               <p className="text-[10px] text-[#B7F7AC]/50">
-                {readCount} / {totalChapters}{' '}
-                {language === 'en' ? 'chapters · 66 books' : 'capítulos · 66 libros'}
+                {readCount} / {totalChapters} {t('bible.chapters')}
               </p>
             </div>
           </div>
@@ -151,21 +152,21 @@ export default function BiblePage() {
         <div className="flex p-1 rounded-2xl bg-[#0a0a0a] border border-[#00B10C]/25 mb-3">
           {(
             [
-              { id: 'read' as MainTab, es: 'Leer', en: 'Read' },
-              { id: 'explore' as MainTab, es: 'Buscar & Concordancia', en: 'Search & Concordance' },
+              { id: 'read' as MainTab, key: 'bible.read' },
+              { id: 'explore' as MainTab, key: 'bible.explore' },
             ] as const
-          ).map((t) => (
+          ).map((tab) => (
             <button
-              key={t.id}
+              key={tab.id}
               type="button"
-              onClick={() => setMainTab(t.id)}
+              onClick={() => setMainTab(tab.id)}
               className={`flex-1 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                mainTab === t.id
+                mainTab === tab.id
                   ? 'bg-[#00F511] text-[#040404] shadow-[0_0_18px_rgba(0,245,17,0.22)]'
                   : 'text-[#B7F7AC]/70 hover:text-[#00F511]'
               }`}
             >
-              {language === 'en' ? t.en : t.es}
+              {t(tab.key)}
             </button>
           ))}
         </div>
@@ -207,21 +208,21 @@ export default function BiblePage() {
               }}
               className="flex-1 bg-[#0a0a0a] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm"
             >
-              <optgroup label={language === 'en' ? 'Old Testament' : 'Antiguo Testamento'}>
+              <optgroup label={t('bible.ot')}>
                 {books
                   .filter((b) => b.testament === 'OT')
                   .map((b) => (
                     <option key={b.id} value={b.id}>
-                      {language === 'en' ? b.name : b.nameEs}
+                      {uiLang === 'en' ? b.name : b.nameEs}
                     </option>
                   ))}
               </optgroup>
-              <optgroup label={language === 'en' ? 'New Testament' : 'Nuevo Testamento'}>
+              <optgroup label={t('bible.nt')}>
                 {books
                   .filter((b) => b.testament === 'NT')
                   .map((b) => (
                     <option key={b.id} value={b.id}>
-                      {language === 'en' ? b.name : b.nameEs}
+                      {uiLang === 'en' ? b.name : b.nameEs}
                     </option>
                   ))}
               </optgroup>
@@ -237,7 +238,7 @@ export default function BiblePage() {
             >
               {availableChapters.map((c) => (
                 <option key={c} value={c}>
-                  {language === 'en' ? `Ch. ${c}` : `Cap. ${c}`}
+                  {t('bible.ch')} {c}
                 </option>
               ))}
             </select>
@@ -254,7 +255,7 @@ export default function BiblePage() {
         ) : loadingChapter ? (
           <div className="flex flex-col items-center justify-center py-20 text-[#B7F7AC]/60">
             <div className="w-8 h-8 border-2 border-[#00F511]/40 border-t-[#00F511] rounded-full animate-spin mb-4" />
-            <p className="text-sm">{language === 'en' ? 'Loading chapter…' : 'Cargando capítulo…'}</p>
+            <p className="text-sm">{t('bible.loadingChapter')}</p>
           </div>
         ) : chapter ? (
           <div className="max-w-lg mx-auto w-full overflow-y-auto flex-1 min-h-0">
@@ -333,9 +334,9 @@ export default function BiblePage() {
             >
               {read
                 ? justLogged
-                  ? `✓ ${language === 'en' ? 'Chapter read' : 'Capítulo leído'} · +${pts} Salvation`
-                  : `✓ ${language === 'en' ? 'Already read' : 'Ya leído'}`
-                : `${language === 'en' ? 'Mark as read' : 'Marcar como leído'} · +${pts} Salvation`}
+                  ? `✓ ${t('bible.chapterRead')} · +${pts} Salvation`
+                  : `✓ ${t('bible.alreadyRead')}`
+                : `${t('bible.markRead')} · +${pts} Salvation`}
             </button>
 
             <div className="flex gap-2 mt-3 mb-6">
@@ -344,38 +345,38 @@ export default function BiblePage() {
                 onClick={goPrev}
                 className="flex-1 py-3 rounded-xl border border-[#00B10C]/30 text-xs text-[#B7F7AC] hover:border-[#00F511]/40"
               >
-                ← {language === 'en' ? 'Previous' : 'Anterior'}
+                ← {t('common.previous')}
               </button>
               <button
                 type="button"
                 onClick={() => setMainTab('explore')}
                 className="flex-1 py-3 rounded-xl border border-[#00F511]/40 text-xs text-[#00F511] hover:bg-[#00F511]/10"
               >
-                ⌕ {language === 'en' ? 'Search' : 'Buscar'}
+                ⌕ {t('common.search')}
               </button>
               <button
                 type="button"
                 onClick={goNext}
                 className="flex-1 py-3 rounded-xl border border-[#00B10C]/30 text-xs text-[#B7F7AC] hover:border-[#00F511]/40"
               >
-                {language === 'en' ? 'Next' : 'Siguiente'} →
+                {t('common.next')} →
               </button>
             </div>
 
             {language === 'original' && (
               <p className="text-[11px] text-[#B7F7AC]/40 text-center leading-relaxed mb-4">
-                AT hebreo (WLC) · NT griego (Textus Receptus). RTL en Antiguo Testamento.
+                {t('bible.originalNote')}
               </p>
             )}
             {language === 'es' && (
               <p className="text-[11px] text-[#B7F7AC]/40 text-center leading-relaxed mb-4">
-                Reina Valera 1909 (dominio público).
+                {t('bible.rvNote')}
               </p>
             )}
           </div>
         ) : (
           <div className="text-center py-16 text-[#B7F7AC]/40">
-            <p>{language === 'en' ? 'Could not load chapter.' : 'No se pudo cargar el capítulo.'}</p>
+            <p>{t('bible.couldNotLoad')}</p>
           </div>
         )}
       </main>

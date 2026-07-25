@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 import JupiterSwap from '@/components/wallet/JupiterSwap';
+import { useI18n } from '@/components/I18nProvider';
 
 const SalvazionSite = () => {
-  const [language, setLanguage] = useState<'es' | 'en'>('es');
+  const { lang, setLang } = useI18n();
 
   const copy = {
     es: {
@@ -56,7 +57,7 @@ const SalvazionSite = () => {
     },
   };
 
-  const t = copy[language];
+  const t = copy[lang];
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9]">
@@ -87,11 +88,11 @@ const SalvazionSite = () => {
 
           <div className="flex items-center gap-3">
             <button
-              onClick={() => setLanguage(language === 'es' ? 'en' : 'es')}
+              onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#00F511]/50 hover:bg-[#00F511]/10 transition-all text-xs"
               aria-label="Toggle language"
             >
-              {language === 'es' ? '🇨🇱 ES' : '🇺🇸 EN'}
+              {lang === 'es' ? '🇪🇸 ES' : '🇺🇸 EN'}
             </button>
             <Link
               href="/auth/login"

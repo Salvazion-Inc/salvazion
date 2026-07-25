@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { saveAvatarImage } from '@/lib/store/avatar';
 import { saveProfile } from '@/lib/store/profile';
+import { useI18n } from '@/components/I18nProvider';
 
 type Size = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -35,6 +36,7 @@ export default function ProfileAvatar({
   className = '',
   onChange,
 }: Props) {
+  const { t } = useI18n();
   const inputRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -154,7 +156,7 @@ export default function ProfileAvatar({
             disabled={busy}
             className="text-xs text-[#00F511] hover:underline disabled:opacity-50"
           >
-            {displayUrl ? 'Cambiar foto' : 'Añadir foto'}
+            {displayUrl ? t('profile.changePhoto') : t('profile.addPhoto')}
           </button>
           {displayUrl && (
             <button
@@ -163,7 +165,7 @@ export default function ProfileAvatar({
               disabled={busy}
               className="text-[11px] text-[#B7F7AC]/50 hover:text-red-400 transition disabled:opacity-50"
             >
-              Quitar foto
+              {t('profile.removePhoto')}
             </button>
           )}
           {error && (

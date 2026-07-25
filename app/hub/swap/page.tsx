@@ -9,9 +9,11 @@ import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 import JupiterSwap from '@/components/wallet/JupiterSwap';
 import { loadProfileAsync } from '@/lib/store/profile';
 import { SALVAZION_MINT, shortenAddress } from '@/lib/solana/config';
+import { useI18n } from '@/components/I18nProvider';
 
 export default function SwapPage() {
   const router = useRouter();
+  const { t } = useI18n();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -27,7 +29,7 @@ export default function SwapPage() {
   if (!mounted) {
     return (
       <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-        <div className="text-[#00F511] text-lg animate-pulse">El León se prepara...</div>
+        <div className="text-[#00F511] text-lg animate-pulse">{t('common.lionPreparing')}</div>
       </div>
     );
   }
@@ -47,22 +49,20 @@ export default function SwapPage() {
           </div>
           <div>
             <p className="text-xs text-[#B7F7AC]/60">Salvazion · Solana</p>
-            <p className="text-sm font-medium">Swap Jupiter</p>
+            <p className="text-sm font-medium">{t('swap.title')}</p>
           </div>
         </div>
         <Link href="/hub/dashboard" className="text-sm text-[#00F511]">
-          ← Dashboard
+          ← {t('nav.dashboard')}
         </Link>
       </header>
 
       <main className="flex-1 px-5 pt-4 pb-28 max-w-lg mx-auto w-full space-y-5">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-[#00F511] tracking-tight">$SALVAZION</h1>
-          <p className="text-sm text-[#B7F7AC]/70 mt-1">
-            Compra y vende con el mejor enrutamiento de Jupiter en Solana
-          </p>
+          <p className="text-sm text-[#B7F7AC]/70 mt-1">{t('swap.subtitle')}</p>
           <p className="text-[11px] font-mono text-[#B7F7AC]/40 mt-2 break-all">
-            Mint: {shortenAddress(SALVAZION_MINT, 6)}
+            {t('swap.mint')}: {shortenAddress(SALVAZION_MINT, 6)}
           </p>
         </div>
 
@@ -71,18 +71,17 @@ export default function SwapPage() {
         <div className="glass rounded-2xl p-3 sm:p-4">
           <div className="flex items-center justify-between mb-3 px-1">
             <p className="text-xs uppercase tracking-wider text-[#B7F7AC]/60">
-              Jupiter Terminal
+              {t('swap.terminal')}
             </p>
             <span className="text-[10px] px-2 py-0.5 rounded-full border border-[#00F511]/30 text-[#00F511]">
-              Mainnet
+              {t('swap.mainnet')}
             </span>
           </div>
           <JupiterSwap mode="integrated" />
         </div>
 
         <p className="text-[11px] text-[#B7F7AC]/40 text-center leading-relaxed px-2">
-          Los swaps se firman en tu billetera. Salvazion no custodia fondos. Usa un RPC propio
-          en producción para mejor fiabilidad.
+          {t('swap.disclaimer')}
         </p>
       </main>
 

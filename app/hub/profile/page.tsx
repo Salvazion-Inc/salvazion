@@ -18,9 +18,12 @@ import { createClient } from '@/lib/supabase/client';
 import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 import ProfileAvatar from '@/components/profile/ProfileAvatar';
 import TextScaleControl from '@/components/settings/TextScaleControl';
+import LanguageControl from '@/components/settings/LanguageControl';
+import { useI18n } from '@/components/I18nProvider';
 
 export default function ProfilePage() {
   const router = useRouter();
+  const { t, lang } = useI18n();
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
@@ -66,7 +69,7 @@ export default function ProfilePage() {
   if (!mounted || !profile) {
     return (
       <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-        <div className="text-[#00F511] text-lg animate-pulse">El León se prepara...</div>
+        <div className="text-[#00F511] text-lg animate-pulse">{t('common.lionPreparing')}</div>
       </div>
     );
   }
@@ -84,11 +87,11 @@ export default function ProfilePage() {
           </div>
           <div>
             <p className="text-xs text-[#B7F7AC]/60">Salvazion</p>
-            <p className="text-sm font-medium">Perfil</p>
+            <p className="text-sm font-medium">{t('profile.title')}</p>
           </div>
         </div>
         <Link href="/hub/dashboard" className="text-sm text-[#00F511]">
-          ← Dashboard
+          ← {t('nav.dashboard')}
         </Link>
       </header>
 
@@ -112,7 +115,7 @@ export default function ProfilePage() {
           )}
           {age !== null && (
             <p className="text-sm text-[#B7F7AC]/70 mt-1">
-              {age} años · {getLifeStageLabel(stage)}
+              {age} {t('profile.years')} · {getLifeStageLabel(stage, lang)}
             </p>
           )}
           {(profile as any)._integrityWarning && (
@@ -126,42 +129,29 @@ export default function ProfilePage() {
         <div className="glass rounded-2xl p-5 space-y-4 mb-6">
           {!editing ? (
             <>
-              {email && <Row label="Email" value={email} />}
-              <Row label="Propósito" value={profile.purpose || '—'} />
-              <Row label="Ciudad" value={profile.city || '—'} />
-              <Row label="País" value={profile.country || '—'} />
+              {email && <Row label={t('profile.email')} value={email} />}
+              <Row label={t('profile.purpose')} value={profile.purpose || '—'} />
+              <Row label={t('profile.city')} value={profile.city || '—'} />
+              <Row label={t('profile.country')} value={profile.country || '—'} />
               <Row
-                label="Madurez espiritual"
+                label={t('profile.spiritualMaturity')}
                 value={
-                  {
-                    new: 'Nuevo en la fe',
-                    growing: 'Creciendo',
-                    mature: 'Maduro',
-                    leader: 'Líder / Mentor',
-                  }[profile.spiritualMaturity || 'growing'] || '—'
+                  t(`profile.maturity.${profile.spiritualMaturity || 'growing'}`)
                 }
               />
               <Row
-                label="Familia"
-                value={
-                  {
-                    single: 'Soltero/a',
-                    married: 'Casado/a',
-                    parent: 'Padre / Madre',
-                    family: 'Familia',
-                    widow: 'Viudo/a',
-                  }[profile.familyStatus || 'family'] || '—'
-                }
+                label={t('profile.family')}
+                value={t(`profile.familyStatus.${profile.familyStatus || 'family'}`)}
               />
               <Row
-                label="Focos"
+                label={t('profile.focus')}
                 value={(profile.currentFocus || []).join(', ') || '—'}
               />
               <button
                 onClick={() => setEditing(true)}
                 className="w-full mt-2 py-3 rounded-xl border border-[#00F511]/50 text-[#00F511] text-sm font-medium hover:bg-[#00F511]/10"
               >
-                Editar perfil
+                {t('profile.editProfile')}
               </button>
             </>
           ) : (
@@ -268,9 +258,14 @@ export default function ProfilePage() {
           )}
         </div>
 
+        {/* Language — whole app */}
+        <div className="mb-6">
+          <LanguageControl />
+        </div>
+
         {/* Text size — accessibility */}
         <div className="mb-6">
-          <TextScaleControl lang={(profile.language as 'es' | 'en') || 'es'} />
+          <TextScaleControl />
         </div>
 
         {/* Solana wallet */}
@@ -280,12 +275,8 @@ export default function ProfilePage() {
 
         {/* Privacy note */}
         <div className="glass rounded-2xl p-4 mb-6 text-xs text-[#B7F7AC]/70 leading-relaxed">
-          <p className="font-medium text-[#00F511] mb-1">Privacidad y datos</p>
-          <p>
-            Tu perfil está protegido por Row Level Security de Supabase. Solo tú (auth.uid)
-            puedes leer y escribir tus filas. El caché local acelera la app; la fuente de
-            verdad es el servidor. Soberanía + sincronización.
-          </p>
+          <p className="font-medium text-[#00F511] mb-1">{t('profile.privacyTitle')}</p>
+          <p>{t('profile.privacyBody')}</p>
         </div>
 
         <button
@@ -295,25 +286,22 @@ export default function ProfilePage() {
           }}
           className="w-full mb-4 py-3 rounded-xl border border-[#00B10C]/40 text-[#B7F7AC] text-sm hover:border-[#00F511]/50"
         >
-          Cerrar sesión
+          {t('profile.signOut')}
         </button>
 
         {/* Danger zone */}
         <div className="border border-red-500/30 rounded-2xl p-4">
-          <p className="text-sm text-red-400/90 mb-3">Zona de peligro</p>
+          <p className="text-sm text-red-400/90 mb-3">{t('profile.dangerZone')}</p>
           {!confirmClear ? (
             <button
               onClick={() => setConfirmClear(true)}
               className="w-full py-2.5 rounded-xl border border-red-500/40 text-red-400 text-sm hover:bg-red-500/10"
             >
-              Borrar perfil y scores de este dispositivo
+              {t('profile.clearLocal')}
             </button>
           ) : (
             <div className="space-y-2">
-              <p className="text-xs text-[#D8E1D9]/70">
-                Esto elimina permanentemente tu perfil, acciones y rachas de este navegador.
-                No hay recuperación.
-              </p>
+              <p className="text-xs text-[#D8E1D9]/70">{t('profile.clearConfirm')}</p>
               <div className="flex gap-2">
                 <button
                   onClick={() => setConfirmClear(false)}

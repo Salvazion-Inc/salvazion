@@ -1,33 +1,36 @@
 'use client';
 
 import { useTextScale } from '@/components/TextScaleProvider';
+import { useI18n } from '@/components/I18nProvider';
 import { TEXT_SCALE_OPTIONS, type TextScale } from '@/lib/store/text-scale';
 
 /**
  * Accessible text-size control — keeps Salvazion visual system while scaling type.
  */
-export default function TextScaleControl({ lang = 'es' }: { lang?: 'es' | 'en' }) {
+export default function TextScaleControl() {
   const { scale, setScale } = useTextScale();
+  const { t, lang } = useI18n();
 
   return (
     <div className="glass rounded-2xl p-5 space-y-4">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-wider text-[#B7F7AC]/60">
-            {lang === 'en' ? 'Accessibility' : 'Accesibilidad'}
+            {t('textScale.accessibility')}
           </p>
           <h3 className="text-base font-semibold text-[#00F511] mt-0.5">
-            {lang === 'en' ? 'Text size' : 'Tamaño de letra'}
+            {t('textScale.title')}
           </h3>
           <p className="text-xs text-[#B7F7AC]/55 mt-1 leading-relaxed">
-            {lang === 'en'
-              ? 'Increases text across the whole app. Layout and buttons stay usable.'
-              : 'Aumenta el texto en toda la app. El diseño y los botones siguen siendo usables.'}
+            {t('textScale.hint')}
           </p>
         </div>
         <span
           className="shrink-0 w-11 h-11 rounded-full border border-[#00F511]/40 flex items-center justify-center text-[#00F511] font-semibold"
-          style={{ fontSize: scale === 'md' ? '0.95rem' : scale === 'lg' ? '1.1rem' : scale === 'xl' ? '1.25rem' : '1.4rem' }}
+          style={{
+            fontSize:
+              scale === 'md' ? '0.95rem' : scale === 'lg' ? '1.1rem' : scale === 'xl' ? '1.25rem' : '1.4rem',
+          }}
           aria-hidden
         >
           Aa
@@ -37,7 +40,7 @@ export default function TextScaleControl({ lang = 'es' }: { lang?: 'es' | 'en' }
       <div
         className="grid grid-cols-4 gap-2"
         role="radiogroup"
-        aria-label={lang === 'en' ? 'Text size' : 'Tamaño de letra'}
+        aria-label={t('textScale.title')}
       >
         {TEXT_SCALE_OPTIONS.map((opt) => {
           const active = scale === opt.id;
@@ -77,20 +80,15 @@ export default function TextScaleControl({ lang = 'es' }: { lang?: 'es' | 'en' }
         })}
       </div>
 
-      {/* Live preview */}
       <div className="rounded-xl border border-[#00B10C]/25 bg-[#040404]/50 px-4 py-3">
         <p className="text-[10px] uppercase tracking-wider text-[#B7F7AC]/45 mb-1.5">
-          {lang === 'en' ? 'Preview' : 'Vista previa'}
+          {t('textScale.preview')}
         </p>
         <p className="text-sm text-[#D8E1D9]/90 leading-relaxed">
-          {lang === 'en'
-            ? 'Make Salvation, Health and Freedom Great Again.'
-            : 'Make Salvation, Health and Freedom Great Again.'}
+          {t('textScale.previewLine1')}
         </p>
         <p className="text-xs text-[#B7F7AC]/60 mt-1.5 leading-relaxed">
-          {lang === 'en'
-            ? 'The Word of God lights the path of the Phalanx.'
-            : 'La Palabra de Dios ilumina el camino de la Phalanx.'}
+          {t('textScale.previewLine2')}
         </p>
       </div>
     </div>

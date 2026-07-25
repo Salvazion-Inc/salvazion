@@ -23,7 +23,10 @@ const nextConfig: NextConfig = {
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           {
             key: "Permissions-Policy",
-            value: "camera=(), microphone=(), geolocation=()",
+            // Health sensors (PWA): GPS walks + DeviceMotion steps/activity.
+            // Camera/mic stay blocked.
+            value:
+              "camera=(), microphone=(), geolocation=(self), accelerometer=(self), gyroscope=(self), magnetometer=(self)",
           },
           {
             key: "Content-Security-Policy",

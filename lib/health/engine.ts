@@ -26,7 +26,7 @@ export function getHealthActionsForStage(stage: LifeStage): HealthActionDef[] {
             : 'Entrenamiento de alta intensidad o deporte ≥ 15 min',
       actionType: 'hit_15min',
       icon: '⚡',
-      sensorHint: 'Acelerómetro / GPS (Capacitor)'
+      sensorHint: 'Acelerómetro del celular (sesión HIT / pasos)'
     },
     {
       id: 'outdoor',
@@ -40,7 +40,7 @@ export function getHealthActionsForStage(stage: LifeStage): HealthActionDef[] {
             : 'Actividad al aire libre expuesta al sol ≥ 20 min',
       actionType: 'outdoor_sun_20min',
       icon: '☀️',
-      sensorHint: 'GPS + luz ambiental'
+      sensorHint: 'GPS del celular (caminata exterior)'
     },
     {
       id: 'hydration',
@@ -71,7 +71,7 @@ export function getHealthActionsForStage(stage: LifeStage): HealthActionDef[] {
           : 'Dormir dentro de tu ventana circadiana ideal',
       actionType: 'sleep_ideal',
       icon: '🌙',
-      sensorHint: 'Horario de sueño / wearable'
+      sensorHint: 'Modo reposo del celular · wearable (Fase C)'
     }
   ];
 

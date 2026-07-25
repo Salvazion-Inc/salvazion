@@ -49,6 +49,7 @@ import {
   MealLog
 } from '@/lib/health/biomarkers';
 import { generateCoachGuidance, CoachMessage, getLionShortNudge } from '@/lib/coach/engine';
+import PhoneSensorsPanel from '@/components/health/PhoneSensorsPanel';
 
 export default function HealthPage() {
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
@@ -231,6 +232,18 @@ export default function HealthPage() {
             </div>
           </div>
         </div>
+
+        {/* PHONE SENSORS — steps, activity, GPS, rest/sleep */}
+        <PhoneSensorsPanel
+          loggedToday={loggedToday}
+          onAutoLog={(actionType, label) => handleLog(actionType, label)}
+          onSleepSynced={(bed, wake) => {
+            setBedTime(bed);
+            setWakeTime(wake);
+            setTodaySleep(getTodaySleep());
+            setRegularity(getSleepRegularity());
+          }}
+        />
 
         {/* SUEÑO CIRCADIANO */}
         <section className="mb-6">
@@ -696,7 +709,7 @@ export default function HealthPage() {
         })}
 
         <p className="text-[10px] text-[var(--sage)]/60 text-center leading-relaxed px-2 mb-4">
-          Fase A: sueño + hidratación. En nativo se conectarán sensores y wearables (Fase B/C).
+          Fase B: sensores del celular (pasos, actividad, GPS, reposo). Fase C: HealthKit / Health Connect y wearables.
         </p>
       </main>
 

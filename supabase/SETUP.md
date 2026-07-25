@@ -34,18 +34,16 @@ Ver `docs/domains.md`.
 2. Supabase → Authentication → Providers → **Google** → Enable + Client ID/Secret
 3. Guía: `docs/auth-google.md`
 
-## 3c. Login con X (Twitter)
-1. SQL Editor → ejecuta **`supabase/x-auth.sql`** (columnas `x_username`, `x_user_id`)
-2. Crea una app en el [X Developer Portal](https://developer.x.com/):
-   - Type: Web App
-   - Callback URL de Supabase (la muestra el dashboard):  
-     `https://TU-PROJECT-REF.supabase.co/auth/v1/callback`
-3. Authentication → Providers → **Twitter** → Enable
-4. Pega **API Key** y **API Secret Key** (OAuth 1.0a) o Client ID/Secret según el flujo que use Supabase en tu proyecto
-5. Guarda. En la app: Login / Signup → **Continuar con X**
-6. El `@usuario` se guarda en el perfil y se muestra en Hub → Perfil
+## 3c. Login con X (OAuth 2.0 — no usar Twitter V1 deprecado)
+1. SQL Editor → ejecuta **`supabase/x-auth.sql`** si aún no lo hiciste
+2. [X Developer Portal](https://developer.x.com/): Web App, Request email ON, callback:  
+   `https://TU-PROJECT-REF.supabase.co/auth/v1/callback`
+3. Authentication → Providers → **X / Twitter (OAuth 2.0)** → Enable  
+   → **Client ID + Client Secret** (OAuth 2.0), no API Key de V1
+4. En la app: **Continuar con X** → el `@` se guarda en el perfil
 
-Docs oficiales: https://supabase.com/docs/guides/auth/social-login/auth-twitter
+Guía: `docs/auth-x.md`  
+Docs: https://supabase.com/docs/guides/auth/social-login/auth-twitter
 
 ## 4. Variables de entorno
 

@@ -1,14 +1,11 @@
 /**
- * X (Twitter) OAuth via Supabase Auth.
+ * X OAuth via Supabase Auth (OAuth 2.0).
  *
- * Supabase has two separate providers:
- * - `x`       → X / Twitter (OAuth 2.0)  — uses API v2 /2/users/me
- * - `twitter` → Twitter (OAuth 1.0a)     — uses /1.1/account/verify_credentials.json
+ * Primary provider: `x`  → Supabase “X / Twitter (OAuth 2.0)”
+ *   Credentials: Client ID + Client Secret from developer.x.com
  *
- * "Error getting user profile from external provider" almost always means
- * OAuth 2.0 tokens were issued but GET /2/users/me failed (email flag, wrong
- * Client Secret, or API access). In that case enable legacy Twitter (OAuth 1.0a)
- * with API Key + Secret and set NEXT_PUBLIC_X_AUTH_PROVIDER=twitter.
+ * Legacy `twitter` (OAuth 1.0a) is deprecated by Supabase/X and is only
+ * used if NEXT_PUBLIC_X_AUTH_ALLOW_LEGACY=true (emergency fallback).
  */
 
 import type { Provider, User } from '@supabase/supabase-js';
@@ -33,8 +30,11 @@ export function extractXIdentity(user: User | null | undefined): XIdentity | nul
   if (!user) return null;
 
   const identities = user.identities || [];
+  // Prefer modern `x` identity; still accept legacy `twitter` for old sessions
   const xId =
-    identities.find((i) => i.provider === 'twitter' || i.provider === 'x') || null;
+    identities.find((i) => i.provider === 'x') ||
+    identities.find((i) => i.provider === 'twitter') ||
+    null;
 
   const meta = {
     ...(user.user_metadata || {}),
@@ -97,22 +97,13 @@ function isProviderDisabledError(message: string): boolean {
   );
 }
 
-/**
- * Which Supabase provider to try first.
- * - `twitter` = OAuth 1.0a (API Key + Secret) — often more reliable on Free tier
- * - `x` = OAuth 2.0 (Client ID + Secret) — recommended by Supabase docs
- *
- * Set NEXT_PUBLIC_X_AUTH_PROVIDER=twitter in Vercel if OAuth 2.0 profile fetch fails.
- */
-export function preferredXProvider(): 'x' | 'twitter' {
-  const raw = (process.env.NEXT_PUBLIC_X_AUTH_PROVIDER || 'twitter').toLowerCase();
-  return raw === 'x' ? 'x' : 'twitter';
+function allowLegacyTwitter(): boolean {
+  return (process.env.NEXT_PUBLIC_X_AUTH_ALLOW_LEGACY || '').toLowerCase() === 'true';
 }
 
 /**
- * Start X OAuth (login or signup).
- * Default order: OAuth 1.0a first (twitter), then OAuth 2.0 (x).
- * Override with NEXT_PUBLIC_X_AUTH_PROVIDER=x|twitter
+ * Start X OAuth 2.0 (login or signup).
+ * Uses Supabase provider `x` only, unless legacy fallback is explicitly enabled.
  */
 export async function signInWithX(options?: {
   next?: string;
@@ -122,41 +113,43 @@ export async function signInWithX(options?: {
     const next = options?.next || '/hub/dashboard';
     const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
 
-    const first = preferredXProvider();
-    const order: Provider[] =
-      first === 'x' ? (['x', 'twitter'] as Provider[]) : (['twitter', 'x'] as Provider[]);
+    // Primary: X OAuth 2.0
+    const primary = await supabase.auth.signInWithOAuth({
+      provider: 'x' as Provider,
+      options: {
+        redirectTo,
+        skipBrowserRedirect: false,
+      },
+    });
 
-    let lastError = '';
+    if (!primary.error) {
+      return { error: null };
+    }
 
-    for (const provider of order) {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider,
+    // Optional emergency fallback to deprecated Twitter OAuth 1.0a
+    if (allowLegacyTwitter() && isProviderDisabledError(primary.error.message)) {
+      const legacy = await supabase.auth.signInWithOAuth({
+        provider: 'twitter' as Provider,
         options: {
           redirectTo,
           skipBrowserRedirect: false,
-          // Let GoTrue use its built-in scopes for each provider.
-          // Custom scopes can break X Free tier /users/me.
         },
       });
-
-      if (!error) {
-        return { error: null };
-      }
-
-      lastError = error.message;
-      if (!isProviderDisabledError(error.message)) {
-        // Real auth error (not "disabled") — surface it
-        return { error: error.message };
-      }
-      // else try next provider
+      if (!legacy.error) return { error: null };
+      return { error: legacy.error.message };
     }
 
-    return {
-      error:
-        lastError ||
-        'X/Twitter no está activado en Supabase. Activa “Twitter (OAuth 1.0a)” con API Key+Secret ' +
-          'y/o “X / Twitter (OAuth 2.0)” con Client ID+Secret. Ver docs/auth-x.md',
-    };
+    if (isProviderDisabledError(primary.error.message)) {
+      return {
+        error:
+          'X (OAuth 2.0) no está activado en Supabase. ' +
+          'Authentication → Providers → “X / Twitter (OAuth 2.0)” → Enable + ' +
+          'Client ID y Client Secret de developer.x.com → Save. ' +
+          'En Vercel: NEXT_PUBLIC_X_AUTH_PROVIDER=x (opcional) y Redeploy. Ver docs/auth-x.md',
+      };
+    }
+
+    return { error: primary.error.message };
   } catch (e) {
     return {
       error: e instanceof Error ? e.message : 'No se pudo iniciar sesión con X',

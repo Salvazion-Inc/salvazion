@@ -1,101 +1,73 @@
-# Login con X — guía de reparación
+# Login con X (OAuth 2.0)
 
-## Error: `Error getting user profile from external provider`
+La app usa el provider Supabase **`x`** (X / Twitter OAuth 2.0).  
+El provider legacy **`twitter`** (OAuth 1.0a) está **deprecado** y no se usa por defecto.
 
-Significa: **X te dejó autorizar**, pero **Supabase falló al llamar a la API de perfil de X**.
+## Vercel (opcional)
 
-Supabase OAuth 2.0 (`provider: x`) llama a:
+| Key | Value |
+|-----|--------|
+| `NEXT_PUBLIC_X_AUTH_PROVIDER` | `x` (recomendado; el código ya usa `x` por defecto) |
 
-```http
-GET https://api.x.com/2/users/me?user.fields=...,confirmed_email,...
-```
+**No pongas** Client ID/Secret de X en Vercel. Van en Supabase.
 
-Eso falla a menudo en apps Free / mal configuradas (email no permitido, Client Secret incorrecto, scopes).
-
-### Solución recomendada (OAuth 1.0a) — suele funcionar ya
-
-Usa el provider legacy **Twitter** con **API Key + API Secret** (no Client ID).
-
-#### A) Portal de X — [developer.x.com](https://developer.x.com)
-
-1. Tu App → **Keys and tokens**
-2. Copia:
-   - **API Key** (Consumer Key)
-   - **API Key Secret** (Consumer Secret)
-3. **User authentication settings → Edit**
-   - App permissions: **Read**
-   - **Request email from users: ON**
-   - Type of App: **Web App**
-   - Callback URI (igual que siempre):
-     ```
-     https://kppylfrsclkdmtpobpxd.supabase.co/auth/v1/callback
-     ```
-   - Website: `https://app.salvazion.org`
-   - Terms + Privacy URLs rellenadas
-   - **Save**
-
-#### B) Supabase — proyecto `kppylfrsclkdmtpobpxd`
-
-1. **Authentication → Providers**
-2. Abre **Twitter** (OAuth 1.0a / el que pide API Key, **no** solo “X OAuth 2.0”)
-3. **Enable = ON**
-4. Pega **API Key** y **API Secret Key**
-5. **Save**
-
-(Puedes dejar OAuth 2.0 también, pero la app priorizará 1.0a.)
-
-#### C) Vercel — Environment Variables
+Solo si necesitas el fallback deprecado (no recomendado):
 
 ```env
-NEXT_PUBLIC_APP_URL=https://app.salvazion.org
-NEXT_PUBLIC_SUPABASE_URL=https://kppylfrsclkdmtpobpxd.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=…tu key…
-NEXT_PUBLIC_X_AUTH_PROVIDER=twitter
+NEXT_PUBLIC_X_AUTH_ALLOW_LEGACY=true
 ```
 
-**Redeploy** (obligatorio tras cambiar `NEXT_PUBLIC_*`).
+## Supabase — activar X OAuth 2.0
 
-#### D) Probar
+Proyecto: `kppylfrsclkdmtpobpxd`
 
-Incógnito → `https://app.salvazion.org/auth/login` → **Continuar con X**.
+1. **Authentication → Providers → X / Twitter (OAuth 2.0)**
+2. **Enable = ON**
+3. **Client ID** + **Client Secret** (OAuth 2.0 de X, no API Key de V1)
+4. **Save**
 
----
+Puedes **desactivar** el provider **Twitter** (OAuth 1.0a) si ya no lo quieres.
 
-### Si prefieres OAuth 2.0 (`provider: x`)
+## Portal de X — [developer.x.com](https://developer.x.com)
 
-1. X → Keys and tokens → **OAuth 2.0 Client ID and Client Secret** (abajo)
-2. Supabase → **X / Twitter (OAuth 2.0)** → Client ID + Client Secret → Save  
-3. En X: **Request email from users = ON** (Supabase pide `users.email` + `confirmed_email`)
-4. Vercel:
-   ```env
-   NEXT_PUBLIC_X_AUTH_PROVIDER=x
+1. App → **User authentication settings**
+2. Permissions: **Read**
+3. **Request email from users: ON** (importante para el perfil)
+4. Type: **Web App**
+5. Callback:
    ```
-5. Redeploy
+   https://kppylfrsclkdmtpobpxd.supabase.co/auth/v1/callback
+   ```
+6. Website: `https://app.salvazion.org`
+7. Terms + Privacy URLs
+8. **Save**
+9. **Keys and tokens** → sección **OAuth 2.0 Client ID and Client Secret**  
+   - Copia Client ID  
+   - Regenera/copia Client Secret si hace falta  
+10. Pégalos en Supabase (paso anterior)
 
-Si el perfil sigue fallando en Free tier, vuelve a **OAuth 1.0a** (`twitter`).
+## Redirect URLs de la app (Supabase URL Configuration)
 
----
+- Site URL: `https://app.salvazion.org`
+- Redirects:
+  ```
+  https://app.salvazion.org/auth/callback
+  https://app.salvazion.org/auth/confirm
+  http://localhost:3000/auth/callback
+  ```
 
-### Redirect URLs en Supabase (app, no Canva)
+## Probar
 
-**Site URL:** `https://app.salvazion.org`
+Incógnito → `https://app.salvazion.org/auth/login` → **Continuar con X**
 
-```
-https://app.salvazion.org/auth/callback
-https://app.salvazion.org/auth/confirm
-http://localhost:3000/auth/callback
-```
+## Errores
 
-### Callback en X (no cambia)
-
-```
-https://kppylfrsclkdmtpobpxd.supabase.co/auth/v1/callback
-```
-
----
+| Mensaje | Qué hacer |
+|---------|-----------|
+| `provider is not enabled` | Activa **X / Twitter (OAuth 2.0)** en el proyecto correcto |
+| `Error getting user profile from external provider` | Request email ON; Client ID/Secret OAuth 2.0 correctos; Web App + callback de Supabase |
 
 ## Código
 
-- `lib/auth/x-oauth.ts` — elige provider con `NEXT_PUBLIC_X_AUTH_PROVIDER`
-- Default actual: **`twitter`** (OAuth 1.0a) por fiabilidad
-- Perfil muestra `@usuario` tras login correcto
+- `lib/auth/x-oauth.ts` → `provider: 'x'`
+- Perfil sigue mostrando `@usuario` desde la identity de X

@@ -96,45 +96,65 @@ export default function FreedomPage() {
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
-      <header className="px-5 pt-6 pb-3 border-b border-[#6B8F6E]/20">
+      <header className="page-header px-5 pt-6 pb-3">
         <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2.5">
-            <Link href="/hub/dashboard" className="text-[#B7F7AC]/60 text-sm">←</Link>
-            <div className="w-9 h-9 rounded-full border border-[#8FD99A]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <Link href="/hub/dashboard" className="back-btn" aria-label="Volver">
+              ←
+            </Link>
+            <div className="w-9 h-9 rounded-full border border-[var(--border-soft)] flex items-center justify-center lion-glow overflow-hidden bg-[#040404] shrink-0">
               <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
             </div>
-            <div>
-              <h1 className="text-lg font-bold text-[#8FD99A]">Freedom</h1>
-              <p className="text-[10px] text-[#B7F7AC]/50">{profile?.name} · {stageLabel}</p>
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] font-medium">
+                Freedom
+              </p>
+              <h1 className="text-lg font-bold text-[var(--accent)] leading-tight">Hub</h1>
+              <p className="text-[10px] text-[var(--sage)]/80 truncate">
+                {profile?.name} · {stageLabel}
+              </p>
             </div>
           </div>
-          <div className="text-right">
-            <p className="text-2xl font-bold text-[#B7F7AC]">{freedomScore}</p>
-            <p className="text-[10px] text-[#B7F7AC]/50">
+          <div className="text-right shrink-0">
+            <p className="text-2xl font-bold text-[var(--accent)]">{freedomScore}</p>
+            <p className="text-[10px] text-[var(--sage)]/80">
               {freedomStreak > 0 ? freedomStreak + 'd · ×' + freedomMult.toFixed(2) : 'Score'}
             </p>
           </div>
         </div>
-        <div className="flex gap-1.5">
-          {([
-            { id: 'learn' as const, label: 'Aprender', icon: '📚' },
-            { id: 'connect' as const, label: 'Conectar', icon: '🤝' },
-            { id: 'contribute' as const, label: 'Aportar', icon: '🛠️' }
-          ]).map(t => (
+        <div className="segment-soft mb-2">
+          {(
+            [
+              { id: 'learn' as const, label: 'Aprender' },
+              { id: 'connect' as const, label: 'Conectar' },
+              { id: 'contribute' as const, label: 'Aportar' },
+            ] as const
+          ).map((tab) => (
             <button
-              key={t.id}
-              onClick={() => setActiveTab(t.id)}
-              className={'flex-1 py-2 rounded-xl text-xs font-medium border ' + (activeTab === t.id ? 'border-[#8FD99A] bg-[#7BC98A]/15 text-[#8FD99A]' : 'border-[#6B8F6E]/25 text-[#D8E1D9]/60')}
+              key={tab.id}
+              type="button"
+              data-active={activeTab === tab.id}
+              onClick={() => setActiveTab(tab.id)}
             >
-              {t.icon} {t.label}
+              {tab.label}
             </button>
           ))}
         </div>
+        <Link
+          href="/hub/swap"
+          className="flex items-center justify-between card-soft px-3.5 py-2.5 mt-2 active:scale-[0.99] transition"
+        >
+          <div>
+            <p className="text-xs font-medium text-[var(--accent)]">Swap · $SALVAZION</p>
+            <p className="text-[10px] text-[var(--sage)]">Jupiter · libertad económica</p>
+          </div>
+          <span className="text-[var(--accent)] text-sm">→</span>
+        </Link>
       </header>
 
       <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto">
-        <div className="glass rounded-xl px-4 py-3 mb-5 flex items-start gap-3 border border-[#8FD99A]/20">
-          <div className="w-9 h-9 rounded-full border border-[#8FD99A]/40 flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
+        <div className="glass rounded-xl px-4 py-3 mb-5 flex items-start gap-3 border border-[var(--border-soft)]">
+          <div className="w-9 h-9 rounded-full border border-[var(--border-strong)] flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
             <Image src="/logo-icon.png" alt="León Verde" width={36} height={36} className="object-cover" />
           </div>
           <p className="text-xs text-[#D8E1D9]/80 leading-relaxed">
@@ -146,25 +166,25 @@ export default function FreedomPage() {
           <div className="relative w-28 h-28 flex items-center justify-center">
             <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
               <circle cx="50" cy="50" r="42" fill="none" stroke="#6B8F6E" strokeWidth="6" opacity="0.25" />
-              <circle cx="50" cy="50" r="42" fill="none" stroke="#B7F7AC" strokeWidth="6"
-                strokeDasharray={(Math.min(freedomScore, 100) * 2.64) + ' 264'} strokeLinecap="round" />
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#A8D4AE" strokeWidth="5"
+                strokeDasharray={(Math.min(freedomScore, 100) * 2.64) + ' 264'} strokeLinecap="round" className="ring-glow" />
             </svg>
             <div className="text-center z-10">
               <div className="text-2xl font-bold text-white">{freedomScore}</div>
-              <div className="text-[9px] text-[#B7F7AC]/60 uppercase">Freedom</div>
+              <div className="text-[9px] text-[var(--sage)] uppercase">Freedom</div>
             </div>
           </div>
         </div>
 
         {activeTab === 'learn' && (
           <div className="space-y-3">
-            <h2 className="text-sm font-semibold text-[#B7F7AC]">Biblioteca Salvazion</h2>
+            <h2 className="text-sm font-semibold text-[var(--sage)]">Biblioteca Salvazion</h2>
             {library.map(content => {
               const done = completedContent.has(content.id);
               return (
                 <button key={content.id} onClick={() => setSelectedContent(content)}
-                  className={'w-full text-left glass rounded-xl p-4 border ' + (done ? 'border-[#8FD99A]/30' : 'border-[#6B8F6E]/25')}>
-                  <p className="text-[10px] text-[#B7F7AC]/50 uppercase">{content.category} · {content.readMin} min</p>
+                  className={'w-full text-left glass rounded-xl p-4 border ' + (done ? 'border-[var(--border-strong)]' : 'border-[var(--border-soft)]')}>
+                  <p className="text-[10px] text-[var(--sage)]/80 uppercase">{content.category} · {content.readMin} min</p>
                   <p className="text-sm font-medium text-white">{content.title}</p>
                   <p className="text-xs text-[#D8E1D9]/60 mt-1 line-clamp-2">{content.summary}</p>
                   <p className="text-xs text-[#8FD99A] mt-2">{done ? '✓' : '+' + getFreedomPoints(content.actionType)}</p>
@@ -174,13 +194,17 @@ export default function FreedomPage() {
             {actions.filter(a => a.category === 'learn').map(action => {
               const done = loggedToday.has(action.actionType);
               return (
-                <div key={action.id} className={'glass rounded-xl p-3.5 border flex justify-between items-center ' + (done ? 'border-[#8FD99A]/30' : 'border-[#6B8F6E]/25')}>
+                <div key={action.id} className={'glass rounded-xl p-3.5 border flex justify-between items-center ' + (done ? 'border-[var(--border-strong)]' : 'border-[var(--border-soft)]')}>
                   <div>
                     <p className="text-sm text-white">{action.icon} {action.label}</p>
-                    <p className="text-[11px] text-[#B7F7AC]/50">{action.description}</p>
+                    <p className="text-[11px] text-[var(--sage)]/80">{action.description}</p>
                   </div>
-                  <button disabled={done} onClick={() => !done && handleLog(action.actionType, action.label)}
-                    className={'px-3 py-1.5 rounded-lg text-xs font-medium ' + (done ? 'bg-[#6B8F6E]/20 text-[#B7F7AC]' : 'bg-[#7BC98A] text-[#040404]')}>
+                  <button
+                    type="button"
+                    disabled={done}
+                    onClick={() => !done && handleLog(action.actionType, action.label)}
+                    className={done ? 'btn-sm' : 'btn-sm'}
+                  >
                     {done ? '✓' : '+' + getFreedomPoints(action.actionType)}
                   </button>
                 </div>
@@ -191,19 +215,19 @@ export default function FreedomPage() {
 
         {activeTab === 'connect' && (
           <div className="space-y-3">
-            <h2 className="text-sm font-semibold text-[#B7F7AC]">Conectar</h2>
-            <p className="text-[11px] text-[#B7F7AC]/50">Familia, iglesia y comunidad real.</p>
+            <h2 className="text-sm font-semibold text-[var(--sage)]">Conectar</h2>
+            <p className="text-[11px] text-[var(--sage)]/80">Familia, iglesia y comunidad real.</p>
             {actions.filter(a => a.category === 'connect').map(action => {
               const done = loggedToday.has(action.actionType);
               return (
-                <div key={action.id} className={'glass rounded-xl p-4 border ' + (done ? 'border-[#8FD99A]/30' : 'border-[#6B8F6E]/25')}>
+                <div key={action.id} className={'glass rounded-xl p-4 border ' + (done ? 'border-[var(--border-strong)]' : 'border-[var(--border-soft)]')}>
                   <div className="flex justify-between gap-3">
                     <div>
                       <p className="text-sm font-medium text-white">{action.icon} {action.label}</p>
                       <p className="text-xs text-[#D8E1D9]/60 mt-1">{action.description}</p>
                     </div>
                     <button disabled={done} onClick={() => !done && handleLog(action.actionType, action.label)}
-                      className={'px-3 py-1.5 rounded-lg text-xs font-medium h-fit ' + (done ? 'bg-[#6B8F6E]/20 text-[#B7F7AC]' : 'bg-[#7BC98A] text-[#040404]')}>
+                      className={done ? 'btn-sm' : 'btn-sm'}>
                       {done ? '✓' : '+' + getFreedomPoints(action.actionType)}
                     </button>
                   </div>
@@ -215,19 +239,19 @@ export default function FreedomPage() {
 
         {activeTab === 'contribute' && (
           <div className="space-y-3">
-            <h2 className="text-sm font-semibold text-[#B7F7AC]">Aportar</h2>
-            <p className="text-[11px] text-[#B7F7AC]/50">Trabajo, proyectos, startups, ministerio.</p>
+            <h2 className="text-sm font-semibold text-[var(--sage)]">Aportar</h2>
+            <p className="text-[11px] text-[var(--sage)]/80">Trabajo, proyectos, startups, ministerio.</p>
             {actions.filter(a => a.category === 'contribute').map(action => {
               const done = loggedToday.has(action.actionType);
               return (
-                <div key={action.id} className={'glass rounded-xl p-4 border ' + (done ? 'border-[#8FD99A]/30' : 'border-[#6B8F6E]/25')}>
+                <div key={action.id} className={'glass rounded-xl p-4 border ' + (done ? 'border-[var(--border-strong)]' : 'border-[var(--border-soft)]')}>
                   <div className="flex justify-between gap-3">
                     <div>
                       <p className="text-sm font-medium text-white">{action.icon} {action.label}</p>
                       <p className="text-xs text-[#D8E1D9]/60 mt-1">{action.description}</p>
                     </div>
                     <button disabled={done} onClick={() => !done && handleLog(action.actionType, action.label)}
-                      className={'px-3 py-1.5 rounded-lg text-xs font-medium h-fit ' + (done ? 'bg-[#6B8F6E]/20 text-[#B7F7AC]' : 'bg-[#7BC98A] text-[#040404]')}>
+                      className={done ? 'btn-sm' : 'btn-sm'}>
                       {done ? '✓' : '+' + getFreedomPoints(action.actionType)}
                     </button>
                   </div>
@@ -240,9 +264,9 @@ export default function FreedomPage() {
 
       {selectedContent && (
         <div className="fixed inset-0 z-50 bg-[#040404]/95 flex flex-col">
-          <div className="px-5 pt-6 pb-3 border-b border-[#6B8F6E]/20 flex justify-between">
-            <button onClick={() => setSelectedContent(null)} className="text-[#B7F7AC]/60 text-sm">← Cerrar</button>
-            <span className="text-[10px] text-[#B7F7AC]/50">{selectedContent.category}</span>
+          <div className="px-5 pt-6 pb-3 border-b border-[var(--border-soft)] flex justify-between">
+            <button onClick={() => setSelectedContent(null)} className="text-[var(--sage)] text-sm">← Cerrar</button>
+            <span className="text-[10px] text-[var(--sage)]/80">{selectedContent.category}</span>
           </div>
           <div className="flex-1 overflow-y-auto px-5 py-6 max-w-lg mx-auto">
             <h2 className="text-xl font-bold text-white mb-3">{selectedContent.title}</h2>
@@ -251,7 +275,7 @@ export default function FreedomPage() {
             <button
               onClick={() => handleCompleteContent(selectedContent)}
               disabled={completedContent.has(selectedContent.id)}
-              className={'w-full py-3.5 rounded-xl font-semibold text-sm ' + (completedContent.has(selectedContent.id) ? 'bg-[#6B8F6E]/20 text-[#B7F7AC]' : 'bg-[#7BC98A] text-[#040404]')}
+              className={completedContent.has(selectedContent.id) ? 'btn-secondary' : 'btn-primary'}
             >
               {completedContent.has(selectedContent.id) ? '✓ Completado' : 'Completar · +' + getFreedomPoints(selectedContent.actionType)}
             </button>
@@ -260,7 +284,7 @@ export default function FreedomPage() {
       )}
 
       {toast && (
-        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-[#7BC98A] text-[#040404] text-sm font-semibold">{toast}</div>
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 toast-soft">{toast}</div>
       )}
 
       <BottomNav variant="freedom" />

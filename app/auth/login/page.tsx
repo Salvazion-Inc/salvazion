@@ -170,11 +170,11 @@ function LoginForm() {
           <LanguageControl compact />
         </div>
         <div className="text-center mb-8">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[#8FD99A]/40 flex items-center justify-center lion-glow overflow-hidden">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[var(--border-strong)] flex items-center justify-center lion-glow overflow-hidden">
             <Image src="/logo.png" alt="Salvazion" width={64} height={64} className="object-contain" />
           </div>
           <h1 className="text-2xl font-bold text-[#8FD99A] tracking-tight">{title}</h1>
-          <p className="text-sm text-[#B7F7AC]/70 mt-1">{subtitle}</p>
+          <p className="text-sm text-[var(--sage)] mt-1">{subtitle}</p>
         </div>
 
         <form
@@ -188,14 +188,14 @@ function LoginForm() {
           className="glass rounded-2xl p-6 space-y-4"
         >
           <div>
-            <label className="block text-xs text-[#B7F7AC] mb-1.5">{t('auth.email')}</label>
+            <label className="block text-xs text-[var(--sage)] mb-1.5">{t('auth.email')}</label>
             <input
               type="email"
               required
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#8FD99A]"
+              className="input-soft"
               placeholder="you@email.com"
             />
           </div>
@@ -203,7 +203,7 @@ function LoginForm() {
           {mode === 'password' && (
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs text-[#B7F7AC]">{t('auth.password')}</label>
+                <label className="block text-xs text-[var(--sage)]">{t('auth.password')}</label>
                 <button
                   type="button"
                   onClick={() => {
@@ -211,7 +211,7 @@ function LoginForm() {
                     setError(null);
                     setInfo(null);
                   }}
-                  className="text-[11px] text-[#B7F7AC]/60 hover:text-[#8FD99A]"
+                  className="text-[11px] text-[var(--sage)] hover:text-[#8FD99A]"
                 >
                   {t('auth.forgot')}
                 </button>
@@ -222,7 +222,7 @@ function LoginForm() {
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#8FD99A]"
+                className="input-soft"
                 placeholder="••••••••"
               />
             </div>
@@ -232,7 +232,7 @@ function LoginForm() {
             <p className="text-sm text-red-400 bg-red-500/10 rounded-lg px-3 py-2">{error}</p>
           )}
           {info && (
-            <p className="text-sm text-[#8FD99A] bg-[#7BC98A]/10 rounded-lg px-3 py-2">{info}</p>
+            <p className="text-sm text-[#8FD99A] bg-[var(--surface-active)] rounded-lg px-3 py-2">{info}</p>
           )}
 
           <button
@@ -258,7 +258,7 @@ function LoginForm() {
                   setError(null);
                   setInfo(null);
                 }}
-                className="w-full text-xs text-[#B7F7AC]/60 hover:text-[#8FD99A]"
+                className="w-full text-xs text-[var(--sage)] hover:text-[#8FD99A]"
               >
                 {t('auth.backToPassword')}
               </button>
@@ -271,7 +271,7 @@ function LoginForm() {
                   setError(null);
                   setInfo(null);
                 }}
-                className="w-full text-xs text-[#B7F7AC]/60 hover:text-[#8FD99A]"
+                className="w-full text-xs text-[var(--sage)] hover:text-[#8FD99A]"
               >
                 {t('auth.magicLink')}
               </button>
@@ -279,14 +279,14 @@ function LoginForm() {
           </div>
         </form>
 
-        <p className="text-center text-sm text-[#B7F7AC]/50 mt-6">
+        <p className="text-center text-sm text-[var(--sage)]/80 mt-6">
           {t('auth.noAccount')}{' '}
           <Link href="/auth/signup" className="text-[#8FD99A] hover:underline">
             {t('auth.createAccount')}
           </Link>
         </p>
 
-        <p className="text-center text-[11px] text-[#B7F7AC]/40 mt-8 leading-relaxed">
+        <p className="text-center text-[11px] text-[var(--sage)]/70 mt-8 leading-relaxed">
           {t('auth.rlsNote')}
           <br />
           {t('auth.rlsNote2')}

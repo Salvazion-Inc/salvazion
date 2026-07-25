@@ -129,27 +129,35 @@ export default function BiblePage() {
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
-      {/* Header */}
-      <header className="px-5 pt-6 pb-3 border-b border-[#6B8F6E]/20 sticky top-0 z-40 bg-[#040404]/95 backdrop-blur-md">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2.5">
-            <Link href="/hub/dashboard" className="text-[#B7F7AC]/60 text-sm w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#7BC98A]/10">
+      {/* Header — Salvation pillar */}
+      <header className="page-header px-5 pt-6 pb-3 sticky top-0 z-40">
+        <div className="flex items-center justify-between mb-3 gap-2">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <Link href="/hub/dashboard" className="back-btn" aria-label={t('common.back')}>
               ←
             </Link>
-            <div className="w-9 h-9 rounded-full border border-[#8FD99A]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+            <div className="w-9 h-9 rounded-full border border-[var(--border-soft)] flex items-center justify-center lion-glow overflow-hidden bg-[#040404] shrink-0">
               <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
             </div>
-            <div>
-              <h1 className="text-lg font-bold text-[#8FD99A] leading-tight">{t('bible.title')}</h1>
-              <p className="text-[10px] text-[#B7F7AC]/50">
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] font-medium">
+                {t('nav.salvation')}
+              </p>
+              <h1 className="text-lg font-bold text-[var(--accent)] leading-tight truncate">
+                {t('bible.title')}
+              </h1>
+              <p className="text-[10px] text-[var(--sage)]/80">
                 {readCount} / {totalChapters} {t('bible.chapters')}
               </p>
             </div>
           </div>
+          <Link href="/hub/devotional" className="pill-soft pill-soft-active shrink-0 text-[10px]">
+            {t('nav.devotional')}
+          </Link>
         </div>
 
         {/* Main tabs: Read / Explore */}
-        <div className="flex p-1 rounded-2xl bg-[#0a0a0a] border border-[#6B8F6E]/25 mb-3">
+        <div className="segment-soft mb-3">
           {(
             [
               { id: 'read' as MainTab, key: 'bible.read' },
@@ -159,12 +167,8 @@ export default function BiblePage() {
             <button
               key={tab.id}
               type="button"
+              data-active={mainTab === tab.id}
               onClick={() => setMainTab(tab.id)}
-              className={`flex-1 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                mainTab === tab.id
-                  ? 'bg-[#7BC98A] text-[#040404] shadow-[0_0_18px_rgba(143, 217, 154,0.22)]'
-                  : 'text-[#B7F7AC]/70 hover:text-[#8FD99A]'
-              }`}
             >
               {t(tab.key)}
             </button>
@@ -184,11 +188,7 @@ export default function BiblePage() {
               key={lang.id}
               type="button"
               onClick={() => setLanguage(lang.id)}
-              className={`px-3 py-1.5 rounded-full text-xs border transition-all ${
-                language === lang.id
-                  ? 'bg-[#7BC98A]/20 border-[#8FD99A] text-[#8FD99A]'
-                  : 'border-[#6B8F6E]/40 text-[#D8E1D9]/60'
-              }`}
+              className={`pill-soft ${language === lang.id ? 'pill-soft-active' : ''}`}
             >
               {lang.label}
             </button>
@@ -206,7 +206,7 @@ export default function BiblePage() {
                 setSelectedChapter(chs[0] || 1);
                 setFocusVerse(null);
               }}
-              className="flex-1 bg-[#0a0a0a] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm"
+              className="input-soft flex-1 py-2.5 text-sm"
             >
               <optgroup label={t('bible.ot')}>
                 {books
@@ -234,7 +234,7 @@ export default function BiblePage() {
                 setSelectedChapter(Number(e.target.value));
                 setFocusVerse(null);
               }}
-              className="w-24 bg-[#0a0a0a] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm"
+              className="input-soft w-24 py-2.5 text-sm"
             >
               {availableChapters.map((c) => (
                 <option key={c} value={c}>
@@ -253,8 +253,8 @@ export default function BiblePage() {
             <BibleSearchPanel language={language} onOpenVerse={openVerse} />
           </div>
         ) : loadingChapter ? (
-          <div className="flex flex-col items-center justify-center py-20 text-[#B7F7AC]/60">
-            <div className="w-8 h-8 border-2 border-[#8FD99A]/40 border-t-[#8FD99A] rounded-full animate-spin mb-4" />
+          <div className="flex flex-col items-center justify-center py-20 text-[var(--sage)]">
+            <div className="w-8 h-8 border-2 border-[var(--border-strong)] border-t-[#8FD99A] rounded-full animate-spin mb-4" />
             <p className="text-sm">{t('bible.loadingChapter')}</p>
           </div>
         ) : chapter ? (
@@ -265,13 +265,13 @@ export default function BiblePage() {
                 <h2 className="text-xl font-bold text-white tracking-tight">
                   {chapter.book} {chapter.chapter}
                 </h2>
-                <p className="text-xs text-[#B7F7AC]/50 mt-0.5">{chapter.version}</p>
+                <p className="text-xs text-[var(--sage)]/80 mt-0.5">{chapter.version}</p>
               </div>
               <div className="flex gap-1.5 shrink-0">
                 <button
                   type="button"
                   onClick={goPrev}
-                  className="w-9 h-9 rounded-xl border border-[#6B8F6E]/35 text-[#B7F7AC] hover:border-[#8FD99A]/50 hover:text-[#8FD99A] transition"
+                  className="w-9 h-9 rounded-xl border border-[var(--border-soft)] text-[var(--sage)] hover:border-[var(--border-strong)] hover:text-[#8FD99A] transition"
                   aria-label="Previous"
                 >
                   ‹
@@ -279,7 +279,7 @@ export default function BiblePage() {
                 <button
                   type="button"
                   onClick={goNext}
-                  className="w-9 h-9 rounded-xl border border-[#6B8F6E]/35 text-[#B7F7AC] hover:border-[#8FD99A]/50 hover:text-[#8FD99A] transition"
+                  className="w-9 h-9 rounded-xl border border-[var(--border-soft)] text-[var(--sage)] hover:border-[var(--border-strong)] hover:text-[#8FD99A] transition"
                   aria-label="Next"
                 >
                   ›
@@ -326,11 +326,7 @@ export default function BiblePage() {
               type="button"
               onClick={handleMarkRead}
               disabled={read}
-              className={`w-full py-4 rounded-2xl font-semibold transition-all ${
-                read
-                  ? 'bg-[#6B8F6E]/20 text-[#B7F7AC] border border-[#6B8F6E]/40'
-                  : 'bg-[#7BC98A] text-[#040404] hover:bg-[#B7F7AC] shadow-[0_0_24px_rgba(143, 217, 154,0.2)]'
-              }`}
+              className={read ? 'btn-secondary opacity-80' : 'btn-primary'}
             >
               {read
                 ? justLogged
@@ -340,42 +336,34 @@ export default function BiblePage() {
             </button>
 
             <div className="flex gap-2 mt-3 mb-6">
-              <button
-                type="button"
-                onClick={goPrev}
-                className="flex-1 py-3 rounded-xl border border-[#6B8F6E]/30 text-xs text-[#B7F7AC] hover:border-[#8FD99A]/40"
-              >
+              <button type="button" onClick={goPrev} className="btn-secondary flex-1 py-3 text-xs">
                 ← {t('common.previous')}
               </button>
               <button
                 type="button"
                 onClick={() => setMainTab('explore')}
-                className="flex-1 py-3 rounded-xl border border-[#8FD99A]/40 text-xs text-[#8FD99A] hover:bg-[#7BC98A]/10"
+                className="btn-secondary flex-1 py-3 text-xs"
               >
                 ⌕ {t('common.search')}
               </button>
-              <button
-                type="button"
-                onClick={goNext}
-                className="flex-1 py-3 rounded-xl border border-[#6B8F6E]/30 text-xs text-[#B7F7AC] hover:border-[#8FD99A]/40"
-              >
+              <button type="button" onClick={goNext} className="btn-secondary flex-1 py-3 text-xs">
                 {t('common.next')} →
               </button>
             </div>
 
             {language === 'original' && (
-              <p className="text-[11px] text-[#B7F7AC]/40 text-center leading-relaxed mb-4">
+              <p className="text-[11px] text-[var(--sage)]/70 text-center leading-relaxed mb-4">
                 {t('bible.originalNote')}
               </p>
             )}
             {language === 'es' && (
-              <p className="text-[11px] text-[#B7F7AC]/40 text-center leading-relaxed mb-4">
+              <p className="text-[11px] text-[var(--sage)]/70 text-center leading-relaxed mb-4">
                 {t('bible.rvNote')}
               </p>
             )}
           </div>
         ) : (
-          <div className="text-center py-16 text-[#B7F7AC]/40">
+          <div className="text-center py-16 text-[var(--sage)]/70">
             <p>{t('bible.couldNotLoad')}</p>
           </div>
         )}

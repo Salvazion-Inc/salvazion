@@ -158,7 +158,7 @@ export default function JupiterSwap({
             href={JUPITER_SWAP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="block text-center text-[11px] text-[#B7F7AC]/50 hover:text-[#8FD99A] mt-2"
+            className="block text-center text-[11px] text-[var(--sage)]/80 hover:text-[#8FD99A] mt-2"
           >
             Abrir jup.ag en nueva pestaña ↗
           </a>
@@ -190,7 +190,7 @@ export default function JupiterSwap({
       )}
       <div
         id={targetId}
-        className="w-full overflow-hidden rounded-2xl border border-[#6B8F6E]/30 bg-[#0a0a0a]"
+        className="w-full overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[#0a0a0a]"
         style={{ minHeight: loading ? 0 : 560 }}
       />
       {showFallbackLink && ready && (
@@ -198,7 +198,7 @@ export default function JupiterSwap({
           href={JUPITER_SWAP_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="block text-center text-[11px] text-[#B7F7AC]/50 hover:text-[#8FD99A] mt-3"
+          className="block text-center text-[11px] text-[var(--sage)]/80 hover:text-[#8FD99A] mt-3"
         >
           ¿Problemas? Abre Jupiter completo ↗
         </a>

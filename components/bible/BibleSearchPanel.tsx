@@ -137,7 +137,7 @@ export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
   return (
     <div className="flex flex-col h-full min-h-0">
       {/* Mode toggle */}
-      <div className="flex p-1 rounded-2xl bg-[#0a0a0a] border border-[#6B8F6E]/25 mb-3">
+      <div className="flex p-1 rounded-2xl bg-[#0a0a0a] border border-[var(--border-soft)] mb-3">
         {(
           [
             { id: 'search' as Mode, label: language === 'en' ? 'Search' : 'Búsqueda', icon: '⌕' },
@@ -155,7 +155,7 @@ export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
             className={`flex-1 py-2.5 rounded-xl text-xs font-semibold transition-all ${
               mode === m.id
                 ? 'bg-[#7BC98A] text-[#040404] shadow-[0_0_20px_rgba(143, 217, 154,0.25)]'
-                : 'text-[#B7F7AC]/70 hover:text-[#8FD99A]'
+                : 'text-[var(--sage)] hover:text-[#8FD99A]'
             }`}
           >
             <span className="mr-1 opacity-80">{m.icon}</span>
@@ -178,7 +178,7 @@ export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
           autoComplete="off"
           autoCorrect="off"
           spellCheck={false}
-          className="w-full bg-[#0a0a0a] border border-[#6B8F6E]/40 focus:border-[#8FD99A] rounded-2xl pl-10 pr-10 py-3.5 text-sm text-[#D8E1D9] placeholder:text-[#B7F7AC]/35 outline-none transition-all focus:shadow-[0_0_0_3px_rgba(143, 217, 154,0.12)]"
+          className="w-full bg-[#0a0a0a] border border-[var(--border-soft)] focus:border-[#8FD99A] rounded-2xl pl-10 pr-10 py-3.5 text-sm text-[#D8E1D9] placeholder:text-[var(--sage)]/35 outline-none transition-all focus:shadow-[0_0_0_3px_rgba(143, 217, 154,0.12)]"
         />
         {query && (
           <button
@@ -187,7 +187,7 @@ export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
               setQuery('');
               inputRef.current?.focus();
             }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full text-[#B7F7AC]/60 hover:text-[#8FD99A] hover:bg-[#7BC98A]/10 text-sm"
+            className="absolute right-3 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full text-[var(--sage)] hover:text-[#8FD99A] hover:bg-[var(--surface-active)] text-sm"
             aria-label="Clear"
           >
             ×
@@ -210,8 +210,8 @@ export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
             onClick={() => setTestament(f.id)}
             className={`shrink-0 px-3 py-1.5 rounded-full text-[11px] border transition-all ${
               testament === f.id
-                ? 'border-[#8FD99A] bg-[#7BC98A]/15 text-[#8FD99A]'
-                : 'border-[#6B8F6E]/30 text-[#B7F7AC]/60 hover:border-[#8FD99A]/40'
+                ? 'border-[#8FD99A] bg-[var(--surface-active)] text-[#8FD99A]'
+                : 'border-[var(--border-soft)] text-[var(--sage)] hover:border-[var(--border-strong)]'
             }`}
           >
             {language === 'en' ? f.en : f.es}
@@ -222,13 +222,13 @@ export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
       {/* Indexing progress */}
       {indexing && !indexing.ready && (
         <div className="mb-4 glass rounded-xl px-4 py-3">
-          <div className="flex justify-between text-[11px] text-[#B7F7AC]/70 mb-1.5">
+          <div className="flex justify-between text-[11px] text-[var(--sage)] mb-1.5">
             <span>{language === 'en' ? 'Indexing Bible…' : 'Indexando Biblia…'}</span>
             <span>
               {indexing.loadedBooks}/{indexing.totalBooks}
             </span>
           </div>
-          <div className="h-1.5 rounded-full bg-[#6B8F6E]/20 overflow-hidden">
+          <div className="h-1.5 rounded-full bg-[var(--surface-muted)] overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-[#6B8F6E] to-[#8FD99A] transition-all duration-300"
               style={{
@@ -241,7 +241,7 @@ export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
 
       {/* Results meta */}
       {debounced.length >= 2 && (
-        <div className="flex items-center justify-between mb-3 text-[11px] text-[#B7F7AC]/50">
+        <div className="flex items-center justify-between mb-3 text-[11px] text-[var(--sage)]/80">
           <span>
             {loading
               ? language === 'en'
@@ -274,7 +274,7 @@ export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
             {recent.length > 0 && (
               <section>
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-[11px] uppercase tracking-wider text-[#B7F7AC]/50">
+                  <h3 className="text-[11px] uppercase tracking-wider text-[var(--sage)]/80">
                     {language === 'en' ? 'Recent' : 'Recientes'}
                   </h3>
                   <button
@@ -283,7 +283,7 @@ export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
                       clearRecentSearches();
                       setRecent([]);
                     }}
-                    className="text-[10px] text-[#B7F7AC]/40 hover:text-[#8FD99A]"
+                    className="text-[10px] text-[var(--sage)]/70 hover:text-[#8FD99A]"
                   >
                     {language === 'en' ? 'Clear' : 'Borrar'}
                   </button>
@@ -294,7 +294,7 @@ export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
                       key={r}
                       type="button"
                       onClick={() => setQuery(r)}
-                      className="px-3 py-1.5 rounded-full border border-[#6B8F6E]/30 text-xs text-[#D8E1D9]/80 hover:border-[#8FD99A]/50 hover:text-[#8FD99A] transition"
+                      className="px-3 py-1.5 rounded-full border border-[var(--border-soft)] text-xs text-[#D8E1D9]/80 hover:border-[var(--border-strong)] hover:text-[#8FD99A] transition"
                     >
                       {r}
                     </button>
@@ -304,7 +304,7 @@ export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
             )}
 
             <section>
-              <h3 className="text-[11px] uppercase tracking-wider text-[#B7F7AC]/50 mb-2">
+              <h3 className="text-[11px] uppercase tracking-wider text-[var(--sage)]/80 mb-2">
                 {mode === 'search'
                   ? language === 'en'
                     ? 'Try searching'
@@ -319,7 +319,7 @@ export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
                     key={s}
                     type="button"
                     onClick={() => setQuery(s)}
-                    className="px-3.5 py-2 rounded-xl bg-[#7BC98A]/08 border border-[#8FD99A]/25 text-xs text-[#8FD99A] hover:bg-[#7BC98A]/15 transition"
+                    className="px-3.5 py-2 rounded-xl bg-[#7BC98A]/08 border border-[#8FD99A]/25 text-xs text-[#8FD99A] hover:bg-[var(--surface-active)] transition"
                   >
                     {s}
                   </button>
@@ -338,7 +338,7 @@ export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
                     ? 'Word concordance'
                     : 'Concordancia de palabras'}
               </p>
-              <p className="text-xs text-[#B7F7AC]/50 leading-relaxed">
+              <p className="text-xs text-[var(--sage)]/80 leading-relaxed">
                 {mode === 'search'
                   ? language === 'en'
                     ? 'Words, phrases in quotes, or references like John 3:16.'
@@ -381,7 +381,7 @@ export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
                 <span className="text-xs font-semibold text-[#8FD99A]">
                   {formatRef(hit.verse, language)}
                 </span>
-                <span className="text-[10px] text-[#B7F7AC]/40 group-hover:text-[#8FD99A] transition">
+                <span className="text-[10px] text-[var(--sage)]/70 group-hover:text-[#8FD99A] transition">
                   {language === 'en' ? 'Open →' : 'Abrir →'}
                 </span>
               </div>
@@ -402,10 +402,10 @@ export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
               className="w-full text-left glass rounded-2xl p-4 hover:border-[#8FD99A]/45 transition-all active:scale-[0.99]"
             >
               <div className="flex items-center gap-2 mb-1.5">
-                <span className="text-[10px] px-2 py-0.5 rounded-full border border-[#8FD99A]/30 text-[#8FD99A] font-mono">
+                <span className="text-[10px] px-2 py-0.5 rounded-full border border-[var(--border-strong)] text-[#8FD99A] font-mono">
                   {formatRef(entry.verse, language)}
                 </span>
-                <span className="text-[10px] text-[#B7F7AC]/40">
+                <span className="text-[10px] text-[var(--sage)]/70">
                   {entry.verse.testament === 'OT'
                     ? language === 'en'
                       ? 'OT'
@@ -426,10 +426,10 @@ export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
 
         {!loading && debounced.length >= 2 && total === 0 && !error && (
           <div className="text-center py-12">
-            <p className="text-sm text-[#B7F7AC]/50 mb-3">
+            <p className="text-sm text-[var(--sage)]/80 mb-3">
               {language === 'en' ? 'No verses matched.' : 'Ningún versículo coincide.'}
             </p>
-            <p className="text-xs text-[#B7F7AC]/35">
+            <p className="text-xs text-[var(--sage)]/35">
               {language === 'en'
                 ? 'Try fewer words, a reference, or switch testament filter.'
                 : 'Prueba menos palabras, una referencia, o cambia el filtro de testamento.'}

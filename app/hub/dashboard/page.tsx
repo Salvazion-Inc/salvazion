@@ -210,7 +210,7 @@ export default function DashboardPage() {
           <div className="grid grid-cols-3 gap-2.5">
             <PillarCard
               href="/hub/bible"
-              label="Salvation"
+              label={t('nav.salvation')}
               value={salvation}
               streak={streaks.salvation}
               multiplier={multipliers.salvation}
@@ -219,7 +219,7 @@ export default function DashboardPage() {
             />
             <PillarCard
               href="/hub/health"
-              label="Health"
+              label={t('nav.health')}
               value={health}
               streak={streaks.health}
               multiplier={multipliers.health}
@@ -228,7 +228,7 @@ export default function DashboardPage() {
             />
             <PillarCard
               href="/hub/freedom"
-              label="Freedom"
+              label={t('nav.freedom')}
               value={freedom}
               streak={streaks.freedom}
               multiplier={multipliers.freedom}
@@ -239,7 +239,7 @@ export default function DashboardPage() {
         </div>
 
         {profile.purpose && (
-          <div className="w-full max-w-sm glass rounded-2xl p-4 mb-4">
+          <div className="w-full max-w-sm card-soft p-4 mb-4">
             <p className="text-xs text-[var(--sage)] mb-1">{t('dashboard.purpose')}</p>
             <p className="text-sm leading-snug line-clamp-2">{profile.purpose}</p>
           </div>
@@ -248,18 +248,18 @@ export default function DashboardPage() {
         {/* Pillar hubs */}
         <div className="w-full max-w-sm space-y-2.5 mb-4">
           <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70 px-0.5">
-            Salvation
+            {t('nav.salvation')}
           </p>
           <HubLink href="/hub/devotional" Icon={DevotionalIcon} title={t('dashboard.devotionalTitle')} sub={t('dashboard.devotionalSub')} />
           <HubLink href="/hub/bible" Icon={BibleIcon} title={t('dashboard.bibleTitle')} sub={t('dashboard.bibleSub')} />
 
           <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70 px-0.5 pt-2">
-            Health
+            {t('nav.health')}
           </p>
           <HubLink href="/hub/health" Icon={HealthIcon} title={t('dashboard.healthTitle')} sub={t('dashboard.healthSub')} />
 
           <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70 px-0.5 pt-2">
-            Freedom
+            {t('nav.freedom')}
           </p>
           <HubLink href="/hub/freedom" Icon={FreedomIcon} title={t('dashboard.freedomTitle')} sub={t('dashboard.freedomSub')} />
           <HubLink href="/hub/swap" Icon={SwapIcon} title={t('dashboard.swapTitle')} sub={t('dashboard.swapSub')} />
@@ -380,8 +380,8 @@ function PillarCard({
   return (
     <Link
       href={href}
-      className="glass rounded-2xl p-3 text-center hover:border-[var(--border-strong)] transition-all active:scale-[0.98] min-h-[96px] flex flex-col items-center justify-center gap-1"
-      style={{ borderColor: `${ring}33` }}
+      className="card-soft p-3 text-center hover:border-[var(--border-strong)] transition-all active:scale-[0.98] min-h-[100px] flex flex-col items-center justify-center gap-1"
+      style={{ borderColor: `${ring}40` }}
     >
       <Icon size={26} active />
       <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]">{label}</p>
@@ -411,7 +411,7 @@ function HubLink({
   return (
     <Link
       href={href}
-      className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[var(--border-strong)] transition-all active:scale-[0.99] min-h-[56px]"
+      className="flex items-center justify-between card-soft px-4 py-3.5 hover:border-[var(--border-strong)] transition-all active:scale-[0.99] min-h-[56px]"
     >
       <div className="flex items-center gap-3 min-w-0">
         <Icon size={28} active />

@@ -119,7 +119,7 @@ export default function WalletConnectCard({
             <button
               type="button"
               onClick={handleCopy}
-              className="px-3 py-1.5 rounded-full border border-[#8FD99A]/40 text-xs font-mono text-[#8FD99A] hover:bg-[#7BC98A]/10 transition"
+              className="px-3 py-1.5 rounded-full border border-[var(--border-strong)] text-xs font-mono text-[#8FD99A] hover:bg-[var(--surface-active)] transition"
               title={publicKey.toBase58()}
             >
               {copied ? t('wallet.copied') : shortenAddress(publicKey.toBase58())}
@@ -127,7 +127,7 @@ export default function WalletConnectCard({
             <button
               type="button"
               onClick={handleDisconnect}
-              className="text-[11px] text-[#B7F7AC]/50 hover:text-red-400 transition"
+              className="text-[11px] text-[var(--sage)]/80 hover:text-red-400 transition"
             >
               {t('wallet.disconnect')}
             </button>
@@ -150,11 +150,11 @@ export default function WalletConnectCard({
     <div className={`glass rounded-2xl p-5 space-y-4 ${className}`}>
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs uppercase tracking-wider text-[#B7F7AC]/60">Solana</p>
+          <p className="text-xs uppercase tracking-wider text-[var(--sage)]">Solana</p>
           <h3 className="text-lg font-semibold text-[#8FD99A] mt-0.5">{t('wallet.title')}</h3>
-          <p className="text-xs text-[#B7F7AC]/50 mt-1">{t('wallet.subtitle')}</p>
+          <p className="text-xs text-[var(--sage)]/80 mt-1">{t('wallet.subtitle')}</p>
         </div>
-        <div className="w-10 h-10 rounded-full border border-[#8FD99A]/40 flex items-center justify-center text-lg">
+        <div className="w-10 h-10 rounded-full border border-[var(--border-strong)] flex items-center justify-center text-lg">
           ◎
         </div>
       </div>
@@ -162,7 +162,7 @@ export default function WalletConnectCard({
       {!connected || !publicKey ? (
         <div className="space-y-3">
           {address && !connected && (
-            <p className="text-xs text-[#B7F7AC]/50 font-mono">
+            <p className="text-xs text-[var(--sage)]/80 font-mono">
               {t('wallet.lastLinked')}: {shortenAddress(address)}
             </p>
           )}
@@ -170,16 +170,16 @@ export default function WalletConnectCard({
             type="button"
             disabled={connecting}
             onClick={() => setVisible(true)}
-            className="w-full py-3.5 rounded-xl bg-[#7BC98A] text-[#040404] font-semibold text-sm hover:bg-[#B7F7AC] transition disabled:opacity-50"
+            className="btn-primary"
           >
             {connecting ? t('wallet.connecting') : t('wallet.connect')}
           </button>
         </div>
       ) : (
         <div className="space-y-3">
-          <div className="flex items-center justify-between gap-2 bg-[#040404]/60 border border-[#6B8F6E]/30 rounded-xl px-3 py-2.5">
+          <div className="flex items-center justify-between gap-2 bg-[#040404]/60 border border-[var(--border-soft)] rounded-xl px-3 py-2.5">
             <div className="min-w-0">
-              <p className="text-[10px] text-[#B7F7AC]/50 uppercase">
+              <p className="text-[10px] text-[var(--sage)]/80 uppercase">
                 {wallet?.adapter.name || 'Wallet'}
               </p>
               <p className="text-sm font-mono text-[#D8E1D9] truncate" title={publicKey.toBase58()}>
@@ -196,14 +196,14 @@ export default function WalletConnectCard({
           </div>
 
           <div className="grid grid-cols-2 gap-2">
-            <div className="rounded-xl border border-[#6B8F6E]/25 bg-[#040404]/40 px-3 py-2.5">
-              <p className="text-[10px] text-[#B7F7AC]/50 uppercase">SOL</p>
+            <div className="rounded-xl border border-[var(--border-soft)] bg-[#040404]/40 px-3 py-2.5">
+              <p className="text-[10px] text-[var(--sage)]/80 uppercase">SOL</p>
               <p className="text-sm font-semibold text-white mt-0.5">
                 {solBalance === null ? '—' : solBalance.toFixed(4)}
               </p>
             </div>
-            <div className="rounded-xl border border-[#6B8F6E]/25 bg-[#040404]/40 px-3 py-2.5">
-              <p className="text-[10px] text-[#B7F7AC]/50 uppercase">$SALVAZION</p>
+            <div className="rounded-xl border border-[var(--border-soft)] bg-[#040404]/40 px-3 py-2.5">
+              <p className="text-[10px] text-[var(--sage)]/80 uppercase">$SALVAZION</p>
               <p className="text-sm font-semibold text-[#8FD99A] mt-0.5">
                 {tokenBalance === null
                   ? '—'

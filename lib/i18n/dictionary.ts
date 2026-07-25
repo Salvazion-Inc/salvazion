@@ -134,7 +134,7 @@ export const dictionary = {
     dashboard: {
       purpose: 'Tu propósito',
       pillars: 'Tus tres pilares',
-      pillarsHint: 'Toca un pilar para entrar a su hub',
+      pillarsHint: 'Salvation · Health · Freedom — toca un pilar para entrar',
       swapTitle: 'Swap Jupiter · $SALVAZION',
       swapSub: 'Solana · libertad económica',
       devotionalTitle: 'Devocional de Hoy',
@@ -412,7 +412,7 @@ export const dictionary = {
     dashboard: {
       purpose: 'Your purpose',
       pillars: 'Your three pillars',
-      pillarsHint: 'Tap a pillar to open its hub',
+      pillarsHint: 'Salvation · Health · Freedom — tap a pillar to enter',
       swapTitle: 'Jupiter Swap · $SALVAZION',
       swapSub: 'Solana · economic freedom',
       devotionalTitle: "Today's Devotional",

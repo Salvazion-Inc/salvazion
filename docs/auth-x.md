@@ -12,13 +12,31 @@
 
 ## Setup (una vez)
 
-1. Supabase SQL Editor → ejecuta `supabase/x-auth.sql`
-2. [X Developer Portal](https://developer.x.com/) → app con callback:
+### A) SQL (columnas del perfil)
+
+1. Supabase → **SQL Editor** → New query  
+2. Pega **todo** el contenido de `supabase/x-auth.sql` → **Run**  
+3. Al final debe listar columnas `avatar_url`, `name`, `x_user_id`, `x_username`
+
+**Si falla con `relation "public.profiles" does not exist`:**  
+primero ejecuta `supabase/schema.sql` completo, luego otra vez `x-auth.sql`.
+
+**Si solo quieres las 2 columnas** (proyecto ya con `profiles`):  
+usa `supabase/x-auth-minimal.sql`:
+
+```sql
+alter table public.profiles add column if not exists x_username text;
+alter table public.profiles add column if not exists x_user_id text;
+```
+
+### B) Provider X en Supabase
+
+1. [X Developer Portal](https://developer.x.com/) → app con callback:
    ```
    https://<PROJECT_REF>.supabase.co/auth/v1/callback
    ```
-3. Supabase → Authentication → Providers → Twitter → Enable + keys
-4. Redirect URLs de la app ya incluyen `/auth/callback`
+2. Supabase → Authentication → Providers → Twitter → Enable + keys
+3. Redirect URLs de la app ya incluyen `/auth/callback`
 
 ## Flujo técnico
 

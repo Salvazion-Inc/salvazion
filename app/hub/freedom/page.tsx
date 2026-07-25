@@ -178,38 +178,76 @@ export default function FreedomPage() {
 
         {activeTab === 'learn' && (
           <div className="space-y-3">
-            <h2 className="text-sm font-semibold text-[var(--sage)]">Biblioteca Salvazion</h2>
-            {library.map(content => {
+            <div className="flex items-end justify-between gap-2">
+              <div>
+                <h2 className="text-sm font-semibold text-[var(--sage)]">Artículos · @salvazion_</h2>
+                <p className="text-[10px] text-[var(--sage)]/70 mt-0.5">
+                  Long-form en X · Freedom Score
+                </p>
+              </div>
+              <a
+                href="https://x.com/salvazion_"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[10px] text-[var(--accent)] hover:underline shrink-0"
+              >
+                Ver en X ↗
+              </a>
+            </div>
+            {library.map((content) => {
               const done = completedContent.has(content.id);
               return (
-                <button key={content.id} onClick={() => setSelectedContent(content)}
-                  className={'w-full text-left glass rounded-xl p-4 border ' + (done ? 'border-[var(--border-strong)]' : 'border-[var(--border-soft)]')}>
-                  <p className="text-[10px] text-[var(--sage)]/80 uppercase">{content.category} · {content.readMin} min</p>
+                <button
+                  key={content.id}
+                  type="button"
+                  onClick={() => setSelectedContent(content)}
+                  className={
+                    'w-full text-left glass rounded-xl p-4 border ' +
+                    (done ? 'border-[var(--border-strong)]' : 'border-[var(--border-soft)]')
+                  }
+                >
+                  <p className="text-[10px] text-[var(--sage)]/80 uppercase">
+                    {content.category}
+                    {content.source ? ` · ${content.source}` : ''} · {content.readMin} min
+                    {content.url ? ' · X' : ''}
+                  </p>
                   <p className="text-sm font-medium text-white">{content.title}</p>
                   <p className="text-xs text-[#D8E1D9]/60 mt-1 line-clamp-2">{content.summary}</p>
-                  <p className="text-xs text-[#8FD99A] mt-2">{done ? '✓' : '+' + getFreedomPoints(content.actionType)}</p>
+                  <p className="text-xs text-[#8FD99A] mt-2">
+                    {done ? '✓ Completado' : '+' + getFreedomPoints(content.actionType) + ' Freedom'}
+                  </p>
                 </button>
               );
             })}
-            {actions.filter(a => a.category === 'learn').map(action => {
-              const done = loggedToday.has(action.actionType);
-              return (
-                <div key={action.id} className={'glass rounded-xl p-3.5 border flex justify-between items-center ' + (done ? 'border-[var(--border-strong)]' : 'border-[var(--border-soft)]')}>
-                  <div>
-                    <p className="text-sm text-white">{action.icon} {action.label}</p>
-                    <p className="text-[11px] text-[var(--sage)]/80">{action.description}</p>
-                  </div>
-                  <button
-                    type="button"
-                    disabled={done}
-                    onClick={() => !done && handleLog(action.actionType, action.label)}
-                    className={done ? 'btn-sm' : 'btn-sm'}
+            {actions
+              .filter((a) => a.category === 'learn')
+              .map((action) => {
+                const done = loggedToday.has(action.actionType);
+                return (
+                  <div
+                    key={action.id}
+                    className={
+                      'glass rounded-xl p-3.5 border flex justify-between items-center ' +
+                      (done ? 'border-[var(--border-strong)]' : 'border-[var(--border-soft)]')
+                    }
                   >
-                    {done ? '✓' : '+' + getFreedomPoints(action.actionType)}
-                  </button>
-                </div>
-              );
-            })}
+                    <div>
+                      <p className="text-sm text-white">
+                        {action.icon} {action.label}
+                      </p>
+                      <p className="text-[11px] text-[var(--sage)]/80">{action.description}</p>
+                    </div>
+                    <button
+                      type="button"
+                      disabled={done}
+                      onClick={() => !done && handleLog(action.actionType, action.label)}
+                      className="btn-sm"
+                    >
+                      {done ? '✓' : '+' + getFreedomPoints(action.actionType)}
+                    </button>
+                  </div>
+                );
+              })}
           </div>
         )}
 
@@ -265,19 +303,66 @@ export default function FreedomPage() {
       {selectedContent && (
         <div className="fixed inset-0 z-50 bg-[#040404]/95 flex flex-col">
           <div className="px-5 pt-6 pb-3 border-b border-[var(--border-soft)] flex justify-between">
-            <button onClick={() => setSelectedContent(null)} className="text-[var(--sage)] text-sm">← Cerrar</button>
-            <span className="text-[10px] text-[var(--sage)]/80">{selectedContent.category}</span>
-          </div>
-          <div className="flex-1 overflow-y-auto px-5 py-6 max-w-lg mx-auto">
-            <h2 className="text-xl font-bold text-white mb-3">{selectedContent.title}</h2>
-            <p className="text-sm text-[#D8E1D9]/80 leading-relaxed mb-6">{selectedContent.summary}</p>
-            <p className="text-sm text-[#D8E1D9]/70 mb-8">Aplica una idea hoy. La libertad se construye con oficio, no con consumo pasivo.</p>
             <button
+              type="button"
+              onClick={() => setSelectedContent(null)}
+              className="text-[var(--sage)] text-sm"
+            >
+              ← Cerrar
+            </button>
+            <span className="text-[10px] text-[var(--sage)]/80">
+              {selectedContent.category}
+              {selectedContent.source ? ` · ${selectedContent.source}` : ''}
+            </span>
+          </div>
+          <div className="flex-1 overflow-y-auto px-5 py-6 max-w-lg mx-auto w-full">
+            <h2 className="font-display text-xl font-bold text-white mb-3">
+              {selectedContent.title}
+            </h2>
+            <p className="text-sm text-[#D8E1D9]/80 leading-relaxed mb-4">
+              {selectedContent.summary}
+            </p>
+            <p className="text-xs text-[var(--sage)] mb-6">
+              ~{selectedContent.readMin} min · suma Freedom al completar
+            </p>
+
+            {selectedContent.url ? (
+              <div className="space-y-3 mb-6">
+                <a
+                  href={selectedContent.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary"
+                >
+                  Leer artículo en X ↗
+                </a>
+                <p className="text-[11px] text-[var(--sage)]/80 text-center">
+                  Abre el artículo de @salvazion_ en X. Luego márcalo como leído para
+                  sumar Freedom Score.
+                </p>
+              </div>
+            ) : (
+              <p className="text-sm text-[#D8E1D9]/70 mb-6">
+                Aplica una idea hoy. La libertad se construye con oficio, no con consumo
+                pasivo.
+              </p>
+            )}
+
+            <button
+              type="button"
               onClick={() => handleCompleteContent(selectedContent)}
               disabled={completedContent.has(selectedContent.id)}
-              className={completedContent.has(selectedContent.id) ? 'btn-secondary' : 'btn-primary'}
+              className={
+                completedContent.has(selectedContent.id)
+                  ? 'btn-secondary'
+                  : selectedContent.url
+                    ? 'btn-secondary'
+                    : 'btn-primary'
+              }
             >
-              {completedContent.has(selectedContent.id) ? '✓ Completado' : 'Completar · +' + getFreedomPoints(selectedContent.actionType)}
+              {completedContent.has(selectedContent.id)
+                ? '✓ Completado'
+                : 'Marcar como leído · +' + getFreedomPoints(selectedContent.actionType)}
             </button>
           </div>
         </div>

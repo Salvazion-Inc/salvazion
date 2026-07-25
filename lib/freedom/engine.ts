@@ -25,84 +25,132 @@ export interface FreedomContent {
   tags: string[];
   stages?: LifeStage[];
   actionType: string;
+  /** External long-form URL (X Articles / status). Opens in new tab. */
+  url?: string;
+  /** Source label, e.g. @salvazion_ */
+  source?: string;
 }
 
+/**
+ * Freedom library — primary content is X Articles from @salvazion_.
+ * Links use x.com/i/article/{id} when published as Articles; otherwise the author status URL.
+ */
 export const FREEDOM_LIBRARY: FreedomContent[] = [
   {
-    id: 'art-phalanx',
+    id: 'x-solana-salvazion',
     category: 'article',
-    title: 'La Phalanx digital: disciplina en red',
-    summary: 'Cómo la constancia compartida fortalece familias y comunidades de fe frente al ruido globalista.',
-    readMin: 6,
-    tags: ['phalanx', 'disciplina', 'comunidad'],
-    actionType: 'learn_article_video'
+    title: 'Solana y $SALVAZION: tecnología al servicio de la libertad',
+    summary:
+      'Por qué Solana es infraestructura para soberanía económica, y cómo $SALVAZION (Patriot Bitcoin) defiende familia, nación y Cultura Occidental Cristiana frente al metacapital globalista.',
+    readMin: 12,
+    tags: ['solana', 'salvazion', 'libertad', 'bioconservadurismo'],
+    actionType: 'learn_article_video',
+    url: 'https://x.com/i/article/2080163223987245056',
+    source: '@salvazion_',
   },
   {
-    id: 'art-biocons',
+    id: 'x-immigration',
     category: 'article',
-    title: 'Bio-conservadurismo: el cuerpo como templo',
-    summary: 'Por qué sol, sueño, comida real y movimiento son actos políticos y espirituales.',
-    readMin: 7,
-    tags: ['salud', 'templo', 'bio-conservadurismo'],
-    actionType: 'learn_article_video'
+    title: 'Inmigración legal e ilegal: efectos y balance',
+    summary:
+      'Dinámicas de inmigración legal e ilegal, impacto económico y social, y por qué fronteras y orden importan para la cultura occidental cristiana.',
+    readMin: 10,
+    tags: ['inmigracion', 'soberania', 'occidente'],
+    actionType: 'learn_article_video',
+    url: 'https://x.com/i/article/1809649703920738306',
+    source: '@salvazion_',
   },
   {
-    id: 'art-freedom',
+    id: 'x-communism',
     category: 'article',
-    title: 'Libertad no es consumismo',
-    summary: 'La verdadera libertad se construye con carácter, oficio y aporte — no con entretenimiento infinito.',
+    title: 'Comunismo: ideología, historia y costo humano',
+    summary:
+      'Orígenes, regímenes, fracasos y democidio. Incluye Cultural Marxism y por qué esta ideología sigue siendo una amenaza a la libertad.',
+    readMin: 14,
+    tags: ['comunismo', 'libertad', 'qolitica'],
+    actionType: 'learn_article_video',
+    url: 'https://x.com/i/article/1805331717353246720',
+    source: '@salvazion_',
+  },
+  {
+    id: 'x-islamic-west',
+    category: 'article',
+    title: 'Mundo islámico y Cultura Occidental Cristiana',
+    summary:
+      'Diversidad del mundo islámico, diferencias de cosmovisión con el Occidente cristiano, historia de choque y caminos de discernimiento.',
+    readMin: 12,
+    tags: ['cultura', 'occidente', 'fe'],
+    actionType: 'learn_article_video',
+    url: 'https://x.com/i/article/1814520724087873536',
+    source: '@salvazion_',
+  },
+  {
+    id: 'x-nato',
+    category: 'article',
+    title: 'OTAN: alianza, historia y desafíos',
+    summary:
+      'De la Guerra Fría a la ciberseguridad y la guerra híbrida. Análisis de la alianza y el debate sobre el rol de Estados Unidos.',
+    readMin: 11,
+    tags: ['otan', 'geopolitica', 'libertad'],
+    actionType: 'learn_article_video',
+    url: 'https://x.com/salvazion_/status/1811189410198642787',
+    source: '@salvazion_',
+  },
+  {
+    id: 'x-mega-europe',
+    category: 'article',
+    title: 'Patriots for Europe (MEGA): soberanía y cultura',
+    summary:
+      'La alianza de Orbán y otros líderes: soberanía nacional, control migratorio e identidad cultural en Europa.',
+    readMin: 10,
+    tags: ['europa', 'soberania', 'patriots'],
+    actionType: 'learn_article_video',
+    url: 'https://x.com/salvazion_/status/1811060019695149336',
+    source: '@salvazion_',
+  },
+  {
+    id: 'x-nvidia-huang',
+    category: 'article',
+    title: 'Jensen Huang y NVIDIA: tecnología exponencial',
+    summary:
+      'Del GPU al AI: cómo NVIDIA reconfiguró el poder tecnológico y qué significa para constructores y líderes de la Phalanx.',
+    readMin: 11,
+    tags: ['tecnologia', 'ai', 'exponencial'],
+    actionType: 'learn_article_video',
+    url: 'https://x.com/salvazion_/status/1818153582480257356',
+    source: '@salvazion_',
+  },
+  {
+    id: 'x-green-lion',
+    category: 'article',
+    title: 'El León: Cristo y el espíritu de Salvazion',
+    summary:
+      'El León de Judá, el logo del León Verde y la convocatoria a Green Lion Kings en fe, familia y libertad.',
     readMin: 5,
-    tags: ['libertad', 'caracter'],
-    actionType: 'learn_article_video'
-  },
-  {
-    id: 'vid-morning',
-    category: 'video',
-    title: 'Ritual de mañana: Palabra, sol, movimiento',
-    summary: 'Un orden simple de 30 minutos para empezar el día con Salvation y Health alineados.',
-    readMin: 4,
-    tags: ['habito', 'manana'],
-    actionType: 'learn_article_video'
+    tags: ['fe', 'leon', 'salvazion'],
+    actionType: 'learn_article_video',
+    url: 'https://x.com/salvazion_/status/2080090098029523147',
+    source: '@salvazion_',
   },
   {
     id: 'debate-family',
     category: 'debate',
-    title: 'Debate: La familia es la primera politica',
-    summary: 'Preguntas para discutir en casa o en la iglesia sobre soberania familiar.',
+    title: 'Debate: La familia es la primera política',
+    summary: 'Preguntas para discutir en casa o en la iglesia sobre soberanía familiar.',
     readMin: 10,
     tags: ['familia', 'debate'],
     stages: ['young_adult', 'adult', 'mature', 'senior'],
-    actionType: 'debate_participate'
+    actionType: 'debate_participate',
   },
   {
     id: 'book-virtue',
     category: 'book',
-    title: 'Leccion: Virtud como musculo',
-    summary: 'Mini-leccion: la virtud se entrena con repeticion, no con intencion.',
+    title: 'Lección: Virtud como músculo',
+    summary: 'Mini-lección: la virtud se entrena con repetición, no con intención.',
     readMin: 8,
     tags: ['virtud', 'leccion'],
-    actionType: 'learn_lesson'
+    actionType: 'learn_lesson',
   },
-  {
-    id: 'art-youth',
-    category: 'article',
-    title: 'Juventud: el caracter se decide ahora',
-    summary: 'Por que los habitos de los 15-25 anos pesan decadas.',
-    readMin: 5,
-    tags: ['juventud', 'caracter'],
-    stages: ['juventud', 'young_adult'],
-    actionType: 'learn_article_video'
-  },
-  {
-    id: 'art-kids',
-    category: 'article',
-    title: 'Para crecer con Dios (familia)',
-    summary: 'Ideas simples para que padres e hijos compartan Palabra, juego y orden.',
-    readMin: 4,
-    tags: ['familia', 'infancia'],
-    stages: ['infancia', 'adult', 'mature'],
-    actionType: 'learn_article_video'
-  }
 ];
 
 export function getCurrentFreedomStage(): LifeStage {

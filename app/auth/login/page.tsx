@@ -15,6 +15,7 @@ import {
 } from '@/lib/invite/engine';
 import { tryAcceptPendingInbound } from '@/lib/invite/supabase';
 import SocialAuthButtons from '@/components/auth/SocialAuthButtons';
+import { markXProfileFetchFailed } from '@/lib/auth/x-oauth';
 
 type Mode = 'password' | 'magic' | 'forgot';
 
@@ -34,7 +35,16 @@ function LoginForm() {
   useEffect(() => {
     const code = searchParams.get('error');
     const mapped = mapQueryAuthError(code);
-    const detail = searchParams.get('detail');
+    const detail = searchParams.get('detail') || '';
+
+    // If X OAuth 2.0 failed to load user profile, next click uses Twitter OAuth 1.0a
+    if (
+      detail.toLowerCase().includes('user profile from external provider') ||
+      detail.toLowerCase().includes('getting user profile')
+    ) {
+      markXProfileFetchFailed();
+    }
+
     if (mapped && detail) {
       setError(`${mapped} (${detail})`);
     } else if (mapped) {

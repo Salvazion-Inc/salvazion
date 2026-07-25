@@ -8,6 +8,7 @@
 
 import type { User } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/client';
+import { getOAuthRedirectTo } from '@/lib/auth/oauth-redirect';
 
 export interface GoogleIdentity {
   email?: string;
@@ -134,13 +135,13 @@ export async function signInWithGoogle(options?: {
 
     const supabase = createClient();
     const next = options?.next || '/hub/dashboard';
-    const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
+    const redirectTo = getOAuthRedirectTo(next);
 
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo,
-        skipBrowserRedirect: false,
+        skipBrowserRedirect: true,
         queryParams: {
           access_type: 'offline',
           prompt: 'select_account',
@@ -160,7 +161,11 @@ export async function signInWithGoogle(options?: {
       }
       return { error: error.message };
     }
-    return { error: null };
+    if (data?.url) {
+      window.location.assign(data.url);
+      return { error: null };
+    }
+    return { error: 'No se recibió URL de Google' };
   } catch (e) {
     return {
       error: e instanceof Error ? e.message : 'No se pudo iniciar sesión con Google',

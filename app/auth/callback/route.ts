@@ -2,55 +2,56 @@ import { NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { safeNextPath } from '@/lib/auth/paths';
+import { APP_URL } from '@/lib/config/site';
+
+type CookieToSet = {
+  name: string;
+  value: string;
+  options?: Parameters<NextResponse['cookies']['set']>[2];
+};
 
 /**
- * OAuth / magic-link / email-confirm redirect (PKCE code flow).
- *
- * Critical: session cookies must be written onto the *redirect* NextResponse,
- * otherwise exchangeCodeForSession appears to fail and the user lands on login.
+ * OAuth / magic-link callback (PKCE).
+ * Writes auth cookies onto the redirect response (required for Next.js App Router).
  */
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
   const next = safeNextPath(requestUrl.searchParams.get('next'), '/hub/dashboard');
 
-  // Prefer public host behind Vercel (app.salvazion.org)
   const forwardedHost = request.headers.get('x-forwarded-host');
   const forwardedProto = request.headers.get('x-forwarded-proto') || 'https';
+  // Prefer configured product host, then proxy host, then request origin
+  const configured = (process.env.NEXT_PUBLIC_APP_URL || APP_URL).replace(/\/$/, '');
   const origin = forwardedHost
     ? `${forwardedProto}://${forwardedHost}`
-    : requestUrl.origin;
+    : configured || requestUrl.origin;
+
+  const fail = (detail: string) => {
+    const url = new URL('/auth/login', origin);
+    url.searchParams.set('error', 'auth_callback_failed');
+    url.searchParams.set('detail', detail.slice(0, 220));
+    return NextResponse.redirect(url);
+  };
 
   const oauthError = requestUrl.searchParams.get('error');
   if (oauthError) {
     const desc =
       requestUrl.searchParams.get('error_description') || oauthError;
-    const url = new URL('/auth/login', origin);
-    url.searchParams.set('error', 'auth_callback_failed');
-    url.searchParams.set('detail', desc.slice(0, 200));
-    return NextResponse.redirect(url);
+    return fail(desc);
   }
 
   if (!code) {
-    const url = new URL('/auth/login', origin);
-    url.searchParams.set('error', 'auth_callback_failed');
-    url.searchParams.set('detail', 'missing_code');
-    return NextResponse.redirect(url);
+    return fail('missing_code');
   }
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
   if (!supabaseUrl || !supabaseKey) {
-    const url = new URL('/auth/login', origin);
-    url.searchParams.set('error', 'auth_callback_failed');
-    url.searchParams.set('detail', 'missing_supabase_env');
-    return NextResponse.redirect(url);
+    return fail('missing_supabase_env');
   }
 
-  // Build the success redirect first so we can attach Set-Cookie to it
   let response = NextResponse.redirect(`${origin}${next}`);
-
   const cookieStore = await cookies();
 
   const supabase = createServerClient(supabaseUrl, supabaseKey, {
@@ -58,15 +59,22 @@ export async function GET(request: Request) {
       getAll() {
         return cookieStore.getAll();
       },
-      setAll(cookiesToSet) {
+      setAll(cookiesToSet: CookieToSet[]) {
         cookiesToSet.forEach(({ name, value, options }) => {
+          const opts = {
+            ...options,
+            path: options?.path ?? '/',
+            sameSite: (options?.sameSite as 'lax' | 'strict' | 'none') ?? 'lax',
+            secure:
+              options?.secure ??
+              (process.env.NODE_ENV === 'production' || origin.startsWith('https')),
+          };
           try {
-            cookieStore.set(name, value, options);
+            cookieStore.set(name, value, opts);
           } catch {
-            // ignore if cookie store is read-only in this context
+            /* ignore */
           }
-          // Must set on the response that will be returned (redirect)
-          response.cookies.set(name, value, options);
+          response.cookies.set(name, value, opts);
         });
       },
     },
@@ -76,13 +84,15 @@ export async function GET(request: Request) {
 
   if (error) {
     console.error('[auth/callback] exchangeCodeForSession', error.message);
-    const url = new URL('/auth/login', origin);
-    url.searchParams.set('error', 'auth_callback_failed');
-    url.searchParams.set('detail', error.message.slice(0, 200));
-    return NextResponse.redirect(url);
+    // Client-side recovery page can retry with browser cookies
+    const recover = new URL('/auth/callback/recover', origin);
+    recover.searchParams.set('code', code);
+    recover.searchParams.set('next', next);
+    recover.searchParams.set('err', error.message.slice(0, 120));
+    return NextResponse.redirect(recover);
   }
 
-  // Best-effort: stamp social identity (X / Google) onto profiles
+  // Stamp social profile fields (best-effort; never block login)
   try {
     const user = data.session?.user;
     if (user) {
@@ -91,7 +101,6 @@ export async function GET(request: Request) {
         (i) => i.provider === 'twitter' || i.provider === 'x'
       );
       const googleIdentity = identities.find((i) => i.provider === 'google');
-
       const meta = {
         ...(user.user_metadata || {}),
         ...(xIdentity?.identity_data || {}),
@@ -103,7 +112,6 @@ export async function GET(request: Request) {
         updated_at: new Date().toISOString(),
       };
 
-      // Display name from any social provider
       const displayName =
         (typeof meta.full_name === 'string' && meta.full_name) ||
         (typeof meta.name === 'string' && meta.name) ||
@@ -111,7 +119,6 @@ export async function GET(request: Request) {
         null;
       if (displayName) payload.name = displayName;
 
-      // Avatar
       const avatar =
         (typeof meta.avatar_url === 'string' && meta.avatar_url) ||
         (typeof meta.picture === 'string' && meta.picture) ||
@@ -122,7 +129,6 @@ export async function GET(request: Request) {
         payload.avatar_url = String(avatar).replace('_normal', '_400x400');
       }
 
-      // X handle
       if (xIdentity) {
         const raw =
           meta.user_name ||
@@ -135,6 +141,8 @@ export async function GET(request: Request) {
           payload.x_username = username;
           if (typeof meta.provider_id === 'string') {
             payload.x_user_id = meta.provider_id;
+          } else if (typeof meta.sub === 'string') {
+            payload.x_user_id = meta.sub;
           }
         }
       }

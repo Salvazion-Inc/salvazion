@@ -9,6 +9,9 @@ Las keys de Google **no van en Vercel**. Van en **Supabase**.
    - External (o Internal si es Workspace)  
    - App name: Salvazion  
    - Support email: el tuyo  
+   - Application home page: `https://app.salvazion.org`  
+   - Privacy: `https://app.salvazion.org/privacy`  
+   - Terms: `https://app.salvazion.org/terms`  
    - Save  
 3. **APIs & Services → Credentials → Create credentials → OAuth client ID**  
    - Application type: **Web application**  

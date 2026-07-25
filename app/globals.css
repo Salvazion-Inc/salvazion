@@ -1,5 +1,25 @@
 @import "tailwindcss";
 
+/* Official brand display typeface (same as salvazion.org / Canva) */
+@font-face {
+  font-family: "Cosmic Octo";
+  src: url("/fonts/cosmic-octo-medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cosmic Octo";
+  src: url("/fonts/cosmic-octo-bold.woff") format("woff");
+  font-weight: 600 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-display: "Cosmic Octo", var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
 :root {
   /* Soft Salvazion palette — long dark-mode reading */
   --neon-primary: #6BCF78;
@@ -26,6 +46,7 @@
   --radius-lg: 1.25rem;
   --radius-xl: 1.5rem;
   --app-text-scale: 1;
+  --font-cosmic-octo: "Cosmic Octo", var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   color-scheme: dark;
 }
 
@@ -60,6 +81,17 @@ html[data-text-scale="xxl"] nav.fixed span {
   text-shadow: 0 0 6px rgba(143, 217, 154, 0.22), 0 0 12px rgba(107, 207, 120, 0.08);
 }
 
+/* Cosmic Octo — brand / display (headlines, wordmark, token). Not body UI. */
+.font-display {
+  font-family: var(--font-cosmic-octo);
+  letter-spacing: -0.03em;
+}
+.font-brand {
+  font-family: var(--font-cosmic-octo);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
 .lion-glow {
   filter: drop-shadow(0 0 8px rgba(143, 217, 154, 0.22));
 }
@@ -85,8 +117,10 @@ html[data-text-scale="xxl"] nav.fixed span {
   border-radius: var(--radius-md);
   background: var(--accent-fill);
   color: #0a120c;
-  font-weight: 600;
+  font-family: var(--font-cosmic-octo);
+  font-weight: 700;
   font-size: 0.9rem;
+  letter-spacing: 0.01em;
   border: 1px solid transparent;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
   transition: background 0.18s ease, transform 0.12s ease, opacity 0.15s ease, box-shadow 0.18s ease;

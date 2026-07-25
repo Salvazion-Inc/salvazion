@@ -31,7 +31,7 @@ export default function SalvazionLanding() {
             <div className="w-9 h-9 rounded-full border border-[var(--border-strong)] flex items-center justify-center lion-glow overflow-hidden bg-[#040404] shrink-0">
               <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
             </div>
-            <span className="font-mono text-lg tracking-tighter text-[var(--accent)] neon-text hidden xs:inline">
+            <span className="font-brand text-lg text-[var(--accent)] neon-text hidden xs:inline">
               SALVAZION
             </span>
           </Link>
@@ -146,10 +146,10 @@ export default function SalvazionLanding() {
             />
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.95] neon-text whitespace-pre-line">
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.95] neon-text whitespace-pre-line">
             {t.hero.title}
           </h1>
-          <p className="mt-3 text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--accent)] tracking-tighter">
+          <p className="font-display mt-3 text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--accent)]">
             {t.hero.sub}
           </p>
 
@@ -179,7 +179,7 @@ export default function SalvazionLanding() {
             <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">
               {t.app.eyebrow}
             </p>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.app.title}</h2>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">{t.app.title}</h2>
             <p className="mt-3 max-w-2xl mx-auto text-sm text-[var(--sage)] leading-relaxed">
               {t.app.subtitle}
             </p>
@@ -239,7 +239,7 @@ export default function SalvazionLanding() {
           <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">
             {t.purpose.eyebrow}
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-6">{t.purpose.title}</h2>
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight mb-6">{t.purpose.title}</h2>
           <p className="text-base sm:text-lg leading-relaxed text-[#D8E1D9]/85">{t.purpose.body}</p>
           <div className="mt-8 grid sm:grid-cols-3 gap-3 text-left">
             {t.purpose.values.map((v) => (
@@ -261,7 +261,7 @@ export default function SalvazionLanding() {
             <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">
               {t.salvators.chapter}
             </p>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.salvators.title}</h2>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">{t.salvators.title}</h2>
             <p className="mt-2 text-sm text-[var(--sage)] max-w-lg mx-auto">{t.salvators.subtitle}</p>
           </div>
           <div className="relative rounded-3xl overflow-hidden border border-[var(--border-soft)] card-soft">
@@ -284,7 +284,7 @@ export default function SalvazionLanding() {
       <section id="token" className="py-16 sm:py-20 border-t border-[var(--border-soft)]">
         <div className="max-w-3xl mx-auto px-5 text-center">
           <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">Solana</p>
-          <h2 className="text-4xl sm:text-5xl font-bold tracking-tighter mb-2">$SALVAZION</h2>
+          <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tighter mb-2">$SALVAZION</h2>
           <p className="text-sm text-[var(--sage)] mb-6">{t.token.subtitle}</p>
           <div className="font-mono text-[10px] sm:text-xs bg-[#0a0a0a] border border-[var(--border-soft)] px-3 py-2.5 rounded-xl mb-8 inline-block break-all max-w-full">
             CA: {MINT}
@@ -318,7 +318,7 @@ export default function SalvazionLanding() {
             <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">
               {t.team.eyebrow}
             </p>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.team.title}</h2>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">{t.team.title}</h2>
             <p className="mt-3 text-sm text-[var(--sage)] max-w-2xl mx-auto leading-relaxed">
               {t.team.intro}
             </p>
@@ -346,7 +346,7 @@ export default function SalvazionLanding() {
       {/* CTA final */}
       <section className="py-16 border-t border-[var(--border-soft)]">
         <div className="max-w-2xl mx-auto px-5 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-3">{t.final.title}</h2>
+          <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight mb-3">{t.final.title}</h2>
           <p className="text-sm text-[var(--sage)] mb-6">{t.final.body}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/auth/signup" className="btn-primary sm:w-auto sm:min-w-[180px]">

@@ -219,7 +219,7 @@ https://salvazion.com
               <div className="w-20 h-20 mx-auto mb-4 rounded-full border border-[var(--border-strong)] flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
                 <Image src="/logo-icon.png" alt="Salvazion" width={80} height={80} className="object-cover" />
               </div>
-              <h1 className="text-3xl font-bold text-[#8FD99A] tracking-tight">
+              <h1 className="font-display text-3xl font-bold text-[#8FD99A] tracking-tight">
                 Bienvenido a la Phalanx
               </h1>
               <p className="text-[var(--sage)]/80 mt-2 text-sm">
@@ -531,7 +531,7 @@ https://salvazion.com
         {step === 5 && (
           <div className="space-y-6 max-w-md mx-auto pt-2 text-center">
             <div>
-              <h2 className="text-3xl font-bold tracking-tight">
+              <h2 className="font-display text-3xl font-bold tracking-tight">
                 Conoce a tu <span className="text-[#8FD99A]">León Verde</span>
               </h2>
               <p className="text-[var(--sage)]/80 mt-1">Tu coach de virtud y desarrollo integral</p>

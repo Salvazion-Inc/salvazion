@@ -61,7 +61,7 @@ export default function SwapPage() {
 
       <main className="flex-1 px-5 pt-4 pb-28 max-w-lg mx-auto w-full space-y-5">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-[#8FD99A] tracking-tight">$SALVAZION</h1>
+          <h1 className="font-display text-2xl font-bold text-[#8FD99A] tracking-tight">$SALVAZION</h1>
           <p className="text-sm text-[var(--sage)] mt-1">{t('swap.subtitle')}</p>
           <p className="text-[11px] font-mono text-[var(--sage)]/70 mt-2 break-all">
             {t('swap.mint')}: {shortenAddress(SALVAZION_MINT, 6)}

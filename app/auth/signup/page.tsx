@@ -144,7 +144,7 @@ function SignupForm() {
           <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[var(--border-strong)] flex items-center justify-center lion-glow overflow-hidden">
             <Image src="/logo.png" alt="Salvazion" width={64} height={64} className="object-contain" />
           </div>
-          <h1 className="text-2xl font-bold text-[#8FD99A] tracking-tight">{t('auth.signupTitle')}</h1>
+          <h1 className="font-display text-2xl font-bold text-[#8FD99A] tracking-tight">{t('auth.signupTitle')}</h1>
           <p className="text-sm text-[var(--sage)] mt-1">{t('auth.signupSubtitle')}</p>
         </div>
 

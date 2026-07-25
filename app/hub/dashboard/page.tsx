@@ -191,7 +191,7 @@ export default function DashboardPage() {
             />
           </svg>
           <div className="text-center z-10">
-            <div className="text-5xl font-bold text-white tracking-tighter">{global}</div>
+            <div className="font-display text-5xl font-bold text-white tracking-tighter">{global}</div>
             <div className="text-xs uppercase tracking-widest text-[var(--sage)] mt-1">
               {t('dashboard.salvazionScore')}
             </div>

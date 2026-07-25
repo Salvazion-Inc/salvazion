@@ -119,13 +119,7 @@ export function getClientCredentials(id: OAuthProviderId): {
   return { clientId, clientSecret };
 }
 
-export function getAppBaseUrl(): string {
-  return (
-    process.env.NEXT_PUBLIC_APP_URL ||
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
-  ).replace(/\/$/, '');
-}
+export { getAppBaseUrl } from '@/lib/config/site';
 
 export function getRedirectUri(provider: OAuthProviderId): string {
   return `${getAppBaseUrl()}/api/wearables/oauth/${provider}/callback`;

@@ -63,8 +63,8 @@ Checklist en [developer.x.com](https://developer.x.com) → tu App:
 4. **Type of App:** Web App  
 5. **Callback URI:**  
    `https://kppylfrsclkdmtpobpxd.supabase.co/auth/v1/callback`  
-6. **Website URL:** `https://salvazion.org`  
-7. **Terms of service** y **Privacy policy** URLs rellenadas (pueden ser páginas de salvazion.org)  
+6. **Website URL:** `https://app.salvazion.org`  
+7. **Terms of service** y **Privacy policy** URLs rellenadas (app o sitio marketing)  
 8. **Save**
 9. **Keys and tokens** → sección **OAuth 2.0 Client ID and Client Secret**  
    - Copia **Client ID** y regenera/copia **Client Secret**  

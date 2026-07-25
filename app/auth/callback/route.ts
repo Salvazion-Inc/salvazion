@@ -14,7 +14,7 @@ export async function GET(request: Request) {
   const code = requestUrl.searchParams.get('code');
   const next = safeNextPath(requestUrl.searchParams.get('next'), '/hub/dashboard');
 
-  // Prefer public host behind Vercel so redirects stay on salvazion.org
+  // Prefer public host behind Vercel (app.salvazion.org)
   const forwardedHost = request.headers.get('x-forwarded-host');
   const forwardedProto = request.headers.get('x-forwarded-proto') || 'https';
   const origin = forwardedHost

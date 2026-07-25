@@ -15,13 +15,18 @@
 1. Authentication → Providers → Email → Enable
 2. (Opcional) desactiva “Confirm email” solo en desarrollo para ir más rápido
 3. Authentication → URL Configuration:
-   - **Site URL (producción):** `https://TU-DOMINIO.vercel.app`
+   - **Site URL (producción):** `https://app.salvazion.org`  
+     (la app; **no** uses `www.salvazion.org` — ese es el sitio Canva antiguo)
    - **Redirect URLs** (añade todas):
+     - `https://app.salvazion.org/auth/callback`
+     - `https://app.salvazion.org/auth/confirm`
+     - `https://www.app.salvazion.org/auth/callback`
+     - `https://www.app.salvazion.org/auth/confirm`
      - `http://localhost:3000/auth/callback`
      - `http://localhost:3000/auth/confirm`
-     - `https://TU-DOMINIO.vercel.app/auth/callback`
-     - `https://TU-DOMINIO.vercel.app/auth/confirm`
-     - (opcional wildcards si Vercel Preview) `https://*-tu-equipo.vercel.app/auth/callback`
+     - (opcional Preview) `https://*-tu-equipo.vercel.app/auth/callback`
+
+Ver `docs/domains.md`.
 
 ## 3b. Login con X (Twitter)
 1. SQL Editor → ejecuta **`supabase/x-auth.sql`** (columnas `x_username`, `x_user_id`)

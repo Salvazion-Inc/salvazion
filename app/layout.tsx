@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import Providers from "@/components/Providers";
 import PwaRegister from "@/components/PwaRegister";
+import { APP_URL, getAppBaseUrl } from "@/lib/config/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -17,6 +18,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || APP_URL
+  ),
   title: {
     default: "Salvazion | Make Salvation, Health and Freedom Great Again",
     template: "%s | Salvazion",
@@ -24,6 +28,9 @@ export const metadata: Metadata = {
   description:
     "Phalanx digital que une Salvación, Salud y Libertad. Defendemos la Cultura Occidental Cristiana y BioConservadurismo.",
   applicationName: "Salvazion",
+  alternates: {
+    canonical: "/",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",

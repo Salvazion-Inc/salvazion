@@ -6,18 +6,21 @@ export function isLanguage(v: unknown): v is Language {
   return v === 'es' || v === 'en';
 }
 
+/**
+ * English is principal. Default: saved locale → browser → `en`.
+ */
 export function loadLocale(): Language {
-  if (typeof window === 'undefined') return 'es';
+  if (typeof window === 'undefined') return 'en';
   try {
     const raw = localStorage.getItem(LOCALE_STORAGE_KEY);
     if (isLanguage(raw)) return raw;
-    // browser preference
+    // browser preference (es browsers get Spanish; everyone else EN)
     const nav = navigator.language?.toLowerCase() || '';
-    if (nav.startsWith('en')) return 'en';
+    if (nav.startsWith('es')) return 'es';
   } catch {
     // ignore
   }
-  return 'es';
+  return 'en';
 }
 
 export function saveLocale(lang: Language): void {

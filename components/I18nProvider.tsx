@@ -21,7 +21,7 @@ interface I18nContextValue {
 }
 
 const I18nContext = createContext<I18nContextValue>({
-  lang: 'es',
+  lang: 'en',
   setLang: () => {},
   t: (key) => key,
 });
@@ -31,11 +31,11 @@ export function useI18n() {
 }
 
 /**
- * Global language (ES/EN) for the whole app.
- * Preference: localStorage → profile.language → browser.
+ * Global language (EN principal / ES).
+ * Preference: localStorage → profile.language → browser → en.
  */
 export default function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Language>('es');
+  const [lang, setLangState] = useState<Language>('en');
 
   useEffect(() => {
     const fromStore = loadLocale();

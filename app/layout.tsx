@@ -77,7 +77,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="es"
+      lang="en"
       className={`dark ${geistSans.variable} ${geistMono.variable}`}
       style={{ colorScheme: "dark" }}
       suppressHydrationWarning

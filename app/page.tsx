@@ -37,9 +37,6 @@ export default function SalvazionLanding() {
           </Link>
 
           <div className="hidden lg:flex items-center gap-6 text-[11px] uppercase tracking-[0.15em] text-[var(--sage)]">
-            <a href="#pillars" className="hover:text-[var(--accent)] transition-colors">
-              {t.nav.pillars}
-            </a>
             <a href="#app" className="hover:text-[var(--accent)] transition-colors">
               {t.nav.app}
             </a>
@@ -55,13 +52,45 @@ export default function SalvazionLanding() {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            <button
-              type="button"
-              onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
-              className="px-2.5 py-1.5 rounded-full border border-[var(--border-soft)] text-[10px] text-[var(--sage)] hover:bg-[var(--surface-active)]"
+            {/* Language: USA = English (principal), Chile = Español */}
+            <div
+              className="flex items-center gap-1 p-0.5 rounded-full border border-[var(--border-soft)] bg-[#0a0a0a]/80"
+              role="group"
+              aria-label={t.nav.language}
             >
-              {lang === 'es' ? 'ES' : 'EN'}
-            </button>
+              <button
+                type="button"
+                onClick={() => setLang('en')}
+                className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold transition ${
+                  lang === 'en'
+                    ? 'bg-[var(--accent-fill)] text-[#0a120c]'
+                    : 'text-[var(--sage)] hover:bg-[var(--surface-active)]'
+                }`}
+                aria-pressed={lang === 'en'}
+                title="English (USA)"
+              >
+                <span className="text-base leading-none" aria-hidden>
+                  🇺🇸
+                </span>
+                <span className="hidden sm:inline">EN</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setLang('es')}
+                className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold transition ${
+                  lang === 'es'
+                    ? 'bg-[var(--accent-fill)] text-[#0a120c]'
+                    : 'text-[var(--sage)] hover:bg-[var(--surface-active)]'
+                }`}
+                aria-pressed={lang === 'es'}
+                title="Español (Chile)"
+              >
+                <span className="text-base leading-none" aria-hidden>
+                  🇨🇱
+                </span>
+                <span className="hidden sm:inline">ES</span>
+              </button>
+            </div>
             <Link
               href="/auth/login"
               className="px-4 py-2 rounded-full bg-[var(--accent-fill)] text-[#0a120c] text-xs sm:text-sm font-semibold hover:bg-[var(--accent-hover)] transition"
@@ -72,12 +101,22 @@ export default function SalvazionLanding() {
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="relative pt-28 sm:pt-32 pb-16 sm:pb-24 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(#8FD99A_0.7px,transparent_1px)] bg-[length:20px_20px] opacity-[0.12]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#040404]" />
+      {/* Hero — same Canva home video (green smoke) */}
+      <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden pt-20">
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          src="/videos/hero-home.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden
+        />
+        <div className="absolute inset-0 bg-[#040404]/55" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#040404]/40 via-transparent to-[#040404]" />
 
-        <div className="relative z-10 max-w-5xl mx-auto px-5 text-center">
+        <div className="relative z-10 max-w-5xl mx-auto px-5 text-center py-16 sm:py-24">
           <p className="text-[10px] sm:text-xs uppercase tracking-[0.35em] text-[var(--accent)] mb-5">
             {t.hero.eyebrow}
           </p>
@@ -100,77 +139,54 @@ export default function SalvazionLanding() {
             {t.hero.sub}
           </p>
 
-          <p className="max-w-2xl mx-auto mt-6 text-base sm:text-lg text-[#D8E1D9]/85 leading-relaxed">
+          <p className="max-w-2xl mx-auto mt-6 text-base sm:text-lg text-[#D8E1D9]/90 leading-relaxed">
             {t.hero.tagline}
             <br />
             <span className="text-[var(--accent)] font-medium">{t.hero.tagline2}</span>
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-            <Link
-              href="/auth/signup"
-              className="btn-primary sm:w-auto sm:min-w-[200px] px-8"
-            >
+            <Link href="/auth/signup" className="btn-primary sm:w-auto sm:min-w-[200px] px-8">
               {t.hero.ctaPrimary}
             </Link>
-            <Link
-              href="/auth/login"
-              className="btn-secondary sm:w-auto sm:min-w-[200px] px-8"
-            >
+            <Link href="/auth/login" className="btn-secondary sm:w-auto sm:min-w-[200px] px-8">
               {t.hero.ctaLogin}
             </Link>
           </div>
 
-          <p className="mt-4 text-[11px] text-[var(--sage)]">
-            {t.hero.socialHint}
-          </p>
+          <p className="mt-4 text-[11px] text-[var(--sage)]">{t.hero.socialHint}</p>
         </div>
       </section>
 
-      {/* Three pillars */}
-      <section id="pillars" className="py-16 sm:py-20 border-t border-[var(--border-soft)]">
-        <div className="max-w-6xl mx-auto px-5">
-          <div className="text-center mb-10">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">
-              {t.pillars.eyebrow}
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.pillars.title}</h2>
-            <p className="mt-3 max-w-xl mx-auto text-sm text-[var(--sage)]">{t.pillars.subtitle}</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-4">
-            {t.pillars.cards.map((card) => (
-              <div
-                key={card.name}
-                className="card-soft p-6 flex flex-col min-h-[220px]"
-              >
-                <span className="text-2xl mb-3" aria-hidden>
-                  {card.icon}
-                </span>
-                <h3 className="text-xl font-bold text-[var(--accent)] tracking-tight">
-                  {card.name}
-                </h3>
-                <p className="mt-2 text-sm text-[#D8E1D9]/80 leading-relaxed flex-1">
-                  {card.body}
-                </p>
-                <p className="mt-4 text-[11px] text-[var(--sage)] uppercase tracking-wider">
-                  {card.inApp}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* App features */}
-      <section id="app" className="py-16 sm:py-20 bg-zinc-950/40 border-t border-[var(--border-soft)]">
+      {/* One App — fused product (no separate AI pillars) */}
+      <section id="app" className="py-16 sm:py-20 border-t border-[var(--border-soft)]">
         <div className="max-w-6xl mx-auto px-5">
           <div className="text-center mb-10">
             <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">
               {t.app.eyebrow}
             </p>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.app.title}</h2>
-            <p className="mt-3 max-w-xl mx-auto text-sm text-[var(--sage)]">{t.app.subtitle}</p>
+            <p className="mt-3 max-w-2xl mx-auto text-sm text-[var(--sage)] leading-relaxed">
+              {t.app.subtitle}
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-4 mb-12">
+            {t.app.areas.map((area) => (
+              <div key={area.name} className="card-soft p-6 flex flex-col min-h-[200px]">
+                <span className="text-2xl mb-3" aria-hidden>
+                  {area.icon}
+                </span>
+                <h3 className="text-xl font-bold text-[var(--accent)] tracking-tight">{area.name}</h3>
+                <p className="mt-2 text-sm text-[#D8E1D9]/80 leading-relaxed flex-1">{area.body}</p>
+                <p className="mt-4 text-[11px] text-[var(--sage)] uppercase tracking-wider">{area.inApp}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mb-8">
+            <h3 className="text-lg font-semibold text-white tracking-tight">{t.app.featuresTitle}</h3>
+            <p className="mt-1 text-xs text-[var(--sage)]">{t.app.featuresSubtitle}</p>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -185,9 +201,7 @@ export default function SalvazionLanding() {
                     <Icon size={28} active />
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold text-white">
-                      {t.app.features[f.key].title}
-                    </h3>
+                    <h3 className="text-sm font-semibold text-white">{t.app.features[f.key].title}</h3>
                     <p className="text-xs text-[var(--sage)] mt-1 leading-relaxed">
                       {t.app.features[f.key].body}
                     </p>
@@ -206,17 +220,13 @@ export default function SalvazionLanding() {
       </section>
 
       {/* Purpose */}
-      <section id="purpose" className="py-16 sm:py-20 border-t border-[var(--border-soft)]">
+      <section id="purpose" className="py-16 sm:py-20 border-t border-[var(--border-soft)] bg-zinc-950/40">
         <div className="max-w-3xl mx-auto px-5 text-center">
           <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">
             {t.purpose.eyebrow}
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-6">
-            {t.purpose.title}
-          </h2>
-          <p className="text-base sm:text-lg leading-relaxed text-[#D8E1D9]/85">
-            {t.purpose.body}
-          </p>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-6">{t.purpose.title}</h2>
+          <p className="text-base sm:text-lg leading-relaxed text-[#D8E1D9]/85">{t.purpose.body}</p>
           <div className="mt-8 grid sm:grid-cols-3 gap-3 text-left">
             {t.purpose.values.map((v) => (
               <div key={v.title} className="card-soft p-4">
@@ -237,12 +247,8 @@ export default function SalvazionLanding() {
             <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">
               {t.salvators.chapter}
             </p>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-              {t.salvators.title}
-            </h2>
-            <p className="mt-2 text-sm text-[var(--sage)] max-w-lg mx-auto">
-              {t.salvators.subtitle}
-            </p>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{t.salvators.title}</h2>
+            <p className="mt-2 text-sm text-[var(--sage)] max-w-lg mx-auto">{t.salvators.subtitle}</p>
           </div>
           <div className="relative rounded-3xl overflow-hidden border border-[var(--border-soft)] card-soft">
             <Image
@@ -254,31 +260,7 @@ export default function SalvazionLanding() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#040404]/95 via-[#040404]/30 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
-              <p className="text-sm sm:text-base text-[#D8E1D9]/90 max-w-xl">
-                {t.salvators.caption}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* AI / ecosystem nod */}
-      <section className="py-14 border-t border-[var(--border-soft)]">
-        <div className="max-w-6xl mx-auto px-5">
-          <div className="card-soft p-6 sm:p-8">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">
-              {t.ai.eyebrow}
-            </p>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-3">{t.ai.title}</h2>
-            <p className="text-sm text-[var(--sage)] max-w-2xl leading-relaxed mb-6">
-              {t.ai.body}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {t.ai.projects.map((p) => (
-                <span key={p} className="pill-soft pill-soft-active text-[11px]">
-                  {p}
-                </span>
-              ))}
+              <p className="text-sm sm:text-base text-[#D8E1D9]/90 max-w-xl">{t.salvators.caption}</p>
             </div>
           </div>
         </div>
@@ -287,9 +269,7 @@ export default function SalvazionLanding() {
       {/* Token */}
       <section id="token" className="py-16 sm:py-20 border-t border-[var(--border-soft)]">
         <div className="max-w-3xl mx-auto px-5 text-center">
-          <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">
-            Solana
-          </p>
+          <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">Solana</p>
           <h2 className="text-4xl sm:text-5xl font-bold tracking-tighter mb-2">$SALVAZION</h2>
           <p className="text-sm text-[var(--sage)] mb-6">{t.token.subtitle}</p>
           <div className="font-mono text-[10px] sm:text-xs bg-[#0a0a0a] border border-[var(--border-soft)] px-3 py-2.5 rounded-xl mb-8 inline-block break-all max-w-full">
@@ -409,194 +389,53 @@ const features = [
 ] as const;
 
 const copy = {
-  es: {
-    nav: {
-      pillars: 'Pilares',
-      app: 'La App',
-      purpose: 'Propósito',
-      token: 'Token',
-      team: 'Equipo',
-      enter: 'Entrar al Hub',
-    },
-    hero: {
-      eyebrow: 'Phalanx digital · Fe · Familia · Tecnología',
-      title: 'MAKE SALVATION,\nHEALTH AND\nFREEDOM',
-      sub: 'GREAT AGAIN',
-      tagline: 'El mundo secular te quita el espíritu, la mente, el cuerpo y el alma.',
-      tagline2: 'Salvazion te los devuelve — en una sola app.',
-      ctaPrimary: 'Crear cuenta gratis',
-      ctaLogin: 'Ya tengo cuenta',
-      socialHint: 'Gmail · X · email · PWA en el teléfono',
-    },
-    pillars: {
-      eyebrow: 'Los tres pilares',
-      title: 'Salvation · Health · Freedom',
-      subtitle:
-        'La misma visión de salvazion.org, convertida en hábitos diarios, scores y comunidad.',
-      cards: [
-        {
-          name: 'Salvation',
-          icon: '✝',
-          body: 'La fe no es un adorno: es el centro. Biblia offline, devocional personalizado con Grok y disciplina espiritual medible.',
-          inApp: 'En la app: Biblia · Devocional · Coach León Verde',
-        },
-        {
-          name: 'Health',
-          icon: '🌿',
-          body: 'El cuerpo es templo. Sueño, hidratación, movimiento, sensores del celular y wearables al servicio de la virtud — no del culto al yo.',
-          inApp: 'En la app: Health hub · sensores · wearables',
-        },
-        {
-          name: 'Freedom',
-          icon: '🦅',
-          body: 'Libertad con responsabilidad: aprender, conectar, aportar y soberanía económica real en Solana.',
-          inApp: 'En la app: Freedom hub · Phalanx · Swap $SALVAZION',
-        },
-      ],
-    },
-    app: {
-      eyebrow: 'Producto vivo',
-      title: 'Todo lo que ya puedes hacer en el Hub',
-      subtitle:
-        'No es solo un sitio de marketing: es la Phalanx operativa — login social, scores y pilares en tu bolsillo.',
-      cta: 'Abrir la App',
-      features: {
-        bible: {
-          title: 'Biblia completa offline',
-          body: 'ES · EN · originales. Lectura, búsqueda y concordancia. Marca capítulos y suma Salvation.',
-        },
-        devotional: {
-          title: 'Devocional con Grok',
-          body: 'Personalizado a tu perfil: Escritura, virtud, cultura cristiano-occidental y BioConservadurismo.',
-        },
-        health: {
-          title: 'Health con sensores',
-          body: 'Sueño, agua, comida, deportes. Pasos, GPS y monitores Bluetooth / wearables cuando los conectas.',
-        },
-        freedom: {
-          title: 'Freedom · aprender y aportar',
-          body: 'Biblioteca, conexiones reales y proyectos. La libertad se construye con oficio, no con consumo pasivo.',
-        },
-        phalanx: {
-          title: 'Phalanx',
-          body: 'Invita familia, hermanos, amigos y colegas. Crezcan juntos en fe, salud y libertad.',
-        },
-        web3: {
-          title: '$SALVAZION en Solana',
-          body: 'Conecta Phantom/Solflare y swap con Jupiter. Patriot Bitcoin — no custodiamos tus llaves.',
-        },
-      },
-    },
-    purpose: {
-      eyebrow: 'Massive Transformative Purpose',
-      title: 'Nuestro propósito',
-      body: 'Make Salvation, Health and Freedom Great Again. Una comunidad global que defiende la Cultura Occidental Cristiana y el BioConservadurismo en una Guerra Espiritual — con fe, familia, excelencia e innovación exponencial al servicio de las personas.',
-      values: [
-        {
-          title: 'Fe',
-          body: 'Cristo al centro. Escritura, oración y virtud como base de toda construcción.',
-        },
-        {
-          title: 'Familia',
-          body: 'La Phalanx empieza en casa: matrimonio, hijos, hermanos y comunidad real.',
-        },
-        {
-          title: 'Libertad',
-          body: 'Soberanía personal y económica frente al relativismo y el control centralizado.',
-        },
-      ],
-    },
-    salvators: {
-      chapter: 'Chapter 01',
-      title: 'Los 12 Salvators',
-      subtitle: 'Principios de enfoque para la Phalanx.',
-      caption:
-        'Doce anclas de disciplina y carácter. La app convierte principios en acciones diarias y scores de los tres pilares.',
-    },
-    ai: {
-      eyebrow: 'Ecosistema',
-      title: 'Tecnología exponencial al servicio del propósito',
-      body: 'Además del Hub, Salvazion avanza proyectos de IA alineados a Salvation, Health y Freedom — siempre al servicio de personas reales, no del culto a la máquina.',
-      projects: ['Alerci', 'Zallud', 'Qolitica', 'Gepardo', 'Grok · Devocional'],
-    },
-    token: {
-      subtitle: 'Patriot Bitcoin on Solana',
-      connect: 'Conecta tu billetera Solana',
-      buy: 'Comprar $SALVAZION',
-      openJupiter: 'Abrir en Jupiter',
-    },
-    team: {
-      eyebrow: 'Fundadores',
-      title: 'Una familia con propósito',
-      intro:
-        'Cristian Cortés y Beatriz Isler: más de 20 años juntos en salud, educación, tecnología e innovación. Excelencia, integridad y servicio a las personas.',
-      cristian:
-        'Kinesiólogo, Magíster en Kinesiología. Ex Embajador de Singularity University. Top Exponentialist en Digital Health. Green Lion King · CEO de Salvazion Inc.',
-      beatriz:
-        'Kinesióloga y académica. Digital Health Champion (BID). Madre de cuatro y co-constructora de Salvazion · COO.',
-    },
-    final: {
-      title: 'La Phalanx te espera',
-      body: 'Crea tu cuenta, elige tus pilares y camina con nosotros.',
-      cta: 'Unirme ahora',
-      terms: 'Términos',
-      privacy: 'Privacidad',
-    },
-    footer: {
-      copy: '© 2026 Salvazion · Fe, familia y tecnología exponencial.',
-    },
-  },
   en: {
     nav: {
-      pillars: 'Pillars',
       app: 'The App',
       purpose: 'Purpose',
       token: 'Token',
       team: 'Team',
       enter: 'Enter Hub',
+      language: 'Language',
     },
     hero: {
       eyebrow: 'Digital Phalanx · Faith · Family · Technology',
       title: 'MAKE SALVATION,\nHEALTH AND\nFREEDOM',
       sub: 'GREAT AGAIN',
       tagline: 'The secular world strips spirit, mind, body and soul.',
-      tagline2: 'Salvazion gives them back — in one app.',
+      tagline2: 'Salvazion gives them back — in one App.',
       ctaPrimary: 'Create free account',
       ctaLogin: 'I have an account',
       socialHint: 'Gmail · X · email · install as PWA',
     },
-    pillars: {
-      eyebrow: 'The three pillars',
-      title: 'Salvation · Health · Freedom',
+    app: {
+      eyebrow: 'One App',
+      title: 'Everything fused into a single Hub',
       subtitle:
-        'The vision of salvazion.org, turned into daily habits, scores and community.',
-      cards: [
+        'We no longer split the mission into separate products. Salvation, Health and Freedom live together in one App — habits, scores, community and Solana in your pocket.',
+      featuresTitle: 'What you can do today',
+      featuresSubtitle: 'Live product — not a pitch deck.',
+      cta: 'Open the App',
+      areas: [
         {
           name: 'Salvation',
           icon: '✝',
-          body: 'Faith is not decoration — it is the center. Offline Bible, Grok devotionals and measurable spiritual discipline.',
-          inApp: 'In app: Bible · Devotional · Green Lion Coach',
+          body: 'Faith at the center. Offline Bible, Grok devotionals and measurable spiritual discipline.',
+          inApp: 'Bible · Devotional · Green Lion Coach',
         },
         {
           name: 'Health',
           icon: '🌿',
-          body: 'The body is a temple. Sleep, hydration, movement, phone sensors and wearables for virtue — not self-worship.',
-          inApp: 'In app: Health hub · sensors · wearables',
+          body: 'The body is a temple. Sleep, hydration, movement, phone sensors and wearables for virtue.',
+          inApp: 'Health hub · sensors · wearables',
         },
         {
           name: 'Freedom',
           icon: '🦅',
           body: 'Freedom with responsibility: learn, connect, contribute and real economic sovereignty on Solana.',
-          inApp: 'In app: Freedom hub · Phalanx · $SALVAZION swap',
+          inApp: 'Freedom hub · Phalanx · $SALVAZION swap',
         },
       ],
-    },
-    app: {
-      eyebrow: 'Live product',
-      title: 'What you can do in the Hub today',
-      subtitle:
-        'Not just a marketing page — an operating Phalanx: social login, scores and pillars in your pocket.',
-      cta: 'Open the App',
       features: {
         bible: {
           title: 'Full offline Bible',
@@ -648,13 +487,7 @@ const copy = {
       title: 'The 12 Salvators',
       subtitle: 'Focus principles for the Phalanx.',
       caption:
-        'Twelve anchors of discipline and character. The app turns principles into daily actions and scores across the three pillars.',
-    },
-    ai: {
-      eyebrow: 'Ecosystem',
-      title: 'Exponential technology for the purpose',
-      body: 'Beyond the Hub, Salvazion advances AI projects aligned to Salvation, Health and Freedom — always serving real people, never worshipping the machine.',
-      projects: ['Alerci', 'Zallud', 'Qolitica', 'Gepardo', 'Grok · Devotional'],
+        'Twelve anchors of discipline and character. The App turns principles into daily actions and scores across Salvation, Health and Freedom.',
     },
     token: {
       subtitle: 'Patriotic Bitcoin on Solana',
@@ -674,13 +507,140 @@ const copy = {
     },
     final: {
       title: 'The Phalanx awaits',
-      body: 'Create your account, choose your pillars and walk with us.',
+      body: 'Create your account and walk with us in one App.',
       cta: 'Join now',
       terms: 'Terms',
       privacy: 'Privacy',
     },
     footer: {
       copy: '© 2026 Salvazion · Faith, family and exponential technology.',
+    },
+  },
+  es: {
+    nav: {
+      app: 'La App',
+      purpose: 'Propósito',
+      token: 'Token',
+      team: 'Equipo',
+      enter: 'Entrar al Hub',
+      language: 'Idioma',
+    },
+    hero: {
+      eyebrow: 'Phalanx digital · Fe · Familia · Tecnología',
+      title: 'MAKE SALVATION,\nHEALTH AND\nFREEDOM',
+      sub: 'GREAT AGAIN',
+      tagline: 'El mundo secular te quita el espíritu, la mente, el cuerpo y el alma.',
+      tagline2: 'Salvazion te los devuelve — en una sola App.',
+      ctaPrimary: 'Crear cuenta gratis',
+      ctaLogin: 'Ya tengo cuenta',
+      socialHint: 'Gmail · X · email · PWA en el teléfono',
+    },
+    app: {
+      eyebrow: 'Una sola App',
+      title: 'Todo fusionado en un solo Hub',
+      subtitle:
+        'Ya no separamos la misión en productos distintos. Salvation, Health y Freedom viven juntos en una App: hábitos, scores, comunidad y Solana en tu bolsillo.',
+      featuresTitle: 'Lo que ya puedes hacer',
+      featuresSubtitle: 'Producto vivo — no solo un pitch.',
+      cta: 'Abrir la App',
+      areas: [
+        {
+          name: 'Salvation',
+          icon: '✝',
+          body: 'La fe al centro. Biblia offline, devocional con Grok y disciplina espiritual medible.',
+          inApp: 'Biblia · Devocional · Coach León Verde',
+        },
+        {
+          name: 'Health',
+          icon: '🌿',
+          body: 'El cuerpo es templo. Sueño, hidratación, movimiento, sensores del celular y wearables al servicio de la virtud.',
+          inApp: 'Health hub · sensores · wearables',
+        },
+        {
+          name: 'Freedom',
+          icon: '🦅',
+          body: 'Libertad con responsabilidad: aprender, conectar, aportar y soberanía económica real en Solana.',
+          inApp: 'Freedom hub · Phalanx · Swap $SALVAZION',
+        },
+      ],
+      features: {
+        bible: {
+          title: 'Biblia completa offline',
+          body: 'ES · EN · originales. Lectura, búsqueda y concordancia. Marca capítulos y suma Salvation.',
+        },
+        devotional: {
+          title: 'Devocional con Grok',
+          body: 'Personalizado a tu perfil: Escritura, virtud, cultura cristiano-occidental y BioConservadurismo.',
+        },
+        health: {
+          title: 'Health con sensores',
+          body: 'Sueño, agua, comida, deportes. Pasos, GPS y monitores Bluetooth / wearables cuando los conectas.',
+        },
+        freedom: {
+          title: 'Freedom · aprender y aportar',
+          body: 'Biblioteca, conexiones reales y proyectos. La libertad se construye con oficio, no con consumo pasivo.',
+        },
+        phalanx: {
+          title: 'Phalanx',
+          body: 'Invita familia, hermanos, amigos y colegas. Crezcan juntos en fe, salud y libertad.',
+        },
+        web3: {
+          title: '$SALVAZION en Solana',
+          body: 'Conecta Phantom/Solflare y swap con Jupiter. Patriot Bitcoin — no custodiamos tus llaves.',
+        },
+      },
+    },
+    purpose: {
+      eyebrow: 'Massive Transformative Purpose',
+      title: 'Nuestro propósito',
+      body: 'Make Salvation, Health and Freedom Great Again. Una comunidad global que defiende la Cultura Occidental Cristiana y el BioConservadurismo en una Guerra Espiritual — con fe, familia, excelencia e innovación exponencial al servicio de las personas.',
+      values: [
+        {
+          title: 'Fe',
+          body: 'Cristo al centro. Escritura, oración y virtud como base de toda construcción.',
+        },
+        {
+          title: 'Familia',
+          body: 'La Phalanx empieza en casa: matrimonio, hijos, hermanos y comunidad real.',
+        },
+        {
+          title: 'Libertad',
+          body: 'Soberanía personal y económica frente al relativismo y el control centralizado.',
+        },
+      ],
+    },
+    salvators: {
+      chapter: 'Chapter 01',
+      title: 'Los 12 Salvators',
+      subtitle: 'Principios de enfoque para la Phalanx.',
+      caption:
+        'Doce anclas de disciplina y carácter. La App convierte principios en acciones diarias y scores de Salvation, Health y Freedom.',
+    },
+    token: {
+      subtitle: 'Patriot Bitcoin on Solana',
+      connect: 'Conecta tu billetera Solana',
+      buy: 'Comprar $SALVAZION',
+      openJupiter: 'Abrir en Jupiter',
+    },
+    team: {
+      eyebrow: 'Fundadores',
+      title: 'Una familia con propósito',
+      intro:
+        'Cristian Cortés y Beatriz Isler: más de 20 años juntos en salud, educación, tecnología e innovación. Excelencia, integridad y servicio a las personas.',
+      cristian:
+        'Kinesiólogo, Magíster en Kinesiología. Ex Embajador de Singularity University. Top Exponentialist en Digital Health. Green Lion King · CEO de Salvazion Inc.',
+      beatriz:
+        'Kinesióloga y académica. Digital Health Champion (BID). Madre de cuatro y co-constructora de Salvazion · COO.',
+    },
+    final: {
+      title: 'La Phalanx te espera',
+      body: 'Crea tu cuenta y camina con nosotros en una sola App.',
+      cta: 'Unirme ahora',
+      terms: 'Términos',
+      privacy: 'Privacidad',
+    },
+    footer: {
+      copy: '© 2026 Salvazion · Fe, familia y tecnología exponencial.',
     },
   },
 } as const;

@@ -1,56 +1,64 @@
-# Biblia Offline — Dataset JSON
+# Biblia Offline — Dataset completo
+
+Canon protestante: **66 libros · 1189 capítulos**.
 
 ## Estructura
 
 ```
 public/bible/
-├── es/                 # Reina Valera 1960
-│   ├── gen-1.json
-│   ├── psa-23.json
-│   └── ...
-├── en/                 # King James Version (public domain)
-│   ├── gen-1.json
-│   └── ...
-└── original/           # (opcional) notas hebreo/griego
+├── meta.json
+├── es/books/{bookId}.json      # Reina Valera 1909 (dominio público)
+├── en/books/{bookId}.json      # King James Version (public domain)
+└── original/books/{bookId}.json # Hebreo WLC (AT) + Griego Textus Receptus (NT)
 ```
 
-## Formato de cada archivo
+Cada archivo de libro:
 
 ```json
 {
   "book": "Génesis",
   "bookId": "gen",
-  "chapter": 1,
-  "verses": [
-    { "number": 1, "text": "En el principio creó Dios los cielos y la tierra." },
-    ...
+  "version": "Reina Valera 1909",
+  "chapters": [
+    {
+      "chapter": 1,
+      "verses": [
+        { "number": 1, "text": "…" }
+      ]
+    }
   ]
 }
 ```
 
-Nombre del archivo: `{bookId}-{chapter}.json`  
-Ejemplos: `gen-1.json`, `psa-23.json`, `jhn-3.json`, `rev-5.json`
+También se soporta el formato legado por capítulo: `{bookId}-{chapter}.json`.
 
-## Cómo completar el dataset
+## Generar / actualizar
 
-1. Obtén un JSON de la Biblia en dominio público (recomendado: **King James Version**).
-2. Fuentes confiables de referencia:
-   - KJV public domain JSON (varios repos de GitHub / scrollmapper)
-   - Westminster Leningrad Codex + SBLGNT para original
-3. Genera un archivo por capítulo siguiendo el formato anterior.
-4. Colócalos en `public/bible/es/` y `public/bible/en/`.
-5. La app los carga automáticamente (cache + force-cache). No requiere cambios de código.
+```bash
+npm run bible:build
+```
 
-## Estado actual
+Fuente de datos: [getbible.net API v2](https://api.getbible.net/v2/)
 
-- Catálogo completo: **66 libros · 1189 capítulos**
-- Textos curados ya presentes (JSON):
-  - gen-1 (ES + EN)
-  - psa-23 (ES + EN)
-  - jhn-1 (ES + EN)
-  - rom-12 (ES)
-  - rev-5 (ES) — León de Judá
+| Lang | Translation key | Etiqueta |
+|------|-----------------|----------|
+| es | `valera` | Reina Valera **1909** |
+| en | `kjv` | King James Version |
+| original OT | `codex` | Westminster Leningrad Codex (hebreo) |
+| original NT | `textusreceptus` | Textus Receptus (griego) |
 
-Una vez que se deposite el dataset completo, la Biblia queda 100% offline, soberana y lista para la Phalanx.
+## Nota legal — Reina Valera 1960
+
+**Reina-Valera 1960®** es marca y texto protegido por **Sociedades Bíblicas Unidas / American Bible Society**.  
+No se puede redistribuir el texto completo de la RV1960 en una app sin licencia.
+
+Esta app incluye **Reina Valera 1909** (dominio público), la edición clásica libremente redistribuible.  
+Si obtienes licencia de RV1960, genera JSON con el mismo esquema y reemplaza `public/bible/es/books/`.
+
+## King James & Originales
+
+- **KJV**: dominio público.
+- **Hebreo**: Westminster Leningrad Codex vía getbible `codex`.
+- **Griego NT**: Textus Receptus vía getbible `textusreceptus`.
 
 Salvazion — La Palabra primero.

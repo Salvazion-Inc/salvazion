@@ -12,6 +12,7 @@ import {
   isChapterRead,
   getReadCount,
   getTotalChapters,
+  getBook,
 } from '@/lib/bible/engine';
 import { BibleLanguage, BibleChapter } from '@/lib/bible/types';
 import { logAction, getPointsForAction } from '@/lib/scoring/engine';
@@ -84,12 +85,12 @@ export default function BiblePage() {
         </div>
 
         {/* Language tabs */}
-        <div className="flex gap-2 mb-3">
+        <div className="flex flex-wrap gap-2 mb-3">
           {([
-            { id: 'es' as BibleLanguage, label: 'ES · Reina Valera 1960' },
+            { id: 'es' as BibleLanguage, label: 'ES · Reina Valera' },
             { id: 'en' as BibleLanguage, label: 'EN · King James' },
-            { id: 'original' as BibleLanguage, label: 'Original' }
-          ]).map(lang => (
+            { id: 'original' as BibleLanguage, label: 'Original · Heb/Gr' },
+          ]).map((lang) => (
             <button
               key={lang.id}
               onClick={() => setLanguage(lang.id)}
@@ -179,10 +180,24 @@ export default function BiblePage() {
               <p className="text-xs text-[#B7F7AC]/50">{chapter.version}</p>
             </div>
 
-            <div className="space-y-4 mb-8">
-              {chapter.verses.map(v => (
-                <p key={v.number} className="leading-relaxed text-[#D8E1D9]/90">
-                  <span className="text-[#00F511] text-xs font-medium mr-2">{v.number}</span>
+            <div
+              className="space-y-4 mb-8"
+              dir={
+                language === 'original' && getBook(selectedBook)?.testament === 'OT'
+                  ? 'rtl'
+                  : 'ltr'
+              }
+            >
+              {chapter.verses.map((v) => (
+                <p
+                  key={v.number}
+                  className={`leading-relaxed text-[#D8E1D9]/90 ${
+                    language === 'original' ? 'text-[1.05rem] font-serif' : ''
+                  }`}
+                >
+                  <span className="text-[#00F511] text-xs font-medium mx-1.5 font-sans">
+                    {v.number}
+                  </span>
                   {v.text}
                 </p>
               ))}
@@ -213,8 +228,15 @@ export default function BiblePage() {
             </button>
 
             {language === 'original' && (
-              <p className="text-xs text-[#B7F7AC]/40 mt-4 text-center">
-                Vista original en desarrollo. Se mostrará texto hebreo/griego completo + transliteración en la versión final.
+              <p className="text-xs text-[#B7F7AC]/40 mt-4 text-center leading-relaxed">
+                AT en hebreo (Westminster Leningrad Codex) · NT en griego (Textus Receptus).
+                Lectura de derecha a izquierda en el Antiguo Testamento.
+              </p>
+            )}
+            {language === 'es' && (
+              <p className="text-xs text-[#B7F7AC]/40 mt-4 text-center leading-relaxed">
+                Texto Reina Valera 1909 (dominio público). La edición 1960® de SBU requiere licencia
+                comercial; si la obtienes, puedes sustituir los JSON en /public/bible/es/books/.
               </p>
             )}
           </div>

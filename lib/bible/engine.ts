@@ -1,44 +1,83 @@
 import { BibleChapter, BibleLanguage, BibleBook, ReadingProgress } from './types';
-import { BIBLE_BOOKS, SAMPLE_CHAPTERS, ORIGINAL_NOTES } from '@/data/bible/sample';
+import { BIBLE_BOOKS, SAMPLE_CHAPTERS } from '@/data/bible/sample';
 
 const STORAGE_PROGRESS = 'salvazion_bible_progress';
 
-// Simple in-memory cache for offline JSON chapters
+// Chapter cache + book-file cache (one fetch per book)
 const chapterCache = new Map<string, BibleChapter>();
+const bookFileCache = new Map<string, BookFilePayload>();
+
+interface BookFilePayload {
+  book: string;
+  bookId: string;
+  version: string;
+  chapters: { chapter: number; verses: { number: number; text: string }[] }[];
+}
+
+const VERSION_LABEL: Record<BibleLanguage, string> = {
+  es: 'Reina Valera 1909',
+  en: 'King James Version',
+  original: 'Original (Hebreo / Griego)',
+};
 
 export function getBooks(): BibleBook[] {
   return BIBLE_BOOKS;
 }
 
 export function getBook(bookId: string): BibleBook | undefined {
-  return BIBLE_BOOKS.find(b => b.id === bookId);
+  return BIBLE_BOOKS.find((b) => b.id === bookId);
 }
 
-/**
- * Returns every chapter number for the book (1..N).
- * Full Protestant canon (66 books · 1189 chapters).
- */
 export function getAvailableChapters(bookId: string, _language: BibleLanguage = 'es'): number[] {
   const book = getBook(bookId);
   if (!book) return [];
   return Array.from({ length: book.chapters }, (_, i) => i + 1);
 }
 
-/**
- * Builds the public path for a chapter JSON.
- * Convention: /bible/{lang}/{bookId}-{chapter}.json
- * Example: /bible/es/gen-1.json  /bible/en/psa-23.json
- */
+function versionLabelFor(language: BibleLanguage, book?: BibleBook, fromFile?: string): string {
+  if (fromFile) return fromFile;
+  if (language === 'original' && book) {
+    return book.testament === 'OT'
+      ? 'Hebreo · Westminster Leningrad Codex'
+      : 'Griego · Textus Receptus';
+  }
+  return VERSION_LABEL[language];
+}
+
+/** Prefer book-level offline JSON: /bible/{lang}/books/{bookId}.json */
+function getBookJsonPath(bookId: string, language: BibleLanguage): string {
+  return `/bible/${language}/books/${bookId}.json`;
+}
+
+/** Legacy per-chapter path still supported */
 function getChapterJsonPath(bookId: string, chapter: number, language: BibleLanguage): string {
-  const lang = language === 'original' ? 'es' : language;
-  return `/bible/${lang}/${bookId}-${chapter}.json`;
+  return `/bible/${language}/${bookId}-${chapter}.json`;
+}
+
+async function loadBookFile(
+  bookId: string,
+  language: BibleLanguage
+): Promise<BookFilePayload | null> {
+  const key = `${language}:${bookId}`;
+  if (bookFileCache.has(key)) return bookFileCache.get(key)!;
+
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const res = await fetch(getBookJsonPath(bookId, language), { cache: 'force-cache' });
+    if (!res.ok) return null;
+    const data = (await res.json()) as BookFilePayload;
+    if (!data?.chapters?.length) return null;
+    bookFileCache.set(key, data);
+    return data;
+  } catch {
+    return null;
+  }
 }
 
 /**
- * Async loader — prefers offline JSON from public/bible/.
- * Falls back to curated SAMPLE_CHAPTERS, then to a respectful placeholder.
- * Once the full dataset is dropped into public/bible/{es|en}/ the app becomes
- * fully offline without any code change.
+ * Full chapter loader — offline book JSON first, then legacy chapter JSON,
+ * then curated samples, then a clear placeholder.
  */
 export async function getChapter(
   bookId: string,
@@ -53,95 +92,81 @@ export async function getChapter(
     return chapterCache.get(cacheKey)!;
   }
 
-  // 1. Try offline JSON first (full dataset path)
-  if (typeof window !== 'undefined') {
-    try {
-      const path = getChapterJsonPath(bookId, chapter, language);
-      const res = await fetch(path, { cache: 'force-cache' });
-      if (res.ok) {
-        const data = await res.json();
-        const version =
-          language === 'en'
-            ? 'King James Version'
-            : language === 'original'
-              ? 'Original (Hebreo/Griego)'
-              : 'Reina Valera 1960';
-
-        let verses = data.verses || [];
-        if (language === 'original' && ORIGINAL_NOTES[`${bookId}-${chapter}`] && verses.length > 0) {
-          verses = verses.map((v: { number: number; text: string }, idx: number) =>
-            idx === 0
-              ? { ...v, text: `${ORIGINAL_NOTES[`${bookId}-${chapter}`]}\n\n${v.text}` }
-              : v
-          );
-        }
-
-        const chapterData: BibleChapter = {
-          book: data.book || (language === 'en' ? book.name : book.nameEs),
-          bookId,
-          chapter,
-          language,
-          version,
-          verses,
-        };
-        chapterCache.set(cacheKey, chapterData);
-        return chapterData;
-      }
-    } catch {
-      // network or file missing → fall through
-    }
-  }
-
-  // 2. Curated sample (always available, even SSR)
-  if (language === 'original') {
-    const base = SAMPLE_CHAPTERS.find(
-      c => c.bookId === bookId && c.chapter === chapter && c.language === 'es'
-    );
-    if (base) {
+  // 1. Book-level offline dataset (full canon)
+  const bookFile = await loadBookFile(bookId, language);
+  if (bookFile) {
+    const ch = bookFile.chapters.find((c) => c.chapter === chapter);
+    if (ch && ch.verses?.length) {
       const chapterData: BibleChapter = {
-        ...base,
-        language: 'original',
-        version: 'Original (Hebreo/Griego) — muestra',
-        verses: base.verses.map(v => ({
-          ...v,
-          text:
-            v.number === 1 && ORIGINAL_NOTES[`${bookId}-${chapter}`]
-              ? `${ORIGINAL_NOTES[`${bookId}-${chapter}`]}\n\n${v.text}`
-              : v.text,
-        })),
+        book: bookFile.book || (language === 'en' ? book.name : book.nameEs),
+        bookId,
+        chapter,
+        language,
+        version: versionLabelFor(language, book, bookFile.version),
+        verses: ch.verses.map((v) => ({ number: v.number, text: v.text })),
       };
       chapterCache.set(cacheKey, chapterData);
       return chapterData;
     }
   }
 
-  const sample = SAMPLE_CHAPTERS.find(
-    c => c.bookId === bookId && c.chapter === chapter && c.language === (language === 'original' ? 'es' : language)
-  );
-  if (sample) {
-    chapterCache.set(cacheKey, sample);
-    return sample;
+  // 2. Legacy per-chapter JSON
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch(getChapterJsonPath(bookId, chapter, language), {
+        cache: 'force-cache',
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const chapterData: BibleChapter = {
+          book: data.book || (language === 'en' ? book.name : book.nameEs),
+          bookId,
+          chapter,
+          language,
+          version: versionLabelFor(language, book, data.version),
+          verses: data.verses || [],
+        };
+        chapterCache.set(cacheKey, chapterData);
+        return chapterData;
+      }
+    } catch {
+      // fall through
+    }
   }
 
-  // 3. Placeholder — structure is complete, full text still being populated
+  // 3. Curated samples
+  const sampleLang = language === 'original' ? 'es' : language;
+  const sample = SAMPLE_CHAPTERS.find(
+    (c) => c.bookId === bookId && c.chapter === chapter && c.language === sampleLang
+  );
+  if (sample) {
+    const chapterData: BibleChapter = {
+      ...sample,
+      language,
+      version:
+        language === 'original'
+          ? versionLabelFor(language, book) + ' — muestra'
+          : sample.version,
+    };
+    chapterCache.set(cacheKey, chapterData);
+    return chapterData;
+  }
+
+  // 4. Placeholder
   const isEnglish = language === 'en';
   const bookName = isEnglish ? book.name : book.nameEs;
-  const versionLabel = isEnglish
-    ? 'King James Version — full text loading'
-    : 'Reina Valera 1960 — texto completo en preparación';
-
   const placeholder: BibleChapter = {
     book: bookName,
     bookId,
     chapter,
     language,
-    version: versionLabel,
+    version: versionLabelFor(language, book) + ' — cargando dataset',
     verses: [
       {
         number: 1,
         text: isEnglish
-          ? `Chapter ${chapter} of ${bookName}. The full Protestant canon (66 books · 1189 chapters) is ready. Drop the complete offline JSON files into /public/bible/en/ (and /es/) following the pattern {bookId}-{chapter}.json and this chapter will appear automatically. Key passages already present: Genesis 1, Psalm 23, John 1, Romans 12, Revelation 5 (Lion of Judah).`
-          : `Capítulo ${chapter} de ${bookName}. El catálogo canónico completo (66 libros · 1189 capítulos) está listo. Coloca los JSON offline en /public/bible/es/ (y /en/) con el patrón {bookId}-{chapter}.json y este capítulo aparecerá automáticamente. Pasajes clave ya cargados: Génesis 1, Salmos 23, Juan 1, Romanos 12, Apocalipsis 5 (León de Judá).`,
+          ? `Chapter ${chapter} of ${bookName} is not in the offline pack yet. Run: node scripts/build-bible.mjs`
+          : `El capítulo ${chapter} de ${bookName} aún no está en el paquete offline. Ejecuta: node scripts/build-bible.mjs`,
       },
     ],
   };
@@ -149,7 +174,6 @@ export async function getChapter(
   return placeholder;
 }
 
-/** Synchronous helper for SSR / initial render (uses samples only) */
 export function getChapterSync(
   bookId: string,
   chapter: number,
@@ -158,34 +182,14 @@ export function getChapterSync(
   const book = getBook(bookId);
   if (!book || chapter < 1 || chapter > book.chapters) return null;
 
-  if (language === 'original') {
-    const base = SAMPLE_CHAPTERS.find(
-      c => c.bookId === bookId && c.chapter === chapter && c.language === 'es'
-    );
-    if (base) {
-      return {
-        ...base,
-        language: 'original',
-        version: 'Original (Hebreo/Griego) — muestra',
-        verses: base.verses.map(v => ({
-          ...v,
-          text:
-            v.number === 1 && ORIGINAL_NOTES[`${bookId}-${chapter}`]
-              ? `${ORIGINAL_NOTES[`${bookId}-${chapter}`]}\n\n${v.text}`
-              : v.text,
-        })),
-      };
-    }
-  }
-
+  const sampleLang = language === 'original' ? 'es' : language;
   return (
     SAMPLE_CHAPTERS.find(
-      c => c.bookId === bookId && c.chapter === chapter && c.language === language
+      (c) => c.bookId === bookId && c.chapter === chapter && c.language === sampleLang
     ) || null
   );
 }
 
-/** Reading progress (local) */
 export function loadReadingProgress(): ReadingProgress[] {
   if (typeof window === 'undefined') return [];
   try {
@@ -199,7 +203,7 @@ export function loadReadingProgress(): ReadingProgress[] {
 export function markChapterRead(bookId: string, chapter: number): void {
   if (typeof window === 'undefined') return;
   const progress = loadReadingProgress();
-  const exists = progress.some(p => p.bookId === bookId && p.chapter === chapter);
+  const exists = progress.some((p) => p.bookId === bookId && p.chapter === chapter);
   if (!exists) {
     progress.push({
       bookId,
@@ -211,14 +215,17 @@ export function markChapterRead(bookId: string, chapter: number): void {
 }
 
 export function isChapterRead(bookId: string, chapter: number): boolean {
-  return loadReadingProgress().some(p => p.bookId === bookId && p.chapter === chapter);
+  return loadReadingProgress().some((p) => p.bookId === bookId && p.chapter === chapter);
 }
 
 export function getReadCount(): number {
   return loadReadingProgress().length;
 }
 
-/** Total chapters in the complete Protestant canon */
 export function getTotalChapters(): number {
   return BIBLE_BOOKS.reduce((sum, b) => sum + b.chapters, 0);
+}
+
+export function getBibleVersionLabel(language: BibleLanguage): string {
+  return VERSION_LABEL[language];
 }

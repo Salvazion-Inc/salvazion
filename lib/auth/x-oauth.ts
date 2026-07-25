@@ -117,11 +117,13 @@ export async function signInWithX(options?: {
     const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
 
     // 1) Preferred: X OAuth 2.0 (Supabase dashboard: "X / Twitter (OAuth 2.0)")
+    // Do NOT override scopes with tweet.read-only sets — Supabase requests the
+    // scopes it needs to fetch /2/users/me. Wrong scopes →
+    // "Error getting user profile from external provider".
     const primary = await supabase.auth.signInWithOAuth({
       provider: 'x' as Provider,
       options: {
         redirectTo,
-        scopes: 'tweet.read users.read offline.access',
         skipBrowserRedirect: false,
       },
     });

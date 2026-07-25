@@ -51,6 +51,28 @@ alter table public.profiles add column if not exists x_user_id text;
 
 Si el error es `provider is not enabled`, casi siempre es porque se activó el provider legacy **Twitter (OAuth 1.0a)** en lugar de **X / Twitter (OAuth 2.0)**, o se pegaron las keys incorrectas.
 
+### Error: `Error getting user profile from external provider`
+
+Significa: X devolvió el token, pero Supabase no pudo llamar a la API de perfil de X.
+
+Checklist en [developer.x.com](https://developer.x.com) → tu App:
+
+1. **User authentication settings → Set up / Edit**
+2. **App permissions:** Read  
+3. **Request email from users:** **ON** (Supabase lo necesita a menudo)
+4. **Type of App:** Web App  
+5. **Callback URI:**  
+   `https://kppylfrsclkdmtpobpxd.supabase.co/auth/v1/callback`  
+6. **Website URL:** `https://salvazion.org`  
+7. **Terms of service** y **Privacy policy** URLs rellenadas (pueden ser páginas de salvazion.org)  
+8. **Save**
+9. **Keys and tokens** → sección **OAuth 2.0 Client ID and Client Secret**  
+   - Copia **Client ID** y regenera/copia **Client Secret**  
+10. En Supabase → **X / Twitter (OAuth 2.0)** pega **esas** credenciales (no “API Key / API Secret” de arriba)  
+11. Save en Supabase y prueba en incógnito
+
+Si tu app de X está en nivel Free y sigue fallando, confirma en el portal que OAuth 2.0 User authentication está activo para esa app.
+
 ## Flujo técnico
 
 ```

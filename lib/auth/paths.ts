@@ -59,6 +59,17 @@ export function mapAuthError(message: string | null | undefined): string {
       'Usa OAuth 2.0 (Client ID), no solo las API Key de OAuth 1.0a.'
     );
   }
+  if (
+    m.includes('user profile from external provider') ||
+    m.includes('getting user profile')
+  ) {
+    return (
+      'X autorizó, pero Supabase no pudo leer tu perfil. En developer.x.com → tu app → ' +
+      'User authentication settings: activa “Request email from users”, App type Web App, ' +
+      'permissions Read, y guarda. En Keys and tokens usa Client ID + Client Secret (OAuth 2.0) ' +
+      'en Supabase → Providers → X / Twitter (OAuth 2.0), no las API Key de OAuth 1.0a.'
+    );
+  }
 
   return message;
 }

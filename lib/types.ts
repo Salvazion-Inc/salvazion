@@ -71,12 +71,21 @@ export interface Devotional {
   date: string;
   title: string;
   scripture: Scripture;
+  /** Optional second supporting verse */
+  secondaryScripture?: Scripture;
   reflection: string;
   prayer: string;
   action: string;
+  /** Virtue of the day (fortaleza, templanza, fe, etc.) */
+  virtue?: string;
+  /** Closing charge / blessing */
+  closing?: string;
   tags: string[];
   points: number;
   personalizedFor?: string;
+  /** Generation engine */
+  source?: 'grok' | 'rules';
+  model?: string;
 }
 
 /**

@@ -39,6 +39,7 @@ const nextConfig: NextConfig = {
                 "connect-src 'self'",
                 "https://*.supabase.co",
                 "wss://*.supabase.co",
+                "https://api.x.ai",
                 "https://*.solana.com",
                 "https://api.mainnet-beta.solana.com",
                 "https://api.devnet.solana.com",

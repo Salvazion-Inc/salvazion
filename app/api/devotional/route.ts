@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateDevotional } from '@/lib/devotional-engine';
+import { generateDevotionalAsync, isXaiConfigured } from '@/lib/devotional-engine';
 import { UserProfile } from '@/lib/types';
 
 /** Basic sanitization for free-text fields */
@@ -12,13 +12,12 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    // Rate-limit style guard: reject oversized payloads
-    if (JSON.stringify(body).length > 4000) {
+    if (JSON.stringify(body).length > 12000) {
       return NextResponse.json({ success: false, error: 'Payload too large' }, { status: 413 });
     }
 
     const profile: UserProfile = {
-      name: sanitize(body.name, 80) || 'Hermano',
+      name: sanitize(body.name, 80) || (body.language === 'en' ? 'Brother' : 'Hermano'),
       language: body.language === 'en' ? 'en' : 'es',
       spiritualMaturity: ['new', 'growing', 'mature', 'leader'].includes(body.spiritualMaturity)
         ? body.spiritualMaturity
@@ -34,28 +33,32 @@ export async function POST(req: NextRequest) {
         : [],
       preferredBibleVersion: ['rv1960', 'kjv', 'original'].includes(body.preferredBibleVersion)
         ? body.preferredBibleVersion
-        : 'rv1960',
-      purpose: '',
-      city: '',
-      country: '',
-      birthDate: '',
+        : body.language === 'en'
+          ? 'kjv'
+          : 'rv1960',
+      purpose: sanitize(body.purpose, 400),
+      city: sanitize(body.city, 80),
+      country: sanitize(body.country, 80),
+      birthDate: typeof body.birthDate === 'string' ? body.birthDate.slice(0, 10) : '',
       familyLinks: [],
       friendsLinks: [],
       hasAcceptedLionCoach: true,
       onboardingCompleted: true,
     };
 
-    const date = typeof body.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(body.date)
-      ? body.date
-      : new Date().toISOString().slice(0, 10);
+    const date =
+      typeof body.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(body.date)
+        ? body.date
+        : new Date().toISOString().slice(0, 10);
 
-    const devotional = generateDevotional(profile, date);
+    const { devotional, engine, note } = await generateDevotionalAsync(profile, date);
 
     return NextResponse.json({
       success: true,
       data: devotional,
-      engine: 'salvazion-rule-based-v1',
-      note: 'Motor de reglas + matching inteligente. Listo para upgrade a LLM real.',
+      engine,
+      note,
+      grokConfigured: isXaiConfigured(),
     });
   } catch (error) {
     console.error('Devotional engine error:', error);
@@ -69,14 +72,8 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   return NextResponse.json({
     message: 'Salvazion Devotional Engine',
-    usage: 'POST with UserProfile body',
-    example: {
-      name: 'Juan Pérez',
-      language: 'es',
-      spiritualMaturity: 'growing',
-      familyStatus: 'parent',
-      currentFocus: ['familia', 'fe', 'proposito'],
-      struggles: ['perseverancia'],
-    },
+    grokConfigured: isXaiConfigured(),
+    usage: 'POST with full UserProfile fields (name, language, purpose, birthDate, currentFocus, …)',
+    model: process.env.XAI_MODEL || 'grok-4.5',
   });
 }

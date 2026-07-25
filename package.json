@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "bible:build": "node scripts/build-bible.mjs"
+    "bible:build": "node scripts/build-bible.mjs",
+    "db:phalanx": "node scripts/run-phalanx-sql.mjs"
   },
   "dependencies": {
     "@solana/wallet-adapter-base": "^0.9.27",
@@ -19,6 +20,7 @@
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.8",
     "next": "16.2.10",
+    "openai": "^6.49.0",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
@@ -29,6 +31,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
+    "pg": "^8.22.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

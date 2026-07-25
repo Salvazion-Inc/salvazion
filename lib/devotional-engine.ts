@@ -1,162 +1,374 @@
-import { UserProfile, Devotional, Language } from './types';
+import { UserProfile, Devotional, Language, Scripture } from './types';
 import { DEVOTIONALS_LIBRARY, DEVOTIONALS_EN } from '@/data/devotionals-library';
+import { getXaiClient, getXaiModel, isXaiConfigured } from '@/lib/ai/xai';
+import { calculateAge, getLifeStage, getLifeStageLabel } from '@/lib/store/profile';
 
 /**
- * Motor de personalización de Devocionales Salvazion
- * 
- * En esta fase: motor inteligente basado en reglas + matching de tags
- * (preparado para ser reemplazado o aumentado por un LLM real en producción).
- * 
- * Lógica:
- * 1. Selecciona la biblioteca según idioma
- * 2. Calcula score de relevancia por tags + madurez + estado familiar
- * 3. Elige el mejor match del día (determinista por fecha para consistencia)
- * 4. Personaliza el texto con el nombre del usuario
- * 5. Ajusta puntos según madurez (líderes reciben ligeramente más responsabilidad)
+ * Motor de Devocionales Salvazion
+ *
+ * 1) Prefer Grok (xAI) — personalizado, extenso, bíblico
+ * 2) Fallback: biblioteca + reglas si no hay XAI_API_KEY o falla la API
+ *
+ * Identidad: Cultura Cristiano-Occidental, BioConservadurismo,
+ * virtud y desarrollo espiritual. Sin tibieza ni lenguaje secular woke.
  */
 
 function getDaySeed(date: string): number {
-  // Seed determinista por fecha para que el mismo día siempre devuelva el mismo devocional
   const d = new Date(date);
   return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
 }
 
-function scoreMatch(
-  itemTags: string[],
-  profile: UserProfile
-): number {
+function scoreMatch(itemTags: string[], profile: UserProfile): number {
   let score = 0;
-
-  // Matching directo de focus
   for (const focus of profile.currentFocus) {
     if (itemTags.includes(focus)) score += 10;
   }
-
-  // Bonus por madurez
   if (profile.spiritualMaturity === 'leader' && itemTags.includes('liderazgo')) score += 8;
   if (profile.spiritualMaturity === 'new' && itemTags.includes('fe')) score += 6;
   if (profile.spiritualMaturity === 'growing' && itemTags.includes('perseverancia')) score += 5;
-
-  // Bonus familiar
   if (
-    (profile.familyStatus === 'parent' || profile.familyStatus === 'married' || profile.familyStatus === 'family') &&
+    (profile.familyStatus === 'parent' ||
+      profile.familyStatus === 'married' ||
+      profile.familyStatus === 'family') &&
     itemTags.includes('familia')
   ) {
     score += 12;
   }
-
-  // Bonus por struggles
   if (profile.struggles) {
     for (const s of profile.struggles) {
       if (itemTags.includes(s)) score += 7;
     }
   }
-
   return score;
 }
 
 function personalizeText(text: string, name: string, language: Language): string {
   if (!name) return text;
-
-  // Pequeños toques de personalización
   if (language === 'es') {
     return text
       .replace(/\btú\b/gi, name)
-      .replace(/\bTu\b/g, name) // cuidado con mayúsculas
       .replace(/hoy elige/gi, `${name}, hoy elige`)
       .replace(/eres llamado/gi, `${name}, eres llamado`);
-  } else {
-    return text
-      .replace(/\byou\b/gi, name)
-      .replace(/Today choose/gi, `${name}, today choose`);
   }
+  return text
+    .replace(/\byou\b/gi, name)
+    .replace(/Today choose/gi, `${name}, today choose`);
 }
 
-export function generateDevotional(
+export function generateDevotionalRules(
   profile: UserProfile,
   date: string = new Date().toISOString().slice(0, 10)
 ): Devotional {
   const library = profile.language === 'en' ? DEVOTIONALS_EN : DEVOTIONALS_LIBRARY;
-
-  // Calcular scores
   const scored = library.map((item, index) => ({
     item,
     index,
-    score: scoreMatch(item.tags, profile)
+    score: scoreMatch(item.tags, profile),
   }));
-
-  // Ordenar por score descendente
   scored.sort((a, b) => b.score - a.score);
-
-  // Si hay empates, usar el seed del día para elegir de forma estable
   const topScore = scored[0].score;
-  const topCandidates = scored.filter(s => s.score === topScore || s.score >= topScore - 5);
-
+  const topCandidates = scored.filter((s) => s.score === topScore || s.score >= topScore - 5);
   const seed = getDaySeed(date);
   const chosen = topCandidates[seed % topCandidates.length];
-
   const base = chosen.item;
 
-  // Personalizar
-  const reflection = personalizeText(base.reflection, profile.name, profile.language);
-  const prayer = personalizeText(base.prayer, profile.name, profile.language);
-
-  // Ajuste de puntos por madurez (más responsabilidad = ligeramente más peso)
   let points = base.points;
   if (profile.spiritualMaturity === 'leader') points += 3;
   if (profile.spiritualMaturity === 'mature') points += 1;
 
   return {
-    id: `dev-${date}-${chosen.index}`,
+    id: `dev-${date}-rules-${chosen.index}`,
     date,
     title: base.title,
     scripture: base.scripture,
-    reflection,
-    prayer,
+    reflection: personalizeText(base.reflection, profile.name, profile.language),
+    prayer: personalizeText(base.prayer, profile.name, profile.language),
     action: base.action,
+    virtue: profile.language === 'en' ? 'Faithfulness' : 'Fidelidad',
+    closing:
+      profile.language === 'en'
+        ? `${profile.name || 'Brother'}, stand firm. Defend faith, family and freedom today.`
+        : `${profile.name || 'Hermano'}, mantente firme. Defiende la fe, la familia y la libertad hoy.`,
     tags: base.tags,
     points,
-    personalizedFor: profile.name
+    personalizedFor: profile.name,
+    source: 'rules',
+  };
+}
+
+/** @deprecated use generateDevotionalAsync — sync alias for rules engine */
+export function generateDevotional(
+  profile: UserProfile,
+  date?: string
+): Devotional {
+  return generateDevotionalRules(profile, date);
+}
+
+export function buildLLMSystemPrompt(language: Language): string {
+  if (language === 'en') {
+    return `You are the Devotional Engine of Salvazion — the Green Lion of Western Christian Civilization.
+
+MISSION:
+- Produce a deep, biblical, personalized daily devotional.
+- Always defend Western Christian Culture, the traditional family, ordered liberty, and BioConservatism (life, body stewardship, rejection of ideologies that dissolve nature, sex, and family).
+- Strengthen virtue (faith, hope, charity, fortitude, temperance, prudence, justice) and spiritual growth.
+- Base every claim on Scripture. Use the King James Version (KJV) for English.
+
+TONE:
+- Firm, hopeful, fatherly and clear. No lukewarmness. No progressive/woke framing.
+- Speak to the person by name. Address their maturity, family situation, purpose and struggles.
+- Long enough to form the soul: substantial reflection (not a tweet).
+
+OUTPUT:
+- Respond ONLY with valid JSON (no markdown fences). Match the schema the user provides.`;
+  }
+
+  return `Eres el Motor de Devocionales de Salvazion — el León Verde de la Civilización Cristiana Occidental.
+
+MISIÓN:
+- Generar un devocional diario profundo, bíblico y personalizado.
+- Defender siempre la Cultura Cristiano-Occidental, la familia tradicional, la libertad ordenada y el BioConservadurismo (vida, mayordomía del cuerpo, rechazo de ideologías que disuelven la naturaleza, el sexo y la familia).
+- Potenciar la virtud (fe, esperanza, caridad, fortaleza, templanza, prudencia, justicia) y el desarrollo espiritual.
+- Fundamentar todo en la Escritura. Usa Reina Valera (estilo clásico / RV) en español.
+
+TONO:
+- Firme, esperanzador, paternal y claro. Sin tibieza. Sin marco progresista/woke.
+- Habla a la persona por su nombre. Atiende madurez, familia, propósito y luchas.
+- Extenso y formativo: reflexión sustancial (no un hilo corto).
+
+SALIDA:
+- Responde SOLO con JSON válido (sin bloques markdown). Cumple el schema que te da el usuario.`;
+}
+
+export function buildLLMUserPrompt(profile: UserProfile, date: string): string {
+  const age = profile.birthDate ? calculateAge(profile.birthDate) : null;
+  const stage = getLifeStage(age);
+  const stageLabel = getLifeStageLabel(stage, profile.language);
+  const lang = profile.language === 'en' ? 'en' : 'es';
+  const bible =
+    profile.preferredBibleVersion === 'kjv' || lang === 'en'
+      ? 'King James Version (KJV)'
+      : 'Reina Valera (clásica / estilo RV1909-RV1960)';
+
+  if (lang === 'en') {
+    return `Generate TODAY's personalized Salvazion devotional.
+
+DATE: ${date}
+
+USER PROFILE:
+- Name: ${profile.name || 'Brother'}
+- Language: English
+- Age / life stage: ${age ?? 'unknown'} / ${stageLabel}
+- Spiritual maturity: ${profile.spiritualMaturity}
+- Family status: ${profile.familyStatus}
+- Life purpose: ${profile.purpose || 'not specified'}
+- City / country: ${profile.city || '—'} / ${profile.country || '—'}
+- Current focus: ${(profile.currentFocus || []).join(', ') || 'faith, family'}
+- Struggles: ${(profile.struggles || []).join(', ') || 'none specified'}
+- Preferred Bible: ${bible}
+
+REQUIRED STRUCTURE (richer / longer than a short card):
+1. title — powerful, short (max ~10 words)
+2. virtue — one classical Christian virtue for the day
+3. scripture — main verse { reference, text, version: "KJV" } exact reference
+4. secondaryScripture — supporting verse { reference, text, version: "KJV" }
+5. reflection — 280–420 words, direct address by name; weave faith + virtue + Western Christian culture + BioConservatism as it fits their life; never contradict Scripture
+6. prayer — 90–140 words, first person or pastoral "we/I"
+7. action — one concrete, doable action TODAY (spiritual + preferably one embodied/family act)
+8. closing — 2–3 sentence charge/blessing
+9. tags — 4–8 lowercase tags from: fe, familia, proposito, salud, libertad, oracion, liderazgo, perseverancia, virtud, bioconservadurismo, cultura
+10. points — integer 20–28
+
+JSON SCHEMA ONLY:
+{
+  "title": "",
+  "virtue": "",
+  "scripture": { "reference": "", "text": "", "version": "KJV" },
+  "secondaryScripture": { "reference": "", "text": "", "version": "KJV" },
+  "reflection": "",
+  "prayer": "",
+  "action": "",
+  "closing": "",
+  "tags": [],
+  "points": 24
+}`;
+  }
+
+  return `Genera el devocional personalizado de HOY para Salvazion.
+
+FECHA: ${date}
+
+PERFIL DEL USUARIO:
+- Nombre: ${profile.name || 'Hermano'}
+- Idioma: Español
+- Edad / etapa: ${age ?? 'desconocida'} / ${stageLabel}
+- Madurez espiritual: ${profile.spiritualMaturity}
+- Situación familiar: ${profile.familyStatus}
+- Propósito de vida: ${profile.purpose || 'no especificado'}
+- Ciudad / país: ${profile.city || '—'} / ${profile.country || '—'}
+- Enfoque actual: ${(profile.currentFocus || []).join(', ') || 'fe, familia'}
+- Luchas: ${(profile.struggles || []).join(', ') || 'ninguna especificada'}
+- Biblia preferida: ${bible}
+
+ESTRUCTURA REQUERIDA (más extensa y formativa):
+1. title — potente y corto (máx. ~10 palabras)
+2. virtue — una virtud cristiana clásica del día (ej. fortaleza, templanza, fe, caridad…)
+3. scripture — versículo principal { reference, text, version: "Reina Valera" } referencia exacta
+4. secondaryScripture — versículo de apoyo { reference, text, version: "Reina Valera" }
+5. reflection — 280–420 palabras; habla de tú/nombre; une fe + virtud + Cultura Cristiano-Occidental + BioConservadurismo según su vida; nunca contradigas la Escritura
+6. prayer — 90–140 palabras
+7. action — una acción concreta HOY (espiritual + preferible un acto corporal/familiar)
+8. closing — 2–3 frases de consignación/bendición
+9. tags — 4–8 tags en minúsculas de: fe, familia, proposito, salud, libertad, oracion, liderazgo, perseverancia, virtud, bioconservadurismo, cultura
+10. points — entero 20–28
+
+SOLO JSON:
+{
+  "title": "",
+  "virtue": "",
+  "scripture": { "reference": "", "text": "", "version": "Reina Valera" },
+  "secondaryScripture": { "reference": "", "text": "", "version": "Reina Valera" },
+  "reflection": "",
+  "prayer": "",
+  "action": "",
+  "closing": "",
+  "tags": [],
+  "points": 24
+}`;
+}
+
+function extractJson(raw: string): unknown {
+  let text = raw.trim();
+  // strip markdown fences if model ignores instructions
+  const fence = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fence) text = fence[1].trim();
+  const start = text.indexOf('{');
+  const end = text.lastIndexOf('}');
+  if (start >= 0 && end > start) text = text.slice(start, end + 1);
+  return JSON.parse(text);
+}
+
+function asScripture(v: unknown, fallbackVersion: string): Scripture | null {
+  if (!v || typeof v !== 'object') return null;
+  const o = v as Record<string, unknown>;
+  const reference = typeof o.reference === 'string' ? o.reference.trim() : '';
+  const text = typeof o.text === 'string' ? o.text.trim() : '';
+  if (!reference || !text) return null;
+  return {
+    reference: reference.slice(0, 120),
+    text: text.slice(0, 1200),
+    version: typeof o.version === 'string' ? o.version.slice(0, 40) : fallbackVersion,
+  };
+}
+
+function normalizeGrokDevotional(
+  raw: unknown,
+  profile: UserProfile,
+  date: string,
+  model: string
+): Devotional | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const o = raw as Record<string, unknown>;
+  const fallbackV =
+    profile.language === 'en' ? 'KJV' : 'Reina Valera';
+  const scripture = asScripture(o.scripture, fallbackV);
+  if (!scripture) return null;
+
+  const title = typeof o.title === 'string' ? o.title.trim() : '';
+  const reflection = typeof o.reflection === 'string' ? o.reflection.trim() : '';
+  const prayer = typeof o.prayer === 'string' ? o.prayer.trim() : '';
+  const action = typeof o.action === 'string' ? o.action.trim() : '';
+  if (!title || !reflection || !prayer || !action) return null;
+
+  const tags = Array.isArray(o.tags)
+    ? o.tags.filter((t): t is string => typeof t === 'string').map((t) => t.toLowerCase().slice(0, 40)).slice(0, 10)
+    : ['fe', 'virtud'];
+
+  let points = typeof o.points === 'number' ? Math.round(o.points) : 24;
+  if (points < 18) points = 18;
+  if (points > 30) points = 30;
+
+  const secondary = asScripture(o.secondaryScripture, fallbackV) || undefined;
+
+  return {
+    id: `dev-${date}-grok`,
+    date,
+    title: title.slice(0, 120),
+    scripture,
+    secondaryScripture: secondary,
+    reflection: reflection.slice(0, 6000),
+    prayer: prayer.slice(0, 2500),
+    action: action.slice(0, 800),
+    virtue: typeof o.virtue === 'string' ? o.virtue.trim().slice(0, 80) : undefined,
+    closing: typeof o.closing === 'string' ? o.closing.trim().slice(0, 800) : undefined,
+    tags,
+    points,
+    personalizedFor: profile.name,
+    source: 'grok',
+    model,
   };
 }
 
 /**
- * Genera un prompt listo para un LLM real (cuando se conecte OpenAI / Grok / Claude)
- * Úsalo en el futuro para reemplazar o enriquecer el motor de reglas.
+ * Generate with Grok when XAI_API_KEY is set; otherwise rules fallback.
  */
+export async function generateDevotionalAsync(
+  profile: UserProfile,
+  date: string = new Date().toISOString().slice(0, 10)
+): Promise<{ devotional: Devotional; engine: string; note?: string }> {
+  const client = getXaiClient();
+  const model = getXaiModel();
+
+  if (!client) {
+    return {
+      devotional: generateDevotionalRules(profile, date),
+      engine: 'salvazion-rules-v1',
+      note: 'XAI_API_KEY no configurada. Usando motor de reglas. Añade XAI_API_KEY para Grok.',
+    };
+  }
+
+  try {
+    const completion = await client.chat.completions.create({
+      model,
+      temperature: 0.75,
+      max_tokens: 4096,
+      messages: [
+        { role: 'system', content: buildLLMSystemPrompt(profile.language) },
+        { role: 'user', content: buildLLMUserPrompt(profile, date) },
+      ],
+    });
+
+    const content = completion.choices[0]?.message?.content || '';
+    const parsed = extractJson(content);
+    const devotional = normalizeGrokDevotional(parsed, profile, date, model);
+
+    if (!devotional) {
+      console.warn('[Devotional] Grok JSON invalid, falling back to rules');
+      return {
+        devotional: generateDevotionalRules(profile, date),
+        engine: 'salvazion-rules-v1',
+        note: 'Grok respondió en formato inválido; se usó fallback de reglas.',
+      };
+    }
+
+    return {
+      devotional,
+      engine: `grok:${model}`,
+      note: 'Generado con Grok (xAI) · personalizado por perfil',
+    };
+  } catch (e) {
+    console.error('[Devotional] Grok error', e);
+    return {
+      devotional: generateDevotionalRules(profile, date),
+      engine: 'salvazion-rules-v1',
+      note: `Error Grok: ${e instanceof Error ? e.message : 'unknown'}. Fallback reglas.`,
+    };
+  }
+}
+
+/** Prompt builder kept for debugging / admin */
 export function buildLLMPrompt(profile: UserProfile, date: string): string {
-  return `
-Eres el motor de Devocionales de Salvazion.
-Genera un devocional personalizado, profundo, bíblico y alineado con la cultura cristiano-occidental y el bio-conservadurismo.
-
-Usuario:
-- Nombre: ${profile.name}
-- Idioma: ${profile.language}
-- Madurez espiritual: ${profile.spiritualMaturity}
-- Situación familiar: ${profile.familyStatus}
-- Enfoque actual: ${profile.currentFocus.join(', ')}
-- Luchas: ${profile.struggles?.join(', ') || 'ninguna especificada'}
-
-Requisitos:
-1. Título potente y corto.
-2. Un versículo (Reina Valera 1960 si ES, KJV si EN) con referencia exacta.
-3. Reflexión de 80-120 palabras que hable directamente a la situación del usuario, defendiendo fe, familia, propósito, salud o libertad según corresponda.
-4. Oración de 40-60 palabras.
-5. Una acción concreta y realizable hoy.
-6. Tags relevantes.
-7. Tono: firme, esperanzador, sin tibieza, sin lenguaje woke.
-
-Fecha: ${date}
-
-Responde SOLO en JSON con esta estructura:
-{
-  "title": "",
-  "scripture": { "reference": "", "text": "", "version": "" },
-  "reflection": "",
-  "prayer": "",
-  "action": "",
-  "tags": [],
-  "points": 18
+  return `${buildLLMSystemPrompt(profile.language)}\n\n${buildLLMUserPrompt(profile, date)}`;
 }
-`.trim();
-}
+
+export { isXaiConfigured };

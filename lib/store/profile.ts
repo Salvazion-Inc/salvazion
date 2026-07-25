@@ -36,6 +36,7 @@ function fromDb(row: any): Partial<UserProfile> {
     city: row.city ?? '',
     country: row.country ?? '',
     birthDate: row.birth_date ?? '',
+    avatarUrl: row.avatar_url || undefined,
     hasAcceptedLionCoach: row.has_accepted_lion_coach ?? false,
     onboardingCompleted: row.onboarding_completed ?? false,
     // familyLinks / friendsLinks live primarily in localStorage for now
@@ -58,6 +59,13 @@ function toDb(profile: Partial<UserProfile>) {
     city: profile.city,
     country: profile.country,
     birth_date: profile.birthDate || null,
+    // http(s) → DB; empty string → clear column; data: URLs stay local only
+    avatar_url:
+      profile.avatarUrl === ''
+        ? null
+        : profile.avatarUrl && /^https?:\/\//i.test(profile.avatarUrl)
+          ? profile.avatarUrl
+          : undefined,
     has_accepted_lion_coach: profile.hasAcceptedLionCoach,
     onboarding_completed: profile.onboardingCompleted,
   };
@@ -174,6 +182,10 @@ export async function loadProfileAsync(): Promise<Partial<UserProfile>> {
             typeof user.user_metadata?.name === 'string' ? user.user_metadata.name : '';
           profile.name = metaName || user.email?.split('@')[0] || local.name || '';
         }
+        // Keep local data-URL avatar if server has none yet
+        if (!profile.avatarUrl && local.avatarUrl) {
+          profile.avatarUrl = local.avatarUrl;
+        }
         saveLocal(profile);
         return profile;
       }
@@ -194,7 +206,9 @@ export function loadProfile(): Partial<UserProfile> {
  * Optimistic local write + upsert to Supabase when session exists.
  */
 export async function saveProfile(profile: Partial<UserProfile>) {
-  saveLocal(profile);
+  // Merge with current local so partial updates (e.g. only avatar) keep the rest
+  const merged = { ...loadLocal(), ...profile };
+  saveLocal(merged);
 
   try {
     const supabase = createClient();
@@ -204,14 +218,27 @@ export async function saveProfile(profile: Partial<UserProfile>) {
 
     if (!user) return;
 
-    const { error } = await supabase.from('profiles').upsert({
+    const row = toDb(merged);
+    // Drop undefined keys so we don't wipe columns unintentionally
+    const payload: Record<string, unknown> = {
       id: user.id,
-      ...toDb(profile),
       updated_at: new Date().toISOString(),
-    });
+    };
+    for (const [k, v] of Object.entries(row)) {
+      if (v !== undefined) payload[k] = v;
+    }
+
+    const { error } = await supabase.from('profiles').upsert(payload);
 
     if (error) {
-      console.error('[Salvazion] Profile upsert failed', error);
+      // avatar_url column may not exist yet — retry without it
+      if (String(error.message || '').includes('avatar_url')) {
+        delete payload.avatar_url;
+        const { error: e2 } = await supabase.from('profiles').upsert(payload);
+        if (e2) console.error('[Salvazion] Profile upsert failed', e2);
+      } else {
+        console.error('[Salvazion] Profile upsert failed', error);
+      }
     }
   } catch (e) {
     console.warn('[Salvazion] Supabase save failed', e);

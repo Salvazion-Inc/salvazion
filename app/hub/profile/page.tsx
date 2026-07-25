@@ -16,6 +16,7 @@ import {
 import { UserProfile } from '@/lib/types';
 import { createClient } from '@/lib/supabase/client';
 import WalletConnectCard from '@/components/wallet/WalletConnectCard';
+import ProfileAvatar from '@/components/profile/ProfileAvatar';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -93,10 +94,18 @@ export default function ProfilePage() {
       <main className="flex-1 px-5 pt-6 pb-28 max-w-md mx-auto w-full">
         {/* Avatar + name */}
         <div className="text-center mb-8">
-          <div className="w-20 h-20 mx-auto mb-4 rounded-full border-2 border-[#00F511]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
-            <Image src="/logo-icon.png" alt="Green Lion King" width={80} height={80} className="object-cover" />
-          </div>
-          <h1 className="text-2xl font-bold text-white">{profile.name || 'Hermano'}</h1>
+          <ProfileAvatar
+            avatarUrl={profile.avatarUrl}
+            name={profile.name || 'Hermano'}
+            editable
+            size="xl"
+            className="mb-1"
+            onChange={(url) => {
+              setProfile((p) => (p ? { ...p, avatarUrl: url } : p));
+              setDraft((d) => ({ ...d, avatarUrl: url }));
+            }}
+          />
+          <h1 className="text-2xl font-bold text-white mt-2">{profile.name || 'Hermano'}</h1>
           {email && (
             <p className="text-xs text-[#B7F7AC]/50 mt-1 break-all">{email}</p>
           )}

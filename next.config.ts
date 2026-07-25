@@ -75,9 +75,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  // Images: allow local + future CDN
+  // Images: allow local + Supabase storage avatars
   images: {
-    remotePatterns: [],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
+    ],
     formats: ["image/avif", "image/webp"],
   },
 };

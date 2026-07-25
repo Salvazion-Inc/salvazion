@@ -36,12 +36,56 @@ Rellena con Project Settings → API:
 ### Vercel
 Project → Settings → Environment Variables → mismas dos keys (Production + Preview).
 
-## 5. Instalar dependencias
+## 5. Avatar de perfil (Storage opcional)
+La foto funciona **offline** (comprimida en el dispositivo). Para multi-dispositivo:
+
+1. SQL Editor — si el proyecto ya existía sin `avatar_url`:
+```sql
+alter table public.profiles add column if not exists avatar_url text;
+```
+
+2. Storage → New bucket:
+   - Name: `avatars`
+   - **Public** bucket: ON
+
+3. Storage → Policies (o SQL):
+```sql
+-- Public read
+create policy "Avatar images are publicly accessible"
+  on storage.objects for select
+  using (bucket_id = 'avatars');
+
+-- Users upload/update only their folder: {user_id}/avatar.jpg
+create policy "Users can upload own avatar"
+  on storage.objects for insert
+  with check (
+    bucket_id = 'avatars'
+    and auth.uid()::text = (storage.foldername(name))[1]
+  );
+
+create policy "Users can update own avatar"
+  on storage.objects for update
+  using (
+    bucket_id = 'avatars'
+    and auth.uid()::text = (storage.foldername(name))[1]
+  );
+
+create policy "Users can delete own avatar"
+  on storage.objects for delete
+  using (
+    bucket_id = 'avatars'
+    and auth.uid()::text = (storage.foldername(name))[1]
+  );
+```
+
+Sin el bucket, la foto se guarda igual en el dispositivo (localStorage).
+
+## 6. Instalar dependencias
 ```bash
 npm install
 ```
 
-## 6. Arrancar
+## 7. Arrancar
 ```bash
 npm run dev
 ```

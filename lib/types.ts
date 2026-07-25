@@ -27,6 +27,9 @@ export interface UserProfile {
   country: string;
   birthDate: string;         // YYYY-MM-DD — para calcular edad y personalizar
 
+  /** Profile photo — https URL (Supabase Storage) or compressed data URL (local) */
+  avatarUrl?: string;
+
   // Social graph inside the app
   familyLinks: LinkedProfile[];
   friendsLinks: LinkedProfile[];

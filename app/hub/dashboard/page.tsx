@@ -12,6 +12,7 @@ import { generateCoachGuidance, CoachMessage } from '@/lib/coach/engine';
 import { evaluateBadges, getBadgeProgress, getEarnedBadgesDetailed, BadgeDef } from '@/lib/badges/engine';
 import BottomNav from '@/components/BottomNav';
 import WalletConnectCard from '@/components/wallet/WalletConnectCard';
+import ProfileAvatar from '@/components/profile/ProfileAvatar';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -85,9 +86,14 @@ export default function DashboardPage() {
       {/* Top bar */}
       <header className="flex items-center justify-between px-5 pt-6 pb-2">
         <div className="flex items-center gap-2.5">
-          <div className="w-10 h-10 rounded-full border border-[#00F511]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
-            <Image src="/logo-icon.png" alt="Salvazion" width={40} height={40} className="object-cover" />
-          </div>
+          <Link href="/hub/profile" className="shrink-0" title="Perfil">
+            <ProfileAvatar
+              avatarUrl={profile.avatarUrl}
+              name={profile.name || 'Hermano'}
+              size="sm"
+              editable={false}
+            />
+          </Link>
           <div>
             <p className="text-xs text-[#B7F7AC]/60 tracking-wide">Salvazion</p>
             <p className="text-sm font-medium leading-tight">

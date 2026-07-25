@@ -28,7 +28,13 @@
 
 Ver `docs/domains.md`.
 
-## 3b. Login con X (Twitter)
+## 3b. Login con Gmail (Google)
+1. Google Cloud → OAuth Client (Web) con redirect:  
+   `https://TU-PROJECT-REF.supabase.co/auth/v1/callback`
+2. Supabase → Authentication → Providers → **Google** → Enable + Client ID/Secret
+3. Guía: `docs/auth-google.md`
+
+## 3c. Login con X (Twitter)
 1. SQL Editor → ejecuta **`supabase/x-auth.sql`** (columnas `x_username`, `x_user_id`)
 2. Crea una app en el [X Developer Portal](https://developer.x.com/):
    - Type: Web App

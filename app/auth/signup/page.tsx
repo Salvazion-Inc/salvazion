@@ -16,7 +16,7 @@ import {
   type InboundInvite,
 } from '@/lib/invite/engine';
 import { tryAcceptPendingInbound } from '@/lib/invite/supabase';
-import XAuthButton from '@/components/auth/XAuthButton';
+import SocialAuthButtons from '@/components/auth/SocialAuthButtons';
 
 function SignupForm() {
   const router = useRouter();
@@ -155,17 +155,10 @@ function SignupForm() {
         )}
 
         <div className="glass rounded-2xl p-6 space-y-4">
-          <XAuthButton
+          <SocialAuthButtons
             next="/hub/onboarding"
             onError={(msg) => setError(msg)}
           />
-          <div className="flex items-center gap-3">
-            <div className="h-px flex-1 bg-[var(--border-soft)]" />
-            <span className="text-[10px] uppercase tracking-wider text-[var(--sage)]">
-              {t('auth.orEmail')}
-            </span>
-            <div className="h-px flex-1 bg-[var(--border-soft)]" />
-          </div>
 
         <form onSubmit={handleSignup} className="space-y-4">
           <div>

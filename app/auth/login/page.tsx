@@ -14,7 +14,7 @@ import {
   saveInboundInvite,
 } from '@/lib/invite/engine';
 import { tryAcceptPendingInbound } from '@/lib/invite/supabase';
-import XAuthButton from '@/components/auth/XAuthButton';
+import SocialAuthButtons from '@/components/auth/SocialAuthButtons';
 
 type Mode = 'password' | 'magic' | 'forgot';
 
@@ -185,19 +185,7 @@ function LoginForm() {
 
         <div className="glass rounded-2xl p-6 space-y-4">
           {mode === 'password' && (
-            <>
-              <XAuthButton
-                next={next}
-                onError={(msg) => setError(msg)}
-              />
-              <div className="flex items-center gap-3">
-                <div className="h-px flex-1 bg-[var(--border-soft)]" />
-                <span className="text-[10px] uppercase tracking-wider text-[var(--sage)]">
-                  {t('auth.orEmail')}
-                </span>
-                <div className="h-px flex-1 bg-[var(--border-soft)]" />
-              </div>
-            </>
+            <SocialAuthButtons next={next} onError={(msg) => setError(msg)} />
           )}
 
         <form

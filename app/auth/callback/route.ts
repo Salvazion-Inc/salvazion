@@ -82,59 +82,72 @@ export async function GET(request: Request) {
     return NextResponse.redirect(url);
   }
 
-  // Best-effort: stamp X username / avatar on profile
+  // Best-effort: stamp social identity (X / Google) onto profiles
   try {
     const user = data.session?.user;
     if (user) {
-      const identity = user.identities?.find(
+      const identities = user.identities || [];
+      const xIdentity = identities.find(
         (i) => i.provider === 'twitter' || i.provider === 'x'
       );
+      const googleIdentity = identities.find((i) => i.provider === 'google');
+
       const meta = {
         ...(user.user_metadata || {}),
-        ...(identity?.identity_data || {}),
+        ...(xIdentity?.identity_data || {}),
+        ...(googleIdentity?.identity_data || {}),
       } as Record<string, unknown>;
 
-      const raw =
-        meta.user_name ||
-        meta.preferred_username ||
-        meta.screen_name ||
-        meta.username;
-      const username =
-        typeof raw === 'string' ? raw.trim().replace(/^@+/, '') : '';
+      const payload: Record<string, unknown> = {
+        id: user.id,
+        updated_at: new Date().toISOString(),
+      };
 
-      if (username) {
-        const displayName =
-          (typeof meta.full_name === 'string' && meta.full_name) ||
-          (typeof meta.name === 'string' && meta.name) ||
-          username;
-        const avatar =
-          (typeof meta.avatar_url === 'string' && meta.avatar_url) ||
-          (typeof meta.picture === 'string' && meta.picture) ||
-          null;
+      // Display name from any social provider
+      const displayName =
+        (typeof meta.full_name === 'string' && meta.full_name) ||
+        (typeof meta.name === 'string' && meta.name) ||
+        (typeof meta.given_name === 'string' && meta.given_name) ||
+        null;
+      if (displayName) payload.name = displayName;
 
-        const payload: Record<string, unknown> = {
-          id: user.id,
-          x_username: username,
-          updated_at: new Date().toISOString(),
-        };
-        if (displayName) payload.name = displayName;
-        if (avatar) {
-          payload.avatar_url = String(avatar).replace('_normal', '_400x400');
-        }
-        if (typeof meta.provider_id === 'string') {
-          payload.x_user_id = meta.provider_id;
-        }
+      // Avatar
+      const avatar =
+        (typeof meta.avatar_url === 'string' && meta.avatar_url) ||
+        (typeof meta.picture === 'string' && meta.picture) ||
+        (typeof meta.profile_image_url_https === 'string' &&
+          meta.profile_image_url_https) ||
+        null;
+      if (avatar) {
+        payload.avatar_url = String(avatar).replace('_normal', '_400x400');
+      }
 
-        const { error: upErr } = await supabase.from('profiles').upsert(payload);
-        if (upErr && String(upErr.message || '').includes('x_username')) {
-          delete payload.x_username;
-          delete payload.x_user_id;
-          await supabase.from('profiles').upsert(payload);
+      // X handle
+      if (xIdentity) {
+        const raw =
+          meta.user_name ||
+          meta.preferred_username ||
+          meta.screen_name ||
+          meta.username;
+        const username =
+          typeof raw === 'string' ? raw.trim().replace(/^@+/, '') : '';
+        if (username) {
+          payload.x_username = username;
+          if (typeof meta.provider_id === 'string') {
+            payload.x_user_id = meta.provider_id;
+          }
         }
+      }
+
+      const { error: upErr } = await supabase.from('profiles').upsert(payload);
+      if (upErr && String(upErr.message || '').includes('x_username')) {
+        delete payload.x_username;
+        delete payload.x_user_id;
+        await supabase.from('profiles').upsert(payload);
       }
     }
   } catch (stampErr) {
-    console.warn('[auth/callback] X profile stamp failed', stampErr);
+    console.warn('[auth/callback] social profile stamp failed', stampErr);
   }
 
   return response;

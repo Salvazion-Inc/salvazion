@@ -29,9 +29,11 @@ const FOCUS_OPTIONS = [
 const RELATION_OPTIONS: { id: LinkedProfile['relation']; label: string }[] = [
   { id: 'spouse', label: 'Esposa / Cónyuge' },
   { id: 'child', label: 'Hijos' },
+  { id: 'sibling', label: 'Hermanos / Hermanas' },
   { id: 'family', label: 'Familia extendida' },
   { id: 'friend', label: 'Amigos cercanos' },
-  { id: 'faith_community', label: 'Comunidad de fe' }
+  { id: 'colleague', label: 'Colegas' },
+  { id: 'faith_community', label: 'Comunidad de fe' },
 ];
 
 export default function OnboardingPage() {
@@ -128,7 +130,7 @@ export default function OnboardingPage() {
       relation: inviteRelation,
       status: 'invited',
     };
-    const isFamily = ['spouse', 'child', 'family'].includes(inviteRelation);
+    const isFamily = ['spouse', 'child', 'sibling', 'family'].includes(inviteRelation);
     if (isFamily) {
       const current = profile.familyLinks || [];
       update({ familyLinks: [...current, newLink] });

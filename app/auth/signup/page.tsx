@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, FormEvent, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
@@ -9,10 +9,17 @@ import { mapAuthError } from '@/lib/auth/paths';
 import { ensureProfileForUser } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
 import LanguageControl from '@/components/settings/LanguageControl';
+import {
+  parseInviteFromSearchParams,
+  relationLabel,
+  saveInboundInvite,
+  type InboundInvite,
+} from '@/lib/invite/engine';
 
-export default function SignupPage() {
+function SignupForm() {
   const router = useRouter();
-  const { t } = useI18n();
+  const searchParams = useSearchParams();
+  const { t, lang } = useI18n();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,6 +27,17 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [inbound, setInbound] = useState<InboundInvite | null>(null);
+
+  useEffect(() => {
+    const inv = parseInviteFromSearchParams(searchParams);
+    if (inv) {
+      setInbound(inv);
+      saveInboundInvite(inv);
+      if (inv.forName && !name) setName(inv.forName);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   async function handleSignup(e: FormEvent) {
     e.preventDefault();
@@ -46,11 +64,18 @@ export default function SignupPage() {
       return;
     }
 
+    const meta: Record<string, string> = { name: name.trim() };
+    if (inbound) {
+      meta.invited_by = inbound.from;
+      meta.invite_code = inbound.code;
+      meta.invite_relation = inbound.relation;
+    }
+
     const { data, error: err } = await supabase.auth.signUp({
       email: email.trim(),
       password,
       options: {
-        data: { name: name.trim() },
+        data: meta,
         emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent('/hub/onboarding')}`,
       },
     });
@@ -61,14 +86,12 @@ export default function SignupPage() {
       return;
     }
 
-    // If email confirmation is required, show message
     if (data.user && !data.session) {
       setSuccess(true);
       setLoading(false);
       return;
     }
 
-    // Auto-confirmed (dev / confirm email disabled) → ensure profile + onboarding
     try {
       await ensureProfileForUser(name.trim());
     } catch {
@@ -115,6 +138,19 @@ export default function SignupPage() {
           <p className="text-sm text-[#B7F7AC]/70 mt-1">{t('auth.signupSubtitle')}</p>
         </div>
 
+        {inbound && (
+          <div className="glass rounded-2xl px-4 py-3 mb-4 border border-[#00F511]/30">
+            <p className="text-sm text-[#D8E1D9]/90">
+              <span className="text-[#00F511] font-semibold">{inbound.from}</span>{' '}
+              {t('invite.invitedYou')} {t('invite.asRelation')}{' '}
+              <span className="text-[#B7F7AC]">
+                {relationLabel(inbound.relation, lang)}
+              </span>
+              .
+            </p>
+          </div>
+        )}
+
         <form onSubmit={handleSignup} className="glass rounded-2xl p-6 space-y-4">
           <div>
             <label className="block text-xs text-[#B7F7AC] mb-1.5">{t('auth.name')}</label>
@@ -124,7 +160,7 @@ export default function SignupPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#00F511]"
-              placeholder="Tu nombre"
+              placeholder={t('auth.name')}
             />
           </div>
 
@@ -137,7 +173,7 @@ export default function SignupPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#00F511]"
-              placeholder="tu@email.com"
+              placeholder="you@email.com"
             />
           </div>
 
@@ -165,7 +201,7 @@ export default function SignupPage() {
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
               className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#00F511]"
-              placeholder="Repite la contraseña"
+              placeholder="••••••••"
             />
           </div>
 
@@ -190,5 +226,19 @@ export default function SignupPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#040404] flex items-center justify-center text-[#00F511]">
+          Cargando…
+        </div>
+      }
+    >
+      <SignupForm />
+    </Suspense>
   );
 }

@@ -3,12 +3,28 @@ export type FamilyStatus = 'single' | 'married' | 'parent' | 'widow' | 'family';
 export type Language = 'es' | 'en';
 export type BibleVersion = 'rv1960' | 'kjv' | 'original';
 
+/** Who you can invite into your Phalanx */
+export type LinkRelation =
+  | 'spouse'
+  | 'child'
+  | 'sibling' // hermanos / hermanas
+  | 'family'
+  | 'friend'
+  | 'colleague' // colegas de trabajo / ministerio
+  | 'faith_community';
+
 export interface LinkedProfile {
   id: string;
   name: string;
-  relation: 'spouse' | 'child' | 'family' | 'friend' | 'faith_community';
+  relation: LinkRelation;
   status: 'pending' | 'connected' | 'invited';
   avatarUrl?: string;
+  /** Optional contact for follow-up */
+  email?: string;
+  /** Shareable invite code */
+  inviteCode?: string;
+  invitedAt?: string;
+  note?: string;
 }
 
 export interface UserProfile {

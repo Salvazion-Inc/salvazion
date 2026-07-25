@@ -19,6 +19,7 @@ import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 import ProfileAvatar from '@/components/profile/ProfileAvatar';
 import TextScaleControl from '@/components/settings/TextScaleControl';
 import LanguageControl from '@/components/settings/LanguageControl';
+import InvitePhalanx from '@/components/invite/InvitePhalanx';
 import { useI18n } from '@/components/I18nProvider';
 
 export default function ProfilePage() {
@@ -215,47 +216,21 @@ export default function ProfilePage() {
           )}
         </div>
 
-        {/* Phalanx / Familia */}
-        <div className="glass rounded-2xl p-5 mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-medium text-[#00F511]">Tu Phalanx Personal</h3>
-            <span className="text-[11px] text-[#B7F7AC]/50">
-              {(profile.familyLinks?.length || 0) + (profile.friendsLinks?.length || 0)} vínculos
-            </span>
-          </div>
-          {[...(profile.familyLinks || []), ...(profile.friendsLinks || [])].length === 0 ? (
-            <p className="text-xs text-[#B7F7AC]/50 leading-relaxed">
-              Aún no has invitado a nadie. Vuelve al onboarding o invita desde aquí pronto.
-              La familia es el núcleo de la civilización occidental cristiana.
-            </p>
-          ) : (
-            <div className="space-y-2">
-              {[...(profile.familyLinks || []), ...(profile.friendsLinks || [])].map((l) => (
-                <div
-                  key={l.id}
-                  className="flex items-center justify-between text-sm py-1.5 border-b border-[#00B10C]/15 last:border-0"
-                >
-                  <div>
-                    <span className="text-[#D8E1D9]">{l.name}</span>
-                    <span className="text-[11px] text-[#B7F7AC]/50 ml-2">
-                      {
-                        {
-                          spouse: 'Cónyuge',
-                          child: 'Hijo/a',
-                          family: 'Familia',
-                          friend: 'Amigo/a',
-                          faith_community: 'Comunidad de fe',
-                        }[l.relation]
-                      }
-                    </span>
-                  </div>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full border border-[#00F511]/30 text-[#B7F7AC]">
-                    {l.status === 'invited' ? 'Invitado' : l.status}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
+        {/* Phalanx invites — family, siblings, friends, colleagues */}
+        <div className="mb-6">
+          <InvitePhalanx
+            onChanged={(links) => {
+              const family = links.filter((l) =>
+                ['spouse', 'child', 'sibling', 'family'].includes(l.relation)
+              );
+              const friends = links.filter(
+                (l) => !['spouse', 'child', 'sibling', 'family'].includes(l.relation)
+              );
+              setProfile((p) =>
+                p ? { ...p, familyLinks: family, friendsLinks: friends } : p
+              );
+            }}
+          />
         </div>
 
         {/* Language — whole app */}

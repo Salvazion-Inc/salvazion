@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import Providers from "@/components/Providers";
 import PwaRegister from "@/components/PwaRegister";
 import "./globals.css";
@@ -72,8 +73,17 @@ export default function RootLayout({
       lang="es"
       className={`dark ${geistSans.variable} ${geistMono.variable}`}
       style={{ colorScheme: "dark" }}
+      suppressHydrationWarning
     >
       <body className="bg-[#040404] text-[#D8E1D9] min-h-screen font-sans overflow-x-hidden">
+        {/* Apply saved text scale early to avoid a flash of wrong size */}
+        <Script
+          id="salvazion-text-scale"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var k='salvazion_text_scale';var s=localStorage.getItem(k);if(s==='md'||s==='lg'||s==='xl'||s==='xxl'){document.documentElement.dataset.textScale=s;var m={md:16,lg:18,xl:20,xxl:22};var px=m[s]||16;document.documentElement.style.fontSize=px+'px';document.documentElement.style.setProperty('--app-text-scale',String(px/16));}}catch(e){}})();`,
+          }}
+        />
         <Providers>
           <PwaRegister />
           {children}

@@ -2,10 +2,15 @@
 
 import type { ReactNode } from 'react';
 import SolanaWalletProvider from '@/components/wallet/SolanaWalletProvider';
+import TextScaleProvider from '@/components/TextScaleProvider';
 
 /**
- * Client-side providers tree (Solana wallets, future context, etc.).
+ * Client-side providers tree (text scale, Solana wallets, etc.).
  */
 export default function Providers({ children }: { children: ReactNode }) {
-  return <SolanaWalletProvider>{children}</SolanaWalletProvider>;
+  return (
+    <TextScaleProvider>
+      <SolanaWalletProvider>{children}</SolanaWalletProvider>
+    </TextScaleProvider>
+  );
 }

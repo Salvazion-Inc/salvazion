@@ -6,18 +6,48 @@
   --soft-green: #B7F7AC;
   --off-white: #D8E1D9;
   --true-black: #040404;
+  /* 1 = 16px base; TextScaleProvider multiplies via html font-size */
+  --app-text-scale: 1;
   color-scheme: dark;
 }
 
 html {
   color-scheme: dark;
   background-color: var(--true-black);
+  font-size: 16px;
+  /* Smooth scale changes */
+  transition: font-size 0.15s ease;
+}
+
+/* Accessibility text scales (also set inline by TextScaleProvider) */
+html[data-text-scale="md"] {
+  font-size: 16px;
+}
+html[data-text-scale="lg"] {
+  font-size: 18px;
+}
+html[data-text-scale="xl"] {
+  font-size: 20px;
+}
+html[data-text-scale="xxl"] {
+  font-size: 22px;
 }
 
 body {
   font-family: var(--font-geist-sans);
   background-color: var(--true-black);
   color: var(--off-white);
+  /* Keep line length comfortable as type grows */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Bottom nav labels: wrap cleanly at large type */
+html[data-text-scale="xl"] nav.fixed span,
+html[data-text-scale="xxl"] nav.fixed span {
+  line-height: 1.15;
+  max-width: 4.5rem;
+  text-align: center;
 }
 
 .neon-text {

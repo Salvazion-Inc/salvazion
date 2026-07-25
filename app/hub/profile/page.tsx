@@ -17,6 +17,7 @@ import { UserProfile } from '@/lib/types';
 import { createClient } from '@/lib/supabase/client';
 import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 import ProfileAvatar from '@/components/profile/ProfileAvatar';
+import TextScaleControl from '@/components/settings/TextScaleControl';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -265,6 +266,11 @@ export default function ProfilePage() {
               ))}
             </div>
           )}
+        </div>
+
+        {/* Text size — accessibility */}
+        <div className="mb-6">
+          <TextScaleControl lang={(profile.language as 'es' | 'en') || 'es'} />
         </div>
 
         {/* Solana wallet */}

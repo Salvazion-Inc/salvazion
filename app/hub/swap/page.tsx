@@ -29,7 +29,7 @@ export default function SwapPage() {
   if (!mounted) {
     return (
       <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-        <div className="text-[#00F511] text-lg animate-pulse">{t('common.lionPreparing')}</div>
+        <div className="text-[#8FD99A] text-lg animate-pulse">{t('common.lionPreparing')}</div>
       </div>
     );
   }
@@ -38,7 +38,7 @@ export default function SwapPage() {
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
       <header className="flex items-center justify-between px-5 pt-6 pb-2">
         <div className="flex items-center gap-2.5">
-          <div className="w-10 h-10 rounded-full border border-[#00F511]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+          <div className="w-10 h-10 rounded-full border border-[#8FD99A]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
             <Image
               src="/logo-icon.png"
               alt="Salvazion"
@@ -52,14 +52,14 @@ export default function SwapPage() {
             <p className="text-sm font-medium">{t('swap.title')}</p>
           </div>
         </div>
-        <Link href="/hub/dashboard" className="text-sm text-[#00F511]">
+        <Link href="/hub/dashboard" className="text-sm text-[#8FD99A]">
           ← {t('nav.dashboard')}
         </Link>
       </header>
 
       <main className="flex-1 px-5 pt-4 pb-28 max-w-lg mx-auto w-full space-y-5">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-[#00F511] tracking-tight">$SALVAZION</h1>
+          <h1 className="text-2xl font-bold text-[#8FD99A] tracking-tight">$SALVAZION</h1>
           <p className="text-sm text-[#B7F7AC]/70 mt-1">{t('swap.subtitle')}</p>
           <p className="text-[11px] font-mono text-[#B7F7AC]/40 mt-2 break-all">
             {t('swap.mint')}: {shortenAddress(SALVAZION_MINT, 6)}
@@ -73,7 +73,7 @@ export default function SwapPage() {
             <p className="text-xs uppercase tracking-wider text-[#B7F7AC]/60">
               {t('swap.terminal')}
             </p>
-            <span className="text-[10px] px-2 py-0.5 rounded-full border border-[#00F511]/30 text-[#00F511]">
+            <span className="text-[10px] px-2 py-0.5 rounded-full border border-[#8FD99A]/30 text-[#8FD99A]">
               {t('swap.mainnet')}
             </span>
           </div>

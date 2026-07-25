@@ -192,30 +192,30 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-wider text-[#B7F7AC]/60">Phalanx</p>
-          <h3 className="text-base font-semibold text-[#00F511] mt-0.5">{t('invite.title')}</h3>
+          <h3 className="text-base font-semibold text-[#8FD99A] mt-0.5">{t('invite.title')}</h3>
           <p className="text-xs text-[#B7F7AC]/55 mt-1 leading-relaxed">{t('invite.subtitle')}</p>
         </div>
-        <span className="text-[11px] px-2.5 py-1 rounded-full border border-[#00F511]/30 text-[#00F511] shrink-0">
+        <span className="text-[11px] px-2.5 py-1 rounded-full border border-[#8FD99A]/30 text-[#8FD99A] shrink-0">
           {links.length} {t('invite.count')}
         </span>
       </div>
 
       {/* Accept invite (existing account or after signup) */}
-      <div className="rounded-xl border border-[#00F511]/25 bg-[#00F511]/05 p-4 space-y-3">
+      <div className="rounded-xl border border-[#8FD99A]/25 bg-[#7BC98A]/05 p-4 space-y-3">
         <div>
-          <p className="text-xs font-semibold text-[#00F511]">{t('invite.acceptTitle')}</p>
+          <p className="text-xs font-semibold text-[#8FD99A]">{t('invite.acceptTitle')}</p>
           <p className="text-[11px] text-[#B7F7AC]/55 mt-0.5">{t('invite.acceptHint')}</p>
         </div>
         {pendingBanner && (
-          <div className="rounded-lg border border-[#00F511]/30 bg-[#040404]/60 px-3 py-2 text-xs text-[#D8E1D9]/90">
-            <span className="text-[#00F511] font-semibold">{pendingBanner.from}</span>{' '}
+          <div className="rounded-lg border border-[#8FD99A]/30 bg-[#040404]/60 px-3 py-2 text-xs text-[#D8E1D9]/90">
+            <span className="text-[#8FD99A] font-semibold">{pendingBanner.from}</span>{' '}
             {t('invite.invitedYou')} {t('invite.asRelation')}{' '}
             <span className="text-[#B7F7AC]">{pendingBanner.relation}</span>.
             <button
               type="button"
               disabled={acceptBusy}
               onClick={() => handleAcceptCode(pendingBanner.code)}
-              className="mt-2 w-full py-2 rounded-lg bg-[#00F511] text-[#040404] font-semibold text-xs hover:bg-[#B7F7AC] disabled:opacity-50"
+              className="mt-2 w-full py-2 rounded-lg bg-[#7BC98A] text-[#040404] font-semibold text-xs hover:bg-[#B7F7AC] disabled:opacity-50"
             >
               {acceptBusy ? t('invite.accepting') : t('invite.acceptNow')}
             </button>
@@ -227,13 +227,13 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
             value={acceptCode}
             onChange={(e) => setAcceptCode(e.target.value.toUpperCase())}
             placeholder={t('invite.codePlaceholder')}
-            className="flex-1 bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm font-mono tracking-wider focus:outline-none focus:border-[#00F511] uppercase"
+            className="flex-1 bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm font-mono tracking-wider focus:outline-none focus:border-[#8FD99A] uppercase"
           />
           <button
             type="button"
             disabled={acceptBusy || !acceptCode.trim()}
             onClick={() => handleAcceptCode()}
-            className="shrink-0 px-4 py-2.5 rounded-xl border border-[#00F511]/50 text-[#00F511] text-xs font-semibold hover:bg-[#00F511]/10 disabled:opacity-50"
+            className="shrink-0 px-4 py-2.5 rounded-xl border border-[#8FD99A]/50 text-[#8FD99A] text-xs font-semibold hover:bg-[#7BC98A]/10 disabled:opacity-50"
           >
             {t('invite.accept')}
           </button>
@@ -251,12 +251,12 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
               onClick={() => setCategory(c.id)}
               className={`text-left rounded-xl border px-3 py-3 transition-all ${
                 active
-                  ? 'border-[#00F511] bg-[#00F511]/12 shadow-[0_0_16px_rgba(0,245,17,0.12)]'
-                  : 'border-[#00B10C]/30 hover:border-[#00F511]/40'
+                  ? 'border-[#8FD99A] bg-[#7BC98A]/12 shadow-[0_0_16px_rgba(143, 217, 154,0.12)]'
+                  : 'border-[#6B8F6E]/30 hover:border-[#8FD99A]/40'
               }`}
             >
               <div className="text-xl mb-1">{c.icon}</div>
-              <div className={`text-sm font-semibold ${active ? 'text-[#00F511]' : 'text-white'}`}>
+              <div className={`text-sm font-semibold ${active ? 'text-[#8FD99A]' : 'text-white'}`}>
                 {categoryLabel(c.id, lang)}
               </div>
               <div className="text-[10px] text-[#B7F7AC]/50 leading-snug mt-0.5">
@@ -268,10 +268,10 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
       </div>
 
       {/* Form */}
-      <div className="space-y-3 rounded-xl border border-[#00B10C]/25 bg-[#040404]/40 p-4">
+      <div className="space-y-3 rounded-xl border border-[#6B8F6E]/25 bg-[#040404]/40 p-4">
         <p className="text-[11px] text-[#B7F7AC]/60">
           {t('invite.invitingAs')}{' '}
-          <span className="text-[#00F511] font-medium">
+          <span className="text-[#8FD99A] font-medium">
             {relationLabel(catDef.relation, lang)}
           </span>
         </p>
@@ -282,7 +282,7 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder={t('invite.namePlaceholder')}
-            className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#00F511]"
+            className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#8FD99A]"
           />
         </div>
         <div>
@@ -294,7 +294,7 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="email@example.com"
-            className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#00F511]"
+            className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#8FD99A]"
           />
         </div>
 
@@ -302,14 +302,14 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
           <p className="text-xs text-red-400 bg-red-500/10 rounded-lg px-3 py-2">{error}</p>
         )}
         {success && (
-          <p className="text-xs text-[#00F511] bg-[#00F511]/10 rounded-lg px-3 py-2">{success}</p>
+          <p className="text-xs text-[#8FD99A] bg-[#7BC98A]/10 rounded-lg px-3 py-2">{success}</p>
         )}
 
         <button
           type="button"
           disabled={busy || !name.trim()}
           onClick={handleInvite}
-          className="w-full py-3.5 rounded-xl bg-[#00F511] text-[#040404] font-semibold text-sm hover:bg-[#B7F7AC] transition disabled:opacity-50"
+          className="w-full py-3.5 rounded-xl bg-[#7BC98A] text-[#040404] font-semibold text-sm hover:bg-[#B7F7AC] transition disabled:opacity-50"
         >
           {busy ? t('invite.sending') : t('invite.send')}
         </button>
@@ -319,12 +319,12 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
             <input
               readOnly
               value={lastUrl}
-              className="flex-1 bg-[#040404] border border-[#00B10C]/30 rounded-xl px-3 py-2 text-[11px] text-[#B7F7AC]/70 font-mono truncate"
+              className="flex-1 bg-[#040404] border border-[#6B8F6E]/30 rounded-xl px-3 py-2 text-[11px] text-[#B7F7AC]/70 font-mono truncate"
             />
             <button
               type="button"
               onClick={copyLast}
-              className="shrink-0 px-3 py-2 rounded-xl border border-[#00F511]/40 text-[#00F511] text-xs hover:bg-[#00F511]/10"
+              className="shrink-0 px-3 py-2 rounded-xl border border-[#8FD99A]/40 text-[#8FD99A] text-xs hover:bg-[#7BC98A]/10"
             >
               {t('invite.copyLink')}
             </button>
@@ -354,8 +354,8 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
                 onClick={() => setFilter(f.id)}
                 className={`shrink-0 px-2 py-1 rounded-full text-[10px] border transition ${
                   filter === f.id
-                    ? 'border-[#00F511] text-[#00F511] bg-[#00F511]/10'
-                    : 'border-[#00B10C]/25 text-[#B7F7AC]/50'
+                    ? 'border-[#8FD99A] text-[#8FD99A] bg-[#7BC98A]/10'
+                    : 'border-[#6B8F6E]/25 text-[#B7F7AC]/50'
                 }`}
               >
                 {f.label}
@@ -371,7 +371,7 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
             {filtered.map((l) => (
               <li
                 key={l.id}
-                className="flex items-center justify-between gap-2 rounded-xl border border-[#00B10C]/20 bg-[#040404]/50 px-3 py-2.5"
+                className="flex items-center justify-between gap-2 rounded-xl border border-[#6B8F6E]/20 bg-[#040404]/50 px-3 py-2.5"
               >
                 <div className="min-w-0">
                   <p className="text-sm text-white font-medium truncate">{l.name}</p>
@@ -384,8 +384,8 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
                   <span
                     className={`text-[10px] px-2 py-0.5 rounded-full border ${
                       l.status === 'connected'
-                        ? 'border-[#00F511] text-[#00F511] bg-[#00F511]/10'
-                        : 'border-[#00F511]/30 text-[#B7F7AC]'
+                        ? 'border-[#8FD99A] text-[#8FD99A] bg-[#7BC98A]/10'
+                        : 'border-[#8FD99A]/30 text-[#B7F7AC]'
                     }`}
                   >
                     {l.status === 'invited'

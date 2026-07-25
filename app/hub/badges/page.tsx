@@ -42,7 +42,7 @@ export default function BadgesPage() {
   if (!mounted) {
     return (
       <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-        <div className="text-[#00F511] animate-pulse">Cargando insignias...</div>
+        <div className="text-[#8FD99A] animate-pulse">Cargando insignias...</div>
       </div>
     );
   }
@@ -51,14 +51,14 @@ export default function BadgesPage() {
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
-      <header className="px-5 pt-6 pb-4 border-b border-[#00B10C]/20">
+      <header className="px-5 pt-6 pb-4 border-b border-[#6B8F6E]/20">
         <div className="flex items-center gap-2.5 mb-3">
           <Link href="/hub/dashboard" className="text-[#B7F7AC]/60 text-sm">←</Link>
-          <div className="w-9 h-9 rounded-full border border-[#00F511]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+          <div className="w-9 h-9 rounded-full border border-[#8FD99A]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
             <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-[#00F511]">Insignias</h1>
+            <h1 className="text-lg font-bold text-[#8FD99A]">Insignias</h1>
             <p className="text-[10px] text-[#B7F7AC]/50">Virtud · Constancia · Excelencia</p>
           </div>
         </div>
@@ -66,9 +66,9 @@ export default function BadgesPage() {
           <p className="text-sm text-white">
             {progress.earned} / {progress.total} desbloqueadas
           </p>
-          <div className="h-2 w-32 rounded-full bg-[#00B10C]/20 overflow-hidden">
+          <div className="h-2 w-32 rounded-full bg-[#6B8F6E]/20 overflow-hidden">
             <div
-              className="h-full bg-[#00F511] transition-all"
+              className="h-full bg-[#7BC98A] transition-all"
               style={{ width: `${(progress.earned / Math.max(progress.total, 1)) * 100}%` }}
             />
           </div>
@@ -82,11 +82,11 @@ export default function BadgesPage() {
             {newBadges.map(b => (
               <div
                 key={b.id}
-                className="glass rounded-xl p-3 border border-[#00F511] flex items-center gap-3 shadow-[0_0_20px_rgba(0,245,17,0.15)]"
+                className="glass rounded-xl p-3 border border-[#8FD99A] flex items-center gap-3 shadow-[0_0_20px_rgba(143, 217, 154,0.15)]"
               >
                 <span className="text-2xl">{b.icon}</span>
                 <div>
-                  <p className="text-[10px] text-[#00F511] uppercase tracking-wider">Nueva insignia</p>
+                  <p className="text-[10px] text-[#8FD99A] uppercase tracking-wider">Nueva insignia</p>
                   <p className="text-sm font-semibold text-white">{b.name}</p>
                 </div>
               </div>
@@ -94,8 +94,8 @@ export default function BadgesPage() {
           </div>
         )}
 
-        <div className="glass rounded-xl px-4 py-3 mb-5 flex items-start gap-2.5 border border-[#00F511]/15">
-          <div className="w-8 h-8 rounded-full border border-[#00F511]/40 flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
+        <div className="glass rounded-xl px-4 py-3 mb-5 flex items-start gap-2.5 border border-[#8FD99A]/15">
+          <div className="w-8 h-8 rounded-full border border-[#8FD99A]/40 flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
             <Image src="/logo-icon.png" alt="León Verde" width={32} height={32} className="object-cover" />
           </div>
           <p className="text-xs text-[#D8E1D9]/80 leading-relaxed">
@@ -119,8 +119,8 @@ export default function BadgesPage() {
                       key={badge.id}
                       className={`glass rounded-xl p-3 border transition-all ${
                         unlocked
-                          ? 'border-[#00F511]/40 bg-[#00F511]/5'
-                          : 'border-[#00B10C]/20 opacity-45'
+                          ? 'border-[#8FD99A]/40 bg-[#7BC98A]/5'
+                          : 'border-[#6B8F6E]/20 opacity-45'
                       }`}
                     >
                       <div className="text-2xl mb-1.5">{badge.icon}</div>
@@ -131,7 +131,7 @@ export default function BadgesPage() {
                         {badge.requirement}
                       </p>
                       {unlocked && (
-                        <p className="text-[10px] text-[#00F511] mt-1.5">✓ Desbloqueada</p>
+                        <p className="text-[10px] text-[#8FD99A] mt-1.5">✓ Desbloqueada</p>
                       )}
                     </div>
                   );

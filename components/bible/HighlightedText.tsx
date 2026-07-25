@@ -21,7 +21,7 @@ export default function HighlightedText({ text, ranges, className = '' }: Props)
     parts.push(
       <mark
         key={`h-${i}`}
-        className="bg-[#00F511]/25 text-[#00F511] rounded px-0.5 not-italic"
+        className="bg-[#7BC98A]/25 text-[#8FD99A] rounded px-0.5 not-italic"
       >
         {text.slice(start, end)}
       </mark>

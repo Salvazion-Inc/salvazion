@@ -78,7 +78,7 @@ export default function CalendarPage() {
   if (!mounted) {
     return (
       <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-        <div className="text-[#00F511] animate-pulse">Cargando calendario...</div>
+        <div className="text-[#8FD99A] animate-pulse">Cargando calendario...</div>
       </div>
     );
   }
@@ -93,15 +93,15 @@ export default function CalendarPage() {
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
-      <header className="px-5 pt-6 pb-3 border-b border-[#00B10C]/20">
+      <header className="px-5 pt-6 pb-3 border-b border-[#6B8F6E]/20">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2.5">
             <Link href="/hub/dashboard" className="text-[#B7F7AC]/60 text-sm">←</Link>
-            <div className="w-9 h-9 rounded-full border border-[#00F511]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+            <div className="w-9 h-9 rounded-full border border-[#8FD99A]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
               <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-[#00F511]">Calendario</h1>
+              <h1 className="text-lg font-bold text-[#8FD99A]">Calendario</h1>
               <p className="text-[10px] text-[#B7F7AC]/50">Disciplina · {name || 'Phalanx'}</p>
             </div>
           </div>
@@ -125,14 +125,14 @@ export default function CalendarPage() {
                 onClick={() => setSelectedDate(d)}
                 className={`flex-shrink-0 w-11 py-2 rounded-xl text-center border transition-all ${
                   isSelected
-                    ? 'border-[#00F511] bg-[#00F511]/15'
-                    : 'border-[#00B10C]/25'
+                    ? 'border-[#8FD99A] bg-[#7BC98A]/15'
+                    : 'border-[#6B8F6E]/25'
                 }`}
               >
                 <p className="text-[10px] text-[#B7F7AC]/50">
                   {new Date(d + 'T12:00:00').toLocaleDateString('es', { weekday: 'narrow' })}
                 </p>
-                <p className={`text-sm font-semibold ${isToday ? 'text-[#00F511]' : 'text-white'}`}>
+                <p className={`text-sm font-semibold ${isToday ? 'text-[#8FD99A]' : 'text-white'}`}>
                   {dayNum}
                 </p>
                 {dayEvents.length > 0 && (
@@ -150,13 +150,13 @@ export default function CalendarPage() {
           <div className="flex gap-2">
             <button
               onClick={handleSeedTemplates}
-              className="text-[10px] px-2.5 py-1 rounded-lg border border-[#00B10C]/40 text-[#B7F7AC]/70"
+              className="text-[10px] px-2.5 py-1 rounded-lg border border-[#6B8F6E]/40 text-[#B7F7AC]/70"
             >
               Plantillas
             </button>
             <button
               onClick={() => setShowAdd(!showAdd)}
-              className="text-[10px] px-2.5 py-1 rounded-lg bg-[#00F511]/15 border border-[#00F511]/40 text-[#00F511]"
+              className="text-[10px] px-2.5 py-1 rounded-lg bg-[#7BC98A]/15 border border-[#8FD99A]/40 text-[#8FD99A]"
             >
               + Evento
             </button>
@@ -164,8 +164,8 @@ export default function CalendarPage() {
         </div>
 
         {/* León */}
-        <div className="glass rounded-xl px-4 py-3 mb-4 flex items-start gap-2.5 border border-[#00F511]/15">
-          <div className="w-8 h-8 rounded-full border border-[#00F511]/40 flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
+        <div className="glass rounded-xl px-4 py-3 mb-4 flex items-start gap-2.5 border border-[#8FD99A]/15">
+          <div className="w-8 h-8 rounded-full border border-[#8FD99A]/40 flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
             <Image src="/logo-icon.png" alt="León Verde" width={32} height={32} className="object-cover" />
           </div>
           <p className="text-xs text-[#D8E1D9]/80 leading-relaxed">
@@ -179,19 +179,19 @@ export default function CalendarPage() {
 
         {/* Add form */}
         {showAdd && (
-          <div className="glass rounded-2xl p-4 mb-4 border border-[#00F511]/30 space-y-3">
+          <div className="glass rounded-2xl p-4 mb-4 border border-[#8FD99A]/30 space-y-3">
             <input
               type="text"
               placeholder="Título de la disciplina"
               value={newTitle}
               onChange={e => setNewTitle(e.target.value)}
-              className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm"
+              className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm"
             />
             <div className="flex gap-2">
               <select
                 value={newPillar}
                 onChange={e => setNewPillar(e.target.value as CalendarPillar)}
-                className="flex-1 bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm"
+                className="flex-1 bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm"
               >
                 <option value="salvation">Salvation</option>
                 <option value="health">Health</option>
@@ -201,12 +201,12 @@ export default function CalendarPage() {
                 type="time"
                 value={newTime}
                 onChange={e => setNewTime(e.target.value)}
-                className="w-28 bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm"
+                className="w-28 bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm"
               />
             </div>
             <button
               onClick={handleAdd}
-              className="w-full py-2.5 rounded-xl bg-[#00F511] text-[#040404] text-sm font-semibold"
+              className="w-full py-2.5 rounded-xl bg-[#7BC98A] text-[#040404] text-sm font-semibold"
             >
               Guardar en el día
             </button>
@@ -224,15 +224,15 @@ export default function CalendarPage() {
             <div
               key={ev.id}
               className={`glass rounded-xl p-3.5 border flex items-start gap-3 transition-all ${
-                ev.completed ? 'border-[#00F511]/30 opacity-70' : 'border-[#00B10C]/25'
+                ev.completed ? 'border-[#8FD99A]/30 opacity-70' : 'border-[#6B8F6E]/25'
               }`}
             >
               <button
                 onClick={() => handleToggle(ev.id)}
                 className={`mt-0.5 w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
                   ev.completed
-                    ? 'border-[#00F511] bg-[#00F511] text-[#040404]'
-                    : 'border-[#00B10C]/50'
+                    ? 'border-[#8FD99A] bg-[#7BC98A] text-[#040404]'
+                    : 'border-[#6B8F6E]/50'
                 }`}
               >
                 {ev.completed && <span className="text-xs">✓</span>}
@@ -272,10 +272,10 @@ export default function CalendarPage() {
         {/* Legend */}
         <div className="flex gap-4 justify-center mt-8 text-[10px] text-[#B7F7AC]/50">
           <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-[#00F511]" /> Salvation
+            <span className="w-2 h-2 rounded-full bg-[#7BC98A]" /> Salvation
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-[#00B10C]" /> Health
+            <span className="w-2 h-2 rounded-full bg-[#6B8F6E]" /> Health
           </span>
           <span className="flex items-center gap-1">
             <span className="w-2 h-2 rounded-full bg-[#B7F7AC]" /> Freedom

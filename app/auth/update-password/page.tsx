@@ -74,7 +74,7 @@ export default function UpdatePasswordPage() {
 
   if (!ready) {
     return (
-      <div className="min-h-screen bg-[#040404] flex items-center justify-center text-[#00F511]">
+      <div className="min-h-screen bg-[#040404] flex items-center justify-center text-[#8FD99A]">
         Cargando…
       </div>
     );
@@ -84,11 +84,11 @@ export default function UpdatePasswordPage() {
     return (
       <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col items-center justify-center px-5">
         <div className="w-full max-w-sm text-center glass rounded-2xl p-8">
-          <h1 className="text-xl font-bold text-[#00F511] mb-2">Enlace no válido</h1>
+          <h1 className="text-xl font-bold text-[#8FD99A] mb-2">Enlace no válido</h1>
           <p className="text-sm text-[#B7F7AC]/80 mb-6">
             Abre el enlace del correo de recuperación otra vez, o solicita uno nuevo.
           </p>
-          <Link href="/auth/login" className="text-sm text-[#00F511] hover:underline">
+          <Link href="/auth/login" className="text-sm text-[#8FD99A] hover:underline">
             Ir a login
           </Link>
         </div>
@@ -100,10 +100,10 @@ export default function UpdatePasswordPage() {
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col items-center justify-center px-5">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[#00F511]/40 flex items-center justify-center lion-glow overflow-hidden">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[#8FD99A]/40 flex items-center justify-center lion-glow overflow-hidden">
             <Image src="/logo.png" alt="Salvazion" width={64} height={64} className="object-contain" />
           </div>
-          <h1 className="text-2xl font-bold text-[#00F511] tracking-tight">Nueva contraseña</h1>
+          <h1 className="text-2xl font-bold text-[#8FD99A] tracking-tight">Nueva contraseña</h1>
           <p className="text-sm text-[#B7F7AC]/70 mt-1">Elige una contraseña segura para tu cuenta</p>
         </div>
 
@@ -117,7 +117,7 @@ export default function UpdatePasswordPage() {
               autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#00F511]"
+              className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#8FD99A]"
               placeholder="Mínimo 8 caracteres"
             />
           </div>
@@ -130,7 +130,7 @@ export default function UpdatePasswordPage() {
               autoComplete="new-password"
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
-              className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#00F511]"
+              className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#8FD99A]"
               placeholder="Repite la contraseña"
             />
           </div>
@@ -142,7 +142,7 @@ export default function UpdatePasswordPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 rounded-xl bg-[#00F511] text-[#040404] font-semibold text-sm hover:bg-[#B7F7AC] transition disabled:opacity-50"
+            className="w-full py-3.5 rounded-xl bg-[#7BC98A] text-[#040404] font-semibold text-sm hover:bg-[#B7F7AC] transition disabled:opacity-50"
           >
             {loading ? 'Guardando…' : 'Guardar contraseña'}
           </button>

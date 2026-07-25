@@ -85,7 +85,7 @@ export default function FreedomPage() {
   if (!mounted || !scores) {
     return (
       <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-        <div className="text-[#00F511] animate-pulse">Cargando Freedom...</div>
+        <div className="text-[#8FD99A] animate-pulse">Cargando Freedom...</div>
       </div>
     );
   }
@@ -96,15 +96,15 @@ export default function FreedomPage() {
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
-      <header className="px-5 pt-6 pb-3 border-b border-[#00B10C]/20">
+      <header className="px-5 pt-6 pb-3 border-b border-[#6B8F6E]/20">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2.5">
             <Link href="/hub/dashboard" className="text-[#B7F7AC]/60 text-sm">←</Link>
-            <div className="w-9 h-9 rounded-full border border-[#00F511]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+            <div className="w-9 h-9 rounded-full border border-[#8FD99A]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
               <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-[#00F511]">Freedom</h1>
+              <h1 className="text-lg font-bold text-[#8FD99A]">Freedom</h1>
               <p className="text-[10px] text-[#B7F7AC]/50">{profile?.name} · {stageLabel}</p>
             </div>
           </div>
@@ -124,7 +124,7 @@ export default function FreedomPage() {
             <button
               key={t.id}
               onClick={() => setActiveTab(t.id)}
-              className={'flex-1 py-2 rounded-xl text-xs font-medium border ' + (activeTab === t.id ? 'border-[#00F511] bg-[#00F511]/15 text-[#00F511]' : 'border-[#00B10C]/25 text-[#D8E1D9]/60')}
+              className={'flex-1 py-2 rounded-xl text-xs font-medium border ' + (activeTab === t.id ? 'border-[#8FD99A] bg-[#7BC98A]/15 text-[#8FD99A]' : 'border-[#6B8F6E]/25 text-[#D8E1D9]/60')}
             >
               {t.icon} {t.label}
             </button>
@@ -133,8 +133,8 @@ export default function FreedomPage() {
       </header>
 
       <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto">
-        <div className="glass rounded-xl px-4 py-3 mb-5 flex items-start gap-3 border border-[#00F511]/20">
-          <div className="w-9 h-9 rounded-full border border-[#00F511]/40 flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
+        <div className="glass rounded-xl px-4 py-3 mb-5 flex items-start gap-3 border border-[#8FD99A]/20">
+          <div className="w-9 h-9 rounded-full border border-[#8FD99A]/40 flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
             <Image src="/logo-icon.png" alt="León Verde" width={36} height={36} className="object-cover" />
           </div>
           <p className="text-xs text-[#D8E1D9]/80 leading-relaxed">
@@ -145,7 +145,7 @@ export default function FreedomPage() {
         <div className="flex justify-center mb-6">
           <div className="relative w-28 h-28 flex items-center justify-center">
             <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="42" fill="none" stroke="#00B10C" strokeWidth="6" opacity="0.25" />
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#6B8F6E" strokeWidth="6" opacity="0.25" />
               <circle cx="50" cy="50" r="42" fill="none" stroke="#B7F7AC" strokeWidth="6"
                 strokeDasharray={(Math.min(freedomScore, 100) * 2.64) + ' 264'} strokeLinecap="round" />
             </svg>
@@ -163,24 +163,24 @@ export default function FreedomPage() {
               const done = completedContent.has(content.id);
               return (
                 <button key={content.id} onClick={() => setSelectedContent(content)}
-                  className={'w-full text-left glass rounded-xl p-4 border ' + (done ? 'border-[#00F511]/30' : 'border-[#00B10C]/25')}>
+                  className={'w-full text-left glass rounded-xl p-4 border ' + (done ? 'border-[#8FD99A]/30' : 'border-[#6B8F6E]/25')}>
                   <p className="text-[10px] text-[#B7F7AC]/50 uppercase">{content.category} · {content.readMin} min</p>
                   <p className="text-sm font-medium text-white">{content.title}</p>
                   <p className="text-xs text-[#D8E1D9]/60 mt-1 line-clamp-2">{content.summary}</p>
-                  <p className="text-xs text-[#00F511] mt-2">{done ? '✓' : '+' + getFreedomPoints(content.actionType)}</p>
+                  <p className="text-xs text-[#8FD99A] mt-2">{done ? '✓' : '+' + getFreedomPoints(content.actionType)}</p>
                 </button>
               );
             })}
             {actions.filter(a => a.category === 'learn').map(action => {
               const done = loggedToday.has(action.actionType);
               return (
-                <div key={action.id} className={'glass rounded-xl p-3.5 border flex justify-between items-center ' + (done ? 'border-[#00F511]/30' : 'border-[#00B10C]/25')}>
+                <div key={action.id} className={'glass rounded-xl p-3.5 border flex justify-between items-center ' + (done ? 'border-[#8FD99A]/30' : 'border-[#6B8F6E]/25')}>
                   <div>
                     <p className="text-sm text-white">{action.icon} {action.label}</p>
                     <p className="text-[11px] text-[#B7F7AC]/50">{action.description}</p>
                   </div>
                   <button disabled={done} onClick={() => !done && handleLog(action.actionType, action.label)}
-                    className={'px-3 py-1.5 rounded-lg text-xs font-medium ' + (done ? 'bg-[#00B10C]/20 text-[#B7F7AC]' : 'bg-[#00F511] text-[#040404]')}>
+                    className={'px-3 py-1.5 rounded-lg text-xs font-medium ' + (done ? 'bg-[#6B8F6E]/20 text-[#B7F7AC]' : 'bg-[#7BC98A] text-[#040404]')}>
                     {done ? '✓' : '+' + getFreedomPoints(action.actionType)}
                   </button>
                 </div>
@@ -196,14 +196,14 @@ export default function FreedomPage() {
             {actions.filter(a => a.category === 'connect').map(action => {
               const done = loggedToday.has(action.actionType);
               return (
-                <div key={action.id} className={'glass rounded-xl p-4 border ' + (done ? 'border-[#00F511]/30' : 'border-[#00B10C]/25')}>
+                <div key={action.id} className={'glass rounded-xl p-4 border ' + (done ? 'border-[#8FD99A]/30' : 'border-[#6B8F6E]/25')}>
                   <div className="flex justify-between gap-3">
                     <div>
                       <p className="text-sm font-medium text-white">{action.icon} {action.label}</p>
                       <p className="text-xs text-[#D8E1D9]/60 mt-1">{action.description}</p>
                     </div>
                     <button disabled={done} onClick={() => !done && handleLog(action.actionType, action.label)}
-                      className={'px-3 py-1.5 rounded-lg text-xs font-medium h-fit ' + (done ? 'bg-[#00B10C]/20 text-[#B7F7AC]' : 'bg-[#00F511] text-[#040404]')}>
+                      className={'px-3 py-1.5 rounded-lg text-xs font-medium h-fit ' + (done ? 'bg-[#6B8F6E]/20 text-[#B7F7AC]' : 'bg-[#7BC98A] text-[#040404]')}>
                       {done ? '✓' : '+' + getFreedomPoints(action.actionType)}
                     </button>
                   </div>
@@ -220,14 +220,14 @@ export default function FreedomPage() {
             {actions.filter(a => a.category === 'contribute').map(action => {
               const done = loggedToday.has(action.actionType);
               return (
-                <div key={action.id} className={'glass rounded-xl p-4 border ' + (done ? 'border-[#00F511]/30' : 'border-[#00B10C]/25')}>
+                <div key={action.id} className={'glass rounded-xl p-4 border ' + (done ? 'border-[#8FD99A]/30' : 'border-[#6B8F6E]/25')}>
                   <div className="flex justify-between gap-3">
                     <div>
                       <p className="text-sm font-medium text-white">{action.icon} {action.label}</p>
                       <p className="text-xs text-[#D8E1D9]/60 mt-1">{action.description}</p>
                     </div>
                     <button disabled={done} onClick={() => !done && handleLog(action.actionType, action.label)}
-                      className={'px-3 py-1.5 rounded-lg text-xs font-medium h-fit ' + (done ? 'bg-[#00B10C]/20 text-[#B7F7AC]' : 'bg-[#00F511] text-[#040404]')}>
+                      className={'px-3 py-1.5 rounded-lg text-xs font-medium h-fit ' + (done ? 'bg-[#6B8F6E]/20 text-[#B7F7AC]' : 'bg-[#7BC98A] text-[#040404]')}>
                       {done ? '✓' : '+' + getFreedomPoints(action.actionType)}
                     </button>
                   </div>
@@ -240,7 +240,7 @@ export default function FreedomPage() {
 
       {selectedContent && (
         <div className="fixed inset-0 z-50 bg-[#040404]/95 flex flex-col">
-          <div className="px-5 pt-6 pb-3 border-b border-[#00B10C]/20 flex justify-between">
+          <div className="px-5 pt-6 pb-3 border-b border-[#6B8F6E]/20 flex justify-between">
             <button onClick={() => setSelectedContent(null)} className="text-[#B7F7AC]/60 text-sm">← Cerrar</button>
             <span className="text-[10px] text-[#B7F7AC]/50">{selectedContent.category}</span>
           </div>
@@ -251,7 +251,7 @@ export default function FreedomPage() {
             <button
               onClick={() => handleCompleteContent(selectedContent)}
               disabled={completedContent.has(selectedContent.id)}
-              className={'w-full py-3.5 rounded-xl font-semibold text-sm ' + (completedContent.has(selectedContent.id) ? 'bg-[#00B10C]/20 text-[#B7F7AC]' : 'bg-[#00F511] text-[#040404]')}
+              className={'w-full py-3.5 rounded-xl font-semibold text-sm ' + (completedContent.has(selectedContent.id) ? 'bg-[#6B8F6E]/20 text-[#B7F7AC]' : 'bg-[#7BC98A] text-[#040404]')}
             >
               {completedContent.has(selectedContent.id) ? '✓ Completado' : 'Completar · +' + getFreedomPoints(selectedContent.actionType)}
             </button>
@@ -260,7 +260,7 @@ export default function FreedomPage() {
       )}
 
       {toast && (
-        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-[#00F511] text-[#040404] text-sm font-semibold">{toast}</div>
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-[#7BC98A] text-[#040404] text-sm font-semibold">{toast}</div>
       )}
 
       <BottomNav variant="freedom" />

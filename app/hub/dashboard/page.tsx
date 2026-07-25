@@ -22,6 +22,7 @@ import {
   CalendarIcon,
   BadgesIcon,
   FreedomIcon,
+  BibleIcon,
 } from '@/components/Icons';
 
 export default function DashboardPage() {
@@ -78,7 +79,7 @@ export default function DashboardPage() {
   if (!mounted || !profile || !scores || !coach) {
     return (
       <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-        <div className="text-[#00F511] text-lg animate-pulse">{t('common.lionPreparing')}</div>
+        <div className="text-[#8FD99A] text-lg animate-pulse">{t('common.lionPreparing')}</div>
       </div>
     );
   }
@@ -86,18 +87,17 @@ export default function DashboardPage() {
   const { salvation, health, freedom, global, multipliers, streaks, todayActions } = scores;
 
   const toneStyles = {
-    encourage: 'border-[#00F511]/40',
-    discipline: 'border-amber-500/50',
-    challenge: 'border-[#00F511]/60',
-    celebrate: 'border-[#00F511] shadow-[0_0_20px_rgba(0,245,17,0.15)]'
+    encourage: 'border-[var(--border-strong)]',
+    discipline: 'border-amber-500/40',
+    challenge: 'border-[var(--accent)]/50',
+    celebrate: 'border-[var(--accent)]/60 shadow-[0_0_16px_rgba(143,217,154,0.12)]',
   };
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
-      {/* Top bar */}
       <header className="flex items-center justify-between px-5 pt-6 pb-2">
-        <div className="flex items-center gap-2.5">
-          <Link href="/hub/profile" className="shrink-0" title="Perfil">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <Link href="/hub/profile" className="shrink-0" title={t('nav.profile')}>
             <ProfileAvatar
               avatarUrl={profile.avatarUrl}
               name={profile.name || 'Hermano'}
@@ -105,13 +105,14 @@ export default function DashboardPage() {
               editable={false}
             />
           </Link>
-          <div>
-            <p className="text-xs text-[#B7F7AC]/60 tracking-wide">Salvazion</p>
-            <p className="text-sm font-medium leading-tight">
+          <div className="min-w-0">
+            <p className="text-xs text-[var(--sage)] tracking-wide">Salvazion</p>
+            <p className="text-sm font-medium leading-tight truncate">
               {profile.name || 'Hermano'}
               {profile.birthDate && calculateAge(profile.birthDate) !== null && (
-                <span className="text-[#B7F7AC]/50 font-normal text-xs ml-1.5">
-                  · {calculateAge(profile.birthDate)} años · {getLifeStageLabel(getLifeStage(calculateAge(profile.birthDate)))}
+                <span className="text-[var(--sage)]/70 font-normal text-xs ml-1.5">
+                  · {calculateAge(profile.birthDate)} ·{' '}
+                  {getLifeStageLabel(getLifeStage(calculateAge(profile.birthDate)))}
                 </span>
               )}
             </p>
@@ -121,27 +122,23 @@ export default function DashboardPage() {
       </header>
 
       <main className="flex-1 flex flex-col items-center px-5 pt-4 pb-32">
-        {/* ===== LEÓN VERDE COACH ===== */}
-        <div className={`w-full max-w-sm glass rounded-2xl p-4 mb-5 border ${toneStyles[coach.tone]}`}>
+        {/* Coach */}
+        <div className={`w-full max-w-sm glass rounded-2xl p-4 mb-5 ${toneStyles[coach.tone]}`}>
           <div className="flex items-start gap-3">
-            <div className="w-11 h-11 rounded-full border border-[#00F511]/50 flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
+            <div className="w-11 h-11 rounded-full border border-[var(--border-strong)] flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
               <Image src="/logo-icon.png" alt="León Verde" width={44} height={44} className="object-cover" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[10px] uppercase tracking-wider text-[#00F511] mb-0.5">
+              <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] mb-0.5">
                 León Verde · Coach
               </p>
-              <h3 className="text-sm font-semibold text-white leading-snug mb-1.5">
-                {coach.title}
-              </h3>
-              <p className="text-xs text-[#D8E1D9]/80 leading-relaxed">
-                {coach.body}
-              </p>
-
+              <h3 className="text-sm font-semibold text-white leading-snug mb-1.5">{coach.title}</h3>
+              <p className="text-xs text-[#D8E1D9]/80 leading-relaxed">{coach.body}</p>
               {coach.recommendedAction && (
                 <button
+                  type="button"
                   onClick={() => handleLog(coach.recommendedAction!.type)}
-                  className="mt-3 w-full py-2.5 rounded-xl bg-[#00F511] text-[#040404] text-sm font-semibold hover:bg-[#B7F7AC] transition-all"
+                  className="btn-primary mt-3 py-2.5 text-sm"
                 >
                   {coach.recommendedAction.label} · +{coach.recommendedAction.points}
                 </button>
@@ -150,14 +147,13 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* New badges */}
         {newBadges.length > 0 && (
           <div className="w-full max-w-sm space-y-2 mb-4">
-            {newBadges.map(b => (
-              <div key={b.id} className="glass rounded-xl p-3 border border-[#00F511] flex items-center gap-3">
-                <span className="text-2xl">{b.icon}</span>
+            {newBadges.map((b) => (
+              <div key={b.id} className="glass rounded-xl p-3 border-[var(--border-strong)] flex items-center gap-3">
+                <span className="text-2xl" aria-hidden>{b.icon}</span>
                 <div>
-                  <p className="text-[10px] text-[#00F511] uppercase">Nueva insignia</p>
+                  <p className="text-[10px] text-[var(--accent)] uppercase">{t('dashboard.newBadge')}</p>
                   <p className="text-sm font-semibold text-white">{b.name}</p>
                 </div>
               </div>
@@ -165,207 +161,193 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Rings */}
-        <div className="relative w-60 h-60 flex items-center justify-center mb-5">
-          <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="46" fill="none" stroke="#00B10C" strokeWidth="3" opacity="0.2" />
+        {/* Global score */}
+        <div className="relative w-56 h-56 flex items-center justify-center mb-3">
+          <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100" aria-hidden>
+            <circle cx="50" cy="50" r="46" fill="none" stroke="#6B8F6E" strokeWidth="3" opacity="0.2" />
             <circle
-              cx="50" cy="50" r="46" fill="none" stroke="#00F511" strokeWidth="3.5"
+              cx="50" cy="50" r="46" fill="none" stroke="#8FD99A" strokeWidth="3.2"
               strokeDasharray={`${Math.min(salvation, 100) * 2.89} 289`}
               strokeLinecap="round"
               className="ring-glow transition-all duration-700"
             />
           </svg>
-          <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="38" fill="none" stroke="#00B10C" strokeWidth="3" opacity="0.2" />
+          <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100" aria-hidden>
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#6B8F6E" strokeWidth="3" opacity="0.2" />
             <circle
-              cx="50" cy="50" r="38" fill="none" stroke="#00F511" strokeWidth="3"
+              cx="50" cy="50" r="38" fill="none" stroke="#7EC8A3" strokeWidth="2.8"
               strokeDasharray={`${Math.min(health, 100) * 2.39} 239`}
               strokeLinecap="round"
-              opacity="0.9"
               className="transition-all duration-700"
             />
           </svg>
-          <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="30" fill="none" stroke="#00B10C" strokeWidth="3" opacity="0.2" />
+          <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100" aria-hidden>
+            <circle cx="50" cy="50" r="30" fill="none" stroke="#6B8F6E" strokeWidth="3" opacity="0.2" />
             <circle
-              cx="50" cy="50" r="30" fill="none" stroke="#B7F7AC" strokeWidth="3"
+              cx="50" cy="50" r="30" fill="none" stroke="#A8D4AE" strokeWidth="2.6"
               strokeDasharray={`${Math.min(freedom, 100) * 1.88} 188`}
               strokeLinecap="round"
               className="transition-all duration-700"
             />
           </svg>
-
           <div className="text-center z-10">
             <div className="text-5xl font-bold text-white tracking-tighter">{global}</div>
-            <div className="text-xs uppercase tracking-widest text-[#B7F7AC]/70 mt-1">
-              Salvazion Score
+            <div className="text-xs uppercase tracking-widest text-[var(--sage)] mt-1">
+              {t('dashboard.salvazionScore')}
             </div>
-            <div className="text-[10px] text-[#00F511] font-medium">GLOBAL</div>
+            <div className="text-[10px] text-[var(--accent)] font-medium">{t('dashboard.global')}</div>
           </div>
         </div>
 
-        {/* Score cards */}
-        <div className="grid grid-cols-3 gap-3 w-full max-w-sm mb-5">
-          <ScoreCard label="Salvation" value={salvation} streak={streaks.salvation} multiplier={multipliers.salvation} />
-          <ScoreCard label="Health" value={health} streak={streaks.health} multiplier={multipliers.health} />
-          <ScoreCard label="Freedom" value={freedom} streak={streaks.freedom} multiplier={multipliers.freedom} />
+        {/* THREE PILLARS — primary navigation */}
+        <div className="w-full max-w-sm mb-5">
+          <div className="flex items-end justify-between mb-2 px-0.5">
+            <div>
+              <p className="text-xs font-semibold text-[var(--accent)]">{t('dashboard.pillars')}</p>
+              <p className="text-[10px] text-[var(--sage)]/80">{t('dashboard.pillarsHint')}</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-2.5">
+            <PillarCard
+              href="/hub/bible"
+              label="Salvation"
+              value={salvation}
+              streak={streaks.salvation}
+              multiplier={multipliers.salvation}
+              Icon={BibleIcon}
+              ring="#8FD99A"
+            />
+            <PillarCard
+              href="/hub/health"
+              label="Health"
+              value={health}
+              streak={streaks.health}
+              multiplier={multipliers.health}
+              Icon={HealthIcon}
+              ring="#7EC8A3"
+            />
+            <PillarCard
+              href="/hub/freedom"
+              label="Freedom"
+              value={freedom}
+              streak={streaks.freedom}
+              multiplier={multipliers.freedom}
+              Icon={FreedomIcon}
+              ring="#A8D4AE"
+            />
+          </div>
         </div>
 
-        {/* Purpose */}
         {profile.purpose && (
           <div className="w-full max-w-sm glass rounded-2xl p-4 mb-4">
-            <p className="text-xs text-[#B7F7AC]/60 mb-1">Tu propósito</p>
+            <p className="text-xs text-[var(--sage)] mb-1">{t('dashboard.purpose')}</p>
             <p className="text-sm leading-snug line-clamp-2">{profile.purpose}</p>
           </div>
         )}
 
-        {/* Quick links */}
-        <div className="w-full max-w-sm space-y-3 mb-4">
-          <Link
-            href="/hub/profile"
-            className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#00F511]/40 transition-all"
-          >
-            <div className="flex items-center gap-3">
-              <InviteIcon size={28} active />
-              <div>
-                <p className="text-sm font-medium">{t('invite.title')}</p>
-                <p className="text-xs text-[#B7F7AC]/50">{t('invite.subtitle')}</p>
-              </div>
-            </div>
-            <span className="text-[#8FD99A]">→</span>
-          </Link>
-          <Link
-            href="/hub/swap"
-            className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#8AAB8E]/40 transition-all"
-          >
-            <div className="flex items-center gap-3">
-              <SwapIcon size={28} active />
-              <div>
-                <p className="text-sm font-medium">{t('dashboard.swapTitle')}</p>
-                <p className="text-xs text-[#B7F7AC]/50">{t('dashboard.swapSub')}</p>
-              </div>
-            </div>
-            <span className="text-[#8FD99A]">→</span>
-          </Link>
-          <Link
-            href="/hub/devotional"
-            className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#8AAB8E]/40 transition-all"
-          >
-            <div className="flex items-center gap-3">
-              <DevotionalIcon size={28} active />
-              <div>
-                <p className="text-sm font-medium">{t('dashboard.devotionalTitle')}</p>
-                <p className="text-xs text-[#B7F7AC]/50">{t('dashboard.devotionalSub')}</p>
-              </div>
-            </div>
-            <span className="text-[#8FD99A]">→</span>
-          </Link>
+        {/* Pillar hubs */}
+        <div className="w-full max-w-sm space-y-2.5 mb-4">
+          <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70 px-0.5">
+            Salvation
+          </p>
+          <HubLink href="/hub/devotional" Icon={DevotionalIcon} title={t('dashboard.devotionalTitle')} sub={t('dashboard.devotionalSub')} />
+          <HubLink href="/hub/bible" Icon={BibleIcon} title={t('dashboard.bibleTitle')} sub={t('dashboard.bibleSub')} />
 
-          <Link
-            href="/hub/health"
-            className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#8AAB8E]/40 transition-all"
-          >
-            <div className="flex items-center gap-3">
-              <HealthIcon size={28} active />
-              <div>
-                <p className="text-sm font-medium">Health</p>
-                <p className="text-xs text-[#B7F7AC]/50">Ejercicio · Sol · Sueño · Alimentación</p>
-              </div>
-            </div>
-            <span className="text-[#8FD99A]">→</span>
-          </Link>
+          <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70 px-0.5 pt-2">
+            Health
+          </p>
+          <HubLink href="/hub/health" Icon={HealthIcon} title={t('dashboard.healthTitle')} sub={t('dashboard.healthSub')} />
 
-          <Link
-            href="/hub/calendar"
-            className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#8AAB8E]/40 transition-all"
-          >
-            <div className="flex items-center gap-3">
-              <CalendarIcon size={28} active />
-              <div>
-                <p className="text-sm font-medium">Calendario de disciplina</p>
-                <p className="text-xs text-[#B7F7AC]/50">Salvation · Health · Freedom</p>
-              </div>
-            </div>
-            <span className="text-[#8FD99A]">→</span>
-          </Link>
+          <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70 px-0.5 pt-2">
+            Freedom
+          </p>
+          <HubLink href="/hub/freedom" Icon={FreedomIcon} title={t('dashboard.freedomTitle')} sub={t('dashboard.freedomSub')} />
+          <HubLink href="/hub/swap" Icon={SwapIcon} title={t('dashboard.swapTitle')} sub={t('dashboard.swapSub')} />
 
-
-          <Link
-            href="/hub/badges"
-            className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[#8AAB8E]/40 transition-all"
-          >
-            <div className="flex items-center gap-3">
-              <BadgesIcon size={28} active />
-              <div>
-                <p className="text-sm font-medium">Insignias</p>
-                <p className="text-xs text-[#B7F7AC]/50">Virtud y constancia</p>
-              </div>
-            </div>
-            <span className="text-[#8FD99A]">→</span>
-          </Link>
+          <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70 px-0.5 pt-2">
+            Phalanx
+          </p>
+          <HubLink href="/hub/profile" Icon={InviteIcon} title={t('invite.title')} sub={t('invite.subtitle')} />
+          <HubLink href="/hub/calendar" Icon={CalendarIcon} title={t('dashboard.calendarTitle')} sub={t('dashboard.calendarSub')} />
+          <HubLink href="/hub/badges" Icon={BadgesIcon} title={t('dashboard.badgesTitle')} sub={t('dashboard.badgesSub')} />
 
           <button
+            type="button"
             onClick={() => setShowActions(!showActions)}
-            className="w-full flex items-center justify-between glass rounded-xl px-4 py-3.5 text-left"
+            className="w-full flex items-center justify-between glass rounded-xl px-4 py-3.5 text-left hover:border-[var(--border-strong)] transition-all"
           >
             <div className="flex items-center gap-3">
               <FreedomIcon size={28} active={showActions} />
               <div>
-                <p className="text-sm font-medium">Registrar acción</p>
-                <p className="text-xs text-[#B7F7AC]/50">
-                  {todayActions.length} acción{todayActions.length !== 1 ? 'es' : ''} hoy
+                <p className="text-sm font-medium">{t('dashboard.logActions')}</p>
+                <p className="text-xs text-[var(--sage)]">
+                  {todayActions.length} {t('dashboard.actionsToday')} · {t('dashboard.logActionsSub')}
                 </p>
               </div>
             </div>
-            <span className="text-[#00F511]">{showActions ? '−' : '+'}</span>
+            <span className="text-[var(--accent)] text-lg leading-none">{showActions ? '−' : '+'}</span>
           </button>
         </div>
 
         {showActions && (
           <div className="w-full max-w-sm glass rounded-2xl p-4 space-y-2 mb-4">
-            <p className="text-xs text-[#B7F7AC]/60 mb-2">Acciones rápidas</p>
-            <div className="grid grid-cols-1 gap-2 max-h-48 overflow-y-auto">
+            <p className="text-xs text-[var(--sage)] mb-2">{t('dashboard.quickActions')}</p>
+            <div className="grid grid-cols-1 gap-2 max-h-52 overflow-y-auto">
               {Object.entries(ACTION_CATALOG).map(([key, val]) => {
                 const stage = profile.birthDate
                   ? getLifeStage(calculateAge(profile.birthDate))
                   : 'adult';
                 const pts = getPointsForAction(key, stage);
                 if (pts <= 0) return null;
+                const pillarColor =
+                  val.pillar === 'salvation'
+                    ? '#8FD99A'
+                    : val.pillar === 'health'
+                      ? '#7EC8A3'
+                      : '#A8D4AE';
                 return (
-                <button
-                  key={key}
-                  onClick={() => handleLog(key)}
-                  className="flex justify-between items-center text-left px-3 py-2 rounded-lg border border-[#00B10C]/30 hover:border-[#00F511]/50 text-sm"
-                >
-                  <span className="truncate pr-2">{val.label}</span>
-                  <span className="text-[#00F511] text-xs whitespace-nowrap">
-                    +{pts}
-                  </span>
-                </button>
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => handleLog(key)}
+                    className="flex justify-between items-center text-left px-3 py-2.5 rounded-xl border border-[var(--border-soft)] hover:border-[var(--border-strong)] hover:bg-[var(--surface-active)] text-sm transition-all min-h-[44px]"
+                  >
+                    <span className="truncate pr-2 flex items-center gap-2">
+                      <span
+                        className="w-1.5 h-1.5 rounded-full shrink-0"
+                        style={{ background: pillarColor }}
+                        title={val.pillar}
+                      />
+                      {val.label}
+                    </span>
+                    <span className="text-[var(--accent)] text-xs whitespace-nowrap font-medium">
+                      +{pts}
+                    </span>
+                  </button>
                 );
               })}
             </div>
             <button
+              type="button"
               onClick={async () => {
                 await resetScores();
                 refresh();
               }}
-              className="w-full text-xs text-red-400/70 mt-2 py-1"
+              className="btn-ghost w-full text-red-400/70 mt-1"
             >
-              Reset scores (demo)
+              {t('dashboard.resetToday')}
             </button>
           </div>
         )}
 
         {todayActions.length > 0 && (
           <div className="w-full max-w-sm">
-            <p className="text-xs text-[#B7F7AC]/50 mb-2">Hoy</p>
-            <div className="space-y-1.5">
-              {todayActions.slice(-5).reverse().map(a => (
-                <div key={a.id} className="flex justify-between text-xs px-2">
-                  <span className="text-[#D8E1D9]/70 truncate">{a.label}</span>
-                  <span className="text-[#00F511]">+{a.points}</span>
+            <p className="text-xs text-[var(--sage)] mb-2">{t('dashboard.today')}</p>
+            <div className="space-y-1.5 glass rounded-xl p-3">
+              {todayActions.slice(-5).reverse().map((a) => (
+                <div key={a.id} className="flex justify-between text-xs gap-2">
+                  <span className="text-[#D8E1D9]/75 truncate">{a.label}</span>
+                  <span className="text-[var(--accent)] shrink-0">+{a.points}</span>
                 </div>
               ))}
             </div>
@@ -378,18 +360,67 @@ export default function DashboardPage() {
   );
 }
 
-function ScoreCard({
-  label, value, streak, multiplier
-}: { label: string; value: number; streak: number; multiplier: number }) {
+function PillarCard({
+  href,
+  label,
+  value,
+  streak,
+  multiplier,
+  Icon,
+  ring,
+}: {
+  href: string;
+  label: string;
+  value: number;
+  streak: number;
+  multiplier: number;
+  Icon: React.FC<{ size?: number; active?: boolean }>;
+  ring: string;
+}) {
   return (
-    <div className="glass rounded-xl p-3 text-center">
-      <p className="text-[10px] uppercase tracking-wider text-[#B7F7AC]/60 mb-1">{label}</p>
-      <p className="text-2xl font-bold text-[#00F511]">{value}</p>
+    <Link
+      href={href}
+      className="glass rounded-2xl p-3 text-center hover:border-[var(--border-strong)] transition-all active:scale-[0.98] min-h-[96px] flex flex-col items-center justify-center gap-1"
+      style={{ borderColor: `${ring}33` }}
+    >
+      <Icon size={26} active />
+      <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]">{label}</p>
+      <p className="text-2xl font-bold leading-none" style={{ color: ring }}>
+        {value}
+      </p>
       {streak > 0 && (
-        <p className="text-[10px] text-[#B7F7AC]/50 mt-0.5">
+        <p className="text-[10px] text-[var(--sage)]/70">
           {streak}d · ×{multiplier.toFixed(2)}
         </p>
       )}
-    </div>
+    </Link>
+  );
+}
+
+function HubLink({
+  href,
+  Icon,
+  title,
+  sub,
+}: {
+  href: string;
+  Icon: React.FC<{ size?: number; active?: boolean }>;
+  title: string;
+  sub: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="flex items-center justify-between glass rounded-xl px-4 py-3.5 hover:border-[var(--border-strong)] transition-all active:scale-[0.99] min-h-[56px]"
+    >
+      <div className="flex items-center gap-3 min-w-0">
+        <Icon size={28} active />
+        <div className="min-w-0">
+          <p className="text-sm font-medium truncate">{title}</p>
+          <p className="text-xs text-[var(--sage)] truncate">{sub}</p>
+        </div>
+      </div>
+      <span className="text-[var(--accent)] shrink-0 ml-2">→</span>
+    </Link>
   );
 }

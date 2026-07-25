@@ -149,7 +149,7 @@ export default function HealthPage() {
   if (!mounted || !scores || !hydration || !nutrition) {
     return (
       <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-        <div className="text-[#00F511] animate-pulse">Cargando Health...</div>
+        <div className="text-[#8FD99A] animate-pulse">Cargando Health...</div>
       </div>
     );
   }
@@ -171,22 +171,22 @@ export default function HealthPage() {
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
-      <header className="px-5 pt-6 pb-3 border-b border-[#00B10C]/20">
+      <header className="px-5 pt-6 pb-3 border-b border-[#6B8F6E]/20">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2.5">
             <Link href="/hub/dashboard" className="text-[#B7F7AC]/60 text-sm">←</Link>
-            <div className="w-9 h-9 rounded-full border border-[#00F511]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+            <div className="w-9 h-9 rounded-full border border-[#8FD99A]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
               <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-[#00F511]">Health</h1>
+              <h1 className="text-lg font-bold text-[#8FD99A]">Health</h1>
               <p className="text-[10px] text-[#B7F7AC]/50">
                 {profile?.name} · {stageLabel}
               </p>
             </div>
           </div>
           <div className="text-right">
-            <p className="text-2xl font-bold text-[#00F511]">{healthScore}</p>
+            <p className="text-2xl font-bold text-[#8FD99A]">{healthScore}</p>
             <p className="text-[10px] text-[#B7F7AC]/50">
               {healthStreak > 0 ? `${healthStreak}d · ×${healthMult.toFixed(2)}` : 'Score'}
             </p>
@@ -195,12 +195,12 @@ export default function HealthPage() {
       </header>
 
       <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto">
-        <div className="glass rounded-xl px-4 py-3 mb-5 flex items-start gap-3 border border-[#00F511]/20">
-          <div className="w-9 h-9 rounded-full border border-[#00F511]/40 flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
+        <div className="glass rounded-xl px-4 py-3 mb-5 flex items-start gap-3 border border-[#8FD99A]/20">
+          <div className="w-9 h-9 rounded-full border border-[#8FD99A]/40 flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
             <Image src="/logo-icon.png" alt="León Verde" width={36} height={36} className="object-cover" />
           </div>
           <div>
-            <p className="text-[10px] uppercase tracking-wider text-[#00F511] mb-0.5">León Verde</p>
+            <p className="text-[10px] uppercase tracking-wider text-[#8FD99A] mb-0.5">León Verde</p>
             <p className="text-xs text-[#D8E1D9]/80 leading-relaxed">
               {coach?.pillarFocus === 'health' && coach.body
                 ? coach.body
@@ -212,9 +212,9 @@ export default function HealthPage() {
         <div className="flex justify-center mb-6">
           <div className="relative w-28 h-28 flex items-center justify-center">
             <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="42" fill="none" stroke="#00B10C" strokeWidth="6" opacity="0.25" />
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#6B8F6E" strokeWidth="6" opacity="0.25" />
               <circle
-                cx="50" cy="50" r="42" fill="none" stroke="#00F511" strokeWidth="6"
+                cx="50" cy="50" r="42" fill="none" stroke="#8FD99A" strokeWidth="6"
                 strokeDasharray={`${Math.min(healthScore, 100) * 2.64} 264`}
                 strokeLinecap="round"
                 className="ring-glow transition-all duration-700"
@@ -232,7 +232,7 @@ export default function HealthPage() {
           <h2 className="text-sm font-semibold text-[#B7F7AC] mb-3 flex items-center gap-2">
             <span>🌙</span> Sueño circadiano
           </h2>
-          <div className="glass rounded-2xl p-4 border border-[#00B10C]/25 space-y-4">
+          <div className="glass rounded-2xl p-4 border border-[#6B8F6E]/25 space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-[11px] text-[#B7F7AC]/60 mb-1">Hora de dormir</label>
@@ -240,7 +240,7 @@ export default function HealthPage() {
                   type="time"
                   value={bedTime}
                   onChange={e => setBedTime(e.target.value)}
-                  className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm"
+                  className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm"
                 />
               </div>
               <div>
@@ -249,7 +249,7 @@ export default function HealthPage() {
                   type="time"
                   value={wakeTime}
                   onChange={e => setWakeTime(e.target.value)}
-                  className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm"
+                  className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm"
                 />
               </div>
             </div>
@@ -259,7 +259,7 @@ export default function HealthPage() {
                 Duración: <strong className="text-white">{durationH} h</strong>
                 <span className="text-[#B7F7AC]/50"> (ideal {ideal.min}–{ideal.max} h)</span>
               </span>
-              <span className={sleepIdealNow ? 'text-[#00F511]' : 'text-amber-400/80'}>
+              <span className={sleepIdealNow ? 'text-[#8FD99A]' : 'text-amber-400/80'}>
                 {sleepIdealNow ? '✓ Ventana ideal' : 'Fuera de ventana'}
               </span>
             </div>
@@ -273,12 +273,12 @@ export default function HealthPage() {
                     : `±${regularity.avgDeviationMinutes} min · ${regularity.score}/100`}
                 </p>
               </div>
-              <p className="text-lg font-bold text-[#00F511]">{regularity.score || '—'}</p>
+              <p className="text-lg font-bold text-[#8FD99A]">{regularity.score || '—'}</p>
             </div>
 
             <button
               onClick={handleSaveSleep}
-              className="w-full py-3 rounded-xl bg-[#00F511] text-[#040404] font-semibold text-sm hover:bg-[#B7F7AC] transition-all"
+              className="w-full py-3 rounded-xl bg-[#7BC98A] text-[#040404] font-semibold text-sm hover:bg-[#B7F7AC] transition-all"
             >
               {todaySleep ? 'Actualizar sueño' : 'Registrar sueño'}
               {sleepIdealNow && !loggedToday.has('sleep_ideal') ? (
@@ -293,7 +293,7 @@ export default function HealthPage() {
           <h2 className="text-sm font-semibold text-[#B7F7AC] mb-3 flex items-center gap-2">
             <span>💧</span> Hidratación
           </h2>
-          <div className="glass rounded-2xl p-4 border border-[#00B10C]/25">
+          <div className="glass rounded-2xl p-4 border border-[#6B8F6E]/25">
             <div className="flex items-center justify-between mb-3">
               <div>
                 <p className="text-sm text-white font-medium">
@@ -304,13 +304,13 @@ export default function HealthPage() {
                 </p>
               </div>
               {isHydrationComplete(stage) && (
-                <span className="text-xs text-[#00F511] font-medium">✓ Meta</span>
+                <span className="text-xs text-[#8FD99A] font-medium">✓ Meta</span>
               )}
             </div>
 
-            <div className="h-2 rounded-full bg-[#00B10C]/20 mb-4 overflow-hidden">
+            <div className="h-2 rounded-full bg-[#6B8F6E]/20 mb-4 overflow-hidden">
               <div
-                className="h-full rounded-full bg-[#00F511] transition-all duration-500"
+                className="h-full rounded-full bg-[#7BC98A] transition-all duration-500"
                 style={{ width: `${Math.min(100, (hydration.glasses / hydration.goal) * 100)}%` }}
               />
             </div>
@@ -332,8 +332,8 @@ export default function HealthPage() {
                   }}
                   className={`w-8 h-8 rounded-lg border text-sm flex items-center justify-center transition-all ${
                     i < hydration.glasses
-                      ? 'bg-[#00F511]/20 border-[#00F511] text-[#00F511]'
-                      : 'border-[#00B10C]/30 text-[#B7F7AC]/30'
+                      ? 'bg-[#7BC98A]/20 border-[#8FD99A] text-[#8FD99A]'
+                      : 'border-[#6B8F6E]/30 text-[#B7F7AC]/30'
                   }`}
                 >
                   💧
@@ -345,13 +345,13 @@ export default function HealthPage() {
               <button
                 onClick={() => handleHydration(-1)}
                 disabled={hydration.glasses <= 0}
-                className="flex-1 py-2.5 rounded-xl border border-[#00B10C]/40 text-sm disabled:opacity-30"
+                className="flex-1 py-2.5 rounded-xl border border-[#6B8F6E]/40 text-sm disabled:opacity-30"
               >
                 −1
               </button>
               <button
                 onClick={() => handleHydration(1)}
-                className="flex-1 py-2.5 rounded-xl bg-[#00F511]/15 border border-[#00F511]/40 text-[#00F511] text-sm font-medium"
+                className="flex-1 py-2.5 rounded-xl bg-[#7BC98A]/15 border border-[#8FD99A]/40 text-[#8FD99A] text-sm font-medium"
               >
                 +1 vaso
               </button>
@@ -365,7 +365,7 @@ export default function HealthPage() {
           <h2 className="text-sm font-semibold text-[#B7F7AC] mb-3 flex items-center gap-2">
             <span>🥗</span> Alimentación
           </h2>
-          <div className="glass rounded-2xl p-4 border border-[#00B10C]/25 space-y-4">
+          <div className="glass rounded-2xl p-4 border border-[#6B8F6E]/25 space-y-4">
             <p className="text-[11px] text-[#B7F7AC]/50 leading-relaxed">
               Enfoque bio-conservador: comida real, ventana de alimentación y ayuno consciente.
               Las calorías son opcionales, no el centro.
@@ -384,7 +384,7 @@ export default function HealthPage() {
                 <p className="text-[10px] text-[#B7F7AC]/50">Ventana</p>
               </div>
               <div className="bg-[#040404]/60 rounded-xl py-2.5 px-1">
-                <p className="text-lg font-bold text-[#00F511]">
+                <p className="text-lg font-bold text-[#8FD99A]">
                   {totalEstimatedKcal(nutrition) > 0 ? totalEstimatedKcal(nutrition) : '—'}
                 </p>
                 <p className="text-[10px] text-[#B7F7AC]/50">kcal est.</p>
@@ -397,7 +397,7 @@ export default function HealthPage() {
                   Ayuno nocturno aprox: <strong className="text-white">{nutrition.fastingHours} h</strong>
                 </span>
                 {isFastingWindowGood(nutrition, stage) && (
-                  <span className="text-[#00F511]">✓ Ventana saludable</span>
+                  <span className="text-[#8FD99A]">✓ Ventana saludable</span>
                 )}
               </div>
             )}
@@ -405,7 +405,7 @@ export default function HealthPage() {
             {/* Calidad */}
             {nutrition.meals.length > 0 && (
               <div className="flex gap-2 text-[11px]">
-                <span className="text-[#00F511]">Real {qualitySummary(nutrition).whole}</span>
+                <span className="text-[#8FD99A]">Real {qualitySummary(nutrition).whole}</span>
                 <span className="text-[#B7F7AC]/60">Mixta {qualitySummary(nutrition).mixed}</span>
                 <span className="text-amber-400/70">Procesada {qualitySummary(nutrition).processed}</span>
               </div>
@@ -422,7 +422,7 @@ export default function HealthPage() {
                       <span className="ml-2 text-[#D8E1D9]/50">
                         {m.quality === 'whole' ? '· real' : m.quality === 'mixed' ? '· mixta' : '· procesada'}
                       </span>
-                      {m.estimatedKcal ? <span className="ml-1 text-[#00F511]/70">{m.estimatedKcal} kcal</span> : null}
+                      {m.estimatedKcal ? <span className="ml-1 text-[#8FD99A]/70">{m.estimatedKcal} kcal</span> : null}
                     </span>
                     <button
                       onClick={() => setNutrition(removeMeal(m.slot, m.time))}
@@ -436,13 +436,13 @@ export default function HealthPage() {
             )}
 
             {/* Formulario agregar comida */}
-            <div className="border-t border-[#00B10C]/20 pt-3 space-y-3">
+            <div className="border-t border-[#6B8F6E]/20 pt-3 space-y-3">
               <p className="text-[11px] text-[#B7F7AC]/60">Registrar comida</p>
               <div className="grid grid-cols-2 gap-2">
                 <select
                   value={mealSlot}
                   onChange={e => setMealSlot(e.target.value as MealSlot)}
-                  className="bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm"
+                  className="bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm"
                 >
                   <option value="breakfast">Desayuno</option>
                   <option value="lunch">Almuerzo</option>
@@ -453,7 +453,7 @@ export default function HealthPage() {
                   type="time"
                   value={mealTime}
                   onChange={e => setMealTime(e.target.value)}
-                  className="bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm"
+                  className="bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm"
                 />
               </div>
 
@@ -468,8 +468,8 @@ export default function HealthPage() {
                     onClick={() => setMealQuality(q.id)}
                     className={`flex-1 py-2 rounded-lg text-[11px] border transition-all ${
                       mealQuality === q.id
-                        ? 'border-[#00F511] text-[#00F511] bg-[#00F511]/10'
-                        : 'border-[#00B10C]/30 text-[#D8E1D9]/50'
+                        ? 'border-[#8FD99A] text-[#8FD99A] bg-[#7BC98A]/10'
+                        : 'border-[#6B8F6E]/30 text-[#D8E1D9]/50'
                     }`}
                   >
                     {q.label}
@@ -484,7 +484,7 @@ export default function HealthPage() {
                   placeholder="kcal (opcional)"
                   value={mealKcal}
                   onChange={e => setMealKcal(e.target.value)}
-                  className="flex-1 bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm"
+                  className="flex-1 bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm"
                 />
                 <button
                   onClick={() => {
@@ -505,7 +505,7 @@ export default function HealthPage() {
                       showToast('Comida registrada');
                     }
                   }}
-                  className="px-4 py-2.5 rounded-xl bg-[#00F511] text-[#040404] text-sm font-semibold"
+                  className="px-4 py-2.5 rounded-xl bg-[#7BC98A] text-[#040404] text-sm font-semibold"
                 >
                   Añadir
                 </button>
@@ -523,27 +523,27 @@ export default function HealthPage() {
             </h2>
             <button
               onClick={() => setShowSportForm(!showSportForm)}
-              className="text-[10px] px-2.5 py-1 rounded-lg border border-[#00F511]/40 text-[#00F511]"
+              className="text-[10px] px-2.5 py-1 rounded-lg border border-[#8FD99A]/40 text-[#8FD99A]"
             >
               {showSportForm ? 'Cerrar' : '+ Deporte'}
             </button>
           </div>
 
           {showSportForm && (
-            <div className="glass rounded-2xl p-4 mb-3 border border-[#00F511]/30 space-y-3">
+            <div className="glass rounded-2xl p-4 mb-3 border border-[#8FD99A]/30 space-y-3">
               <input
                 type="text"
                 placeholder="Nombre del deporte"
                 value={sportName}
                 onChange={e => setSportName(e.target.value)}
-                className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm"
+                className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm"
               />
               <div className="flex flex-wrap gap-1.5">
                 {SUGGESTED_SPORTS.slice(0, 8).map(s => (
                   <button
                     key={s.name}
                     onClick={() => { setSportName(s.name); setSportEnv(s.environment); }}
-                    className="text-[10px] px-2 py-1 rounded-full border border-[#00B10C]/30 text-[#B7F7AC]/70"
+                    className="text-[10px] px-2 py-1 rounded-full border border-[#6B8F6E]/30 text-[#B7F7AC]/70"
                   >
                     {s.name}
                   </button>
@@ -553,7 +553,7 @@ export default function HealthPage() {
                 <select
                   value={sportEnv}
                   onChange={e => setSportEnv(e.target.value as SportEnvironment)}
-                  className="flex-1 bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm"
+                  className="flex-1 bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm"
                 >
                   <option value="outdoor">Outdoor</option>
                   <option value="indoor">Indoor</option>
@@ -561,7 +561,7 @@ export default function HealthPage() {
                 <select
                   value={sportFreq}
                   onChange={e => setSportFreq(e.target.value as SportFrequency)}
-                  className="flex-1 bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm"
+                  className="flex-1 bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm"
                 >
                   <option value="daily">Diario</option>
                   <option value="weekly">Semanal</option>
@@ -576,7 +576,7 @@ export default function HealthPage() {
                   setShowSportForm(false);
                   showToast('Deporte añadido');
                 }}
-                className="w-full py-2.5 rounded-xl bg-[#00F511] text-[#040404] text-sm font-semibold"
+                className="w-full py-2.5 rounded-xl bg-[#7BC98A] text-[#040404] text-sm font-semibold"
               >
                 Guardar deporte
               </button>
@@ -593,7 +593,7 @@ export default function HealthPage() {
             {sports.map(sport => {
               const prog = sportProgress(sport);
               return (
-                <div key={sport.id} className="glass rounded-xl p-4 border border-[#00B10C]/25">
+                <div key={sport.id} className="glass rounded-xl p-4 border border-[#6B8F6E]/25">
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <p className="text-sm font-medium text-white">{sport.name}</p>
@@ -617,7 +617,7 @@ export default function HealthPage() {
                           }
                           setSports(loadSports());
                         }}
-                        className="px-3 py-1.5 rounded-lg bg-[#00F511] text-[#040404] text-xs font-medium"
+                        className="px-3 py-1.5 rounded-lg bg-[#7BC98A] text-[#040404] text-xs font-medium"
                       >
                         Registrar sesión
                       </button>
@@ -658,7 +658,7 @@ export default function HealthPage() {
                     <div
                       key={action.id}
                       className={`glass rounded-xl p-4 border transition-all ${
-                        done ? 'border-[#00F511]/40 bg-[#00F511]/5' : 'border-[#00B10C]/25'
+                        done ? 'border-[#8FD99A]/40 bg-[#7BC98A]/5' : 'border-[#6B8F6E]/25'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-3">
@@ -670,14 +670,14 @@ export default function HealthPage() {
                           </div>
                         </div>
                         <div className="flex-shrink-0 text-right">
-                          <p className="text-xs text-[#00F511] font-medium mb-1.5">+{pts}</p>
+                          <p className="text-xs text-[#8FD99A] font-medium mb-1.5">+{pts}</p>
                           <button
                             onClick={() => !done && handleLog(action.actionType, action.label)}
                             disabled={done}
                             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                               done
-                                ? 'bg-[#00B10C]/20 text-[#B7F7AC]'
-                                : 'bg-[#00F511] text-[#040404] hover:bg-[#B7F7AC]'
+                                ? 'bg-[#6B8F6E]/20 text-[#B7F7AC]'
+                                : 'bg-[#7BC98A] text-[#040404] hover:bg-[#B7F7AC]'
                             }`}
                           >
                             {done ? '✓ Hecho' : 'Registrar'}
@@ -698,7 +698,7 @@ export default function HealthPage() {
       </main>
 
       {toast && (
-        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-[#00F511] text-[#040404] text-sm font-semibold shadow-lg">
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-[#7BC98A] text-[#040404] text-sm font-semibold shadow-lg">
           {toast}
         </div>
       )}

@@ -93,8 +93,8 @@ export default function ProfileAvatar({
           type="button"
           onClick={openPicker}
           disabled={!editable || busy}
-          className={`${dim.box} rounded-full border-2 border-[#00F511]/50 lion-glow overflow-hidden bg-[#040404] relative ${
-            editable ? 'cursor-pointer hover:border-[#00F511] transition-all' : 'cursor-default'
+          className={`${dim.box} rounded-full border-2 border-[#8FD99A]/50 lion-glow overflow-hidden bg-[#040404] relative ${
+            editable ? 'cursor-pointer hover:border-[#8FD99A] transition-all' : 'cursor-default'
           }`}
           aria-label={editable ? 'Cambiar foto de perfil' : name}
         >
@@ -118,7 +118,7 @@ export default function ProfileAvatar({
           )}
           {busy && (
             <div className="absolute inset-0 bg-black/55 flex items-center justify-center">
-              <div className="w-5 h-5 border-2 border-[#00F511]/40 border-t-[#00F511] rounded-full animate-spin" />
+              <div className="w-5 h-5 border-2 border-[#8FD99A]/40 border-t-[#8FD99A] rounded-full animate-spin" />
             </div>
           )}
         </button>
@@ -128,7 +128,7 @@ export default function ProfileAvatar({
             type="button"
             onClick={openPicker}
             disabled={busy}
-            className={`absolute -bottom-0.5 -right-0.5 ${dim.badge} rounded-full bg-[#00F511] text-[#040404] flex items-center justify-center shadow-[0_0_12px_rgba(0,245,17,0.45)] border border-[#040404] hover:scale-105 transition`}
+            className={`absolute -bottom-0.5 -right-0.5 ${dim.badge} rounded-full bg-[#7BC98A] text-[#040404] flex items-center justify-center shadow-[0_0_12px_rgba(143, 217, 154,0.45)] border border-[#040404] hover:scale-105 transition`}
             aria-label="Editar foto"
             title="Cambiar foto"
           >
@@ -154,7 +154,7 @@ export default function ProfileAvatar({
             type="button"
             onClick={openPicker}
             disabled={busy}
-            className="text-xs text-[#00F511] hover:underline disabled:opacity-50"
+            className="text-xs text-[#8FD99A] hover:underline disabled:opacity-50"
           >
             {displayUrl ? t('profile.changePhoto') : t('profile.addPhoto')}
           </button>

@@ -170,10 +170,10 @@ function LoginForm() {
           <LanguageControl compact />
         </div>
         <div className="text-center mb-8">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[#00F511]/40 flex items-center justify-center lion-glow overflow-hidden">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[#8FD99A]/40 flex items-center justify-center lion-glow overflow-hidden">
             <Image src="/logo.png" alt="Salvazion" width={64} height={64} className="object-contain" />
           </div>
-          <h1 className="text-2xl font-bold text-[#00F511] tracking-tight">{title}</h1>
+          <h1 className="text-2xl font-bold text-[#8FD99A] tracking-tight">{title}</h1>
           <p className="text-sm text-[#B7F7AC]/70 mt-1">{subtitle}</p>
         </div>
 
@@ -195,7 +195,7 @@ function LoginForm() {
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#00F511]"
+              className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#8FD99A]"
               placeholder="you@email.com"
             />
           </div>
@@ -211,7 +211,7 @@ function LoginForm() {
                     setError(null);
                     setInfo(null);
                   }}
-                  className="text-[11px] text-[#B7F7AC]/60 hover:text-[#00F511]"
+                  className="text-[11px] text-[#B7F7AC]/60 hover:text-[#8FD99A]"
                 >
                   {t('auth.forgot')}
                 </button>
@@ -222,7 +222,7 @@ function LoginForm() {
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#00F511]"
+                className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#8FD99A]"
                 placeholder="••••••••"
               />
             </div>
@@ -232,13 +232,13 @@ function LoginForm() {
             <p className="text-sm text-red-400 bg-red-500/10 rounded-lg px-3 py-2">{error}</p>
           )}
           {info && (
-            <p className="text-sm text-[#00F511] bg-[#00F511]/10 rounded-lg px-3 py-2">{info}</p>
+            <p className="text-sm text-[#8FD99A] bg-[#7BC98A]/10 rounded-lg px-3 py-2">{info}</p>
           )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 rounded-xl bg-[#00F511] text-[#040404] font-semibold text-sm hover:bg-[#B7F7AC] transition disabled:opacity-50"
+            className="btn-primary"
           >
             {loading
               ? t('auth.processing')
@@ -258,7 +258,7 @@ function LoginForm() {
                   setError(null);
                   setInfo(null);
                 }}
-                className="w-full text-xs text-[#B7F7AC]/60 hover:text-[#00F511]"
+                className="w-full text-xs text-[#B7F7AC]/60 hover:text-[#8FD99A]"
               >
                 {t('auth.backToPassword')}
               </button>
@@ -271,7 +271,7 @@ function LoginForm() {
                   setError(null);
                   setInfo(null);
                 }}
-                className="w-full text-xs text-[#B7F7AC]/60 hover:text-[#00F511]"
+                className="w-full text-xs text-[#B7F7AC]/60 hover:text-[#8FD99A]"
               >
                 {t('auth.magicLink')}
               </button>
@@ -281,7 +281,7 @@ function LoginForm() {
 
         <p className="text-center text-sm text-[#B7F7AC]/50 mt-6">
           {t('auth.noAccount')}{' '}
-          <Link href="/auth/signup" className="text-[#00F511] hover:underline">
+          <Link href="/auth/signup" className="text-[#8FD99A] hover:underline">
             {t('auth.createAccount')}
           </Link>
         </p>
@@ -300,7 +300,7 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#040404] flex items-center justify-center text-[#00F511]">
+        <div className="min-h-screen bg-[#040404] flex items-center justify-center text-[#8FD99A]">
           Cargando…
         </div>
       }

@@ -70,7 +70,7 @@ export default function ProfilePage() {
   if (!mounted || !profile) {
     return (
       <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-        <div className="text-[#00F511] text-lg animate-pulse">{t('common.lionPreparing')}</div>
+        <div className="text-[#8FD99A] text-lg animate-pulse">{t('common.lionPreparing')}</div>
       </div>
     );
   }
@@ -83,7 +83,7 @@ export default function ProfilePage() {
       {/* Header */}
       <header className="flex items-center justify-between px-5 pt-6 pb-2">
         <div className="flex items-center gap-2.5">
-          <div className="w-10 h-10 rounded-full border border-[#00F511]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+          <div className="w-10 h-10 rounded-full border border-[#8FD99A]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
             <Image src="/logo-icon.png" alt="Salvazion" width={40} height={40} className="object-cover" />
           </div>
           <div>
@@ -91,7 +91,7 @@ export default function ProfilePage() {
             <p className="text-sm font-medium">{t('profile.title')}</p>
           </div>
         </div>
-        <Link href="/hub/dashboard" className="text-sm text-[#00F511]">
+        <Link href="/hub/dashboard" className="text-sm text-[#8FD99A]">
           ← {t('nav.dashboard')}
         </Link>
       </header>
@@ -150,7 +150,7 @@ export default function ProfilePage() {
               />
               <button
                 onClick={() => setEditing(true)}
-                className="w-full mt-2 py-3 rounded-xl border border-[#00F511]/50 text-[#00F511] text-sm font-medium hover:bg-[#00F511]/10"
+                className="w-full mt-2 py-3 rounded-xl border border-[#8FD99A]/50 text-[#8FD99A] text-sm font-medium hover:bg-[#7BC98A]/10"
               >
                 {t('profile.editProfile')}
               </button>
@@ -163,7 +163,7 @@ export default function ProfilePage() {
                   type="text"
                   value={draft.name || ''}
                   onChange={(e) => setDraft({ ...draft, name: e.target.value })}
-                  className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#00F511]"
+                  className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#8FD99A]"
                 />
               </div>
               <div>
@@ -172,7 +172,7 @@ export default function ProfilePage() {
                   value={draft.purpose || ''}
                   onChange={(e) => setDraft({ ...draft, purpose: e.target.value })}
                   rows={3}
-                  className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#00F511] resize-none"
+                  className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#8FD99A] resize-none"
                 />
               </div>
               <div className="grid grid-cols-2 gap-2">
@@ -182,7 +182,7 @@ export default function ProfilePage() {
                     type="text"
                     value={draft.city || ''}
                     onChange={(e) => setDraft({ ...draft, city: e.target.value })}
-                    className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#00F511]"
+                    className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#8FD99A]"
                   />
                 </div>
                 <div>
@@ -191,7 +191,7 @@ export default function ProfilePage() {
                     type="text"
                     value={draft.country || ''}
                     onChange={(e) => setDraft({ ...draft, country: e.target.value })}
-                    className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#00F511]"
+                    className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#8FD99A]"
                   />
                 </div>
               </div>
@@ -201,13 +201,13 @@ export default function ProfilePage() {
                     setDraft(profile);
                     setEditing(false);
                   }}
-                  className="flex-1 py-2.5 rounded-xl border border-[#00B10C]/50 text-sm"
+                  className="flex-1 py-2.5 rounded-xl border border-[#6B8F6E]/50 text-sm"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={handleSave}
-                  className="flex-1 py-2.5 rounded-xl bg-[#00F511] text-[#040404] font-semibold text-sm"
+                  className="flex-1 py-2.5 rounded-xl bg-[#7BC98A] text-[#040404] font-semibold text-sm"
                 >
                   Guardar
                 </button>
@@ -250,7 +250,7 @@ export default function ProfilePage() {
 
         {/* Privacy note */}
         <div className="glass rounded-2xl p-4 mb-6 text-xs text-[#B7F7AC]/70 leading-relaxed">
-          <p className="font-medium text-[#00F511] mb-1">{t('profile.privacyTitle')}</p>
+          <p className="font-medium text-[#8FD99A] mb-1">{t('profile.privacyTitle')}</p>
           <p>{t('profile.privacyBody')}</p>
         </div>
 
@@ -259,7 +259,7 @@ export default function ProfilePage() {
             await signOut();
             router.replace('/');
           }}
-          className="w-full mb-4 py-3 rounded-xl border border-[#00B10C]/40 text-[#B7F7AC] text-sm hover:border-[#00F511]/50"
+          className="w-full mb-4 py-3 rounded-xl border border-[#6B8F6E]/40 text-[#B7F7AC] text-sm hover:border-[#8FD99A]/50"
         >
           {t('profile.signOut')}
         </button>
@@ -280,7 +280,7 @@ export default function ProfilePage() {
               <div className="flex gap-2">
                 <button
                   onClick={() => setConfirmClear(false)}
-                  className="flex-1 py-2 rounded-xl border border-[#00B10C]/40 text-sm"
+                  className="flex-1 py-2 rounded-xl border border-[#6B8F6E]/40 text-sm"
                 >
                   Cancelar
                 </button>

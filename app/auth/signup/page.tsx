@@ -107,17 +107,17 @@ function SignupForm() {
     return (
       <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col items-center justify-center px-5">
         <div className="w-full max-w-sm text-center glass rounded-2xl p-8">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[#00F511]/40 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[#8FD99A]/40 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
             <Image src="/logo-icon.png" alt="Salvazion" width={64} height={64} className="object-cover" />
           </div>
-          <h1 className="text-xl font-bold text-[#00F511] mb-2">{t('auth.checkEmail')}</h1>
+          <h1 className="text-xl font-bold text-[#8FD99A] mb-2">{t('auth.checkEmail')}</h1>
           <p className="text-sm text-[#B7F7AC]/80 leading-relaxed">
             {t('auth.checkEmailBody')} <span className="text-[#D8E1D9]">{email.trim()}</span>.{' '}
             {t('auth.activateAndReturn')}
           </p>
           <Link
             href="/auth/login"
-            className="inline-block mt-6 text-sm text-[#00F511] hover:underline"
+            className="inline-block mt-6 text-sm text-[#8FD99A] hover:underline"
           >
             {t('auth.goLogin')}
           </Link>
@@ -133,17 +133,17 @@ function SignupForm() {
           <LanguageControl compact />
         </div>
         <div className="text-center mb-8">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[#00F511]/40 flex items-center justify-center lion-glow overflow-hidden">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[#8FD99A]/40 flex items-center justify-center lion-glow overflow-hidden">
             <Image src="/logo.png" alt="Salvazion" width={64} height={64} className="object-contain" />
           </div>
-          <h1 className="text-2xl font-bold text-[#00F511] tracking-tight">{t('auth.signupTitle')}</h1>
+          <h1 className="text-2xl font-bold text-[#8FD99A] tracking-tight">{t('auth.signupTitle')}</h1>
           <p className="text-sm text-[#B7F7AC]/70 mt-1">{t('auth.signupSubtitle')}</p>
         </div>
 
         {inbound && (
-          <div className="glass rounded-2xl px-4 py-3 mb-4 border border-[#00F511]/30">
+          <div className="glass rounded-2xl px-4 py-3 mb-4 border border-[#8FD99A]/30">
             <p className="text-sm text-[#D8E1D9]/90">
-              <span className="text-[#00F511] font-semibold">{inbound.from}</span>{' '}
+              <span className="text-[#8FD99A] font-semibold">{inbound.from}</span>{' '}
               {t('invite.invitedYou')} {t('invite.asRelation')}{' '}
               <span className="text-[#B7F7AC]">
                 {relationLabel(inbound.relation, lang)}
@@ -161,7 +161,7 @@ function SignupForm() {
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#00F511]"
+              className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#8FD99A]"
               placeholder={t('auth.name')}
             />
           </div>
@@ -174,7 +174,7 @@ function SignupForm() {
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#00F511]"
+              className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#8FD99A]"
               placeholder="you@email.com"
             />
           </div>
@@ -188,7 +188,7 @@ function SignupForm() {
               autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#00F511]"
+              className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#8FD99A]"
               placeholder="••••••••"
             />
           </div>
@@ -202,7 +202,7 @@ function SignupForm() {
               autoComplete="new-password"
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
-              className="w-full bg-[#040404] border border-[#00B10C]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#00F511]"
+              className="w-full bg-[#040404] border border-[#6B8F6E]/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#8FD99A]"
               placeholder="••••••••"
             />
           </div>
@@ -214,7 +214,7 @@ function SignupForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 rounded-xl bg-[#00F511] text-[#040404] font-semibold text-sm hover:bg-[#B7F7AC] transition disabled:opacity-50"
+            className="btn-primary"
           >
             {loading ? t('auth.creating') : t('auth.create')}
           </button>
@@ -222,7 +222,7 @@ function SignupForm() {
 
         <p className="text-center text-sm text-[#B7F7AC]/50 mt-6">
           {t('auth.hasAccount')}{' '}
-          <Link href="/auth/login" className="text-[#00F511] hover:underline">
+          <Link href="/auth/login" className="text-[#8FD99A] hover:underline">
             {t('auth.signIn')}
           </Link>
         </p>
@@ -235,7 +235,7 @@ export default function SignupPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#040404] flex items-center justify-center text-[#00F511]">
+        <div className="min-h-screen bg-[#040404] flex items-center justify-center text-[#8FD99A]">
           Cargando…
         </div>
       }

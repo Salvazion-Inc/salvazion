@@ -189,7 +189,7 @@ https://salvazion.com
   if (booting) {
     return (
       <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-        <div className="text-[#00F511] text-lg animate-pulse">El León se prepara...</div>
+        <div className="text-[#8FD99A] text-lg animate-pulse">El León se prepara...</div>
       </div>
     );
   }
@@ -203,7 +203,7 @@ https://salvazion.com
             <div
               key={i}
               className={`h-1 flex-1 rounded-full transition-all ${
-                i <= step ? 'bg-[#00F511]' : 'bg-[#00B10C]/30'
+                i <= step ? 'bg-[#7BC98A]' : 'bg-[#6B8F6E]/30'
               }`}
             />
           ))}
@@ -216,10 +216,10 @@ https://salvazion.com
         {step === 1 && (
           <div className="space-y-6 max-w-md mx-auto">
             <div className="text-center pt-4">
-              <div className="w-20 h-20 mx-auto mb-4 rounded-full border border-[#00F511]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+              <div className="w-20 h-20 mx-auto mb-4 rounded-full border border-[#8FD99A]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
                 <Image src="/logo-icon.png" alt="Salvazion" width={80} height={80} className="object-cover" />
               </div>
-              <h1 className="text-3xl font-bold text-[#00F511] tracking-tight">
+              <h1 className="text-3xl font-bold text-[#8FD99A] tracking-tight">
                 Bienvenido a la Phalanx
               </h1>
               <p className="text-[#B7F7AC]/80 mt-2 text-sm">
@@ -235,7 +235,7 @@ https://salvazion.com
                   value={profile.name || ''}
                   onChange={e => update({ name: e.target.value })}
                   placeholder="Tu nombre completo"
-                  className="w-full bg-[#040404] text-[#D8E1D9] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511] placeholder:text-[#B7F7AC]/40"
+                  className="w-full bg-[#040404] text-[#D8E1D9] border border-[#6B8F6E]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#8FD99A] placeholder:text-[#B7F7AC]/40"
                 />
               </div>
 
@@ -246,7 +246,7 @@ https://salvazion.com
                   value={profile.birthDate || ''}
                   onChange={e => update({ birthDate: e.target.value })}
                   max={new Date().toISOString().slice(0, 10)}
-                  className="w-full bg-[#040404] text-[#D8E1D9] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511]"
+                  className="w-full bg-[#040404] text-[#D8E1D9] border border-[#6B8F6E]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#8FD99A]"
                 />
                 <p className="text-[11px] text-[#B7F7AC]/40 mt-1">
                   Nos permite personalizar tu experiencia según tu etapa de vida.
@@ -260,7 +260,7 @@ https://salvazion.com
                   onChange={e => update({ purpose: e.target.value })}
                   placeholder="¿Para qué estás en este mundo? ¿Qué legado quieres dejar?"
                   rows={3}
-                  className="w-full bg-[#040404] text-[#D8E1D9] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511] resize-none placeholder:text-[#B7F7AC]/40"
+                  className="w-full bg-[#040404] text-[#D8E1D9] border border-[#6B8F6E]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#8FD99A] resize-none placeholder:text-[#B7F7AC]/40"
                 />
               </div>
 
@@ -272,7 +272,7 @@ https://salvazion.com
                     value={profile.city || ''}
                     onChange={e => update({ city: e.target.value })}
                     placeholder="Ciudad"
-                    className="w-full bg-[#040404] text-[#D8E1D9] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511] placeholder:text-[#B7F7AC]/40"
+                    className="w-full bg-[#040404] text-[#D8E1D9] border border-[#6B8F6E]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#8FD99A] placeholder:text-[#B7F7AC]/40"
                   />
                 </div>
                 <div>
@@ -282,7 +282,7 @@ https://salvazion.com
                     value={profile.country || ''}
                     onChange={e => update({ country: e.target.value })}
                     placeholder="País"
-                    className="w-full bg-[#040404] text-[#D8E1D9] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511] placeholder:text-[#B7F7AC]/40"
+                    className="w-full bg-[#040404] text-[#D8E1D9] border border-[#6B8F6E]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#8FD99A] placeholder:text-[#B7F7AC]/40"
                   />
                 </div>
               </div>
@@ -291,7 +291,7 @@ https://salvazion.com
             <button
               onClick={next}
               disabled={!profile.name || !profile.purpose || !profile.birthDate}
-              className="w-full py-4 rounded-xl bg-[#00F511] text-[#040404] font-semibold text-lg disabled:opacity-40"
+              className="w-full py-4 rounded-xl bg-[#7BC98A] text-[#040404] font-semibold text-lg disabled:opacity-40"
             >
               Continuar
             </button>
@@ -301,14 +301,14 @@ https://salvazion.com
         {/* STEP 2 — Madurez, Familia, Focos */}
         {step === 2 && (
           <div className="space-y-6 max-w-md mx-auto pt-4">
-            <h2 className="text-2xl font-bold text-[#00F511]">Tu perfil espiritual</h2>
+            <h2 className="text-2xl font-bold text-[#8FD99A]">Tu perfil espiritual</h2>
 
             <div>
               <label className="block text-sm text-[#B7F7AC] mb-1.5">Madurez espiritual</label>
               <select
                 value={profile.spiritualMaturity}
                 onChange={e => update({ spiritualMaturity: e.target.value as any })}
-                className="w-full bg-[#040404] text-[#D8E1D9] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511]"
+                className="w-full bg-[#040404] text-[#D8E1D9] border border-[#6B8F6E]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#8FD99A]"
               >
                 <option value="new">Nuevo en la fe</option>
                 <option value="growing">Creciendo</option>
@@ -322,7 +322,7 @@ https://salvazion.com
               <select
                 value={profile.familyStatus}
                 onChange={e => update({ familyStatus: e.target.value as any })}
-                className="w-full bg-[#040404] text-[#D8E1D9] border border-[#00B10C]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#00F511]"
+                className="w-full bg-[#040404] text-[#D8E1D9] border border-[#6B8F6E]/40 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#8FD99A]"
               >
                 <option value="single">Soltero/a</option>
                 <option value="married">Casado/a</option>
@@ -341,8 +341,8 @@ https://salvazion.com
                     onClick={() => toggleFocus(opt.id)}
                     className={`px-3.5 py-2 rounded-full text-sm border transition-all ${
                       profile.currentFocus?.includes(opt.id)
-                        ? 'bg-[#00F511]/20 border-[#00F511] text-[#00F511]'
-                        : 'border-[#00B10C]/40 text-[#D8E1D9]/70'
+                        ? 'bg-[#7BC98A]/20 border-[#8FD99A] text-[#8FD99A]'
+                        : 'border-[#6B8F6E]/40 text-[#D8E1D9]/70'
                     }`}
                   >
                     {opt.label}
@@ -352,12 +352,12 @@ https://salvazion.com
             </div>
 
             <div className="flex gap-3 pt-4">
-              <button onClick={back} className="flex-1 py-3.5 rounded-xl border border-[#00B10C]/50">
+              <button onClick={back} className="flex-1 py-3.5 rounded-xl border border-[#6B8F6E]/50">
                 Atrás
               </button>
               <button
                 onClick={next}
-                className="flex-1 py-3.5 rounded-xl bg-[#00F511] text-[#040404] font-semibold"
+                className="flex-1 py-3.5 rounded-xl bg-[#7BC98A] text-[#040404] font-semibold"
               >
                 Continuar
               </button>
@@ -369,7 +369,7 @@ https://salvazion.com
         {step === 3 && (
           <div className="space-y-6 max-w-md mx-auto pt-4">
             <div>
-              <h2 className="text-2xl font-bold text-[#00F511]">Tu Phalanx Personal</h2>
+              <h2 className="text-2xl font-bold text-[#8FD99A]">Tu Phalanx Personal</h2>
               <p className="text-[#B7F7AC]/70 text-sm mt-1">
                 Vincula a tu familia y amigos dentro de Salvazion. Juntos son más fuertes.
               </p>
@@ -390,7 +390,7 @@ https://salvazion.com
                       <span>{rel.label}</span>
                       <button
                         onClick={() => openInvite(rel.id)}
-                        className="px-4 py-1.5 rounded-lg border border-[#00F511]/50 text-[#00F511] text-sm hover:bg-[#00F511]/10"
+                        className="px-4 py-1.5 rounded-lg border border-[#8FD99A]/50 text-[#8FD99A] text-sm hover:bg-[#7BC98A]/10"
                       >
                         Invitar
                       </button>
@@ -400,7 +400,7 @@ https://salvazion.com
                         {links.map((l) => (
                           <span
                             key={l.id}
-                            className="text-[11px] px-2 py-0.5 rounded-full bg-[#00F511]/10 border border-[#00F511]/30 text-[#B7F7AC]"
+                            className="text-[11px] px-2 py-0.5 rounded-full bg-[#7BC98A]/10 border border-[#8FD99A]/30 text-[#B7F7AC]"
                           >
                             {l.name} · {l.status === 'invited' ? 'invitado' : l.status}
                           </span>
@@ -417,12 +417,12 @@ https://salvazion.com
             </p>
 
             <div className="flex gap-3 pt-2">
-              <button onClick={back} className="flex-1 py-3.5 rounded-xl border border-[#00B10C]/50">
+              <button onClick={back} className="flex-1 py-3.5 rounded-xl border border-[#6B8F6E]/50">
                 Atrás
               </button>
               <button
                 onClick={next}
-                className="flex-1 py-3.5 rounded-xl bg-[#00F511] text-[#040404] font-semibold"
+                className="flex-1 py-3.5 rounded-xl bg-[#7BC98A] text-[#040404] font-semibold"
               >
                 Continuar
               </button>
@@ -433,14 +433,14 @@ https://salvazion.com
         {/* Invite Modal */}
         {inviteOpen && (
           <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 p-4">
-            <div className="w-full max-w-md glass rounded-2xl p-5 border border-[#00F511]/30 space-y-4">
+            <div className="w-full max-w-md glass rounded-2xl p-5 border border-[#8FD99A]/30 space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-bold text-[#00F511]">
+                <h3 className="text-lg font-bold text-[#8FD99A]">
                   Invitar · {RELATION_OPTIONS.find((r) => r.id === inviteRelation)?.label}
                 </h3>
                 <button
                   onClick={closeInvite}
-                  className="text-[#B7F7AC]/60 text-sm hover:text-[#00F511]"
+                  className="text-[#B7F7AC]/60 text-sm hover:text-[#8FD99A]"
                 >
                   Cerrar
                 </button>
@@ -454,7 +454,7 @@ https://salvazion.com
                   onChange={(e) => setInviteName(e.target.value)}
                   placeholder="Ej: María, Juan, etc."
                   autoFocus
-                  className="w-full bg-[#040404] text-[#D8E1D9] border border-[#00B10C]/40 rounded-xl px-4 py-3 focus:outline-none focus:border-[#00F511] placeholder:text-[#B7F7AC]/40"
+                  className="w-full bg-[#040404] text-[#D8E1D9] border border-[#6B8F6E]/40 rounded-xl px-4 py-3 focus:outline-none focus:border-[#8FD99A] placeholder:text-[#B7F7AC]/40"
                 />
               </div>
 
@@ -462,13 +462,13 @@ https://salvazion.com
                 <button
                   onClick={addLinkedMember}
                   disabled={!inviteName.trim()}
-                  className="w-full py-3 rounded-xl bg-[#00F511] text-[#040404] font-semibold disabled:opacity-40"
+                  className="w-full py-3 rounded-xl bg-[#7BC98A] text-[#040404] font-semibold disabled:opacity-40"
                 >
                   Agregar a mi Phalanx
                 </button>
                 <button
                   onClick={shareInvite}
-                  className="w-full py-3 rounded-xl border border-[#00F511]/50 text-[#00F511] font-medium hover:bg-[#00F511]/10"
+                  className="w-full py-3 rounded-xl border border-[#8FD99A]/50 text-[#8FD99A] font-medium hover:bg-[#7BC98A]/10"
                 >
                   {inviteCopied ? '✓ Mensaje copiado' : 'Compartir invitación'}
                 </button>
@@ -485,7 +485,7 @@ https://salvazion.com
         {/* STEP 4 — Resumen rápido */}
         {step === 4 && (
           <div className="space-y-6 max-w-md mx-auto pt-4">
-            <h2 className="text-2xl font-bold text-[#00F511]">Confirma tu identidad</h2>
+            <h2 className="text-2xl font-bold text-[#8FD99A]">Confirma tu identidad</h2>
             <div className="glass rounded-2xl p-5 space-y-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-[#B7F7AC]/60">Nombre</span>
@@ -514,12 +514,12 @@ https://salvazion.com
             </div>
 
             <div className="flex gap-3">
-              <button onClick={back} className="flex-1 py-3.5 rounded-xl border border-[#00B10C]/50">
+              <button onClick={back} className="flex-1 py-3.5 rounded-xl border border-[#6B8F6E]/50">
                 Atrás
               </button>
               <button
                 onClick={next}
-                className="flex-1 py-3.5 rounded-xl bg-[#00F511] text-[#040404] font-semibold"
+                className="flex-1 py-3.5 rounded-xl bg-[#7BC98A] text-[#040404] font-semibold"
               >
                 Continuar
               </button>
@@ -532,42 +532,42 @@ https://salvazion.com
           <div className="space-y-6 max-w-md mx-auto pt-2 text-center">
             <div>
               <h2 className="text-3xl font-bold tracking-tight">
-                Conoce a tu <span className="text-[#00F511]">León Verde</span>
+                Conoce a tu <span className="text-[#8FD99A]">León Verde</span>
               </h2>
               <p className="text-[#B7F7AC]/80 mt-1">Tu coach de virtud y desarrollo integral</p>
             </div>
 
             {/* Lion visual */}
             <div className="relative mx-auto w-48 h-48 flex items-center justify-center">
-              <div className="absolute inset-0 rounded-full border border-[#00F511]/20 animate-pulse" />
-              <div className="absolute inset-4 rounded-full border border-[#00B10C]/30" />
-              <div className="w-36 h-36 rounded-full overflow-hidden lion-glow flex items-center justify-center bg-[#040404] border border-[#00F511]/40">
+              <div className="absolute inset-0 rounded-full border border-[#8FD99A]/20 animate-pulse" />
+              <div className="absolute inset-4 rounded-full border border-[#6B8F6E]/30" />
+              <div className="w-36 h-36 rounded-full overflow-hidden lion-glow flex items-center justify-center bg-[#040404] border border-[#8FD99A]/40">
                 <Image src="/logo-icon.png" alt="León Verde" width={144} height={144} className="object-cover" />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-left">
               <div className="glass rounded-xl p-3">
-                <p className="text-[#00F511] text-xs font-medium mb-1">Espiritual</p>
+                <p className="text-[#8FD99A] text-xs font-medium mb-1">Espiritual</p>
                 <p className="text-sm">Biblia · Oración · Devocional</p>
               </div>
               <div className="glass rounded-xl p-3">
-                <p className="text-[#00F511] text-xs font-medium mb-1">Físico</p>
+                <p className="text-[#8FD99A] text-xs font-medium mb-1">Físico</p>
                 <p className="text-sm">Salud · Disciplina · Cuerpo</p>
               </div>
               <div className="glass rounded-xl p-3">
-                <p className="text-[#00F511] text-xs font-medium mb-1">Mental</p>
+                <p className="text-[#8FD99A] text-xs font-medium mb-1">Mental</p>
                 <p className="text-sm">Propósito · Libertad · Enfoque</p>
               </div>
               <div className="glass rounded-xl p-3">
-                <p className="text-[#00F511] text-xs font-medium mb-1">Virtud</p>
+                <p className="text-[#8FD99A] text-xs font-medium mb-1">Virtud</p>
                 <p className="text-sm">Constancia · Excelencia</p>
               </div>
             </div>
 
             <p className="text-sm text-[#D8E1D9]/80 leading-relaxed px-2">
               Te entrenaré en virtud, constancia y excelencia para que{' '}
-              <span className="text-[#00F511]">Salvation, Health y Freedom</span> crezcan cada día.
+              <span className="text-[#8FD99A]">Salvation, Health y Freedom</span> crezcan cada día.
             </p>
 
             <p className="text-[11px] text-[#B7F7AC]/50 leading-relaxed px-1">
@@ -577,7 +577,7 @@ https://salvazion.com
 
             <button
               onClick={finish}
-              className="w-full py-4 rounded-xl bg-[#00F511] text-[#040404] font-semibold text-lg shadow-[0_0_20px_rgba(0,245,17,0.3)]"
+              className="w-full py-4 rounded-xl bg-[#7BC98A] text-[#040404] font-semibold text-lg shadow-[0_0_20px_rgba(143, 217, 154,0.3)]"
             >
               Acepto el llamado
             </button>

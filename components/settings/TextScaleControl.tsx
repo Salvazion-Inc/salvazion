@@ -18,7 +18,7 @@ export default function TextScaleControl() {
           <p className="text-xs uppercase tracking-wider text-[#B7F7AC]/60">
             {t('textScale.accessibility')}
           </p>
-          <h3 className="text-base font-semibold text-[#00F511] mt-0.5">
+          <h3 className="text-base font-semibold text-[#8FD99A] mt-0.5">
             {t('textScale.title')}
           </h3>
           <p className="text-xs text-[#B7F7AC]/55 mt-1 leading-relaxed">
@@ -26,7 +26,7 @@ export default function TextScaleControl() {
           </p>
         </div>
         <span
-          className="shrink-0 w-11 h-11 rounded-full border border-[#00F511]/40 flex items-center justify-center text-[#00F511] font-semibold"
+          className="shrink-0 w-11 h-11 rounded-full border border-[#8FD99A]/40 flex items-center justify-center text-[#8FD99A] font-semibold"
           style={{
             fontSize:
               scale === 'md' ? '0.95rem' : scale === 'lg' ? '1.1rem' : scale === 'xl' ? '1.25rem' : '1.4rem',
@@ -53,12 +53,12 @@ export default function TextScaleControl() {
               onClick={() => setScale(opt.id as TextScale)}
               className={`flex flex-col items-center justify-center gap-1 rounded-xl border py-3 px-1 transition-all min-h-[4.5rem] ${
                 active
-                  ? 'border-[#00F511] bg-[#00F511]/15 text-[#00F511] shadow-[0_0_16px_rgba(0,245,17,0.15)]'
-                  : 'border-[#00B10C]/30 text-[#B7F7AC]/70 hover:border-[#00F511]/40'
+                  ? 'border-[#8FD99A] bg-[#7BC98A]/15 text-[#8FD99A] shadow-[0_0_16px_rgba(143, 217, 154,0.15)]'
+                  : 'border-[#6B8F6E]/30 text-[#B7F7AC]/70 hover:border-[#8FD99A]/40'
               }`}
             >
               <span
-                className="font-semibold leading-none text-[#00F511]"
+                className="font-semibold leading-none text-[#8FD99A]"
                 style={{
                   fontSize:
                     opt.id === 'md'
@@ -80,7 +80,7 @@ export default function TextScaleControl() {
         })}
       </div>
 
-      <div className="rounded-xl border border-[#00B10C]/25 bg-[#040404]/50 px-4 py-3">
+      <div className="rounded-xl border border-[#6B8F6E]/25 bg-[#040404]/50 px-4 py-3">
         <p className="text-[10px] uppercase tracking-wider text-[#B7F7AC]/45 mb-1.5">
           {t('textScale.preview')}
         </p>

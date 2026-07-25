@@ -119,7 +119,7 @@ export default function WalletConnectCard({
             <button
               type="button"
               onClick={handleCopy}
-              className="px-3 py-1.5 rounded-full border border-[#00F511]/40 text-xs font-mono text-[#00F511] hover:bg-[#00F511]/10 transition"
+              className="px-3 py-1.5 rounded-full border border-[#8FD99A]/40 text-xs font-mono text-[#8FD99A] hover:bg-[#7BC98A]/10 transition"
               title={publicKey.toBase58()}
             >
               {copied ? t('wallet.copied') : shortenAddress(publicKey.toBase58())}
@@ -137,7 +137,7 @@ export default function WalletConnectCard({
             type="button"
             disabled={connecting}
             onClick={() => setVisible(true)}
-            className="px-3 py-1.5 rounded-full bg-[#00F511] text-[#040404] text-xs font-semibold hover:bg-[#B7F7AC] transition disabled:opacity-50"
+            className="px-3 py-1.5 rounded-full bg-[#7BC98A] text-[#040404] text-xs font-semibold hover:bg-[#B7F7AC] transition disabled:opacity-50"
           >
             {connecting ? t('wallet.connecting') : t('wallet.connectShort')}
           </button>
@@ -151,10 +151,10 @@ export default function WalletConnectCard({
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-wider text-[#B7F7AC]/60">Solana</p>
-          <h3 className="text-lg font-semibold text-[#00F511] mt-0.5">{t('wallet.title')}</h3>
+          <h3 className="text-lg font-semibold text-[#8FD99A] mt-0.5">{t('wallet.title')}</h3>
           <p className="text-xs text-[#B7F7AC]/50 mt-1">{t('wallet.subtitle')}</p>
         </div>
-        <div className="w-10 h-10 rounded-full border border-[#00F511]/40 flex items-center justify-center text-lg">
+        <div className="w-10 h-10 rounded-full border border-[#8FD99A]/40 flex items-center justify-center text-lg">
           ◎
         </div>
       </div>
@@ -170,14 +170,14 @@ export default function WalletConnectCard({
             type="button"
             disabled={connecting}
             onClick={() => setVisible(true)}
-            className="w-full py-3.5 rounded-xl bg-[#00F511] text-[#040404] font-semibold text-sm hover:bg-[#B7F7AC] transition disabled:opacity-50"
+            className="w-full py-3.5 rounded-xl bg-[#7BC98A] text-[#040404] font-semibold text-sm hover:bg-[#B7F7AC] transition disabled:opacity-50"
           >
             {connecting ? t('wallet.connecting') : t('wallet.connect')}
           </button>
         </div>
       ) : (
         <div className="space-y-3">
-          <div className="flex items-center justify-between gap-2 bg-[#040404]/60 border border-[#00B10C]/30 rounded-xl px-3 py-2.5">
+          <div className="flex items-center justify-between gap-2 bg-[#040404]/60 border border-[#6B8F6E]/30 rounded-xl px-3 py-2.5">
             <div className="min-w-0">
               <p className="text-[10px] text-[#B7F7AC]/50 uppercase">
                 {wallet?.adapter.name || 'Wallet'}
@@ -189,22 +189,22 @@ export default function WalletConnectCard({
             <button
               type="button"
               onClick={handleCopy}
-              className="shrink-0 text-xs text-[#00F511] hover:underline px-2"
+              className="shrink-0 text-xs text-[#8FD99A] hover:underline px-2"
             >
               {copied ? '✓' : t('wallet.copy')}
             </button>
           </div>
 
           <div className="grid grid-cols-2 gap-2">
-            <div className="rounded-xl border border-[#00B10C]/25 bg-[#040404]/40 px-3 py-2.5">
+            <div className="rounded-xl border border-[#6B8F6E]/25 bg-[#040404]/40 px-3 py-2.5">
               <p className="text-[10px] text-[#B7F7AC]/50 uppercase">SOL</p>
               <p className="text-sm font-semibold text-white mt-0.5">
                 {solBalance === null ? '—' : solBalance.toFixed(4)}
               </p>
             </div>
-            <div className="rounded-xl border border-[#00B10C]/25 bg-[#040404]/40 px-3 py-2.5">
+            <div className="rounded-xl border border-[#6B8F6E]/25 bg-[#040404]/40 px-3 py-2.5">
               <p className="text-[10px] text-[#B7F7AC]/50 uppercase">$SALVAZION</p>
-              <p className="text-sm font-semibold text-[#00F511] mt-0.5">
+              <p className="text-sm font-semibold text-[#8FD99A] mt-0.5">
                 {tokenBalance === null
                   ? '—'
                   : tokenBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })}
@@ -225,7 +225,7 @@ export default function WalletConnectCard({
               />
               <Link
                 href="/hub/swap"
-                className="block text-center text-xs text-[#00F511] hover:underline"
+                className="block text-center text-xs text-[#8FD99A] hover:underline"
               >
                 {t('wallet.openTerminal')}
               </Link>

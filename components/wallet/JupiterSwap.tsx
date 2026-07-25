@@ -146,7 +146,7 @@ export default function JupiterSwap({
           type="button"
           onClick={openModal}
           disabled={loading}
-          className="w-full py-3 rounded-xl bg-gradient-to-r from-[#00F511] to-[#00B10C] text-[#040404] font-semibold text-sm hover:opacity-90 transition disabled:opacity-50"
+          className="w-full py-3 rounded-xl bg-gradient-to-r from-[#8FD99A] to-[#6B8F6E] text-[#040404] font-semibold text-sm hover:opacity-90 transition disabled:opacity-50"
         >
           {loading ? 'Abriendo Jupiter…' : triggerLabel}
         </button>
@@ -158,7 +158,7 @@ export default function JupiterSwap({
             href={JUPITER_SWAP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="block text-center text-[11px] text-[#B7F7AC]/50 hover:text-[#00F511] mt-2"
+            className="block text-center text-[11px] text-[#B7F7AC]/50 hover:text-[#8FD99A] mt-2"
           >
             Abrir jup.ag en nueva pestaña ↗
           </a>
@@ -171,7 +171,7 @@ export default function JupiterSwap({
   return (
     <div className={`w-full ${className}`}>
       {loading && (
-        <div className="min-h-[280px] flex items-center justify-center text-[#00F511] text-sm animate-pulse">
+        <div className="min-h-[280px] flex items-center justify-center text-[#8FD99A] text-sm animate-pulse">
           Cargando Jupiter…
         </div>
       )}
@@ -182,7 +182,7 @@ export default function JupiterSwap({
             href={JUPITER_SWAP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm text-[#00F511] hover:underline"
+            className="text-sm text-[#8FD99A] hover:underline"
           >
             Continuar en jup.ag ↗
           </a>
@@ -190,7 +190,7 @@ export default function JupiterSwap({
       )}
       <div
         id={targetId}
-        className="w-full overflow-hidden rounded-2xl border border-[#00B10C]/30 bg-[#0a0a0a]"
+        className="w-full overflow-hidden rounded-2xl border border-[#6B8F6E]/30 bg-[#0a0a0a]"
         style={{ minHeight: loading ? 0 : 560 }}
       />
       {showFallbackLink && ready && (
@@ -198,7 +198,7 @@ export default function JupiterSwap({
           href={JUPITER_SWAP_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="block text-center text-[11px] text-[#B7F7AC]/50 hover:text-[#00F511] mt-3"
+          className="block text-center text-[11px] text-[#B7F7AC]/50 hover:text-[#8FD99A] mt-3"
         >
           ¿Problemas? Abre Jupiter completo ↗
         </a>

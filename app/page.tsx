@@ -52,43 +52,53 @@ export default function SalvazionLanding() {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Language: USA = English (principal), Chile = Español */}
+            {/* Language flags — same photo flags as salvazion.org (USA=EN, Chile=ES). No ES/EN text. */}
             <div
-              className="flex items-center gap-1 p-0.5 rounded-full border border-[var(--border-soft)] bg-[#0a0a0a]/80"
+              className="flex items-center gap-2"
               role="group"
               aria-label={t.nav.language}
             >
               <button
                 type="button"
                 onClick={() => setLang('en')}
-                className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold transition ${
+                className={`relative overflow-hidden rounded-[3px] transition ring-offset-2 ring-offset-[#040404] ${
                   lang === 'en'
-                    ? 'bg-[var(--accent-fill)] text-[#0a120c]'
-                    : 'text-[var(--sage)] hover:bg-[var(--surface-active)]'
+                    ? 'ring-2 ring-[var(--accent)] opacity-100'
+                    : 'opacity-70 hover:opacity-100'
                 }`}
                 aria-pressed={lang === 'en'}
-                title="English (USA)"
+                aria-label="English"
+                title="English"
               >
-                <span className="text-base leading-none" aria-hidden>
-                  🇺🇸
-                </span>
-                <span className="hidden sm:inline">EN</span>
+                <Image
+                  src="/flags/usa.jpg"
+                  alt=""
+                  width={51}
+                  height={32}
+                  className="block h-7 w-[44px] sm:h-8 sm:w-[51px] object-cover"
+                  priority
+                />
               </button>
               <button
                 type="button"
                 onClick={() => setLang('es')}
-                className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold transition ${
+                className={`relative overflow-hidden rounded-[3px] transition ring-offset-2 ring-offset-[#040404] ${
                   lang === 'es'
-                    ? 'bg-[var(--accent-fill)] text-[#0a120c]'
-                    : 'text-[var(--sage)] hover:bg-[var(--surface-active)]'
+                    ? 'ring-2 ring-[var(--accent)] opacity-100'
+                    : 'opacity-70 hover:opacity-100'
                 }`}
                 aria-pressed={lang === 'es'}
-                title="Español (Chile)"
+                aria-label="Español"
+                title="Español"
               >
-                <span className="text-base leading-none" aria-hidden>
-                  🇨🇱
-                </span>
-                <span className="hidden sm:inline">ES</span>
+                <Image
+                  src="/flags/chile.jpg"
+                  alt=""
+                  width={51}
+                  height={32}
+                  className="block h-7 w-[44px] sm:h-8 sm:w-[51px] object-cover"
+                  priority
+                />
               </button>
             </div>
             <Link

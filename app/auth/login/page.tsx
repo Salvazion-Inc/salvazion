@@ -34,9 +34,14 @@ function LoginForm() {
   useEffect(() => {
     const code = searchParams.get('error');
     const mapped = mapQueryAuthError(code);
-    if (mapped) setError(mapped);
     const detail = searchParams.get('detail');
-    if (detail && !mapped) setError(detail);
+    if (mapped && detail) {
+      setError(`${mapped} (${detail})`);
+    } else if (mapped) {
+      setError(mapped);
+    } else if (detail) {
+      setError(detail);
+    }
 
     const inv = parseInviteFromSearchParams(searchParams);
     if (inv) saveInboundInvite(inv);

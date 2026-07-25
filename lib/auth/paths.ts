@@ -68,7 +68,7 @@ export function mapQueryAuthError(code: string | null | undefined): string | nul
   if (!code) return null;
   switch (code) {
     case 'auth_callback_failed':
-      return 'No pudimos completar el acceso. El enlace puede haber expirado. Intenta de nuevo.';
+      return 'No pudimos completar el acceso con el proveedor. Cierra la ventana, vuelve a intentar «Continuar con X» o usa email.';
     case 'confirm_failed':
       return 'No pudimos confirmar el email. Solicita un nuevo enlace.';
     case 'session_missing':

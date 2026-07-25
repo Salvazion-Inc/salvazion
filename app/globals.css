@@ -38,6 +38,14 @@ body {
   filter: drop-shadow(0 0 12px #00F511);
 }
 
+/* Bible search highlight */
+mark {
+  background-color: rgba(0, 245, 17, 0.22);
+  color: #00f511;
+  border-radius: 0.2rem;
+  padding: 0 0.1rem;
+}
+
 /* Dark form controls — native date / select / autofill */
 input,
 textarea,

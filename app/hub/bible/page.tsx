@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import BottomNav from '@/components/BottomNav';
+import BibleSearchPanel from '@/components/bible/BibleSearchPanel';
 import {
   getBooks,
   getChapter,
@@ -17,18 +18,22 @@ import {
 import { BibleLanguage, BibleChapter } from '@/lib/bible/types';
 import { logAction, getPointsForAction } from '@/lib/scoring/engine';
 import { loadProfile, calculateAge, getLifeStage } from '@/lib/store/profile';
-import { getLionShortNudge } from '@/lib/coach/engine';
+
+type MainTab = 'read' | 'explore';
 
 export default function BiblePage() {
   const books = getBooks();
+  const [mainTab, setMainTab] = useState<MainTab>('read');
   const [language, setLanguage] = useState<BibleLanguage>('es');
   const [selectedBook, setSelectedBook] = useState('gen');
   const [selectedChapter, setSelectedChapter] = useState(1);
+  const [focusVerse, setFocusVerse] = useState<number | null>(null);
   const [chapter, setChapter] = useState<BibleChapter | null>(null);
   const [loadingChapter, setLoadingChapter] = useState(false);
   const [read, setRead] = useState(false);
   const [justLogged, setJustLogged] = useState(false);
   const [readCount, setReadCount] = useState(0);
+  const verseRefs = useRef<Map<number, HTMLParagraphElement>>(new Map());
 
   const availableChapters = getAvailableChapters(selectedBook, language);
   const totalChapters = getTotalChapters();
@@ -54,6 +59,19 @@ export default function BiblePage() {
     };
   }, [selectedBook, selectedChapter, language]);
 
+  // Scroll to focused verse from search/concordance
+  useEffect(() => {
+    if (focusVerse == null || loadingChapter || !chapter) return;
+    const el = verseRefs.current.get(focusVerse);
+    if (el) {
+      requestAnimationFrame(() => {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+      const t = setTimeout(() => setFocusVerse(null), 2800);
+      return () => clearTimeout(t);
+    }
+  }, [focusVerse, loadingChapter, chapter]);
+
   const handleMarkRead = () => {
     if (read) return;
     markChapterRead(selectedBook, selectedChapter);
@@ -63,36 +81,107 @@ export default function BiblePage() {
     setReadCount(getReadCount());
   };
 
-  const bookMeta = books.find(b => b.id === selectedBook);
+  const openVerse = useCallback((bookId: string, chapterNum: number, verse?: number) => {
+    setSelectedBook(bookId);
+    setSelectedChapter(chapterNum);
+    setFocusVerse(verse ?? null);
+    setMainTab('read');
+  }, []);
+
+  const goPrev = () => {
+    if (selectedChapter > 1) {
+      setSelectedChapter(selectedChapter - 1);
+      setFocusVerse(null);
+      return;
+    }
+    const idx = books.findIndex((b) => b.id === selectedBook);
+    if (idx > 0) {
+      const prev = books[idx - 1];
+      setSelectedBook(prev.id);
+      setSelectedChapter(prev.chapters);
+      setFocusVerse(null);
+    }
+  };
+
+  const goNext = () => {
+    const book = getBook(selectedBook);
+    if (!book) return;
+    if (selectedChapter < book.chapters) {
+      setSelectedChapter(selectedChapter + 1);
+      setFocusVerse(null);
+      return;
+    }
+    const idx = books.findIndex((b) => b.id === selectedBook);
+    if (idx < books.length - 1) {
+      setSelectedBook(books[idx + 1].id);
+      setSelectedChapter(1);
+      setFocusVerse(null);
+    }
+  };
+
+  const stage = (() => {
+    const pr = loadProfile();
+    return pr?.birthDate ? getLifeStage(calculateAge(pr.birthDate)) : 'adult';
+  })();
+  const pts = getPointsForAction('bible_chapter', stage);
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
       {/* Header */}
-      <header className="px-5 pt-6 pb-3 border-b border-[#00B10C]/20">
+      <header className="px-5 pt-6 pb-3 border-b border-[#00B10C]/20 sticky top-0 z-40 bg-[#040404]/95 backdrop-blur-md">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2.5">
-            <Link href="/hub/dashboard" className="text-[#B7F7AC]/60 text-sm">←</Link>
+            <Link href="/hub/dashboard" className="text-[#B7F7AC]/60 text-sm w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#00F511]/10">
+              ←
+            </Link>
             <div className="w-9 h-9 rounded-full border border-[#00F511]/50 flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
               <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
             </div>
             <div>
               <h1 className="text-lg font-bold text-[#00F511] leading-tight">Biblia</h1>
               <p className="text-[10px] text-[#B7F7AC]/50">
-                {readCount} / {totalChapters} capítulos · 66 libros
+                {readCount} / {totalChapters}{' '}
+                {language === 'en' ? 'chapters · 66 books' : 'capítulos · 66 libros'}
               </p>
             </div>
           </div>
         </div>
 
-        {/* Language tabs */}
-        <div className="flex flex-wrap gap-2 mb-3">
-          {([
-            { id: 'es' as BibleLanguage, label: 'ES · Reina Valera' },
-            { id: 'en' as BibleLanguage, label: 'EN · King James' },
-            { id: 'original' as BibleLanguage, label: 'Original · Heb/Gr' },
-          ]).map((lang) => (
+        {/* Main tabs: Read / Explore */}
+        <div className="flex p-1 rounded-2xl bg-[#0a0a0a] border border-[#00B10C]/25 mb-3">
+          {(
+            [
+              { id: 'read' as MainTab, es: 'Leer', en: 'Read' },
+              { id: 'explore' as MainTab, es: 'Buscar & Concordancia', en: 'Search & Concordance' },
+            ] as const
+          ).map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => setMainTab(t.id)}
+              className={`flex-1 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+                mainTab === t.id
+                  ? 'bg-[#00F511] text-[#040404] shadow-[0_0_18px_rgba(0,245,17,0.22)]'
+                  : 'text-[#B7F7AC]/70 hover:text-[#00F511]'
+              }`}
+            >
+              {language === 'en' ? t.en : t.es}
+            </button>
+          ))}
+        </div>
+
+        {/* Language */}
+        <div className="flex flex-wrap gap-2">
+          {(
+            [
+              { id: 'es' as BibleLanguage, label: 'ES · Reina Valera' },
+              { id: 'en' as BibleLanguage, label: 'EN · King James' },
+              { id: 'original' as BibleLanguage, label: 'Original · Heb/Gr' },
+            ] as const
+          ).map((lang) => (
             <button
               key={lang.id}
+              type="button"
               onClick={() => setLanguage(lang.id)}
               className={`px-3 py-1.5 rounded-full text-xs border transition-all ${
                 language === lang.id
@@ -105,144 +194,188 @@ export default function BiblePage() {
           ))}
         </div>
 
-        {/* Book + Chapter selectors */}
-        <div className="flex gap-2">
-          <select
-            value={selectedBook}
-            onChange={e => {
-              setSelectedBook(e.target.value);
-              const chs = getAvailableChapters(e.target.value, language);
-              setSelectedChapter(chs[0] || 1);
-            }}
-            className="flex-1 bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm"
-          >
-            <optgroup label={language === 'en' ? 'Old Testament' : 'Antiguo Testamento'}>
-              {books
-                .filter(b => b.testament === 'OT')
-                .map(b => (
-                  <option key={b.id} value={b.id}>
-                    {language === 'en' ? b.name : b.nameEs}
-                  </option>
-                ))}
-            </optgroup>
-            <optgroup label={language === 'en' ? 'New Testament' : 'Nuevo Testamento'}>
-              {books
-                .filter(b => b.testament === 'NT')
-                .map(b => (
-                  <option key={b.id} value={b.id}>
-                    {language === 'en' ? b.name : b.nameEs}
-                  </option>
-                ))}
-            </optgroup>
-          </select>
+        {/* Book + chapter — only in read mode */}
+        {mainTab === 'read' && (
+          <div className="flex gap-2 mt-3">
+            <select
+              value={selectedBook}
+              onChange={(e) => {
+                setSelectedBook(e.target.value);
+                const chs = getAvailableChapters(e.target.value, language);
+                setSelectedChapter(chs[0] || 1);
+                setFocusVerse(null);
+              }}
+              className="flex-1 bg-[#0a0a0a] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm"
+            >
+              <optgroup label={language === 'en' ? 'Old Testament' : 'Antiguo Testamento'}>
+                {books
+                  .filter((b) => b.testament === 'OT')
+                  .map((b) => (
+                    <option key={b.id} value={b.id}>
+                      {language === 'en' ? b.name : b.nameEs}
+                    </option>
+                  ))}
+              </optgroup>
+              <optgroup label={language === 'en' ? 'New Testament' : 'Nuevo Testamento'}>
+                {books
+                  .filter((b) => b.testament === 'NT')
+                  .map((b) => (
+                    <option key={b.id} value={b.id}>
+                      {language === 'en' ? b.name : b.nameEs}
+                    </option>
+                  ))}
+              </optgroup>
+            </select>
 
-          <select
-            value={selectedChapter}
-            onChange={e => setSelectedChapter(Number(e.target.value))}
-            className="w-24 bg-[#040404] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm"
-          >
-            {availableChapters.length > 0 ? (
-              availableChapters.map(c => (
-                <option key={c} value={c}>Cap. {c}</option>
-              ))
-            ) : (
-              <option value={1}>Cap. 1</option>
-            )}
-          </select>
-        </div>
+            <select
+              value={selectedChapter}
+              onChange={(e) => {
+                setSelectedChapter(Number(e.target.value));
+                setFocusVerse(null);
+              }}
+              className="w-24 bg-[#0a0a0a] border border-[#00B10C]/40 rounded-xl px-3 py-2.5 text-sm"
+            >
+              {availableChapters.map((c) => (
+                <option key={c} value={c}>
+                  {language === 'en' ? `Ch. ${c}` : `Cap. ${c}`}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </header>
 
-      {/* Lion nudge */}
-      <div className="px-5 py-3">
-        <div className="glass rounded-xl px-4 py-2.5 flex items-start gap-2.5 border border-[#00F511]/15">
-          <div className="w-8 h-8 rounded-full border border-[#00F511]/40 flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
-            <Image src="/logo-icon.png" alt="León Verde" width={32} height={32} className="object-cover" />
-          </div>
-          <p className="text-xs text-[#D8E1D9]/75 leading-relaxed">
-            {getLionShortNudge('salvation')}
-          </p>
-        </div>
-      </div>
-
       {/* Content */}
-      <main className="flex-1 px-5 pb-32 overflow-y-auto">
-        {loadingChapter ? (
+      <main className="flex-1 px-5 pt-4 pb-28 overflow-hidden flex flex-col min-h-0">
+        {mainTab === 'explore' ? (
+          <div className="flex-1 min-h-0 max-w-lg mx-auto w-full flex flex-col">
+            <BibleSearchPanel language={language} onOpenVerse={openVerse} />
+          </div>
+        ) : loadingChapter ? (
           <div className="flex flex-col items-center justify-center py-20 text-[#B7F7AC]/60">
             <div className="w-8 h-8 border-2 border-[#00F511]/40 border-t-[#00F511] rounded-full animate-spin mb-4" />
-            <p className="text-sm">Cargando capítulo…</p>
+            <p className="text-sm">{language === 'en' ? 'Loading chapter…' : 'Cargando capítulo…'}</p>
           </div>
         ) : chapter ? (
-          <div className="max-w-lg mx-auto">
-            <div className="mb-4">
-              <h2 className="text-xl font-bold text-white">
-                {chapter.book} {chapter.chapter}
-              </h2>
-              <p className="text-xs text-[#B7F7AC]/50">{chapter.version}</p>
+          <div className="max-w-lg mx-auto w-full overflow-y-auto flex-1 min-h-0">
+            {/* Chapter title + nav */}
+            <div className="flex items-start justify-between gap-3 mb-5">
+              <div>
+                <h2 className="text-xl font-bold text-white tracking-tight">
+                  {chapter.book} {chapter.chapter}
+                </h2>
+                <p className="text-xs text-[#B7F7AC]/50 mt-0.5">{chapter.version}</p>
+              </div>
+              <div className="flex gap-1.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={goPrev}
+                  className="w-9 h-9 rounded-xl border border-[#00B10C]/35 text-[#B7F7AC] hover:border-[#00F511]/50 hover:text-[#00F511] transition"
+                  aria-label="Previous"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  onClick={goNext}
+                  className="w-9 h-9 rounded-xl border border-[#00B10C]/35 text-[#B7F7AC] hover:border-[#00F511]/50 hover:text-[#00F511] transition"
+                  aria-label="Next"
+                >
+                  ›
+                </button>
+              </div>
             </div>
 
             <div
-              className="space-y-4 mb-8"
+              className="space-y-1 mb-8"
               dir={
                 language === 'original' && getBook(selectedBook)?.testament === 'OT'
                   ? 'rtl'
                   : 'ltr'
               }
             >
-              {chapter.verses.map((v) => (
-                <p
-                  key={v.number}
-                  className={`leading-relaxed text-[#D8E1D9]/90 ${
-                    language === 'original' ? 'text-[1.05rem] font-serif' : ''
-                  }`}
-                >
-                  <span className="text-[#00F511] text-xs font-medium mx-1.5 font-sans">
-                    {v.number}
-                  </span>
-                  {v.text}
-                </p>
-              ))}
+              {chapter.verses.map((v) => {
+                const focused = focusVerse === v.number;
+                return (
+                  <p
+                    key={v.number}
+                    id={`v-${v.number}`}
+                    ref={(el) => {
+                      if (el) verseRefs.current.set(v.number, el);
+                      else verseRefs.current.delete(v.number);
+                    }}
+                    className={`leading-relaxed text-[#D8E1D9]/90 rounded-xl px-2.5 py-2 transition-all duration-500 ${
+                      language === 'original' ? 'text-[1.05rem] font-serif' : 'text-[0.95rem]'
+                    } ${
+                      focused
+                        ? 'bg-[#00F511]/12 ring-1 ring-[#00F511]/40 shadow-[0_0_24px_rgba(0,245,17,0.12)]'
+                        : 'hover:bg-white/[0.02]'
+                    }`}
+                  >
+                    <span className="text-[#00F511] text-[11px] font-semibold mx-1 font-sans align-super">
+                      {v.number}
+                    </span>
+                    {v.text}
+                  </p>
+                );
+              })}
             </div>
 
-            {/* Mark as read */}
             <button
+              type="button"
               onClick={handleMarkRead}
               disabled={read}
-              className={`w-full py-4 rounded-xl font-semibold transition-all ${
+              className={`w-full py-4 rounded-2xl font-semibold transition-all ${
                 read
                   ? 'bg-[#00B10C]/20 text-[#B7F7AC] border border-[#00B10C]/40'
-                  : 'bg-[#00F511] text-[#040404] hover:bg-[#B7F7AC]'
+                  : 'bg-[#00F511] text-[#040404] hover:bg-[#B7F7AC] shadow-[0_0_24px_rgba(0,245,17,0.2)]'
               }`}
             >
-              {(() => {
-                const stage = (() => {
-                  const pr = loadProfile();
-                  return pr?.birthDate ? getLifeStage(calculateAge(pr.birthDate)) : 'adult';
-                })();
-                const pts = getPointsForAction('bible_chapter', stage);
-                return read
-                  ? justLogged
-                    ? `✓ Capítulo leído · +${pts} Salvation`
-                    : '✓ Ya leído'
-                  : `Marcar como leído · +${pts} Salvation`;
-              })()}
+              {read
+                ? justLogged
+                  ? `✓ ${language === 'en' ? 'Chapter read' : 'Capítulo leído'} · +${pts} Salvation`
+                  : `✓ ${language === 'en' ? 'Already read' : 'Ya leído'}`
+                : `${language === 'en' ? 'Mark as read' : 'Marcar como leído'} · +${pts} Salvation`}
             </button>
 
+            <div className="flex gap-2 mt-3 mb-6">
+              <button
+                type="button"
+                onClick={goPrev}
+                className="flex-1 py-3 rounded-xl border border-[#00B10C]/30 text-xs text-[#B7F7AC] hover:border-[#00F511]/40"
+              >
+                ← {language === 'en' ? 'Previous' : 'Anterior'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setMainTab('explore')}
+                className="flex-1 py-3 rounded-xl border border-[#00F511]/40 text-xs text-[#00F511] hover:bg-[#00F511]/10"
+              >
+                ⌕ {language === 'en' ? 'Search' : 'Buscar'}
+              </button>
+              <button
+                type="button"
+                onClick={goNext}
+                className="flex-1 py-3 rounded-xl border border-[#00B10C]/30 text-xs text-[#B7F7AC] hover:border-[#00F511]/40"
+              >
+                {language === 'en' ? 'Next' : 'Siguiente'} →
+              </button>
+            </div>
+
             {language === 'original' && (
-              <p className="text-xs text-[#B7F7AC]/40 mt-4 text-center leading-relaxed">
-                AT en hebreo (Westminster Leningrad Codex) · NT en griego (Textus Receptus).
-                Lectura de derecha a izquierda en el Antiguo Testamento.
+              <p className="text-[11px] text-[#B7F7AC]/40 text-center leading-relaxed mb-4">
+                AT hebreo (WLC) · NT griego (Textus Receptus). RTL en Antiguo Testamento.
               </p>
             )}
             {language === 'es' && (
-              <p className="text-xs text-[#B7F7AC]/40 mt-4 text-center leading-relaxed">
-                Texto Reina Valera 1909 (dominio público). La edición 1960® de SBU requiere licencia
-                comercial; si la obtienes, puedes sustituir los JSON en /public/bible/es/books/.
+              <p className="text-[11px] text-[#B7F7AC]/40 text-center leading-relaxed mb-4">
+                Reina Valera 1909 (dominio público).
               </p>
             )}
           </div>
         ) : (
           <div className="text-center py-16 text-[#B7F7AC]/40">
-            <p>No se pudo cargar el capítulo.</p>
+            <p>{language === 'en' ? 'Could not load chapter.' : 'No se pudo cargar el capítulo.'}</p>
           </div>
         )}
       </main>

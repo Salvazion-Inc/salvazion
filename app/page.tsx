@@ -103,8 +103,12 @@ export default function SalvazionLanding() {
 
       {/* Hero — same Canva home video (green smoke) */}
       <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden pt-20">
+        {/*
+          Same Canva home asset (green smoke). On salvazion.org the fill is
+          mirrored horizontally so the dense plume sits on the right — match that.
+        */}
         <video
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover -scale-x-100"
           src="/videos/hero-home.mp4"
           autoPlay
           muted

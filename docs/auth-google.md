@@ -50,6 +50,21 @@ Las keys de Google **no van en Vercel**. Van en **Supabase**.
 
 No hace falta ninguna variable nueva en Vercel (solo las de Supabase que ya tienes).
 
+## Error 400: `provider is not enabled`
+
+La app llama al proyecto de `NEXT_PUBLIC_SUPABASE_URL` en Vercel. Si Google está ON en **otro** proyecto, verás este error.
+
+1. Vercel → Environment Variables → copia el valor de `NEXT_PUBLIC_SUPABASE_URL`  
+   Debe ser: `https://kppylfrsclkdmtpobpxd.supabase.co`
+2. Abre **ese** proyecto en Supabase (no otro).
+3. Authentication → Providers → **Google**:
+   - Toggle **Enabled** = ON (verde)
+   - Client ID y Client Secret rellenados (no vacíos)
+   - **Save** otra vez
+4. Vercel → Redeploy (por si la URL de Supabase se cambió hace poco)
+
+**No** pongas Client ID/Secret de Google en Vercel.
+
 ## Código
 
 - `lib/auth/google-oauth.ts`

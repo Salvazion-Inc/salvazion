@@ -58,10 +58,80 @@ export function extractGoogleIdentity(user: User | null | undefined): GoogleIden
   return { email, displayName, avatarUrl, userId };
 }
 
+/** Which Supabase project the app is talking to (from NEXT_PUBLIC_SUPABASE_URL). */
+function supabaseProjectHint(): string {
+  try {
+    const raw = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const host = new URL(raw).hostname; // xxx.supabase.co
+    return host.replace('.supabase.co', '') || raw || 'desconocido';
+  } catch {
+    return process.env.NEXT_PUBLIC_SUPABASE_URL || 'desconocido';
+  }
+}
+
+/**
+ * Read public auth settings to see if Google is enabled on THIS project.
+ */
+export async function isGoogleProviderEnabled(): Promise<{
+  enabled: boolean;
+  projectRef: string;
+  external?: Record<string, boolean>;
+}> {
+  const projectRef = supabaseProjectHint();
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!base || !key) {
+    return { enabled: false, projectRef };
+  }
+  try {
+    const res = await fetch(`${base.replace(/\/$/, '')}/auth/v1/settings`, {
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+      },
+      cache: 'no-store',
+    });
+    if (!res.ok) {
+      return { enabled: false, projectRef };
+    }
+    const json = (await res.json()) as {
+      external?: Record<string, boolean | string>;
+    };
+    const external: Record<string, boolean> = {};
+    if (json.external) {
+      for (const [k, v] of Object.entries(json.external)) {
+        external[k] = v === true || v === 'true';
+      }
+    }
+    return {
+      enabled: external.google === true,
+      projectRef,
+      external,
+    };
+  } catch {
+    return { enabled: false, projectRef };
+  }
+}
+
 export async function signInWithGoogle(options?: {
   next?: string;
 }): Promise<{ error: string | null }> {
   try {
+    const projectRef = supabaseProjectHint();
+
+    // Pre-flight: surface clear error if Google is off on this project
+    const status = await isGoogleProviderEnabled();
+    if (!status.enabled) {
+      return {
+        error:
+          `Google no está habilitado en el proyecto Supabase que usa la app (${projectRef}). ` +
+          `Abre ese proyecto en supabase.com → Authentication → Providers → Google → ` +
+          `Enable ON + Client ID y Client Secret → Save. ` +
+          `Comprueba en Vercel que NEXT_PUBLIC_SUPABASE_URL sea https://${projectRef}.supabase.co ` +
+          `y haz Redeploy. Las keys de Google NO van en Vercel.`,
+      };
+    }
+
     const supabase = createClient();
     const next = options?.next || '/hub/dashboard';
     const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
@@ -72,7 +142,6 @@ export async function signInWithGoogle(options?: {
         redirectTo,
         skipBrowserRedirect: false,
         queryParams: {
-          // Force account picker (handy when multiple Gmail accounts)
           access_type: 'offline',
           prompt: 'select_account',
         },
@@ -84,7 +153,9 @@ export async function signInWithGoogle(options?: {
       if (m.includes('not enabled') || m.includes('unsupported provider')) {
         return {
           error:
-            'Google no está activado en Supabase. Authentication → Providers → Google → Enable + Client ID/Secret de Google Cloud → Save.',
+            `Google sigue “not enabled” en Supabase (proyecto ${projectRef}). ` +
+            `En el dashboard de ESE proyecto: Providers → Google → Enable + Client ID/Secret → Save. ` +
+            `Si ya lo hiciste en otro proyecto, actualiza NEXT_PUBLIC_SUPABASE_URL en Vercel.`,
         };
       }
       return { error: error.message };

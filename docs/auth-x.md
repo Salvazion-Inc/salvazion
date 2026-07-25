@@ -29,14 +29,27 @@ alter table public.profiles add column if not exists x_username text;
 alter table public.profiles add column if not exists x_user_id text;
 ```
 
-### B) Provider X en Supabase
+### B) Provider X en Supabase (OAuth 2.0)
 
-1. [X Developer Portal](https://developer.x.com/) → app con callback:
-   ```
-   https://<PROJECT_REF>.supabase.co/auth/v1/callback
-   ```
-2. Supabase → Authentication → Providers → Twitter → Enable + keys
-3. Redirect URLs de la app ya incluyen `/auth/callback`
+**Importante:** la app usa el provider `x` (OAuth 2.0), no el legacy `twitter` (OAuth 1.0a).
+
+1. [X Developer Portal](https://developer.x.com/) → User authentication settings:
+   - Type: **Web App**
+   - Callback:
+     ```
+     https://kppylfrsclkdmtpobpxd.supabase.co/auth/v1/callback
+     ```
+   - Website: `https://salvazion.org`
+   - Copia **Client ID** y **Client Secret** (Keys and tokens → OAuth 2.0)
+2. Supabase (proyecto `kppylfrsclkdmtpobpxd`) → Authentication → Providers  
+   → **X / Twitter (OAuth 2.0)** → Enable  
+   → pega **Client ID** + **Client Secret** (no las API Key de OAuth 1.0a)  
+   → **Save**
+3. Redirect URLs de la app:
+   - `https://salvazion.org/auth/callback`
+   - `http://localhost:3000/auth/callback`
+
+Si el error es `provider is not enabled`, casi siempre es porque se activó el provider legacy **Twitter (OAuth 1.0a)** en lugar de **X / Twitter (OAuth 2.0)**, o se pegaron las keys incorrectas.
 
 ## Flujo técnico
 

@@ -48,6 +48,17 @@ export function mapAuthError(message: string | null | undefined): string {
   if (m.includes('missing next_public_supabase') || m.includes('supabase no está')) {
     return message;
   }
+  if (
+    m.includes('provider is not enabled') ||
+    m.includes('unsupported provider') ||
+    m.includes('x no está activado')
+  ) {
+    return (
+      'X no está activado en este proyecto de Supabase. ' +
+      'Authentication → Providers → “X / Twitter (OAuth 2.0)” → Enable + Client ID/Secret → Save. ' +
+      'Usa OAuth 2.0 (Client ID), no solo las API Key de OAuth 1.0a.'
+    );
+  }
 
   return message;
 }

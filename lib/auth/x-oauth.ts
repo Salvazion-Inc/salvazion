@@ -1,9 +1,14 @@
 /**
  * X (Twitter) OAuth via Supabase Auth.
- * Provider id remains "twitter" in Supabase even after the X rebrand.
+ *
+ * Supabase now has two providers:
+ * - `x`      → X / Twitter (OAuth 2.0)  ← recommended
+ * - `twitter`→ legacy Twitter (OAuth 1.0a)
+ *
+ * We try `x` first, then fall back to `twitter` if only the legacy one is enabled.
  */
 
-import type { User } from '@supabase/supabase-js';
+import type { Provider, User } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/client';
 
 export interface XIdentity {
@@ -16,12 +21,10 @@ export interface XIdentity {
 function cleanUsername(raw: unknown): string | null {
   if (typeof raw !== 'string') return null;
   const u = raw.trim().replace(/^@+/, '');
-  if (!u || !/^[A-Za-z0-9_]{1,15}$/.test(u) && !/^[A-Za-z0-9_]{1,50}$/.test(u)) {
-    // X allows longer handles in some edge cases; keep alnum underscore
-    const loose = u.replace(/[^A-Za-z0-9_]/g, '');
-    return loose || null;
-  }
-  return u;
+  if (!u) return null;
+  // X handles: letters, numbers, underscore
+  const loose = u.replace(/[^A-Za-z0-9_]/g, '');
+  return loose || null;
 }
 
 /**
@@ -47,7 +50,6 @@ export function extractXIdentity(user: User | null | undefined): XIdentity | nul
     cleanUsername(meta.nickname);
 
   if (!username) {
-    // Only treat as X login if provider is twitter/x
     const isX =
       user.app_metadata?.provider === 'twitter' ||
       user.app_metadata?.provider === 'x' ||
@@ -93,8 +95,18 @@ export function xProfileUrl(username: string): string {
   return `https://x.com/${username.replace(/^@+/, '')}`;
 }
 
+function isProviderDisabledError(message: string): boolean {
+  const m = message.toLowerCase();
+  return (
+    m.includes('not enabled') ||
+    m.includes('unsupported provider') ||
+    m.includes('provider is not enabled')
+  );
+}
+
 /**
  * Start X OAuth (login or signup — same flow; Supabase creates account if new).
+ * Prefer OAuth 2.0 provider `x`; fall back to legacy `twitter`.
  */
 export async function signInWithX(options?: {
   next?: string;
@@ -104,19 +116,46 @@ export async function signInWithX(options?: {
     const next = options?.next || '/hub/dashboard';
     const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
 
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'twitter',
+    // 1) Preferred: X OAuth 2.0 (Supabase dashboard: "X / Twitter (OAuth 2.0)")
+    const primary = await supabase.auth.signInWithOAuth({
+      provider: 'x' as Provider,
       options: {
         redirectTo,
-        // Request profile for username; scopes depend on X app config
         scopes: 'tweet.read users.read offline.access',
+        skipBrowserRedirect: false,
       },
     });
 
-    if (error) {
-      return { error: error.message };
+    if (!primary.error) {
+      return { error: null };
     }
-    return { error: null };
+
+    // 2) Fallback: legacy Twitter OAuth 1.0a if only that is enabled
+    if (isProviderDisabledError(primary.error.message)) {
+      const legacy = await supabase.auth.signInWithOAuth({
+        provider: 'twitter' as Provider,
+        options: {
+          redirectTo,
+          skipBrowserRedirect: false,
+        },
+      });
+
+      if (!legacy.error) {
+        return { error: null };
+      }
+
+      if (isProviderDisabledError(legacy.error.message)) {
+        return {
+          error:
+            'X no está activado en Supabase. En Authentication → Providers habilita ' +
+            '“X / Twitter (OAuth 2.0)” con Client ID y Client Secret de X, y guarda. ' +
+            'Proyecto: kppylfrsclkdmtpobpxd',
+        };
+      }
+      return { error: legacy.error.message };
+    }
+
+    return { error: primary.error.message };
   } catch (e) {
     return {
       error: e instanceof Error ? e.message : 'No se pudo iniciar sesión con X',

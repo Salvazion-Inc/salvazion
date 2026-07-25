@@ -26,7 +26,7 @@ const nextConfig: NextConfig = {
             // Health sensors (PWA): GPS walks + DeviceMotion steps/activity.
             // Camera/mic stay blocked.
             value:
-              "camera=(), microphone=(), geolocation=(self), accelerometer=(self), gyroscope=(self), magnetometer=(self)",
+              "camera=(), microphone=(), geolocation=(self), accelerometer=(self), gyroscope=(self), magnetometer=(self), bluetooth=(self)",
           },
           {
             key: "Content-Security-Policy",

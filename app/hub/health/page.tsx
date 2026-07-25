@@ -50,6 +50,7 @@ import {
 } from '@/lib/health/biomarkers';
 import { generateCoachGuidance, CoachMessage, getLionShortNudge } from '@/lib/coach/engine';
 import PhoneSensorsPanel from '@/components/health/PhoneSensorsPanel';
+import WearablesPanel from '@/components/health/WearablesPanel';
 
 export default function HealthPage() {
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
@@ -236,6 +237,16 @@ export default function HealthPage() {
         {/* PHONE SENSORS — steps, activity, GPS, rest/sleep */}
         <PhoneSensorsPanel
           loggedToday={loggedToday}
+          onAutoLog={(actionType, label) => handleLog(actionType, label)}
+          onSleepSynced={(bed, wake) => {
+            setBedTime(bed);
+            setWakeTime(wake);
+            setTodaySleep(getTodaySleep());
+            setRegularity(getSleepRegularity());
+          }}
+        />
+
+        <WearablesPanel
           onAutoLog={(actionType, label) => handleLog(actionType, label)}
           onSleepSynced={(bed, wake) => {
             setBedTime(bed);
@@ -709,7 +720,7 @@ export default function HealthPage() {
         })}
 
         <p className="text-[10px] text-[var(--sage)]/60 text-center leading-relaxed px-2 mb-4">
-          Fase B: sensores del celular (pasos, actividad, GPS, reposo). Fase C: HealthKit / Health Connect y wearables.
+          Fase B: sensores del celular. Fase C: wearables (BLE + entrada manual). Fase D: OAuth / HealthKit / Health Connect.
         </p>
       </main>
 

@@ -71,7 +71,7 @@ export function getHealthActionsForStage(stage: LifeStage): HealthActionDef[] {
           : 'Dormir dentro de tu ventana circadiana ideal',
       actionType: 'sleep_ideal',
       icon: '🌙',
-      sensorHint: 'Modo reposo del celular · wearable (Fase C)'
+      sensorHint: 'Modo reposo del celular · wearable / anillo / reloj'
     }
   ];
 

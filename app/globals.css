@@ -78,7 +78,8 @@ html[data-text-scale="xxl"] nav.fixed span {
 }
 
 .neon-text {
-  text-shadow: 0 0 6px rgba(143, 217, 154, 0.22), 0 0 12px rgba(107, 207, 120, 0.08);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--accent) 28%, transparent),
+    0 0 12px color-mix(in srgb, var(--neon-primary) 12%, transparent);
 }
 
 /* Cosmic Octo — brand / display (headlines, wordmark, token). Not body UI. */
@@ -93,7 +94,7 @@ html[data-text-scale="xxl"] nav.fixed span {
 }
 
 .lion-glow {
-  filter: drop-shadow(0 0 8px rgba(143, 217, 154, 0.22));
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent) 28%, transparent));
 }
 
 .glass {
@@ -103,7 +104,7 @@ html[data-text-scale="xxl"] nav.fixed span {
 }
 
 .ring-glow {
-  filter: drop-shadow(0 0 6px rgba(143, 217, 154, 0.18));
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent) 22%, transparent));
 }
 
 /* —— Soft UI primitives —— */

@@ -6,16 +6,43 @@ export type InviteCategory = 'family' | 'sibling' | 'friend' | 'colleague';
 export interface InviteCategoryDef {
   id: InviteCategory;
   relation: LinkRelation;
+  /** Emoji fallback */
   icon: string;
+  /** Icono de marca Imagine — estilo Salvazion HUD */
+  iconSrc: string;
   group: 'family' | 'circle';
 }
 
 /** Categories requested for the Phalanx invite UX */
 export const INVITE_CATEGORIES: InviteCategoryDef[] = [
-  { id: 'family', relation: 'family', icon: '👨‍👩‍👧‍👦', group: 'family' },
-  { id: 'sibling', relation: 'sibling', icon: '🤝', group: 'family' },
-  { id: 'friend', relation: 'friend', icon: '💚', group: 'circle' },
-  { id: 'colleague', relation: 'colleague', icon: '💼', group: 'circle' },
+  {
+    id: 'family',
+    relation: 'family',
+    icon: '👨‍👩‍👧‍👦',
+    iconSrc: '/icons/invite/family.jpg',
+    group: 'family',
+  },
+  {
+    id: 'sibling',
+    relation: 'sibling',
+    icon: '🤝',
+    iconSrc: '/icons/invite/sibling.jpg',
+    group: 'family',
+  },
+  {
+    id: 'friend',
+    relation: 'friend',
+    icon: '💚',
+    iconSrc: '/icons/invite/friend.jpg',
+    group: 'circle',
+  },
+  {
+    id: 'colleague',
+    relation: 'colleague',
+    icon: '💼',
+    iconSrc: '/icons/invite/colleague.jpg',
+    group: 'circle',
+  },
 ];
 
 /** Extra relations still supported (onboarding / legacy) */
@@ -58,13 +85,13 @@ export function relationLabel(relation: LinkRelation, lang: Language = 'es'): st
 export function categoryLabel(id: InviteCategory, lang: Language = 'es'): string {
   const es: Record<InviteCategory, string> = {
     family: 'Familia',
-    sibling: 'Hermanos',
+    sibling: 'Hermanos en la fe',
     friend: 'Amigos',
     colleague: 'Colegas',
   };
   const en: Record<InviteCategory, string> = {
     family: 'Family',
-    sibling: 'Siblings',
+    sibling: 'Faith siblings',
     friend: 'Friends',
     colleague: 'Colleagues',
   };
@@ -74,13 +101,13 @@ export function categoryLabel(id: InviteCategory, lang: Language = 'es'): string
 export function categoryHint(id: InviteCategory, lang: Language = 'es'): string {
   const es: Record<InviteCategory, string> = {
     family: 'Padres, cónyuge, hijos y familia extendida',
-    sibling: 'Hermanos y hermanas de sangre o de fe cercana',
+    sibling: 'Hermanos y hermanas de sangre o de la fe',
     friend: 'Amigos del camino y de la vida',
     colleague: 'Compañeros de trabajo, ministerio o proyectos',
   };
   const en: Record<InviteCategory, string> = {
     family: 'Parents, spouse, children and extended family',
-    sibling: 'Brothers and sisters by blood or close faith',
+    sibling: 'Brothers and sisters by blood or in the faith',
     friend: 'Friends for the journey of life',
     colleague: 'Coworkers, ministry partners and project teammates',
   };

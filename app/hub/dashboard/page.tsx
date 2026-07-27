@@ -168,7 +168,14 @@ export default function DashboardPage() {
           <div className="w-full max-w-sm space-y-2 mb-4">
             {newBadges.map((b) => (
               <div key={b.id} className="glass rounded-xl p-3 border-[var(--border-strong)] flex items-center gap-3">
-                <span className="text-2xl" aria-hidden>{b.icon}</span>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={b.iconSrc}
+                  alt=""
+                  width={40}
+                  height={40}
+                  className="w-10 h-10 rounded-full object-cover border border-[var(--border-strong)] lion-glow shrink-0"
+                />
                 <div>
                   <p className="text-[10px] text-[var(--accent)] uppercase">{t('dashboard.newBadge')}</p>
                   <p className="text-sm font-semibold text-white">{b.name}</p>

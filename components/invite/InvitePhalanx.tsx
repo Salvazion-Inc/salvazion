@@ -22,6 +22,7 @@ import {
 } from '@/lib/invite/supabase';
 import { loadProfileAsync } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
+import BrandMarkIcon from '@/components/BrandMarkIcon';
 
 interface Props {
   /** When provided, parent controls refresh */
@@ -255,8 +256,16 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
                   : 'border-[var(--border-soft)] hover:border-[var(--border-strong)]'
               }`}
             >
-              <div className="text-xl mb-1">{c.icon}</div>
-              <div className={`text-sm font-semibold ${active ? 'text-[#8FD99A]' : 'text-white'}`}>
+              <div className="mb-2">
+                <BrandMarkIcon
+                  src={c.iconSrc}
+                  alt={categoryLabel(c.id, lang)}
+                  fallback={c.icon}
+                  size={44}
+                  muted={!active}
+                />
+              </div>
+              <div className={`text-sm font-semibold ${active ? 'text-[var(--accent)]' : 'text-white'}`}>
                 {categoryLabel(c.id, lang)}
               </div>
               <div className="text-[10px] text-[var(--sage)]/80 leading-snug mt-0.5">

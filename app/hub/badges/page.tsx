@@ -14,6 +14,7 @@ import {
   BadgeCategory
 } from '@/lib/badges/engine';
 import { loadProfile } from '@/lib/store/profile';
+import BrandMarkIcon from '@/components/BrandMarkIcon';
 
 const CATEGORY_LABELS: Record<BadgeCategory, string> = {
   salvation: 'Salvation',
@@ -84,9 +85,14 @@ export default function BadgesPage() {
                 key={b.id}
                 className="glass rounded-xl p-3 border border-[#8FD99A] flex items-center gap-3 shadow-[0_0_20px_rgba(143, 217, 154,0.15)]"
               >
-                <span className="text-2xl">{b.icon}</span>
+                <BrandMarkIcon
+                  src={b.iconSrc}
+                  alt={b.name}
+                  fallback={b.icon}
+                  size={44}
+                />
                 <div>
-                  <p className="text-[10px] text-[#8FD99A] uppercase tracking-wider">Nueva insignia</p>
+                  <p className="text-[10px] text-[var(--accent)] uppercase tracking-wider">Nueva insignia</p>
                   <p className="text-sm font-semibold text-white">{b.name}</p>
                 </div>
               </div>
@@ -123,7 +129,15 @@ export default function BadgesPage() {
                           : 'border-[var(--border-soft)] opacity-45'
                       }`}
                     >
-                      <div className="text-2xl mb-1.5">{badge.icon}</div>
+                      <div className="mb-2">
+                        <BrandMarkIcon
+                          src={badge.iconSrc}
+                          alt={badge.name}
+                          fallback={badge.icon}
+                          size={48}
+                          muted={!unlocked}
+                        />
+                      </div>
                       <p className={`text-sm font-medium ${unlocked ? 'text-white' : 'text-[#D8E1D9]/60'}`}>
                         {badge.name}
                       </p>

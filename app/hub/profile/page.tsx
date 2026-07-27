@@ -18,6 +18,7 @@ import { createClient } from '@/lib/supabase/client';
 import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 import ProfileAvatar from '@/components/profile/ProfileAvatar';
 import TextScaleControl from '@/components/settings/TextScaleControl';
+import ThemeControl from '@/components/settings/ThemeControl';
 import LanguageControl from '@/components/settings/LanguageControl';
 import InvitePhalanx from '@/components/invite/InvitePhalanx';
 import { useI18n } from '@/components/I18nProvider';
@@ -271,6 +272,11 @@ export default function ProfilePage() {
               );
             }}
           />
+        </div>
+
+        {/* Aesthetic / colors — Salvazion DNA preserved */}
+        <div className="mb-6">
+          <ThemeControl />
         </div>
 
         {/* Language — whole app */}

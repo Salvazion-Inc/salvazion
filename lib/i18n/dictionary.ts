@@ -152,6 +152,14 @@ export const dictionary = {
       previewLine1: 'Make Salvation, Health and Freedom Great Again.',
       previewLine2: 'La Palabra de Dios ilumina el camino de la Phalanx.',
     },
+    theme: {
+      section: 'Estética',
+      title: 'Colores de la app',
+      hint: 'Elige una paleta sin perder la esencia Salvazion: oscuro, tech y resplandor suave.',
+      preview: 'Vista previa',
+      previewLine1: 'Make Salvation, Health and Freedom Great Again.',
+      previewLine2: 'La Phalanx brilla en la oscuridad con el León Verde.',
+    },
     dashboard: {
       purpose: 'Tu propósito',
       pillars: 'Tus tres pilares',
@@ -588,6 +596,14 @@ export const dictionary = {
       preview: 'Preview',
       previewLine1: 'Make Salvation, Health and Freedom Great Again.',
       previewLine2: 'The Word of God lights the path of the Phalanx.',
+    },
+    theme: {
+      section: 'Aesthetics',
+      title: 'App colors',
+      hint: 'Pick a palette without losing Salvazion essence: dark, tech, soft glow.',
+      preview: 'Preview',
+      previewLine1: 'Make Salvation, Health and Freedom Great Again.',
+      previewLine2: 'The Phalanx shines in the dark with the Green Lion.',
     },
     dashboard: {
       purpose: 'Your purpose',

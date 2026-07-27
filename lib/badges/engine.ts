@@ -15,10 +15,18 @@ export interface BadgeDef {
   id: string;
   name: string;
   description: string;
+  /** Emoji fallback (accesibilidad / legacy) */
   icon: string;
+  /** Icono de marca Imagine — estilo Salvazion HUD */
+  iconSrc: string;
   category: BadgeCategory;
   /** Condición legible */
   requirement: string;
+}
+
+/** Ruta pública del icono de insignia */
+export function badgeIconSrc(id: string): string {
+  return `/icons/badges/${id}.jpg`;
 }
 
 export interface EarnedBadge {
@@ -28,170 +36,176 @@ export interface EarnedBadge {
 
 const STORAGE_BADGES = 'salvazion_badges';
 
+function b(
+  partial: Omit<BadgeDef, 'iconSrc'> & { id: string }
+): BadgeDef {
+  return { ...partial, iconSrc: badgeIconSrc(partial.id) };
+}
+
 export const BADGE_CATALOG: BadgeDef[] = [
   // Salvation
-  {
+  b({
     id: 'first_devotional',
     name: 'Primera Palabra',
     description: 'Completaste tu primer Devocional.',
     icon: '✝️',
     category: 'salvation',
-    requirement: '1 devocional completado'
-  },
-  {
+    requirement: '1 devocional completado',
+  }),
+  b({
     id: 'bible_reader',
     name: 'Lector Fiel',
     description: 'Has leído 5 capítulos de la Biblia.',
     icon: '📖',
     category: 'salvation',
-    requirement: '5 capítulos leídos'
-  },
-  {
+    requirement: '5 capítulos leídos',
+  }),
+  b({
     id: 'salvation_50',
     name: 'Alma Despierta',
     description: 'Alcanzaste 50 en Salvation en un día.',
     icon: '🔥',
     category: 'salvation',
-    requirement: 'Salvation ≥ 50 en un día'
-  },
-  {
+    requirement: 'Salvation ≥ 50 en un día',
+  }),
+  b({
     id: 'salvation_100',
     name: 'Firme en la Roca',
     description: 'Alcanzaste 100 en Salvation en un día.',
     icon: '🪨',
     category: 'salvation',
-    requirement: 'Salvation ≥ 100 en un día'
-  },
+    requirement: 'Salvation ≥ 100 en un día',
+  }),
 
   // Health
-  {
+  b({
     id: 'first_movement',
     name: 'Cuerpo en Movimiento',
     description: 'Registraste tu primera sesión de ejercicio o deporte.',
     icon: '⚡',
     category: 'health',
-    requirement: '1 acción de movimiento'
-  },
-  {
+    requirement: '1 acción de movimiento',
+  }),
+  b({
     id: 'sun_walker',
     name: 'Hijo del Sol',
     description: '3 días con aire libre / sol registrados.',
     icon: '☀️',
     category: 'health',
-    requirement: '3 registros outdoor/sol'
-  },
-  {
+    requirement: '3 registros outdoor/sol',
+  }),
+  b({
     id: 'hydration_hero',
     name: 'Templo Hidratado',
     description: 'Completaste la meta de hidratación 3 días.',
     icon: '💧',
     category: 'health',
-    requirement: '3 días de hidratación completa'
-  },
-  {
+    requirement: '3 días de hidratación completa',
+  }),
+  b({
     id: 'sleep_guardian',
     name: 'Guardián del Sueño',
     description: '5 registros de sueño circadiano.',
     icon: '🌙',
     category: 'health',
-    requirement: '5 noches registradas'
-  },
-  {
+    requirement: '5 noches registradas',
+  }),
+  b({
     id: 'athlete',
     name: 'Atleta de la Phalanx',
     description: '10 sesiones de deporte registradas.',
     icon: '🏟️',
     category: 'health',
-    requirement: '10 sesiones de deporte'
-  },
+    requirement: '10 sesiones de deporte',
+  }),
 
   // Freedom
-  {
+  b({
     id: 'first_learn',
     name: 'Mente Despierta',
     description: 'Completaste tu primera acción de aprendizaje.',
     icon: '📚',
     category: 'freedom',
-    requirement: '1 acción Freedom de aprendizaje'
-  },
-  {
+    requirement: '1 acción Freedom de aprendizaje',
+  }),
+  b({
     id: 'connector',
     name: 'Tejido Vivo',
     description: '3 conexiones reales (familia / fe).',
     icon: '🤝',
     category: 'freedom',
-    requirement: '3 conexiones reales'
-  },
+    requirement: '3 conexiones reales',
+  }),
 
   // Streaks
-  {
+  b({
     id: 'streak_3',
     name: 'Tres Días Firme',
     description: 'Racha de 3 días en cualquier pilar.',
     icon: '3️⃣',
     category: 'streak',
-    requirement: 'Racha ≥ 3'
-  },
-  {
+    requirement: 'Racha ≥ 3',
+  }),
+  b({
     id: 'streak_7',
     name: 'Semana de Virtud',
     description: 'Racha de 7 días en cualquier pilar.',
     icon: '7️⃣',
     category: 'streak',
-    requirement: 'Racha ≥ 7'
-  },
-  {
+    requirement: 'Racha ≥ 7',
+  }),
+  b({
     id: 'streak_30',
     name: 'Mes de Constancia',
     description: 'Racha de 30 días en cualquier pilar.',
     icon: '📅',
     category: 'streak',
-    requirement: 'Racha ≥ 30'
-  },
+    requirement: 'Racha ≥ 30',
+  }),
 
   // Discipline / Calendar
-  {
+  b({
     id: 'day_complete',
     name: 'Día Ordenado',
     description: 'Completaste todas las disciplinas de un día en el calendario.',
     icon: '✅',
     category: 'discipline',
-    requirement: '100% del día en calendario'
-  },
-  {
+    requirement: '100% del día en calendario',
+  }),
+  b({
     id: 'disciplined_7',
     name: 'Siete Días de Orden',
     description: '7 eventos de calendario marcados como cumplidos.',
     icon: '🦁',
     category: 'discipline',
-    requirement: '7 disciplinas cumplidas'
-  },
+    requirement: '7 disciplinas cumplidas',
+  }),
 
   // Special
-  {
+  b({
     id: 'global_70',
     name: 'Equilibrio Vivo',
     description: 'Salvazion Score Global ≥ 70.',
     icon: '⚖️',
     category: 'special',
-    requirement: 'Global ≥ 70'
-  },
-  {
+    requirement: 'Global ≥ 70',
+  }),
+  b({
     id: 'global_90',
     name: 'Excelencia de la Phalanx',
     description: 'Salvazion Score Global ≥ 90.',
     icon: '👑',
     category: 'special',
-    requirement: 'Global ≥ 90'
-  },
-  {
+    requirement: 'Global ≥ 90',
+  }),
+  b({
     id: 'lion_oath',
     name: 'Juramento del León',
     description: 'Aceptaste al León Verde como coach.',
     icon: '🦁',
     category: 'special',
-    requirement: 'Onboarding completado'
-  },
+    requirement: 'Onboarding completado',
+  }),
 ];
 
 export function loadEarned(): EarnedBadge[] {

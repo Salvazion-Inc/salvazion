@@ -47,6 +47,7 @@ export default function OnboardingPage() {
     city: '',
     country: '',
     birthDate: '',
+    sex: undefined,
     spiritualMaturity: 'growing',
     familyStatus: 'family',
     currentFocus: [],
@@ -333,6 +334,39 @@ https://salvazion.com
             </div>
 
             <div>
+              <label className="block text-sm text-[var(--sage)] mb-1.5">
+                Sexo biológico
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => update({ sex: 'male' })}
+                  className={`py-3.5 rounded-xl border text-sm font-medium transition-all ${
+                    profile.sex === 'male'
+                      ? 'bg-[#7BC98A]/20 border-[#8FD99A] text-[#8FD99A]'
+                      : 'border-[var(--border-soft)] text-[#D8E1D9]/80'
+                  }`}
+                >
+                  Hombre
+                </button>
+                <button
+                  type="button"
+                  onClick={() => update({ sex: 'female' })}
+                  className={`py-3.5 rounded-xl border text-sm font-medium transition-all ${
+                    profile.sex === 'female'
+                      ? 'bg-[#7BC98A]/20 border-[#8FD99A] text-[#8FD99A]'
+                      : 'border-[var(--border-soft)] text-[#D8E1D9]/80'
+                  }`}
+                >
+                  Mujer
+                </button>
+              </div>
+              <p className="text-[11px] text-[var(--sage)]/75 mt-1.5 leading-relaxed">
+                Requerido para personalizar Health (p. ej. ciclo menstrual y biomarcadores).
+              </p>
+            </div>
+
+            <div>
               <label className="block text-sm text-[var(--sage)] mb-2">¿En qué te quieres enfocar ahora?</label>
               <div className="flex flex-wrap gap-2">
                 {FOCUS_OPTIONS.map(opt => (
@@ -357,7 +391,8 @@ https://salvazion.com
               </button>
               <button
                 onClick={next}
-                className="btn-primary flex-1"
+                disabled={profile.sex !== 'male' && profile.sex !== 'female'}
+                className="btn-primary flex-1 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Continuar
               </button>

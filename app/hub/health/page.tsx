@@ -4,8 +4,8 @@ import { useEffect, useState, useCallback, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import BottomNav from '@/components/BottomNav';
-import { loadProfile, getLifeStageLabel } from '@/lib/store/profile';
-import { UserProfile } from '@/lib/types';
+import { loadProfile, getLifeStageLabel, saveProfile } from '@/lib/store/profile';
+import { UserProfile, BiologicalSex } from '@/lib/types';
 import { computeScores, logAction } from '@/lib/scoring/engine';
 import { ComputedScores } from '@/lib/scoring/types';
 import {
@@ -52,6 +52,9 @@ import { generateCoachGuidance, CoachMessage, getLionShortNudge } from '@/lib/co
 import PhoneSensorsPanel from '@/components/health/PhoneSensorsPanel';
 import WearablesPanel from '@/components/health/WearablesPanel';
 import CloudNativeSyncPanel from '@/components/health/CloudNativeSyncPanel';
+import WomenHealthPanel from '@/components/health/WomenHealthPanel';
+import BiomarkersPanel from '@/components/health/BiomarkersPanel';
+import ClinicalRecordPanel from '@/components/health/ClinicalRecordPanel';
 
 export default function HealthPage() {
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
@@ -59,8 +62,8 @@ export default function HealthPage() {
   const [coach, setCoach] = useState<CoachMessage | null>(null);
   const [actions, setActions] = useState<HealthActionDef[]>([]);
   const [loggedToday, setLoggedToday] = useState<Set<string>>(new Set());
-  const [mounted, setMounted] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [healthRefreshKey, setHealthRefreshKey] = useState(0);
 
   const [bedTime, setBedTime] = useState('22:30');
   const [wakeTime, setWakeTime] = useState('06:30');
@@ -107,14 +110,17 @@ export default function HealthPage() {
   }, [stage]);
 
   useEffect(() => {
-    setMounted(true);
-    refresh();
+    // Defer so we don't sync-setState inside the effect body (React 19 lint).
+    const id = requestAnimationFrame(() => refresh());
+    return () => cancelAnimationFrame(id);
   }, [refresh]);
 
   const showToast = (msg: string) => {
     setToast(msg);
     setTimeout(() => setToast(null), 2500);
   };
+
+  const bumpHealthData = () => setHealthRefreshKey((k) => k + 1);
 
   const handleLog = (actionType: string, label: string) => {
     const result = logAction(actionType);
@@ -123,13 +129,29 @@ export default function HealthPage() {
       setLoggedToday(prev => new Set([...prev, actionType]));
       if (profile) setCoach(generateCoachGuidance(profile, result));
       showToast(`+${getHealthPointsPreview(actionType)} Health · ${label}`);
+      bumpHealthData();
     }
+  };
+
+  const handleSetSex = (sex: BiologicalSex) => {
+    saveProfile({ sex });
+    const p = loadProfile();
+    setProfile(p);
+    bumpHealthData();
+    showToast(
+      sex === 'female'
+        ? 'Perfil: salud femenina habilitada'
+        : sex === 'male'
+          ? 'Sexo biológico actualizado'
+          : 'Sexo no especificado'
+    );
   };
 
   const handleSaveSleep = () => {
     const entry = saveSleepEntry(bedTime, wakeTime);
     setTodaySleep(entry);
     setRegularity(getSleepRegularity());
+    bumpHealthData();
 
     if (isSleepIdeal(bedTime, wakeTime, stage) && !loggedToday.has('sleep_ideal')) {
       handleLog('sleep_ideal', 'Sueño circadiano ideal');
@@ -144,12 +166,13 @@ export default function HealthPage() {
     if (!hydration) return;
     const next = setHydrationGlasses(hydration.glasses + delta, stage);
     setHydration(next);
+    bumpHealthData();
     if (next.glasses >= next.goal && !loggedToday.has('hydration_daily')) {
       handleLog('hydration_daily', 'Hidratación diaria completada');
     }
   };
 
-  if (!mounted || !scores || !hydration || !nutrition) {
+  if (!scores || !hydration || !nutrition) {
     return (
       <div className="min-h-screen bg-[#040404] flex items-center justify-center">
         <div className="text-[#8FD99A] animate-pulse">Cargando Health...</div>
@@ -235,6 +258,13 @@ export default function HealthPage() {
           </div>
         </div>
 
+        {/* BIOMARCADORES desde sensores + hábitos */}
+        <BiomarkersPanel
+          isFemale={profile?.sex === 'female'}
+          lang={profile?.language === 'en' ? 'en' : 'es'}
+          refreshKey={healthRefreshKey}
+        />
+
         {/* PHONE SENSORS — steps, activity, GPS, rest/sleep */}
         <PhoneSensorsPanel
           loggedToday={loggedToday}
@@ -244,6 +274,7 @@ export default function HealthPage() {
             setWakeTime(wake);
             setTodaySleep(getTodaySleep());
             setRegularity(getSleepRegularity());
+            bumpHealthData();
           }}
         />
 
@@ -254,6 +285,7 @@ export default function HealthPage() {
             setWakeTime(wake);
             setTodaySleep(getTodaySleep());
             setRegularity(getSleepRegularity());
+            bumpHealthData();
           }}
         />
 
@@ -265,9 +297,63 @@ export default function HealthPage() {
               setWakeTime(wake);
               setTodaySleep(getTodaySleep());
               setRegularity(getSleepRegularity());
+              bumpHealthData();
             }}
           />
         </Suspense>
+
+        {/* Sexo biológico — habilita salud femenina */}
+        {profile?.sex !== 'female' && profile?.sex !== 'male' && (
+          <section className="mb-6">
+            <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] space-y-3">
+              <h2 className="text-sm font-semibold text-white">
+                Personaliza Health
+              </h2>
+              <p className="text-[11px] text-[var(--sage)]/85 leading-relaxed">
+                Indica tu sexo biológico para activar módulos de salud (p. ej. ciclo menstrual
+                y biomarcadores adaptados). Se guarda en tu perfil.
+              </p>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleSetSex('female')}
+                  className="btn-secondary flex-1 py-2.5 text-sm"
+                >
+                  Mujer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSetSex('male')}
+                  className="btn-secondary flex-1 py-2.5 text-sm"
+                >
+                  Hombre
+                </button>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* SALUD FEMENINA — solo perfiles mujer */}
+        {profile?.sex === 'female' && (
+          <WomenHealthPanel
+            lang={profile?.language === 'en' ? 'en' : 'es'}
+            onLogged={() => {
+              if (!loggedToday.has('cycle_log')) {
+                handleLog('cycle_log', 'Registro de ciclo / salud femenina');
+              } else {
+                bumpHealthData();
+                showToast('Ciclo actualizado');
+              }
+            }}
+          />
+        )}
+
+        {/* Ficha clínica FHIR */}
+        <ClinicalRecordPanel
+          profile={profile}
+          lang={profile?.language === 'en' ? 'en' : 'es'}
+          refreshKey={healthRefreshKey}
+        />
 
         {/* SUEÑO CIRCADIANO */}
         <section className="mb-6">

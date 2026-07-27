@@ -122,27 +122,44 @@ export default function DashboardPage() {
       </header>
 
       <main className="flex-1 flex flex-col items-center px-5 pt-4 pb-32">
-        {/* Coach */}
+        {/* Coach León Verde */}
         <div className={`w-full max-w-sm glass rounded-2xl p-4 mb-5 ${toneStyles[coach.tone]}`}>
           <div className="flex items-start gap-3">
-            <div className="w-11 h-11 rounded-full border border-[var(--border-strong)] flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
-              <Image src="/logo-icon.png" alt="León Verde" width={44} height={44} className="object-cover" />
-            </div>
+            <Link
+              href="/hub/coach"
+              className="w-12 h-12 rounded-full border border-[var(--border-strong)] flex-shrink-0 lion-glow overflow-hidden bg-[#040404] relative"
+            >
+              <Image
+                src="/coach/leon-verde-thumb.jpg"
+                alt="León Verde"
+                width={48}
+                height={48}
+                className="object-cover w-full h-full"
+              />
+            </Link>
             <div className="flex-1 min-w-0">
               <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] mb-0.5">
-                León Verde · Coach
+                León Verde · Agente de voz
               </p>
               <h3 className="text-sm font-semibold text-white leading-snug mb-1.5">{coach.title}</h3>
               <p className="text-xs text-[#D8E1D9]/80 leading-relaxed">{coach.body}</p>
-              {coach.recommendedAction && (
-                <button
-                  type="button"
-                  onClick={() => handleLog(coach.recommendedAction!.type)}
-                  className="btn-primary mt-3 py-2.5 text-sm"
+              <div className="flex flex-wrap gap-2 mt-3">
+                {coach.recommendedAction && (
+                  <button
+                    type="button"
+                    onClick={() => handleLog(coach.recommendedAction!.type)}
+                    className="btn-primary flex-1 min-w-[8rem] py-2.5 text-sm"
+                  >
+                    {coach.recommendedAction.label} · +{coach.recommendedAction.points}
+                  </button>
+                )}
+                <Link
+                  href="/hub/coach"
+                  className="btn-secondary flex-1 min-w-[8rem] py-2.5 text-sm text-center"
                 >
-                  {coach.recommendedAction.label} · +{coach.recommendedAction.points}
-                </button>
-              )}
+                  🎙 Hablar con el León
+                </Link>
+              </div>
             </div>
           </div>
         </div>

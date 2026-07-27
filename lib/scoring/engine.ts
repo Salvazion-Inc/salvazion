@@ -36,6 +36,7 @@ export const ACTION_CATALOG: Record<string, { pillar: Pillar; points: number; la
   hydration_daily: { pillar: 'health', points: 8, label: 'Hidratación diaria completada' },
   fasting: { pillar: 'health', points: 12, label: 'Ayuno registrado' },
   sleep_ideal: { pillar: 'health', points: 18, label: 'Sueño dentro de ventana circadiana' },
+  cycle_log: { pillar: 'health', points: 10, label: 'Registro de ciclo / salud femenina' },
 
   // Freedom
   learn_article_video: { pillar: 'freedom', points: 8, label: 'Artículo o video corto completado' },

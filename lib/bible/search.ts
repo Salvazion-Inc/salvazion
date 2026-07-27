@@ -374,7 +374,7 @@ function escapeReg(s: string): string {
 /** Parse human Bible references into book/chapter/verse */
 export function parseReference(
   input: string,
-  language: BibleLanguage
+  _language?: BibleLanguage
 ): { bookId: string; chapter: number; verse?: number } | null {
   const raw = input.trim();
   // Patterns: "1 Juan 4:8", "Juan 3:16", "gen 1:1", "Salmos 23", "Ps 23:1"
@@ -388,7 +388,7 @@ export function parseReference(
   const verse = m[3] ? parseInt(m[3], 10) : undefined;
   if (!chapter || chapter < 1) return null;
 
-  const bookId = resolveBookId(bookPart, language);
+  const bookId = resolveBookId(bookPart);
   if (!bookId) return null;
   const book = getBook(bookId);
   if (!book || chapter > book.chapters) return null;
@@ -463,16 +463,30 @@ const ALIASES: Record<string, string> = {
   '3 juan': '3jn', '3juan': '3jn', '3jn': '3jn',
   judas: 'jud', jude: 'jud', jud: 'jud',
   apocalipsis: 'rev', revelation: 'rev', rev: 'rev', ap: 'rev',
-  // EN common
-  genesis: 'gen', exodus: 'exo', leviticus: 'lev', numbers: 'num',
-  deuteronomy: 'deu', joshua: 'jos', judges: 'jdg',
-  proverbs: 'pro', ecclesiastes: 'ecc', isaiah: 'isa', jeremiah: 'jer',
-  ezekiel: 'ezk', hosea: 'hos', obadiah: 'oba', jonah: 'jon',
-  micah: 'mic', nahum: 'nam', habakkuk: 'hab', zephaniah: 'zep',
-  haggai: 'hag', zechariah: 'zec', malachi: 'mal',
+  // EN common (only keys not already listed above)
+  exodus: 'exo',
+  leviticus: 'lev',
+  numbers: 'num',
+  deuteronomy: 'deu',
+  joshua: 'jos',
+  judges: 'jdg',
+  proverbs: 'pro',
+  ecclesiastes: 'ecc',
+  isaiah: 'isa',
+  jeremiah: 'jer',
+  ezekiel: 'ezk',
+  hosea: 'hos',
+  obadiah: 'oba',
+  jonah: 'jon',
+  micah: 'mic',
+  habakkuk: 'hab',
+  zephaniah: 'zep',
+  haggai: 'hag',
+  zechariah: 'zec',
+  malachi: 'mal',
 };
 
-function resolveBookId(part: string, language: BibleLanguage): string | null {
+function resolveBookId(part: string): string | null {
   const key = part.toLowerCase().replace(/\s+/g, ' ').trim();
   if (ALIASES[key]) return ALIASES[key];
 

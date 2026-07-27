@@ -162,6 +162,10 @@ export default function ProfilePage() {
                 value={t(`profile.familyStatus.${profile.familyStatus || 'family'}`)}
               />
               <Row
+                label={t('profile.sex')}
+                value={t(`profile.sexValue.${profile.sex || 'unspecified'}`)}
+              />
+              <Row
                 label={t('profile.focus')}
                 value={(profile.currentFocus || []).join(', ') || '—'}
               />
@@ -191,6 +195,25 @@ export default function ProfilePage() {
                   rows={3}
                   className="w-full bg-[#040404] border border-[var(--border-soft)] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#8FD99A] resize-none"
                 />
+              </div>
+              <div>
+                <label className="block text-xs text-[var(--sage)] mb-1">
+                  {t('profile.sex')}
+                </label>
+                <select
+                  value={draft.sex || 'unspecified'}
+                  onChange={(e) =>
+                    setDraft({
+                      ...draft,
+                      sex: e.target.value as 'female' | 'male' | 'unspecified',
+                    })
+                  }
+                  className="w-full bg-[#040404] border border-[var(--border-soft)] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#8FD99A]"
+                >
+                  <option value="unspecified">{t('profile.sexValue.unspecified')}</option>
+                  <option value="female">{t('profile.sexValue.female')}</option>
+                  <option value="male">{t('profile.sexValue.male')}</option>
+                </select>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>

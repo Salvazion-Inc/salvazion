@@ -3,6 +3,8 @@
  * Credentials come from env — never ship secrets to the client.
  */
 
+import { getAppBaseUrl } from '@/lib/config/site';
+
 export type OAuthProviderId = 'fitbit' | 'oura' | 'whoop' | 'garmin';
 
 export interface OAuthProviderConfig {
@@ -119,7 +121,7 @@ export function getClientCredentials(id: OAuthProviderId): {
   return { clientId, clientSecret };
 }
 
-export { getAppBaseUrl } from '@/lib/config/site';
+export { getAppBaseUrl };
 
 export function getRedirectUri(provider: OAuthProviderId): string {
   return `${getAppBaseUrl()}/api/wearables/oauth/${provider}/callback`;

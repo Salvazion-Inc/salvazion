@@ -2,6 +2,8 @@ export type SpiritualMaturity = 'new' | 'growing' | 'mature' | 'leader';
 export type FamilyStatus = 'single' | 'married' | 'parent' | 'widow' | 'family';
 export type Language = 'es' | 'en';
 export type BibleVersion = 'rv1960' | 'kjv' | 'original';
+/** Sexo biológico (salud / biomarcadores / ciclo). */
+export type BiologicalSex = 'female' | 'male' | 'unspecified';
 
 /** Who you can invite into your Phalanx */
 export type LinkRelation =
@@ -47,6 +49,8 @@ export interface UserProfile {
   city: string;
   country: string;
   birthDate: string;         // YYYY-MM-DD — para calcular edad y personalizar
+  /** Sexo biológico — habilita módulos de salud (p. ej. ciclo menstrual) */
+  sex?: BiologicalSex;
 
   /** Profile photo — https URL (Supabase Storage) or compressed data URL (local) */
   avatarUrl?: string;

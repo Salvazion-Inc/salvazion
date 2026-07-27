@@ -43,9 +43,9 @@ function Node({
   r = 1.1,
   active,
 }: {
-  cx: number;
-  cy: number;
-  r?: number;
+  cx: number | string;
+  cy: number | string;
+  r?: number | string;
   active?: boolean;
 }) {
   return <circle cx={cx} cy={cy} r={r} fill={tone(active)} opacity={active ? 0.95 : 0.7} />;

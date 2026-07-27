@@ -452,3 +452,120 @@ select:-webkit-autofill {
   background: rgba(107, 143, 110, 0.55);
   border-radius: 3px;
 }
+
+/* —— Bible cover carousel & book-change animations —— */
+.bible-carousel {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.bible-carousel::-webkit-scrollbar {
+  display: none;
+  height: 0;
+}
+
+.bible-carousel-item {
+  animation: bible-carousel-in 0.42s ease both;
+}
+
+@keyframes bible-carousel-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.bible-pulse {
+  animation: bible-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes bible-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.85); }
+}
+
+.bible-hero-stage {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+.bible-hero-enter-from-right {
+  animation: bible-hero-in-right 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.bible-hero-enter-from-left {
+  animation: bible-hero-in-left 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.bible-hero-enter-fade {
+  animation: bible-hero-fade 0.4s ease both;
+}
+
+@keyframes bible-hero-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(18%) scale(0.98);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes bible-hero-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-18%) scale(0.98);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes bible-hero-fade {
+  from {
+    opacity: 0;
+    transform: scale(1.03);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+.bible-content-enter {
+  animation: bible-content-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes bible-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bible-carousel-item,
+  .bible-hero-enter-from-right,
+  .bible-hero-enter-from-left,
+  .bible-hero-enter-fade,
+  .bible-content-enter,
+  .bible-pulse {
+    animation: none !important;
+  }
+}

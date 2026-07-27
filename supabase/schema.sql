@@ -20,6 +20,7 @@ create table if not exists public.profiles (
   city text default '',
   country text default '',
   birth_date date,
+  sex text check (sex is null or sex in ('female', 'male', 'unspecified')),
   avatar_url text,
   x_username text,
   x_user_id text,
@@ -33,6 +34,7 @@ create table if not exists public.profiles (
 alter table public.profiles add column if not exists avatar_url text;
 alter table public.profiles add column if not exists x_username text;
 alter table public.profiles add column if not exists x_user_id text;
+alter table public.profiles add column if not exists sex text;
 
 -- 2. Score actions (every logged action)
 create table if not exists public.score_actions (

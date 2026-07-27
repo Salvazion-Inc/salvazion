@@ -5,6 +5,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import BottomNav from '@/components/BottomNav';
 import BibleSearchPanel from '@/components/bible/BibleSearchPanel';
+import BookCover from '@/components/bible/BookCover';
+import BookLibrary from '@/components/bible/BookLibrary';
+import BookCarousel from '@/components/bible/BookCarousel';
 import {
   getBooks,
   getChapter,
@@ -21,11 +24,14 @@ import { loadProfile, calculateAge, getLifeStage } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
 
 type MainTab = 'read' | 'explore';
+type ExploreMode = 'library' | 'search';
+type BookAnimDir = 'left' | 'right' | 'fade';
 
 export default function BiblePage() {
   const books = getBooks();
   const { t, lang: uiLang } = useI18n();
   const [mainTab, setMainTab] = useState<MainTab>('read');
+  const [exploreMode, setExploreMode] = useState<ExploreMode>('library');
   const [language, setLanguage] = useState<BibleLanguage>('es');
   const [selectedBook, setSelectedBook] = useState('gen');
   const [selectedChapter, setSelectedChapter] = useState(1);
@@ -35,10 +41,38 @@ export default function BiblePage() {
   const [read, setRead] = useState(false);
   const [justLogged, setJustLogged] = useState(false);
   const [readCount, setReadCount] = useState(0);
+  const [bookAnimDir, setBookAnimDir] = useState<BookAnimDir>('fade');
+  const [bookAnimKey, setBookAnimKey] = useState(0);
   const verseRefs = useRef<Map<number, HTMLParagraphElement>>(new Map());
+  const prevBookIdxRef = useRef(0);
 
   const availableChapters = getAvailableChapters(selectedBook, language);
   const totalChapters = getTotalChapters();
+  const selectedBookIdx = books.findIndex((b) => b.id === selectedBook);
+
+  const selectBook = useCallback(
+    (bookId: string, chapterNum?: number) => {
+      const nextIdx = books.findIndex((b) => b.id === bookId);
+      const prevIdx = prevBookIdxRef.current;
+      if (nextIdx !== prevIdx && nextIdx >= 0) {
+        setBookAnimDir(nextIdx > prevIdx ? 'right' : 'left');
+        setBookAnimKey((k) => k + 1);
+        prevBookIdxRef.current = nextIdx;
+      } else if (nextIdx === prevIdx) {
+        setBookAnimDir('fade');
+      }
+
+      setSelectedBook(bookId);
+      if (typeof chapterNum === 'number') {
+        setSelectedChapter(chapterNum);
+      } else {
+        const chs = getAvailableChapters(bookId, language);
+        setSelectedChapter(chs[0] || 1);
+      }
+      setFocusVerse(null);
+    },
+    [books, language]
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -83,12 +117,22 @@ export default function BiblePage() {
     setReadCount(getReadCount());
   };
 
-  const openVerse = useCallback((bookId: string, chapterNum: number, verse?: number) => {
-    setSelectedBook(bookId);
-    setSelectedChapter(chapterNum);
-    setFocusVerse(verse ?? null);
-    setMainTab('read');
-  }, []);
+  const openVerse = useCallback(
+    (bookId: string, chapterNum: number, verse?: number) => {
+      selectBook(bookId, chapterNum);
+      setFocusVerse(verse ?? null);
+      setMainTab('read');
+    },
+    [selectBook]
+  );
+
+  const openBookFromLibrary = useCallback(
+    (bookId: string) => {
+      selectBook(bookId);
+      setMainTab('read');
+    },
+    [selectBook]
+  );
 
   const goPrev = () => {
     if (selectedChapter > 1) {
@@ -99,9 +143,7 @@ export default function BiblePage() {
     const idx = books.findIndex((b) => b.id === selectedBook);
     if (idx > 0) {
       const prev = books[idx - 1];
-      setSelectedBook(prev.id);
-      setSelectedChapter(prev.chapters);
-      setFocusVerse(null);
+      selectBook(prev.id, prev.chapters);
     }
   };
 
@@ -115,11 +157,16 @@ export default function BiblePage() {
     }
     const idx = books.findIndex((b) => b.id === selectedBook);
     if (idx < books.length - 1) {
-      setSelectedBook(books[idx + 1].id);
-      setSelectedChapter(1);
-      setFocusVerse(null);
+      selectBook(books[idx + 1].id, 1);
     }
   };
+
+  const heroAnimClass =
+    bookAnimDir === 'right'
+      ? 'bible-hero-enter-from-right'
+      : bookAnimDir === 'left'
+        ? 'bible-hero-enter-from-left'
+        : 'bible-hero-enter-fade';
 
   const stage = (() => {
     const pr = loadProfile();
@@ -195,53 +242,64 @@ export default function BiblePage() {
           ))}
         </div>
 
-        {/* Book + chapter — only in read mode */}
+        {/* Book carousel + chapter — only in read mode */}
         {mainTab === 'read' && (
-          <div className="flex gap-2 mt-3">
-            <select
-              value={selectedBook}
-              onChange={(e) => {
-                setSelectedBook(e.target.value);
-                const chs = getAvailableChapters(e.target.value, language);
-                setSelectedChapter(chs[0] || 1);
-                setFocusVerse(null);
-              }}
-              className="input-soft flex-1 py-2.5 text-sm"
-            >
-              <optgroup label={t('bible.ot')}>
-                {books
-                  .filter((b) => b.testament === 'OT')
-                  .map((b) => (
-                    <option key={b.id} value={b.id}>
-                      {uiLang === 'en' ? b.name : b.nameEs}
-                    </option>
-                  ))}
-              </optgroup>
-              <optgroup label={t('bible.nt')}>
-                {books
-                  .filter((b) => b.testament === 'NT')
-                  .map((b) => (
-                    <option key={b.id} value={b.id}>
-                      {uiLang === 'en' ? b.name : b.nameEs}
-                    </option>
-                  ))}
-              </optgroup>
-            </select>
+          <div className="mt-3 -mx-5">
+            <BookCarousel
+              books={books}
+              selectedBookId={selectedBook}
+              uiLang={uiLang === 'en' ? 'en' : 'es'}
+              onSelect={(id) => selectBook(id)}
+              size="md"
+            />
+            <div className="flex gap-2 mt-2.5 px-5">
+              <select
+                value={selectedBook}
+                onChange={(e) => selectBook(e.target.value)}
+                className="input-soft flex-1 py-2.5 text-sm"
+                aria-label={t('bible.library')}
+              >
+                <optgroup label={t('bible.ot')}>
+                  {books
+                    .filter((b) => b.testament === 'OT')
+                    .map((b) => (
+                      <option key={b.id} value={b.id}>
+                        {uiLang === 'en' ? b.name : b.nameEs}
+                      </option>
+                    ))}
+                </optgroup>
+                <optgroup label={t('bible.nt')}>
+                  {books
+                    .filter((b) => b.testament === 'NT')
+                    .map((b) => (
+                      <option key={b.id} value={b.id}>
+                        {uiLang === 'en' ? b.name : b.nameEs}
+                      </option>
+                    ))}
+                </optgroup>
+              </select>
 
-            <select
-              value={selectedChapter}
-              onChange={(e) => {
-                setSelectedChapter(Number(e.target.value));
-                setFocusVerse(null);
-              }}
-              className="input-soft w-24 py-2.5 text-sm"
-            >
-              {availableChapters.map((c) => (
-                <option key={c} value={c}>
-                  {t('bible.ch')} {c}
-                </option>
-              ))}
-            </select>
+              <select
+                value={selectedChapter}
+                onChange={(e) => {
+                  setSelectedChapter(Number(e.target.value));
+                  setFocusVerse(null);
+                }}
+                className="input-soft w-24 py-2.5 text-sm"
+                aria-label={t('bible.ch')}
+              >
+                {availableChapters.map((c) => (
+                  <option key={c} value={c}>
+                    {t('bible.ch')} {c}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {selectedBookIdx >= 0 && (
+              <p className="px-5 mt-1.5 text-[10px] text-[var(--sage)]/70 tabular-nums">
+                {selectedBookIdx + 1} / {books.length}
+              </p>
+            )}
           </div>
         )}
       </header>
@@ -249,8 +307,40 @@ export default function BiblePage() {
       {/* Content */}
       <main className="flex-1 px-5 pt-4 pb-28 overflow-hidden flex flex-col min-h-0">
         {mainTab === 'explore' ? (
-          <div className="flex-1 min-h-0 max-w-lg mx-auto w-full flex flex-col">
-            <BibleSearchPanel language={language} onOpenVerse={openVerse} />
+          <div className="flex-1 min-h-0 max-w-lg mx-auto w-full flex flex-col overflow-hidden">
+            <div className="segment-soft mb-3 shrink-0">
+              {(
+                [
+                  { id: 'library' as ExploreMode, key: 'bible.library' },
+                  { id: 'search' as ExploreMode, key: 'bible.search' },
+                ] as const
+              ).map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  data-active={exploreMode === tab.id}
+                  onClick={() => setExploreMode(tab.id)}
+                >
+                  {t(tab.key)}
+                </button>
+              ))}
+            </div>
+            {exploreMode === 'library' ? (
+              <div className="flex-1 min-h-0 overflow-y-auto pb-2">
+                <BookLibrary
+                  books={books}
+                  selectedBookId={selectedBook}
+                  uiLang={uiLang === 'en' ? 'en' : 'es'}
+                  otLabel={t('bible.ot')}
+                  ntLabel={t('bible.nt')}
+                  onSelect={openBookFromLibrary}
+                />
+              </div>
+            ) : (
+              <div className="flex-1 min-h-0 flex flex-col">
+                <BibleSearchPanel language={language} onOpenVerse={openVerse} />
+              </div>
+            )}
           </div>
         ) : loadingChapter ? (
           <div className="flex flex-col items-center justify-center py-20 text-[var(--sage)]">
@@ -258,14 +348,54 @@ export default function BiblePage() {
             <p className="text-sm">{t('bible.loadingChapter')}</p>
           </div>
         ) : chapter ? (
-          <div className="max-w-lg mx-auto w-full overflow-y-auto flex-1 min-h-0">
+          <div
+            key={`book-${selectedBook}-${bookAnimKey}`}
+            className="max-w-lg mx-auto w-full overflow-y-auto flex-1 min-h-0 bible-content-enter"
+          >
+            {(() => {
+              const bookMeta = getBook(selectedBook);
+              if (!bookMeta) return null;
+              const displayName = uiLang === 'en' ? bookMeta.name : bookMeta.nameEs;
+              return (
+                <div className={`mb-4 bible-hero-stage ${heroAnimClass}`}>
+                  <BookCover
+                    bookId={selectedBook}
+                    name={displayName}
+                    testament={bookMeta.testament}
+                    testamentLabel={
+                      bookMeta.testament === 'OT' ? t('bible.ot') : t('bible.nt')
+                    }
+                    variant="hero"
+                    priority
+                  />
+                </div>
+              );
+            })()}
+
             {/* Chapter title + nav */}
             <div className="flex items-start justify-between gap-3 mb-5">
-              <div>
-                <h2 className="text-xl font-bold text-white tracking-tight">
-                  {chapter.book} {chapter.chapter}
-                </h2>
-                <p className="text-xs text-[var(--sage)]/80 mt-0.5">{chapter.version}</p>
+              <div className="flex items-start gap-2.5 min-w-0">
+                {(() => {
+                  const bookMeta = getBook(selectedBook);
+                  if (!bookMeta) return null;
+                  return (
+                    <span className={heroAnimClass}>
+                      <BookCover
+                        bookId={selectedBook}
+                        name={uiLang === 'en' ? bookMeta.name : bookMeta.nameEs}
+                        testament={bookMeta.testament}
+                        variant="chip"
+                        selected
+                      />
+                    </span>
+                  );
+                })()}
+                <div className="min-w-0">
+                  <h2 className="text-xl font-bold text-white tracking-tight">
+                    {chapter.book} {chapter.chapter}
+                  </h2>
+                  <p className="text-xs text-[var(--sage)]/80 mt-0.5">{chapter.version}</p>
+                </div>
               </div>
               <div className="flex gap-1.5 shrink-0">
                 <button
@@ -288,7 +418,8 @@ export default function BiblePage() {
             </div>
 
             <div
-              className="space-y-1 mb-8"
+              key={`verses-${selectedBook}-${selectedChapter}`}
+              className="space-y-1 mb-8 bible-content-enter"
               dir={
                 language === 'original' && getBook(selectedBook)?.testament === 'OT'
                   ? 'rtl'
@@ -341,10 +472,13 @@ export default function BiblePage() {
               </button>
               <button
                 type="button"
-                onClick={() => setMainTab('explore')}
+                onClick={() => {
+                  setExploreMode('library');
+                  setMainTab('explore');
+                }}
                 className="btn-secondary flex-1 py-3 text-xs"
               >
-                ⌕ {t('common.search')}
+                ⌕ {t('bible.library')}
               </button>
               <button type="button" onClick={goNext} className="btn-secondary flex-1 py-3 text-xs">
                 {t('common.next')} →

@@ -37,6 +37,10 @@ function fromDb(row: any): Partial<UserProfile> {
     city: row.city ?? '',
     country: row.country ?? '',
     birthDate: row.birth_date ?? '',
+    sex:
+      row.sex === 'female' || row.sex === 'male' || row.sex === 'unspecified'
+        ? row.sex
+        : undefined,
     avatarUrl: row.avatar_url || undefined,
     xUsername: row.x_username || undefined,
     xUserId: row.x_user_id || undefined,
@@ -62,6 +66,7 @@ function toDb(profile: Partial<UserProfile>) {
     city: profile.city,
     country: profile.country,
     birth_date: profile.birthDate || null,
+    sex: profile.sex || null,
     // http(s) → DB; empty string → clear column; data: URLs stay local only
     avatar_url:
       profile.avatarUrl === ''

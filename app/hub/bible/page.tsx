@@ -8,6 +8,7 @@ import BibleSearchPanel from '@/components/bible/BibleSearchPanel';
 import BookCover from '@/components/bible/BookCover';
 import BookLibrary from '@/components/bible/BookLibrary';
 import BookCarousel from '@/components/bible/BookCarousel';
+import PrayerMotivesPanel from '@/components/salvation/PrayerMotivesPanel';
 import {
   getBooks,
   getChapter,
@@ -23,7 +24,7 @@ import { logAction, getPointsForAction } from '@/lib/scoring/engine';
 import { loadProfile, calculateAge, getLifeStage } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
 
-type MainTab = 'read' | 'explore';
+type MainTab = 'read' | 'explore' | 'prayer';
 type ExploreMode = 'library' | 'search';
 type BookAnimDir = 'left' | 'right' | 'fade';
 
@@ -43,6 +44,8 @@ export default function BiblePage() {
   const [readCount, setReadCount] = useState(0);
   const [bookAnimDir, setBookAnimDir] = useState<BookAnimDir>('fade');
   const [bookAnimKey, setBookAnimKey] = useState(0);
+  /** Repliega chrome superior para maximizar lectura */
+  const [chromeCollapsed, setChromeCollapsed] = useState(false);
   const verseRefs = useRef<Map<number, HTMLParagraphElement>>(new Map());
   const prevBookIdxRef = useRef(0);
 
@@ -174,139 +177,220 @@ export default function BiblePage() {
   })();
   const pts = getPointsForAction('bible_chapter', stage);
 
+  const bookMeta = getBook(selectedBook);
+  const bookDisplayName = bookMeta
+    ? uiLang === 'en'
+      ? bookMeta.name
+      : bookMeta.nameEs
+    : selectedBook;
+
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
-      {/* Header — Salvation pillar */}
-      <header className="page-header px-5 pt-6 pb-3 sticky top-0 z-40">
-        <div className="flex items-center justify-between mb-3 gap-2">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <Link href="/hub/dashboard" className="back-btn" aria-label={t('common.back')}>
+      {/* Header — Salvation pillar (replegable en modo lectura) */}
+      <header className="page-header px-5 sticky top-0 z-40">
+        {chromeCollapsed && mainTab === 'read' ? (
+          <div className="pt-3 pb-2.5 flex items-center gap-2">
+            <Link href="/hub/dashboard" className="back-btn shrink-0" aria-label={t('common.back')}>
               ←
             </Link>
-            <div className="w-9 h-9 rounded-full border border-[var(--border-soft)] flex items-center justify-center lion-glow overflow-hidden bg-[#040404] shrink-0">
-              <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] font-medium">
+            <button
+              type="button"
+              onClick={() => setChromeCollapsed(false)}
+              className="flex-1 min-w-0 text-left rounded-xl border border-[var(--border-soft)] bg-[var(--surface-muted)] px-3 py-2 hover:border-[var(--border-strong)] transition"
+            >
+              <p className="text-[10px] uppercase tracking-wider text-[var(--accent)]">
                 {t('nav.salvation')}
               </p>
-              <h1 className="text-lg font-bold text-[var(--accent)] leading-tight truncate">
-                {t('bible.title')}
-              </h1>
-              <p className="text-[10px] text-[var(--sage)]/80">
-                {readCount} / {totalChapters} {t('bible.chapters')}
+              <p className="text-sm font-semibold text-white truncate">
+                {chapter?.book || bookDisplayName} {selectedChapter}
               </p>
+            </button>
+            <div className="flex gap-1 shrink-0">
+              <button
+                type="button"
+                onClick={goPrev}
+                className="w-9 h-9 rounded-xl border border-[var(--border-soft)] text-[var(--sage)]"
+                aria-label={t('common.previous')}
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                onClick={goNext}
+                className="w-9 h-9 rounded-xl border border-[var(--border-soft)] text-[var(--sage)]"
+                aria-label={t('common.next')}
+              >
+                ›
+              </button>
+              <button
+                type="button"
+                onClick={() => setChromeCollapsed(false)}
+                className="w-9 h-9 rounded-xl border border-[var(--border-strong)] text-[var(--accent)] text-sm"
+                aria-label={t('bible.expandChrome')}
+                title={t('bible.expandChrome')}
+              >
+                ▾
+              </button>
             </div>
           </div>
-          <Link href="/hub/devotional" className="pill-soft pill-soft-active shrink-0 text-[10px]">
-            {t('nav.devotional')}
-          </Link>
-        </div>
-
-        {/* Main tabs: Read / Explore */}
-        <div className="segment-soft mb-3">
-          {(
-            [
-              { id: 'read' as MainTab, key: 'bible.read' },
-              { id: 'explore' as MainTab, key: 'bible.explore' },
-            ] as const
-          ).map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              data-active={mainTab === tab.id}
-              onClick={() => setMainTab(tab.id)}
-            >
-              {t(tab.key)}
-            </button>
-          ))}
-        </div>
-
-        {/* Language */}
-        <div className="flex flex-wrap gap-2">
-          {(
-            [
-              { id: 'es' as BibleLanguage, label: 'ES · Reina Valera' },
-              { id: 'en' as BibleLanguage, label: 'EN · King James' },
-              { id: 'original' as BibleLanguage, label: 'Original · Heb/Gr' },
-            ] as const
-          ).map((lang) => (
-            <button
-              key={lang.id}
-              type="button"
-              onClick={() => setLanguage(lang.id)}
-              className={`pill-soft ${language === lang.id ? 'pill-soft-active' : ''}`}
-            >
-              {lang.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Book carousel + chapter — only in read mode */}
-        {mainTab === 'read' && (
-          <div className="mt-3 -mx-5">
-            <BookCarousel
-              books={books}
-              selectedBookId={selectedBook}
-              uiLang={uiLang === 'en' ? 'en' : 'es'}
-              onSelect={(id) => selectBook(id)}
-              size="md"
-            />
-            <div className="flex gap-2 mt-2.5 px-5">
-              <select
-                value={selectedBook}
-                onChange={(e) => selectBook(e.target.value)}
-                className="input-soft flex-1 py-2.5 text-sm"
-                aria-label={t('bible.library')}
-              >
-                <optgroup label={t('bible.ot')}>
-                  {books
-                    .filter((b) => b.testament === 'OT')
-                    .map((b) => (
-                      <option key={b.id} value={b.id}>
-                        {uiLang === 'en' ? b.name : b.nameEs}
-                      </option>
-                    ))}
-                </optgroup>
-                <optgroup label={t('bible.nt')}>
-                  {books
-                    .filter((b) => b.testament === 'NT')
-                    .map((b) => (
-                      <option key={b.id} value={b.id}>
-                        {uiLang === 'en' ? b.name : b.nameEs}
-                      </option>
-                    ))}
-                </optgroup>
-              </select>
-
-              <select
-                value={selectedChapter}
-                onChange={(e) => {
-                  setSelectedChapter(Number(e.target.value));
-                  setFocusVerse(null);
-                }}
-                className="input-soft w-24 py-2.5 text-sm"
-                aria-label={t('bible.ch')}
-              >
-                {availableChapters.map((c) => (
-                  <option key={c} value={c}>
-                    {t('bible.ch')} {c}
-                  </option>
-                ))}
-              </select>
+        ) : (
+          <div className="pt-6 pb-3">
+            <div className="flex items-center justify-between mb-3 gap-2">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <Link href="/hub/dashboard" className="back-btn" aria-label={t('common.back')}>
+                  ←
+                </Link>
+                <div className="w-9 h-9 rounded-full border border-[var(--border-soft)] flex items-center justify-center lion-glow overflow-hidden bg-[#040404] shrink-0">
+                  <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] font-medium">
+                    {t('nav.salvation')}
+                  </p>
+                  <h1 className="text-lg font-bold text-[var(--accent)] leading-tight truncate">
+                    {t('bible.title')}
+                  </h1>
+                  <p className="text-[10px] text-[var(--sage)]/80">
+                    {readCount} / {totalChapters} {t('bible.chapters')}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5 shrink-0">
+                {mainTab === 'read' && (
+                  <button
+                    type="button"
+                    onClick={() => setChromeCollapsed(true)}
+                    className="pill-soft text-[10px]"
+                    title={t('bible.collapseChrome')}
+                  >
+                    {t('bible.collapseChrome')}
+                  </button>
+                )}
+                <Link href="/hub/devotional" className="pill-soft pill-soft-active text-[10px]">
+                  {t('nav.devotional')}
+                </Link>
+              </div>
             </div>
-            {selectedBookIdx >= 0 && (
-              <p className="px-5 mt-1.5 text-[10px] text-[var(--sage)]/70 tabular-nums">
-                {selectedBookIdx + 1} / {books.length}
-              </p>
+
+            {/* Main tabs: Read / Explore / Prayer */}
+            <div className="segment-soft mb-3">
+              {(
+                [
+                  { id: 'read' as MainTab, key: 'bible.read' },
+                  { id: 'explore' as MainTab, key: 'bible.explore' },
+                  { id: 'prayer' as MainTab, key: 'bible.prayer' },
+                ] as const
+              ).map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  data-active={mainTab === tab.id}
+                  onClick={() => {
+                    setMainTab(tab.id);
+                    if (tab.id !== 'read') setChromeCollapsed(false);
+                  }}
+                >
+                  {t(tab.key)}
+                </button>
+              ))}
+            </div>
+
+            {/* Language — hide on pure prayer tab to free space */}
+            {mainTab !== 'prayer' && (
+              <div className="flex flex-wrap gap-2">
+                {(
+                  [
+                    { id: 'es' as BibleLanguage, label: 'ES · Reina Valera' },
+                    { id: 'en' as BibleLanguage, label: 'EN · King James' },
+                    { id: 'original' as BibleLanguage, label: 'Original · Heb/Gr' },
+                  ] as const
+                ).map((lang) => (
+                  <button
+                    key={lang.id}
+                    type="button"
+                    onClick={() => setLanguage(lang.id)}
+                    className={`pill-soft ${language === lang.id ? 'pill-soft-active' : ''}`}
+                  >
+                    {lang.label}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Book carousel + chapter — only in read mode */}
+            {mainTab === 'read' && (
+              <div className="mt-3 -mx-5">
+                <BookCarousel
+                  books={books}
+                  selectedBookId={selectedBook}
+                  uiLang={uiLang === 'en' ? 'en' : 'es'}
+                  onSelect={(id) => selectBook(id)}
+                  size="md"
+                />
+                <div className="flex gap-2 mt-2.5 px-5">
+                  <select
+                    value={selectedBook}
+                    onChange={(e) => selectBook(e.target.value)}
+                    className="input-soft flex-1 py-2.5 text-sm"
+                    aria-label={t('bible.library')}
+                  >
+                    <optgroup label={t('bible.ot')}>
+                      {books
+                        .filter((b) => b.testament === 'OT')
+                        .map((b) => (
+                          <option key={b.id} value={b.id}>
+                            {uiLang === 'en' ? b.name : b.nameEs}
+                          </option>
+                        ))}
+                    </optgroup>
+                    <optgroup label={t('bible.nt')}>
+                      {books
+                        .filter((b) => b.testament === 'NT')
+                        .map((b) => (
+                          <option key={b.id} value={b.id}>
+                            {uiLang === 'en' ? b.name : b.nameEs}
+                          </option>
+                        ))}
+                    </optgroup>
+                  </select>
+
+                  <select
+                    value={selectedChapter}
+                    onChange={(e) => {
+                      setSelectedChapter(Number(e.target.value));
+                      setFocusVerse(null);
+                    }}
+                    className="input-soft w-24 py-2.5 text-sm"
+                    aria-label={t('bible.ch')}
+                  >
+                    {availableChapters.map((c) => (
+                      <option key={c} value={c}>
+                        {t('bible.ch')} {c}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {selectedBookIdx >= 0 && (
+                  <p className="px-5 mt-1.5 text-[10px] text-[var(--sage)]/70 tabular-nums">
+                    {selectedBookIdx + 1} / {books.length}
+                  </p>
+                )}
+              </div>
             )}
           </div>
         )}
       </header>
 
       {/* Content */}
-      <main className="flex-1 px-5 pt-4 pb-28 overflow-hidden flex flex-col min-h-0">
-        {mainTab === 'explore' ? (
+      <main className="flex-1 px-5 pt-3 pb-28 overflow-hidden flex flex-col min-h-0">
+        {mainTab === 'prayer' ? (
+          <PrayerMotivesPanel
+            lang={uiLang === 'en' ? 'en' : 'es'}
+            onPrayed={() => {
+              logAction('pray_5min');
+            }}
+          />
+        ) : mainTab === 'explore' ? (
           <div className="flex-1 min-h-0 max-w-lg mx-auto w-full flex flex-col overflow-hidden">
             <div className="segment-soft mb-3 shrink-0">
               {(
@@ -352,44 +436,36 @@ export default function BiblePage() {
             key={`book-${selectedBook}-${bookAnimKey}`}
             className="max-w-lg mx-auto w-full overflow-y-auto flex-1 min-h-0 bible-content-enter"
           >
-            {(() => {
-              const bookMeta = getBook(selectedBook);
-              if (!bookMeta) return null;
-              const displayName = uiLang === 'en' ? bookMeta.name : bookMeta.nameEs;
-              return (
-                <div className={`mb-4 bible-hero-stage ${heroAnimClass}`}>
-                  <BookCover
-                    bookId={selectedBook}
-                    name={displayName}
-                    testament={bookMeta.testament}
-                    testamentLabel={
-                      bookMeta.testament === 'OT' ? t('bible.ot') : t('bible.nt')
-                    }
-                    variant="hero"
-                    priority
-                  />
-                </div>
-              );
-            })()}
+            {/* Hero cover — hide when chrome collapsed for immersion */}
+            {!chromeCollapsed && bookMeta && (
+              <div className={`mb-4 bible-hero-stage ${heroAnimClass}`}>
+                <BookCover
+                  bookId={selectedBook}
+                  name={bookDisplayName}
+                  testament={bookMeta.testament}
+                  testamentLabel={
+                    bookMeta.testament === 'OT' ? t('bible.ot') : t('bible.nt')
+                  }
+                  variant="hero"
+                  priority
+                />
+              </div>
+            )}
 
             {/* Chapter title + nav */}
-            <div className="flex items-start justify-between gap-3 mb-5">
+            <div className="flex items-start justify-between gap-3 mb-4">
               <div className="flex items-start gap-2.5 min-w-0">
-                {(() => {
-                  const bookMeta = getBook(selectedBook);
-                  if (!bookMeta) return null;
-                  return (
-                    <span className={heroAnimClass}>
-                      <BookCover
-                        bookId={selectedBook}
-                        name={uiLang === 'en' ? bookMeta.name : bookMeta.nameEs}
-                        testament={bookMeta.testament}
-                        variant="chip"
-                        selected
-                      />
-                    </span>
-                  );
-                })()}
+                {bookMeta && (
+                  <span className={heroAnimClass}>
+                    <BookCover
+                      bookId={selectedBook}
+                      name={bookDisplayName}
+                      testament={bookMeta.testament}
+                      variant="chip"
+                      selected
+                    />
+                  </span>
+                )}
                 <div className="min-w-0">
                   <h2 className="text-xl font-bold text-white tracking-tight">
                     {chapter.book} {chapter.chapter}
@@ -398,6 +474,17 @@ export default function BiblePage() {
                 </div>
               </div>
               <div className="flex gap-1.5 shrink-0">
+                {!chromeCollapsed && (
+                  <button
+                    type="button"
+                    onClick={() => setChromeCollapsed(true)}
+                    className="w-9 h-9 rounded-xl border border-[var(--border-soft)] text-[var(--sage)] text-xs hover:border-[var(--border-strong)] hover:text-[#8FD99A] transition"
+                    aria-label={t('bible.collapseChrome')}
+                    title={t('bible.collapseChrome')}
+                  >
+                    ▴
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={goPrev}

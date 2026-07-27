@@ -24,6 +24,8 @@ import {
   FreedomIcon,
   BibleIcon,
 } from '@/components/Icons';
+import ValueJourney from '@/components/value-journey/ValueJourney';
+import XArticlesFeed from '@/components/freedom/XArticlesFeed';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -164,6 +166,11 @@ export default function DashboardPage() {
           </div>
         </div>
 
+        {/* Value props journey — fullscreen first time; replay card after */}
+        <div className="w-full max-w-sm mb-4">
+          <ValueJourney />
+        </div>
+
         {newBadges.length > 0 && (
           <div className="w-full max-w-sm space-y-2 mb-4">
             {newBadges.map((b) => (
@@ -287,6 +294,21 @@ export default function DashboardPage() {
           </p>
           <HubLink href="/hub/freedom" Icon={FreedomIcon} title={t('dashboard.freedomTitle')} sub={t('dashboard.freedomSub')} />
           <HubLink href="/hub/swap" Icon={SwapIcon} title={t('dashboard.swapTitle')} sub={t('dashboard.swapSub')} />
+
+          <div className="pt-1">
+            <XArticlesFeed
+              focus={profile.currentFocus || []}
+              limit={4}
+              showFilters={false}
+              onScored={() => refresh(profile)}
+            />
+            <Link
+              href="/hub/freedom"
+              className="mt-2 block text-center text-[11px] text-[var(--accent)] hover:underline"
+            >
+              {t('articles.seeAll')} →
+            </Link>
+          </div>
 
           <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70 px-0.5 pt-2">
             Phalanx

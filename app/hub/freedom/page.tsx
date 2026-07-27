@@ -19,6 +19,7 @@ import {
 } from '@/lib/freedom/engine';
 import { generateCoachGuidance, CoachMessage, getLionShortNudge } from '@/lib/coach/engine';
 import { evaluateBadges } from '@/lib/badges/engine';
+import XArticlesFeed from '@/components/freedom/XArticlesFeed';
 
 export default function FreedomPage() {
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
@@ -177,48 +178,51 @@ export default function FreedomPage() {
         </div>
 
         {activeTab === 'learn' && (
-          <div className="space-y-3">
-            <div className="flex items-end justify-between gap-2">
-              <div>
-                <h2 className="text-sm font-semibold text-[var(--sage)]">Artículos · @salvazion_</h2>
-                <p className="text-[10px] text-[var(--sage)]/70 mt-0.5">
-                  Long-form en X · Freedom Score
-                </p>
+          <div className="space-y-5">
+            <XArticlesFeed
+              focus={profile?.currentFocus || []}
+              showFilters
+              onScored={() => refresh()}
+            />
+
+            {/* Debates / lessons (non-X library) */}
+            {library.filter((c) => !c.url || c.category !== 'article').length > 0 && (
+              <div className="space-y-2">
+                <h2 className="text-sm font-semibold text-[var(--sage)]">
+                  Lecciones y debates
+                </h2>
+                {library
+                  .filter((c) => !c.url || c.category !== 'article')
+                  .map((content) => {
+                    const done = completedContent.has(content.id);
+                    return (
+                      <button
+                        key={content.id}
+                        type="button"
+                        onClick={() => setSelectedContent(content)}
+                        className={
+                          'w-full text-left glass rounded-xl p-4 border ' +
+                          (done ? 'border-[var(--border-strong)]' : 'border-[var(--border-soft)]')
+                        }
+                      >
+                        <p className="text-[10px] text-[var(--sage)]/80 uppercase">
+                          {content.category} · {content.readMin} min
+                        </p>
+                        <p className="text-sm font-medium text-white">{content.title}</p>
+                        <p className="text-xs text-[#D8E1D9]/60 mt-1 line-clamp-2">
+                          {content.summary}
+                        </p>
+                        <p className="text-xs text-[var(--accent)] mt-2">
+                          {done
+                            ? '✓ Completado'
+                            : '+' + getFreedomPoints(content.actionType) + ' Freedom'}
+                        </p>
+                      </button>
+                    );
+                  })}
               </div>
-              <a
-                href="https://x.com/salvazion_"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[10px] text-[var(--accent)] hover:underline shrink-0"
-              >
-                Ver en X ↗
-              </a>
-            </div>
-            {library.map((content) => {
-              const done = completedContent.has(content.id);
-              return (
-                <button
-                  key={content.id}
-                  type="button"
-                  onClick={() => setSelectedContent(content)}
-                  className={
-                    'w-full text-left glass rounded-xl p-4 border ' +
-                    (done ? 'border-[var(--border-strong)]' : 'border-[var(--border-soft)]')
-                  }
-                >
-                  <p className="text-[10px] text-[var(--sage)]/80 uppercase">
-                    {content.category}
-                    {content.source ? ` · ${content.source}` : ''} · {content.readMin} min
-                    {content.url ? ' · X' : ''}
-                  </p>
-                  <p className="text-sm font-medium text-white">{content.title}</p>
-                  <p className="text-xs text-[#D8E1D9]/60 mt-1 line-clamp-2">{content.summary}</p>
-                  <p className="text-xs text-[#8FD99A] mt-2">
-                    {done ? '✓ Completado' : '+' + getFreedomPoints(content.actionType) + ' Freedom'}
-                  </p>
-                </button>
-              );
-            })}
+            )}
+
             {actions
               .filter((a) => a.category === 'learn')
               .map((action) => {

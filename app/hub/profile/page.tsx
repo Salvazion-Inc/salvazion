@@ -21,6 +21,7 @@ import TextScaleControl from '@/components/settings/TextScaleControl';
 import ThemeControl from '@/components/settings/ThemeControl';
 import LanguageControl from '@/components/settings/LanguageControl';
 import InvitePhalanx from '@/components/invite/InvitePhalanx';
+import ValueJourney from '@/components/value-journey/ValueJourney';
 import { useI18n } from '@/components/I18nProvider';
 
 export default function ProfilePage() {
@@ -272,6 +273,11 @@ export default function ProfilePage() {
               );
             }}
           />
+        </div>
+
+        {/* Value journey replay */}
+        <div className="mb-6">
+          <ValueJourney />
         </div>
 
         {/* Aesthetic / colors — Salvazion DNA preserved */}

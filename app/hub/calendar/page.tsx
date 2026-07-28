@@ -22,25 +22,38 @@ export default function CalendarPage() {
   const [week, setWeek] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
   const [name, setName] = useState('');
-  const [tick, setTick] = useState(0);
+  const [counts, setCounts] = useState({ done: 0, total: 0 });
   const [toast, setToast] = useState<string | null>(null);
 
   const flash = (msg: string) => {
     setToast(msg);
-    setTimeout(() => setToast(null), 2200);
+    window.setTimeout(() => setToast(null), 2200);
   };
 
-  const refreshWeek = useCallback(() => {
-    setWeek(weekDates(new Date(selectedDate + 'T12:00:00')));
-    setTick((n) => n + 1);
-  }, [selectedDate]);
+  const refreshCounts = useCallback((date: string) => {
+    const de = getEventsForDate(date);
+    setCounts({
+      done: de.filter((e) => e.completed).length,
+      total: de.length,
+    });
+    // refresh week dots without remounting board
+    setWeek(weekDates(new Date(date + 'T12:00:00')));
+  }, []);
 
   useEffect(() => {
     setMounted(true);
     const p = loadProfile();
     if (p?.name) setName(p.name);
-    refreshWeek();
-  }, [refreshWeek]);
+    const d = todayStr();
+    setSelectedDate(d);
+    setWeek(weekDates());
+    refreshCounts(d);
+  }, [refreshCounts]);
+
+  useEffect(() => {
+    if (!mounted) return;
+    refreshCounts(selectedDate);
+  }, [selectedDate, mounted, refreshCounts]);
 
   if (!mounted) {
     return (
@@ -54,10 +67,6 @@ export default function CalendarPage() {
     lang === 'es' ? 'es' : 'en',
     { weekday: 'long', day: 'numeric', month: 'short' }
   );
-
-  const dayEvents = getEventsForDate(selectedDate);
-  const completed = dayEvents.filter((e) => e.completed).length;
-  const total = dayEvents.length;
 
   return (
     <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] flex flex-col">
@@ -87,13 +96,12 @@ export default function CalendarPage() {
           </div>
           <div className="text-right shrink-0">
             <p className="text-sm font-bold text-white tabular-nums">
-              {completed}/{total}
+              {counts.done}/{counts.total}
             </p>
             <p className="text-[10px] text-[var(--sage)]/80">{t('agenda.done')}</p>
           </div>
         </div>
 
-        {/* Week strip */}
         <div className="flex gap-1.5 overflow-x-auto pb-1">
           {week.map((d) => {
             const dayNum = d.slice(8, 10);
@@ -106,7 +114,7 @@ export default function CalendarPage() {
                 key={d}
                 type="button"
                 onClick={() => setSelectedDate(d)}
-                className={`flex-shrink-0 w-11 py-2 rounded-xl text-center border transition-all ${
+                className={`flex-shrink-0 w-11 py-2 rounded-xl text-center border transition-all min-h-[52px] ${
                   isSelected
                     ? 'border-[var(--border-strong)] bg-[var(--surface-active)]'
                     : 'border-[var(--border-soft)]'
@@ -137,13 +145,8 @@ export default function CalendarPage() {
       </header>
 
       <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto max-w-lg mx-auto w-full">
-        <div className="flex items-center justify-between gap-2 mb-3">
-          <h2 className="text-sm font-semibold capitalize text-white min-w-0 truncate">
-            {dayLabel}
-          </h2>
-        </div>
+        <h2 className="text-sm font-semibold capitalize text-white mb-3">{dayLabel}</h2>
 
-        {/* Legend — Salvation white · Health blue · Freedom green */}
         <div className="flex flex-wrap gap-3 mb-3 text-[10px]">
           <span className="inline-flex items-center gap-1.5 text-[var(--sage)]">
             <i className="w-2.5 h-2.5 rounded-sm bg-[#F5F7F5] border border-white/30" />
@@ -160,41 +163,40 @@ export default function CalendarPage() {
         </div>
 
         <div className="glass rounded-xl px-3 py-2.5 mb-3 text-[11px] text-[var(--off-white)]/80 leading-relaxed">
-          {t('calendar.coachGuide')}
+          {t('calendar.coachGuideSimple')}
         </div>
 
-        {/* Duplicate routine */}
         <div className="flex flex-wrap gap-2 mb-4">
           <button
             type="button"
-            className="btn-outline-sm"
+            className="btn-outline-sm min-h-[36px]"
             onClick={() => {
               const n = duplicateToTomorrow(selectedDate);
               flash(t('calendar.copiedTomorrow', { n }));
-              setTick((x) => x + 1);
+              refreshCounts(selectedDate);
             }}
           >
             {t('calendar.copyTomorrow')}
           </button>
           <button
             type="button"
-            className="btn-outline-sm"
+            className="btn-outline-sm min-h-[36px]"
             onClick={() => {
               const n = duplicateToWeek(selectedDate);
               flash(t('calendar.copiedWeek', { n }));
-              setTick((x) => x + 1);
+              refreshCounts(selectedDate);
             }}
           >
             {t('calendar.copyWeek')}
           </button>
-          {total > 0 && (
+          {counts.total > 0 && (
             <button
               type="button"
-              className="btn-ghost text-red-400/80 text-[11px]"
+              className="btn-ghost text-red-400/80 text-[11px] min-h-[36px]"
               onClick={() => {
                 if (window.confirm(t('calendar.clearConfirm'))) {
                   clearDay(selectedDate);
-                  setTick((x) => x + 1);
+                  refreshCounts(selectedDate);
                 }
               }}
             >
@@ -203,10 +205,11 @@ export default function CalendarPage() {
           )}
         </div>
 
+        {/* Stable key: only date — never remount on every edit */}
         <RoutineBoard
-          key={`${selectedDate}-${tick}`}
+          key={selectedDate}
           date={selectedDate}
-          onChange={() => setTick((n) => n + 1)}
+          onChange={() => refreshCounts(selectedDate)}
         />
       </main>
 

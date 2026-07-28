@@ -559,6 +559,8 @@ export const dictionary = {
       all: 'Todo',
       done: 'hechos',
       open: 'Ir',
+      now: 'Ahora',
+      dayProgress: 'del día',
       blocks: {
         pray: 'Oración',
         bible: 'Lectura bíblica',
@@ -621,6 +623,82 @@ export const dictionary = {
       resetDefaultConfirm:
         '¿Restablecer este día a la rutina ideal? (Sueño 00:00–07:00, oración, ejercicio, comidas, trabajo, familia…)',
       resetDefaultDone: 'Día restablecido a la rutina ideal',
+    },
+    outdoorClimate: {
+      section: 'Health · Exterior',
+      title: 'Luz natural y clima',
+      subtitle:
+        'Salidas al aire libre, ejercicio, deporte y ritmo circadiano según tu ubicación',
+      refresh: 'Actualizar',
+      loading: 'Obteniendo luz y clima…',
+      error: 'No se pudo cargar el clima. Reintenta o permite la ubicación.',
+      naturalLightOn: 'Hay luz natural ahora',
+      naturalLightOff: 'Sin luz natural (noche)',
+      outdoorScore: 'Aptitud exterior',
+      sunrise: 'Amanecer',
+      sunset: 'Atardecer',
+      daylight: 'Horas de luz',
+      remaining: 'Luz restante',
+      night: 'Noche',
+      temp: 'Temp.',
+      condition: 'Cielo',
+      uv: 'UV máx.',
+      clouds: 'Nubes',
+      wind: 'Viento',
+      humidity: 'Humedad',
+      locationOn: 'Ubicación local',
+      locationFallback: 'Ubicación aproximada (activa GPS para más precisión)',
+      windowsTitle: 'Ventanas recomendadas',
+      kinds: {
+        outdoor: 'Aire libre + sol',
+        exercise: 'Ejercicio',
+        sport: 'Deporte',
+        circadian_morning: 'Luz matutina (circadiano)',
+        circadian_evening: 'Atardecer / bajar luz',
+      },
+      reasons: {
+        morningLight: 'Luz brillante temprana ancla el reloj biológico',
+        bestOutdoor: 'Mejor tramo del día para salir al exterior',
+        exerciseWindow: 'Condiciones favorables para mover el cuerpo',
+        sportWindow: 'Ventana para deporte outdoor',
+        eveningDim: 'Reduce luz brillante; prepara el sueño',
+      },
+      conditions: {
+        clear: 'Despejado',
+        partly: 'Parcial',
+        cloudy: 'Nublado',
+        fog: 'Niebla',
+        rain: 'Lluvia',
+        snow: 'Nieve',
+        showers: 'Chubascos',
+        storm: 'Tormenta',
+      },
+      uvLevels: {
+        low: 'Bajo',
+        moderate: 'Moderado',
+        high: 'Alto',
+        very_high: 'Muy alto',
+        extreme: 'Extremo',
+      },
+      tips: {
+        nightMode:
+          'De noche: prioriza interior, luz tenue y horario de sueño circadiano.',
+        goodLight:
+          'Buena luz natural: ideal para caminar, outdoor y anclar el ritmo circadiano.',
+        cloudyLight:
+          'Cielo cubierto: aún hay luz útil; sal al menos 20–30 min si puedes.',
+        rainIndoor:
+          'Lluvia: mueve ejercicio/deporte indoor o pospone outdoor.',
+        uvProtect:
+          'UV alto: usa sombra, gafas y evita mediodía largo al sol directo.',
+        heatCaution: 'Calor: hidrátate y prefiere mañana o atardecer para esfuerzo.',
+        coldCaution: 'Frío: abrígate y calienta bien antes del ejercicio outdoor.',
+        windy: 'Viento fuerte: elige rutas resguardadas o reduce intensidad outdoor.',
+        circadianCore:
+          'Circadiano: luz natural por la mañana y menos luz brillante 60–90 min antes de dormir.',
+        outdoorScoreTip:
+          'Usa las ventanas de arriba para planificar outdoor, ejercicio y deporte en el día.',
+      },
     },
     onboarding: {
       welcome: 'Bienvenido a la Comunidad',
@@ -1274,6 +1352,8 @@ export const dictionary = {
       all: 'All',
       done: 'done',
       open: 'Open',
+      now: 'Now',
+      dayProgress: 'of the day',
       blocks: {
         pray: 'Prayer',
         bible: 'Bible reading',
@@ -1336,6 +1416,82 @@ export const dictionary = {
       resetDefaultConfirm:
         'Reset this day to the ideal routine? (Sleep 00:00–07:00, prayer, exercise, meals, work, family…)',
       resetDefaultDone: 'Day reset to the ideal routine',
+    },
+    outdoorClimate: {
+      section: 'Health · Outdoor',
+      title: 'Natural light & weather',
+      subtitle:
+        'Outdoor time, exercise, sport, and circadian rhythm by your location',
+      refresh: 'Refresh',
+      loading: 'Fetching light and weather…',
+      error: 'Could not load weather. Retry or allow location.',
+      naturalLightOn: 'Natural light is available now',
+      naturalLightOff: 'No natural light (night)',
+      outdoorScore: 'Outdoor score',
+      sunrise: 'Sunrise',
+      sunset: 'Sunset',
+      daylight: 'Daylight',
+      remaining: 'Light left',
+      night: 'Night',
+      temp: 'Temp.',
+      condition: 'Sky',
+      uv: 'UV max',
+      clouds: 'Clouds',
+      wind: 'Wind',
+      humidity: 'Humidity',
+      locationOn: 'Local location',
+      locationFallback: 'Approximate location (enable GPS for accuracy)',
+      windowsTitle: 'Recommended windows',
+      kinds: {
+        outdoor: 'Outdoor + sun',
+        exercise: 'Exercise',
+        sport: 'Sport',
+        circadian_morning: 'Morning light (circadian)',
+        circadian_evening: 'Evening dim-down',
+      },
+      reasons: {
+        morningLight: 'Early bright light anchors your body clock',
+        bestOutdoor: 'Best stretch of the day to go outside',
+        exerciseWindow: 'Favorable conditions to move your body',
+        sportWindow: 'Window for outdoor sport',
+        eveningDim: 'Reduce bright light; prepare for sleep',
+      },
+      conditions: {
+        clear: 'Clear',
+        partly: 'Partly cloudy',
+        cloudy: 'Cloudy',
+        fog: 'Fog',
+        rain: 'Rain',
+        snow: 'Snow',
+        showers: 'Showers',
+        storm: 'Storm',
+      },
+      uvLevels: {
+        low: 'Low',
+        moderate: 'Moderate',
+        high: 'High',
+        very_high: 'Very high',
+        extreme: 'Extreme',
+      },
+      tips: {
+        nightMode:
+          'At night: prioritize indoor, dim light, and circadian sleep timing.',
+        goodLight:
+          'Good natural light: ideal for walking, outdoor time, and circadian anchoring.',
+        cloudyLight:
+          'Overcast: useful light remains; still aim for 20–30 min outside if you can.',
+        rainIndoor:
+          'Rain: move exercise/sport indoors or postpone outdoor blocks.',
+        uvProtect:
+          'High UV: use shade/sunglasses and avoid long midday direct sun.',
+        heatCaution: 'Heat: hydrate and prefer morning or evening for hard effort.',
+        coldCaution: 'Cold: layer up and warm thoroughly before outdoor exercise.',
+        windy: 'Strong wind: pick sheltered routes or lower outdoor intensity.',
+        circadianCore:
+          'Circadian: natural light in the morning and less bright light 60–90 min before bed.',
+        outdoorScoreTip:
+          'Use the windows above to plan outdoor, exercise, and sport across the day.',
+      },
     },
     onboarding: {
       welcome: 'Welcome to the Community',

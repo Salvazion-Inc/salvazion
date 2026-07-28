@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import BottomNav from '@/components/BottomNav';
 import RoutineBoard from '@/components/calendar/RoutineBoard';
+import OutdoorClimatePanel from '@/components/calendar/OutdoorClimatePanel';
 import {
   todayStr,
   weekDates,
@@ -171,6 +172,8 @@ export default function CalendarPage() {
         <div className="glass rounded-xl px-3 py-2.5 mb-3 text-[11px] text-[var(--off-white)]/80 leading-relaxed">
           {t('calendar.coachGuideSimple')}
         </div>
+
+        <OutdoorClimatePanel className="mb-4" />
 
         <div className="flex flex-wrap gap-2 mb-4">
           <button

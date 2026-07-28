@@ -2,7 +2,7 @@ export type SpiritualMaturity = 'new' | 'growing' | 'mature' | 'leader';
 export type FamilyStatus = 'single' | 'married' | 'parent' | 'widow' | 'family';
 export type Language = 'es' | 'en';
 export type BibleVersion = 'rv1960' | 'kjv' | 'original';
-/** Sexo biológico (salud / biomarcadores / ciclo). */
+/** Sexo (Health: biomarcadores / ciclo). Se define en onboarding; no se re-pregunta en la app. */
 export type BiologicalSex = 'female' | 'male' | 'unspecified';
 
 /** Who you can invite into your Phalanx */
@@ -46,10 +46,11 @@ export interface UserProfile {
 
   // New for onboarding
   purpose: string;           // Propósito de vida
+  /** Ubicación (UI unificada “Ciudad y país”; se guarda en city + country) */
   city: string;
   country: string;
   birthDate: string;         // YYYY-MM-DD — para calcular edad y personalizar
-  /** Sexo biológico — habilita módulos de salud (p. ej. ciclo menstrual) */
+  /** Desde onboarding — habilita módulos de Health (p. ej. ciclo menstrual) */
   sex?: BiologicalSex;
 
   /** Profile photo — https URL (Supabase Storage) or compressed data URL (local) */

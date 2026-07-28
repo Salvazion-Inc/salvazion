@@ -23,7 +23,6 @@ import {
   BadgeDef,
 } from '@/lib/badges/engine';
 import BottomNav from '@/components/BottomNav';
-import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 import ProfileAvatar from '@/components/profile/ProfileAvatar';
 import { useI18n } from '@/components/I18nProvider';
 import {
@@ -96,42 +95,44 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] flex flex-col">
-      <header className="flex items-center justify-between px-5 pt-6 pb-2 max-w-lg mx-auto w-full">
-        <div className="flex items-center gap-2.5 min-w-0">
-          <Link href="/hub/profile" className="shrink-0" title={t('nav.profile')}>
-            <ProfileAvatar
-              avatarUrl={profile.avatarUrl}
-              name={profile.name || 'Brother'}
-              size="sm"
-              editable={false}
-            />
-          </Link>
-          <div className="min-w-0">
-            <p className="text-xs text-[var(--sage)] tracking-wide">Salvazion</p>
-            <p className="text-sm font-medium leading-tight truncate">
-              {profile.name || 'Brother'}
-              {profile.birthDate && calculateAge(profile.birthDate) !== null && (
-                <span className="text-[var(--sage)]/70 font-normal text-xs ml-1.5">
-                  · {calculateAge(profile.birthDate)} ·{' '}
-                  {getLifeStageLabel(
-                    getLifeStage(calculateAge(profile.birthDate))
-                  )}
-                </span>
-              )}
+      <main className="flex-1 flex flex-col items-center px-5 pt-6 pb-32 max-w-lg mx-auto w-full">
+        {/* Profile + purpose (unified) */}
+        <Link
+          href="/hub/profile"
+          className="w-full max-w-sm card-soft p-4 mb-5 flex items-start gap-3 hover:border-[var(--border-strong)] transition-all active:scale-[0.99]"
+          title={t('nav.profile')}
+        >
+          <ProfileAvatar
+            avatarUrl={profile.avatarUrl}
+            name={profile.name || 'Brother'}
+            size="md"
+            editable={false}
+          />
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70">
+              Salvazion
             </p>
+            <p className="text-base font-semibold text-white leading-tight truncate">
+              {profile.name || 'Brother'}
+            </p>
+            {profile.birthDate && calculateAge(profile.birthDate) !== null && (
+              <p className="text-[11px] text-[var(--sage)]/75 mt-0.5">
+                {calculateAge(profile.birthDate)} ·{' '}
+                {getLifeStageLabel(getLifeStage(calculateAge(profile.birthDate)))}
+              </p>
+            )}
+            {profile.purpose ? (
+              <div className="mt-2 pt-2 border-t border-[var(--border-soft)]">
+                <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70 mb-0.5">
+                  {t('dashboard.purpose')}
+                </p>
+                <p className="text-sm leading-snug text-[var(--off-white)]/90 line-clamp-3">
+                  {profile.purpose}
+                </p>
+              </div>
+            ) : null}
           </div>
-        </div>
-        <WalletConnectCard variant="compact" />
-      </header>
-
-      <main className="flex-1 flex flex-col items-center px-5 pt-3 pb-32 max-w-lg mx-auto w-full">
-        {/* Purpose — above main score ring */}
-        {profile.purpose && (
-          <div className="w-full max-w-sm card-soft p-4 mb-4">
-            <p className="text-xs text-[var(--sage)] mb-1">{t('dashboard.purpose')}</p>
-            <p className="text-sm leading-snug line-clamp-3">{profile.purpose}</p>
-          </div>
-        )}
+        </Link>
 
         {/* Score dashboard */}
         <div

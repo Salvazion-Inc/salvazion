@@ -1,11 +1,10 @@
 'use client';
 
 import { useEffect, useState, useCallback, Suspense } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 import BottomNav from '@/components/BottomNav';
-import { loadProfile, getLifeStageLabel, saveProfile } from '@/lib/store/profile';
-import { UserProfile, BiologicalSex } from '@/lib/types';
+import { loadProfile, getLifeStageLabel } from '@/lib/store/profile';
+import { UserProfile } from '@/lib/types';
 import { computeScores, logAction } from '@/lib/scoring/engine';
 import { ComputedScores } from '@/lib/scoring/types';
 import {
@@ -55,6 +54,7 @@ import CloudNativeSyncPanel from '@/components/health/CloudNativeSyncPanel';
 import WomenHealthPanel from '@/components/health/WomenHealthPanel';
 import BiomarkersPanel from '@/components/health/BiomarkersPanel';
 import ClinicalRecordPanel from '@/components/health/ClinicalRecordPanel';
+import PillarHubHeader from '@/components/hub/PillarHubHeader';
 
 export default function HealthPage() {
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
@@ -133,20 +133,6 @@ export default function HealthPage() {
     }
   };
 
-  const handleSetSex = (sex: BiologicalSex) => {
-    saveProfile({ sex });
-    const p = loadProfile();
-    setProfile(p);
-    bumpHealthData();
-    showToast(
-      sex === 'female'
-        ? 'Perfil: salud femenina habilitada'
-        : sex === 'male'
-          ? 'Sexo biológico actualizado'
-          : 'Sexo no especificado'
-    );
-  };
-
   const handleSaveSleep = () => {
     const entry = saveSleepEntry(bedTime, wakeTime);
     setTodaySleep(entry);
@@ -181,8 +167,6 @@ export default function HealthPage() {
   }
 
   const healthScore = scores.health;
-  const healthStreak = scores.streaks.health;
-  const healthMult = scores.multipliers.health;
   const ideal = idealSleepHours(stage);
   const durationH = todaySleep
     ? (todaySleep.durationMinutes / 60).toFixed(1)
@@ -197,33 +181,11 @@ export default function HealthPage() {
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
-      <header className="page-header px-5 pt-6 pb-3">
-        <div className="flex items-center justify-between mb-1">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <Link href="/hub/dashboard" className="back-btn" aria-label="Volver">
-              ←
-            </Link>
-            <div className="w-9 h-9 rounded-full border border-[var(--border-soft)] flex items-center justify-center lion-glow overflow-hidden bg-[#040404] shrink-0">
-              <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-[10px] uppercase tracking-wider font-medium" style={{ color: '#4A9EFF' }}>
-                Health
-              </p>
-              <h1 className="text-lg font-bold leading-tight" style={{ color: '#8FC4FF' }}>Hub</h1>
-              <p className="text-[10px] text-[var(--sage)]/80 truncate">
-                {profile?.name} · {stageLabel}
-              </p>
-            </div>
-          </div>
-          <div className="text-right shrink-0">
-            <p className="text-2xl font-bold" style={{ color: '#4A9EFF' }}>{healthScore}</p>
-            <p className="text-[10px] text-[var(--sage)]/80">
-              {healthStreak > 0 ? `${healthStreak}d · ×${healthMult.toFixed(2)}` : 'Score'}
-            </p>
-          </div>
-        </div>
-      </header>
+      <PillarHubHeader
+        pillar="health"
+        score={healthScore}
+        subtitle={`${profile?.name || 'Salvazion'} · ${stageLabel}`}
+      />
 
       <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto">
         <div className="glass rounded-xl px-4 py-3 mb-5 flex items-start gap-3 border" style={{ borderColor: 'rgba(74, 158, 255, 0.35)' }}>
@@ -236,25 +198,6 @@ export default function HealthPage() {
                 ? coach.body
                 : getLionShortNudge('health', stage)}
             </p>
-          </div>
-        </div>
-
-        <div className="flex justify-center mb-6">
-          <div className="relative w-28 h-28 flex items-center justify-center">
-            <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="42" fill="none" stroke="#1e3a5f" strokeWidth="6" opacity="0.5" />
-              <circle
-                cx="50" cy="50" r="42" fill="none" stroke="#4A9EFF" strokeWidth="6"
-                strokeDasharray={`${Math.min(healthScore, 100) * 2.64} 264`}
-                strokeLinecap="round"
-                className="transition-all duration-700"
-                style={{ filter: 'drop-shadow(0 0 6px rgba(74, 158, 255, 0.45))' }}
-              />
-            </svg>
-            <div className="text-center z-10">
-              <div className="text-2xl font-bold text-white">{healthScore}</div>
-              <div className="text-[9px] uppercase" style={{ color: '#8FC4FF' }}>Health</div>
-            </div>
           </div>
         </div>
 
@@ -302,38 +245,7 @@ export default function HealthPage() {
           />
         </Suspense>
 
-        {/* Sexo biológico — habilita salud femenina */}
-        {profile?.sex !== 'female' && profile?.sex !== 'male' && (
-          <section className="mb-6">
-            <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] space-y-3">
-              <h2 className="text-sm font-semibold text-white">
-                Personaliza Health
-              </h2>
-              <p className="text-[11px] text-[var(--sage)]/85 leading-relaxed">
-                Indica tu sexo biológico para activar módulos de salud (p. ej. ciclo menstrual
-                y biomarcadores adaptados). Se guarda en tu perfil.
-              </p>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleSetSex('female')}
-                  className="btn-secondary flex-1 py-2.5 text-sm"
-                >
-                  Mujer
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSetSex('male')}
-                  className="btn-secondary flex-1 py-2.5 text-sm"
-                >
-                  Hombre
-                </button>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* SALUD FEMENINA — solo perfiles mujer */}
+        {/* SALUD FEMENINA — desde sexo del onboarding/perfil */}
         {profile?.sex === 'female' && (
           <WomenHealthPanel
             lang={profile?.language === 'en' ? 'en' : 'es'}

@@ -21,6 +21,7 @@ import { generateCoachGuidance, CoachMessage, getLionShortNudge } from '@/lib/co
 import { evaluateBadges } from '@/lib/badges/engine';
 import XArticlesFeed from '@/components/freedom/XArticlesFeed';
 import BookStoreCarousel from '@/components/freedom/BookStoreCarousel';
+import PillarHubHeader from '@/components/hub/PillarHubHeader';
 
 export default function FreedomPage() {
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
@@ -93,38 +94,15 @@ export default function FreedomPage() {
   }
 
   const freedomScore = scores.freedom;
-  const freedomStreak = scores.streaks.freedom;
-  const freedomMult = scores.multipliers.freedom;
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
-      <header className="page-header px-5 pt-6 pb-3">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <Link href="/hub/dashboard" className="back-btn" aria-label="Volver">
-              ←
-            </Link>
-            <div className="w-9 h-9 rounded-full border border-[var(--border-soft)] flex items-center justify-center lion-glow overflow-hidden bg-[#040404] shrink-0">
-              <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-[10px] uppercase tracking-wider font-medium" style={{ color: '#7BC98A' }}>
-                Freedom
-              </p>
-              <h1 className="text-lg font-bold leading-tight" style={{ color: '#8FD99A' }}>Hub</h1>
-              <p className="text-[10px] text-[var(--sage)]/80 truncate">
-                {profile?.name} · {stageLabel}
-              </p>
-            </div>
-          </div>
-          <div className="text-right shrink-0">
-            <p className="text-2xl font-bold" style={{ color: '#7BC98A' }}>{freedomScore}</p>
-            <p className="text-[10px] text-[var(--sage)]/80">
-              {freedomStreak > 0 ? freedomStreak + 'd · ×' + freedomMult.toFixed(2) : 'Score'}
-            </p>
-          </div>
-        </div>
-        <div className="segment-soft mb-2">
+      <PillarHubHeader
+        pillar="freedom"
+        score={freedomScore}
+        subtitle={`${profile?.name || 'Salvazion'} · ${stageLabel}`}
+      >
+        <div className="segment-soft mb-2 mt-3">
           {(
             [
               { id: 'learn' as const, label: 'Aprender' },
@@ -153,7 +131,7 @@ export default function FreedomPage() {
           </div>
           <span className="text-sm" style={{ color: '#7BC98A' }}>→</span>
         </Link>
-      </header>
+      </PillarHubHeader>
 
       <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto">
         <div className="glass rounded-xl px-4 py-3 mb-5 flex items-start gap-3 border" style={{ borderColor: 'rgba(123, 201, 138, 0.35)' }}>
@@ -163,21 +141,6 @@ export default function FreedomPage() {
           <p className="text-xs text-[#D8E1D9]/80 leading-relaxed">
             {coach?.pillarFocus === 'freedom' && coach.body ? coach.body : getLionShortNudge('freedom', stage)}
           </p>
-        </div>
-
-        <div className="flex justify-center mb-6">
-          <div className="relative w-28 h-28 flex items-center justify-center">
-            <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="42" fill="none" stroke="#2a4a32" strokeWidth="6" opacity="0.5" />
-              <circle cx="50" cy="50" r="42" fill="none" stroke="#7BC98A" strokeWidth="5"
-                strokeDasharray={(Math.min(freedomScore, 100) * 2.64) + ' 264'} strokeLinecap="round"
-                style={{ filter: 'drop-shadow(0 0 6px rgba(123, 201, 138, 0.45))' }} />
-            </svg>
-            <div className="text-center z-10">
-              <div className="text-2xl font-bold text-white">{freedomScore}</div>
-              <div className="text-[9px] uppercase" style={{ color: '#8FD99A' }}>Freedom</div>
-            </div>
-          </div>
         </div>
 
         {activeTab === 'learn' && (

@@ -301,27 +301,26 @@ export default function OnboardingPage() {
                   className="input-soft py-3.5 resize-none"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-sm text-[var(--sage)] mb-1.5">{t('onboarding.city')}</label>
-                  <input
-                    type="text"
-                    value={profile.city || ''}
-                    onChange={(e) => update({ city: e.target.value })}
-                    placeholder={t('onboarding.cityPlaceholder')}
-                    className="input-soft py-3.5"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-[var(--sage)] mb-1.5">{t('onboarding.country')}</label>
-                  <input
-                    type="text"
-                    value={profile.country || ''}
-                    onChange={(e) => update({ country: e.target.value })}
-                    placeholder={t('onboarding.countryPlaceholder')}
-                    className="input-soft py-3.5"
-                  />
-                </div>
+              <div>
+                <label className="block text-sm text-[var(--sage)] mb-1.5">
+                  {t('onboarding.location')}
+                </label>
+                <input
+                  type="text"
+                  value={[profile.city, profile.country].filter(Boolean).join(', ')}
+                  onChange={(e) => {
+                    const parts = e.target.value
+                      .split(',')
+                      .map((s) => s.trim())
+                      .filter(Boolean);
+                    update({
+                      city: parts[0] || '',
+                      country: parts.slice(1).join(', '),
+                    });
+                  }}
+                  placeholder={t('onboarding.locationPlaceholder')}
+                  className="input-soft py-3.5"
+                />
               </div>
             </div>
 

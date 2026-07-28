@@ -20,9 +20,10 @@ import {
   getBook,
 } from '@/lib/bible/engine';
 import { BibleLanguage, BibleChapter } from '@/lib/bible/types';
-import { logAction, getPointsForAction } from '@/lib/scoring/engine';
+import { logAction, getPointsForAction, computeScores } from '@/lib/scoring/engine';
 import { loadProfile, calculateAge, getLifeStage } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
+import PillarHubHeader from '@/components/hub/PillarHubHeader';
 
 type MainTab = 'read' | 'explore' | 'prayer';
 type ExploreMode = 'library' | 'search';
@@ -46,6 +47,7 @@ export default function BiblePage() {
   const [bookAnimKey, setBookAnimKey] = useState(0);
   /** Repliega chrome superior para maximizar lectura */
   const [chromeCollapsed, setChromeCollapsed] = useState(false);
+  const [salvationScore, setSalvationScore] = useState(0);
   const verseRefs = useRef<Map<number, HTMLParagraphElement>>(new Map());
   const prevBookIdxRef = useRef(0);
 
@@ -76,6 +78,10 @@ export default function BiblePage() {
     },
     [books, language]
   );
+
+  useEffect(() => {
+    setSalvationScore(computeScores().salvation);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -118,6 +124,7 @@ export default function BiblePage() {
     setRead(true);
     setJustLogged(true);
     setReadCount(getReadCount());
+    setSalvationScore(computeScores().salvation);
   };
 
   const openVerse = useCallback(
@@ -199,7 +206,7 @@ export default function BiblePage() {
               className="flex-1 min-w-0 text-left rounded-xl border border-[var(--border-soft)] bg-[var(--surface-muted)] px-3 py-2 hover:border-[var(--border-strong)] transition"
             >
               <p className="text-[10px] uppercase tracking-wider text-[var(--accent)]">
-                {t('nav.salvation')}
+                Salvazion Hub · {salvationScore}
               </p>
               <p className="text-sm font-semibold text-white truncate">
                 {chapter?.book || bookDisplayName} {selectedChapter}
@@ -234,28 +241,15 @@ export default function BiblePage() {
             </div>
           </div>
         ) : (
-          <div className="pt-6 pb-3">
-            <div className="flex items-center justify-between mb-3 gap-2">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <Link href="/hub/dashboard" className="back-btn" aria-label={t('common.back')}>
-                  ←
-                </Link>
-                <div className="w-9 h-9 rounded-full border border-[var(--border-soft)] flex items-center justify-center lion-glow overflow-hidden bg-[#040404] shrink-0">
-                  <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-[10px] uppercase tracking-wider font-medium" style={{ color: '#F5F7F5' }}>
-                    {t('nav.salvation')}
-                  </p>
-                  <h1 className="text-lg font-bold leading-tight truncate" style={{ color: '#F5F7F5' }}>
-                    {t('bible.title')}
-                  </h1>
-                  <p className="text-[10px] text-[var(--sage)]/80">
-                    {readCount} / {totalChapters} {t('bible.chapters')}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-1.5 shrink-0">
+          <PillarHubHeader
+            as="div"
+            pillar="salvation"
+            score={salvationScore}
+            subtitle={`${readCount} / ${totalChapters} ${t('bible.chapters')}`}
+            className="!pt-3 !px-0 !pb-0 bg-transparent border-0 shadow-none"
+            sticky={false}
+            actions={
+              <>
                 {mainTab === 'read' && (
                   <button
                     type="button"
@@ -269,11 +263,11 @@ export default function BiblePage() {
                 <Link href="/hub/devotional" className="pill-soft pill-soft-active text-[10px]">
                   {t('nav.devotional')}
                 </Link>
-              </div>
-            </div>
-
+              </>
+            }
+          >
             {/* Main tabs: Read / Explore / Prayer */}
-            <div className="segment-soft mb-3">
+            <div className="segment-soft mb-3 mt-3">
               {(
                 [
                   { id: 'read' as MainTab, key: 'bible.read' },
@@ -377,7 +371,7 @@ export default function BiblePage() {
                 )}
               </div>
             )}
-          </div>
+          </PillarHubHeader>
         )}
       </header>
 
@@ -388,6 +382,7 @@ export default function BiblePage() {
             lang={uiLang === 'en' ? 'en' : 'es'}
             onPrayed={() => {
               logAction('pray_5min');
+              setSalvationScore(computeScores().salvation);
             }}
           />
         ) : mainTab === 'explore' ? (

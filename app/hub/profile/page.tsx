@@ -192,8 +192,12 @@ export default function ProfilePage() {
                 />
               )}
               <Row label={t('profile.purpose')} value={profile.purpose || '—'} />
-              <Row label={t('profile.city')} value={profile.city || '—'} />
-              <Row label={t('profile.country')} value={profile.country || '—'} />
+              <Row
+                label={t('profile.location')}
+                value={
+                  [profile.city, profile.country].filter(Boolean).join(', ') || '—'
+                }
+              />
               <Row
                 label={t('profile.spiritualMaturity')}
                 value={
@@ -203,10 +207,6 @@ export default function ProfilePage() {
               <Row
                 label={t('profile.family')}
                 value={t(`profile.familyStatus.${profile.familyStatus || 'family'}`)}
-              />
-              <Row
-                label={t('profile.sex')}
-                value={t(`profile.sexValue.${profile.sex || 'unspecified'}`)}
               />
               <Row
                 label={t('profile.focus')}
@@ -251,42 +251,23 @@ export default function ProfilePage() {
               </div>
               <div>
                 <label className="block text-xs text-[var(--sage)] mb-1">
-                  {t('profile.sex')}
+                  {t('profile.location')}
                 </label>
-                <select
-                  value={draft.sex || 'unspecified'}
-                  onChange={(e) =>
-                    setDraft({
-                      ...draft,
-                      sex: e.target.value as 'female' | 'male' | 'unspecified',
-                    })
-                  }
+                <input
+                  type="text"
+                  value={[draft.city, draft.country].filter(Boolean).join(', ')}
+                  onChange={(e) => {
+                    const parts = e.target.value
+                      .split(',')
+                      .map((s) => s.trim())
+                      .filter(Boolean);
+                    const city = parts[0] || '';
+                    const country = parts.slice(1).join(', ');
+                    setDraft({ ...draft, city, country });
+                  }}
+                  placeholder={t('profile.locationPlaceholder')}
                   className="w-full bg-[#040404] border border-[var(--border-soft)] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#8FD99A]"
-                >
-                  <option value="unspecified">{t('profile.sexValue.unspecified')}</option>
-                  <option value="female">{t('profile.sexValue.female')}</option>
-                  <option value="male">{t('profile.sexValue.male')}</option>
-                </select>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block text-xs text-[var(--sage)] mb-1">Ciudad</label>
-                  <input
-                    type="text"
-                    value={draft.city || ''}
-                    onChange={(e) => setDraft({ ...draft, city: e.target.value })}
-                    className="w-full bg-[#040404] border border-[var(--border-soft)] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#8FD99A]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs text-[var(--sage)] mb-1">País</label>
-                  <input
-                    type="text"
-                    value={draft.country || ''}
-                    onChange={(e) => setDraft({ ...draft, country: e.target.value })}
-                    className="w-full bg-[#040404] border border-[var(--border-soft)] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#8FD99A]"
-                  />
-                </div>
+                />
               </div>
               <div className="flex gap-2 pt-2">
                 <button

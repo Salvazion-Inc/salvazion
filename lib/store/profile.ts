@@ -5,6 +5,28 @@ import { extractXIdentity } from '@/lib/auth/x-oauth';
 const STORAGE_KEY = 'salvazion_profile';
 const STORAGE_VERSION = 2;
 
+/** Display "City, Country" from separate stored fields. */
+export function formatLocation(
+  city?: string | null,
+  country?: string | null
+): string {
+  return [city, country]
+    .map((s) => (s || '').trim())
+    .filter(Boolean)
+    .join(', ');
+}
+
+/** Parse a single "City, Country" input back into city + country. */
+export function parseLocation(input: string): { city: string; country: string } {
+  const parts = input
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (parts.length === 0) return { city: '', country: '' };
+  if (parts.length === 1) return { city: parts[0], country: '' };
+  return { city: parts[0], country: parts.slice(1).join(', ') };
+}
+
 interface StoredPayload {
   v: number;
   ts: number;

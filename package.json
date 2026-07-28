@@ -23,6 +23,10 @@
     "@capacitor/core": "^7.4.2",
     "@capacitor/splash-screen": "^7.0.3",
     "@capacitor/status-bar": "^7.0.3",
+    "@jup-ag/jup-mobile-adapter": "^0.0.2",
+    "@reown/appkit": "^1.8.23",
+    "@reown/appkit-adapter-solana": "^1.8.23",
+    "@reown/appkit-wallet-button": "^1.8.23",
     "@salvazion/capacitor-health": "file:native/capacitor/plugins/SalvazionHealth",
     "@solana/wallet-adapter-base": "^0.9.27",
     "@solana/wallet-adapter-phantom": "^0.9.29",
@@ -48,6 +52,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
     "pg": "^8.22.0",
+    "playwright": "^1.62.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import {
   SALVAZION_MINT,
@@ -15,6 +14,7 @@ import {
   saveLinkedWallet,
 } from '@/lib/solana/wallet-store';
 import JupiterSwap from '@/components/wallet/JupiterSwap';
+import WalletSelectModal from '@/components/wallet/WalletSelectModal';
 import { useI18n } from '@/components/I18nProvider';
 
 type Variant = 'card' | 'compact';
@@ -34,12 +34,15 @@ export default function WalletConnectCard({
   const { t } = useI18n();
   const { connection } = useConnection();
   const { publicKey, connected, connecting, disconnect, wallet } = useWallet();
-  const { setVisible } = useWalletModal();
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   const [solBalance, setSolBalance] = useState<number | null>(null);
   const [tokenBalance, setTokenBalance] = useState<number | null>(null);
   const [copied, setCopied] = useState(false);
   const [balanceError, setBalanceError] = useState<string | null>(null);
+
+  const openPicker = () => setPickerOpen(true);
+  const closePicker = () => setPickerOpen(false);
 
   // Persist linked address when connected
   useEffect(() => {
@@ -113,36 +116,39 @@ export default function WalletConnectCard({
 
   if (variant === 'compact') {
     return (
-      <div className={`flex items-center gap-2 ${className}`}>
-        {connected && publicKey ? (
-          <>
+      <>
+        <div className={`flex items-center gap-2 ${className}`}>
+          {connected && publicKey ? (
+            <>
+              <button
+                type="button"
+                onClick={handleCopy}
+                className="px-3 py-1.5 rounded-full border border-[var(--border-strong)] text-xs font-mono text-[#8FD99A] hover:bg-[var(--surface-active)] transition"
+                title={publicKey.toBase58()}
+              >
+                {copied ? t('wallet.copied') : shortenAddress(publicKey.toBase58())}
+              </button>
+              <button
+                type="button"
+                onClick={handleDisconnect}
+                className="text-[11px] text-[var(--sage)]/80 hover:text-red-400 transition"
+              >
+                {t('wallet.disconnect')}
+              </button>
+            </>
+          ) : (
             <button
               type="button"
-              onClick={handleCopy}
-              className="px-3 py-1.5 rounded-full border border-[var(--border-strong)] text-xs font-mono text-[#8FD99A] hover:bg-[var(--surface-active)] transition"
-              title={publicKey.toBase58()}
+              disabled={connecting}
+              onClick={openPicker}
+              className="px-3 py-1.5 rounded-full bg-[#7BC98A] text-[#040404] text-xs font-semibold hover:bg-[#B7F7AC] transition disabled:opacity-50"
             >
-              {copied ? t('wallet.copied') : shortenAddress(publicKey.toBase58())}
+              {connecting ? t('wallet.connecting') : t('wallet.connectShort')}
             </button>
-            <button
-              type="button"
-              onClick={handleDisconnect}
-              className="text-[11px] text-[var(--sage)]/80 hover:text-red-400 transition"
-            >
-              {t('wallet.disconnect')}
-            </button>
-          </>
-        ) : (
-          <button
-            type="button"
-            disabled={connecting}
-            onClick={() => setVisible(true)}
-            className="px-3 py-1.5 rounded-full bg-[#7BC98A] text-[#040404] text-xs font-semibold hover:bg-[#B7F7AC] transition disabled:opacity-50"
-          >
-            {connecting ? t('wallet.connecting') : t('wallet.connectShort')}
-          </button>
-        )}
-      </div>
+          )}
+        </div>
+        <WalletSelectModal open={pickerOpen} onClose={closePicker} />
+      </>
     );
   }
 
@@ -169,11 +175,12 @@ export default function WalletConnectCard({
           <button
             type="button"
             disabled={connecting}
-            onClick={() => setVisible(true)}
+            onClick={openPicker}
             className="btn-primary"
           >
             {connecting ? t('wallet.connecting') : t('wallet.connect')}
           </button>
+          <WalletSelectModal open={pickerOpen} onClose={closePicker} />
         </div>
       ) : (
         <div className="space-y-3">

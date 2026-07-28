@@ -473,7 +473,7 @@ const copy = {
         },
         web3: {
           title: '$SALVAZION on Solana',
-          body: 'Connect Phantom/Solflare and swap via Jupiter. Patriotic Bitcoin — we never hold your keys.',
+          body: 'Connect Jupiter Mobile, Phantom or Solflare and swap via Jupiter. Patriotic Bitcoin — we never hold your keys.',
         },
       },
     },
@@ -600,7 +600,7 @@ const copy = {
         },
         web3: {
           title: '$SALVAZION en Solana',
-          body: 'Conecta Phantom/Solflare y swap con Jupiter. Patriot Bitcoin — no custodiamos tus llaves.',
+          body: 'Conecta Jupiter Mobile, Phantom o Solflare y swap con Jupiter. Patriot Bitcoin — no custodiamos tus llaves.',
         },
       },
     },

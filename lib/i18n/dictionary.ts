@@ -404,7 +404,7 @@ export const dictionary = {
     },
     wallet: {
       title: 'Billetera Web3',
-      subtitle: 'Phantom, Solflare y otras wallets de Solana',
+      subtitle: 'Jupiter Mobile, Phantom, Solflare y otras wallets de Solana',
       connect: 'Conectar billetera Solana',
       connecting: 'Conectando…',
       disconnect: 'Desconectar',
@@ -414,6 +414,12 @@ export const dictionary = {
       swapSalvazion: 'Swap $SALVAZION con Jupiter',
       openTerminal: 'Abrir terminal Jupiter completa →',
       connectShort: 'Conectar wallet',
+      jupiterHint: 'Escanea el QR con la app Jupiter Mobile',
+      installed: 'Detectada en este dispositivo',
+      detectable: 'Disponible para conectar',
+      noneFound: 'No se encontraron wallets en este dispositivo.',
+      modalFooter:
+        'No custodiamos tus llaves. Jupiter Mobile, Phantom, Solflare y otras wallets de Solana aparecen aquí — misma lista en home y en la App.',
     },
     invite: {
       title: 'Invitar a tu Phalanx',
@@ -876,7 +882,7 @@ export const dictionary = {
     },
     wallet: {
       title: 'Web3 Wallet',
-      subtitle: 'Phantom, Solflare and other Solana wallets',
+      subtitle: 'Jupiter Mobile, Phantom, Solflare and other Solana wallets',
       connect: 'Connect Solana wallet',
       connecting: 'Connecting…',
       disconnect: 'Disconnect',
@@ -886,6 +892,12 @@ export const dictionary = {
       swapSalvazion: 'Swap $SALVAZION with Jupiter',
       openTerminal: 'Open full Jupiter terminal →',
       connectShort: 'Connect wallet',
+      jupiterHint: 'Scan the QR with the Jupiter Mobile app',
+      installed: 'Detected on this device',
+      detectable: 'Available to connect',
+      noneFound: 'No wallets found on this device.',
+      modalFooter:
+        'We never custody your keys. Jupiter Mobile, Phantom, Solflare and other Solana wallets appear here — same list on home and in the App.',
     },
     invite: {
       title: 'Invite to your Phalanx',

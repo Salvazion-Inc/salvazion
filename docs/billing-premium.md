@@ -64,6 +64,14 @@ Run `supabase/subscriptions.sql` in the SQL editor so entitlements persist.
 
 Enable Customer Portal in Stripe Billing settings (cancel / update payment method).
 
+## Customer emails (From / support)
+
+- **Support email** (Dashboard → Public business information): **`info@salvazion.org`**
+- Optional: custom email domain `salvazion.org` so receipts/invoices leave Stripe’s default `stripe.com` domain  
+  (Stripe uses fixed local-parts like `receipts@`, `invoice@` on your domain; replies go to support email)
+
+Full steps: [`docs/email.md`](./email.md)
+
 ## App routes
 
 - `/hub/premium` — plans & checkout  

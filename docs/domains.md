@@ -83,6 +83,11 @@ NEXT_PUBLIC_APP_URL=https://app.salvazion.org
 
 Luego: `npm run cap:sync`
 
+## 7) Emails (From: info@salvazion.org)
+
+Todos los emails del producto (Auth, pagos, app) usan **`info@salvazion.org`**.  
+Guía: [`docs/email.md`](./email.md) — Supabase Custom SMTP, Stripe support/domain, Resend para la app.
+
 ## Comprobar
 
 Abre `https://app.salvazion.org` → debe cargar Salvazion Hub / landing de la app.  

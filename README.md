@@ -9,7 +9,8 @@ Phalanx digital: **Salvation · Health · Freedom**.
 | [www.salvazion.org](https://www.salvazion.org) | Sitio marketing antiguo (Canva) — **no** este repo |
 | [app.salvazion.org](https://app.salvazion.org) | **Esta app** (Vercel + Supabase) |
 
-Guía DNS / Vercel / Supabase: [`docs/domains.md`](docs/domains.md).
+Guía DNS / Vercel / Supabase: [`docs/domains.md`](docs/domains.md).  
+Emails del producto (From **`info@salvazion.org`**): [`docs/email.md`](docs/email.md).
 
 ## Desarrollo
 

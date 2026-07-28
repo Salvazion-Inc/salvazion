@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { ReactNode } from 'react';
+import { SUPPORT_EMAIL, SUPPORT_MAILTO } from '@/lib/config/site';
 
 export default function LegalShell({
   title,
@@ -71,10 +72,10 @@ export default function LegalShell({
         <p className="mt-1">
           Contacto:{' '}
           <a
-            href="mailto:info@salvazion.org"
+            href={SUPPORT_MAILTO}
             className="text-[var(--accent)] hover:underline"
           >
-            info@salvazion.org
+            {SUPPORT_EMAIL}
           </a>
         </p>
       </footer>

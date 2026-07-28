@@ -14,7 +14,10 @@
 ## 3. Configurar Auth
 1. Authentication → Providers → Email → Enable
 2. (Opcional) desactiva “Confirm email” solo en desarrollo para ir más rápido
-3. Authentication → URL Configuration:
+3. **Custom SMTP (producción obligatorio)** — From: **`info@salvazion.org`**  
+   Authentication → Emails → SMTP Settings → Enable Custom SMTP  
+   Guía completa: [`docs/email.md`](../docs/email.md)
+4. Authentication → URL Configuration:
    - **Site URL (producción):** `https://app.salvazion.org`  
      (la app; **no** uses `www.salvazion.org` — ese es el sitio Canva antiguo)
    - **Redirect URLs** (añade todas):

@@ -4,6 +4,9 @@
  * - Marketing (Canva, sitio antiguo): https://www.salvazion.org
  * - Product app (this Next.js / Vercel deploy): https://app.salvazion.org
  *   Optional alias: https://www.app.salvazion.org
+ *
+ * Email policy: all product / transactional mail uses info@salvazion.org
+ * (see lib/email/* and docs/email.md).
  */
 
 /** Marketing site — do not point this Next.js project here */
@@ -17,6 +20,16 @@ export const APP_HOST_WWW = 'www.app.salvazion.org';
 
 export const APP_URL = `https://${APP_HOST}`;
 export const APP_URL_WWW = `https://${APP_HOST_WWW}`;
+
+/**
+ * Canonical support / contact / From address for the product.
+ * Auth (Supabase SMTP), Stripe support, and app mailer must use this.
+ */
+export const SUPPORT_EMAIL = 'info@salvazion.org';
+/** Display name for outbound product email */
+export const SUPPORT_EMAIL_NAME = 'Salvazion';
+/** mailto: link for legal / footer UI */
+export const SUPPORT_MAILTO = `mailto:${SUPPORT_EMAIL}`;
 
 /**
  * Canonical public origin for the app (OAuth redirects, wearables, Capacitor, metadata).

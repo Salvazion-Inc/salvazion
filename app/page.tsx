@@ -13,6 +13,7 @@ import {
   InviteIcon,
   SwapIcon,
 } from '@/components/Icons';
+import { SUPPORT_EMAIL, SUPPORT_MAILTO } from '@/lib/config/site';
 
 const JUPITER_BUY =
   'https://jup.ag/swap?inputMint=So11111111111111111111111111111111111111112&outputMint=7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2';
@@ -383,8 +384,8 @@ export default function SalvazionLanding() {
             >
               salvazion.org
             </a>
-            <a href="mailto:info@salvazion.org" className="hover:text-[var(--accent)]">
-              info@salvazion.org
+            <a href={SUPPORT_MAILTO} className="hover:text-[var(--accent)]">
+              {SUPPORT_EMAIL}
             </a>
           </div>
         </div>

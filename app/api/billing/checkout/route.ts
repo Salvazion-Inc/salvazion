@@ -58,6 +58,13 @@ export async function POST(req: NextRequest) {
       success_url: `${base}/hub/profile?billing=success`,
       cancel_url: `${base}/hub/premium?billing=cancel`,
       allow_promotion_codes: true,
+      // Legal links shown at Checkout (Portal business_profile set via scripts/stripe-set-portal-legal.mjs)
+      custom_text: {
+        submit: {
+          message:
+            'By confirming you agree to Salvazion [Terms of Service](https://app.salvazion.org/terms) and [Privacy Policy](https://app.salvazion.org/privacy).',
+        },
+      },
       subscription_data: {
         metadata: {
           supabase_user_id: user.id,

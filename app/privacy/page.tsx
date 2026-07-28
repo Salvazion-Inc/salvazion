@@ -1,17 +1,28 @@
 import type { Metadata } from 'next';
 import LegalDocument from '@/components/legal/LegalDocument';
 import { PRIVACY } from '@/lib/legal/privacy';
-import { APP_URL } from '@/lib/config/site';
+import { absoluteUrl } from '@/lib/seo/config';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | Política de Privacidad',
   description: PRIVACY.en.metaDescription,
   alternates: {
-    canonical: `${APP_URL}/privacy`,
+    canonical: absoluteUrl('/privacy'),
     languages: {
-      en: `${APP_URL}/privacy`,
-      es: `${APP_URL}/privacy`,
+      en: absoluteUrl('/privacy'),
+      es: absoluteUrl('/privacy'),
+      'x-default': absoluteUrl('/privacy'),
     },
+  },
+  openGraph: {
+    title: 'Privacy Policy | Salvazion',
+    description: PRIVACY.en.metaDescription,
+    url: absoluteUrl('/privacy'),
+    type: 'website',
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

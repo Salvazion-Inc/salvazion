@@ -3,7 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import Providers from "@/components/Providers";
 import PwaRegister from "@/components/PwaRegister";
-import { APP_URL } from "@/lib/config/site";
+import { getAppBaseUrl } from "@/lib/config/site";
+import { SEO } from "@/lib/seo/config";
 import { getThemeBootScript } from "@/lib/store/theme";
 import "./globals.css";
 
@@ -18,27 +19,75 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const metadataBase = new URL(
+  (process.env.NEXT_PUBLIC_APP_URL || getAppBaseUrl()).replace(/\/$/, "") ||
+    SEO.url
+);
+
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || APP_URL
-  ),
+  metadataBase,
   title: {
-    default: "Salvazion | Make Salvation, Health and Freedom Great Again",
-    template: "%s | Salvazion",
+    default: SEO.title,
+    template: SEO.titleTemplate,
   },
-  description:
-    "Comunidad digital que une Salvación, Salud y Libertad. Defendemos la Cultura Occidental Cristiana y BioConservadurismo.",
-  applicationName: "Salvazion",
+  description: SEO.description,
+  applicationName: SEO.siteName,
+  authors: [
+    { name: "Cristian Cortés", url: SEO.url },
+    { name: "Beatriz Isler", url: SEO.url },
+  ],
+  creator: SEO.legalName,
+  publisher: SEO.legalName,
+  category: SEO.category,
+  keywords: [...SEO.keywords],
+  generator: "Next.js",
+  referrer: "origin-when-cross-origin",
   alternates: {
     canonical: "/",
+    languages: {
+      en: "/",
+      es: "/",
+      "x-default": "/",
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: SEO.locale,
+    alternateLocale: [SEO.alternateLocale],
+    url: "/",
+    siteName: SEO.siteName,
+    title: SEO.title,
+    description: SEO.description,
+    // Image: app/opengraph-image.tsx (auto-injected by Next.js)
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SEO.title,
+    description: SEO.description,
+    // Image: app/twitter-image.tsx
+    creator: SEO.twitterHandle,
+    site: SEO.twitterHandle,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Salvazion",
+    title: SEO.siteName,
   },
   formatDetection: {
     telephone: false,
+    email: false,
+    address: false,
   },
   icons: {
     icon: [
@@ -54,6 +103,7 @@ export const metadata: Metadata = {
     ],
     shortcut: ["/icon-192.png"],
   },
+  manifest: "/manifest.webmanifest",
   other: {
     "mobile-web-app-capable": "yes",
   },

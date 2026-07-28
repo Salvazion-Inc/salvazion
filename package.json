@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "bible:build": "node scripts/build-bible.mjs",
+    "salvators:video": "node scripts/build-salvators-video.mjs",
     "db:phalanx": "node scripts/run-phalanx-sql.mjs",
     "cap:init": "node scripts/capacitor-init.mjs",
     "cap:doctor": "node scripts/capacitor-doctor.mjs",

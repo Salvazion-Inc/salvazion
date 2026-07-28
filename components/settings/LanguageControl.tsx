@@ -1,17 +1,19 @@
 'use client';
 
 import { useI18n } from '@/components/I18nProvider';
+import FlatFlag from '@/components/ui/FlatFlag';
 import type { Language } from '@/lib/types';
 
 /**
  * Global language switcher (Spanish / English) for the whole app.
+ * Flat Chile (ES) and USA (EN) flags — no photo wrinkles.
  */
 export default function LanguageControl({ compact = false }: { compact?: boolean }) {
   const { lang, setLang, t } = useI18n();
 
-  const options: { id: Language; flag: string; label: string }[] = [
-    { id: 'es', flag: '🇪🇸', label: t('common.spanish') },
-    { id: 'en', flag: '🇺🇸', label: t('common.english') },
+  const options: { id: Language; label: string }[] = [
+    { id: 'es', label: t('common.spanish') },
+    { id: 'en', label: t('common.english') },
   ];
 
   if (compact) {
@@ -24,14 +26,20 @@ export default function LanguageControl({ compact = false }: { compact?: boolean
               key={opt.id}
               type="button"
               onClick={() => setLang(opt.id)}
-              className={`px-2.5 py-1.5 rounded-full text-xs border transition-all ${
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs border transition-all ${
                 active
                   ? 'border-[#8FD99A] bg-[#7BC98A]/15 text-[#8FD99A]'
                   : 'border-[#6B8F6E]/35 text-[#B7F7AC]/70 hover:border-[#8FD99A]/40'
               }`}
               aria-pressed={active}
+              aria-label={opt.label}
             >
-              {opt.flag} {opt.id.toUpperCase()}
+              <FlatFlag
+                lang={opt.id}
+                size="sm"
+                className="rounded-[2px] ring-1 ring-black/20"
+              />
+              <span>{opt.id.toUpperCase()}</span>
             </button>
           );
         })}
@@ -63,14 +71,14 @@ export default function LanguageControl({ compact = false }: { compact?: boolean
               role="radio"
               aria-checked={active}
               onClick={() => setLang(opt.id)}
-              className={`flex flex-col items-center gap-1.5 rounded-xl border py-4 px-2 transition-all ${
+              className={`flex flex-col items-center gap-2 rounded-xl border py-4 px-2 transition-all ${
                 active
-                  ? 'border-[#8FD99A] bg-[#7BC98A]/15 text-[#8FD99A] shadow-[0_0_16px_rgba(143, 217, 154,0.15)]'
+                  ? 'border-[#8FD99A] bg-[#7BC98A]/15 text-[#8FD99A] shadow-[0_0_16px_rgba(143,217,154,0.15)]'
                   : 'border-[#6B8F6E]/30 text-[#B7F7AC]/70 hover:border-[#8FD99A]/40'
               }`}
             >
-              <span className="text-2xl" aria-hidden>
-                {opt.flag}
+              <span className="rounded-[3px] overflow-hidden ring-1 ring-white/10 shadow-sm">
+                <FlatFlag lang={opt.id} size="lg" />
               </span>
               <span className="text-sm font-semibold">{opt.label}</span>
               <span className="text-[10px] opacity-70">{opt.id.toUpperCase()}</span>

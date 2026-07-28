@@ -56,3 +56,6 @@ ios/App/Pods
 ios/App/App/public
 ios/DerivedData
 ios/App/output
+
+# Video build temp frames
+tmp/

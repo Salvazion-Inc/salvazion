@@ -6,18 +6,20 @@ import type { MetadataRoute } from 'next';
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Salvazion',
+    name: 'Salvazion — Salvation · Health · Freedom',
     short_name: 'Salvazion',
     description:
-      'Make Salvation, Health and Freedom Great Again. Comunidad digital con fe, salud y libertad.',
+      'Make Salvation, Health and Freedom Great Again. Freemium app: Bible, devotionals, health, Freedom library, Phalanx community, Green Lion coach and $SALVAZION on Solana.',
     start_url: '/',
     scope: '/',
+    id: '/',
     display: 'standalone',
     orientation: 'portrait-primary',
     background_color: '#040404',
     theme_color: '#8FD99A',
-    categories: ['lifestyle', 'health', 'education'],
+    categories: ['lifestyle', 'health', 'education', 'productivity'],
     lang: 'en',
+    dir: 'ltr',
     icons: [
       {
         src: '/icon-192.png',

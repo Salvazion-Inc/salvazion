@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1235 650" role="img" aria-label="United States">
+  <!-- Flat USA flag — solid fills only (no folds, shadows, or photo texture) -->
+  <rect width="1235" height="650" fill="#B22234"/>
+  <g fill="#fff">
+    <rect y="50" width="1235" height="50"/>
+    <rect y="150" width="1235" height="50"/>
+    <rect y="250" width="1235" height="50"/>
+    <rect y="350" width="1235" height="50"/>
+    <rect y="450" width="1235" height="50"/>
+    <rect y="550" width="1235" height="50"/>
+  </g>
+  <rect width="494" height="350" fill="#3C3B6E"/>
+  <!-- Flat star field (circles read cleanly at UI size) -->
+  <g fill="#fff">
+    <g id="star-row-6">
+      <circle cx="41.2" cy="29.2" r="12"/>
+      <circle cx="123.5" cy="29.2" r="12"/>
+      <circle cx="205.8" cy="29.2" r="12"/>
+      <circle cx="288.2" cy="29.2" r="12"/>
+      <circle cx="370.5" cy="29.2" r="12"/>
+      <circle cx="452.8" cy="29.2" r="12"/>
+    </g>
+    <use href="#star-row-6" y="70"/>
+    <use href="#star-row-6" y="140"/>
+    <use href="#star-row-6" y="210"/>
+    <use href="#star-row-6" y="280"/>
+    <g id="star-row-5">
+      <circle cx="82.3" cy="64.2" r="12"/>
+      <circle cx="164.7" cy="64.2" r="12"/>
+      <circle cx="247" cy="64.2" r="12"/>
+      <circle cx="329.3" cy="64.2" r="12"/>
+      <circle cx="411.7" cy="64.2" r="12"/>
+    </g>
+    <use href="#star-row-5" y="70"/>
+    <use href="#star-row-5" y="140"/>
+    <use href="#star-row-5" y="210"/>
+  </g>
+</svg>

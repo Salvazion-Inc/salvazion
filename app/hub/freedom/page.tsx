@@ -17,6 +17,7 @@ import { evaluateBadges } from '@/lib/badges/engine';
 import XArticlesFeed from '@/components/freedom/XArticlesFeed';
 import BookStoreCarousel from '@/components/freedom/BookStoreCarousel';
 import YouTubeChannelsPanel from '@/components/freedom/YouTubeChannelsPanel';
+import XCommunitiesPanel from '@/components/freedom/XCommunitiesPanel';
 import PillarHubHeader from '@/components/hub/PillarHubHeader';
 import InvitePhalanx from '@/components/invite/InvitePhalanx';
 import VoiceAgent from '@/components/coach/VoiceAgent';
@@ -156,6 +157,8 @@ export default function FreedomPage() {
 
         {activeTab === 'connect' && (
           <div className="space-y-4">
+            <XCommunitiesPanel onScored={() => refresh()} />
+
             <InvitePhalanx
               onChanged={(links) => {
                 const family = links.filter((l) =>

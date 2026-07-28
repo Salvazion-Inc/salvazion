@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 32" width="48" height="32" role="img" aria-label="Chile">
+  <!-- Flat Chile flag — no texture, folds, or shading -->
+  <rect width="48" height="32" fill="#D52B1E"/>
+  <rect width="48" height="16" fill="#fff"/>
+  <rect width="16" height="16" fill="#0039A6"/>
+  <!-- Centered 5-point star (flat white) -->
+  <polygon
+    fill="#fff"
+    points="8,3.2 9.1,6.6 12.7,6.6 9.8,8.7 10.9,12.1 8,10 5.1,12.1 6.2,8.7 3.3,6.6 6.9,6.6"
+  />
+</svg>

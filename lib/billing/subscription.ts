@@ -17,12 +17,13 @@ const ACTIVE: SubscriptionStatus[] = ['active', 'trialing'];
 function fromRow(row: Record<string, unknown>): Entitlement {
   const status = (row.status as SubscriptionStatus) || 'none';
   const priceId = (row.price_id as string) || null;
+  const billingInterval = (row.billing_interval as string) || (row.interval as string);
   return {
     isPremium: isPremiumStatus(status) && isPremiumPriceId(priceId),
     status,
     interval:
-      row.interval === 'year' || row.interval === 'month'
-        ? row.interval
+      billingInterval === 'year' || billingInterval === 'month'
+        ? billingInterval
         : null,
     priceId,
     currentPeriodEnd: (row.current_period_end as string) || null,
@@ -133,7 +134,7 @@ export async function upsertSubscriptionRow(
         user_id: userId,
         status: ent.status || 'none',
         price_id: ent.priceId || null,
-        interval: ent.interval || null,
+        billing_interval: ent.interval || null,
         stripe_customer_id: ent.customerId || null,
         stripe_subscription_id: ent.subscriptionId || null,
         current_period_end: ent.currentPeriodEnd || null,

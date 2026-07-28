@@ -1,13 +1,16 @@
 -- ============================================================
 -- Salvazion Premium subscriptions (Stripe)
--- Run in Supabase SQL Editor after schema.sql
+-- Paste THIS ENTIRE script into Supabase → SQL Editor → Run
+-- (Do not paste the file path "supabase/subscriptions.sql")
 -- ============================================================
 
 create table if not exists public.subscriptions (
   user_id uuid primary key references auth.users(id) on delete cascade,
   status text not null default 'none',
   price_id text,
-  interval text check (interval is null or interval in ('month', 'year')),
+  billing_interval text check (
+    billing_interval is null or billing_interval in ('month', 'year')
+  ),
   stripe_customer_id text unique,
   stripe_subscription_id text,
   current_period_end timestamptz,

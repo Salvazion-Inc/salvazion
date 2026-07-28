@@ -12,6 +12,8 @@ interface IconProps {
   size?: number;
   className?: string;
   active?: boolean;
+  /** Override active color (e.g. pillar white / blue / green) */
+  color?: string;
 }
 
 /** Soft brand colors — CSS vars so themes recolor icons */
@@ -23,7 +25,8 @@ const C = {
   fillIdle: 'var(--border-soft, rgba(138, 171, 142, 0.08))',
 };
 
-function tone(active?: boolean) {
+function tone(active?: boolean, color?: string) {
+  if (active && color) return color;
   return active ? C.active : C.idle;
 }
 
@@ -42,25 +45,36 @@ function Node({
   cy,
   r = 1.1,
   active,
+  color,
 }: {
   cx: number | string;
   cy: number | string;
   r?: number | string;
   active?: boolean;
+  color?: string;
 }) {
-  return <circle cx={cx} cy={cy} r={r} fill={tone(active)} opacity={active ? 0.95 : 0.7} />;
+  return (
+    <circle
+      cx={cx}
+      cy={cy}
+      r={r}
+      fill={tone(active, color)}
+      opacity={active ? 0.95 : 0.7}
+    />
+  );
 }
 
 /** Shared circular frame — exclusive Salvazion mark */
-function Frame({ active }: { active?: boolean }) {
+function Frame({ active, color }: { active?: boolean; color?: string }) {
+  const s = tone(active, color);
   return (
     <circle
       cx="12"
       cy="12"
       r="10.25"
-      stroke={tone(active)}
+      stroke={s}
       strokeWidth="1.15"
-      fill={active ? C.fillActive : C.fillIdle}
+      fill={active ? (color ? `${color}22` : C.fillActive) : C.fillIdle}
       opacity={active ? 1 : 0.9}
     />
   );
@@ -104,8 +118,8 @@ export function HomeIcon({ size = 24, className = '', active }: IconProps) {
   );
 }
 
-export function BibleIcon({ size = 24, className = '', active }: IconProps) {
-  const s = tone(active);
+export function BibleIcon({ size = 24, className = '', active, color }: IconProps) {
+  const s = tone(active, color);
   return (
     <svg
       width={size}
@@ -115,7 +129,7 @@ export function BibleIcon({ size = 24, className = '', active }: IconProps) {
       className={baseClass(active, className)}
       aria-hidden
     >
-      <Frame active={active} />
+      <Frame active={active} color={color} />
       {/* open book */}
       <path
         d="M12 8.2c-1.6-1-3.4-1.4-5.2-1.2v7.6c1.8-.2 3.6.2 5.2 1.2 1.6-1 3.4-1.4 5.2-1.2V7c-1.8-.2-3.6.2-5.2 1.2z"
@@ -126,14 +140,14 @@ export function BibleIcon({ size = 24, className = '', active }: IconProps) {
       <path d="M12 8.4v7.4" stroke={s} strokeWidth="1.15" strokeLinecap="round" />
       {/* soft cross light */}
       <path d="M12 9.6v2.8M10.6 11h2.8" stroke={s} strokeWidth="1.15" strokeLinecap="round" opacity={0.85} />
-      <Node cx="8.2" cy="8.5" active={active} r={0.85} />
-      <Node cx="15.8" cy="8.5" active={active} r={0.85} />
+      <Node cx="8.2" cy="8.5" active={active} color={color} r={0.85} />
+      <Node cx="15.8" cy="8.5" active={active} color={color} r={0.85} />
     </svg>
   );
 }
 
-export function HealthIcon({ size = 24, className = '', active }: IconProps) {
-  const s = tone(active);
+export function HealthIcon({ size = 24, className = '', active, color }: IconProps) {
+  const s = tone(active, color);
   return (
     <svg
       width={size}
@@ -143,7 +157,7 @@ export function HealthIcon({ size = 24, className = '', active }: IconProps) {
       className={baseClass(active, className)}
       aria-hidden
     >
-      <Frame active={active} />
+      <Frame active={active} color={color} />
       {/* leaf / heart hybrid */}
       <path
         d="M12 16.6c-2.8-1.8-4.2-3.6-4.2-5.5A2.7 2.7 0 0 1 12 8.6a2.7 2.7 0 0 1 4.2 2.5c0 1.9-1.4 3.7-4.2 5.5z"
@@ -152,13 +166,13 @@ export function HealthIcon({ size = 24, className = '', active }: IconProps) {
         strokeLinejoin="round"
       />
       <path d="M12 10v3.2M10.4 11.6h3.2" stroke={s} strokeWidth="1.2" strokeLinecap="round" />
-      <Node cx="12" cy="7.4" active={active} r={0.9} />
+      <Node cx="12" cy="7.4" active={active} color={color} r={0.9} />
     </svg>
   );
 }
 
-export function FreedomIcon({ size = 24, className = '', active }: IconProps) {
-  const s = tone(active);
+export function FreedomIcon({ size = 24, className = '', active, color }: IconProps) {
+  const s = tone(active, color);
   return (
     <svg
       width={size}
@@ -168,7 +182,7 @@ export function FreedomIcon({ size = 24, className = '', active }: IconProps) {
       className={baseClass(active, className)}
       aria-hidden
     >
-      <Frame active={active} />
+      <Frame active={active} color={color} />
       {/* open key / liberty path */}
       <circle cx="9.2" cy="11.2" r="2.2" stroke={s} strokeWidth="1.3" />
       <path
@@ -184,7 +198,7 @@ export function FreedomIcon({ size = 24, className = '', active }: IconProps) {
         strokeLinecap="round"
         opacity={0.8}
       />
-      <Node cx="9.2" cy="11.2" active={active} r={0.85} />
+      <Node cx="9.2" cy="11.2" active={active} color={color} r={0.85} />
     </svg>
   );
 }

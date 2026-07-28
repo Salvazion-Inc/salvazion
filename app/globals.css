@@ -47,6 +47,10 @@
   --radius-xl: 1.5rem;
   --app-text-scale: 1;
   --font-cosmic-octo: "Cosmic Octo", var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  /* Three pillars */
+  --pillar-salvation: #F5F7F5;
+  --pillar-health: #4A9EFF;
+  --pillar-freedom: #7BC98A;
   color-scheme: dark;
 }
 
@@ -350,10 +354,10 @@ html[data-text-scale="xxl"] nav.fixed span {
   padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
 }
 
-/* Pillar accents */
-.pillar-salvation { --pillar: #8FD99A; }
-.pillar-health { --pillar: #7EC8A3; }
-.pillar-freedom { --pillar: #A8D4AE; }
+/* Pillar accents — Salvation white · Health blue · Freedom green */
+.pillar-salvation { --pillar: var(--pillar-salvation); }
+.pillar-health { --pillar: var(--pillar-health); }
+.pillar-freedom { --pillar: var(--pillar-freedom); }
 
 mark {
   background-color: rgba(143, 217, 154, 0.16);

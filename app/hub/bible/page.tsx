@@ -244,10 +244,10 @@ export default function BiblePage() {
                   <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] font-medium">
+                  <p className="text-[10px] uppercase tracking-wider font-medium" style={{ color: '#F5F7F5' }}>
                     {t('nav.salvation')}
                   </p>
-                  <h1 className="text-lg font-bold text-[var(--accent)] leading-tight truncate">
+                  <h1 className="text-lg font-bold leading-tight truncate" style={{ color: '#F5F7F5' }}>
                     {t('bible.title')}
                   </h1>
                   <p className="text-[10px] text-[var(--sage)]/80">

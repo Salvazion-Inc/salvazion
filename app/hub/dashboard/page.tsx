@@ -31,6 +31,7 @@ import {
   BadgesIcon,
 } from '@/components/Icons';
 import ProgressCharts from '@/components/progress/ProgressCharts';
+import { PILLAR_COLORS } from '@/lib/theme/pillars';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -214,7 +215,7 @@ export default function DashboardPage() {
               streak={streaks.salvation}
               multiplier={multipliers.salvation}
               Icon={BibleIcon}
-              ring="#F5F7F5"
+              ring={PILLAR_COLORS.salvation.solid}
             />
             <PillarCard
               href="/hub/health"
@@ -223,7 +224,7 @@ export default function DashboardPage() {
               streak={streaks.health}
               multiplier={multipliers.health}
               Icon={HealthIcon}
-              ring="#4A9EFF"
+              ring={PILLAR_COLORS.health.solid}
             />
             <PillarCard
               href="/hub/freedom"
@@ -232,7 +233,7 @@ export default function DashboardPage() {
               streak={streaks.freedom}
               multiplier={multipliers.freedom}
               Icon={FreedomIcon}
-              ring="#7BC98A"
+              ring={PILLAR_COLORS.freedom.solid}
             />
           </div>
         </div>
@@ -382,17 +383,22 @@ function PillarCard({
   value: number;
   streak: number;
   multiplier: number;
-  Icon: React.FC<{ size?: number; active?: boolean }>;
+  Icon: React.FC<{ size?: number; active?: boolean; color?: string }>;
   ring: string;
 }) {
   return (
     <Link
       href={href}
-      className="card-soft p-3 text-center hover:border-[var(--border-strong)] transition-all active:scale-[0.98] min-h-[100px] flex flex-col items-center justify-center gap-1"
-      style={{ borderColor: `color-mix(in srgb, ${ring} 40%, transparent)` }}
+      className="card-soft p-3 text-center transition-all active:scale-[0.98] min-h-[100px] flex flex-col items-center justify-center gap-1"
+      style={{
+        borderColor: `color-mix(in srgb, ${ring} 45%, transparent)`,
+        background: `color-mix(in srgb, ${ring} 8%, #040404)`,
+      }}
     >
-      <Icon size={26} active />
-      <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]">{label}</p>
+      <Icon size={26} active color={ring} />
+      <p className="text-[10px] uppercase tracking-wider" style={{ color: ring, opacity: 0.85 }}>
+        {label}
+      </p>
       <p className="text-2xl font-bold leading-none" style={{ color: ring }}>
         {value}
       </p>

@@ -207,17 +207,17 @@ export default function HealthPage() {
               <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
             </div>
             <div className="min-w-0">
-              <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] font-medium">
+              <p className="text-[10px] uppercase tracking-wider font-medium" style={{ color: '#4A9EFF' }}>
                 Health
               </p>
-              <h1 className="text-lg font-bold text-[var(--accent)] leading-tight">Hub</h1>
+              <h1 className="text-lg font-bold leading-tight" style={{ color: '#8FC4FF' }}>Hub</h1>
               <p className="text-[10px] text-[var(--sage)]/80 truncate">
                 {profile?.name} · {stageLabel}
               </p>
             </div>
           </div>
           <div className="text-right shrink-0">
-            <p className="text-2xl font-bold text-[var(--accent)]">{healthScore}</p>
+            <p className="text-2xl font-bold" style={{ color: '#4A9EFF' }}>{healthScore}</p>
             <p className="text-[10px] text-[var(--sage)]/80">
               {healthStreak > 0 ? `${healthStreak}d · ×${healthMult.toFixed(2)}` : 'Score'}
             </p>
@@ -226,8 +226,8 @@ export default function HealthPage() {
       </header>
 
       <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto">
-        <div className="glass rounded-xl px-4 py-3 mb-5 flex items-start gap-3 border border-[var(--border-soft)]">
-          <div className="w-9 h-9 rounded-full border border-[var(--border-strong)] flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
+        <div className="glass rounded-xl px-4 py-3 mb-5 flex items-start gap-3 border" style={{ borderColor: 'rgba(74, 158, 255, 0.35)' }}>
+          <div className="w-9 h-9 rounded-full border flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]" style={{ borderColor: 'rgba(74, 158, 255, 0.55)' }}>
             <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
           </div>
           <div>
@@ -242,17 +242,18 @@ export default function HealthPage() {
         <div className="flex justify-center mb-6">
           <div className="relative w-28 h-28 flex items-center justify-center">
             <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="42" fill="none" stroke="#6B8F6E" strokeWidth="6" opacity="0.25" />
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#1e3a5f" strokeWidth="6" opacity="0.5" />
               <circle
-                cx="50" cy="50" r="42" fill="none" stroke="#8FD99A" strokeWidth="6"
+                cx="50" cy="50" r="42" fill="none" stroke="#4A9EFF" strokeWidth="6"
                 strokeDasharray={`${Math.min(healthScore, 100) * 2.64} 264`}
                 strokeLinecap="round"
-                className="ring-glow transition-all duration-700"
+                className="transition-all duration-700"
+                style={{ filter: 'drop-shadow(0 0 6px rgba(74, 158, 255, 0.45))' }}
               />
             </svg>
             <div className="text-center z-10">
               <div className="text-2xl font-bold text-white">{healthScore}</div>
-              <div className="text-[9px] text-[var(--sage)] uppercase">Health</div>
+              <div className="text-[9px] uppercase" style={{ color: '#8FC4FF' }}>Health</div>
             </div>
           </div>
         </div>

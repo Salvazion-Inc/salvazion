@@ -10,6 +10,7 @@ import {
   ProfileIcon,
 } from './Icons';
 import { useI18n } from '@/components/I18nProvider';
+import { PILLAR_COLORS } from '@/lib/theme/pillars';
 
 type NavKey = 'home' | 'salvation' | 'health' | 'freedom' | 'profile';
 
@@ -17,17 +18,12 @@ interface NavItemConfig {
   href: string;
   labelKey: string;
   key: NavKey;
-  Icon: React.FC<{ size?: number; active?: boolean }>;
-  /** Paths that also count as active for this tab */
+  Icon: React.FC<{ size?: number; active?: boolean; color?: string }>;
   match?: string[];
+  /** Active color for this tab */
+  color?: string;
 }
 
-/**
- * Primary nav = three pillars + home + profile
- * Salvation → Bible / Devotional
- * Health → Health hub
- * Freedom → Freedom hub / Swap
- */
 const PILLAR_NAV: NavItemConfig[] = [
   { href: '/hub/dashboard', labelKey: 'nav.home', key: 'home', Icon: HomeIcon },
   {
@@ -36,6 +32,7 @@ const PILLAR_NAV: NavItemConfig[] = [
     key: 'salvation',
     Icon: BibleIcon,
     match: ['/hub/bible', '/hub/devotional'],
+    color: PILLAR_COLORS.salvation.solid,
   },
   {
     href: '/hub/health',
@@ -43,6 +40,7 @@ const PILLAR_NAV: NavItemConfig[] = [
     key: 'health',
     Icon: HealthIcon,
     match: ['/hub/health'],
+    color: PILLAR_COLORS.health.solid,
   },
   {
     href: '/hub/freedom',
@@ -50,6 +48,7 @@ const PILLAR_NAV: NavItemConfig[] = [
     key: 'freedom',
     Icon: FreedomIcon,
     match: ['/hub/freedom', '/hub/swap'],
+    color: PILLAR_COLORS.freedom.solid,
   },
   { href: '/hub/profile', labelKey: 'nav.profile', key: 'profile', Icon: ProfileIcon },
 ];
@@ -81,6 +80,7 @@ export default function BottomNav({ variant: _variant = 'default' }: BottomNavPr
           const active = isActive(pathname, item);
           const Icon = item.Icon;
           const label = t(item.labelKey);
+          const color = item.color;
           return (
             <Link
               key={item.key}
@@ -89,15 +89,25 @@ export default function BottomNav({ variant: _variant = 'default' }: BottomNavPr
               aria-label={label}
               className={`flex flex-col items-center justify-center gap-0.5 min-w-[56px] min-h-[48px] py-1.5 px-1 rounded-2xl transition-all ${
                 active
-                  ? 'bg-[var(--surface-active)] scale-[1.02]'
+                  ? 'scale-[1.02]'
                   : 'opacity-80 hover:opacity-100 hover:bg-white/[0.03]'
               }`}
+              style={
+                active && color
+                  ? { background: `${color}14` }
+                  : active
+                    ? { background: 'var(--surface-active)' }
+                    : undefined
+              }
             >
-              <Icon size={22} active={active} />
+              <Icon size={22} active={active} color={active ? color : undefined} />
               <span
-                className={`text-[10px] tracking-wide font-medium max-w-[4.25rem] text-center leading-tight ${
-                  active ? 'text-[var(--accent)]' : 'text-[var(--sage)]'
-                }`}
+                className="text-[10px] tracking-wide font-medium max-w-[4.25rem] text-center leading-tight"
+                style={{
+                  color: active
+                    ? color || 'var(--accent)'
+                    : 'var(--sage)',
+                }}
               >
                 {label}
               </span>

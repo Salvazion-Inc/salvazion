@@ -107,17 +107,17 @@ export default function FreedomPage() {
               <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
             </div>
             <div className="min-w-0">
-              <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] font-medium">
+              <p className="text-[10px] uppercase tracking-wider font-medium" style={{ color: '#7BC98A' }}>
                 Freedom
               </p>
-              <h1 className="text-lg font-bold text-[var(--accent)] leading-tight">Hub</h1>
+              <h1 className="text-lg font-bold leading-tight" style={{ color: '#8FD99A' }}>Hub</h1>
               <p className="text-[10px] text-[var(--sage)]/80 truncate">
                 {profile?.name} · {stageLabel}
               </p>
             </div>
           </div>
           <div className="text-right shrink-0">
-            <p className="text-2xl font-bold text-[var(--accent)]">{freedomScore}</p>
+            <p className="text-2xl font-bold" style={{ color: '#7BC98A' }}>{freedomScore}</p>
             <p className="text-[10px] text-[var(--sage)]/80">
               {freedomStreak > 0 ? freedomStreak + 'd · ×' + freedomMult.toFixed(2) : 'Score'}
             </p>
@@ -144,18 +144,19 @@ export default function FreedomPage() {
         <Link
           href="/hub/swap"
           className="flex items-center justify-between card-soft px-3.5 py-2.5 mt-2 active:scale-[0.99] transition"
+          style={{ borderColor: 'rgba(123, 201, 138, 0.35)' }}
         >
           <div>
-            <p className="text-xs font-medium text-[var(--accent)]">Swap · $SALVAZION</p>
+            <p className="text-xs font-medium" style={{ color: '#8FD99A' }}>Swap · $SALVAZION</p>
             <p className="text-[10px] text-[var(--sage)]">Jupiter · libertad económica</p>
           </div>
-          <span className="text-[var(--accent)] text-sm">→</span>
+          <span className="text-sm" style={{ color: '#7BC98A' }}>→</span>
         </Link>
       </header>
 
       <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto">
-        <div className="glass rounded-xl px-4 py-3 mb-5 flex items-start gap-3 border border-[var(--border-soft)]">
-          <div className="w-9 h-9 rounded-full border border-[var(--border-strong)] flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
+        <div className="glass rounded-xl px-4 py-3 mb-5 flex items-start gap-3 border" style={{ borderColor: 'rgba(123, 201, 138, 0.35)' }}>
+          <div className="w-9 h-9 rounded-full border flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]" style={{ borderColor: 'rgba(123, 201, 138, 0.55)' }}>
             <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
           </div>
           <p className="text-xs text-[#D8E1D9]/80 leading-relaxed">
@@ -166,13 +167,14 @@ export default function FreedomPage() {
         <div className="flex justify-center mb-6">
           <div className="relative w-28 h-28 flex items-center justify-center">
             <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="42" fill="none" stroke="#6B8F6E" strokeWidth="6" opacity="0.25" />
-              <circle cx="50" cy="50" r="42" fill="none" stroke="#A8D4AE" strokeWidth="5"
-                strokeDasharray={(Math.min(freedomScore, 100) * 2.64) + ' 264'} strokeLinecap="round" className="ring-glow" />
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#2a4a32" strokeWidth="6" opacity="0.5" />
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#7BC98A" strokeWidth="5"
+                strokeDasharray={(Math.min(freedomScore, 100) * 2.64) + ' 264'} strokeLinecap="round"
+                style={{ filter: 'drop-shadow(0 0 6px rgba(123, 201, 138, 0.45))' }} />
             </svg>
             <div className="text-center z-10">
               <div className="text-2xl font-bold text-white">{freedomScore}</div>
-              <div className="text-[9px] text-[var(--sage)] uppercase">Freedom</div>
+              <div className="text-[9px] uppercase" style={{ color: '#8FD99A' }}>Freedom</div>
             </div>
           </div>
         </div>

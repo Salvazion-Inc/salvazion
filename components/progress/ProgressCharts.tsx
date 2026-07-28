@@ -9,7 +9,7 @@ import {
 import { getBadgeProgress, getEarnedBadgesDetailed } from '@/lib/badges/engine';
 import type { ComputedScores } from '@/lib/scoring/types';
 import { useI18n } from '@/components/I18nProvider';
-import { PILLAR_COLORS } from '@/lib/calendar/colors';
+import { PILLAR_COLORS } from '@/lib/theme/pillars';
 
 type Props = {
   scores: ComputedScores;

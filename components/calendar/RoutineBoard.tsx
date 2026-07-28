@@ -14,9 +14,12 @@ import {
   timeToMinutes,
   minutesToTime,
   snapMinutes,
+  endTimeOf,
+  seedDefaultDay,
   DAY_START_MIN,
   DAY_END_MIN,
   SNAP_MIN,
+  DEFAULT_BLOCK_MIN,
   type CalendarEvent,
   type CalendarPillar,
   type AgendaBlockDef,
@@ -27,11 +30,9 @@ import { useI18n } from '@/components/I18nProvider';
 
 type Props = {
   date: string;
-  /** Notify parent counts changed — must NOT remount this board */
   onChange?: () => void;
 };
 
-/** 15-min time options for the day window */
 function buildTimeOptions(): string[] {
   const opts: string[] = [];
   for (let m = DAY_START_MIN; m < DAY_END_MIN; m += SNAP_MIN) {
@@ -41,16 +42,21 @@ function buildTimeOptions(): string[] {
 }
 
 const TIME_OPTIONS = buildTimeOptions();
-const DURATION_OPTIONS = [15, 30, 45, 60, 90, 120, 180, 240];
+const DURATION_OPTIONS = [15, 30, 45, 60, 90, 120, 180, 210, 240, 420];
 
 /**
- * Stable routine board — no remount-prone pointer capture.
- * Place: pick block → pick time. Move: time select or ▲▼.
+ * Calendar routine board:
+ * - Day from 00:00
+ * - Default block 30 min (editable)
+ * - Select block → attach to calendar (time + add)
+ * - Seeds default day schedule when empty
  */
 export default function RoutineBoard({ date, onChange }: Props) {
   const { t } = useI18n();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [picked, setPicked] = useState<string | null>(null);
+  const [attachTime, setAttachTime] = useState('08:00');
+  const [attachDur, setAttachDur] = useState(DEFAULT_BLOCK_MIN);
   const [filter, setFilter] = useState<CalendarPillar | 'all'>('all');
 
   const sync = useCallback(() => {
@@ -60,6 +66,8 @@ export default function RoutineBoard({ date, onChange }: Props) {
 
   useEffect(() => {
     setPicked(null);
+    // Seed ideal default schedule for empty days
+    seedDefaultDay(date);
     setEvents(getEventsForDate(date));
   }, [date]);
 
@@ -68,8 +76,21 @@ export default function RoutineBoard({ date, onChange }: Props) {
     return key ? t(key) : ev.title;
   };
 
-  const placeAtTime = (blockKey: string, time: string) => {
-    placeBlock(date, blockKey, time);
+  const selectBlock = (blockKey: string) => {
+    const def = ROUTINE_BLOCKS.find((b) => b.key === blockKey);
+    if (!def) return;
+    if (picked === blockKey) {
+      setPicked(null);
+      return;
+    }
+    setPicked(blockKey);
+    setAttachTime(def.defaultTime);
+    setAttachDur(def.durationMin || DEFAULT_BLOCK_MIN);
+  };
+
+  const attachToCalendar = () => {
+    if (!picked) return;
+    placeBlock(date, picked, attachTime, attachDur);
     setPicked(null);
     sync();
   };
@@ -80,7 +101,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
     const next = snapMinutes(
       Math.max(
         DAY_START_MIN,
-        Math.min(DAY_END_MIN - SNAP_MIN, timeToMinutes(ev.time || '09:00') + deltaMin)
+        Math.min(DAY_END_MIN - SNAP_MIN, timeToMinutes(ev.time || '00:00') + deltaMin)
       )
     );
     moveEventToTime(id, minutesToTime(next));
@@ -93,7 +114,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
   };
 
   const setDuration = (id: string, durationMin: number) => {
-    updateEvent(id, { durationMin });
+    updateEvent(id, { durationMin: Math.max(SNAP_MIN, durationMin) });
     sync();
   };
 
@@ -121,6 +142,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
   );
 
   const completed = events.filter((e) => e.completed).length;
+  const pickedDef = picked ? ROUTINE_BLOCKS.find((b) => b.key === picked) : null;
 
   const filters: { id: CalendarPillar | 'all'; label: string; color?: string }[] = [
     { id: 'all', label: t('agenda.all') },
@@ -129,35 +151,13 @@ export default function RoutineBoard({ date, onChange }: Props) {
     { id: 'freedom', label: 'F', color: pillarPalette('freedom').solid },
   ];
 
-  // Suggest next free-ish default when adding via quick-add
-  const nextDefaultTime = () => {
-    if (events.length === 0) return '08:00';
-    const last = events[events.length - 1];
-    const end =
-      timeToMinutes(last.time || '08:00') + (last.durationMin || 30);
-    return minutesToTime(
-      snapMinutes(Math.min(DAY_END_MIN - 30, Math.max(DAY_START_MIN, end)))
-    );
-  };
-
-  const quickAdd = (blockKey: string) => {
-    const def = ROUTINE_BLOCKS.find((b) => b.key === blockKey);
-    if (!def) return;
-    // If already in pick mode for this block, place at default; else select for time strip
-    if (picked === blockKey) {
-      placeAtTime(blockKey, nextDefaultTime());
-      return;
-    }
-    setPicked(blockKey);
-  };
-
   return (
     <div className="space-y-3">
       <p className="text-[11px] text-[var(--sage)] leading-relaxed px-0.5">
-        {picked ? t('calendar.tapToPlace') : t('calendar.dragHint')}
+        {t('calendar.dragHint')}
       </p>
 
-      {/* Palette + S/H/F */}
+      {/* Palette */}
       <div className="card-soft p-3 space-y-2.5">
         <div className="flex items-center justify-between gap-2 flex-wrap">
           <p className="text-xs font-semibold text-[var(--off-white)]">
@@ -166,7 +166,6 @@ export default function RoutineBoard({ date, onChange }: Props) {
           <div
             className="flex gap-1 p-1 rounded-xl bg-[var(--surface)] border border-[var(--border-soft)]"
             role="group"
-            aria-label="Filter"
           >
             {filters.map((tab) => {
               const active = filter === tab.id;
@@ -203,46 +202,77 @@ export default function RoutineBoard({ date, onChange }: Props) {
               block={b}
               label={t(b.titleKey)}
               selected={picked === b.key}
-              onPick={() => quickAdd(b.key)}
+              onPick={() => selectBlock(b.key)}
             />
           ))}
         </div>
-
-        {picked && (
-          <button
-            type="button"
-            className="btn-primary text-sm py-2"
-            onClick={() => placeAtTime(picked, nextDefaultTime())}
-          >
-            + {t(ROUTINE_BLOCKS.find((b) => b.key === picked)?.titleKey || '')} ·{' '}
-            {nextDefaultTime()}
-          </button>
-        )}
       </div>
 
-      {/* Time strip when placing */}
-      {picked && (
-        <div className="card-soft p-3">
-          <p className="text-[11px] text-[var(--sage)] mb-2">{t('calendar.chooseTime')}</p>
-          <div className="grid grid-cols-4 gap-1.5 max-h-40 overflow-y-auto">
-            {TIME_OPTIONS.filter((_, i) => i % 2 === 0).map((time) => (
-              <button
-                key={time}
-                type="button"
-                className="min-h-[40px] rounded-lg border border-[var(--border-soft)] text-xs tabular-nums text-[var(--off-white)] hover:border-[var(--border-strong)] hover:bg-[var(--surface-active)]"
-                onClick={() => placeAtTime(picked, time)}
-              >
-                {time}
-              </button>
-            ))}
+      {/* Attach panel when block selected */}
+      {picked && pickedDef && (
+        <div
+          className="card-soft p-4 space-y-3 border"
+          style={{ borderColor: pillarPalette(pickedDef.pillar).border }}
+        >
+          <div>
+            <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]">
+              {t('calendar.attachTitle')}
+            </p>
+            <p
+              className="text-sm font-semibold"
+              style={{ color: pillarPalette(pickedDef.pillar).text }}
+            >
+              {t(pickedDef.titleKey)}
+            </p>
           </div>
-          <button
-            type="button"
-            className="mt-2 text-xs text-[var(--sage)]"
-            onClick={() => setPicked(null)}
-          >
-            {t('common.cancel')}
-          </button>
+
+          <div className="flex flex-wrap gap-3">
+            <label className="flex flex-col gap-1 text-[11px] text-[var(--sage)]">
+              {t('calendar.time')}
+              <select
+                value={attachTime}
+                onChange={(e) => setAttachTime(e.target.value)}
+                className="min-h-[40px] rounded-lg border border-[var(--border-soft)] bg-[var(--true-black)] px-2 text-sm text-[var(--off-white)]"
+              >
+                {TIME_OPTIONS.map((tm) => (
+                  <option key={tm} value={tm}>
+                    {tm}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1 text-[11px] text-[var(--sage)]">
+              {t('calendar.duration')}
+              <select
+                value={attachDur}
+                onChange={(e) => setAttachDur(Number(e.target.value))}
+                className="min-h-[40px] rounded-lg border border-[var(--border-soft)] bg-[var(--true-black)] px-2 text-sm text-[var(--off-white)]"
+              >
+                {DURATION_OPTIONS.map((d) => (
+                  <option key={d} value={d}>
+                    {d} min
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <div className="flex gap-2">
+            <button
+              type="button"
+              className="btn-primary flex-1 min-h-[44px]"
+              onClick={attachToCalendar}
+            >
+              {t('calendar.attach')}
+            </button>
+            <button
+              type="button"
+              className="btn-secondary flex-1 min-h-[44px]"
+              onClick={() => setPicked(null)}
+            >
+              {t('common.cancel')}
+            </button>
+          </div>
         </div>
       )}
 
@@ -250,26 +280,23 @@ export default function RoutineBoard({ date, onChange }: Props) {
         <span>
           {completed}/{events.length} {t('agenda.done')}
         </span>
+        <span className="text-[10px] opacity-70">00:00 – 24:00</span>
       </div>
 
-      {/* Day list (stable, always works) */}
       {events.length === 0 ? (
         <div className="card-soft p-6 text-center">
-          <p className="text-sm text-[var(--sage)] mb-1">{t('calendar.emptyDay')}</p>
-          <p className="text-[11px] text-[var(--sage)]/70">{t('calendar.dragHint')}</p>
+          <p className="text-sm text-[var(--sage)]">{t('calendar.emptyDay')}</p>
         </div>
       ) : (
         <ul className="space-y-2">
           {events.map((ev) => {
             const pal = pillarPalette(ev.pillar);
+            const end = endTimeOf(ev);
             return (
               <li
                 key={ev.id}
                 className={`card-soft p-3 border ${ev.completed ? 'opacity-60' : ''}`}
-                style={{
-                  background: pal.soft,
-                  borderColor: pal.border,
-                }}
+                style={{ background: pal.soft, borderColor: pal.border }}
               >
                 <div className="flex items-start gap-2">
                   <button
@@ -291,20 +318,25 @@ export default function RoutineBoard({ date, onChange }: Props) {
                   </button>
 
                   <div className="min-w-0 flex-1 space-y-2">
-                    <p
-                      className={`text-sm font-semibold ${
-                        ev.completed ? 'line-through opacity-70' : ''
-                      }`}
-                      style={{ color: pal.text }}
-                    >
-                      {labelFor(ev)}
-                    </p>
+                    <div>
+                      <p
+                        className={`text-sm font-semibold ${
+                          ev.completed ? 'line-through opacity-70' : ''
+                        }`}
+                        style={{ color: pal.text }}
+                      >
+                        {labelFor(ev)}
+                      </p>
+                      <p className="text-[10px] tabular-nums opacity-70" style={{ color: pal.text }}>
+                        {ev.time || '00:00'} – {end}
+                      </p>
+                    </div>
 
                     <div className="flex flex-wrap items-center gap-2">
                       <label className="flex items-center gap-1 text-[10px]" style={{ color: pal.muted }}>
                         <span>{t('calendar.time')}</span>
                         <select
-                          value={ev.time || '09:00'}
+                          value={ev.time || '00:00'}
                           onChange={(e) => setTime(ev.id, e.target.value)}
                           className="min-h-[36px] rounded-lg border bg-[var(--true-black)] px-2 text-xs text-[var(--off-white)]"
                           style={{ borderColor: pal.border }}
@@ -321,23 +353,21 @@ export default function RoutineBoard({ date, onChange }: Props) {
                       </label>
 
                       <label className="flex items-center gap-1 text-[10px]" style={{ color: pal.muted }}>
-                        <span>min</span>
+                        <span>{t('calendar.duration')}</span>
                         <select
-                          value={ev.durationMin || 30}
-                          onChange={(e) =>
-                            setDuration(ev.id, Number(e.target.value))
-                          }
+                          value={ev.durationMin || DEFAULT_BLOCK_MIN}
+                          onChange={(e) => setDuration(ev.id, Number(e.target.value))}
                           className="min-h-[36px] rounded-lg border bg-[var(--true-black)] px-2 text-xs text-[var(--off-white)]"
                           style={{ borderColor: pal.border }}
                         >
                           {!DURATION_OPTIONS.includes(ev.durationMin || 0) && (
-                            <option value={ev.durationMin || 30}>
-                              {ev.durationMin || 30}
+                            <option value={ev.durationMin || DEFAULT_BLOCK_MIN}>
+                              {ev.durationMin || DEFAULT_BLOCK_MIN}
                             </option>
                           )}
                           {DURATION_OPTIONS.map((d) => (
                             <option key={d} value={d}>
-                              {d}
+                              {d} min
                             </option>
                           ))}
                         </select>
@@ -350,7 +380,6 @@ export default function RoutineBoard({ date, onChange }: Props) {
                         className="min-h-[36px] min-w-[36px] rounded-lg border text-sm"
                         style={{ borderColor: pal.border, color: pal.text }}
                         onClick={() => moveBy(ev.id, -SNAP_MIN)}
-                        aria-label="-15 min"
                       >
                         ▲
                       </button>
@@ -359,9 +388,36 @@ export default function RoutineBoard({ date, onChange }: Props) {
                         className="min-h-[36px] min-w-[36px] rounded-lg border text-sm"
                         style={{ borderColor: pal.border, color: pal.text }}
                         onClick={() => moveBy(ev.id, SNAP_MIN)}
-                        aria-label="+15 min"
                       >
                         ▼
+                      </button>
+                      <button
+                        type="button"
+                        className="min-h-[36px] min-w-[36px] rounded-lg border text-sm"
+                        style={{ borderColor: pal.border, color: pal.text }}
+                        onClick={() =>
+                          setDuration(
+                            ev.id,
+                            Math.max(SNAP_MIN, (ev.durationMin || DEFAULT_BLOCK_MIN) - 15)
+                          )
+                        }
+                        title="-15 min"
+                      >
+                        −
+                      </button>
+                      <button
+                        type="button"
+                        className="min-h-[36px] min-w-[36px] rounded-lg border text-sm"
+                        style={{ borderColor: pal.border, color: pal.text }}
+                        onClick={() =>
+                          setDuration(
+                            ev.id,
+                            (ev.durationMin || DEFAULT_BLOCK_MIN) + 15
+                          )
+                        }
+                        title="+15 min"
+                      >
+                        +
                       </button>
                       <button
                         type="button"
@@ -407,7 +463,6 @@ function PaletteChip({
         background: pal.soft,
         borderColor: selected ? pal.solid : pal.border,
         color: pal.text,
-        outlineColor: pal.solid,
       }}
     >
       {label}

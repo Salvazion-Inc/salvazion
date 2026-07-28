@@ -12,6 +12,8 @@ import {
   duplicateToTomorrow,
   duplicateToWeek,
   clearDay,
+  seedDefaultDay,
+  resetToDefaultDay,
 } from '@/lib/calendar/engine';
 import { loadProfile } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
@@ -24,6 +26,8 @@ export default function CalendarPage() {
   const [name, setName] = useState('');
   const [counts, setCounts] = useState({ done: 0, total: 0 });
   const [toast, setToast] = useState<string | null>(null);
+  /** Bump to force RoutineBoard remount after clear/reset */
+  const [boardEpoch, setBoardEpoch] = useState(0);
 
   const flash = (msg: string) => {
     setToast(msg);
@@ -46,12 +50,14 @@ export default function CalendarPage() {
     if (p?.name) setName(p.name);
     const d = todayStr();
     setSelectedDate(d);
+    seedDefaultDay(d);
     setWeek(weekDates());
     refreshCounts(d);
   }, [refreshCounts]);
 
   useEffect(() => {
     if (!mounted) return;
+    seedDefaultDay(selectedDate);
     refreshCounts(selectedDate);
   }, [selectedDate, mounted, refreshCounts]);
 
@@ -189,6 +195,20 @@ export default function CalendarPage() {
           >
             {t('calendar.copyWeek')}
           </button>
+          <button
+            type="button"
+            className="btn-outline-sm min-h-[36px]"
+            onClick={() => {
+              if (window.confirm(t('calendar.resetDefaultConfirm'))) {
+                resetToDefaultDay(selectedDate);
+                flash(t('calendar.resetDefaultDone'));
+                setBoardEpoch((e) => e + 1);
+                refreshCounts(selectedDate);
+              }
+            }}
+          >
+            {t('calendar.resetDefault')}
+          </button>
           {counts.total > 0 && (
             <button
               type="button"
@@ -196,6 +216,7 @@ export default function CalendarPage() {
               onClick={() => {
                 if (window.confirm(t('calendar.clearConfirm'))) {
                   clearDay(selectedDate);
+                  setBoardEpoch((e) => e + 1);
                   refreshCounts(selectedDate);
                 }
               }}
@@ -205,9 +226,9 @@ export default function CalendarPage() {
           )}
         </div>
 
-        {/* Stable key: only date — never remount on every edit */}
+        {/* Remount only on date change or clear/reset — not on every edit */}
         <RoutineBoard
-          key={selectedDate}
+          key={`${selectedDate}-${boardEpoch}`}
           date={selectedDate}
           onChange={() => refreshCounts(selectedDate)}
         />

@@ -27,12 +27,12 @@ function fromDb(row: any): Partial<UserProfile> {
   if (!row) return {};
   return {
     name: row.name ?? '',
-    language: row.language ?? 'es',
+    language: row.language === 'es' || row.language === 'en' ? row.language : 'en',
     spiritualMaturity: row.spiritual_maturity ?? 'growing',
     familyStatus: row.family_status ?? 'family',
     currentFocus: row.current_focus ?? [],
     struggles: row.struggles ?? [],
-    preferredBibleVersion: row.preferred_bible_version ?? 'rv1960',
+    preferredBibleVersion: row.preferred_bible_version ?? 'kjv',
     purpose: row.purpose ?? '',
     city: row.city ?? '',
     country: row.country ?? '',
@@ -411,7 +411,7 @@ export function getLifeStage(age: number | null): LifeStage {
   return 'senior';
 }
 
-export function getLifeStageLabel(stage: LifeStage, lang: 'es' | 'en' = 'es'): string {
+export function getLifeStageLabel(stage: LifeStage, lang: 'es' | 'en' = 'en'): string {
   const labels = {
     es: {
       infancia: 'Infancia',

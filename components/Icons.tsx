@@ -14,13 +14,13 @@ interface IconProps {
   active?: boolean;
 }
 
-/** Soft brand colors (not pure neon) */
+/** Soft brand colors — CSS vars so themes recolor icons */
 const C = {
-  active: '#8FD99A', // soft mint-green
-  idle: '#8AAB8E', // muted sage
-  dim: '#6B8F6E',
-  fillActive: 'rgba(143, 217, 154, 0.18)',
-  fillIdle: 'rgba(138, 171, 142, 0.08)',
+  active: 'var(--icon-active, #8FD99A)',
+  idle: 'var(--icon-idle, #8AAB8E)',
+  dim: 'var(--sage-dim, #6B8F6E)',
+  fillActive: 'var(--surface-active, rgba(143, 217, 154, 0.18))',
+  fillIdle: 'var(--border-soft, rgba(138, 171, 142, 0.08))',
 };
 
 function tone(active?: boolean) {

@@ -104,7 +104,7 @@ export const X_ARTICLES: XArticle[] = (catalogJson as Array<Parameters<typeof no
   normalizeEntry
 );
 
-export function formatArticleDate(createdAt?: string | null, lang: 'es' | 'en' = 'es'): string {
+export function formatArticleDate(createdAt?: string | null, lang: 'es' | 'en' = 'en'): string {
   if (!createdAt) return '';
   const d = new Date(createdAt);
   if (Number.isNaN(d.getTime())) {

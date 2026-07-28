@@ -18,15 +18,21 @@ import { useI18n } from '@/components/I18nProvider';
 interface Props {
   /** Show replay card after the journey is done (default true) */
   showReplay?: boolean;
+  /**
+   * Auto-open fullscreen on first visit. Default false so post-onboarding
+   * dashboard stays clean; user opens via card.
+   */
+  autoOpen?: boolean;
   className?: string;
 }
 
 /**
  * In-app value proposition journey — benefits of Salvazion.
- * First time: fullscreen. Later: optional replay card.
+ * Optional fullscreen (autoOpen) or compact replay card.
  */
 export default function ValueJourney({
   showReplay = true,
+  autoOpen = false,
   className = '',
 }: Props) {
   const { lang, t } = useI18n();
@@ -41,8 +47,8 @@ export default function ValueJourney({
     const saved = loadValueJourneyStep();
     setDone(isDone);
     setStepIdx(Math.min(saved, VALUE_JOURNEY_STEPS.length - 1));
-    if (!isDone) setOpen(true);
-  }, []);
+    if (!isDone && autoOpen) setOpen(true);
+  }, [autoOpen]);
 
   const complete = useCallback(() => {
     saveValueJourneyDone();

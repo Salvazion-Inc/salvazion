@@ -15,18 +15,18 @@ export default function TextScaleControl() {
     <div className="glass rounded-2xl p-5 space-y-4">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs uppercase tracking-wider text-[#B7F7AC]/60">
+          <p className="text-xs uppercase tracking-wider text-[var(--sage)]/70">
             {t('textScale.accessibility')}
           </p>
-          <h3 className="text-base font-semibold text-[#8FD99A] mt-0.5">
+          <h3 className="text-base font-semibold text-[var(--accent)] mt-0.5">
             {t('textScale.title')}
           </h3>
-          <p className="text-xs text-[#B7F7AC]/55 mt-1 leading-relaxed">
+          <p className="text-xs text-[var(--sage)]/70 mt-1 leading-relaxed">
             {t('textScale.hint')}
           </p>
         </div>
         <span
-          className="shrink-0 w-11 h-11 rounded-full border border-[#8FD99A]/40 flex items-center justify-center text-[#8FD99A] font-semibold"
+          className="shrink-0 w-11 h-11 rounded-full border border-[var(--border-strong)] flex items-center justify-center text-[var(--accent)] font-semibold"
           style={{
             fontSize:
               scale === 'md' ? '0.95rem' : scale === 'lg' ? '1.1rem' : scale === 'xl' ? '1.25rem' : '1.4rem',
@@ -53,12 +53,12 @@ export default function TextScaleControl() {
               onClick={() => setScale(opt.id as TextScale)}
               className={`flex flex-col items-center justify-center gap-1 rounded-xl border py-3 px-1 transition-all min-h-[4.5rem] ${
                 active
-                  ? 'border-[#8FD99A] bg-[#7BC98A]/15 text-[#8FD99A] shadow-[0_0_16px_rgba(143, 217, 154,0.15)]'
-                  : 'border-[#6B8F6E]/30 text-[#B7F7AC]/70 hover:border-[#8FD99A]/40'
+                  ? 'border-[var(--border-strong)] bg-[var(--surface-active)] text-[var(--accent)] shadow-[0_0_16px_color-mix(in_srgb,var(--accent)_15%,transparent)]'
+                  : 'border-[var(--border-soft)] text-[var(--sage)] hover:border-[var(--border-strong)]'
               }`}
             >
               <span
-                className="font-semibold leading-none text-[#8FD99A]"
+                className="font-semibold leading-none text-[var(--accent)]"
                 style={{
                   fontSize:
                     opt.id === 'md'
@@ -80,14 +80,14 @@ export default function TextScaleControl() {
         })}
       </div>
 
-      <div className="rounded-xl border border-[#6B8F6E]/25 bg-[#040404]/50 px-4 py-3">
-        <p className="text-[10px] uppercase tracking-wider text-[#B7F7AC]/45 mb-1.5">
+      <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--surface-muted)] px-4 py-3">
+        <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/60 mb-1.5">
           {t('textScale.preview')}
         </p>
-        <p className="text-sm text-[#D8E1D9]/90 leading-relaxed">
+        <p className="text-sm text-[var(--off-white)]/90 leading-relaxed">
           {t('textScale.previewLine1')}
         </p>
-        <p className="text-xs text-[#B7F7AC]/60 mt-1.5 leading-relaxed">
+        <p className="text-xs text-[var(--sage)]/70 mt-1.5 leading-relaxed">
           {t('textScale.previewLine2')}
         </p>
       </div>

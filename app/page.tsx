@@ -32,7 +32,7 @@ export default function SalvazionLanding() {
             <div className="w-9 h-9 rounded-full border border-[var(--border-strong)] flex items-center justify-center lion-glow overflow-hidden bg-[#040404] shrink-0">
               <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
             </div>
-            <span className="font-brand text-lg text-[var(--accent)] neon-text hidden xs:inline">
+            <span className="font-brand text-lg text-[var(--accent)] neon-text hidden sm:inline">
               SALVAZION
             </span>
           </Link>

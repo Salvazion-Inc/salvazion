@@ -4,6 +4,7 @@ import Script from "next/script";
 import Providers from "@/components/Providers";
 import PwaRegister from "@/components/PwaRegister";
 import { APP_URL } from "@/lib/config/site";
+import { getThemeBootScript } from "@/lib/store/theme";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -82,13 +83,13 @@ export default function RootLayout({
       style={{ colorScheme: "dark" }}
       suppressHydrationWarning
     >
-      <body className="bg-[#040404] text-[#D8E1D9] min-h-screen font-sans overflow-x-hidden">
-        {/* Apply saved text scale early to avoid a flash of wrong size */}
+      <body className="bg-[var(--true-black)] text-[var(--off-white)] min-h-screen font-sans overflow-x-hidden">
+        {/* Apply saved text scale + theme early to avoid FOUC */}
         <Script
           id="salvazion-boot-prefs"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var k='salvazion_text_scale';var s=localStorage.getItem(k);if(s==='md'||s==='lg'||s==='xl'||s==='xxl'){document.documentElement.dataset.textScale=s;var m={md:16,lg:18,xl:20,xxl:22};var px=m[s]||16;document.documentElement.style.fontSize=px+'px';document.documentElement.style.setProperty('--app-text-scale',String(px/16));}var L=localStorage.getItem('salvazion_locale');if(L==='es'||L==='en'){document.documentElement.lang=L;document.documentElement.dataset.locale=L;}}catch(e){}})();`,
+            __html: `(function(){try{var k='salvazion_text_scale';var s=localStorage.getItem(k);if(s==='md'||s==='lg'||s==='xl'||s==='xxl'){document.documentElement.dataset.textScale=s;var m={md:16,lg:18,xl:20,xxl:22};var px=m[s]||16;document.documentElement.style.fontSize=px+'px';document.documentElement.style.setProperty('--app-text-scale',String(px/16));}var L=localStorage.getItem('salvazion_locale');if(L==='es'||L==='en'){document.documentElement.lang=L;document.documentElement.dataset.locale=L;}}catch(e){}})();${getThemeBootScript()}`,
           }}
         />
         <Providers>

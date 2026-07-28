@@ -32,15 +32,16 @@ export const dictionary = {
     nav: {
       home: 'Inicio',
       bible: 'Biblia',
-      salvation: 'Salvation',
-      health: 'Health',
-      freedom: 'Freedom',
+      salvation: 'Salvación',
+      health: 'Salud',
+      freedom: 'Libertad',
       profile: 'Perfil',
       devotional: 'Devocional',
       calendar: 'Agenda',
       badges: 'Insignias',
       swap: 'Swap',
-      dashboard: 'Dashboard',
+      dashboard: 'Inicio',
+      main: 'Navegación principal',
     },
     auth: {
       loginTitle: 'Entrar a la Phalanx',
@@ -508,10 +509,98 @@ export const dictionary = {
       needsSupabase:
         'Para conexiones reales entre cuentas, ejecuta supabase/phalanx.sql en tu proyecto Supabase.',
     },
+    coach: {
+      fabLabel: 'León Verde · Coach de voz',
+      fabPremium: 'León Verde · Premium',
+      talk: 'Hablar con el León',
+      agentLabel: 'León Verde · Agente de voz',
+    },
     onboarding: {
       welcome: 'Bienvenido a la Phalanx',
+      tagline: 'Únete a la Salvación. Únete a la Salud. Únete a la Libertad.',
       stepOf: 'Paso {n} de 5',
       preparing: 'El León se prepara...',
+      continue: 'Continuar',
+      back: 'Atrás',
+      name: 'Nombre',
+      namePlaceholder: 'Tu nombre completo',
+      birthDate: 'Fecha de nacimiento',
+      birthHint: 'Nos permite personalizar tu experiencia según tu etapa de vida.',
+      purpose: 'Propósito de vida',
+      purposePlaceholder: '¿Para qué estás en este mundo? ¿Qué legado quieres dejar?',
+      city: 'Ciudad',
+      country: 'País',
+      cityPlaceholder: 'Ciudad',
+      countryPlaceholder: 'País',
+      spiritualTitle: 'Tu perfil espiritual',
+      spiritualMaturity: 'Madurez espiritual',
+      maturityNew: 'Nuevo en la fe',
+      maturityGrowing: 'Creciendo',
+      maturityMature: 'Maduro',
+      maturityLeader: 'Líder / Mentor',
+      familyStatus: 'Situación familiar',
+      familySingle: 'Soltero/a',
+      familyMarried: 'Casado/a',
+      familyParent: 'Padre / Madre',
+      familyFamily: 'Familia',
+      familyWidow: 'Viudo/a',
+      sex: 'Sexo biológico',
+      sexMale: 'Hombre',
+      sexFemale: 'Mujer',
+      sexHint: 'Requerido para personalizar Health (p. ej. ciclo menstrual y biomarcadores).',
+      focusLabel: '¿En qué te quieres enfocar ahora?',
+      focusFe: 'Fe',
+      focusFamilia: 'Familia',
+      focusProposito: 'Propósito',
+      focusSalud: 'Salud',
+      focusLibertad: 'Libertad',
+      focusOracion: 'Oración',
+      focusLiderazgo: 'Liderazgo',
+      focusPerseverancia: 'Perseverancia',
+      phalanxTitle: 'Tu Phalanx Personal',
+      phalanxSub: 'Vincula a tu familia y amigos dentro de Salvazion. Juntos son más fuertes.',
+      invite: 'Invitar',
+      invited: 'invitado',
+      phalanxLater: 'Podrás completar o editar estos vínculos más adelante desde tu perfil.',
+      inviteModalTitle: 'Invitar',
+      personName: 'Nombre de la persona',
+      personPlaceholder: 'Ej: María, Juan…',
+      addToPhalanx: 'Agregar a mi Phalanx',
+      shareInvite: 'Compartir invitación',
+      shareCopied: '✓ Mensaje copiado',
+      inviteLocalNote:
+        'Por ahora los vínculos se guardan en este dispositivo. Pronto podrás conectarlos de verdad dentro de la Phalanx.',
+      relSpouse: 'Esposa / Cónyuge',
+      relChild: 'Hijos',
+      relSibling: 'Hermanos / Hermanas',
+      relFamily: 'Familia extendida',
+      relFriend: 'Amigos cercanos',
+      relColleague: 'Colegas',
+      relFaith: 'Comunidad de fe',
+      confirmTitle: 'Confirma tu identidad',
+      confirmAge: 'Edad / Etapa',
+      confirmLocation: 'Ubicación',
+      confirmFocus: 'Focos',
+      years: 'años',
+      lionTitle: 'Conoce a tu',
+      lionName: 'León Verde',
+      lionSub: 'Tu coach de virtud y desarrollo integral',
+      lionSpiritual: 'Espiritual',
+      lionSpiritualBody: 'Biblia · Oración · Devocional',
+      lionPhysical: 'Físico',
+      lionPhysicalBody: 'Salud · Disciplina · Cuerpo',
+      lionMental: 'Mental',
+      lionMentalBody: 'Propósito · Libertad · Enfoque',
+      lionVirtue: 'Virtud',
+      lionVirtueBody: 'Constancia · Excelencia',
+      lionPitch:
+        'Te entrenaré en virtud, constancia y excelencia para que Salvation, Health y Freedom crezcan cada día.',
+      lionPrivacy:
+        'Tu perfil se sincroniza de forma segura. Soberanía y disciplina primero.',
+      acceptCall: 'Acepto el llamado',
+      shareTitle: 'Únete a mi Phalanx — Salvazion',
+      shareBody:
+        '¡Únete a mi Phalanx en Salvazion!\n\nEstoy construyendo Salvation, Health y Freedom con el León Verde. Quiero que formes parte de mi círculo ({relation}).\n\nEntra a la app y crecemos juntos en fe, familia y virtud.\n\nhttps://app.salvazion.org\n\n#Salvazion #Phalanx',
     },
     badges: {
       title: 'Insignias',
@@ -564,7 +653,8 @@ export const dictionary = {
       calendar: 'Agenda',
       badges: 'Badges',
       swap: 'Swap',
-      dashboard: 'Dashboard',
+      dashboard: 'Home',
+      main: 'Main navigation',
     },
     auth: {
       loginTitle: 'Enter the Phalanx',
@@ -1030,10 +1120,97 @@ export const dictionary = {
       needsSupabase:
         'For real multi-account connections, run supabase/phalanx.sql in your Supabase project.',
     },
+    coach: {
+      fabLabel: 'Green Lion · Voice coach',
+      fabPremium: 'Green Lion · Premium',
+      talk: 'Talk to the Lion',
+      agentLabel: 'Green Lion · Voice agent',
+    },
     onboarding: {
       welcome: 'Welcome to the Phalanx',
+      tagline: 'Join Salvation. Join Health. Join Freedom.',
       stepOf: 'Step {n} of 5',
       preparing: 'The Lion is preparing...',
+      continue: 'Continue',
+      back: 'Back',
+      name: 'Name',
+      namePlaceholder: 'Your full name',
+      birthDate: 'Date of birth',
+      birthHint: 'Helps us personalize your experience by life stage.',
+      purpose: 'Life purpose',
+      purposePlaceholder: 'Why are you here? What legacy do you want to leave?',
+      city: 'City',
+      country: 'Country',
+      cityPlaceholder: 'City',
+      countryPlaceholder: 'Country',
+      spiritualTitle: 'Your spiritual profile',
+      spiritualMaturity: 'Spiritual maturity',
+      maturityNew: 'New in the faith',
+      maturityGrowing: 'Growing',
+      maturityMature: 'Mature',
+      maturityLeader: 'Leader / Mentor',
+      familyStatus: 'Family situation',
+      familySingle: 'Single',
+      familyMarried: 'Married',
+      familyParent: 'Parent',
+      familyFamily: 'Family',
+      familyWidow: 'Widowed',
+      sex: 'Biological sex',
+      sexMale: 'Male',
+      sexFemale: 'Female',
+      sexHint: 'Required to personalize Health (e.g. cycle and biomarkers).',
+      focusLabel: 'What do you want to focus on now?',
+      focusFe: 'Faith',
+      focusFamilia: 'Family',
+      focusProposito: 'Purpose',
+      focusSalud: 'Health',
+      focusLibertad: 'Freedom',
+      focusOracion: 'Prayer',
+      focusLiderazgo: 'Leadership',
+      focusPerseverancia: 'Perseverance',
+      phalanxTitle: 'Your Personal Phalanx',
+      phalanxSub: 'Link family and friends inside Salvazion. Stronger together.',
+      invite: 'Invite',
+      invited: 'invited',
+      phalanxLater: 'You can complete or edit these links later from your profile.',
+      inviteModalTitle: 'Invite',
+      personName: 'Person’s name',
+      personPlaceholder: 'e.g. Maria, John…',
+      addToPhalanx: 'Add to my Phalanx',
+      shareInvite: 'Share invitation',
+      shareCopied: '✓ Message copied',
+      inviteLocalNote:
+        'Links are saved on this device for now. Real multi-account connections are available via Phalanx invites.',
+      relSpouse: 'Spouse',
+      relChild: 'Children',
+      relSibling: 'Siblings',
+      relFamily: 'Extended family',
+      relFriend: 'Close friends',
+      relColleague: 'Colleagues',
+      relFaith: 'Faith community',
+      confirmTitle: 'Confirm your identity',
+      confirmAge: 'Age / Stage',
+      confirmLocation: 'Location',
+      confirmFocus: 'Focus areas',
+      years: 'years',
+      lionTitle: 'Meet your',
+      lionName: 'Green Lion',
+      lionSub: 'Your coach for virtue and integral growth',
+      lionSpiritual: 'Spiritual',
+      lionSpiritualBody: 'Bible · Prayer · Devotional',
+      lionPhysical: 'Physical',
+      lionPhysicalBody: 'Health · Discipline · Body',
+      lionMental: 'Mental',
+      lionMentalBody: 'Purpose · Freedom · Focus',
+      lionVirtue: 'Virtue',
+      lionVirtueBody: 'Consistency · Excellence',
+      lionPitch:
+        'I will train you in virtue, consistency, and excellence so Salvation, Health, and Freedom grow every day.',
+      lionPrivacy: 'Your profile syncs securely. Sovereignty and discipline first.',
+      acceptCall: 'I accept the call',
+      shareTitle: 'Join my Phalanx — Salvazion',
+      shareBody:
+        'Join my Phalanx on Salvazion!\n\nI am building Salvation, Health, and Freedom with the Green Lion. I want you in my circle ({relation}).\n\nOpen the app and grow with me in faith, family, and virtue.\n\nhttps://app.salvazion.org\n\n#Salvazion #Phalanx',
     },
     badges: {
       title: 'Badges',
@@ -1063,25 +1240,31 @@ export function translate(
   vars?: Record<string, string | number>
 ): string {
   const parts = key.split('.');
-  let node: unknown = dictionary[lang] ?? dictionary.es;
+  // English is principal; fall back EN → ES → key
+  let node: unknown = dictionary[lang] ?? dictionary.en;
   for (const p of parts) {
     if (node && typeof node === 'object' && p in (node as object)) {
       node = (node as Record<string, unknown>)[p];
     } else {
-      // fallback to Spanish then key
       node = undefined;
       break;
     }
   }
   if (typeof node !== 'string') {
-    // try ES fallback
-    node = dictionary.es;
-    for (const p of parts) {
-      if (node && typeof node === 'object' && p in (node as object)) {
-        node = (node as Record<string, unknown>)[p];
-      } else {
-        return key;
+    const fallbacks = lang === 'en' ? [dictionary.es] : [dictionary.en, dictionary.es];
+    for (const dict of fallbacks) {
+      node = dict;
+      let ok = true;
+      for (const p of parts) {
+        if (node && typeof node === 'object' && p in (node as object)) {
+          node = (node as Record<string, unknown>)[p];
+        } else {
+          ok = false;
+          break;
+        }
       }
+      if (ok && typeof node === 'string') break;
+      node = undefined;
     }
   }
   if (typeof node !== 'string') return key;

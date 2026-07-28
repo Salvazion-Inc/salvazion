@@ -6,12 +6,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 import { mapAuthError } from '@/lib/auth/paths';
+import { useI18n } from '@/components/I18nProvider';
 
 /**
  * Set a new password after a recovery email link (session already established via callback/confirm).
  */
 export default function UpdatePasswordPage() {
   const router = useRouter();
+  const { t } = useI18n();
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [loading, setLoading] = useState(false);
@@ -47,11 +49,11 @@ export default function UpdatePasswordPage() {
     setError(null);
 
     if (password.length < 8) {
-      setError('La contraseña debe tener al menos 8 caracteres.');
+      setError(t('auth.passwordMin'));
       return;
     }
     if (password !== confirm) {
-      setError('Las contraseñas no coinciden.');
+      setError(t('auth.passwordMismatch'));
       return;
     }
 
@@ -67,29 +69,29 @@ export default function UpdatePasswordPage() {
       router.replace('/hub/dashboard?password_updated=1');
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? mapAuthError(err.message) : 'Error al actualizar.');
+      setError(err instanceof Error ? mapAuthError(err.message) : t('auth.processing'));
       setLoading(false);
     }
   }
 
   if (!ready) {
     return (
-      <div className="min-h-screen bg-[#040404] flex items-center justify-center text-[#8FD99A]">
-        Cargando…
+      <div className="min-h-screen bg-[var(--true-black)] flex items-center justify-center text-[var(--accent)]">
+        {t('common.loading')}
       </div>
     );
   }
 
   if (noSession) {
     return (
-      <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col items-center justify-center px-5">
+      <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] flex flex-col items-center justify-center px-5">
         <div className="w-full max-w-sm text-center glass rounded-2xl p-8">
-          <h1 className="text-xl font-bold text-[#8FD99A] mb-2">Enlace no válido</h1>
-          <p className="text-sm text-[var(--sage)]/80 mb-6">
-            Abre el enlace del correo de recuperación otra vez, o solicita uno nuevo.
-          </p>
-          <Link href="/auth/login" className="text-sm text-[#8FD99A] hover:underline">
-            Ir a login
+          <h1 className="text-xl font-bold text-[var(--accent)] mb-2">
+            {t('auth.invalidLink')}
+          </h1>
+          <p className="text-sm text-[var(--sage)]/80 mb-6">{t('auth.invalidLinkBody')}</p>
+          <Link href="/auth/login" className="text-sm text-[var(--accent)] hover:underline">
+            {t('auth.goLogin')}
           </Link>
         </div>
       </div>
@@ -97,19 +99,23 @@ export default function UpdatePasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col items-center justify-center px-5">
+    <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] flex flex-col items-center justify-center px-5">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[var(--border-strong)] flex items-center justify-center lion-glow overflow-hidden">
             <Image src="/logo.png" alt="Salvazion" width={64} height={64} className="object-contain" />
           </div>
-          <h1 className="font-display text-2xl font-bold text-[#8FD99A] tracking-tight">Nueva contraseña</h1>
-          <p className="text-sm text-[var(--sage)] mt-1">Elige una contraseña segura para tu cuenta</p>
+          <h1 className="font-display text-2xl font-bold text-[var(--accent)] tracking-tight">
+            {t('auth.newPassword')}
+          </h1>
+          <p className="text-sm text-[var(--sage)] mt-1">{t('auth.newPasswordSubtitle')}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="glass rounded-2xl p-6 space-y-4">
           <div>
-            <label className="block text-xs text-[var(--sage)] mb-1.5">Nueva contraseña</label>
+            <label className="block text-xs text-[var(--sage)] mb-1.5">
+              {t('auth.newPassword')}
+            </label>
             <input
               type="password"
               required
@@ -118,11 +124,13 @@ export default function UpdatePasswordPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="input-soft"
-              placeholder="Mínimo 8 caracteres"
+              placeholder={t('auth.minPassword')}
             />
           </div>
           <div>
-            <label className="block text-xs text-[var(--sage)] mb-1.5">Confirmar contraseña</label>
+            <label className="block text-xs text-[var(--sage)] mb-1.5">
+              {t('auth.confirmPassword')}
+            </label>
             <input
               type="password"
               required
@@ -131,20 +139,21 @@ export default function UpdatePasswordPage() {
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
               className="input-soft"
-              placeholder="Repite la contraseña"
+              placeholder={t('auth.confirmPassword')}
             />
           </div>
 
           {error && (
-            <p className="text-sm text-red-400 bg-red-500/10 rounded-lg px-3 py-2">{error}</p>
+            <p
+              role="alert"
+              className="text-sm text-red-400 bg-red-500/10 rounded-lg px-3 py-2"
+            >
+              {error}
+            </p>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn-primary"
-          >
-            {loading ? 'Guardando…' : 'Guardar contraseña'}
+          <button type="submit" disabled={loading} className="btn-primary">
+            {loading ? t('auth.saving') : t('auth.savePassword')}
           </button>
         </form>
       </div>

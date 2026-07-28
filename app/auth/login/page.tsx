@@ -191,7 +191,7 @@ function LoginForm() {
   const subtitle = mode === 'forgot' ? t('auth.recoverSubtitle') : t('auth.loginSubtitle');
 
   return (
-    <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col items-center justify-center px-5">
+    <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] flex flex-col items-center justify-center px-5">
       <div className="w-full max-w-sm">
         <div className="flex justify-end mb-4">
           <LanguageControl compact />
@@ -200,7 +200,7 @@ function LoginForm() {
           <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[var(--border-strong)] flex items-center justify-center lion-glow overflow-hidden">
             <Image src="/logo.png" alt="Salvazion" width={64} height={64} className="object-contain" />
           </div>
-          <h1 className="font-display text-2xl font-bold text-[#8FD99A] tracking-tight">{title}</h1>
+          <h1 className="font-display text-2xl font-bold text-[var(--accent)] tracking-tight">{title}</h1>
           <p className="text-sm text-[var(--sage)] mt-1">{subtitle}</p>
         </div>
 
@@ -261,7 +261,7 @@ function LoginForm() {
                     setError(null);
                     setInfo(null);
                   }}
-                  className="text-[11px] text-[var(--sage)] hover:text-[#8FD99A]"
+                  className="text-[11px] text-[var(--sage)] hover:text-[var(--accent)]"
                 >
                   {t('auth.forgot')}
                 </button>
@@ -279,10 +279,20 @@ function LoginForm() {
           )}
 
           {error && (
-            <p className="text-sm text-red-400 bg-red-500/10 rounded-lg px-3 py-2">{error}</p>
+            <p
+              role="alert"
+              className="text-sm text-red-400 bg-red-500/10 rounded-lg px-3 py-2"
+            >
+              {error}
+            </p>
           )}
           {info && (
-            <p className="text-sm text-[#8FD99A] bg-[var(--surface-active)] rounded-lg px-3 py-2">{info}</p>
+            <p
+              role="status"
+              className="text-sm text-[var(--accent)] bg-[var(--surface-active)] rounded-lg px-3 py-2"
+            >
+              {info}
+            </p>
           )}
 
           <button
@@ -308,7 +318,7 @@ function LoginForm() {
                   setError(null);
                   setInfo(null);
                 }}
-                className="w-full text-xs text-[var(--sage)] hover:text-[#8FD99A]"
+                className="w-full text-xs text-[var(--sage)] hover:text-[var(--accent)]"
               >
                 {t('auth.backToPassword')}
               </button>
@@ -321,7 +331,7 @@ function LoginForm() {
                   setError(null);
                   setInfo(null);
                 }}
-                className="w-full text-xs text-[var(--sage)] hover:text-[#8FD99A]"
+                className="w-full text-xs text-[var(--sage)] hover:text-[var(--accent)]"
               >
                 {t('auth.magicLink')}
               </button>
@@ -332,7 +342,7 @@ function LoginForm() {
 
         <p className="text-center text-sm text-[var(--sage)]/80 mt-6">
           {t('auth.noAccount')}{' '}
-          <Link href="/auth/signup" className="text-[#8FD99A] hover:underline">
+          <Link href="/auth/signup" className="text-[var(--accent)] hover:underline">
             {t('auth.createAccount')}
           </Link>
         </p>
@@ -347,15 +357,18 @@ function LoginForm() {
   );
 }
 
+function LoginFallback() {
+  const { t } = useI18n();
+  return (
+    <div className="min-h-screen bg-[var(--true-black)] flex items-center justify-center text-[var(--accent)]">
+      {t('common.loading')}
+    </div>
+  );
+}
+
 export default function LoginPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-[#040404] flex items-center justify-center text-[#8FD99A]">
-          Cargando…
-        </div>
-      }
-    >
+    <Suspense fallback={<LoginFallback />}>
       <LoginForm />
     </Suspense>
   );

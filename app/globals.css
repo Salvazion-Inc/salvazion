@@ -560,7 +560,38 @@ select:-webkit-autofill {
   }
 }
 
+/* —— Accessibility: focus + reduced motion —— */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Soft focus for custom controls that already style focus */
+.input-soft:focus-visible,
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.btn-ghost:focus-visible,
+.btn-sm:focus-visible,
+.btn-outline-sm:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
   .bible-carousel-item,
   .bible-hero-enter-from-right,
   .bible-hero-enter-from-left,

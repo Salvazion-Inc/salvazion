@@ -113,19 +113,19 @@ function SignupForm() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col items-center justify-center px-5">
+      <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] flex flex-col items-center justify-center px-5">
         <div className="w-full max-w-sm text-center glass rounded-2xl p-8">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[var(--border-strong)] flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[var(--border-strong)] flex items-center justify-center lion-glow overflow-hidden bg-[var(--true-black)]">
             <Image src="/logo-icon.png" alt="Salvazion" width={64} height={64} className="object-cover" />
           </div>
-          <h1 className="text-xl font-bold text-[#8FD99A] mb-2">{t('auth.checkEmail')}</h1>
+          <h1 className="text-xl font-bold text-[var(--accent)] mb-2">{t('auth.checkEmail')}</h1>
           <p className="text-sm text-[var(--sage)]/80 leading-relaxed">
-            {t('auth.checkEmailBody')} <span className="text-[#D8E1D9]">{email.trim()}</span>.{' '}
+            {t('auth.checkEmailBody')} <span className="text-[var(--off-white)]">{email.trim()}</span>.{' '}
             {t('auth.activateAndReturn')}
           </p>
           <Link
             href="/auth/login"
-            className="inline-block mt-6 text-sm text-[#8FD99A] hover:underline"
+            className="inline-block mt-6 text-sm text-[var(--accent)] hover:underline"
           >
             {t('auth.goLogin')}
           </Link>
@@ -135,7 +135,7 @@ function SignupForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col items-center justify-center px-5">
+    <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] flex flex-col items-center justify-center px-5">
       <div className="w-full max-w-sm">
         <div className="flex justify-end mb-4">
           <LanguageControl compact />
@@ -144,14 +144,14 @@ function SignupForm() {
           <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[var(--border-strong)] flex items-center justify-center lion-glow overflow-hidden">
             <Image src="/logo.png" alt="Salvazion" width={64} height={64} className="object-contain" />
           </div>
-          <h1 className="font-display text-2xl font-bold text-[#8FD99A] tracking-tight">{t('auth.signupTitle')}</h1>
+          <h1 className="font-display text-2xl font-bold text-[var(--accent)] tracking-tight">{t('auth.signupTitle')}</h1>
           <p className="text-sm text-[var(--sage)] mt-1">{t('auth.signupSubtitle')}</p>
         </div>
 
         {inbound && (
           <div className="glass rounded-2xl px-4 py-3 mb-4 border border-[var(--border-strong)]">
-            <p className="text-sm text-[#D8E1D9]/90">
-              <span className="text-[#8FD99A] font-semibold">{inbound.from}</span>{' '}
+            <p className="text-sm text-[var(--off-white)]/90">
+              <span className="text-[var(--accent)] font-semibold">{inbound.from}</span>{' '}
               {t('invite.invitedYou')} {t('invite.asRelation')}{' '}
               <span className="text-[var(--sage)]">
                 {relationLabel(inbound.relation, lang)}
@@ -228,7 +228,12 @@ function SignupForm() {
           </div>
 
           {error && (
-            <p className="text-sm text-red-400 bg-red-500/10 rounded-lg px-3 py-2">{error}</p>
+            <p
+              role="alert"
+              className="text-sm text-red-400 bg-red-500/10 rounded-lg px-3 py-2"
+            >
+              {error}
+            </p>
           )}
 
           <button
@@ -243,7 +248,7 @@ function SignupForm() {
 
         <p className="text-center text-sm text-[var(--sage)]/80 mt-6">
           {t('auth.hasAccount')}{' '}
-          <Link href="/auth/login" className="text-[#8FD99A] hover:underline">
+          <Link href="/auth/login" className="text-[var(--accent)] hover:underline">
             {t('auth.signIn')}
           </Link>
         </p>
@@ -252,15 +257,18 @@ function SignupForm() {
   );
 }
 
+function SignupFallback() {
+  const { t } = useI18n();
+  return (
+    <div className="min-h-screen bg-[var(--true-black)] flex items-center justify-center text-[var(--accent)]">
+      {t('common.loading')}
+    </div>
+  );
+}
+
 export default function SignupPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-[#040404] flex items-center justify-center text-[#8FD99A]">
-          Cargando…
-        </div>
-      }
-    >
+    <Suspense fallback={<SignupFallback />}>
       <SignupForm />
     </Suspense>
   );

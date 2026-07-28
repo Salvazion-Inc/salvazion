@@ -144,7 +144,7 @@ export function buildLLMUserPrompt(profile: UserProfile, date: string): string {
   const age = profile.birthDate ? calculateAge(profile.birthDate) : null;
   const stage = getLifeStage(age);
   const stageLabel = getLifeStageLabel(stage, profile.language);
-  const lang = profile.language === 'en' ? 'en' : 'es';
+  const lang = profile.language === 'es' ? 'es' : 'en';
   const bible =
     profile.preferredBibleVersion === 'kjv' || lang === 'en'
       ? 'King James Version (KJV)'

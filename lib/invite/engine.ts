@@ -60,7 +60,7 @@ export function isFamilyRelation(relation: LinkRelation): boolean {
   return ['spouse', 'child', 'sibling', 'family'].includes(relation);
 }
 
-export function relationLabel(relation: LinkRelation, lang: Language = 'es'): string {
+export function relationLabel(relation: LinkRelation, lang: Language = 'en'): string {
   const es: Record<LinkRelation, string> = {
     spouse: 'Cónyuge',
     child: 'Hijo/a',
@@ -82,7 +82,7 @@ export function relationLabel(relation: LinkRelation, lang: Language = 'es'): st
   return (lang === 'en' ? en : es)[relation] || relation;
 }
 
-export function categoryLabel(id: InviteCategory, lang: Language = 'es'): string {
+export function categoryLabel(id: InviteCategory, lang: Language = 'en'): string {
   const es: Record<InviteCategory, string> = {
     family: 'Familia',
     sibling: 'Hermanos en la fe',
@@ -98,7 +98,7 @@ export function categoryLabel(id: InviteCategory, lang: Language = 'es'): string
   return (lang === 'en' ? en : es)[id];
 }
 
-export function categoryHint(id: InviteCategory, lang: Language = 'es'): string {
+export function categoryHint(id: InviteCategory, lang: Language = 'en'): string {
   const es: Record<InviteCategory, string> = {
     family: 'Padres, cónyuge, hijos y familia extendida',
     sibling: 'Hermanos y hermanas de sangre o de la fe',
@@ -172,7 +172,7 @@ export function buildShareText(
     relation: LinkRelation;
     inviteUrl: string;
   },
-  lang: Language = 'es'
+  lang: Language = 'en'
 ): string {
   const rel = relationLabel(params.relation, lang);
   if (lang === 'en') {
@@ -204,7 +204,7 @@ ${params.inviteUrl}
  */
 export async function createInvite(
   input: CreateInviteInput,
-  lang: Language = 'es'
+  lang: Language = 'en'
 ): Promise<CreateInviteResult | { error: string }> {
   const name = input.name.trim();
   if (!name) {

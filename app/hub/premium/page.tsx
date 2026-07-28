@@ -47,8 +47,8 @@ export default function PremiumPage() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-        <div className="text-[#8FD99A] text-lg animate-pulse">
+      <div className="min-h-screen bg-[var(--true-black)] flex items-center justify-center">
+        <div className="text-[var(--accent)] text-lg animate-pulse" aria-live="polite">
           {t('common.lionPreparing')}
         </div>
       </div>
@@ -56,13 +56,13 @@ export default function PremiumPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
+    <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] flex flex-col">
       <header className="page-header flex items-center justify-between px-5 pt-6 pb-3">
         <div className="flex items-center gap-2.5 min-w-0">
           <Link href="/hub/profile" className="back-btn" aria-label={t('common.back')}>
             ←
           </Link>
-          <div className="w-10 h-10 rounded-full border border-[var(--border-soft)] flex items-center justify-center lion-glow overflow-hidden bg-[#040404] shrink-0">
+          <div className="w-10 h-10 rounded-full border border-[var(--border-soft)] flex items-center justify-center lion-glow overflow-hidden bg-[var(--true-black)] shrink-0">
             <Image
               src="/logo-icon.png"
               alt="Salvazion"
@@ -82,7 +82,7 @@ export default function PremiumPage() {
 
       <main className="flex-1 px-5 pt-4 pb-28 max-w-lg mx-auto w-full space-y-5">
         <div className="text-center">
-          <h1 className="font-display text-3xl font-bold text-[#8FD99A] tracking-tight">
+          <h1 className="font-display text-3xl font-bold text-[var(--accent)] tracking-tight">
             Salvazion Premium
           </h1>
           <p className="text-sm text-[var(--sage)] mt-2 leading-relaxed">
@@ -93,7 +93,7 @@ export default function PremiumPage() {
               <span
                 className={`px-2.5 py-1 rounded-full border ${
                   isPremium
-                    ? 'border-[#8FD99A]/50 text-[#8FD99A]'
+                    ? 'border-[var(--border-strong)] text-[var(--accent)]'
                     : 'border-[var(--border-soft)] text-[var(--sage)]'
                 }`}
               >

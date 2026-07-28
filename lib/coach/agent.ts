@@ -17,7 +17,7 @@ export interface CoachChatMessage {
 export function buildLionSystemPrompt(
   profile: Partial<UserProfile> | null,
   scores: Partial<ComputedScores> | null,
-  lang: 'es' | 'en' = 'es'
+  lang: 'es' | 'en' = 'en'
 ): string {
   const name = profile?.name?.split(' ')[0] || (lang === 'en' ? 'Friend' : 'Hermano');
   const age = profile?.birthDate ? calculateAge(profile.birthDate) : null;

@@ -254,6 +254,27 @@ export function saveTheme(id: ThemeId): void {
   applyTheme(id);
 }
 
+const THEME_CSS_KEYS: Array<[keyof ThemePreset['vars'], string]> = [
+  ['neonPrimary', '--neon-primary'],
+  ['neonPrimarySoft', '--neon-primary-soft'],
+  ['accent', '--accent'],
+  ['accentFill', '--accent-fill'],
+  ['accentHover', '--accent-hover'],
+  ['darkGreen', '--dark-green'],
+  ['softGreen', '--soft-green'],
+  ['sage', '--sage'],
+  ['sageDim', '--sage-dim'],
+  ['offWhite', '--off-white'],
+  ['trueBlack', '--true-black'],
+  ['surface', '--surface'],
+  ['iconActive', '--icon-active'],
+  ['iconIdle', '--icon-idle'],
+  ['borderSoft', '--border-soft'],
+  ['borderStrong', '--border-strong'],
+  ['surfaceActive', '--surface-active'],
+  ['surfaceMuted', '--surface-muted'],
+];
+
 /** Apply CSS custom properties to <html> */
 export function applyTheme(id: ThemeId): void {
   if (typeof document === 'undefined') return;
@@ -261,24 +282,21 @@ export function applyTheme(id: ThemeId): void {
   const root = document.documentElement;
   root.dataset.theme = id;
   const v = preset.vars;
-  root.style.setProperty('--neon-primary', v.neonPrimary);
-  root.style.setProperty('--neon-primary-soft', v.neonPrimarySoft);
-  root.style.setProperty('--accent', v.accent);
-  root.style.setProperty('--accent-fill', v.accentFill);
-  root.style.setProperty('--accent-hover', v.accentHover);
-  root.style.setProperty('--dark-green', v.darkGreen);
-  root.style.setProperty('--soft-green', v.softGreen);
-  root.style.setProperty('--sage', v.sage);
-  root.style.setProperty('--sage-dim', v.sageDim);
-  root.style.setProperty('--off-white', v.offWhite);
-  root.style.setProperty('--true-black', v.trueBlack);
-  root.style.setProperty('--surface', v.surface);
-  root.style.setProperty('--icon-active', v.iconActive);
-  root.style.setProperty('--icon-idle', v.iconIdle);
-  root.style.setProperty('--border-soft', v.borderSoft);
-  root.style.setProperty('--border-strong', v.borderStrong);
-  root.style.setProperty('--surface-active', v.surfaceActive);
-  root.style.setProperty('--surface-muted', v.surfaceMuted);
-  // Glow helpers depend on accent RGB — approximate via accent itself
+  for (const [key, cssVar] of THEME_CSS_KEYS) {
+    root.style.setProperty(cssVar, v[key]);
+  }
   root.style.setProperty('--theme-glow', v.accent);
+}
+
+/**
+ * Inline boot script (beforeInteractive) to apply saved theme before paint.
+ * Avoids flash of classic mint when user chose another preset.
+ */
+export function getThemeBootScript(): string {
+  const map: Record<string, ThemePreset['vars']> = {};
+  for (const p of THEME_PRESETS) {
+    map[p.id] = p.vars;
+  }
+  const json = JSON.stringify(map);
+  return `(function(){try{var M=${json};var id=localStorage.getItem('${THEME_STORAGE_KEY}');if(!M[id])return;var v=M[id],r=document.documentElement;r.dataset.theme=id;var pairs=[['neonPrimary','--neon-primary'],['neonPrimarySoft','--neon-primary-soft'],['accent','--accent'],['accentFill','--accent-fill'],['accentHover','--accent-hover'],['darkGreen','--dark-green'],['softGreen','--soft-green'],['sage','--sage'],['sageDim','--sage-dim'],['offWhite','--off-white'],['trueBlack','--true-black'],['surface','--surface'],['iconActive','--icon-active'],['iconIdle','--icon-idle'],['borderSoft','--border-soft'],['borderStrong','--border-strong'],['surfaceActive','--surface-active'],['surfaceMuted','--surface-muted']];for(var i=0;i<pairs.length;i++){r.style.setProperty(pairs[i][1],v[pairs[i][0]]);}r.style.setProperty('--theme-glow',v.accent);}catch(e){}})();`;
 }

@@ -14,7 +14,7 @@ Also set:
 - `NEXT_PUBLIC_APP_URL` — public site URL (no trailing slash)
 - `WEARABLES_TOKEN_SECRET` — long random string to seal tokens in cookies
 
-See `.env.wearables.example`.
+See wearables section in `.env.example`.
 
 ### Flow
 

@@ -15,7 +15,9 @@ Guía DNS / Vercel / Supabase: [`docs/domains.md`](docs/domains.md).
 
 ```bash
 cp .env.example .env.local
-# Rellena NEXT_PUBLIC_SUPABASE_* y opcional XAI_API_KEY
+# Rellena en .env.local (única plantilla: .env.example):
+#   NEXT_PUBLIC_SUPABASE_* , SUPABASE_SERVICE_ROLE_KEY,
+#   STRIPE_* , XAI_* , NEXT_PUBLIC_REOWN_PROJECT_ID, wearables opcionales
 
 npm install
 npm run dev
@@ -36,10 +38,14 @@ Abre [http://localhost:3000](http://localhost:3000).
 
 Vercel conectado a `main`. Dominio de producto: **`app.salvazion.org`**.
 
-Variables mínimas en Vercel:
+Variables en Vercel (ver lista completa en `.env.example`):
 
 ```
 NEXT_PUBLIC_APP_URL=https://app.salvazion.org
 NEXT_PUBLIC_SUPABASE_URL=https://kppylfrsclkdmtpobpxd.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=…
+SUPABASE_SERVICE_ROLE_KEY=…
+STRIPE_SECRET_KEY=…
+STRIPE_WEBHOOK_SECRET=…
+NEXT_PUBLIC_REOWN_PROJECT_ID=…
 ```

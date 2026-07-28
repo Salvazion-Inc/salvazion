@@ -49,7 +49,7 @@ Docs: https://supabase.com/docs/guides/auth/social-login/auth-twitter
 
 ### Local
 ```bash
-cp .env.local.example .env.local
+cp .env.example .env.local
 ```
 Rellena con Project Settings → API:
 - `NEXT_PUBLIC_SUPABASE_URL`

@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateDevotionalAsync, isXaiConfigured } from '@/lib/devotional-engine';
+import {
+  generateDevotionalAsync,
+  generateDevotionalRules,
+  isXaiConfigured,
+} from '@/lib/devotional-engine';
 import { UserProfile } from '@/lib/types';
+import { createClient } from '@/lib/supabase/server';
+import { getEntitlementForUser } from '@/lib/billing/subscription';
 
 /** Basic sanitization for free-text fields */
 function sanitize(str: unknown, maxLen = 200): string {
@@ -14,6 +20,21 @@ export async function POST(req: NextRequest) {
 
     if (JSON.stringify(body).length > 12000) {
       return NextResponse.json({ success: false, error: 'Payload too large' }, { status: 413 });
+    }
+
+    // Premium unlocks Grok AI devotionals; free uses rules engine
+    let premium = false;
+    try {
+      const supabase = await createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        const ent = await getEntitlementForUser(user.id, user.email);
+        premium = ent.isPremium;
+      }
+    } catch {
+      // ignore
     }
 
     const profile: UserProfile = {
@@ -51,6 +72,20 @@ export async function POST(req: NextRequest) {
         ? body.date
         : new Date().toISOString().slice(0, 10);
 
+    if (!premium) {
+      return NextResponse.json({
+        success: true,
+        data: generateDevotionalRules(profile, date),
+        engine: 'salvazion-rules-v1',
+        note:
+          profile.language === 'en'
+            ? 'Free plan: rules-based daily devotional. Upgrade to Premium for Grok AI devotionals.'
+            : 'Plan Free: devocional diario por reglas. Mejora a Premium para devocionales con IA Grok.',
+        grokConfigured: isXaiConfigured(),
+        premium: false,
+      });
+    }
+
     const { devotional, engine, note } = await generateDevotionalAsync(profile, date);
 
     return NextResponse.json({
@@ -59,6 +94,7 @@ export async function POST(req: NextRequest) {
       engine,
       note,
       grokConfigured: isXaiConfigured(),
+      premium: true,
     });
   } catch (error) {
     console.error('Devotional engine error:', error);

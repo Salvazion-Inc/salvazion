@@ -16,6 +16,7 @@ import {
 import { UserProfile } from '@/lib/types';
 import { createClient } from '@/lib/supabase/client';
 import WalletConnectCard from '@/components/wallet/WalletConnectCard';
+import BillingCard from '@/components/billing/BillingCard';
 import ProfileAvatar from '@/components/profile/ProfileAvatar';
 import TextScaleControl from '@/components/settings/TextScaleControl';
 import ThemeControl from '@/components/settings/ThemeControl';
@@ -23,6 +24,13 @@ import LanguageControl from '@/components/settings/LanguageControl';
 import InvitePhalanx from '@/components/invite/InvitePhalanx';
 import ValueJourney from '@/components/value-journey/ValueJourney';
 import { useI18n } from '@/components/I18nProvider';
+import {
+  loadLinkedWallet,
+  subscribeLinkedWallet,
+  type LinkedWallet,
+} from '@/lib/solana/wallet-store';
+import { formatSalvazion } from '@/lib/solana/balances';
+import { shortenAddress } from '@/lib/solana/config';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -33,9 +41,13 @@ export default function ProfilePage() {
   const [draft, setDraft] = useState<Partial<UserProfile>>({});
   const [mounted, setMounted] = useState(false);
   const [confirmClear, setConfirmClear] = useState(false);
+  const [linkedWallet, setLinkedWallet] = useState<LinkedWallet | null>(null);
 
   useEffect(() => {
     setMounted(true);
+    setLinkedWallet(loadLinkedWallet());
+    const unsub = subscribeLinkedWallet(setLinkedWallet);
+
     (async () => {
       try {
         const supabase = createClient();
@@ -55,6 +67,8 @@ export default function ProfilePage() {
       setProfile(p);
       setDraft(p);
     })();
+
+    return unsub;
   }, [router]);
 
   const handleSave = async () => {
@@ -131,6 +145,30 @@ export default function ProfilePage() {
             <p className="text-sm text-[var(--sage)] mt-1">
               {age} {t('profile.years')} · {getLifeStageLabel(stage, lang)}
             </p>
+          )}
+          {typeof linkedWallet?.salvazionBalance === 'number' && (
+            <div className="mt-3 inline-flex flex-col items-center gap-1">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#8FD99A]/40 bg-[#8FD99A]/10">
+                <span className="text-[10px] uppercase tracking-wider text-[var(--sage)]">
+                  {t('wallet.holdings')}
+                </span>
+                <span className="text-sm font-semibold text-[#8FD99A] font-mono">
+                  {formatSalvazion(linkedWallet.salvazionBalance)}
+                </span>
+              </div>
+              {linkedWallet.address && (
+                <p className="text-[10px] font-mono text-[var(--sage)]/70">
+                  {shortenAddress(linkedWallet.address, 4)}
+                  {linkedWallet.salvazionSource
+                    ? ` · ${
+                        linkedWallet.salvazionSource === 'onchain'
+                          ? t('wallet.sourceOnchain')
+                          : t('wallet.sourceManual')
+                      }`
+                    : ''}
+                </p>
+              )}
+            </div>
           )}
           {(profile as any)._integrityWarning && (
             <p className="text-xs text-amber-400 mt-2">
@@ -295,9 +333,16 @@ export default function ProfilePage() {
           <TextScaleControl />
         </div>
 
-        {/* Solana wallet */}
+        {/* Premium subscription */}
         <div className="mb-6">
-          <WalletConnectCard />
+          <BillingCard />
+        </div>
+
+        {/* Solana wallet + $SALVAZION amount on profile */}
+        <div className="mb-6">
+          <WalletConnectCard
+            onSalvazionChange={() => setLinkedWallet(loadLinkedWallet())}
+          />
         </div>
 
         {/* Privacy note */}

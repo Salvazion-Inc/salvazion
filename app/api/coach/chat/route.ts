@@ -3,6 +3,8 @@ import { getXaiClient, getXaiModel, isXaiConfigured } from '@/lib/ai/xai';
 import { buildLionSystemPrompt, type CoachChatMessage } from '@/lib/coach/agent';
 import type { UserProfile } from '@/lib/types';
 import type { ComputedScores } from '@/lib/scoring/types';
+import { createClient } from '@/lib/supabase/server';
+import { getEntitlementForUser } from '@/lib/billing/subscription';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -39,6 +41,33 @@ export async function POST(req: NextRequest) {
     const lastUser = [...messages].reverse().find((m) => m.role === 'user');
     if (!lastUser) {
       return NextResponse.json({ error: 'user message required' }, { status: 400 });
+    }
+
+    // Premium: full AI coach
+    try {
+      const supabase = await createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        const ent = await getEntitlementForUser(user.id, user.email);
+        if (!ent.isPremium) {
+          return NextResponse.json(
+            {
+              error: 'premium_required',
+              reply:
+                lang === 'en'
+                  ? 'Green Lion AI coach is a Premium feature. Upgrade for full Grok coaching — Salvation · Health · Freedom.'
+                  : 'El coach León Verde con IA es Premium. Mejora tu plan para coaching Grok completo — Salvación · Salud · Libertad.',
+              source: 'premium_gate',
+              model: null,
+            },
+            { status: 402 }
+          );
+        }
+      }
+    } catch {
+      // If auth/billing unavailable, fall through (dev without Supabase)
     }
 
     if (!isXaiConfigured()) {

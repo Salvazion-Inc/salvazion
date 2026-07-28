@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
+import { getEntitlementForUser } from '@/lib/billing/subscription';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -6,9 +8,28 @@ export const maxDuration = 60;
 /**
  * Text-to-speech via xAI Voice API (/v1/tts).
  * Returns audio/mpeg binary for client playback.
+ * Premium feature.
  */
 export async function POST(req: NextRequest) {
   try {
+    try {
+      const supabase = await createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        const ent = await getEntitlementForUser(user.id, user.email);
+        if (!ent.isPremium) {
+          return NextResponse.json(
+            { error: 'premium_required', fallback: true },
+            { status: 402 }
+          );
+        }
+      }
+    } catch {
+      // continue if auth missing in dev
+    }
+
     const apiKey = process.env.XAI_API_KEY;
     if (!apiKey) {
       return NextResponse.json(

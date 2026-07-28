@@ -8,6 +8,8 @@ import {
 } from '@/lib/health/wearables/oauth/providers';
 import { generateCodeChallenge, generateCodeVerifier, generateState } from '@/lib/health/wearables/oauth/pkce';
 import { saveFlowState } from '@/lib/health/wearables/oauth/tokens';
+import { createClient } from '@/lib/supabase/server';
+import { getEntitlementForUser } from '@/lib/billing/subscription';
 
 export async function GET(
   req: NextRequest,
@@ -19,6 +21,29 @@ export async function GET(
   if (!config) {
     return NextResponse.json({ error: 'Unknown provider' }, { status: 404 });
   }
+
+  // Premium: cloud wearable OAuth
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      const ent = await getEntitlementForUser(user.id, user.email);
+      if (!ent.isPremium) {
+        return NextResponse.json(
+          {
+            error: 'premium_required',
+            message: 'Cloud wearables require Salvazion Premium.',
+          },
+          { status: 402 }
+        );
+      }
+    }
+  } catch {
+    // ignore auth errors in misconfigured env
+  }
+
   if (!isProviderConfigured(provider)) {
     return NextResponse.json(
       {

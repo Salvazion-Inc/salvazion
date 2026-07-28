@@ -15,8 +15,10 @@ export interface RecommendedBook {
   blurbEn: string;
   blurbEs: string;
   themes: BookTheme[];
-  /** Amazon ASIN when known */
+  /** Amazon ASIN when known (also used for cover images) */
   asin?: string;
+  /** Optional explicit cover image URL */
+  coverUrl?: string;
   /** Cover color accent for card */
   accent: string;
   /** Emoji / short mark when no cover image */
@@ -1176,5 +1178,33 @@ export function bookAmazonUrl(book: RecommendedBook): string {
   if (book.asin) return amazonProductUrl(book.asin, 'com');
   // Prefer author+title search so Spanish-market titles still resolve on Amazon
   return amazonSearchUrl(`${book.author} ${book.titleEs || book.title}`, 'com');
+}
+
+/**
+ * Candidate cover image URLs (try in order).
+ * Amazon P-image from ASIN is primary; explicit coverUrl wins if set.
+ */
+export function bookCoverCandidates(book: RecommendedBook): string[] {
+  const urls: string[] = [];
+  if (book.coverUrl) urls.push(book.coverUrl);
+  if (book.asin) {
+    const a = book.asin.trim();
+    // Common Amazon CDN patterns for product photos
+    urls.push(
+      `https://images-na.ssl-images-amazon.com/images/P/${a}.01.LZZZZZZZ.jpg`
+    );
+    urls.push(
+      `https://m.media-amazon.com/images/P/${a}.01._SCLZZZZZZZ_SX400_.jpg`
+    );
+    urls.push(
+      `https://images-na.ssl-images-amazon.com/images/P/${a}.01._SX300_SY400_QL70_ML2_.jpg`
+    );
+  }
+  return urls;
+}
+
+/** Search query for Open Library / Google Books cover lookup */
+export function bookCoverSearchQuery(book: RecommendedBook): string {
+  return `${book.title} ${book.author}`.trim();
 }
 

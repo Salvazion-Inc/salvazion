@@ -6,6 +6,7 @@ import {
   type RecommendedBook,
 } from '@/lib/freedom/books';
 import { useI18n } from '@/components/I18nProvider';
+import BookCover from '@/components/freedom/BookCover';
 
 type Props = {
   className?: string;
@@ -13,7 +14,7 @@ type Props = {
 
 /**
  * Horizontal carousel of books defending Western Christian culture
- * and bioconservatism — Amazon Associates affiliate links only.
+ * and bioconservatism — Amazon Associates affiliate links + real covers.
  */
 export default function BookStoreCarousel({ className = '' }: Props) {
   const { t, lang } = useI18n();
@@ -51,30 +52,22 @@ function BookCard({
 }) {
   const title = lang === 'es' ? book.titleEs : book.title;
   const blurb = lang === 'es' ? book.blurbEs : book.blurbEn;
-  const themeLabel =
-    book.themes.includes('both')
-      ? t('books.themeBoth')
-      : book.themes.includes('bioconservatism')
-        ? t('books.themeBio')
-        : t('books.themeChristian');
+  const themeLabel = book.themes.includes('both')
+    ? t('books.themeBoth')
+    : book.themes.includes('bioconservatism')
+      ? t('books.themeBio')
+      : t('books.themeChristian');
 
   return (
     <article
       className="snap-start shrink-0 w-[11.5rem] card-soft overflow-hidden flex flex-col border"
       style={{ borderColor: `${book.accent}55` }}
     >
-      <div
-        className="h-24 flex items-center justify-center relative"
-        style={{
-          background: `linear-gradient(145deg, ${book.accent}33, #0a0a0a 70%)`,
-        }}
-      >
-        <span className="text-3xl opacity-90" aria-hidden>
-          {book.mark}
-        </span>
+      <div className="relative h-40 shrink-0">
+        <BookCover book={book} className="absolute inset-0" />
         <span
-          className="absolute bottom-1.5 left-2 right-2 text-[8px] uppercase tracking-wider truncate"
-          style={{ color: book.accent }}
+          className="absolute bottom-1.5 left-2 right-2 text-[8px] uppercase tracking-wider truncate z-[1] drop-shadow"
+          style={{ color: '#F5F7F5' }}
         >
           {themeLabel}
         </span>

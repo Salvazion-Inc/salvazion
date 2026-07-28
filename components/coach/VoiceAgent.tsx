@@ -5,16 +5,23 @@ import Image from 'next/image';
 import {
   COACH_SUGGESTED_PROMPTS_EN,
   COACH_SUGGESTED_PROMPTS_ES,
+  DEBATE_SUGGESTED_PROMPTS_EN,
+  DEBATE_SUGGESTED_PROMPTS_ES,
   type CoachChatMessage,
+  type CoachMode,
 } from '@/lib/coach/agent';
 import type { UserProfile } from '@/lib/types';
 import type { ComputedScores } from '@/lib/scoring/types';
+import { logAction } from '@/lib/scoring/engine';
 
 type Props = {
   profile: Partial<UserProfile> | null;
   scores?: Partial<ComputedScores> | null;
   lang?: 'es' | 'en';
   compact?: boolean;
+  /** coach = daily mentor; debate = Freedom Hub structured debate */
+  mode?: CoachMode;
+  onDebateScored?: () => void;
 };
 
 type SpeakState = 'idle' | 'loading' | 'playing';
@@ -34,8 +41,11 @@ export default function VoiceAgent({
   scores = null,
   lang = 'es',
   compact = false,
+  mode = 'coach',
+  onDebateScored,
 }: Props) {
   const es = lang !== 'en';
+  const isDebate = mode === 'debate';
   const [messages, setMessages] = useState<CoachChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
@@ -43,11 +53,18 @@ export default function VoiceAgent({
   const [speakState, setSpeakState] = useState<SpeakState>('idle');
   const [error, setError] = useState<string | null>(null);
   const [voiceOn, setVoiceOn] = useState(true);
+  const [scoredDebate, setScoredDebate] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
-  const suggestions = es ? COACH_SUGGESTED_PROMPTS_ES : COACH_SUGGESTED_PROMPTS_EN;
+  const suggestions = isDebate
+    ? es
+      ? DEBATE_SUGGESTED_PROMPTS_ES
+      : DEBATE_SUGGESTED_PROMPTS_EN
+    : es
+      ? COACH_SUGGESTED_PROMPTS_ES
+      : COACH_SUGGESTED_PROMPTS_EN;
   const name = profile?.name?.split(' ')[0] || (es ? 'Hermano' : 'Friend');
 
   useEffect(() => {
@@ -124,6 +141,7 @@ export default function VoiceAgent({
             profile,
             scores,
             lang,
+            mode,
           }),
         });
         const data = await res.json();
@@ -133,6 +151,11 @@ export default function VoiceAgent({
             ? 'El León te escucha. Intenta de nuevo.'
             : 'The Lion hears you. Try again.');
         setMessages((m) => [...m, { role: 'assistant', content: reply }]);
+        if (isDebate && !scoredDebate && nextMessages.filter((x) => x.role === 'user').length >= 1) {
+          logAction('debate_participate');
+          setScoredDebate(true);
+          onDebateScored?.();
+        }
         await playTts(reply);
       } catch (e) {
         setError(e instanceof Error ? e.message : 'Error');
@@ -140,7 +163,7 @@ export default function VoiceAgent({
         setBusy(false);
       }
     },
-    [busy, messages, profile, scores, lang, es, playTts]
+    [busy, messages, profile, scores, lang, es, playTts, mode, isDebate, scoredDebate, onDebateScored]
   );
 
   const toggleListen = () => {
@@ -215,11 +238,19 @@ export default function VoiceAgent({
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] font-medium">
-            {es ? 'Coach · Voz' : 'Coach · Voice'}
+            {isDebate
+              ? es
+                ? 'Debate · Salvazion'
+                : 'Debate · Salvazion'
+              : es
+                ? 'Coach · Voz'
+                : 'Coach · Voice'}
           </p>
           <p className="text-[11px] text-[var(--sage)]/85 truncate">
-            {es
-              ? `${name} · Salvation · Health · Freedom`
+            {isDebate
+              ? es
+                ? 'Cultura cristiano-occidental · Bio-conservadurismo'
+                : 'Western Christian culture · Bio-conservatism'
               : `${name} · Salvation · Health · Freedom`}
           </p>
         </div>
@@ -244,9 +275,13 @@ export default function VoiceAgent({
         {messages.length === 0 && (
           <div className="glass rounded-2xl p-4 border border-[var(--border-soft)]">
             <p className="text-sm text-[#D8E1D9]/90 leading-relaxed">
-              {es
-                ? `Soy Salvazion. Estoy aquí para motivarte en fe, salud y libertad ordenada. Háblame o escribe.`
-                : `I am Salvazion. I am here to motivate you in faith, health, and ordered freedom. Speak or type.`}
+              {isDebate
+                ? es
+                  ? `Soy Salvazion. Debate conmigo: defiendo la cultura cristiano-occidental y el bio-conservadurismo. Rechazo el globalismo, la agenda woke, la ideología LGBTQ, el Deep State, las ideologías de izquierda y el transhumanismo. Plantea tu tesis — con voz o texto.`
+                  : `I am Salvazion. Debate with me: I defend Western Christian culture and bio-conservatism. I reject globalism, the woke agenda, LGBTQ ideology, the Deep State, leftist ideologies, and transhumanism. State your thesis — voice or text.`
+                : es
+                  ? `Soy Salvazion. Estoy aquí para motivarte en fe, salud y libertad ordenada. Háblame o escribe.`
+                  : `I am Salvazion. I am here to motivate you in faith, health, and ordered freedom. Speak or type.`}
             </p>
             <div className="flex flex-wrap gap-1.5 mt-3">
               {suggestions.map((s) => (

@@ -10,29 +10,25 @@ import { ComputedScores } from '@/lib/scoring/types';
 import {
   getCurrentFreedomStage,
   getFreedomActions,
-  getLibraryForStage,
   getFreedomPoints,
-  markContentComplete,
   FreedomActionDef,
-  FreedomContent
 } from '@/lib/freedom/engine';
 import { evaluateBadges } from '@/lib/badges/engine';
 import XArticlesFeed from '@/components/freedom/XArticlesFeed';
 import BookStoreCarousel from '@/components/freedom/BookStoreCarousel';
+import YouTubeChannelsPanel from '@/components/freedom/YouTubeChannelsPanel';
 import PillarHubHeader from '@/components/hub/PillarHubHeader';
 import InvitePhalanx from '@/components/invite/InvitePhalanx';
+import VoiceAgent from '@/components/coach/VoiceAgent';
 
 export default function FreedomPage() {
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
   const [scores, setScores] = useState<ComputedScores | null>(null);
   const [actions, setActions] = useState<FreedomActionDef[]>([]);
-  const [library, setLibrary] = useState<FreedomContent[]>([]);
   const [loggedToday, setLoggedToday] = useState<Set<string>>(new Set());
-  const [completedContent, setCompletedContent] = useState<Set<string>>(new Set());
   const [mounted, setMounted] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'learn' | 'connect' | 'contribute'>('learn');
-  const [selectedContent, setSelectedContent] = useState<FreedomContent | null>(null);
 
   const stage = getCurrentFreedomStage();
   const stageLabel = getLifeStageLabel(stage);
@@ -43,13 +39,7 @@ export default function FreedomPage() {
     const p = loadProfile();
     setProfile(p);
     setActions(getFreedomActions(stage));
-    setLibrary(getLibraryForStage(stage));
     setLoggedToday(new Set(s.todayActions.filter(a => a.pillar === 'freedom').map(a => a.type)));
-    try {
-      setCompletedContent(new Set(JSON.parse(localStorage.getItem('salvazion_freedom_content') || '[]')));
-    } catch {
-      setCompletedContent(new Set());
-    }
   }, [stage]);
 
   useEffect(() => {
@@ -72,13 +62,6 @@ export default function FreedomPage() {
       }
       showToast('+' + getFreedomPoints(actionType) + ' Freedom · ' + label);
     }
-  };
-
-  const handleCompleteContent = (content: FreedomContent) => {
-    markContentComplete(content.id);
-    setCompletedContent(prev => new Set([...prev, content.id]));
-    handleLog(content.actionType, content.title);
-    setSelectedContent(null);
   };
 
   if (!mounted || !scores) {
@@ -138,75 +121,36 @@ export default function FreedomPage() {
               onScored={() => refresh()}
             />
 
+            {/* 1) Books */}
             <BookStoreCarousel />
 
-            {/* Debates / lessons (non-X library) */}
-            {library.filter((c) => !c.url || c.category !== 'article').length > 0 && (
-              <div className="space-y-2">
-                <h2 className="text-sm font-semibold text-[var(--sage)]">
-                  Lecciones y debates
-                </h2>
-                {library
-                  .filter((c) => !c.url || c.category !== 'article')
-                  .map((content) => {
-                    const done = completedContent.has(content.id);
-                    return (
-                      <button
-                        key={content.id}
-                        type="button"
-                        onClick={() => setSelectedContent(content)}
-                        className={
-                          'w-full text-left glass rounded-xl p-4 border ' +
-                          (done ? 'border-[var(--border-strong)]' : 'border-[var(--border-soft)]')
-                        }
-                      >
-                        <p className="text-[10px] text-[var(--sage)]/80 uppercase">
-                          {content.category} · {content.readMin} min
-                        </p>
-                        <p className="text-sm font-medium text-white">{content.title}</p>
-                        <p className="text-xs text-[#D8E1D9]/60 mt-1 line-clamp-2">
-                          {content.summary}
-                        </p>
-                        <p className="text-xs text-[var(--accent)] mt-2">
-                          {done
-                            ? '✓ Completado'
-                            : '+' + getFreedomPoints(content.actionType) + ' Freedom'}
-                        </p>
-                      </button>
-                    );
-                  })}
-              </div>
-            )}
+            {/* 2) YouTube channels = short video + mini-course */}
+            <YouTubeChannelsPanel onScored={() => refresh()} />
 
-            {actions
-              .filter((a) => a.category === 'learn')
-              .map((action) => {
-                const done = loggedToday.has(action.actionType);
-                return (
-                  <div
-                    key={action.id}
-                    className={
-                      'glass rounded-xl p-3.5 border flex justify-between items-center ' +
-                      (done ? 'border-[var(--border-strong)]' : 'border-[var(--border-soft)]')
-                    }
-                  >
-                    <div>
-                      <p className="text-sm text-white">
-                        {action.icon} {action.label}
-                      </p>
-                      <p className="text-[11px] text-[var(--sage)]/80">{action.description}</p>
-                    </div>
-                    <button
-                      type="button"
-                      disabled={done}
-                      onClick={() => !done && handleLog(action.actionType, action.label)}
-                      className="btn-sm"
-                    >
-                      {done ? '✓' : '+' + getFreedomPoints(action.actionType)}
-                    </button>
-                  </div>
-                );
-              })}
+            {/* 3) Debate last */}
+            <section className="card-soft p-4 border border-[var(--border-soft)]">
+              <div className="mb-3">
+                <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] font-medium">
+                  Freedom · Debate
+                </p>
+                <h2 className="text-base font-semibold text-white leading-tight">
+                  Habla y debate con Salvazion
+                </h2>
+                <p className="text-[11px] text-[var(--sage)]/85 mt-1 leading-relaxed">
+                  Defiende la cultura cristiano-occidental y el bio-conservadurismo.
+                  Rechaza globalismo, agenda woke, LGBTQ, Deep State, ideologías de
+                  izquierda y transhumanismo. Argumenta con razón y fe.
+                </p>
+              </div>
+              <VoiceAgent
+                profile={profile}
+                scores={scores}
+                lang={profile?.language === 'en' ? 'en' : 'es'}
+                mode="debate"
+                compact
+                onDebateScored={() => refresh()}
+              />
+            </section>
           </div>
         )}
 
@@ -298,74 +242,6 @@ export default function FreedomPage() {
           </div>
         )}
       </main>
-
-      {selectedContent && (
-        <div className="fixed inset-0 z-50 bg-[#040404]/95 flex flex-col">
-          <div className="px-5 pt-6 pb-3 border-b border-[var(--border-soft)] flex justify-between">
-            <button
-              type="button"
-              onClick={() => setSelectedContent(null)}
-              className="text-[var(--sage)] text-sm"
-            >
-              ← Cerrar
-            </button>
-            <span className="text-[10px] text-[var(--sage)]/80">
-              {selectedContent.category}
-              {selectedContent.source ? ` · ${selectedContent.source}` : ''}
-            </span>
-          </div>
-          <div className="flex-1 overflow-y-auto px-5 py-6 max-w-lg mx-auto w-full">
-            <h2 className="font-display text-xl font-bold text-white mb-3">
-              {selectedContent.title}
-            </h2>
-            <p className="text-sm text-[#D8E1D9]/80 leading-relaxed mb-4">
-              {selectedContent.summary}
-            </p>
-            <p className="text-xs text-[var(--sage)] mb-6">
-              ~{selectedContent.readMin} min · suma Freedom al completar
-            </p>
-
-            {selectedContent.url ? (
-              <div className="space-y-3 mb-6">
-                <a
-                  href={selectedContent.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary"
-                >
-                  Leer artículo en X ↗
-                </a>
-                <p className="text-[11px] text-[var(--sage)]/80 text-center">
-                  Abre el artículo de @salvazion_ en X. Luego márcalo como leído para
-                  sumar Freedom Score.
-                </p>
-              </div>
-            ) : (
-              <p className="text-sm text-[#D8E1D9]/70 mb-6">
-                Aplica una idea hoy. La libertad se construye con oficio, no con consumo
-                pasivo.
-              </p>
-            )}
-
-            <button
-              type="button"
-              onClick={() => handleCompleteContent(selectedContent)}
-              disabled={completedContent.has(selectedContent.id)}
-              className={
-                completedContent.has(selectedContent.id)
-                  ? 'btn-secondary'
-                  : selectedContent.url
-                    ? 'btn-secondary'
-                    : 'btn-primary'
-              }
-            >
-              {completedContent.has(selectedContent.id)
-                ? '✓ Completado'
-                : 'Marcar como leído · +' + getFreedomPoints(selectedContent.actionType)}
-            </button>
-          </div>
-        </div>
-      )}
 
       {toast && (
         <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 toast-soft">{toast}</div>

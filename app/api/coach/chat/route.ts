@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getXaiClient, getXaiModel, isXaiConfigured } from '@/lib/ai/xai';
-import { buildLionSystemPrompt, type CoachChatMessage } from '@/lib/coach/agent';
+import {
+  buildLionSystemPrompt,
+  buildDebateSystemPrompt,
+  type CoachChatMessage,
+  type CoachMode,
+} from '@/lib/coach/agent';
 import type { UserProfile } from '@/lib/types';
 import type { ComputedScores } from '@/lib/scoring/types';
 import { createClient } from '@/lib/supabase/server';
@@ -33,6 +38,7 @@ export async function POST(req: NextRequest) {
     const profile = (body.profile || null) as Partial<UserProfile> | null;
     const scores = (body.scores || null) as Partial<ComputedScores> | null;
     const lang: 'es' | 'en' = body.lang === 'en' ? 'en' : 'es';
+    const mode: CoachMode = body.mode === 'debate' ? 'debate' : 'coach';
 
     if (!messages.length) {
       return NextResponse.json({ error: 'messages required' }, { status: 400 });
@@ -73,13 +79,18 @@ export async function POST(req: NextRequest) {
     if (!isXaiConfigured()) {
       const name = profile?.name?.split(' ')[0] || (lang === 'en' ? 'Friend' : 'Hermano');
       const fallback =
-        lang === 'en'
-          ? `${name}, the Green Lion walks with you. Today: read one Bible chapter, move 15 minutes, and pray 5 minutes. Salvation · Health · Freedom.`
-          : `${name}, el León Verde camina contigo. Hoy: lee un capítulo de la Biblia, muévete 15 minutos y ora 5 minutos. Salvación · Salud · Libertad.`;
+        mode === 'debate'
+          ? lang === 'en'
+            ? `${name}, I stand for Western Christian culture and bio-conservatism. State your thesis — globalism, woke ideology, LGBTQ activism, Deep State power, leftism, or transhumanism — and I will answer with reason and faith.`
+            : `${name}, defiendo la cultura cristiano-occidental y el bio-conservadurismo. Plantea tu tesis — globalismo, agenda woke, LGBTQ, Deep State, izquierda o transhumanismo — y responderé con razón y fe.`
+          : lang === 'en'
+            ? `${name}, the Green Lion walks with you. Today: read one Bible chapter, move 15 minutes, and pray 5 minutes. Salvation · Health · Freedom.`
+            : `${name}, el León Verde camina contigo. Hoy: lee un capítulo de la Biblia, muévete 15 minutos y ora 5 minutos. Salvación · Salud · Libertad.`;
       return NextResponse.json({
         reply: fallback,
         source: 'fallback',
         model: null,
+        mode,
       });
     }
 
@@ -89,12 +100,15 @@ export async function POST(req: NextRequest) {
     }
 
     const model = getXaiModel();
-    const system = buildLionSystemPrompt(profile, scores, lang);
+    const system =
+      mode === 'debate'
+        ? buildDebateSystemPrompt(profile, scores, lang)
+        : buildLionSystemPrompt(profile, scores, lang);
 
     const completion = await client.chat.completions.create({
       model,
-      temperature: 0.75,
-      max_tokens: 700,
+      temperature: mode === 'debate' ? 0.65 : 0.75,
+      max_tokens: mode === 'debate' ? 1100 : 700,
       messages: [
         { role: 'system', content: system },
         ...messages.map((m) => ({ role: m.role, content: m.content })),
@@ -109,8 +123,9 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       reply,
-      source: 'grok',
+      source: 'ai',
       model,
+      mode,
     });
   } catch (e) {
     console.error('[coach/chat]', e);

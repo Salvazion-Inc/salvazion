@@ -44,7 +44,7 @@ const nextConfig: NextConfig = {
               // Jupiter Terminal loads from terminal.jup.ag
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://terminal.jup.ag https://*.jup.ag",
               "style-src 'self' 'unsafe-inline' https://terminal.jup.ag https://*.jup.ag https://fonts.googleapis.com https://fonts.reown.com",
-              "img-src 'self' data: blob: https:",
+              "img-src 'self' data: blob: https: https://images-na.ssl-images-amazon.com https://m.media-amazon.com https://covers.openlibrary.org https://books.google.com",
               "font-src 'self' data: https://terminal.jup.ag https://*.jup.ag https://fonts.gstatic.com https://fonts.reown.com",
               // Supabase + Solana RPC + wallets + Jupiter APIs
               [
@@ -52,6 +52,9 @@ const nextConfig: NextConfig = {
                 "https://*.supabase.co",
                 "wss://*.supabase.co",
                 "https://api.x.ai",
+                "https://openlibrary.org",
+                "https://covers.openlibrary.org",
+                "https://www.googleapis.com",
                 // Wearable OAuth + APIs
                 "https://www.fitbit.com",
                 "https://api.fitbit.com",
@@ -110,7 +113,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  // Images: allow local + Supabase storage avatars + X media covers
+  // Images: local + Supabase + X + Amazon / Open Library book covers
   images: {
     remotePatterns: [
       {
@@ -121,6 +124,31 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "pbs.twimg.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images-na.ssl-images-amazon.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "m.media-amazon.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.amazon.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "covers.openlibrary.org",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "books.google.com",
         pathname: "/**",
       },
     ],

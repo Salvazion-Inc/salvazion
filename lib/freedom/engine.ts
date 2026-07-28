@@ -136,9 +136,32 @@ export const FREEDOM_LIBRARY: FreedomContent[] = [
     id: 'debate-family',
     category: 'debate',
     title: 'Debate: La familia es la primera política',
-    summary: 'Preguntas para discutir en casa o en la iglesia sobre soberanía familiar.',
+    summary:
+      'Debate con Salvazion: familia natural, rechazo al woke y a ideologías que disuelven el hogar.',
     readMin: 10,
-    tags: ['familia', 'debate'],
+    tags: ['familia', 'debate', 'salvazion'],
+    stages: ['young_adult', 'adult', 'mature', 'senior'],
+    actionType: 'debate_participate',
+  },
+  {
+    id: 'debate-bioconservatism',
+    category: 'debate',
+    title: 'Debate: Bio-conservadurismo vs transhumanismo',
+    summary:
+      'El cuerpo como templo frente a la reingeniería humana. Salvazion defiende la naturaleza creada.',
+    readMin: 12,
+    tags: ['bio', 'transhumanismo', 'debate'],
+    stages: ['young_adult', 'adult', 'mature', 'senior'],
+    actionType: 'debate_participate',
+  },
+  {
+    id: 'debate-globalism',
+    category: 'debate',
+    title: 'Debate: Globalismo vs soberanía y fe',
+    summary:
+      'Naciones, fe y libertad ordenada frente al globalismo y el poder no electo (Deep State).',
+    readMin: 12,
+    tags: ['globalismo', 'soberania', 'debate'],
     stages: ['young_adult', 'adult', 'mature', 'senior'],
     actionType: 'debate_participate',
   },
@@ -166,34 +189,9 @@ export function getLibraryForStage(stage: LifeStage): FreedomContent[] {
 }
 
 export function getFreedomActions(stage: LifeStage): FreedomActionDef[] {
+  // Learn actions (video / lesson / debate) are presented via
+  // YouTube channels + Debate UI in Freedom Hub — not separate chips.
   const actions: FreedomActionDef[] = [
-    {
-      id: 'learn_short',
-      category: 'learn',
-      label: 'Articulo o video corto',
-      description: 'Completa un contenido de la biblioteca Salvazion',
-      actionType: 'learn_article_video',
-      icon: '📰'
-    },
-    {
-      id: 'learn_lesson',
-      category: 'learn',
-      label: 'Leccion / mini-curso',
-      description: 'Una leccion estructurada de virtud u oficio',
-      actionType: 'learn_lesson',
-      icon: '🎓'
-    },
-    {
-      id: 'debate',
-      category: 'learn',
-      label: 'Debate estructurado',
-      description:
-        stage === 'infancia' || stage === 'juventud'
-          ? 'Conversacion guiada en familia'
-          : 'Participa en un debate con orden y respeto',
-      actionType: 'debate_participate',
-      icon: '💬'
-    },
     {
       id: 'connect',
       category: 'connect',
@@ -215,9 +213,6 @@ export function getFreedomActions(stage: LifeStage): FreedomActionDef[] {
     }
   ];
 
-  if (stage === 'infancia') {
-    return actions.filter(a => a.id !== 'debate');
-  }
   return actions;
 }
 

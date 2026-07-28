@@ -15,9 +15,6 @@ import { UserProfile } from '@/lib/types';
 import {
   computeScores,
   logAction,
-  ACTION_CATALOG,
-  resetScores,
-  getPointsForAction,
   syncScoresFromServer,
 } from '@/lib/scoring/engine';
 import { ComputedScores } from '@/lib/scoring/types';
@@ -28,14 +25,13 @@ import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 import ProfileAvatar from '@/components/profile/ProfileAvatar';
 import { useI18n } from '@/components/I18nProvider';
 import {
-  DevotionalIcon,
   HealthIcon,
-  CalendarIcon,
-  BadgesIcon,
   FreedomIcon,
   BibleIcon,
+  BadgesIcon,
 } from '@/components/Icons';
 import ProgressCharts from '@/components/progress/ProgressCharts';
+import DailyAgenda from '@/components/calendar/DailyAgenda';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -44,7 +40,6 @@ export default function DashboardPage() {
   const [scores, setScores] = useState<ComputedScores | null>(null);
   const [coach, setCoach] = useState<CoachMessage | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [showActions, setShowActions] = useState(false);
   const [newBadges, setNewBadges] = useState<BadgeDef[]>([]);
   const [badgeProgress, setBadgeProgress] = useState({ earned: 0, total: 0 });
 
@@ -111,7 +106,6 @@ export default function DashboardPage() {
     global,
     multipliers,
     streaks,
-    todayActions,
   } = scores;
 
   const toneStyles = {
@@ -131,7 +125,7 @@ export default function DashboardPage() {
           <Link href="/hub/profile" className="shrink-0" title={t('nav.profile')}>
             <ProfileAvatar
               avatarUrl={profile.avatarUrl}
-              name={profile.name || 'Hermano'}
+              name={profile.name || 'Brother'}
               size="sm"
               editable={false}
             />
@@ -139,7 +133,7 @@ export default function DashboardPage() {
           <div className="min-w-0">
             <p className="text-xs text-[var(--sage)] tracking-wide">Salvazion</p>
             <p className="text-sm font-medium leading-tight truncate">
-              {profile.name || 'Hermano'}
+              {profile.name || 'Brother'}
               {profile.birthDate && calculateAge(profile.birthDate) !== null && (
                 <span className="text-[var(--sage)]/70 font-normal text-xs ml-1.5">
                   · {calculateAge(profile.birthDate)} ·{' '}
@@ -155,7 +149,106 @@ export default function DashboardPage() {
       </header>
 
       <main className="flex-1 flex flex-col items-center px-5 pt-3 pb-32 max-w-lg mx-auto w-full">
-        {/* 1) Coach — primary next action */}
+        {/* Score dashboard */}
+        <div
+          className="relative w-52 h-52 flex items-center justify-center mb-3"
+          role="img"
+          aria-label={scoreLabel}
+        >
+          <svg
+            className="absolute inset-0 w-full h-full -rotate-90"
+            viewBox="0 0 100 100"
+            aria-hidden
+          >
+            <circle cx="50" cy="50" r="46" fill="none" stroke="var(--sage-dim)" strokeWidth="3" opacity="0.25" />
+            <circle
+              cx="50" cy="50" r="46" fill="none" stroke="var(--accent)" strokeWidth="3.2"
+              strokeDasharray={`${Math.min(salvation, 100) * 2.89} 289`}
+              strokeLinecap="round"
+              className="ring-glow transition-all duration-700"
+            />
+          </svg>
+          <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100" aria-hidden>
+            <circle cx="50" cy="50" r="38" fill="none" stroke="var(--sage-dim)" strokeWidth="3" opacity="0.25" />
+            <circle
+              cx="50" cy="50" r="38" fill="none" stroke="var(--soft-green)" strokeWidth="2.8"
+              strokeDasharray={`${Math.min(health, 100) * 2.39} 239`}
+              strokeLinecap="round"
+              className="transition-all duration-700"
+            />
+          </svg>
+          <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100" aria-hidden>
+            <circle cx="50" cy="50" r="30" fill="none" stroke="var(--sage-dim)" strokeWidth="3" opacity="0.25" />
+            <circle
+              cx="50" cy="50" r="30" fill="none" stroke="var(--accent-hover)" strokeWidth="2.6"
+              strokeDasharray={`${Math.min(freedom, 100) * 1.88} 188`}
+              strokeLinecap="round"
+              className="transition-all duration-700"
+            />
+          </svg>
+          <div className="text-center z-10">
+            <div className="font-display text-5xl font-bold text-white tracking-tighter">
+              {global}
+            </div>
+            <div className="text-xs uppercase tracking-widest text-[var(--sage)] mt-1">
+              {t('dashboard.salvazionScore')}
+            </div>
+            <div className="text-[10px] text-[var(--accent)] font-medium">
+              {t('dashboard.global')}
+              {badgeProgress.total > 0 && (
+                <span className="text-[var(--sage)] font-normal">
+                  {' '}
+                  · {badgeProgress.earned}/{badgeProgress.total}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Pillars */}
+        <div className="w-full max-w-sm mb-4">
+          <div className="grid grid-cols-3 gap-2.5">
+            <PillarCard
+              href="/hub/bible"
+              label={t('nav.salvation')}
+              value={salvation}
+              streak={streaks.salvation}
+              multiplier={multipliers.salvation}
+              Icon={BibleIcon}
+              ring="var(--accent)"
+            />
+            <PillarCard
+              href="/hub/health"
+              label={t('nav.health')}
+              value={health}
+              streak={streaks.health}
+              multiplier={multipliers.health}
+              Icon={HealthIcon}
+              ring="var(--soft-green)"
+            />
+            <PillarCard
+              href="/hub/freedom"
+              label={t('nav.freedom')}
+              value={freedom}
+              streak={streaks.freedom}
+              multiplier={multipliers.freedom}
+              Icon={FreedomIcon}
+              ring="var(--accent-hover)"
+            />
+          </div>
+        </div>
+
+        {/* Progress charts */}
+        <div className="w-full max-w-sm mb-5">
+          <ProgressCharts scores={scores} variant="full" />
+        </div>
+
+        {/* Daily agenda blocks */}
+        <div className="w-full max-w-sm mb-5">
+          <DailyAgenda onScored={() => refresh(profile)} />
+        </div>
+
+        {/* Coach compact */}
         <div
           className={`w-full max-w-sm glass rounded-2xl p-4 mb-4 ${toneStyles[coach.tone]}`}
         >
@@ -176,18 +269,18 @@ export default function DashboardPage() {
               <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] mb-0.5">
                 {t('coach.agentLabel')}
               </p>
-              <h3 className="text-sm font-semibold text-white leading-snug mb-1.5">
+              <h3 className="text-sm font-semibold text-white leading-snug mb-1">
                 {coach.title}
               </h3>
-              <p className="text-xs text-[var(--off-white)]/80 leading-relaxed line-clamp-3">
+              <p className="text-xs text-[var(--off-white)]/80 leading-relaxed line-clamp-2">
                 {coach.body}
               </p>
-              <div className="flex flex-wrap gap-2 mt-3">
+              <div className="flex flex-wrap gap-2 mt-2.5">
                 {coach.recommendedAction && (
                   <button
                     type="button"
                     onClick={() => handleLog(coach.recommendedAction!.type)}
-                    className="btn-primary flex-1 min-w-[8rem] py-2.5 text-sm"
+                    className="btn-primary flex-1 min-w-[7rem] py-2 text-sm"
                   >
                     {coach.recommendedAction.label} · +
                     {coach.recommendedAction.points}
@@ -195,7 +288,7 @@ export default function DashboardPage() {
                 )}
                 <Link
                   href="/hub/coach"
-                  className="btn-secondary flex-1 min-w-[8rem] py-2.5 text-sm text-center"
+                  className="btn-secondary flex-1 min-w-[7rem] py-2 text-sm text-center"
                 >
                   {t('coach.talk')}
                 </Link>
@@ -230,152 +323,6 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* 2) Score mandala */}
-        <div
-          className="relative w-56 h-56 flex items-center justify-center mb-3"
-          role="img"
-          aria-label={scoreLabel}
-        >
-          <svg
-            className="absolute inset-0 w-full h-full -rotate-90"
-            viewBox="0 0 100 100"
-            aria-hidden
-          >
-            <circle
-              cx="50"
-              cy="50"
-              r="46"
-              fill="none"
-              stroke="var(--sage-dim)"
-              strokeWidth="3"
-              opacity="0.25"
-            />
-            <circle
-              cx="50"
-              cy="50"
-              r="46"
-              fill="none"
-              stroke="var(--accent)"
-              strokeWidth="3.2"
-              strokeDasharray={`${Math.min(salvation, 100) * 2.89} 289`}
-              strokeLinecap="round"
-              className="ring-glow transition-all duration-700"
-            />
-          </svg>
-          <svg
-            className="absolute inset-0 w-full h-full -rotate-90"
-            viewBox="0 0 100 100"
-            aria-hidden
-          >
-            <circle
-              cx="50"
-              cy="50"
-              r="38"
-              fill="none"
-              stroke="var(--sage-dim)"
-              strokeWidth="3"
-              opacity="0.25"
-            />
-            <circle
-              cx="50"
-              cy="50"
-              r="38"
-              fill="none"
-              stroke="var(--soft-green)"
-              strokeWidth="2.8"
-              strokeDasharray={`${Math.min(health, 100) * 2.39} 239`}
-              strokeLinecap="round"
-              className="transition-all duration-700"
-            />
-          </svg>
-          <svg
-            className="absolute inset-0 w-full h-full -rotate-90"
-            viewBox="0 0 100 100"
-            aria-hidden
-          >
-            <circle
-              cx="50"
-              cy="50"
-              r="30"
-              fill="none"
-              stroke="var(--sage-dim)"
-              strokeWidth="3"
-              opacity="0.25"
-            />
-            <circle
-              cx="50"
-              cy="50"
-              r="30"
-              fill="none"
-              stroke="var(--accent-hover)"
-              strokeWidth="2.6"
-              strokeDasharray={`${Math.min(freedom, 100) * 1.88} 188`}
-              strokeLinecap="round"
-              className="transition-all duration-700"
-            />
-          </svg>
-          <div className="text-center z-10">
-            <div className="font-display text-5xl font-bold text-white tracking-tighter">
-              {global}
-            </div>
-            <div className="text-xs uppercase tracking-widest text-[var(--sage)] mt-1">
-              {t('dashboard.salvazionScore')}
-            </div>
-            <div className="text-[10px] text-[var(--accent)] font-medium">
-              {t('dashboard.global')}
-              {badgeProgress.total > 0 && (
-                <span className="text-[var(--sage)] font-normal">
-                  {' '}
-                  · {badgeProgress.earned}/{badgeProgress.total}
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* 3) Three pillars */}
-        <div className="w-full max-w-sm mb-4">
-          <div className="flex items-end justify-between mb-2 px-0.5">
-            <div>
-              <p className="text-xs font-semibold text-[var(--accent)]">
-                {t('dashboard.pillars')}
-              </p>
-              <p className="text-[10px] text-[var(--sage)]/80">
-                {t('dashboard.pillarsHint')}
-              </p>
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-2.5">
-            <PillarCard
-              href="/hub/bible"
-              label={t('nav.salvation')}
-              value={salvation}
-              streak={streaks.salvation}
-              multiplier={multipliers.salvation}
-              Icon={BibleIcon}
-              ring="var(--accent)"
-            />
-            <PillarCard
-              href="/hub/health"
-              label={t('nav.health')}
-              value={health}
-              streak={streaks.health}
-              multiplier={multipliers.health}
-              Icon={HealthIcon}
-              ring="var(--soft-green)"
-            />
-            <PillarCard
-              href="/hub/freedom"
-              label={t('nav.freedom')}
-              value={freedom}
-              streak={streaks.freedom}
-              multiplier={multipliers.freedom}
-              Icon={FreedomIcon}
-              ring="var(--accent-hover)"
-            />
-          </div>
-        </div>
-
         {profile.purpose && (
           <div className="w-full max-w-sm card-soft p-4 mb-4">
             <p className="text-xs text-[var(--sage)] mb-1">{t('dashboard.purpose')}</p>
@@ -383,129 +330,22 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* 4) Log actions — primary engagement, above hub list */}
-        <div className="w-full max-w-sm mb-4">
-          <button
-            type="button"
-            onClick={() => setShowActions(!showActions)}
-            className="w-full flex items-center justify-between glass rounded-xl px-4 py-3.5 text-left hover:border-[var(--border-strong)] transition-all min-h-[56px]"
-            aria-expanded={showActions}
+        <div className="w-full max-w-sm mb-2">
+          <Link
+            href="/hub/badges"
+            className="flex items-center justify-between card-soft px-4 py-3.5 hover:border-[var(--border-strong)] transition-all min-h-[52px]"
           >
             <div className="flex items-center gap-3">
-              <FreedomIcon size={28} active={showActions} />
+              <BadgesIcon size={28} active />
               <div>
-                <p className="text-sm font-medium">{t('dashboard.logActions')}</p>
+                <p className="text-sm font-medium">{t('dashboard.badgesTitle')}</p>
                 <p className="text-xs text-[var(--sage)]">
-                  {todayActions.length} {t('dashboard.actionsToday')} ·{' '}
-                  {t('dashboard.logActionsSub')}
+                  {badgeProgress.earned}/{badgeProgress.total}
                 </p>
               </div>
             </div>
-            <span className="text-[var(--accent)] text-lg leading-none">
-              {showActions ? '−' : '+'}
-            </span>
-          </button>
-
-          {showActions && (
-            <div className="glass rounded-2xl p-4 space-y-2 mt-2">
-              <p className="text-xs text-[var(--sage)] mb-2">
-                {t('dashboard.quickActions')}
-              </p>
-              <div className="grid grid-cols-1 gap-2 max-h-52 overflow-y-auto">
-                {Object.entries(ACTION_CATALOG).map(([key, val]) => {
-                  const stage = profile.birthDate
-                    ? getLifeStage(calculateAge(profile.birthDate))
-                    : 'adult';
-                  const pts = getPointsForAction(key, stage);
-                  if (pts <= 0) return null;
-                  const pillarColor =
-                    val.pillar === 'salvation'
-                      ? 'var(--accent)'
-                      : val.pillar === 'health'
-                        ? 'var(--soft-green)'
-                        : 'var(--accent-hover)';
-                  return (
-                    <button
-                      key={key}
-                      type="button"
-                      onClick={() => handleLog(key)}
-                      className="flex justify-between items-center text-left px-3 py-2.5 rounded-xl border border-[var(--border-soft)] hover:border-[var(--border-strong)] hover:bg-[var(--surface-active)] text-sm transition-all min-h-[44px]"
-                    >
-                      <span className="truncate pr-2 flex items-center gap-2">
-                        <span
-                          className="w-1.5 h-1.5 rounded-full shrink-0"
-                          style={{ background: pillarColor }}
-                          title={val.pillar}
-                        />
-                        {val.label}
-                      </span>
-                      <span className="text-[var(--accent)] text-xs whitespace-nowrap font-medium">
-                        +{pts}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-              <button
-                type="button"
-                onClick={async () => {
-                  await resetScores();
-                  refresh();
-                }}
-                className="btn-ghost w-full text-red-400/70 mt-1"
-              >
-                {t('dashboard.resetToday')}
-              </button>
-            </div>
-          )}
-
-          {todayActions.length > 0 && (
-            <div className="mt-3">
-              <p className="text-xs text-[var(--sage)] mb-2">{t('dashboard.today')}</p>
-              <div className="space-y-1.5 glass rounded-xl p-3">
-                {todayActions
-                  .slice(-5)
-                  .reverse()
-                  .map((a) => (
-                    <div key={a.id} className="flex justify-between text-xs gap-2">
-                      <span className="text-[var(--off-white)]/75 truncate">
-                        {a.label}
-                      </span>
-                      <span className="text-[var(--accent)] shrink-0">
-                        +{a.points}
-                      </span>
-                    </div>
-                  ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Progress charts — advances & achievements */}
-        <div className="w-full max-w-sm mb-4">
-          <ProgressCharts scores={scores} variant="compact" />
-        </div>
-
-        {/* Shortcuts that are NOT primary BottomNav pillars */}
-        <div className="w-full max-w-sm space-y-2.5 mb-2">
-          <HubLink
-            href="/hub/devotional"
-            Icon={DevotionalIcon}
-            title={t('dashboard.devotionalTitle')}
-            sub={t('dashboard.devotionalSub')}
-          />
-          <HubLink
-            href="/hub/calendar"
-            Icon={CalendarIcon}
-            title={t('dashboard.calendarTitle')}
-            sub={t('dashboard.calendarSub')}
-          />
-          <HubLink
-            href="/hub/badges"
-            Icon={BadgesIcon}
-            title={t('dashboard.badgesTitle')}
-            sub={t('dashboard.badgesSub')}
-          />
+            <span className="text-[var(--accent)]">→</span>
+          </Link>
         </div>
       </main>
 
@@ -547,34 +387,6 @@ function PillarCard({
           {streak}d · ×{multiplier.toFixed(2)}
         </p>
       )}
-    </Link>
-  );
-}
-
-function HubLink({
-  href,
-  Icon,
-  title,
-  sub,
-}: {
-  href: string;
-  Icon: React.FC<{ size?: number; active?: boolean }>;
-  title: string;
-  sub: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="flex items-center justify-between card-soft px-4 py-3.5 hover:border-[var(--border-strong)] transition-all active:scale-[0.99] min-h-[56px]"
-    >
-      <div className="flex items-center gap-3 min-w-0">
-        <Icon size={28} active />
-        <div className="min-w-0">
-          <p className="text-sm font-medium truncate">{title}</p>
-          <p className="text-xs text-[var(--sage)] truncate">{sub}</p>
-        </div>
-      </div>
-      <span className="text-[var(--accent)] shrink-0 ml-2">→</span>
     </Link>
   );
 }

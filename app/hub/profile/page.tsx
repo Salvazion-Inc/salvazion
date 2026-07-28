@@ -216,12 +216,26 @@ export default function ProfilePage() {
                 label={t('profile.focus')}
                 value={(profile.currentFocus || []).join(', ') || '—'}
               />
-              <button
-                onClick={() => setEditing(true)}
-                className="w-full mt-2 py-3 rounded-xl border border-[var(--border-strong)] text-[#8FD99A] text-sm font-medium hover:bg-[var(--surface-active)]"
-              >
-                {t('profile.editProfile')}
-              </button>
+              <div className="grid grid-cols-2 gap-2 mt-3">
+                <button
+                  type="button"
+                  onClick={() => setEditing(true)}
+                  className="py-3 rounded-xl border border-[var(--border-strong)] text-[var(--accent)] text-sm font-medium hover:bg-[var(--surface-active)] min-h-[48px]"
+                >
+                  {t('profile.editProfile')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    document
+                      .getElementById('profile-settings')
+                      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }}
+                  className="py-3 rounded-xl border border-[var(--border-strong)] bg-[var(--surface-active)] text-[var(--accent)] text-sm font-medium hover:border-[var(--accent)] min-h-[48px]"
+                >
+                  {t('settings.open')}
+                </button>
+              </div>
             </>
           ) : (
             <div className="space-y-3">
@@ -333,7 +347,11 @@ export default function ProfilePage() {
         </div>
 
         {/* Settings: colors, language, text size */}
-        <section className="mb-6 space-y-4" aria-labelledby="profile-settings-heading">
+        <section
+          id="profile-settings"
+          className="mb-6 space-y-4 scroll-mt-20"
+          aria-labelledby="profile-settings-heading"
+        >
           <div className="px-0.5">
             <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70">
               {t('settings.section')}

@@ -9,7 +9,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'Salvazion',
     short_name: 'Salvazion',
     description:
-      'Make Salvation, Health and Freedom Great Again. Phalanx digital con fe, salud y libertad.',
+      'Make Salvation, Health and Freedom Great Again. Comunidad digital con fe, salud y libertad.',
     start_url: '/',
     scope: '/',
     display: 'standalone',

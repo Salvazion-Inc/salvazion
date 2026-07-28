@@ -414,7 +414,7 @@ const copy = {
       language: 'Language',
     },
     hero: {
-      eyebrow: 'Digital Phalanx · Faith · Family · Technology',
+      eyebrow: 'Digital Community · Faith · Family · Technology',
       title: 'MAKE SALVATION,\nHEALTH AND\nFREEDOM',
       sub: 'GREAT AGAIN',
       tagline: 'The secular world strips spirit, mind, body and soul.',
@@ -448,7 +448,7 @@ const copy = {
           name: 'Freedom',
           icon: '🦅',
           body: 'Freedom with responsibility: learn, connect, contribute and real economic sovereignty on Solana.',
-          inApp: 'Freedom hub · Phalanx · $SALVAZION swap',
+          inApp: 'Freedom hub · Community · $SALVAZION swap',
         },
       ],
       features: {
@@ -469,7 +469,7 @@ const copy = {
           body: 'Library, real connections and projects. Freedom is built with craft, not passive consumption.',
         },
         phalanx: {
-          title: 'Phalanx',
+          title: 'Community',
           body: 'Invite family, siblings, friends and colleagues. Grow together in faith, health and freedom.',
         },
         web3: {
@@ -489,7 +489,7 @@ const copy = {
         },
         {
           title: 'Family',
-          body: 'The Phalanx starts at home: marriage, children, siblings and real community.',
+          body: 'The Community starts at home: marriage, children, siblings and real community.',
         },
         {
           title: 'Freedom',
@@ -500,7 +500,7 @@ const copy = {
     salvators: {
       chapter: 'Chapter 01',
       title: 'The 12 Salvators',
-      subtitle: 'Focus principles for the Phalanx.',
+      subtitle: 'Focus principles for the Community.',
       caption:
         'Twelve anchors of discipline and character. The App turns principles into daily actions and scores across Salvation, Health and Freedom.',
     },
@@ -521,7 +521,7 @@ const copy = {
         'Physical Therapist and university professor. Digital Health Champion (IDB). Mother of four and co-builder of Salvazion · COO.',
     },
     final: {
-      title: 'The Phalanx awaits',
+      title: 'The Community awaits',
       body: 'Create your account and walk with us in one App.',
       cta: 'Join now',
       terms: 'Terms',
@@ -541,7 +541,7 @@ const copy = {
       language: 'Idioma',
     },
     hero: {
-      eyebrow: 'Phalanx digital · Fe · Familia · Tecnología',
+      eyebrow: 'Comunidad digital · Fe · Familia · Tecnología',
       title: 'MAKE SALVATION,\nHEALTH AND\nFREEDOM',
       sub: 'GREAT AGAIN',
       tagline: 'El mundo secular te quita el espíritu, la mente, el cuerpo y el alma.',
@@ -575,7 +575,7 @@ const copy = {
           name: 'Freedom',
           icon: '🦅',
           body: 'Libertad con responsabilidad: aprender, conectar, aportar y soberanía económica real en Solana.',
-          inApp: 'Freedom hub · Phalanx · Swap $SALVAZION',
+          inApp: 'Freedom hub · Comunidad · Swap $SALVAZION',
         },
       ],
       features: {
@@ -596,7 +596,7 @@ const copy = {
           body: 'Biblioteca, conexiones reales y proyectos. La libertad se construye con oficio, no con consumo pasivo.',
         },
         phalanx: {
-          title: 'Phalanx',
+          title: 'Comunidad',
           body: 'Invita familia, hermanos, amigos y colegas. Crezcan juntos en fe, salud y libertad.',
         },
         web3: {
@@ -616,7 +616,7 @@ const copy = {
         },
         {
           title: 'Familia',
-          body: 'La Phalanx empieza en casa: matrimonio, hijos, hermanos y comunidad real.',
+          body: 'La Comunidad empieza en casa: matrimonio, hijos, hermanos y comunidad real.',
         },
         {
           title: 'Libertad',
@@ -627,7 +627,7 @@ const copy = {
     salvators: {
       chapter: 'Chapter 01',
       title: 'Los 12 Salvators',
-      subtitle: 'Principios de enfoque para la Phalanx.',
+      subtitle: 'Principios de enfoque para la Comunidad.',
       caption:
         'Doce anclas de disciplina y carácter. La App convierte principios en acciones diarias y scores de Salvation, Health y Freedom.',
     },
@@ -648,7 +648,7 @@ const copy = {
         'Kinesióloga y académica. Digital Health Champion (BID). Madre de cuatro y co-constructora de Salvazion · COO.',
     },
     final: {
-      title: 'La Phalanx te espera',
+      title: 'La Comunidad te espera',
       body: 'Crea tu cuenta y camina con nosotros en una sola App.',
       cta: 'Unirme ahora',
       terms: 'Términos',

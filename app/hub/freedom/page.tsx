@@ -20,6 +20,7 @@ import {
 import { generateCoachGuidance, CoachMessage, getLionShortNudge } from '@/lib/coach/engine';
 import { evaluateBadges } from '@/lib/badges/engine';
 import XArticlesFeed from '@/components/freedom/XArticlesFeed';
+import BookStoreCarousel from '@/components/freedom/BookStoreCarousel';
 
 export default function FreedomPage() {
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
@@ -183,9 +184,11 @@ export default function FreedomPage() {
           <div className="space-y-5">
             <XArticlesFeed
               focus={profile?.currentFocus || []}
-              showFilters
+              limit={7}
               onScored={() => refresh()}
             />
+
+            <BookStoreCarousel />
 
             {/* Debates / lessons (non-X library) */}
             {library.filter((c) => !c.url || c.category !== 'article').length > 0 && (

@@ -26,7 +26,8 @@ const C = {
 };
 
 function tone(active?: boolean, color?: string) {
-  if (active && color) return color;
+  // Pillar icons always use their S/H/F color when provided
+  if (color) return color;
   return active ? C.active : C.idle;
 }
 
@@ -67,6 +68,7 @@ function Node({
 /** Shared circular frame — exclusive Salvazion mark */
 function Frame({ active, color }: { active?: boolean; color?: string }) {
   const s = tone(active, color);
+  const filled = active || !!color;
   return (
     <circle
       cx="12"
@@ -74,8 +76,16 @@ function Frame({ active, color }: { active?: boolean; color?: string }) {
       r="10.25"
       stroke={s}
       strokeWidth="1.15"
-      fill={active ? (color ? `${color}22` : C.fillActive) : C.fillIdle}
-      opacity={active ? 1 : 0.9}
+      fill={
+        color
+          ? active
+            ? `${color}28`
+            : `${color}14`
+          : active
+            ? C.fillActive
+            : C.fillIdle
+      }
+      opacity={filled ? 1 : 0.9}
     />
   );
 }

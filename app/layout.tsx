@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     template: "%s | Salvazion",
   },
   description:
-    "Phalanx digital que une Salvación, Salud y Libertad. Defendemos la Cultura Occidental Cristiana y BioConservadurismo.",
+    "Comunidad digital que une Salvación, Salud y Libertad. Defendemos la Cultura Occidental Cristiana y BioConservadurismo.",
   applicationName: "Salvazion",
   alternates: {
     canonical: "/",

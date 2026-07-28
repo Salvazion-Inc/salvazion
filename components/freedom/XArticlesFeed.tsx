@@ -14,34 +14,30 @@ import { useI18n } from '@/components/I18nProvider';
 
 interface Props {
   focus?: string[];
-  /** Max cards; omit for full list */
+  /** Max cards; default 7 recommended unread by interest */
   limit?: number;
+  /** @deprecated Filters removed — always interest + unread recommendations */
   showFilters?: boolean;
   className?: string;
   onScored?: () => void;
 }
 
-type FilterMode = 'for_you' | 'unread' | 'all';
-
-const PAGE_SIZE = 24;
+const DEFAULT_LIMIT = 7;
 
 /**
- * @salvazion_ X Articles — image + title, open on X, unread + interest ranking.
+ * @salvazion_ X Articles — up to 7 unread pieces ranked by user interests.
  */
 export default function XArticlesFeed({
   focus = [],
-  limit,
-  showFilters = true,
+  limit = DEFAULT_LIMIT,
   className = '',
   onScored,
 }: Props) {
   const { t, lang } = useI18n();
-  const [filter, setFilter] = useState<FilterMode>('for_you');
   const [readIds, setReadIds] = useState<Set<string>>(new Set());
   const [selected, setSelected] = useState<XArticle | null>(null);
   const [progress, setProgress] = useState({ read: 0, total: 0 });
   const [toast, setToast] = useState<string | null>(null);
-  const [visible, setVisible] = useState(limit || PAGE_SIZE);
 
   const refresh = useCallback(() => {
     try {
@@ -57,25 +53,17 @@ export default function XArticlesFeed({
     refresh();
   }, [refresh]);
 
-  const articlesAll = useMemo(() => {
-    if (filter === 'unread') {
-      return getArticleFeed({ focus, unreadOnly: true, unreadFirst: true });
-    }
-    if (filter === 'all') {
-      return getArticleFeed({ focus: [], unreadFirst: true });
-    }
-    // for_you: interest + unread first
-    return getArticleFeed({ focus, unreadFirst: true });
-  }, [filter, focus, readIds]);
-
   const articles = useMemo(() => {
-    const cap = limit ?? visible;
-    return articlesAll.slice(0, cap);
-  }, [articlesAll, limit, visible]);
-
-  useEffect(() => {
-    setVisible(limit || PAGE_SIZE);
-  }, [filter, limit]);
+    // Prefer unread + interests; if all caught up, fall back to top interest matches
+    const unread = getArticleFeed({
+      focus,
+      unreadOnly: true,
+      unreadFirst: true,
+      limit,
+    });
+    if (unread.length > 0) return unread;
+    return getArticleFeed({ focus, unreadFirst: false, limit });
+  }, [focus, limit, readIds]);
 
   const handleOpenX = (article: XArticle) => {
     window.open(article.url, '_blank', 'noopener,noreferrer');
@@ -114,34 +102,14 @@ export default function XArticlesFeed({
         </a>
       </div>
 
-      {showFilters && (
-        <div className="flex gap-1.5 overflow-x-auto pb-0.5">
-          {(
-            [
-              { id: 'for_you' as const, label: t('articles.forYou') },
-              { id: 'unread' as const, label: t('articles.unread') },
-              { id: 'all' as const, label: t('articles.all') },
-            ] as const
-          ).map((f) => (
-            <button
-              key={f.id}
-              type="button"
-              onClick={() => setFilter(f.id)}
-              className={`shrink-0 px-3 py-1.5 rounded-full text-[10px] border transition ${
-                filter === f.id
-                  ? 'border-[var(--accent)] text-[var(--accent)] bg-[var(--surface-active)]'
-                  : 'border-[var(--border-soft)] text-[var(--sage)]'
-              }`}
-            >
-              {f.label}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {focus.length > 0 && filter === 'for_you' && (
+      {focus.length > 0 && (
         <p className="text-[10px] text-[var(--sage)]/60">
-          {t('articles.basedOnInterests')}: {focus.join(' · ')}
+          {t('articles.basedOnInterests')}: {focus.join(' · ')} · {t('articles.topN', { n: limit })}
+        </p>
+      )}
+      {focus.length === 0 && (
+        <p className="text-[10px] text-[var(--sage)]/60">
+          {t('articles.topN', { n: limit })}
         </p>
       )}
 
@@ -198,8 +166,6 @@ export default function XArticlesFeed({
                       <p className="text-[10px] text-[var(--sage)]/70 mt-1">
                         {formatArticleDate(article.createdAt, lang === 'en' ? 'en' : 'es') ||
                           article.source}
-                        {' · '}
-                        {article.readMin} min
                       </p>
                     </div>
                   </div>
@@ -208,16 +174,6 @@ export default function XArticlesFeed({
             );
           })}
         </ul>
-      )}
-
-      {!limit && articlesAll.length > articles.length && (
-        <button
-          type="button"
-          onClick={() => setVisible((v) => v + PAGE_SIZE)}
-          className="w-full py-2.5 rounded-xl border border-[var(--border-soft)] text-xs text-[var(--accent)] hover:border-[var(--border-strong)]"
-        >
-          {t('articles.loadMore')} ({articles.length}/{articlesAll.length})
-        </button>
       )}
 
       <p className="text-[10px] text-[var(--sage)]/50 text-center leading-relaxed pt-1">
@@ -261,8 +217,6 @@ export default function XArticlesFeed({
             </h2>
             <p className="text-xs text-[var(--sage)] mb-3">
               {formatArticleDate(selected.createdAt, lang === 'en' ? 'en' : 'es')}
-              {' · ~'}
-              {selected.readMin} min
             </p>
             <p className="text-sm text-[var(--off-white)]/85 leading-relaxed mb-6">
               {selected.preview}

@@ -31,6 +31,7 @@ import {
   BadgesIcon,
 } from '@/components/Icons';
 import ProgressCharts from '@/components/progress/ProgressCharts';
+import DailyAgenda from '@/components/calendar/DailyAgenda';
 import { PILLAR_COLORS } from '@/lib/theme/pillars';
 
 export default function DashboardPage() {
@@ -243,25 +244,9 @@ export default function DashboardPage() {
           <ProgressCharts scores={scores} variant="full" />
         </div>
 
-        {/* Agenda lives in Calendar — link only */}
+        {/* Daily agenda = today's calendar timeline */}
         <div className="w-full max-w-sm mb-5">
-          <Link
-            href="/hub/calendar"
-            className="card-soft flex items-center justify-between px-4 py-4 hover:border-[var(--border-strong)] transition-all min-h-[56px]"
-          >
-            <div>
-              <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70">
-                {t('agenda.section')}
-              </p>
-              <p className="text-sm font-semibold text-[var(--accent)]">
-                {t('agenda.title')}
-              </p>
-              <p className="text-[11px] text-[var(--sage)] mt-0.5">
-                {t('calendar.homeHint')}
-              </p>
-            </div>
-            <span className="text-[var(--accent)] text-lg">→</span>
-          </Link>
+          <DailyAgenda onScored={() => refresh(profile || undefined, scores || undefined)} />
         </div>
 
         {/* Coach compact */}

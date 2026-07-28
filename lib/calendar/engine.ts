@@ -322,6 +322,19 @@ export function endTimeOf(ev: CalendarEvent): string {
   return minutesToTime(end);
 }
 
+/**
+ * Format duration for UI in hours (not minutes).
+ * 30 → "0.5 h", 60 → "1 h", 90 → "1.5 h", 420 → "7 h"
+ */
+export function formatDurationHours(durationMin: number): string {
+  const min = Math.max(0, durationMin || 0);
+  const hours = min / 60;
+  if (Number.isInteger(hours)) return `${hours} h`;
+  const one = Math.round(hours * 10) / 10;
+  if (Math.abs(hours - one) < 0.001) return `${one} h`;
+  return `${Math.round(hours * 100) / 100} h`;
+}
+
 export function clearDay(date: string): void {
   saveEvents(loadEvents().filter((e) => e.date !== date));
 }

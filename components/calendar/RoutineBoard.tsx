@@ -15,6 +15,7 @@ import {
   minutesToTime,
   snapMinutes,
   endTimeOf,
+  formatDurationHours,
   seedDefaultDay,
   DAY_START_MIN,
   DAY_END_MIN,
@@ -250,7 +251,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
               >
                 {DURATION_OPTIONS.map((d) => (
                   <option key={d} value={d}>
-                    {d} min
+                    {formatDurationHours(d)}
                   </option>
                 ))}
               </select>
@@ -362,12 +363,12 @@ export default function RoutineBoard({ date, onChange }: Props) {
                         >
                           {!DURATION_OPTIONS.includes(ev.durationMin || 0) && (
                             <option value={ev.durationMin || DEFAULT_BLOCK_MIN}>
-                              {ev.durationMin || DEFAULT_BLOCK_MIN}
+                              {formatDurationHours(ev.durationMin || DEFAULT_BLOCK_MIN)}
                             </option>
                           )}
                           {DURATION_OPTIONS.map((d) => (
                             <option key={d} value={d}>
-                              {d} min
+                              {formatDurationHours(d)}
                             </option>
                           ))}
                         </select>
@@ -401,7 +402,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
                             Math.max(SNAP_MIN, (ev.durationMin || DEFAULT_BLOCK_MIN) - 15)
                           )
                         }
-                        title="-15 min"
+                        title={`-0.25 h`}
                       >
                         −
                       </button>
@@ -415,7 +416,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
                             (ev.durationMin || DEFAULT_BLOCK_MIN) + 15
                           )
                         }
-                        title="+15 min"
+                        title={`+0.25 h`}
                       >
                         +
                       </button>

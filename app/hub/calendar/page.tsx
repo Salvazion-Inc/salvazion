@@ -96,7 +96,7 @@ export default function CalendarPage() {
                 {t('calendar.title')}
               </h1>
               <p className="text-[10px] text-[var(--sage)]/80 truncate">
-                {t('calendar.subtitle')} · {name || 'Phalanx'}
+                {t('calendar.subtitle')} · {name || t('nav.home')}
               </p>
             </div>
           </div>

@@ -210,7 +210,7 @@ export function getArticleFeed(opts: ArticleFeedOptions = {}): XArticle[] {
   return list;
 }
 
-export function getRecommendedArticles(focus: string[], limit = 5): XArticle[] {
+export function getRecommendedArticles(focus: string[], limit = 7): XArticle[] {
   return getArticleFeed({ focus, unreadOnly: true, limit });
 }
 

@@ -100,13 +100,17 @@ export default function BottomNav({ variant: _variant = 'default' }: BottomNavPr
                     : undefined
               }
             >
-              <Icon size={22} active={active} color={active ? color : undefined} />
+              {/* Pillar icons always use S/H/F colors */}
+              <Icon size={22} active={active} color={color} />
               <span
                 className="text-[10px] tracking-wide font-medium max-w-[4.25rem] text-center leading-tight"
                 style={{
-                  color: active
-                    ? color || 'var(--accent)'
-                    : 'var(--sage)',
+                  color: color
+                    ? color
+                    : active
+                      ? 'var(--accent)'
+                      : 'var(--sage)',
+                  opacity: active ? 1 : color ? 0.88 : 0.8,
                 }}
               >
                 {label}

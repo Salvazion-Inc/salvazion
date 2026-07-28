@@ -150,6 +150,18 @@ export function removeEvent(id: string) {
   saveEvents(loadEvents().filter(e => e.id !== id));
 }
 
+export function updateEvent(
+  id: string,
+  patch: Partial<Omit<CalendarEvent, 'id'>>
+): CalendarEvent | null {
+  const all = loadEvents();
+  const idx = all.findIndex((e) => e.id === id);
+  if (idx < 0) return null;
+  all[idx] = { ...all[idx], ...patch };
+  saveEvents(all);
+  return all[idx];
+}
+
 /**
  * Daily agenda blocks — Salvation · Health · Freedom
  * titleKey resolves via i18n (agenda.blocks.*)
@@ -172,6 +184,13 @@ export const DAILY_AGENDA_BLOCKS: AgendaBlockDef[] = [
   { key: 'inspire', titleKey: 'agenda.blocks.inspire', pillar: 'freedom', type: 'inspire', time: '21:00', durationMin: 20, href: '/hub/freedom' },
   { key: 'collaborate', titleKey: 'agenda.blocks.collaborate', pillar: 'freedom', type: 'collaborate', time: '18:00', durationMin: 45, href: '/hub/freedom' },
 ];
+
+/** Resolve display title key for an event (agenda.blocks.* or custom title) */
+export function eventTitleKey(ev: CalendarEvent): string | null {
+  if (ev.notes?.startsWith('agenda.blocks.')) return ev.notes;
+  const def = DAILY_AGENDA_BLOCKS.find((b) => b.type === ev.type);
+  return def?.titleKey ?? null;
+}
 
 /** Plantillas de disciplina diaria recomendadas (legacy + expanded) */
 export function getDisciplineTemplates(): Omit<CalendarEvent, 'id' | 'date' | 'completed'>[] {

@@ -23,7 +23,6 @@ import ThemeControl from '@/components/settings/ThemeControl';
 import LanguageControl from '@/components/settings/LanguageControl';
 import InvitePhalanx from '@/components/invite/InvitePhalanx';
 import ValueJourney from '@/components/value-journey/ValueJourney';
-import ProgressCharts from '@/components/progress/ProgressCharts';
 import { useI18n } from '@/components/I18nProvider';
 import {
   loadLinkedWallet,
@@ -32,8 +31,6 @@ import {
 } from '@/lib/solana/wallet-store';
 import { formatSalvazion } from '@/lib/solana/balances';
 import { shortenAddress } from '@/lib/solana/config';
-import { computeScores } from '@/lib/scoring/engine';
-import type { ComputedScores } from '@/lib/scoring/types';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -41,11 +38,11 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [draft, setDraft] = useState<Partial<UserProfile>>({});
   const [mounted, setMounted] = useState(false);
   const [confirmClear, setConfirmClear] = useState(false);
   const [linkedWallet, setLinkedWallet] = useState<LinkedWallet | null>(null);
-  const [scores, setScores] = useState<ComputedScores | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -70,7 +67,6 @@ export default function ProfilePage() {
       }
       setProfile(p);
       setDraft(p);
-      setScores(computeScores());
     })();
 
     return unsub;
@@ -226,11 +222,7 @@ export default function ProfilePage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => {
-                    document
-                      .getElementById('profile-settings')
-                      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }}
+                  onClick={() => setShowSettings(true)}
                   className="py-3 rounded-xl border border-[var(--border-strong)] bg-[var(--surface-active)] text-[var(--accent)] text-sm font-medium hover:border-[var(--accent)] min-h-[48px]"
                 >
                   {t('settings.open')}
@@ -317,13 +309,6 @@ export default function ProfilePage() {
           )}
         </div>
 
-        {/* Progress & achievements (full charts) */}
-        {scores && (
-          <div className="mb-6">
-            <ProgressCharts scores={scores} variant="full" />
-          </div>
-        )}
-
         {/* Phalanx invites — only on profile */}
         <div className="mb-6">
           <InvitePhalanx
@@ -345,31 +330,6 @@ export default function ProfilePage() {
         <div className="mb-6">
           <ValueJourney />
         </div>
-
-        {/* Settings: colors, language, text size */}
-        <section
-          id="profile-settings"
-          className="mb-6 space-y-4 scroll-mt-20"
-          aria-labelledby="profile-settings-heading"
-        >
-          <div className="px-0.5">
-            <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70">
-              {t('settings.section')}
-            </p>
-            <h2
-              id="profile-settings-heading"
-              className="text-base font-semibold text-[var(--accent)]"
-            >
-              {t('settings.title')}
-            </h2>
-            <p className="text-[11px] text-[var(--sage)]/75 mt-0.5">
-              {t('settings.subtitle')}
-            </p>
-          </div>
-          <ThemeControl />
-          <LanguageControl />
-          <TextScaleControl />
-        </section>
 
         {/* Premium subscription */}
         <div className="mb-6">
@@ -430,6 +390,51 @@ export default function ProfilePage() {
           )}
         </div>
       </main>
+
+      {/* Settings panel (separate from profile body) */}
+      {showSettings && (
+        <div
+          className="fixed inset-0 z-[60] bg-[var(--true-black)] flex flex-col"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="settings-dialog-title"
+        >
+          <header className="page-header flex items-center gap-3 px-5 pt-6 pb-3">
+            <button
+              type="button"
+              onClick={() => setShowSettings(false)}
+              className="back-btn"
+              aria-label={t('common.back')}
+            >
+              ←
+            </button>
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70">
+                {t('settings.section')}
+              </p>
+              <h2
+                id="settings-dialog-title"
+                className="text-lg font-semibold text-[var(--accent)]"
+              >
+                {t('settings.title')}
+              </h2>
+            </div>
+          </header>
+          <div className="flex-1 overflow-y-auto px-5 py-4 pb-10 space-y-4 max-w-md mx-auto w-full">
+            <p className="text-xs text-[var(--sage)]/80">{t('settings.subtitle')}</p>
+            <ThemeControl />
+            <LanguageControl />
+            <TextScaleControl />
+            <button
+              type="button"
+              onClick={() => setShowSettings(false)}
+              className="btn-primary mt-2"
+            >
+              {t('common.close')}
+            </button>
+          </div>
+        </div>
+      )}
 
       <BottomNav variant="default" />
     </div>

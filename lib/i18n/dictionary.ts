@@ -558,6 +558,21 @@ export const dictionary = {
         collaborate: 'Colaborar',
       },
     },
+    calendar: {
+      title: 'Calendario',
+      subtitle: 'Planifica tu día',
+      planner: 'Plan del día',
+      addBlock: 'Bloque',
+      pickBlock: 'Elige una acción para añadir',
+      customBlock: 'Bloque personalizado',
+      emptyDay: 'Este día está vacío',
+      fillDay: 'Llenar el día',
+      time: 'Hora',
+      homeHint: 'En Inicio ves el resumen; aquí editas horarios y bloques.',
+      coachEmpty: 'Añade bloques para llenar tu día con Salvation, Health y Freedom.',
+      coachDone: 'Día cumplido. La constancia forja el carácter.',
+      coachProgress: 'Llevas {done} de {total}. Termina lo que empezaste.',
+    },
     onboarding: {
       welcome: 'Bienvenido a la Phalanx',
       tagline: 'Únete a la Salvación. Únete a la Salud. Únete a la Libertad.',
@@ -647,9 +662,6 @@ export const dictionary = {
     },
     badges: {
       title: 'Insignias',
-    },
-    calendar: {
-      title: 'Agenda',
     },
     health: {
       title: 'Salud',
@@ -1212,6 +1224,21 @@ export const dictionary = {
         collaborate: 'Collaborate',
       },
     },
+    calendar: {
+      title: 'Calendar',
+      subtitle: 'Plan your day',
+      planner: 'Day plan',
+      addBlock: 'Block',
+      pickBlock: 'Pick an action to add',
+      customBlock: 'Custom block',
+      emptyDay: 'This day is empty',
+      fillDay: 'Fill the day',
+      time: 'Time',
+      homeHint: 'Home shows a summary; edit times and blocks here.',
+      coachEmpty: 'Add blocks to fill your day with Salvation, Health, and Freedom.',
+      coachDone: 'Day complete. Consistency forges character.',
+      coachProgress: 'You have {done} of {total}. Finish what you started.',
+    },
     onboarding: {
       welcome: 'Welcome to the Phalanx',
       tagline: 'Join Salvation. Join Health. Join Freedom.',
@@ -1300,9 +1327,6 @@ export const dictionary = {
     },
     badges: {
       title: 'Badges',
-    },
-    calendar: {
-      title: 'Agenda',
     },
     health: {
       title: 'Health',

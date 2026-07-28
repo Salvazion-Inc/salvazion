@@ -86,8 +86,8 @@ export const PREMIUM_FEATURE_LIST: {
 }[] = [
   {
     id: 'coach_ai',
-    en: 'Green Lion AI coach (Grok chat)',
-    es: 'Coach León Verde con IA (chat Grok)',
+    en: 'Green Lion AI coach (chat)',
+    es: 'Coach León Verde con IA (chat)',
   },
   {
     id: 'coach_tts',
@@ -96,8 +96,8 @@ export const PREMIUM_FEATURE_LIST: {
   },
   {
     id: 'devotional_ai',
-    en: 'Unlimited AI devotionals (Grok)',
-    es: 'Devocionales IA ilimitados (Grok)',
+    en: 'Unlimited AI devotionals',
+    es: 'Devocionales IA ilimitados',
   },
   {
     id: 'wearables_cloud',

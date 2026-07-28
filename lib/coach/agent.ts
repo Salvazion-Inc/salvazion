@@ -1,5 +1,5 @@
 /**
- * León Verde Salvazion — agente virtual de voz/texto (Grok / xAI)
+ * León Verde Salvazion — agente virtual de voz/texto (IA)
  * Motivación en Salvación · Salud · Libertad.
  */
 

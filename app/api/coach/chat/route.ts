@@ -57,8 +57,8 @@ export async function POST(req: NextRequest) {
               error: 'premium_required',
               reply:
                 lang === 'en'
-                  ? 'Green Lion AI coach is a Premium feature. Upgrade for full Grok coaching — Salvation · Health · Freedom.'
-                  : 'El coach León Verde con IA es Premium. Mejora tu plan para coaching Grok completo — Salvación · Salud · Libertad.',
+                  ? 'Green Lion AI coach is a Premium feature. Upgrade for full AI coaching — Salvation · Health · Freedom.'
+                  : 'El coach León Verde con IA es Premium. Mejora tu plan para coaching con IA completo — Salvación · Salud · Libertad.',
               source: 'premium_gate',
               model: null,
             },
@@ -74,8 +74,8 @@ export async function POST(req: NextRequest) {
       const name = profile?.name?.split(' ')[0] || (lang === 'en' ? 'Friend' : 'Hermano');
       const fallback =
         lang === 'en'
-          ? `${name}, the Green Lion walks with you. Configure XAI_API_KEY to unlock full Grok voice coaching. Today: read one Bible chapter, move 15 minutes, and pray 5 minutes. Salvation · Health · Freedom.`
-          : `${name}, el León Verde camina contigo. Configura XAI_API_KEY para activar el coach Grok completo. Hoy: lee un capítulo de la Biblia, muévete 15 minutos y ora 5 minutos. Salvación · Salud · Libertad.`;
+          ? `${name}, the Green Lion walks with you. Today: read one Bible chapter, move 15 minutes, and pray 5 minutes. Salvation · Health · Freedom.`
+          : `${name}, el León Verde camina contigo. Hoy: lee un capítulo de la Biblia, muévete 15 minutos y ora 5 minutos. Salvación · Salud · Libertad.`;
       return NextResponse.json({
         reply: fallback,
         source: 'fallback',

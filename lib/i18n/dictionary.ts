@@ -213,7 +213,7 @@ export const dictionary = {
       swapTitle: 'Swap Jupiter · $SALVAZION',
       swapSub: 'Solana · libertad económica',
       devotionalTitle: 'Devocional de Hoy',
-      devotionalSub: 'Salvation · Grok',
+      devotionalSub: 'Salvation · Escritura',
       bibleTitle: 'Biblia',
       bibleSub: 'Leer · buscar · concordancia',
       healthTitle: 'Health',
@@ -240,6 +240,7 @@ export const dictionary = {
       read: 'Leer',
       explore: 'Explorar',
       prayer: 'Oración',
+      devotional: 'Devocional',
       library: 'Libros',
       search: 'Búsqueda',
       concordance: 'Concordancia',
@@ -629,6 +630,7 @@ export const dictionary = {
       resetDefaultConfirm:
         '¿Restablecer este día a la rutina ideal? (Sueño 00:00–07:00, oración, ejercicio, comidas, trabajo, familia…)',
       resetDefaultDone: 'Día restablecido a la rutina ideal',
+      proportionalHint: 'Tamaño ∝ horas',
     },
     outdoorClimate: {
       section: 'Health · Exterior',
@@ -1016,7 +1018,7 @@ export const dictionary = {
       swapTitle: 'Jupiter Swap · $SALVAZION',
       swapSub: 'Solana · economic freedom',
       devotionalTitle: "Today's Devotional",
-      devotionalSub: 'Salvation · Grok',
+      devotionalSub: 'Salvation · Scripture',
       bibleTitle: 'Bible',
       bibleSub: 'Read · search · concordance',
       healthTitle: 'Health',
@@ -1043,6 +1045,7 @@ export const dictionary = {
       read: 'Read',
       explore: 'Explore',
       prayer: 'Prayer',
+      devotional: 'Devotional',
       library: 'Books',
       search: 'Search',
       concordance: 'Concordance',
@@ -1431,6 +1434,7 @@ export const dictionary = {
       resetDefaultConfirm:
         'Reset this day to the ideal routine? (Sleep 00:00–07:00, prayer, exercise, meals, work, family…)',
       resetDefaultDone: 'Day reset to the ideal routine',
+      proportionalHint: 'Size ∝ hours',
     },
     outdoorClimate: {
       section: 'Health · Outdoor',

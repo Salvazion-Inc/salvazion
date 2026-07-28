@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useCallback, Suspense } from 'react';
-import Image from 'next/image';
 import BottomNav from '@/components/BottomNav';
 import { loadProfile, getLifeStageLabel } from '@/lib/store/profile';
 import { UserProfile } from '@/lib/types';
@@ -47,7 +46,6 @@ import {
   MealSlot,
   MealLog
 } from '@/lib/health/biomarkers';
-import { generateCoachGuidance, CoachMessage, getLionShortNudge } from '@/lib/coach/engine';
 import PhoneSensorsPanel from '@/components/health/PhoneSensorsPanel';
 import WearablesPanel from '@/components/health/WearablesPanel';
 import CloudNativeSyncPanel from '@/components/health/CloudNativeSyncPanel';
@@ -59,7 +57,6 @@ import PillarHubHeader from '@/components/hub/PillarHubHeader';
 export default function HealthPage() {
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
   const [scores, setScores] = useState<ComputedScores | null>(null);
-  const [coach, setCoach] = useState<CoachMessage | null>(null);
   const [actions, setActions] = useState<HealthActionDef[]>([]);
   const [loggedToday, setLoggedToday] = useState<Set<string>>(new Set());
   const [toast, setToast] = useState<string | null>(null);
@@ -80,9 +77,11 @@ export default function HealthPage() {
   const [sportName, setSportName] = useState('');
   const [sportEnv, setSportEnv] = useState<SportEnvironment>('outdoor');
   const [sportFreq, setSportFreq] = useState<SportFrequency>('weekly');
+  const [activeTab, setActiveTab] = useState<'exercise' | 'nutrition' | 'sleep'>('exercise');
 
   const stage = getCurrentHealthStage();
   const stageLabel = getLifeStageLabel(stage);
+  const en = profile?.language === 'en';
 
   const refresh = useCallback(() => {
     const s = computeScores();
@@ -90,7 +89,6 @@ export default function HealthPage() {
     const p = loadProfile();
     setProfile(p);
     setActions(getHealthActionsForStage(stage));
-    if (p) setCoach(generateCoachGuidance(p, s));
 
     const todayTypes = new Set(
       s.todayActions.filter(a => a.pillar === 'health').map(a => a.type)
@@ -127,7 +125,6 @@ export default function HealthPage() {
     if (result) {
       setScores(result);
       setLoggedToday(prev => new Set([...prev, actionType]));
-      if (profile) setCoach(generateCoachGuidance(profile, result));
       showToast(`+${getHealthPointsPreview(actionType)} Health · ${label}`);
       bumpHealthData();
     }
@@ -185,88 +182,39 @@ export default function HealthPage() {
         pillar="health"
         score={healthScore}
         subtitle={`${profile?.name || 'Salvazion'} · ${stageLabel}`}
-      />
+      >
+        <div className="segment-soft mb-2 mt-3">
+          {(
+            [
+              {
+                id: 'exercise' as const,
+                label: en ? 'Exercise' : 'Ejercicio',
+              },
+              {
+                id: 'nutrition' as const,
+                label: en ? 'Nutrition' : 'Alimentación',
+              },
+              {
+                id: 'sleep' as const,
+                label: en ? 'Sleep' : 'Sueño',
+              },
+            ] as const
+          ).map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              data-active={activeTab === tab.id}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </PillarHubHeader>
 
       <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto">
-        <div className="glass rounded-xl px-4 py-3 mb-5 flex items-start gap-3 border" style={{ borderColor: 'rgba(74, 158, 255, 0.35)' }}>
-          <div className="w-9 h-9 rounded-full border flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]" style={{ borderColor: 'rgba(74, 158, 255, 0.55)' }}>
-            <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
-          </div>
-          <div>
-            <p className="text-xs text-[#D8E1D9]/80 leading-relaxed">
-              {coach?.pillarFocus === 'health' && coach.body
-                ? coach.body
-                : getLionShortNudge('health', stage)}
-            </p>
-          </div>
-        </div>
-
-        {/* BIOMARCADORES desde sensores + hábitos */}
-        <BiomarkersPanel
-          isFemale={profile?.sex === 'female'}
-          lang={profile?.language === 'en' ? 'en' : 'es'}
-          refreshKey={healthRefreshKey}
-        />
-
-        {/* PHONE SENSORS — steps, activity, GPS, rest/sleep */}
-        <PhoneSensorsPanel
-          loggedToday={loggedToday}
-          onAutoLog={(actionType, label) => handleLog(actionType, label)}
-          onSleepSynced={(bed, wake) => {
-            setBedTime(bed);
-            setWakeTime(wake);
-            setTodaySleep(getTodaySleep());
-            setRegularity(getSleepRegularity());
-            bumpHealthData();
-          }}
-        />
-
-        <WearablesPanel
-          onAutoLog={(actionType, label) => handleLog(actionType, label)}
-          onSleepSynced={(bed, wake) => {
-            setBedTime(bed);
-            setWakeTime(wake);
-            setTodaySleep(getTodaySleep());
-            setRegularity(getSleepRegularity());
-            bumpHealthData();
-          }}
-        />
-
-        <Suspense fallback={null}>
-          <CloudNativeSyncPanel
-            onAutoLog={(actionType, label) => handleLog(actionType, label)}
-            onSleepSynced={(bed, wake) => {
-              setBedTime(bed);
-              setWakeTime(wake);
-              setTodaySleep(getTodaySleep());
-              setRegularity(getSleepRegularity());
-              bumpHealthData();
-            }}
-          />
-        </Suspense>
-
-        {/* SALUD FEMENINA — desde sexo del onboarding/perfil */}
-        {profile?.sex === 'female' && (
-          <WomenHealthPanel
-            lang={profile?.language === 'en' ? 'en' : 'es'}
-            onLogged={() => {
-              if (!loggedToday.has('cycle_log')) {
-                handleLog('cycle_log', 'Registro de ciclo / salud femenina');
-              } else {
-                bumpHealthData();
-                showToast('Ciclo actualizado');
-              }
-            }}
-          />
-        )}
-
-        {/* Ficha clínica FHIR */}
-        <ClinicalRecordPanel
-          profile={profile}
-          lang={profile?.language === 'en' ? 'en' : 'es'}
-          refreshKey={healthRefreshKey}
-        />
-
+        {activeTab === 'sleep' && (
+          <>
         {/* SUEÑO CIRCADIANO */}
         <section className="mb-6">
           <h2 className="text-sm font-semibold text-[var(--sage)] mb-3 flex items-center gap-2">
@@ -327,7 +275,11 @@ export default function HealthPage() {
             </button>
           </div>
         </section>
+          </>
+        )}
 
+        {activeTab === 'nutrition' && (
+          <>
         {/* HIDRATACIÓN */}
         <section className="mb-6">
           <h2 className="text-sm font-semibold text-[var(--sage)] mb-3 flex items-center gap-2">
@@ -555,8 +507,11 @@ export default function HealthPage() {
             </div>
           </div>
         </section>
+          </>
+        )}
 
-
+        {activeTab === 'exercise' && (
+          <>
         {/* DEPORTES */}
         <section className="mb-6">
           <div className="flex items-center justify-between mb-3">
@@ -680,27 +635,34 @@ export default function HealthPage() {
           </div>
         </section>
 
-        {/* Otras acciones */}
-        {categories.map(cat => {
-          const items = actions.filter(a => a.category === cat.id);
-          const filtered = items.filter(
-            a => a.actionType !== 'sleep_ideal' && a.actionType !== 'hydration_daily' && a.actionType !== 'fasting'
+        {/* Otras acciones de ejercicio */}
+        {(() => {
+          const cat = categories.find((c) => c.id === 'exercise');
+          if (!cat) return null;
+          const filtered = actions.filter(
+            (a) =>
+              a.category === 'exercise' &&
+              a.actionType !== 'sleep_ideal' &&
+              a.actionType !== 'hydration_daily' &&
+              a.actionType !== 'fasting'
           );
           if (filtered.length === 0) return null;
           return (
-            <div key={cat.id} className="mb-6">
+            <div className="mb-6">
               <h2 className="text-sm font-semibold text-[var(--sage)] mb-3 flex items-center gap-2">
                 <span>{cat.icon}</span> {cat.title}
               </h2>
               <div className="space-y-2.5">
-                {filtered.map(action => {
+                {filtered.map((action) => {
                   const pts = getHealthPointsPreview(action.actionType);
                   const done = loggedToday.has(action.actionType);
                   return (
                     <div
                       key={action.id}
                       className={`glass rounded-xl p-4 border transition-all ${
-                        done ? 'border-[var(--border-strong)] bg-[var(--surface-active)]' : 'border-[var(--border-soft)]'
+                        done
+                          ? 'border-[var(--border-strong)] bg-[var(--surface-active)]'
+                          : 'border-[var(--border-soft)]'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-3">
@@ -708,7 +670,9 @@ export default function HealthPage() {
                           <span className="text-xl flex-shrink-0">{action.icon}</span>
                           <div className="min-w-0">
                             <p className="text-sm font-medium text-white">{action.label}</p>
-                            <p className="text-xs text-[#D8E1D9]/60 mt-0.5">{action.description}</p>
+                            <p className="text-xs text-[#D8E1D9]/60 mt-0.5">
+                              {action.description}
+                            </p>
                           </div>
                         </div>
                         <div className="flex-shrink-0 text-right">
@@ -728,7 +692,72 @@ export default function HealthPage() {
               </div>
             </div>
           );
-        })}
+        })()}
+          </>
+        )}
+
+        {/* Herramientas comunes de Health (siempre visibles) */}
+        <BiomarkersPanel
+          isFemale={profile?.sex === 'female'}
+          lang={en ? 'en' : 'es'}
+          refreshKey={healthRefreshKey}
+        />
+
+        <PhoneSensorsPanel
+          loggedToday={loggedToday}
+          onAutoLog={(actionType, label) => handleLog(actionType, label)}
+          onSleepSynced={(bed, wake) => {
+            setBedTime(bed);
+            setWakeTime(wake);
+            setTodaySleep(getTodaySleep());
+            setRegularity(getSleepRegularity());
+            bumpHealthData();
+          }}
+        />
+
+        <WearablesPanel
+          onAutoLog={(actionType, label) => handleLog(actionType, label)}
+          onSleepSynced={(bed, wake) => {
+            setBedTime(bed);
+            setWakeTime(wake);
+            setTodaySleep(getTodaySleep());
+            setRegularity(getSleepRegularity());
+            bumpHealthData();
+          }}
+        />
+
+        <Suspense fallback={null}>
+          <CloudNativeSyncPanel
+            onAutoLog={(actionType, label) => handleLog(actionType, label)}
+            onSleepSynced={(bed, wake) => {
+              setBedTime(bed);
+              setWakeTime(wake);
+              setTodaySleep(getTodaySleep());
+              setRegularity(getSleepRegularity());
+              bumpHealthData();
+            }}
+          />
+        </Suspense>
+
+        {profile?.sex === 'female' && (
+          <WomenHealthPanel
+            lang={en ? 'en' : 'es'}
+            onLogged={() => {
+              if (!loggedToday.has('cycle_log')) {
+                handleLog('cycle_log', 'Registro de ciclo / salud femenina');
+              } else {
+                bumpHealthData();
+                showToast('Ciclo actualizado');
+              }
+            }}
+          />
+        )}
+
+        <ClinicalRecordPanel
+          profile={profile}
+          lang={en ? 'en' : 'es'}
+          refreshKey={healthRefreshKey}
+        />
 
         <p className="text-[10px] text-[var(--sage)]/60 text-center leading-relaxed px-2 mb-4">
           Fase B: sensores · Fase C: BLE/manual · Fase D: OAuth (Fitbit/Oura/WHOOP/Garmin) + HealthKit / Health Connect nativo.

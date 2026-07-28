@@ -38,7 +38,7 @@ export default function DevotionalPage() {
         setProfile((prev) => ({ ...prev, language: lang }));
       }
 
-      // Restore today's cached Grok/rules devotional
+      // Restore today's cached devotional
       try {
         const raw = localStorage.getItem(CACHE_PREFIX + today);
         if (raw) {
@@ -51,7 +51,11 @@ export default function DevotionalPage() {
           if (cached?.data?.date === today) {
             setDevotional(cached.data);
             setEngine(cached.engine || null);
-            setEngineNote(cached.note || null);
+            // Never surface provider brand names in the UI
+            const note = cached.note || null;
+            setEngineNote(
+              note && /grok|xai/i.test(note) ? null : note
+            );
             setCompleted(!!cached.completed);
           }
         }
@@ -91,14 +95,18 @@ export default function DevotionalPage() {
       if (json.success) {
         setDevotional(json.data);
         setEngine(json.engine || null);
-        setEngineNote(json.note || null);
+        const note =
+          typeof json.note === 'string' && !/grok|xai/i.test(json.note)
+            ? json.note
+            : null;
+        setEngineNote(note);
         try {
           localStorage.setItem(
             CACHE_PREFIX + today,
             JSON.stringify({
               data: json.data,
               engine: json.engine,
-              note: json.note,
+              note,
               completed: false,
             })
           );
@@ -145,7 +153,10 @@ export default function DevotionalPage() {
     ? getLifeStage(calculateAge(profile.birthDate))
     : 'adult';
   const pts = getPointsForAction('devotional_complete', stage);
-  const isGrok = engine?.startsWith('grok') || devotional?.source === 'grok';
+  const isAi =
+    engine?.startsWith('grok') ||
+    engine?.startsWith('ai') ||
+    devotional?.source === 'grok';
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
@@ -156,7 +167,7 @@ export default function DevotionalPage() {
           </Link>
           <div className="min-w-0">
             <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] font-medium">
-              {lang === 'en' ? 'Salvation' : 'Salvation'}
+              Salvation Hub
             </p>
             <h1 className="text-base font-bold text-[var(--accent)] leading-tight truncate">
               {lang === 'en' ? 'Devotional' : 'Devocional'}
@@ -164,8 +175,14 @@ export default function DevotionalPage() {
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <span className={`pill-soft ${isGrok ? 'pill-soft-active' : ''}`}>
-            {isGrok ? 'Grok · xAI' : lang === 'en' ? 'Rules' : 'Reglas'}
+          <span className={`pill-soft ${isAi ? 'pill-soft-active' : ''}`}>
+            {isAi
+              ? lang === 'en'
+                ? 'Personalized'
+                : 'Personalizado'
+              : lang === 'en'
+                ? 'Standard'
+                : 'Estándar'}
           </span>
           <div className="w-9 h-9 rounded-full border border-[var(--border-soft)] flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
             <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
@@ -181,8 +198,8 @@ export default function DevotionalPage() {
             </h2>
             <p className="text-sm text-[var(--sage)] mt-1">
               {lang === 'en'
-                ? 'Grok · Western Christian culture · BioConservatism · Virtue'
-                : 'Grok · Cultura cristiano-occidental · BioConservadurismo · Virtud'}
+                ? 'Western Christian culture · BioConservatism · Virtue'
+                : 'Cultura cristiano-occidental · BioConservadurismo · Virtud'}
             </p>
           </div>
 
@@ -198,7 +215,7 @@ export default function DevotionalPage() {
           {/* Profile summary used for personalization */}
           <div className="glass rounded-2xl p-5 mb-6 space-y-3">
             <p className="text-xs uppercase tracking-wider text-[var(--sage)]/80">
-              {lang === 'en' ? 'Profile used for Grok' : 'Perfil usado por Grok'}
+              {lang === 'en' ? 'Profile used for personalization' : 'Perfil para personalizar'}
             </p>
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div>
@@ -243,12 +260,12 @@ export default function DevotionalPage() {
             >
               {loading
                 ? lang === 'en'
-                  ? 'Grok is writing…'
-                  : 'Grok está escribiendo…'
+                  ? 'Writing…'
+                  : 'Escribiendo…'
                 : devotional
                   ? lang === 'en'
-                    ? 'Regenerate with Grok'
-                    : 'Regenerar con Grok'
+                    ? 'Regenerate'
+                    : 'Regenerar'
                   : lang === 'en'
                     ? "Generate today's devotional"
                     : 'Generar devocional de hoy'}
@@ -266,8 +283,8 @@ export default function DevotionalPage() {
               <div className="w-10 h-10 mx-auto border-2 border-[var(--border-strong)] border-t-[#8FD99A] rounded-full animate-spin" />
               <p className="text-sm text-[#8FD99A]">
                 {lang === 'en'
-                  ? 'Grok is crafting a longer, personalized biblical devotional…'
-                  : 'Grok está elaborando un devocional bíblico largo y personalizado…'}
+                  ? 'Crafting a longer, personalized biblical devotional…'
+                  : 'Elaborando un devocional bíblico largo y personalizado…'}
               </p>
               <p className="text-xs text-[var(--sage)]/80">
                 {lang === 'en'
@@ -292,7 +309,7 @@ export default function DevotionalPage() {
                     {lang === 'en' ? 'For' : 'Para'} {devotional.personalizedFor}
                   </p>
                 )}
-                {engineNote && (
+                {engineNote && !/grok|xai/i.test(engineNote) && (
                   <p className="text-[11px] text-[var(--sage)]/70 mt-2">{engineNote}</p>
                 )}
               </div>
@@ -379,8 +396,8 @@ export default function DevotionalPage() {
             <div className="text-center py-12 text-[var(--sage)]/70">
               <p>
                 {lang === 'en'
-                  ? 'Generate a longer Grok-powered devotional from your profile.'
-                  : 'Genera un devocional extenso con Grok a partir de tu perfil.'}
+                  ? 'Generate a longer personalized devotional from your profile.'
+                  : 'Genera un devocional extenso y personalizado a partir de tu perfil.'}
               </p>
               <p className="text-sm mt-2">
                 {lang === 'en'

@@ -9,6 +9,7 @@ import {
   calculateAge,
   getLifeStage,
   getLifeStageLabel,
+  formatLocation,
 } from '@/lib/store/profile';
 import { UserProfile } from '@/lib/types';
 import {
@@ -25,12 +26,7 @@ import {
 import BottomNav from '@/components/BottomNav';
 import ProfileAvatar from '@/components/profile/ProfileAvatar';
 import { useI18n } from '@/components/I18nProvider';
-import {
-  HealthIcon,
-  FreedomIcon,
-  BibleIcon,
-  BadgesIcon,
-} from '@/components/Icons';
+import { BadgesIcon } from '@/components/Icons';
 import ProgressCharts from '@/components/progress/ProgressCharts';
 import DailyAgenda from '@/components/calendar/DailyAgenda';
 import { PILLAR_COLORS } from '@/lib/theme/pillars';
@@ -91,125 +87,275 @@ export default function DashboardPage() {
 
   const { salvation, health, freedom, global } = scores;
 
+  const age = profile.birthDate ? calculateAge(profile.birthDate) : null;
+  const stageLabel =
+    age !== null ? getLifeStageLabel(getLifeStage(age)) : null;
+  const location = formatLocation(profile.city, profile.country);
+  const metaBits = [
+    age !== null ? String(age) : null,
+    stageLabel,
+    location || null,
+  ].filter(Boolean) as string[];
+
   const scoreLabel = `${t('dashboard.salvazionScore')} ${global}: ${t('nav.salvation')} ${salvation}, ${t('nav.health')} ${health}, ${t('nav.freedom')} ${freedom}`;
 
   return (
     <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] flex flex-col">
-      <main className="flex-1 flex flex-col items-center px-5 pt-6 pb-32 max-w-lg mx-auto w-full">
-        {/* Profile + purpose (unified) */}
-        <Link
-          href="/hub/profile"
-          className="w-full max-w-sm card-soft p-4 mb-5 flex items-start gap-3 hover:border-[var(--border-strong)] transition-all active:scale-[0.99]"
-          title={t('nav.profile')}
+      <main className="flex-1 flex flex-col items-center px-5 pt-5 pb-32 max-w-lg mx-auto w-full">
+        {/* Hero: identity + purpose + score — one surface */}
+        <section
+          className="relative w-full max-w-sm mb-5 overflow-hidden rounded-[1.35rem] border border-[var(--border-soft)]"
+          style={{
+            background:
+              'linear-gradient(165deg, color-mix(in srgb, var(--accent) 7%, #080808) 0%, #050505 42%, #040404 100%)',
+            boxShadow:
+              '0 0 0 1px color-mix(in srgb, var(--accent) 6%, transparent), 0 18px 48px rgba(0,0,0,0.45)',
+          }}
         >
-          <ProfileAvatar
-            avatarUrl={profile.avatarUrl}
-            name={profile.name || 'Brother'}
-            size="md"
-            editable={false}
+          {/* Soft pillar glow accents */}
+          <div
+            className="pointer-events-none absolute -top-16 -right-10 w-40 h-40 rounded-full blur-3xl opacity-30"
+            style={{ background: PILLAR_COLORS.salvation.solid }}
+            aria-hidden
           />
-          <div className="min-w-0 flex-1">
-            <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70">
-              Salvazion
-            </p>
-            <p className="text-base font-semibold text-white leading-tight truncate">
-              {profile.name || 'Brother'}
-            </p>
-            {profile.birthDate && calculateAge(profile.birthDate) !== null && (
-              <p className="text-[11px] text-[var(--sage)]/75 mt-0.5">
-                {calculateAge(profile.birthDate)} ·{' '}
-                {getLifeStageLabel(getLifeStage(calculateAge(profile.birthDate)))}
+          <div
+            className="pointer-events-none absolute top-24 -left-12 w-36 h-36 rounded-full blur-3xl opacity-20"
+            style={{ background: PILLAR_COLORS.health.solid }}
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute bottom-8 right-0 w-32 h-32 rounded-full blur-3xl opacity-25"
+            style={{ background: PILLAR_COLORS.freedom.solid }}
+            aria-hidden
+          />
+
+          {/* Identity row */}
+          <Link
+            href="/hub/profile"
+            className="relative z-[1] flex items-center gap-3.5 px-4 pt-4 pb-3 group"
+            title={t('nav.profile')}
+          >
+            <div
+              className="relative shrink-0 rounded-full p-[2px]"
+              style={{
+                background: `conic-gradient(from 200deg, ${PILLAR_COLORS.salvation.solid}, ${PILLAR_COLORS.health.solid}, ${PILLAR_COLORS.freedom.solid}, ${PILLAR_COLORS.salvation.solid})`,
+                boxShadow:
+                  '0 0 20px color-mix(in srgb, var(--accent) 22%, transparent)',
+              }}
+            >
+              <div className="rounded-full bg-[var(--true-black)] p-[2px]">
+                <ProfileAvatar
+                  avatarUrl={profile.avatarUrl}
+                  name={profile.name || 'Brother'}
+                  size="md"
+                  editable={false}
+                />
+              </div>
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-[var(--accent)]/80 font-medium">
+                Salvazion
               </p>
-            )}
-            {profile.purpose ? (
-              <div className="mt-2 pt-2 border-t border-[var(--border-soft)]">
-                <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70 mb-0.5">
+              <p className="text-lg font-semibold text-white leading-tight truncate group-hover:text-[var(--accent)] transition-colors">
+                {profile.name || 'Brother'}
+              </p>
+              {metaBits.length > 0 && (
+                <p className="text-[11px] text-[var(--sage)]/80 mt-0.5 truncate">
+                  {metaBits.join(' · ')}
+                </p>
+              )}
+            </div>
+            <span
+              className="shrink-0 text-[var(--sage)]/50 group-hover:text-[var(--accent)] transition-colors text-sm"
+              aria-hidden
+            >
+              →
+            </span>
+          </Link>
+
+          {/* Purpose */}
+          {profile.purpose ? (
+            <div className="relative z-[1] px-4 pb-3">
+              <div
+                className="rounded-xl px-3.5 py-3 border"
+                style={{
+                  borderColor: 'color-mix(in srgb, var(--accent) 18%, transparent)',
+                  background:
+                    'linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, transparent), transparent)',
+                }}
+              >
+                <p className="text-[9px] uppercase tracking-[0.14em] text-[var(--sage)]/65 mb-1">
                   {t('dashboard.purpose')}
                 </p>
-                <p className="text-sm leading-snug text-[var(--off-white)]/90 line-clamp-3">
+                <p className="text-[13px] leading-relaxed text-[var(--off-white)]/90 line-clamp-3">
+                  <span className="text-[var(--accent)]/70 font-display text-base leading-none mr-0.5">
+                    “
+                  </span>
                   {profile.purpose}
+                  <span className="text-[var(--accent)]/70 font-display text-base leading-none ml-0.5">
+                    ”
+                  </span>
                 </p>
               </div>
-            ) : null}
-          </div>
-        </Link>
+            </div>
+          ) : null}
 
-        {/* Score dashboard */}
-        <div
-          className="relative w-52 h-52 flex items-center justify-center mb-3"
-          role="img"
-          aria-label={scoreLabel}
-        >
-          <svg
-            className="absolute inset-0 w-full h-full -rotate-90"
-            viewBox="0 0 100 100"
-            aria-hidden
-          >
-            <circle cx="50" cy="50" r="46" fill="none" stroke="var(--sage-dim)" strokeWidth="3" opacity="0.25" />
-            <circle
-              cx="50" cy="50" r="46" fill="none" stroke="#F5F7F5" strokeWidth="3.2"
-              strokeDasharray={`${Math.min(salvation, 100) * 2.89} 289`}
-              strokeLinecap="round"
-              className="ring-glow transition-all duration-700"
-            />
-          </svg>
-          <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100" aria-hidden>
-            <circle cx="50" cy="50" r="38" fill="none" stroke="var(--sage-dim)" strokeWidth="3" opacity="0.25" />
-            <circle
-              cx="50" cy="50" r="38" fill="none" stroke="#4A9EFF" strokeWidth="2.8"
-              strokeDasharray={`${Math.min(health, 100) * 2.39} 239`}
-              strokeLinecap="round"
-              className="transition-all duration-700"
-            />
-          </svg>
-          <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100" aria-hidden>
-            <circle cx="50" cy="50" r="30" fill="none" stroke="var(--sage-dim)" strokeWidth="3" opacity="0.25" />
-            <circle
-              cx="50" cy="50" r="30" fill="none" stroke="#7BC98A" strokeWidth="2.6"
-              strokeDasharray={`${Math.min(freedom, 100) * 1.88} 188`}
-              strokeLinecap="round"
-              className="transition-all duration-700"
-            />
-          </svg>
-          <div className="text-center z-10">
-            <div className="font-display text-5xl font-bold text-white tracking-tighter">
-              {global}
+          {/* Score rings */}
+          <div className="relative z-[1] flex flex-col items-center px-4 pt-1 pb-5">
+            <div
+              className="relative w-[13.5rem] h-[13.5rem] flex items-center justify-center"
+              role="img"
+              aria-label={scoreLabel}
+            >
+              <svg
+                className="absolute inset-0 w-full h-full -rotate-90"
+                viewBox="0 0 100 100"
+                aria-hidden
+              >
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="46"
+                  fill="none"
+                  stroke="var(--sage-dim)"
+                  strokeWidth="3"
+                  opacity="0.22"
+                />
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="46"
+                  fill="none"
+                  stroke={PILLAR_COLORS.salvation.solid}
+                  strokeWidth="3.2"
+                  strokeDasharray={`${Math.min(salvation, 100) * 2.89} 289`}
+                  strokeLinecap="round"
+                  className="ring-glow transition-all duration-700"
+                />
+              </svg>
+              <svg
+                className="absolute inset-0 w-full h-full -rotate-90"
+                viewBox="0 0 100 100"
+                aria-hidden
+              >
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="38"
+                  fill="none"
+                  stroke="var(--sage-dim)"
+                  strokeWidth="3"
+                  opacity="0.22"
+                />
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="38"
+                  fill="none"
+                  stroke={PILLAR_COLORS.health.solid}
+                  strokeWidth="2.8"
+                  strokeDasharray={`${Math.min(health, 100) * 2.39} 239`}
+                  strokeLinecap="round"
+                  className="transition-all duration-700"
+                  style={{
+                    filter:
+                      'drop-shadow(0 0 6px color-mix(in srgb, #4A9EFF 40%, transparent))',
+                  }}
+                />
+              </svg>
+              <svg
+                className="absolute inset-0 w-full h-full -rotate-90"
+                viewBox="0 0 100 100"
+                aria-hidden
+              >
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="30"
+                  fill="none"
+                  stroke="var(--sage-dim)"
+                  strokeWidth="3"
+                  opacity="0.22"
+                />
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="30"
+                  fill="none"
+                  stroke={PILLAR_COLORS.freedom.solid}
+                  strokeWidth="2.6"
+                  strokeDasharray={`${Math.min(freedom, 100) * 1.88} 188`}
+                  strokeLinecap="round"
+                  className="transition-all duration-700"
+                  style={{
+                    filter:
+                      'drop-shadow(0 0 6px color-mix(in srgb, #7BC98A 40%, transparent))',
+                  }}
+                />
+              </svg>
+              <div className="text-center z-10">
+                <div className="font-display text-5xl font-bold text-white tracking-tighter leading-none">
+                  {global}
+                </div>
+                <div className="text-[10px] uppercase tracking-[0.14em] text-[var(--sage)] mt-1.5">
+                  {t('dashboard.salvazionScore')}
+                </div>
+                <div className="text-[10px] text-[var(--accent)] font-medium mt-0.5">
+                  {t('dashboard.global')}
+                </div>
+              </div>
             </div>
-            <div className="text-xs uppercase tracking-widest text-[var(--sage)] mt-1">
-              {t('dashboard.salvazionScore')}
-            </div>
-            <div className="text-[10px] text-[var(--accent)] font-medium">
-              {t('dashboard.global')}
-            </div>
-          </div>
-        </div>
 
-        {/* Pillars */}
-        <div className="w-full max-w-sm mb-4">
-          <div className="grid grid-cols-3 gap-2.5">
-            <PillarCard
-              href="/hub/bible"
-              label={t('nav.salvation')}
-              value={salvation}
-              Icon={BibleIcon}
-              ring={PILLAR_COLORS.salvation.solid}
-            />
-            <PillarCard
-              href="/hub/health"
-              label={t('nav.health')}
-              value={health}
-              Icon={HealthIcon}
-              ring={PILLAR_COLORS.health.solid}
-            />
-            <PillarCard
-              href="/hub/freedom"
-              label={t('nav.freedom')}
-              value={freedom}
-              Icon={FreedomIcon}
-              ring={PILLAR_COLORS.freedom.solid}
-            />
+            {/* Compact pillar legend chips */}
+            <div className="flex items-center justify-center gap-2 mt-1 w-full">
+              {(
+                [
+                  {
+                    href: '/hub/bible',
+                    label: t('nav.salvation'),
+                    value: salvation,
+                    color: PILLAR_COLORS.salvation.solid,
+                  },
+                  {
+                    href: '/hub/health',
+                    label: t('nav.health'),
+                    value: health,
+                    color: PILLAR_COLORS.health.solid,
+                  },
+                  {
+                    href: '/hub/freedom',
+                    label: t('nav.freedom'),
+                    value: freedom,
+                    color: PILLAR_COLORS.freedom.solid,
+                  },
+                ] as const
+              ).map((p) => (
+                <Link
+                  key={p.href}
+                  href={p.href}
+                  className="flex-1 min-w-0 rounded-xl px-2 py-2 text-center border transition-all active:scale-[0.98]"
+                  style={{
+                    borderColor: `color-mix(in srgb, ${p.color} 40%, transparent)`,
+                    background: `color-mix(in srgb, ${p.color} 10%, #040404)`,
+                  }}
+                >
+                  <p
+                    className="text-[9px] uppercase tracking-wider truncate"
+                    style={{ color: p.color, opacity: 0.9 }}
+                  >
+                    {p.label}
+                  </p>
+                  <p
+                    className="text-lg font-bold tabular-nums leading-none mt-0.5"
+                    style={{ color: p.color }}
+                  >
+                    {p.value}
+                  </p>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
+        </section>
 
         {/* Weekly score chart */}
         <div className="w-full max-w-sm mb-5">
@@ -322,39 +468,6 @@ export default function DashboardPage() {
 
       <BottomNav />
     </div>
-  );
-}
-
-function PillarCard({
-  href,
-  label,
-  value,
-  Icon,
-  ring,
-}: {
-  href: string;
-  label: string;
-  value: number;
-  Icon: React.FC<{ size?: number; active?: boolean; color?: string }>;
-  ring: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="card-soft p-3 text-center transition-all active:scale-[0.98] min-h-[100px] flex flex-col items-center justify-center gap-1"
-      style={{
-        borderColor: `color-mix(in srgb, ${ring} 45%, transparent)`,
-        background: `color-mix(in srgb, ${ring} 8%, #040404)`,
-      }}
-    >
-      <Icon size={26} active color={ring} />
-      <p className="text-[10px] uppercase tracking-wider" style={{ color: ring, opacity: 0.85 }}>
-        {label}
-      </p>
-      <p className="text-2xl font-bold leading-none" style={{ color: ring }}>
-        {value}
-      </p>
-    </Link>
   );
 }
 

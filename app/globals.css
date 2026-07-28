@@ -300,19 +300,24 @@ html[data-text-scale="xxl"] nav.fixed span {
   background: var(--surface);
   border: 1px solid var(--border-soft);
 }
-.segment-soft button {
+.segment-soft button,
+.segment-soft a {
   flex: 1;
-  padding: 0.65rem 0.5rem;
+  padding: 0.65rem 0.35rem;
   border-radius: var(--radius-md);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 600;
   color: var(--sage);
   border: none;
   background: transparent;
+  text-align: center;
+  text-decoration: none;
   transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
 .segment-soft button[data-active="true"],
-.segment-soft button.is-active {
+.segment-soft button.is-active,
+.segment-soft a[data-active="true"],
+.segment-soft a.is-active {
   background: var(--accent-fill);
   color: #0a120c;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;

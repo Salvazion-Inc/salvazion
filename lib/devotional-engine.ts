@@ -6,7 +6,7 @@ import { calculateAge, getLifeStage, getLifeStageLabel } from '@/lib/store/profi
 /**
  * Motor de Devocionales Salvazion
  *
- * 1) Prefer Grok (xAI) — personalizado, extenso, bíblico
+ * 1) Prefer AI when configured — personalizado, extenso, bíblico
  * 2) Fallback: biblioteca + reglas si no hay XAI_API_KEY o falla la API
  *
  * Identidad: Cultura Cristiano-Occidental, BioConservadurismo,
@@ -310,7 +310,7 @@ function normalizeGrokDevotional(
 }
 
 /**
- * Generate with Grok when XAI_API_KEY is set; otherwise rules fallback.
+ * Generate with AI when XAI_API_KEY is set; otherwise rules fallback.
  */
 export async function generateDevotionalAsync(
   profile: UserProfile,
@@ -323,7 +323,7 @@ export async function generateDevotionalAsync(
     return {
       devotional: generateDevotionalRules(profile, date),
       engine: 'salvazion-rules-v1',
-      note: 'XAI_API_KEY no configurada. Usando motor de reglas. Añade XAI_API_KEY para Grok.',
+      note: 'IA no configurada. Usando motor de reglas.',
     };
   }
 
@@ -343,25 +343,25 @@ export async function generateDevotionalAsync(
     const devotional = normalizeGrokDevotional(parsed, profile, date, model);
 
     if (!devotional) {
-      console.warn('[Devotional] Grok JSON invalid, falling back to rules');
+      console.warn('[Devotional] AI JSON invalid, falling back to rules');
       return {
         devotional: generateDevotionalRules(profile, date),
         engine: 'salvazion-rules-v1',
-        note: 'Grok respondió en formato inválido; se usó fallback de reglas.',
+        note: 'Respuesta de IA en formato inválido; se usó fallback de reglas.',
       };
     }
 
     return {
       devotional,
-      engine: `grok:${model}`,
-      note: 'Generado con Grok (xAI) · personalizado por perfil',
+      engine: `ai:${model}`,
+      note: 'Devocional personalizado por perfil',
     };
   } catch (e) {
-    console.error('[Devotional] Grok error', e);
+    console.error('[Devotional] AI error', e);
     return {
       devotional: generateDevotionalRules(profile, date),
       engine: 'salvazion-rules-v1',
-      note: `Error Grok: ${e instanceof Error ? e.message : 'unknown'}. Fallback reglas.`,
+      note: 'Error de IA. Se usó fallback de reglas.',
     };
   }
 }

@@ -25,7 +25,7 @@ import { loadProfile, calculateAge, getLifeStage } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
 import PillarHubHeader from '@/components/hub/PillarHubHeader';
 
-type MainTab = 'read' | 'explore' | 'prayer';
+type MainTab = 'read' | 'explore' | 'prayer' | 'devotional';
 type ExploreMode = 'library' | 'search';
 type BookAnimDir = 'left' | 'right' | 'fade';
 
@@ -206,7 +206,7 @@ export default function BiblePage() {
               className="flex-1 min-w-0 text-left rounded-xl border border-[var(--border-soft)] bg-[var(--surface-muted)] px-3 py-2 hover:border-[var(--border-strong)] transition"
             >
               <p className="text-[10px] uppercase tracking-wider text-[var(--accent)]">
-                Salvazion Hub · {salvationScore}
+                Salvation Hub · {salvationScore}
               </p>
               <p className="text-sm font-semibold text-white truncate">
                 {chapter?.book || bookDisplayName} {selectedChapter}
@@ -249,44 +249,50 @@ export default function BiblePage() {
             className="!pt-3 !px-0 !pb-0 bg-transparent border-0 shadow-none"
             sticky={false}
             actions={
-              <>
-                {mainTab === 'read' && (
-                  <button
-                    type="button"
-                    onClick={() => setChromeCollapsed(true)}
-                    className="pill-soft text-[10px]"
-                    title={t('bible.collapseChrome')}
-                  >
-                    {t('bible.collapseChrome')}
-                  </button>
-                )}
-                <Link href="/hub/devotional" className="pill-soft pill-soft-active text-[10px]">
-                  {t('nav.devotional')}
-                </Link>
-              </>
+              mainTab === 'read' ? (
+                <button
+                  type="button"
+                  onClick={() => setChromeCollapsed(true)}
+                  className="pill-soft text-[10px]"
+                  title={t('bible.collapseChrome')}
+                >
+                  {t('bible.collapseChrome')}
+                </button>
+              ) : null
             }
           >
-            {/* Main tabs: Read / Explore / Prayer */}
+            {/* Main tabs: Read / Explore / Prayer / Devotional */}
             <div className="segment-soft mb-3 mt-3">
               {(
                 [
                   { id: 'read' as MainTab, key: 'bible.read' },
                   { id: 'explore' as MainTab, key: 'bible.explore' },
                   { id: 'prayer' as MainTab, key: 'bible.prayer' },
+                  { id: 'devotional' as MainTab, key: 'bible.devotional' },
                 ] as const
-              ).map((tab) => (
-                <button
-                  key={tab.id}
-                  type="button"
-                  data-active={mainTab === tab.id}
-                  onClick={() => {
-                    setMainTab(tab.id);
-                    if (tab.id !== 'read') setChromeCollapsed(false);
-                  }}
-                >
-                  {t(tab.key)}
-                </button>
-              ))}
+              ).map((tab) =>
+                tab.id === 'devotional' ? (
+                  <Link
+                    key={tab.id}
+                    href="/hub/devotional"
+                    data-active={mainTab === 'devotional' ? 'true' : undefined}
+                  >
+                    {t(tab.key)}
+                  </Link>
+                ) : (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    data-active={mainTab === tab.id}
+                    onClick={() => {
+                      setMainTab(tab.id);
+                      if (tab.id !== 'read') setChromeCollapsed(false);
+                    }}
+                  >
+                    {t(tab.key)}
+                  </button>
+                )
+              )}
             </div>
 
             {/* Language — hide on pure prayer tab to free space */}

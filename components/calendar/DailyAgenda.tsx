@@ -87,6 +87,19 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
     }
   }, [now, lang]);
 
+  const dateLabel = useMemo(() => {
+    try {
+      return now.toLocaleDateString(lang === 'es' ? 'es' : 'en', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      });
+    } catch {
+      return now.toISOString().slice(0, 10);
+    }
+  }, [now, lang]);
+
   const completed = events.filter((e) => e.completed).length;
   const total = events.length;
   const pct = total ? Math.round((completed / total) * 100) : 0;
@@ -111,9 +124,13 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
   return (
     <div className={`space-y-3 ${className}`}>
       <div className="flex items-start justify-between gap-2 px-0.5">
-        <div>
+        <div className="min-w-0">
           <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70">
             {t('agenda.section')}
+            <span className="normal-case tracking-normal text-[var(--sage)]/80 font-normal">
+              {' · '}
+              <span className="capitalize">{dateLabel}</span>
+            </span>
           </p>
           <h2 className="text-base font-semibold text-[var(--accent)]">
             {t('agenda.title')}
@@ -168,13 +185,14 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
         </div>
       ) : (
         <ul
-          className="space-y-2 rounded-2xl p-2 border transition-[background,border-color] duration-1000"
+          className="space-y-1.5 rounded-2xl p-2 border transition-[background,border-color] duration-1000"
           style={shell}
         >
           {timeline.map((ev) => {
             const pal = pillarPalette(ev.pillar as CalendarPillar);
             const end = endTimeOf(ev);
-            const dur = formatDurationHours(ev.durationMin || DEFAULT_BLOCK_MIN);
+            const durMin = ev.durationMin || DEFAULT_BLOCK_MIN;
+            const dur = formatDurationHours(durMin);
             const phase = agendaEventPhase(ev.time, end, now);
             const darken = agendaEventDarken(ambient, phase);
             const bg = mixTowardBlack(pal.soft, darken);
@@ -182,11 +200,13 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
             const text = mixTowardBlack(pal.text, darken * 0.35);
             const muted = mixTowardBlack(pal.muted, darken * 0.4);
             const solid = mixTowardBlack(pal.solid, darken * 0.25);
+            // Height proportional to hours (min ~2.75rem for usability)
+            const blockH = Math.max(44, Math.round((durMin / 60) * 40));
 
             return (
               <li
                 key={ev.id}
-                className={`rounded-xl p-3 border flex items-start gap-2.5 transition-[background,border-color,opacity] duration-700 ${
+                className={`rounded-xl px-3 border flex items-start gap-2.5 transition-[background,border-color,opacity] duration-700 ${
                   ev.completed ? 'opacity-55' : phase === 'past' ? 'opacity-80' : 'opacity-100'
                 } ${phase === 'now' ? 'ring-1 ring-[var(--accent)]/35' : ''}`}
                 style={{
@@ -194,6 +214,9 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
                   borderColor: phase === 'now'
                     ? mixTowardBlack('var(--accent)', ambient * 0.2)
                     : border,
+                  minHeight: blockH,
+                  paddingTop: blockH >= 72 ? 12 : 8,
+                  paddingBottom: blockH >= 72 ? 12 : 8,
                 }}
                 data-phase={phase}
               >

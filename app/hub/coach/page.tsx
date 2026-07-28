@@ -62,8 +62,8 @@ export default function CoachPage() {
               title={lang === 'en' ? 'AI Coach is Premium' : 'Coach con IA es Premium'}
               description={
                 lang === 'en'
-                  ? 'Unlock full Grok coaching, voice TTS and advanced guidance for Salvation, Health and Freedom.'
-                  : 'Desbloquea coaching Grok completo, voz TTS y guía avanzada en Salvación, Salud y Libertad.'
+                  ? 'Unlock full AI coaching, voice TTS and advanced guidance for Salvation, Health and Freedom.'
+                  : 'Desbloquea coaching con IA completo, voz TTS y guía avanzada en Salvación, Salud y Libertad.'
               }
             />
           ) : (

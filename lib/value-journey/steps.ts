@@ -51,9 +51,9 @@ export const VALUE_JOURNEY_STEPS: ValueJourneyStep[] = [
     titleEs: 'Salvation — Alma despierta',
     titleEn: 'Salvation — Awakened soul',
     bodyEs:
-      'Devocional diario con Grok, Biblia integrada (lectura, búsqueda y concordancia) y motivos de oración. La Palabra primero: no es un “mindfulness” sin cruz.',
+      'Devocional diario personalizado, Biblia integrada (lectura, búsqueda y concordancia) y motivos de oración. La Palabra primero: no es un “mindfulness” sin cruz.',
     bodyEn:
-      'Daily devotional with Grok, integrated Bible (read, search, concordance) and prayer motives. The Word first — not cross-less mindfulness.',
+      'Daily personalized devotional, integrated Bible (read, search, concordance) and prayer motives. The Word first — not cross-less mindfulness.',
     benefitEs: 'Constancia espiritual medible · rachas · score Salvation',
     benefitEn: 'Measurable spiritual consistency · streaks · Salvation score',
     ctaEs: 'Siguiente: Health',

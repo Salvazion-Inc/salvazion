@@ -435,7 +435,7 @@ const copy = {
         {
           name: 'Salvation',
           icon: '✝',
-          body: 'Faith at the center. Offline Bible, Grok devotionals and measurable spiritual discipline.',
+          body: 'Faith at the center. Offline Bible, personalized devotionals and measurable spiritual discipline.',
           inApp: 'Bible · Devotional · Green Lion Coach',
         },
         {
@@ -457,7 +457,7 @@ const copy = {
           body: 'ES · EN · originals. Read, search and concordance. Log chapters for Salvation points.',
         },
         devotional: {
-          title: 'Grok-powered devotional',
+          title: 'Personalized devotional',
           body: 'Profile-aware: Scripture, virtue, Western Christian culture and BioConservatism.',
         },
         health: {
@@ -562,7 +562,7 @@ const copy = {
         {
           name: 'Salvation',
           icon: '✝',
-          body: 'La fe al centro. Biblia offline, devocional con Grok y disciplina espiritual medible.',
+          body: 'La fe al centro. Biblia offline, devocional personalizado y disciplina espiritual medible.',
           inApp: 'Biblia · Devocional · Coach León Verde',
         },
         {
@@ -584,7 +584,7 @@ const copy = {
           body: 'ES · EN · originales. Lectura, búsqueda y concordancia. Marca capítulos y suma Salvation.',
         },
         devotional: {
-          title: 'Devocional con Grok',
+          title: 'Devocional personalizado',
           body: 'Personalizado a tu perfil: Escritura, virtud, cultura cristiano-occidental y BioConservadurismo.',
         },
         health: {

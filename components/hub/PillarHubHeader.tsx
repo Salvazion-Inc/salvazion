@@ -6,7 +6,7 @@ import { PILLAR_COLORS, type PillarId } from '@/lib/theme/pillars';
 import { useI18n } from '@/components/I18nProvider';
 
 const HUB_TITLES: Record<PillarId, string> = {
-  salvation: 'Salvazion Hub',
+  salvation: 'Salvation Hub',
   health: 'Health Hub',
   freedom: 'Freedom Hub',
 };

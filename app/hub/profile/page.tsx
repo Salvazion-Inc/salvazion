@@ -21,8 +21,6 @@ import ProfileAvatar from '@/components/profile/ProfileAvatar';
 import TextScaleControl from '@/components/settings/TextScaleControl';
 import ThemeControl from '@/components/settings/ThemeControl';
 import LanguageControl from '@/components/settings/LanguageControl';
-import InvitePhalanx from '@/components/invite/InvitePhalanx';
-import ValueJourney from '@/components/value-journey/ValueJourney';
 import { useI18n } from '@/components/I18nProvider';
 import {
   loadLinkedWallet,
@@ -288,28 +286,6 @@ export default function ProfilePage() {
               </div>
             </div>
           )}
-        </div>
-
-        {/* Phalanx invites — only on profile */}
-        <div className="mb-6">
-          <InvitePhalanx
-            onChanged={(links) => {
-              const family = links.filter((l) =>
-                ['spouse', 'child', 'sibling', 'family'].includes(l.relation)
-              );
-              const friends = links.filter(
-                (l) => !['spouse', 'child', 'sibling', 'family'].includes(l.relation)
-              );
-              setProfile((p) =>
-                p ? { ...p, familyLinks: family, friendsLinks: friends } : p
-              );
-            }}
-          />
-        </div>
-
-        {/* Value journey replay — only on profile */}
-        <div className="mb-6">
-          <ValueJourney />
         </div>
 
         {/* Premium subscription */}

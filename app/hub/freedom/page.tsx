@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import BottomNav from '@/components/BottomNav';
 import { loadProfile, getLifeStageLabel } from '@/lib/store/profile';
 import { UserProfile } from '@/lib/types';
@@ -17,16 +16,15 @@ import {
   FreedomActionDef,
   FreedomContent
 } from '@/lib/freedom/engine';
-import { generateCoachGuidance, CoachMessage, getLionShortNudge } from '@/lib/coach/engine';
 import { evaluateBadges } from '@/lib/badges/engine';
 import XArticlesFeed from '@/components/freedom/XArticlesFeed';
 import BookStoreCarousel from '@/components/freedom/BookStoreCarousel';
 import PillarHubHeader from '@/components/hub/PillarHubHeader';
+import InvitePhalanx from '@/components/invite/InvitePhalanx';
 
 export default function FreedomPage() {
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
   const [scores, setScores] = useState<ComputedScores | null>(null);
-  const [coach, setCoach] = useState<CoachMessage | null>(null);
   const [actions, setActions] = useState<FreedomActionDef[]>([]);
   const [library, setLibrary] = useState<FreedomContent[]>([]);
   const [loggedToday, setLoggedToday] = useState<Set<string>>(new Set());
@@ -46,7 +44,6 @@ export default function FreedomPage() {
     setProfile(p);
     setActions(getFreedomActions(stage));
     setLibrary(getLibraryForStage(stage));
-    if (p) setCoach(generateCoachGuidance(p, s));
     setLoggedToday(new Set(s.todayActions.filter(a => a.pillar === 'freedom').map(a => a.type)));
     try {
       setCompletedContent(new Set(JSON.parse(localStorage.getItem('salvazion_freedom_content') || '[]')));
@@ -71,7 +68,6 @@ export default function FreedomPage() {
       setScores(result);
       setLoggedToday(prev => new Set([...prev, actionType]));
       if (profile) {
-        setCoach(generateCoachGuidance(profile, result));
         evaluateBadges({ onboardingCompleted: profile.onboardingCompleted });
       }
       showToast('+' + getFreedomPoints(actionType) + ' Freedom · ' + label);
@@ -134,15 +130,6 @@ export default function FreedomPage() {
       </PillarHubHeader>
 
       <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto">
-        <div className="glass rounded-xl px-4 py-3 mb-5 flex items-start gap-3 border" style={{ borderColor: 'rgba(123, 201, 138, 0.35)' }}>
-          <div className="w-9 h-9 rounded-full border flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]" style={{ borderColor: 'rgba(123, 201, 138, 0.55)' }}>
-            <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
-          </div>
-          <p className="text-xs text-[#D8E1D9]/80 leading-relaxed">
-            {coach?.pillarFocus === 'freedom' && coach.body ? coach.body : getLionShortNudge('freedom', stage)}
-          </p>
-        </div>
-
         {activeTab === 'learn' && (
           <div className="space-y-5">
             <XArticlesFeed
@@ -224,26 +211,66 @@ export default function FreedomPage() {
         )}
 
         {activeTab === 'connect' && (
-          <div className="space-y-3">
-            <h2 className="text-sm font-semibold text-[var(--sage)]">Conectar</h2>
-            <p className="text-[11px] text-[var(--sage)]/80">Familia, iglesia y comunidad real.</p>
-            {actions.filter(a => a.category === 'connect').map(action => {
-              const done = loggedToday.has(action.actionType);
-              return (
-                <div key={action.id} className={'glass rounded-xl p-4 border ' + (done ? 'border-[var(--border-strong)]' : 'border-[var(--border-soft)]')}>
-                  <div className="flex justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-medium text-white">{action.icon} {action.label}</p>
-                      <p className="text-xs text-[#D8E1D9]/60 mt-1">{action.description}</p>
+          <div className="space-y-4">
+            <InvitePhalanx
+              onChanged={(links) => {
+                const family = links.filter((l) =>
+                  ['spouse', 'child', 'sibling', 'family'].includes(l.relation)
+                );
+                const friends = links.filter(
+                  (l) =>
+                    !['spouse', 'child', 'sibling', 'family'].includes(l.relation)
+                );
+                setProfile((p) =>
+                  p ? { ...p, familyLinks: family, friendsLinks: friends } : p
+                );
+              }}
+            />
+
+            <div className="space-y-3">
+              <h2 className="text-sm font-semibold text-[var(--sage)]">
+                Conexiones de hoy
+              </h2>
+              <p className="text-[11px] text-[var(--sage)]/80">
+                Familia, iglesia y comunidad real.
+              </p>
+              {actions
+                .filter((a) => a.category === 'connect')
+                .map((action) => {
+                  const done = loggedToday.has(action.actionType);
+                  return (
+                    <div
+                      key={action.id}
+                      className={
+                        'glass rounded-xl p-4 border ' +
+                        (done
+                          ? 'border-[var(--border-strong)]'
+                          : 'border-[var(--border-soft)]')
+                      }
+                    >
+                      <div className="flex justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-medium text-white">
+                            {action.icon} {action.label}
+                          </p>
+                          <p className="text-xs text-[#D8E1D9]/60 mt-1">
+                            {action.description}
+                          </p>
+                        </div>
+                        <button
+                          disabled={done}
+                          onClick={() =>
+                            !done && handleLog(action.actionType, action.label)
+                          }
+                          className="btn-sm"
+                        >
+                          {done ? '✓' : '+' + getFreedomPoints(action.actionType)}
+                        </button>
+                      </div>
                     </div>
-                    <button disabled={done} onClick={() => !done && handleLog(action.actionType, action.label)}
-                      className={done ? 'btn-sm' : 'btn-sm'}>
-                      {done ? '✓' : '+' + getFreedomPoints(action.actionType)}
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+                  );
+                })}
+            </div>
           </div>
         )}
 

@@ -59,7 +59,7 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '4. Spiritual and devotional content',
         paragraphs: [
-          'Bible texts, devotionals (including those generated with AI / Grok assistance when configured), and coaching messages are offered as personal and spiritual growth resources. They are not medical, psychological, or legal advice. You remain free to discern and apply what you find useful under your own responsibility.',
+          'Bible texts, devotionals (including those generated with AI assistance when configured), and coaching messages are offered as personal and spiritual growth resources. They are not medical, psychological, or legal advice. You remain free to discern and apply what you find useful under your own responsibility.',
         ],
       },
       {
@@ -152,7 +152,7 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '4. Contenido espiritual y devocional',
         paragraphs: [
-          'Textos bíblicos, devocionales (incluidos los generados con asistencia de IA / Grok cuando esté configurado) y mensajes de coaching se ofrecen como recursos de crecimiento personal y espiritual. No constituyen consejo médico, psicológico ni legal. Eres libre de discernir y aplicar lo que consideres útil bajo tu propia responsabilidad.',
+          'Textos bíblicos, devocionales (incluidos los generados con asistencia de IA cuando esté configurado) y mensajes de coaching se ofrecen como recursos de crecimiento personal y espiritual. No constituyen consejo médico, psicológico ni legal. Eres libre de discernir y aplicar lo que consideres útil bajo tu propia responsabilidad.',
         ],
       },
       {

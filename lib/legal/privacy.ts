@@ -61,7 +61,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
           'Supabase — authentication, database, and storage (with Row Level Security: generally only you access your rows).',
           'Vercel — App hosting.',
           'Google / X — only if you choose “Continue with Gmail” or “Continue with X”; their use is also governed by their policies.',
-          'xAI (Grok) — if you generate AI devotionals; necessary profile context may be sent to personalize text.',
+          'AI provider — if you generate AI devotionals; necessary profile context may be sent to personalize text.',
           'Jupiter / Solana network — if you use swap or wallet; blockchain transactions are public.',
         ],
         paragraphs: [
@@ -179,7 +179,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
           'Supabase — autenticación, base de datos y almacenamiento (con Row Level Security: en general solo tú accedes a tus filas).',
           'Vercel — alojamiento de la App.',
           'Google / X — solo si eliges “Continuar con Gmail” o “Continuar con X”; su uso se rige también por sus políticas.',
-          'xAI (Grok) — si generas devocionales con IA; se envían datos de perfil necesarios para personalizar el texto.',
+          'Proveedor de IA — si generas devocionales con IA; se envían datos de perfil necesarios para personalizar el texto.',
           'Jupiter / red Solana — si usas swap o billetera; las transacciones son públicas en blockchain.',
         ],
         paragraphs: [

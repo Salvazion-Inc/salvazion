@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Payload too large' }, { status: 413 });
     }
 
-    // Premium unlocks Grok AI devotionals; free uses rules engine
+    // Premium unlocks AI devotionals; free uses rules engine
     let premium = false;
     try {
       const supabase = await createClient();
@@ -79,9 +79,9 @@ export async function POST(req: NextRequest) {
         engine: 'salvazion-rules-v1',
         note:
           profile.language === 'en'
-            ? 'Free plan: rules-based daily devotional. Upgrade to Premium for Grok AI devotionals.'
-            : 'Plan Free: devocional diario por reglas. Mejora a Premium para devocionales con IA Grok.',
-        grokConfigured: isXaiConfigured(),
+            ? 'Free plan: rules-based daily devotional. Upgrade to Premium for AI devotionals.'
+            : 'Plan Free: devocional diario por reglas. Mejora a Premium para devocionales con IA.',
+        aiConfigured: isXaiConfigured(),
         premium: false,
       });
     }
@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
       data: devotional,
       engine,
       note,
-      grokConfigured: isXaiConfigured(),
+      aiConfigured: isXaiConfigured(),
       premium: true,
     });
   } catch (error) {
@@ -108,8 +108,7 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   return NextResponse.json({
     message: 'Salvazion Devotional Engine',
-    grokConfigured: isXaiConfigured(),
+    aiConfigured: isXaiConfigured(),
     usage: 'POST with full UserProfile fields (name, language, purpose, birthDate, currentFocus, …)',
-    model: process.env.XAI_MODEL || 'grok-4.5',
   });
 }

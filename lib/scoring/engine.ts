@@ -403,6 +403,67 @@ export function getDailyScore(date: string): DailyScore {
   return { date, ...raw, actions };
 }
 
+export type DayProgressPoint = {
+  date: string;
+  /** Short weekday label key is handled in UI */
+  salvation: number;
+  health: number;
+  freedom: number;
+  global: number;
+  actionCount: number;
+};
+
+/**
+ * Last N days of pillar/global progress for charts (local action history).
+ * Scores use raw capped points (0–100) without streak multipliers for fair day-to-day comparison.
+ */
+export function getProgressHistory(days = 7): DayProgressPoint[] {
+  const points: DayProgressPoint[] = [];
+  const now = new Date();
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(now.getDate() - i);
+    const date = d.toISOString().slice(0, 10);
+    const day = getDailyScore(date);
+    const salvation = Math.min(day.salvation, 100);
+    const health = Math.min(day.health, 100);
+    const freedom = Math.min(day.freedom, 100);
+    const global = Math.round(
+      Math.min(
+        salvation * WEIGHTS.salvation +
+          health * WEIGHTS.health +
+          freedom * WEIGHTS.freedom,
+        100
+      )
+    );
+    points.push({
+      date,
+      salvation,
+      health,
+      freedom,
+      global,
+      actionCount: day.actions.length,
+    });
+  }
+  return points;
+}
+
+/** Totals for action mix charts */
+export function getActionMixTotals(): {
+  salvation: number;
+  health: number;
+  freedom: number;
+  total: number;
+} {
+  const actions = loadActions();
+  const out = { salvation: 0, health: 0, freedom: 0, total: 0 };
+  for (const a of actions) {
+    out[a.pillar] += a.points;
+    out.total += a.points;
+  }
+  return out;
+}
+
 /**
  * Reset local + borra acciones de hoy y streaks en servidor (si hay sesión).
  * Solo para demo / desarrollo.

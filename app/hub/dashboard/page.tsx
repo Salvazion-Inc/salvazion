@@ -28,8 +28,6 @@ import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 import ProfileAvatar from '@/components/profile/ProfileAvatar';
 import { useI18n } from '@/components/I18nProvider';
 import {
-  InviteIcon,
-  SwapIcon,
   DevotionalIcon,
   HealthIcon,
   CalendarIcon,
@@ -37,8 +35,7 @@ import {
   FreedomIcon,
   BibleIcon,
 } from '@/components/Icons';
-import ValueJourney from '@/components/value-journey/ValueJourney';
-import XArticlesFeed from '@/components/freedom/XArticlesFeed';
+import ProgressCharts from '@/components/progress/ProgressCharts';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -484,19 +481,18 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {/* 5) Secondary tools — no duplicate pillar homes */}
-        <div className="w-full max-w-sm space-y-2.5 mb-4">
+        {/* Progress charts — advances & achievements */}
+        <div className="w-full max-w-sm mb-4">
+          <ProgressCharts scores={scores} variant="compact" />
+        </div>
+
+        {/* Shortcuts that are NOT primary BottomNav pillars */}
+        <div className="w-full max-w-sm space-y-2.5 mb-2">
           <HubLink
             href="/hub/devotional"
             Icon={DevotionalIcon}
             title={t('dashboard.devotionalTitle')}
             sub={t('dashboard.devotionalSub')}
-          />
-          <HubLink
-            href="/hub/swap"
-            Icon={SwapIcon}
-            title={t('dashboard.swapTitle')}
-            sub={t('dashboard.swapSub')}
           />
           <HubLink
             href="/hub/calendar"
@@ -510,31 +506,6 @@ export default function DashboardPage() {
             title={t('dashboard.badgesTitle')}
             sub={t('dashboard.badgesSub')}
           />
-          <HubLink
-            href="/hub/profile"
-            Icon={InviteIcon}
-            title={t('invite.title')}
-            sub={t('invite.subtitle')}
-          />
-        </div>
-
-        <div className="w-full max-w-sm mb-4">
-          <ValueJourney autoOpen={false} />
-        </div>
-
-        <div className="w-full max-w-sm mb-2">
-          <XArticlesFeed
-            focus={profile.currentFocus || []}
-            limit={3}
-            showFilters={false}
-            onScored={() => refresh(profile)}
-          />
-          <Link
-            href="/hub/freedom"
-            className="mt-2 block text-center text-[11px] text-[var(--accent)] hover:underline"
-          >
-            {t('articles.seeAll')} →
-          </Link>
         </div>
       </main>
 

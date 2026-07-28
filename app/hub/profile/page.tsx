@@ -23,6 +23,7 @@ import ThemeControl from '@/components/settings/ThemeControl';
 import LanguageControl from '@/components/settings/LanguageControl';
 import InvitePhalanx from '@/components/invite/InvitePhalanx';
 import ValueJourney from '@/components/value-journey/ValueJourney';
+import ProgressCharts from '@/components/progress/ProgressCharts';
 import { useI18n } from '@/components/I18nProvider';
 import {
   loadLinkedWallet,
@@ -31,6 +32,8 @@ import {
 } from '@/lib/solana/wallet-store';
 import { formatSalvazion } from '@/lib/solana/balances';
 import { shortenAddress } from '@/lib/solana/config';
+import { computeScores } from '@/lib/scoring/engine';
+import type { ComputedScores } from '@/lib/scoring/types';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -42,6 +45,7 @@ export default function ProfilePage() {
   const [mounted, setMounted] = useState(false);
   const [confirmClear, setConfirmClear] = useState(false);
   const [linkedWallet, setLinkedWallet] = useState<LinkedWallet | null>(null);
+  const [scores, setScores] = useState<ComputedScores | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -66,6 +70,7 @@ export default function ProfilePage() {
       }
       setProfile(p);
       setDraft(p);
+      setScores(computeScores());
     })();
 
     return unsub;
@@ -85,8 +90,10 @@ export default function ProfilePage() {
 
   if (!mounted || !profile) {
     return (
-      <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-        <div className="text-[#8FD99A] text-lg animate-pulse">{t('common.lionPreparing')}</div>
+      <div className="min-h-screen bg-[var(--true-black)] flex items-center justify-center">
+        <div className="text-[var(--accent)] text-lg animate-pulse" aria-live="polite">
+          {t('common.lionPreparing')}
+        </div>
       </div>
     );
   }
@@ -95,11 +102,11 @@ export default function ProfilePage() {
   const stage = getLifeStage(age);
 
   return (
-    <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
+    <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] flex flex-col">
       {/* Header */}
       <header className="flex items-center justify-between px-5 pt-6 pb-2">
         <div className="flex items-center gap-2.5">
-          <div className="w-10 h-10 rounded-full border border-[var(--border-strong)] flex items-center justify-center lion-glow overflow-hidden bg-[#040404]">
+          <div className="w-10 h-10 rounded-full border border-[var(--border-strong)] flex items-center justify-center lion-glow overflow-hidden bg-[var(--true-black)]">
             <Image src="/logo-icon.png" alt="Salvazion" width={40} height={40} className="object-cover" />
           </div>
           <div>
@@ -107,7 +114,7 @@ export default function ProfilePage() {
             <p className="text-sm font-medium">{t('profile.title')}</p>
           </div>
         </div>
-        <Link href="/hub/dashboard" className="text-sm text-[#8FD99A]">
+        <Link href="/hub/dashboard" className="text-sm text-[var(--accent)]">
           ← {t('nav.dashboard')}
         </Link>
       </header>
@@ -296,7 +303,14 @@ export default function ProfilePage() {
           )}
         </div>
 
-        {/* Phalanx invites — family, siblings, friends, colleagues */}
+        {/* Progress & achievements (full charts) */}
+        {scores && (
+          <div className="mb-6">
+            <ProgressCharts scores={scores} variant="full" />
+          </div>
+        )}
+
+        {/* Phalanx invites — only on profile */}
         <div className="mb-6">
           <InvitePhalanx
             onChanged={(links) => {
@@ -313,25 +327,31 @@ export default function ProfilePage() {
           />
         </div>
 
-        {/* Value journey replay */}
+        {/* Value journey replay — only on profile */}
         <div className="mb-6">
           <ValueJourney />
         </div>
 
-        {/* Aesthetic / colors — Salvazion DNA preserved */}
-        <div className="mb-6">
+        {/* Settings: colors, language, text size */}
+        <section className="mb-6 space-y-4" aria-labelledby="profile-settings-heading">
+          <div className="px-0.5">
+            <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70">
+              {t('settings.section')}
+            </p>
+            <h2
+              id="profile-settings-heading"
+              className="text-base font-semibold text-[var(--accent)]"
+            >
+              {t('settings.title')}
+            </h2>
+            <p className="text-[11px] text-[var(--sage)]/75 mt-0.5">
+              {t('settings.subtitle')}
+            </p>
+          </div>
           <ThemeControl />
-        </div>
-
-        {/* Language — whole app */}
-        <div className="mb-6">
           <LanguageControl />
-        </div>
-
-        {/* Text size — accessibility */}
-        <div className="mb-6">
           <TextScaleControl />
-        </div>
+        </section>
 
         {/* Premium subscription */}
         <div className="mb-6">
@@ -347,7 +367,7 @@ export default function ProfilePage() {
 
         {/* Privacy note */}
         <div className="glass rounded-2xl p-4 mb-6 text-xs text-[var(--sage)] leading-relaxed">
-          <p className="font-medium text-[#8FD99A] mb-1">{t('profile.privacyTitle')}</p>
+          <p className="font-medium text-[var(--accent)] mb-1">{t('profile.privacyTitle')}</p>
           <p>{t('profile.privacyBody')}</p>
         </div>
 

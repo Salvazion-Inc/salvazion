@@ -15,7 +15,24 @@ export type YouTubeChannel = {
   handle?: string;
   accent: string;
   mark: string;
+  /** Optional direct avatar / banner image URL */
+  imageUrl?: string;
 };
+
+/** Avatar for channel cards — prefers @handle via unavatar.io */
+export function youtubeChannelImage(ch: YouTubeChannel): string | null {
+  if (ch.imageUrl) return ch.imageUrl;
+  if (ch.handle) {
+    const h = ch.handle.replace(/^@/, '');
+    return `https://unavatar.io/youtube/@${encodeURIComponent(h)}?fallback=false`;
+  }
+  // Derive @ from youtube.com/@slug
+  const m = ch.url.match(/youtube\.com\/@([^/?#]+)/i);
+  if (m?.[1]) {
+    return `https://unavatar.io/youtube/@${encodeURIComponent(m[1])}?fallback=false`;
+  }
+  return null;
+}
 
 export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
   {

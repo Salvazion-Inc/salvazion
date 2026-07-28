@@ -140,11 +140,18 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
           </p>
         </div>
         <div className="text-right shrink-0">
-          <p className="text-lg font-bold text-[var(--accent)] tabular-nums">
-            {completed}/{total}
+          <p
+            className={`text-xl font-bold tabular-nums leading-none ${
+              pct >= 80 ? 'text-[#8FD99A]' : 'text-[var(--accent)]'
+            }`}
+          >
+            {pct}
+            <span className="text-[11px] opacity-80">%</span>
           </p>
-          <p className="text-[10px] text-[var(--sage)]">{pct}%</p>
-          <p className="text-[10px] tabular-nums text-[var(--sage)]/80 mt-0.5">
+          <p className="text-[10px] text-[var(--sage)] tabular-nums mt-0.5">
+            {completed}/{total} {t('agenda.done')}
+          </p>
+          <p className="text-[10px] tabular-nums text-[var(--sage)]/80">
             {clockLabel}
           </p>
         </div>
@@ -200,79 +207,41 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
             const text = mixTowardBlack(pal.text, darken * 0.35);
             const muted = mixTowardBlack(pal.muted, darken * 0.4);
             const solid = mixTowardBlack(pal.solid, darken * 0.25);
-            // Height proportional to hours (min ~2.75rem for usability)
-            const blockH = Math.max(44, Math.round((durMin / 60) * 40));
-
             return (
               <li
                 key={ev.id}
-                className={`rounded-xl px-3 border flex items-start gap-2.5 transition-[background,border-color,opacity] duration-700 ${
-                  ev.completed ? 'opacity-55' : phase === 'past' ? 'opacity-80' : 'opacity-100'
+                className={`rounded-lg px-2.5 py-1.5 border flex items-center gap-2 transition-[background,border-color,opacity] duration-700 min-h-[42px] ${
+                  ev.completed ? 'opacity-70' : phase === 'past' ? 'opacity-85' : 'opacity-100'
                 } ${phase === 'now' ? 'ring-1 ring-[var(--accent)]/35' : ''}`}
                 style={{
                   background: bg,
                   borderColor: phase === 'now'
                     ? mixTowardBlack('var(--accent)', ambient * 0.2)
                     : border,
-                  minHeight: blockH,
-                  paddingTop: blockH >= 72 ? 12 : 8,
-                  paddingBottom: blockH >= 72 ? 12 : 8,
                 }}
                 data-phase={phase}
               >
-                <button
-                  type="button"
-                  onClick={() => toggle(ev.id)}
-                  className="w-8 h-8 rounded-full border-2 shrink-0 flex items-center justify-center text-sm font-bold mt-0.5 transition-colors duration-500"
-                  style={{
-                    borderColor: solid,
-                    background: ev.completed ? solid : 'transparent',
-                    color: ev.completed
-                      ? ev.pillar === 'salvation'
-                        ? '#111'
-                        : '#0a120c'
-                      : text,
-                  }}
-                  aria-pressed={!!ev.completed}
-                  aria-label={labelFor(ev)}
-                >
-                  {ev.completed ? '✓' : ''}
-                </button>
+                <span
+                  className="w-1 self-stretch min-h-[26px] rounded-full shrink-0"
+                  style={{ background: solid }}
+                  aria-hidden
+                />
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5 mb-0.5">
-                    <span
-                      className="w-1.5 h-1.5 rounded-full shrink-0 transition-colors duration-500"
-                      style={{
-                        background: solid,
-                        boxShadow:
-                          phase === 'now'
-                            ? `0 0 8px ${pal.solid}`
-                            : undefined,
-                      }}
-                      aria-hidden
-                    />
+                  <div className="flex items-center gap-1.5">
                     <p
-                      className="text-[10px] uppercase tracking-wide"
+                      className="text-[10px] tabular-nums font-semibold shrink-0"
                       style={{ color: muted }}
                     >
-                      {t(
-                        `nav.${
-                          ev.pillar === 'salvation'
-                            ? 'salvation'
-                            : ev.pillar === 'health'
-                              ? 'health'
-                              : 'freedom'
-                        }`
-                      )}
+                      {ev.time || '00:00'}
                     </p>
                     {phase === 'now' && (
-                      <span className="text-[9px] uppercase tracking-wider text-[var(--accent)] ml-auto">
+                      <span className="text-[9px] uppercase tracking-wider text-[var(--accent)]">
                         {t('agenda.now')}
                       </span>
                     )}
                   </div>
                   <p
-                    className={`text-sm font-semibold leading-snug transition-colors duration-500 ${
+                    className={`text-[12px] font-semibold leading-snug truncate transition-colors duration-500 ${
                       ev.completed ? 'line-through opacity-70' : ''
                     }`}
                     style={{ color: text }}
@@ -280,12 +249,52 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
                     {labelFor(ev)}
                   </p>
                   <p
-                    className="text-[11px] tabular-nums mt-0.5 transition-colors duration-500"
+                    className="text-[9px] tabular-nums transition-colors duration-500 opacity-80"
                     style={{ color: muted }}
                   >
-                    {ev.time || '00:00'} – {end}
-                    <span className="opacity-80"> · {dur}</span>
+                    {end} · {dur}
                   </p>
+                </div>
+                <div
+                  className="flex shrink-0 rounded-md border overflow-hidden"
+                  style={{ borderColor: border }}
+                  role="group"
+                >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!ev.completed) toggle(ev.id);
+                    }}
+                    className="min-w-[1.9rem] min-h-[28px] px-1 text-[9px] font-bold"
+                    style={{
+                      background: ev.completed ? solid : 'transparent',
+                      color: ev.completed
+                        ? ev.pillar === 'salvation'
+                          ? '#111'
+                          : '#0a120c'
+                        : muted,
+                    }}
+                    aria-pressed={!!ev.completed}
+                  >
+                    {t('calendar.yes')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (ev.completed) toggle(ev.id);
+                    }}
+                    className="min-w-[1.9rem] min-h-[28px] px-1 text-[9px] font-bold border-l"
+                    style={{
+                      borderColor: border,
+                      background: !ev.completed
+                        ? 'rgba(0,0,0,0.3)'
+                        : 'transparent',
+                      color: !ev.completed ? text : muted,
+                    }}
+                    aria-pressed={!ev.completed}
+                  >
+                    {t('calendar.no')}
+                  </button>
                 </div>
               </li>
             );

@@ -10,6 +10,8 @@ import {
   todayStr,
   weekDates,
   getEventsForDate,
+  getDayCompletionStats,
+  isDaySummaryWindow,
   duplicateToTomorrow,
   duplicateToWeek,
   clearDay,
@@ -25,7 +27,7 @@ export default function CalendarPage() {
   const [week, setWeek] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
   const [name, setName] = useState('');
-  const [counts, setCounts] = useState({ done: 0, total: 0 });
+  const [counts, setCounts] = useState({ done: 0, total: 0, percent: 0 });
   const [toast, setToast] = useState<string | null>(null);
   /** Bump to force RoutineBoard remount after clear/reset */
   const [boardEpoch, setBoardEpoch] = useState(0);
@@ -36,11 +38,8 @@ export default function CalendarPage() {
   };
 
   const refreshCounts = useCallback((date: string) => {
-    const de = getEventsForDate(date);
-    setCounts({
-      done: de.filter((e) => e.completed).length,
-      total: de.length,
-    });
+    const stats = getDayCompletionStats(date);
+    setCounts(stats);
     // refresh week dots without remounting board
     setWeek(weekDates(new Date(date + 'T12:00:00')));
   }, []);
@@ -102,10 +101,17 @@ export default function CalendarPage() {
             </div>
           </div>
           <div className="text-right shrink-0">
-            <p className="text-sm font-bold text-white tabular-nums">
-              {counts.done}/{counts.total}
+            <p
+              className={`text-lg font-bold tabular-nums leading-none ${
+                counts.percent >= 80 ? 'text-[#8FD99A]' : 'text-white'
+              }`}
+            >
+              {counts.percent}
+              <span className="text-[11px] font-semibold opacity-80">%</span>
             </p>
-            <p className="text-[10px] text-[var(--sage)]/80">{t('agenda.done')}</p>
+            <p className="text-[10px] text-[var(--sage)]/80 mt-0.5 tabular-nums">
+              {counts.done}/{counts.total} {t('agenda.done')}
+            </p>
           </div>
         </div>
 
@@ -114,14 +120,13 @@ export default function CalendarPage() {
             const dayNum = d.slice(8, 10);
             const isSelected = d === selectedDate;
             const isToday = d === todayStr();
-            const de = getEventsForDate(d);
-            const doneCount = de.filter((e) => e.completed).length;
+            const st = getDayCompletionStats(d);
             return (
               <button
                 key={d}
                 type="button"
                 onClick={() => setSelectedDate(d)}
-                className={`flex-shrink-0 w-11 py-2 rounded-xl text-center border transition-all min-h-[52px] ${
+                className={`flex-shrink-0 w-11 py-1.5 rounded-xl text-center border transition-all min-h-[48px] ${
                   isSelected
                     ? 'border-[var(--border-strong)] bg-[var(--surface-active)]'
                     : 'border-[var(--border-soft)]'
@@ -134,15 +139,19 @@ export default function CalendarPage() {
                   )}
                 </p>
                 <p
-                  className={`text-sm font-semibold ${
+                  className={`text-sm font-semibold leading-tight ${
                     isToday ? 'text-[var(--accent)]' : 'text-white'
                   }`}
                 >
                   {dayNum}
                 </p>
-                {de.length > 0 && (
-                  <p className="text-[9px] text-[var(--sage)]/70">
-                    {doneCount}/{de.length}
+                {st.total > 0 && (
+                  <p
+                    className={`text-[9px] tabular-nums ${
+                      st.percent >= 80 ? 'text-[#8FD99A]' : 'text-[var(--sage)]/70'
+                    }`}
+                  >
+                    {st.percent}%
                   </p>
                 )}
               </button>
@@ -151,8 +160,15 @@ export default function CalendarPage() {
         </div>
       </header>
 
-      <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto max-w-lg mx-auto w-full">
-        <h2 className="text-sm font-semibold capitalize text-white mb-3">{dayLabel}</h2>
+      <main className="flex-1 px-5 pt-3 pb-32 overflow-y-auto max-w-lg mx-auto w-full">
+        <div className="flex items-end justify-between gap-2 mb-2.5">
+          <h2 className="text-sm font-semibold capitalize text-white">{dayLabel}</h2>
+          {isDaySummaryWindow(selectedDate) && counts.total > 0 && (
+            <p className="text-[10px] text-[var(--accent)] font-medium shrink-0">
+              {t('calendar.daySummary')}
+            </p>
+          )}
+        </div>
 
         <div className="flex flex-wrap gap-3 mb-3 text-[10px]">
           <span className="inline-flex items-center gap-1.5 text-[var(--sage)]">
@@ -169,7 +185,7 @@ export default function CalendarPage() {
           </span>
         </div>
 
-        <div className="glass rounded-xl px-3 py-2.5 mb-3 text-[11px] text-[var(--off-white)]/80 leading-relaxed">
+        <div className="glass rounded-xl px-3 py-2 mb-3 text-[11px] text-[var(--off-white)]/80 leading-relaxed">
           {t('calendar.coachGuideSimple')}
         </div>
 

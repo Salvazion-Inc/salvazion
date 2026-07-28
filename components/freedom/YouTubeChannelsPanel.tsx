@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import {
   YOUTUBE_CHANNELS,
+  youtubeChannelImage,
   type YouTubeChannel,
 } from '@/lib/freedom/youtube-channels';
 import { logAction } from '@/lib/scoring/engine';
@@ -15,16 +16,16 @@ type Props = {
 };
 
 /**
- * YouTube channels of library authors — replaces short video + mini-lesson cards.
- * Opening a channel can score Freedom (article/video or lesson).
+ * YouTube channels of library authors — with channel images when available.
  */
 export default function YouTubeChannelsPanel({
   className = '',
   onScored,
 }: Props) {
-  const { t, lang } = useI18n();
+  const { lang } = useI18n();
   const es = lang !== 'en';
   const [opened, setOpened] = useState<Set<string>>(() => new Set());
+  const [imgFail, setImgFail] = useState<Set<string>>(() => new Set());
 
   const markWatched = (ch: YouTubeChannel, kind: 'video' | 'lesson') => {
     if (opened.has(ch.id)) return;
@@ -56,6 +57,8 @@ export default function YouTubeChannelsPanel({
         {YOUTUBE_CHANNELS.map((ch) => {
           const done = opened.has(ch.id);
           const focus = es ? ch.focusEs : ch.focusEn;
+          const img = youtubeChannelImage(ch);
+          const showImg = !!img && !imgFail.has(ch.id);
           return (
             <article
               key={ch.id}
@@ -67,15 +70,33 @@ export default function YouTubeChannelsPanel({
               }}
             >
               <div
-                className="h-20 flex items-center justify-center relative"
+                className="h-24 flex items-center justify-center relative overflow-hidden"
                 style={{
-                  background: `linear-gradient(145deg, ${ch.accent}40, #0a0a0a 72%)`,
+                  background: `linear-gradient(145deg, ${ch.accent}50, #0a0a0a 78%)`,
                 }}
               >
-                <span className="text-3xl" aria-hidden>
-                  {ch.mark}
-                </span>
-                <span className="absolute bottom-1.5 left-2 text-[9px] font-semibold text-white/90 bg-red-600/90 px-1.5 py-0.5 rounded">
+                {showImg ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={img}
+                    alt=""
+                    className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    onError={() =>
+                      setImgFail((prev) => new Set([...prev, ch.id]))
+                    }
+                  />
+                ) : (
+                  <span className="text-3xl relative z-[1]" aria-hidden>
+                    {ch.mark}
+                  </span>
+                )}
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"
+                  aria-hidden
+                />
+                <span className="absolute bottom-1.5 left-2 text-[9px] font-semibold text-white/95 bg-red-600/90 px-1.5 py-0.5 rounded z-[1]">
                   YouTube
                 </span>
               </div>

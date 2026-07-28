@@ -6,10 +6,7 @@ import Link from 'next/link';
 import {
   loadProfile,
   loadProfileAsync,
-  calculateAge,
-  getLifeStage,
-  getLifeStageLabel,
-  formatLocation,
+  saveProfile,
 } from '@/lib/store/profile';
 import { UserProfile } from '@/lib/types';
 import {
@@ -39,6 +36,10 @@ export default function DashboardPage() {
   const [mounted, setMounted] = useState(false);
   const [newBadges, setNewBadges] = useState<BadgeDef[]>([]);
   const [badgeProgress, setBadgeProgress] = useState({ earned: 0, total: 0 });
+  const [editingPurpose, setEditingPurpose] = useState(false);
+  const [purposeDraft, setPurposeDraft] = useState('');
+  const [purposeSaving, setPurposeSaving] = useState(false);
+  const [purposeError, setPurposeError] = useState<string | null>(null);
 
   const refresh = useCallback((p?: Partial<UserProfile>, s?: ComputedScores) => {
     const scoresToUse = s || computeScores();
@@ -72,6 +73,47 @@ export default function DashboardPage() {
     return getEarnedBadgesDetailed().slice(-4).reverse();
   }, [badgeProgress.earned, newBadges.length]);
 
+  const startEditPurpose = () => {
+    setPurposeDraft(profile?.purpose || '');
+    setPurposeError(null);
+    setEditingPurpose(true);
+  };
+
+  const cancelEditPurpose = () => {
+    setEditingPurpose(false);
+    setPurposeDraft(profile?.purpose || '');
+    setPurposeError(null);
+  };
+
+  const savePurpose = async () => {
+    const next = purposeDraft.trim();
+    if (!next) {
+      setPurposeError(t('dashboard.purposeRequired'));
+      return;
+    }
+    if (next.length > 500) {
+      setPurposeError(t('dashboard.purposeTooLong'));
+      return;
+    }
+    setPurposeSaving(true);
+    setPurposeError(null);
+    try {
+      const base = profile || loadProfile() || {};
+      const merged: Partial<UserProfile> = {
+        ...base,
+        purpose: next,
+        onboardingCompleted: true,
+      };
+      await saveProfile(merged);
+      setProfile(merged);
+      setEditingPurpose(false);
+    } catch {
+      setPurposeError(t('dashboard.purposeSaveError'));
+    } finally {
+      setPurposeSaving(false);
+    }
+  };
+
   if (!mounted || !profile || !scores) {
     return (
       <div className="min-h-screen bg-[var(--true-black)] flex items-center justify-center">
@@ -86,16 +128,6 @@ export default function DashboardPage() {
   }
 
   const { salvation, health, freedom, global } = scores;
-
-  const age = profile.birthDate ? calculateAge(profile.birthDate) : null;
-  const stageLabel =
-    age !== null ? getLifeStageLabel(getLifeStage(age)) : null;
-  const location = formatLocation(profile.city, profile.country);
-  const metaBits = [
-    age !== null ? String(age) : null,
-    stageLabel,
-    location || null,
-  ].filter(Boolean) as string[];
 
   const scoreLabel = `${t('dashboard.salvazionScore')} ${global}: ${t('nav.salvation')} ${salvation}, ${t('nav.health')} ${health}, ${t('nav.freedom')} ${freedom}`;
 
@@ -153,17 +185,9 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-[10px] uppercase tracking-[0.16em] text-[var(--accent)]/80 font-medium">
-                Salvazion
-              </p>
-              <p className="text-lg font-semibold text-white leading-tight truncate group-hover:text-[var(--accent)] transition-colors">
+              <p className="text-lg font-semibold text-white leading-snug break-words group-hover:text-[var(--accent)] transition-colors">
                 {profile.name || 'Brother'}
               </p>
-              {metaBits.length > 0 && (
-                <p className="text-[11px] text-[var(--sage)]/80 mt-0.5 truncate">
-                  {metaBits.join(' · ')}
-                </p>
-              )}
             </div>
             <span
               className="shrink-0 text-[var(--sage)]/50 group-hover:text-[var(--accent)] transition-colors text-sm"
@@ -173,32 +197,103 @@ export default function DashboardPage() {
             </span>
           </Link>
 
-          {/* Purpose */}
-          {profile.purpose ? (
-            <div className="relative z-[1] px-4 pb-3">
-              <div
-                className="rounded-xl px-3.5 py-3 border"
-                style={{
-                  borderColor: 'color-mix(in srgb, var(--accent) 18%, transparent)',
-                  background:
-                    'linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, transparent), transparent)',
-                }}
-              >
-                <p className="text-[9px] uppercase tracking-[0.14em] text-[var(--sage)]/65 mb-1">
+          {/* Purpose — view / edit from Dashboard */}
+          <div className="relative z-[1] px-4 pb-3">
+            <div
+              className="rounded-xl px-3.5 py-3 border"
+              style={{
+                borderColor: 'color-mix(in srgb, var(--accent) 18%, transparent)',
+                background:
+                  'linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, transparent), transparent)',
+              }}
+            >
+              <div className="flex items-center justify-between gap-2 mb-1.5">
+                <p className="text-[9px] uppercase tracking-[0.14em] text-[var(--sage)]/65">
                   {t('dashboard.purpose')}
                 </p>
-                <p className="text-[13px] leading-relaxed text-[var(--off-white)]/90 line-clamp-3">
-                  <span className="text-[var(--accent)]/70 font-display text-base leading-none mr-0.5">
-                    “
-                  </span>
-                  {profile.purpose}
-                  <span className="text-[var(--accent)]/70 font-display text-base leading-none ml-0.5">
-                    ”
-                  </span>
-                </p>
+                {!editingPurpose && (
+                  <button
+                    type="button"
+                    onClick={startEditPurpose}
+                    className="text-[10px] font-semibold text-[var(--accent)] hover:opacity-90 px-2 py-0.5 rounded-full border border-[var(--border-soft)] hover:border-[var(--border-strong)] transition"
+                  >
+                    {profile.purpose
+                      ? t('dashboard.editPurpose')
+                      : t('dashboard.setPurpose')}
+                  </button>
+                )}
               </div>
+
+              {editingPurpose ? (
+                <div className="space-y-2.5">
+                  <textarea
+                    value={purposeDraft}
+                    onChange={(e) => setPurposeDraft(e.target.value)}
+                    rows={4}
+                    maxLength={500}
+                    placeholder={t('dashboard.purposePlaceholder')}
+                    className="w-full bg-[#040404]/90 border border-[var(--border-soft)] rounded-lg px-3 py-2.5 text-[13px] text-[var(--off-white)] placeholder:text-[var(--sage)]/50 focus:outline-none focus:border-[var(--accent)] resize-none leading-relaxed"
+                    autoFocus
+                    aria-label={t('dashboard.purpose')}
+                  />
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-[10px] text-[var(--sage)]/60">
+                      {purposeDraft.trim().length}/500
+                    </p>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={cancelEditPurpose}
+                        disabled={purposeSaving}
+                        className="px-3 py-1.5 rounded-lg text-[11px] border border-[var(--border-soft)] text-[var(--sage)] hover:border-[var(--border-strong)] disabled:opacity-50"
+                      >
+                        {t('dashboard.cancelPurpose')}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => void savePurpose()}
+                        disabled={purposeSaving}
+                        className="px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-[var(--accent-fill)] text-[#0a120c] hover:bg-[var(--accent-hover)] disabled:opacity-50"
+                      >
+                        {purposeSaving
+                          ? t('dashboard.savingPurpose')
+                          : t('dashboard.savePurpose')}
+                      </button>
+                    </div>
+                  </div>
+                  {purposeError && (
+                    <p className="text-[11px] text-red-400" role="alert">
+                      {purposeError}
+                    </p>
+                  )}
+                </div>
+              ) : profile.purpose ? (
+                <button
+                  type="button"
+                  onClick={startEditPurpose}
+                  className="w-full text-left group"
+                >
+                  <p className="text-[13px] leading-relaxed text-[var(--off-white)]/90 line-clamp-4 group-hover:text-white transition-colors">
+                    <span className="text-[var(--accent)]/70 font-display text-base leading-none mr-0.5">
+                      “
+                    </span>
+                    {profile.purpose}
+                    <span className="text-[var(--accent)]/70 font-display text-base leading-none ml-0.5">
+                      ”
+                    </span>
+                  </p>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={startEditPurpose}
+                  className="w-full text-left text-[12px] text-[var(--sage)]/80 leading-relaxed hover:text-[var(--accent)] transition-colors"
+                >
+                  {t('dashboard.purposeEmpty')}
+                </button>
+              )}
             </div>
-          ) : null}
+          </div>
 
           {/* Score rings */}
           <div className="relative z-[1] flex flex-col items-center px-4 pt-1 pb-5">

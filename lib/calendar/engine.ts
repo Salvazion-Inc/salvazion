@@ -203,6 +203,27 @@ export function getEventsForDate(date: string): CalendarEvent[] {
     .sort((a, b) => (a.time || '99:99').localeCompare(b.time || '99:99'));
 }
 
+/** Planned vs completed for a day (for progress % UI). */
+export function getDayCompletionStats(date: string): {
+  total: number;
+  done: number;
+  percent: number;
+} {
+  const events = getEventsForDate(date);
+  const total = events.length;
+  const done = events.filter((e) => e.completed).length;
+  const percent = total === 0 ? 0 : Math.round((done / total) * 100);
+  return { total, done, percent };
+}
+
+/** True when local clock is in evening of `date` (or date is in the past). */
+export function isDaySummaryWindow(date: string, now = new Date()): boolean {
+  const today = todayStr();
+  if (date < today) return true;
+  if (date > today) return false;
+  return now.getHours() >= 20;
+}
+
 export function getEventsInRange(start: string, end: string): CalendarEvent[] {
   return loadEvents().filter((e) => e.date >= start && e.date <= end);
 }

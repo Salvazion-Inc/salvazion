@@ -26,16 +26,6 @@ type Props = {
 
 type SpeakState = 'idle' | 'loading' | 'playing';
 
-function speakBrowser(text: string, lang: 'es' | 'en') {
-  if (typeof window === 'undefined' || !window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = lang === 'en' ? 'en-US' : 'es-ES';
-  u.rate = 0.95;
-  u.pitch = 0.9;
-  window.speechSynthesis.speak(u);
-}
-
 export default function VoiceAgent({
   profile,
   scores = null,
@@ -52,7 +42,8 @@ export default function VoiceAgent({
   const [listening, setListening] = useState(false);
   const [speakState, setSpeakState] = useState<SpeakState>('idle');
   const [error, setError] = useState<string | null>(null);
-  const [voiceOn, setVoiceOn] = useState(true);
+  /** Off by default — freemium browser TTS is poor; Premium uses xAI voice only */
+  const [voiceOn, setVoiceOn] = useState(false);
   const [scoredDebate, setScoredDebate] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -89,9 +80,16 @@ export default function VoiceAgent({
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ text, lang }),
         });
+        // No browser/robotic fallback for freemium — only Premium xAI voice
         if (!res.ok) {
-          speakBrowser(text, lang);
           setSpeakState('idle');
+          if (res.status === 402) {
+            setError(
+              es
+                ? 'Voz del León Verde disponible en Premium (sin voz robótica).'
+                : 'Green Lion voice is Premium (no robotic free TTS).'
+            );
+          }
           return;
         }
         const blob = await res.blob();
@@ -109,15 +107,13 @@ export default function VoiceAgent({
         };
         audio.onerror = () => {
           setSpeakState('idle');
-          speakBrowser(text, lang);
         };
         await audio.play();
       } catch {
-        speakBrowser(text, lang);
         setSpeakState('idle');
       }
     },
-    [lang, voiceOn]
+    [lang, voiceOn, es]
   );
 
   const send = useCallback(

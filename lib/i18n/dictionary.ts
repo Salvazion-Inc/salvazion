@@ -206,6 +206,18 @@ export const dictionary = {
     },
     dashboard: {
       purpose: 'Tu propósito',
+      editPurpose: 'Editar',
+      setPurpose: 'Definir',
+      savePurpose: 'Guardar',
+      savingPurpose: 'Guardando…',
+      cancelPurpose: 'Cancelar',
+      purposePlaceholder:
+        '¿Para qué estás en este mundo? ¿Qué legado quieres dejar en fe, familia, salud y libertad?',
+      purposeEmpty:
+        'Aún no has definido tu propósito. Toca aquí para escribirlo — es tu brújula en Salvazion.',
+      purposeRequired: 'Escribe tu propósito (no puede quedar vacío).',
+      purposeTooLong: 'Máximo 500 caracteres.',
+      purposeSaveError: 'No se pudo guardar. Intenta de nuevo.',
       pillars: 'Tus tres pilares',
       pillarsHint: 'Salvation · Health · Freedom — toca un pilar para entrar',
       coachCta: 'Hablar con el León',
@@ -237,8 +249,9 @@ export const dictionary = {
     bible: {
       title: 'Biblia',
       chapters: 'capítulos · 66 libros',
-      read: 'Leer',
-      explore: 'Explorar',
+      read: 'Biblia',
+      readMode: 'Leer',
+      explore: 'Biblia',
       prayer: 'Oración',
       devotional: 'Devocional',
       library: 'Libros',
@@ -606,7 +619,7 @@ export const dictionary = {
       attach: 'Adjuntar al calendario',
       duration: 'Duración',
       coachGuideSimple:
-        'Día 00:00–24:00. Toca un bloque (S blanco · H azul · F verde), elige hora y duración (30 min por defecto), y adjúntalo. Márcalo ✓ al cumplirlo. Usa «Rutina ideal» para el horario recomendado.',
+        'Toca un bloque (S · H · F), elige hora y duración, y adjúntalo. Marca Sí/No si lo cumpliste. Al final del día verás el % planificado vs realizado.',
       move: 'Mover',
       addBlock: 'Bloque',
       pickBlock: 'Elige una acción',
@@ -616,7 +629,7 @@ export const dictionary = {
       time: 'Hora',
       homeHint: 'Arma tu rutina en el Calendario (bloques desde 00:00).',
       coachGuide:
-        'Coloca bloques de 3 colores (Salvation · Health · Freedom) desde las 00:00. Ajusta duración con +/−. Duplica al día siguiente o a la semana para construir constancia.',
+        'Coloca bloques de 3 colores (Salvation · Health · Freedom). Marca Sí o No en cada uno. El % del día = cumplidos / planificados.',
       coachEmpty: 'Adjunta bloques o carga la rutina ideal para armar tu día.',
       coachDone: 'Día cumplido. La constancia forja el carácter.',
       coachProgress: 'Llevas {done} de {total}. Termina lo que empezaste.',
@@ -630,7 +643,19 @@ export const dictionary = {
       resetDefaultConfirm:
         '¿Restablecer este día a la rutina ideal? (Sueño 00:00–07:00, oración, ejercicio, comidas, trabajo, familia…)',
       resetDefaultDone: 'Día restablecido a la rutina ideal',
-      proportionalHint: 'Tamaño ∝ horas',
+      proportionalHint: 'Lista compacta',
+      dayProgress: 'Progreso del día',
+      daySummary: 'Resumen del día',
+      plannedVsDone: 'planificados vs cumplidos',
+      fulfilled: '¿Cumplido?',
+      yes: 'Sí',
+      no: 'No',
+      yesDone: 'Marcar como cumplido',
+      noPending: 'Marcar como pendiente',
+      summaryPerfect: '100% cumplido. Excelente disciplina.',
+      summaryGood: 'Cumpliste el {percent}% de lo planificado. Buen ritmo.',
+      summaryLow:
+        'Solo el {percent}% de lo planificado. Ajusta el plan o cierra lo pendiente.',
     },
     outdoorClimate: {
       section: 'Health · Exterior',
@@ -1011,6 +1036,18 @@ export const dictionary = {
     },
     dashboard: {
       purpose: 'Your purpose',
+      editPurpose: 'Edit',
+      setPurpose: 'Set',
+      savePurpose: 'Save',
+      savingPurpose: 'Saving…',
+      cancelPurpose: 'Cancel',
+      purposePlaceholder:
+        'Why are you here? What legacy do you want in faith, family, health and freedom?',
+      purposeEmpty:
+        'You have not set your purpose yet. Tap here to write it — your compass in Salvazion.',
+      purposeRequired: 'Write your purpose (it cannot be empty).',
+      purposeTooLong: 'Maximum 500 characters.',
+      purposeSaveError: 'Could not save. Try again.',
       pillars: 'Your three pillars',
       pillarsHint: 'Salvation · Health · Freedom — tap a pillar to enter',
       coachCta: 'Talk to the Lion',
@@ -1042,8 +1079,9 @@ export const dictionary = {
     bible: {
       title: 'Bible',
       chapters: 'chapters · 66 books',
-      read: 'Read',
-      explore: 'Explore',
+      read: 'Bible',
+      readMode: 'Read',
+      explore: 'Bible',
       prayer: 'Prayer',
       devotional: 'Devotional',
       library: 'Books',
@@ -1410,7 +1448,7 @@ export const dictionary = {
       attach: 'Attach to calendar',
       duration: 'Duration',
       coachGuideSimple:
-        'Day runs 00:00–24:00. Tap a block (S white · H blue · F green), pick time and duration (default 30 min), and attach it. Check ✓ when done. Use “Ideal routine” for the recommended schedule.',
+        'Tap a block (S · H · F), pick time and duration, and attach it. Mark Yes/No when done. At day end you see % planned vs completed.',
       move: 'Move',
       addBlock: 'Block',
       pickBlock: 'Pick an action',
@@ -1420,7 +1458,7 @@ export const dictionary = {
       time: 'Time',
       homeHint: 'Build your routine in Calendar (blocks from 00:00).',
       coachGuide:
-        'Place blocks in 3 colors (Salvation · Health · Freedom) from 00:00. Adjust duration with +/−. Duplicate to tomorrow or the week to build consistency.',
+        'Place blocks in 3 colors (Salvation · Health · Freedom). Mark Yes or No on each. Day % = done / planned.',
       coachEmpty: 'Attach blocks or load the ideal routine to shape your day.',
       coachDone: 'Day complete. Consistency forges character.',
       coachProgress: 'You have {done} of {total}. Finish what you started.',
@@ -1434,7 +1472,19 @@ export const dictionary = {
       resetDefaultConfirm:
         'Reset this day to the ideal routine? (Sleep 00:00–07:00, prayer, exercise, meals, work, family…)',
       resetDefaultDone: 'Day reset to the ideal routine',
-      proportionalHint: 'Size ∝ hours',
+      proportionalHint: 'Compact list',
+      dayProgress: 'Day progress',
+      daySummary: 'Day summary',
+      plannedVsDone: 'planned vs done',
+      fulfilled: 'Done?',
+      yes: 'Yes',
+      no: 'No',
+      yesDone: 'Mark as done',
+      noPending: 'Mark as pending',
+      summaryPerfect: '100% complete. Excellent discipline.',
+      summaryGood: 'You completed {percent}% of what you planned. Solid pace.',
+      summaryLow:
+        'Only {percent}% of the plan done. Adjust the plan or close what is open.',
     },
     outdoorClimate: {
       section: 'Health · Outdoor',

@@ -55,6 +55,10 @@ const nextConfig: NextConfig = {
                 "https://openlibrary.org",
                 "https://covers.openlibrary.org",
                 "https://www.googleapis.com",
+                "https://nominatim.openstreetmap.org",
+                "https://overpass-api.de",
+                "https://*.tile.openstreetmap.org",
+                "https://unavatar.io",
                 // Wearable OAuth + APIs
                 "https://www.fitbit.com",
                 "https://api.fitbit.com",
@@ -103,7 +107,7 @@ const nextConfig: NextConfig = {
               ].join(" "),
               "worker-src 'self' blob:",
               "child-src 'self' blob:",
-              "frame-src 'self' https://*.phantom.app https://*.solflare.com https://jup.ag https://*.jup.ag https://terminal.jup.ag https://verify.walletconnect.com https://verify.walletconnect.org https://*.walletconnect.com https://*.walletconnect.org",
+              "frame-src 'self' https://*.phantom.app https://*.solflare.com https://jup.ag https://*.jup.ag https://terminal.jup.ag https://verify.walletconnect.com https://verify.walletconnect.org https://*.walletconnect.com https://*.walletconnect.org https://www.openstreetmap.org https://openstreetmap.org",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",
@@ -149,6 +153,26 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "books.google.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "books.googleusercontent.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "unavatar.io",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "yt3.ggpht.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "yt3.googleusercontent.com",
         pathname: "/**",
       },
     ],

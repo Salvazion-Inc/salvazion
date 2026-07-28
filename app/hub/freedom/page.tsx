@@ -18,6 +18,7 @@ import XArticlesFeed from '@/components/freedom/XArticlesFeed';
 import BookStoreCarousel from '@/components/freedom/BookStoreCarousel';
 import YouTubeChannelsPanel from '@/components/freedom/YouTubeChannelsPanel';
 import XCommunitiesPanel from '@/components/freedom/XCommunitiesPanel';
+import ChurchesMapPanel from '@/components/freedom/ChurchesMapPanel';
 import PillarHubHeader from '@/components/hub/PillarHubHeader';
 import InvitePhalanx from '@/components/invite/InvitePhalanx';
 import VoiceAgent from '@/components/coach/VoiceAgent';
@@ -174,50 +175,7 @@ export default function FreedomPage() {
               }}
             />
 
-            <div className="space-y-3">
-              <h2 className="text-sm font-semibold text-[var(--sage)]">
-                Conexiones de hoy
-              </h2>
-              <p className="text-[11px] text-[var(--sage)]/80">
-                Familia, iglesia y comunidad real.
-              </p>
-              {actions
-                .filter((a) => a.category === 'connect')
-                .map((action) => {
-                  const done = loggedToday.has(action.actionType);
-                  return (
-                    <div
-                      key={action.id}
-                      className={
-                        'glass rounded-xl p-4 border ' +
-                        (done
-                          ? 'border-[var(--border-strong)]'
-                          : 'border-[var(--border-soft)]')
-                      }
-                    >
-                      <div className="flex justify-between gap-3">
-                        <div>
-                          <p className="text-sm font-medium text-white">
-                            {action.icon} {action.label}
-                          </p>
-                          <p className="text-xs text-[#D8E1D9]/60 mt-1">
-                            {action.description}
-                          </p>
-                        </div>
-                        <button
-                          disabled={done}
-                          onClick={() =>
-                            !done && handleLog(action.actionType, action.label)
-                          }
-                          className="btn-sm"
-                        >
-                          {done ? '✓' : '+' + getFreedomPoints(action.actionType)}
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-            </div>
+            <ChurchesMapPanel />
           </div>
         )}
 

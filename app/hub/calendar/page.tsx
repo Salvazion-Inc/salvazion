@@ -143,18 +143,18 @@ export default function CalendarPage() {
           </h2>
         </div>
 
-        {/* Legend — 3 colors */}
+        {/* Legend — Salvation white · Health blue · Freedom green */}
         <div className="flex flex-wrap gap-3 mb-3 text-[10px]">
           <span className="inline-flex items-center gap-1.5 text-[var(--sage)]">
-            <i className="w-2.5 h-2.5 rounded-sm bg-[#7BC98A]" />
+            <i className="w-2.5 h-2.5 rounded-sm bg-[#F5F7F5] border border-white/30" />
             {t('nav.salvation')}
           </span>
           <span className="inline-flex items-center gap-1.5 text-[var(--sage)]">
-            <i className="w-2.5 h-2.5 rounded-sm bg-[#5BA88A]" />
+            <i className="w-2.5 h-2.5 rounded-sm bg-[#4A9EFF]" />
             {t('nav.health')}
           </span>
           <span className="inline-flex items-center gap-1.5 text-[var(--sage)]">
-            <i className="w-2.5 h-2.5 rounded-sm bg-[#A8D4AE]" />
+            <i className="w-2.5 h-2.5 rounded-sm bg-[#7BC98A]" />
             {t('nav.freedom')}
           </span>
         </div>

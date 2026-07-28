@@ -26,10 +26,13 @@ export default function CoachPage() {
             <Link href="/hub/dashboard" className="back-btn" aria-label={t('common.back')}>
               ←
             </Link>
-            <div className="w-9 h-9 rounded-full border border-[var(--border-soft)] flex items-center justify-center lion-glow overflow-hidden bg-[#040404] shrink-0">
+            <div
+              className="w-9 h-9 rounded-full border border-[var(--border-soft)] flex items-center justify-center lion-glow overflow-hidden bg-[#040404] shrink-0"
+              title="Salvazion"
+            >
               <Image
                 src="/coach/leon-verde-thumb.jpg"
-                alt="León Verde"
+                alt="Salvazion"
                 width={36}
                 height={36}
                 className="object-cover"
@@ -37,15 +40,15 @@ export default function CoachPage() {
             </div>
             <div className="min-w-0">
               <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] font-medium">
-                Salvazion · Premium
+                Premium
               </p>
               <h1 className="text-lg font-bold text-[var(--accent)] leading-tight truncate">
-                {lang === 'en' ? 'Green Lion Coach' : 'Coach León Verde'}
+                {lang === 'en' ? 'Coach' : 'Coach'}
               </h1>
               <p className="text-[10px] text-[var(--sage)]/80 truncate">
                 {lang === 'en'
-                  ? 'Voice agent · Salvation · Health · Freedom'
-                  : 'Agente de voz · Salvación · Salud · Libertad'}
+                  ? 'Voice · Salvation · Health · Freedom'
+                  : 'Voz · Salvation · Health · Freedom'}
               </p>
             </div>
           </div>

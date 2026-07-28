@@ -161,7 +161,7 @@ export default function DashboardPage() {
           >
             <circle cx="50" cy="50" r="46" fill="none" stroke="var(--sage-dim)" strokeWidth="3" opacity="0.25" />
             <circle
-              cx="50" cy="50" r="46" fill="none" stroke="var(--accent)" strokeWidth="3.2"
+              cx="50" cy="50" r="46" fill="none" stroke="#F5F7F5" strokeWidth="3.2"
               strokeDasharray={`${Math.min(salvation, 100) * 2.89} 289`}
               strokeLinecap="round"
               className="ring-glow transition-all duration-700"
@@ -170,7 +170,7 @@ export default function DashboardPage() {
           <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100" aria-hidden>
             <circle cx="50" cy="50" r="38" fill="none" stroke="var(--sage-dim)" strokeWidth="3" opacity="0.25" />
             <circle
-              cx="50" cy="50" r="38" fill="none" stroke="var(--soft-green)" strokeWidth="2.8"
+              cx="50" cy="50" r="38" fill="none" stroke="#4A9EFF" strokeWidth="2.8"
               strokeDasharray={`${Math.min(health, 100) * 2.39} 239`}
               strokeLinecap="round"
               className="transition-all duration-700"
@@ -179,7 +179,7 @@ export default function DashboardPage() {
           <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100" aria-hidden>
             <circle cx="50" cy="50" r="30" fill="none" stroke="var(--sage-dim)" strokeWidth="3" opacity="0.25" />
             <circle
-              cx="50" cy="50" r="30" fill="none" stroke="var(--accent-hover)" strokeWidth="2.6"
+              cx="50" cy="50" r="30" fill="none" stroke="#7BC98A" strokeWidth="2.6"
               strokeDasharray={`${Math.min(freedom, 100) * 1.88} 188`}
               strokeLinecap="round"
               className="transition-all duration-700"
@@ -214,7 +214,7 @@ export default function DashboardPage() {
               streak={streaks.salvation}
               multiplier={multipliers.salvation}
               Icon={BibleIcon}
-              ring="var(--accent)"
+              ring="#F5F7F5"
             />
             <PillarCard
               href="/hub/health"
@@ -223,7 +223,7 @@ export default function DashboardPage() {
               streak={streaks.health}
               multiplier={multipliers.health}
               Icon={HealthIcon}
-              ring="var(--soft-green)"
+              ring="#4A9EFF"
             />
             <PillarCard
               href="/hub/freedom"
@@ -232,7 +232,7 @@ export default function DashboardPage() {
               streak={streaks.freedom}
               multiplier={multipliers.freedom}
               Icon={FreedomIcon}
-              ring="var(--accent-hover)"
+              ring="#7BC98A"
             />
           </div>
         </div>
@@ -271,19 +271,18 @@ export default function DashboardPage() {
             <Link
               href="/hub/coach"
               className="w-12 h-12 rounded-full border border-[var(--border-strong)] flex-shrink-0 lion-glow overflow-hidden bg-[var(--true-black)] relative"
+              aria-label="Salvazion"
+              title="Salvazion"
             >
               <Image
                 src="/coach/leon-verde-thumb.jpg"
-                alt={t('coach.agentLabel')}
+                alt="Salvazion"
                 width={48}
                 height={48}
                 className="object-cover w-full h-full"
               />
             </Link>
             <div className="flex-1 min-w-0">
-              <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] mb-0.5">
-                {t('coach.agentLabel')}
-              </p>
               <h3 className="text-sm font-semibold text-white leading-snug mb-1">
                 {coach.title}
               </h3>

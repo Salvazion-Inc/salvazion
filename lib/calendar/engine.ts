@@ -359,9 +359,9 @@ export function weekDates(anchor = new Date()): string[] {
 }
 
 export function pillarColor(pillar: CalendarPillar): string {
-  if (pillar === 'salvation') return 'var(--accent)';
-  if (pillar === 'health') return 'var(--soft-green)';
-  return 'var(--accent-hover)';
+  if (pillar === 'salvation') return '#F5F7F5';
+  if (pillar === 'health') return '#4A9EFF';
+  return '#7BC98A';
 }
 
 export function pillarLabel(pillar: CalendarPillar): string {
@@ -369,7 +369,7 @@ export function pillarLabel(pillar: CalendarPillar): string {
 }
 
 export function pillarSolid(pillar: CalendarPillar): string {
-  if (pillar === 'salvation') return '#7BC98A';
-  if (pillar === 'health') return '#5BA88A';
-  return '#A8D4AE';
+  if (pillar === 'salvation') return '#F5F7F5';
+  if (pillar === 'health') return '#4A9EFF';
+  return '#7BC98A';
 }

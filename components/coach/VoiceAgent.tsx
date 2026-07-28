@@ -206,7 +206,7 @@ export default function VoiceAgent({
         >
           <Image
             src="/coach/leon-verde.jpg"
-            alt="León Verde Salvazion"
+            alt="Salvazion"
             fill
             className="object-cover"
             sizes={compact ? '56px' : '80px'}
@@ -215,15 +215,12 @@ export default function VoiceAgent({
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] font-medium">
-            {es ? 'Agente de voz · Grok' : 'Voice agent · Grok'}
+            {es ? 'Coach · Voz' : 'Coach · Voice'}
           </p>
-          <h2 className={`font-bold text-white leading-tight ${compact ? 'text-base' : 'text-lg'}`}>
-            León Verde
-          </h2>
           <p className="text-[11px] text-[var(--sage)]/85 truncate">
             {es
-              ? `Coach de ${name} · Salvación · Salud · Libertad`
-              : `Coach for ${name} · Salvation · Health · Freedom`}
+              ? `${name} · Salvation · Health · Freedom`
+              : `${name} · Salvation · Health · Freedom`}
           </p>
         </div>
         <button
@@ -233,7 +230,7 @@ export default function VoiceAgent({
             stopSpeech();
           }}
           className={`pill-soft shrink-0 text-[10px] ${voiceOn ? 'pill-soft-active' : ''}`}
-          title={es ? 'Voz del León' : 'Lion voice'}
+          title={es ? 'Voz' : 'Voice'}
         >
           {voiceOn ? (es ? 'Voz on' : 'Voice on') : es ? 'Voz off' : 'Voice off'}
         </button>
@@ -248,8 +245,8 @@ export default function VoiceAgent({
           <div className="glass rounded-2xl p-4 border border-[var(--border-soft)]">
             <p className="text-sm text-[#D8E1D9]/90 leading-relaxed">
               {es
-                ? `Soy el León Verde de Salvazion. Estoy aquí para motivarte e incentivarte en fe, salud y libertad ordenada. Háblame o escribe.`
-                : `I am the Green Lion of Salvazion. I am here to motivate you in faith, health, and ordered freedom. Speak or type.`}
+                ? `Soy Salvazion. Estoy aquí para motivarte en fe, salud y libertad ordenada. Háblame o escribe.`
+                : `I am Salvazion. I am here to motivate you in faith, health, and ordered freedom. Speak or type.`}
             </p>
             <div className="flex flex-wrap gap-1.5 mt-3">
               {suggestions.map((s) => (
@@ -280,7 +277,7 @@ export default function VoiceAgent({
             >
               {m.role === 'assistant' && (
                 <p className="text-[9px] uppercase tracking-wider text-[var(--accent)] mb-1">
-                  León Verde
+                  Salvazion
                 </p>
               )}
               <p className="whitespace-pre-wrap">{m.content}</p>

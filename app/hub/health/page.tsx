@@ -228,10 +228,9 @@ export default function HealthPage() {
       <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto">
         <div className="glass rounded-xl px-4 py-3 mb-5 flex items-start gap-3 border border-[var(--border-soft)]">
           <div className="w-9 h-9 rounded-full border border-[var(--border-strong)] flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
-            <Image src="/logo-icon.png" alt="León Verde" width={36} height={36} className="object-cover" />
+            <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
           </div>
           <div>
-            <p className="text-[10px] uppercase tracking-wider text-[#8FD99A] mb-0.5">León Verde</p>
             <p className="text-xs text-[#D8E1D9]/80 leading-relaxed">
               {coach?.pillarFocus === 'health' && coach.body
                 ? coach.body

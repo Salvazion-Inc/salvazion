@@ -9,6 +9,7 @@ import {
 import { getBadgeProgress, getEarnedBadgesDetailed } from '@/lib/badges/engine';
 import type { ComputedScores } from '@/lib/scoring/types';
 import { useI18n } from '@/components/I18nProvider';
+import { PILLAR_COLORS } from '@/lib/calendar/colors';
 
 type Props = {
   scores: ComputedScores;
@@ -122,16 +123,56 @@ export default function ProgressCharts({
       </div>
 
       {variant === 'full' && (
-        <div className="grid grid-cols-2 gap-3">
-          <div className="card-soft p-4 flex flex-col items-center">
-            <p className="text-xs font-medium text-[var(--off-white)] mb-2 self-start">
-              {t('charts.badges')}
-            </p>
-            <BadgeRing earned={badgeProg.earned} total={badgeProg.total} />
-            <p className="text-[11px] text-[var(--sage)] mt-2 text-center">
-              {badgeProg.earned}/{badgeProg.total} {t('charts.unlocked')}
-            </p>
+        <>
+          <div className="card-soft p-4">
+            <div className="flex items-start gap-4">
+              <BadgeRing earned={badgeProg.earned} total={badgeProg.total} />
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-[var(--off-white)]">
+                  {t('charts.badges')}
+                </p>
+                <p className="text-[11px] text-[var(--sage)] mt-0.5">
+                  {badgeProg.earned}/{badgeProg.total} {t('charts.unlocked')}
+                </p>
+                <div className="mt-2 h-1.5 rounded-full bg-[var(--surface)] overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-[var(--accent-fill)] transition-all duration-700"
+                    style={{
+                      width: `${badgeProg.total ? (badgeProg.earned / badgeProg.total) * 100 : 0}%`,
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            {recentBadges.length > 0 && (
+              <div className="mt-4 pt-3 border-t border-[var(--border-soft)]">
+                <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70 mb-2">
+                  {t('charts.recentBadges')}
+                </p>
+                <div className="flex gap-3 overflow-x-auto pb-1">
+                  {recentBadges.map((b) => (
+                    <div
+                      key={b.id}
+                      className="shrink-0 w-16 flex flex-col items-center gap-1"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={b.iconSrc}
+                        alt=""
+                        width={44}
+                        height={44}
+                        className="w-11 h-11 rounded-full object-cover border border-[var(--border-strong)] lion-glow"
+                      />
+                      <p className="text-[9px] text-center text-[var(--off-white)]/85 leading-tight line-clamp-2">
+                        {b.name}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
+
           <div className="card-soft p-4 flex flex-col items-center">
             <p className="text-xs font-medium text-[var(--off-white)] mb-2 self-start">
               {t('charts.mix')}
@@ -141,50 +182,31 @@ export default function ProgressCharts({
               health={mix.health}
               freedom={mix.freedom}
             />
-            <div className="flex flex-wrap justify-center gap-x-2 gap-y-0.5 mt-2 text-[9px] text-[var(--sage)]">
+            <div className="flex flex-wrap justify-center gap-x-3 gap-y-0.5 mt-2 text-[9px] text-[var(--sage)]">
               <span className="inline-flex items-center gap-1">
-                <i className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
+                <i
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{ background: PILLAR_COLORS.salvation.solid }}
+                />
                 {t('nav.salvation')}
               </span>
               <span className="inline-flex items-center gap-1">
-                <i className="w-1.5 h-1.5 rounded-full bg-[var(--soft-green)]" />
+                <i
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{ background: PILLAR_COLORS.health.solid }}
+                />
                 {t('nav.health')}
               </span>
               <span className="inline-flex items-center gap-1">
-                <i className="w-1.5 h-1.5 rounded-full bg-[var(--accent-hover)]" />
+                <i
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{ background: PILLAR_COLORS.freedom.solid }}
+                />
                 {t('nav.freedom')}
               </span>
             </div>
           </div>
-        </div>
-      )}
-
-      {variant === 'full' && recentBadges.length > 0 && (
-        <div className="card-soft p-4">
-          <p className="text-xs font-medium text-[var(--off-white)] mb-3">
-            {t('charts.recentBadges')}
-          </p>
-          <div className="flex gap-3 overflow-x-auto pb-1">
-            {recentBadges.map((b) => (
-              <div
-                key={b.id}
-                className="shrink-0 w-20 flex flex-col items-center gap-1.5"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={b.iconSrc}
-                  alt=""
-                  width={48}
-                  height={48}
-                  className="w-12 h-12 rounded-full object-cover border border-[var(--border-strong)] lion-glow"
-                />
-                <p className="text-[10px] text-center text-[var(--off-white)]/85 leading-tight line-clamp-2">
-                  {b.name}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
+        </>
       )}
 
       {variant === 'compact' && (
@@ -318,9 +340,9 @@ function PillarBars({
   labels: { salvation: string; health: string; freedom: string };
 }) {
   const rows = [
-    { key: 'salvation', v: salvation, color: 'var(--accent)', label: labels.salvation },
-    { key: 'health', v: health, color: 'var(--soft-green)', label: labels.health },
-    { key: 'freedom', v: freedom, color: 'var(--accent-hover)', label: labels.freedom },
+    { key: 'salvation', v: salvation, color: PILLAR_COLORS.salvation.solid, label: labels.salvation },
+    { key: 'health', v: health, color: PILLAR_COLORS.health.solid, label: labels.health },
+    { key: 'freedom', v: freedom, color: PILLAR_COLORS.freedom.solid, label: labels.freedom },
   ];
   return (
     <div className="space-y-3">
@@ -358,9 +380,9 @@ function StreakRows({
   daysLabel: string;
 }) {
   const rows = [
-    { key: 'salvation' as const, label: labels.salvation, color: 'var(--accent)' },
-    { key: 'health' as const, label: labels.health, color: 'var(--soft-green)' },
-    { key: 'freedom' as const, label: labels.freedom, color: 'var(--accent-hover)' },
+    { key: 'salvation' as const, label: labels.salvation, color: PILLAR_COLORS.salvation.solid },
+    { key: 'health' as const, label: labels.health, color: PILLAR_COLORS.health.solid },
+    { key: 'freedom' as const, label: labels.freedom, color: PILLAR_COLORS.freedom.solid },
   ];
   const max = Math.max(7, ...rows.map((r) => streaks[r.key]));
   return (
@@ -456,9 +478,9 @@ function MixDonut({
 }) {
   const total = Math.max(1, salvation + health + freedom);
   const segs = [
-    { v: salvation / total, color: 'var(--accent)' },
-    { v: health / total, color: 'var(--soft-green)' },
-    { v: freedom / total, color: 'var(--accent-hover)' },
+    { v: salvation / total, color: PILLAR_COLORS.salvation.solid },
+    { v: health / total, color: PILLAR_COLORS.health.solid },
+    { v: freedom / total, color: PILLAR_COLORS.freedom.solid },
   ];
   const r = 34;
   const c = 2 * Math.PI * r;

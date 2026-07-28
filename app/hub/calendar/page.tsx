@@ -4,12 +4,14 @@ import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import BottomNav from '@/components/BottomNav';
-import DayPlanner from '@/components/calendar/DayPlanner';
+import RoutineBoard from '@/components/calendar/RoutineBoard';
 import {
   todayStr,
   weekDates,
   getEventsForDate,
-  ensureDayAgenda,
+  duplicateToTomorrow,
+  duplicateToWeek,
+  clearDay,
 } from '@/lib/calendar/engine';
 import { loadProfile } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
@@ -21,10 +23,15 @@ export default function CalendarPage() {
   const [mounted, setMounted] = useState(false);
   const [name, setName] = useState('');
   const [tick, setTick] = useState(0);
+  const [toast, setToast] = useState<string | null>(null);
+
+  const flash = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 2200);
+  };
 
   const refreshWeek = useCallback(() => {
     setWeek(weekDates(new Date(selectedDate + 'T12:00:00')));
-    ensureDayAgenda(selectedDate);
     setTick((n) => n + 1);
   }, [selectedDate]);
 
@@ -86,6 +93,7 @@ export default function CalendarPage() {
           </div>
         </div>
 
+        {/* Week strip */}
         <div className="flex gap-1.5 overflow-x-auto pb-1">
           {week.map((d) => {
             const dayNum = d.slice(8, 10);
@@ -129,33 +137,84 @@ export default function CalendarPage() {
       </header>
 
       <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto max-w-lg mx-auto w-full">
-        <h2 className="text-sm font-semibold capitalize text-white mb-3">{dayLabel}</h2>
-
-        <div className="glass rounded-xl px-4 py-3 mb-4 flex items-start gap-2.5 border border-[var(--border-soft)]">
-          <div className="w-8 h-8 rounded-full border border-[var(--border-strong)] flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[var(--true-black)]">
-            <Image
-              src="/logo-icon.png"
-              alt=""
-              width={32}
-              height={32}
-              className="object-cover"
-            />
-          </div>
-          <p className="text-xs text-[var(--off-white)]/80 leading-relaxed">
-            {total === 0
-              ? t('calendar.coachEmpty')
-              : completed === total
-                ? t('calendar.coachDone')
-                : t('calendar.coachProgress', { done: completed, total })}
-          </p>
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <h2 className="text-sm font-semibold capitalize text-white min-w-0 truncate">
+            {dayLabel}
+          </h2>
         </div>
 
-        <DayPlanner
+        {/* Legend — 3 colors */}
+        <div className="flex flex-wrap gap-3 mb-3 text-[10px]">
+          <span className="inline-flex items-center gap-1.5 text-[var(--sage)]">
+            <i className="w-2.5 h-2.5 rounded-sm bg-[#7BC98A]" />
+            {t('nav.salvation')}
+          </span>
+          <span className="inline-flex items-center gap-1.5 text-[var(--sage)]">
+            <i className="w-2.5 h-2.5 rounded-sm bg-[#5BA88A]" />
+            {t('nav.health')}
+          </span>
+          <span className="inline-flex items-center gap-1.5 text-[var(--sage)]">
+            <i className="w-2.5 h-2.5 rounded-sm bg-[#A8D4AE]" />
+            {t('nav.freedom')}
+          </span>
+        </div>
+
+        <div className="glass rounded-xl px-3 py-2.5 mb-3 text-[11px] text-[var(--off-white)]/80 leading-relaxed">
+          {t('calendar.coachGuide')}
+        </div>
+
+        {/* Duplicate routine */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          <button
+            type="button"
+            className="btn-outline-sm"
+            onClick={() => {
+              const n = duplicateToTomorrow(selectedDate);
+              flash(t('calendar.copiedTomorrow', { n }));
+              setTick((x) => x + 1);
+            }}
+          >
+            {t('calendar.copyTomorrow')}
+          </button>
+          <button
+            type="button"
+            className="btn-outline-sm"
+            onClick={() => {
+              const n = duplicateToWeek(selectedDate);
+              flash(t('calendar.copiedWeek', { n }));
+              setTick((x) => x + 1);
+            }}
+          >
+            {t('calendar.copyWeek')}
+          </button>
+          {total > 0 && (
+            <button
+              type="button"
+              className="btn-ghost text-red-400/80 text-[11px]"
+              onClick={() => {
+                if (window.confirm(t('calendar.clearConfirm'))) {
+                  clearDay(selectedDate);
+                  setTick((x) => x + 1);
+                }
+              }}
+            >
+              {t('calendar.clearDay')}
+            </button>
+          )}
+        </div>
+
+        <RoutineBoard
           key={`${selectedDate}-${tick}`}
           date={selectedDate}
           onChange={() => setTick((n) => n + 1)}
         />
       </main>
+
+      {toast && (
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[70] toast-soft whitespace-nowrap">
+          {toast}
+        </div>
+      )}
 
       <BottomNav />
     </div>

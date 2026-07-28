@@ -92,7 +92,7 @@ export default function DayPlanner({ date, onChange, className = '' }: Props) {
       pillar: def.pillar,
       type: def.type,
       date,
-      time: def.time || '09:00',
+      time: def.defaultTime || '09:00',
       durationMin: def.durationMin || 30,
       recurring: null,
       notes: def.titleKey,

@@ -3,7 +3,6 @@
 import {
   RECOMMENDED_BOOKS,
   bookAmazonUrl,
-  bookMercadoLibreUrl,
   type RecommendedBook,
 } from '@/lib/freedom/books';
 import { useI18n } from '@/components/I18nProvider';
@@ -14,7 +13,7 @@ type Props = {
 
 /**
  * Horizontal carousel of books defending Western Christian culture
- * and bioconservatism — Amazon + Mercado Libre affiliate links.
+ * and bioconservatism — Amazon Associates affiliate links only.
  */
 export default function BookStoreCarousel({ className = '' }: Props) {
   const { t, lang } = useI18n();
@@ -88,34 +87,19 @@ function BookCard({
         <p className="text-[10px] text-[var(--sage)]/75 leading-relaxed line-clamp-3 flex-1">
           {blurb}
         </p>
-        <div className="flex flex-col gap-1.5 pt-1">
-          <a
-            href={bookAmazonUrl(book)}
-            target="_blank"
-            rel="noopener noreferrer sponsored"
-            className="text-center text-[11px] font-medium min-h-[34px] flex items-center justify-center rounded-lg border transition hover:opacity-90"
-            style={{
-              borderColor: 'rgba(255,153,0,0.45)',
-              color: '#FFB84D',
-              background: 'rgba(255,153,0,0.08)',
-            }}
-          >
-            Amazon ↗
-          </a>
-          <a
-            href={bookMercadoLibreUrl(book)}
-            target="_blank"
-            rel="noopener noreferrer sponsored"
-            className="text-center text-[11px] font-medium min-h-[34px] flex items-center justify-center rounded-lg border transition hover:opacity-90"
-            style={{
-              borderColor: 'rgba(255,230,0,0.35)',
-              color: '#FFE066',
-              background: 'rgba(255,230,0,0.06)',
-            }}
-          >
-            Mercado Libre ↗
-          </a>
-        </div>
+        <a
+          href={bookAmazonUrl(book)}
+          target="_blank"
+          rel="noopener noreferrer sponsored"
+          className="mt-auto text-center text-[11px] font-medium min-h-[36px] flex items-center justify-center rounded-lg border transition hover:opacity-90"
+          style={{
+            borderColor: 'rgba(255,153,0,0.45)',
+            color: '#FFB84D',
+            background: 'rgba(255,153,0,0.08)',
+          }}
+        >
+          {t('books.buyAmazon')} ↗
+        </a>
       </div>
     </article>
   );

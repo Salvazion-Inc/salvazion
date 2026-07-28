@@ -1,13 +1,9 @@
 /**
  * Recommended books: Western Christian culture + bioconservatism.
- * Buy links use Amazon Associates + Mercado Libre (referral commission).
+ * Buy links use Amazon Associates (referral commission).
  */
 
-import {
-  amazonProductUrl,
-  amazonSearchUrl,
-  mercadoLibreSearchUrl,
-} from '@/lib/config/affiliates';
+import { amazonProductUrl, amazonSearchUrl } from '@/lib/config/affiliates';
 
 export type BookTheme = 'western_christian' | 'bioconservatism' | 'both';
 
@@ -177,8 +173,4 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
 export function bookAmazonUrl(book: RecommendedBook): string {
   if (book.asin) return amazonProductUrl(book.asin, 'com');
   return amazonSearchUrl(`${book.title} ${book.author}`, 'com');
-}
-
-export function bookMercadoLibreUrl(book: RecommendedBook): string {
-  return mercadoLibreSearchUrl(`${book.title} ${book.author}`, 'mlm');
 }

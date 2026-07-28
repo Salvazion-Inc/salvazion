@@ -194,12 +194,13 @@ export const dictionary = {
     books: {
       title: 'Biblioteca recomendada',
       subtitle:
-        'Cultura cristiana occidental y bioconservadurismo · compra con enlace de referidos',
+        'Cultura cristiana occidental y bioconservadurismo · compra en Amazon',
       themeChristian: 'Cultura cristiana',
       themeBio: 'Bioconservadurismo',
       themeBoth: 'Fe · Cuerpo',
+      buyAmazon: 'Comprar en Amazon',
       affiliateNote:
-        'Enlaces de afiliado Amazon y Mercado Libre: Salvazion puede recibir comisión sin costo extra para ti.',
+        'Enlaces de afiliado Amazon Associates: Salvazion puede recibir comisión sin costo extra para ti.',
     },
     dashboard: {
       purpose: 'Tu propósito',
@@ -907,12 +908,13 @@ export const dictionary = {
     books: {
       title: 'Recommended library',
       subtitle:
-        'Western Christian culture & bioconservatism · shop via referral links',
+        'Western Christian culture & bioconservatism · buy on Amazon',
       themeChristian: 'Christian culture',
       themeBio: 'Bioconservatism',
       themeBoth: 'Faith · Body',
+      buyAmazon: 'Buy on Amazon',
       affiliateNote:
-        'Amazon and Mercado Libre affiliate links: Salvazion may earn a commission at no extra cost to you.',
+        'Amazon Associates affiliate links: Salvazion may earn a commission at no extra cost to you.',
     },
     dashboard: {
       purpose: 'Your purpose',

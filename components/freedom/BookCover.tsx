@@ -17,6 +17,8 @@ type Props = {
  * 1) Explicit coverUrl / Amazon ASIN
  * 2) Open Library + Google Books lookup
  * 3) Accent + mark placeholder
+ *
+ * Rejects Amazon 1×1 / tiny placeholder GIFs that report HTTP 200.
  */
 export default function BookCover({ book, className = '' }: Props) {
   const candidates = useMemo(() => bookCoverCandidates(book), [book]);
@@ -32,10 +34,30 @@ export default function BookCover({ book, className = '' }: Props) {
         ? candidates[idx]
         : null;
 
-  // When static candidates are exhausted (or none), look up a real cover
+  const advance = () => {
+    if (remoteUrl && active === remoteUrl) {
+      setRemoteUrl(null);
+      setFailed(true);
+      return;
+    }
+    if (idx + 1 < candidates.length) {
+      setIdx((i) => i + 1);
+    } else {
+      // Exhaust static candidates → remote lookup
+      setIdx(candidates.length);
+    }
+  };
+
+  // Look up a real cover when static candidates fail OR when we only have a
+  // generated placeholder (ui-avatars) and can upgrade to a publisher image.
   useEffect(() => {
     if (remoteDone || remoteUrl) return;
-    if (candidates.length > 0 && idx < candidates.length) return;
+    const onlyPlaceholder =
+      candidates.length > 0 &&
+      candidates.every((u) => /ui-avatars\.com/i.test(u));
+    if (candidates.length > 0 && idx < candidates.length && !onlyPlaceholder) {
+      return;
+    }
 
     let cancelled = false;
     const queries = bookCoverSearchQueries(book);
@@ -113,14 +135,17 @@ export default function BookCover({ book, className = '' }: Props) {
 
       if (!cancelled) {
         setRemoteDone(true);
-        setFailed(true);
+        // Keep showing static candidates (e.g. branded placeholder) if any remain
+        if (candidates.length === 0 || idx >= candidates.length) {
+          setFailed(true);
+        }
       }
     })();
 
     return () => {
       cancelled = true;
     };
-  }, [book, candidates.length, idx, remoteDone, remoteUrl]);
+  }, [book, candidates, candidates.length, idx, remoteDone, remoteUrl]);
 
   const showImg = !!active && !failed;
 
@@ -138,26 +163,21 @@ export default function BookCover({ book, className = '' }: Props) {
         <img
           src={active}
           alt=""
-          className="absolute inset-0 w-full h-full object-cover object-top"
+          className="absolute inset-0 w-full h-full object-cover object-center"
           loading="lazy"
           referrerPolicy="no-referrer"
-          onError={() => {
-            if (remoteUrl && active === remoteUrl) {
-              setRemoteUrl(null);
-              setFailed(true);
-              return;
-            }
-            if (idx + 1 < candidates.length) {
-              setIdx((i) => i + 1);
-            } else {
-              // Trigger remote lookup by moving past candidates
-              setIdx(candidates.length);
+          onLoad={(e) => {
+            const img = e.currentTarget;
+            // Amazon often returns a 1×1 transparent GIF with HTTP 200
+            if (img.naturalWidth <= 2 || img.naturalHeight <= 2) {
+              advance();
             }
           }}
+          onError={() => advance()}
         />
       ) : null}
 
-      {!showImg && !remoteDone && candidates.length === 0 && (
+      {!showImg && !remoteDone && (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="w-6 h-6 rounded-full border-2 border-[var(--border-soft)] border-t-[var(--accent)] animate-spin" />
         </div>

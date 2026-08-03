@@ -337,13 +337,13 @@ export default function VoiceAgent({
         <p className="text-[11px] text-amber-300/90 mb-2 leading-relaxed">{error}</p>
       )}
 
-      {/* Composer */}
+      {/* Composer — fixed row: mic | input | send */}
       <div className="shrink-0 space-y-2">
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2 min-w-0 w-full">
           <button
             type="button"
             onClick={toggleListen}
-            className={`w-12 h-12 rounded-xl border flex items-center justify-center shrink-0 transition ${
+            className={`h-11 w-11 rounded-xl border flex items-center justify-center shrink-0 transition ${
               listening
                 ? 'border-[#8FD99A] bg-[#7BC98A]/25 text-[#8FD99A] animate-pulse'
                 : 'border-[var(--border-soft)] text-[var(--sage)] hover:border-[var(--border-strong)]'
@@ -364,14 +364,14 @@ export default function VoiceAgent({
             placeholder={
               es ? 'Escribe o usa el mic…' : 'Type or use the mic…'
             }
-            className="input-soft flex-1 py-3 text-sm"
+            className="input-soft input-inline px-3 text-sm"
             disabled={busy}
           />
           <button
             type="button"
             disabled={busy || !input.trim()}
             onClick={() => void send(input)}
-            className="btn-primary w-auto px-4 py-0 shrink-0 disabled:opacity-40"
+            className="btn-primary btn-inline text-xs sm:text-sm disabled:opacity-40"
           >
             {es ? 'Enviar' : 'Send'}
           </button>

@@ -16,7 +16,7 @@ type Props = {
 };
 
 /**
- * YouTube channels of library authors — with channel images when available.
+ * YouTube channels of library authors — avatars centered (no head crop).
  */
 export default function YouTubeChannelsPanel({
   className = '',
@@ -69,10 +69,11 @@ export default function YouTubeChannelsPanel({
                   : `${ch.accent}55`,
               }}
             >
+              {/* Square avatar area — full face, centered, no wide crop */}
               <div
-                className="h-24 flex items-center justify-center relative overflow-hidden"
+                className="relative w-full aspect-square flex items-center justify-center overflow-hidden"
                 style={{
-                  background: `linear-gradient(145deg, ${ch.accent}50, #0a0a0a 78%)`,
+                  background: `linear-gradient(145deg, ${ch.accent}45, #0a0a0a 80%)`,
                 }}
               >
                 {showImg ? (
@@ -81,6 +82,8 @@ export default function YouTubeChannelsPanel({
                     src={img}
                     alt=""
                     className="absolute inset-0 w-full h-full object-cover"
+                    // Bias slightly upward so faces/heads stay in frame
+                    style={{ objectPosition: 'center 18%' }}
                     loading="lazy"
                     referrerPolicy="no-referrer"
                     onError={() =>
@@ -88,15 +91,15 @@ export default function YouTubeChannelsPanel({
                     }
                   />
                 ) : (
-                  <span className="text-3xl relative z-[1]" aria-hidden>
+                  <span className="text-4xl relative z-[1]" aria-hidden>
                     {ch.mark}
                   </span>
                 )}
                 <div
-                  className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"
+                  className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent pointer-events-none"
                   aria-hidden
                 />
-                <span className="absolute bottom-1.5 left-2 text-[9px] font-semibold text-white/95 bg-red-600/90 px-1.5 py-0.5 rounded z-[1]">
+                <span className="absolute bottom-2 left-2 text-[9px] font-semibold text-white/95 bg-red-600/90 px-1.5 py-0.5 rounded z-[1]">
                   YouTube
                 </span>
               </div>

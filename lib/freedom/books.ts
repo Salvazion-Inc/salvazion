@@ -26,7 +26,6 @@ export interface RecommendedBook {
 }
 
 export const RECOMMENDED_BOOKS: RecommendedBook[] = [
-  // ── Classics already curated ─────────────────────────────
   {
     id: 'mere-christianity',
     title: 'Mere Christianity',
@@ -36,6 +35,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Defensa clásica de la fe cristiana que forjó Occidente.',
     themes: ['western_christian'],
     asin: '0060652926',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0060652926.01.LZZZZZZZ.jpg',
     accent: '#C4A574',
     mark: '✝',
   },
@@ -48,6 +48,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Contra el relativismo moral y la reingeniería de la naturaleza humana.',
     themes: ['both'],
     asin: '0060652942',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0060652942.01.LZZZZZZZ.jpg',
     accent: '#8B7355',
     mark: '⚖',
   },
@@ -60,6 +61,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Cómo el cristianismo rehizo Occidente — y aún lo hace.',
     themes: ['western_christian'],
     asin: '0465093507',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0465093507.01.LZZZZZZZ.jpg',
     accent: '#9B6B4A',
     mark: '🏛',
   },
@@ -72,6 +74,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Comunidades cristianas resilientes en una era postcristiana.',
     themes: ['western_christian'],
     asin: '0735213291',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0735213291.01.LZZZZZZZ.jpg',
     accent: '#6B8F6E',
     mark: '🛡',
   },
@@ -84,6 +87,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Totalitarismo blando y el deber cristiano de decir la verdad.',
     themes: ['western_christian'],
     asin: '0593087395',
+    coverUrl: 'https://covers.openlibrary.org/b/id/9714007-L.jpg',
     accent: '#7A6B5A',
     mark: '🕯',
   },
@@ -96,6 +100,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Cómo el individualismo expresivo desmanteló la antropología cristiana.',
     themes: ['both'],
     asin: '1433556332',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1433556332.01.LZZZZZZZ.jpg',
     accent: '#5C6B8A',
     mark: '🧠',
   },
@@ -108,6 +113,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Guía accesible a la cultura de la identidad y la respuesta cristiana.',
     themes: ['both'],
     asin: '1433579308',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1433579308.01.LZZZZZZZ.jpg',
     accent: '#4A7A8A',
     mark: '🌍',
   },
@@ -120,6 +126,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Derecho bioconservador: cuerpo, vulnerabilidad y dignidad humana.',
     themes: ['bioconservatism'],
     asin: '0674987721',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0674987721.01.LZZZZZZZ.jpg',
     accent: '#4A9EFF',
     mark: '🧬',
   },
@@ -132,6 +139,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Bioconservadurismo fundacional frente a la soberbia biotecnológica.',
     themes: ['bioconservatism'],
     asin: '159403039X',
+    coverUrl: 'https://covers.openlibrary.org/b/id/942727-L.jpg',
     accent: '#3D7AB5',
     mark: '🫀',
   },
@@ -144,6 +152,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Crítica del orden liberal y recuperación de la tradición arraigada.',
     themes: ['western_christian'],
     asin: '0300223447',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0300223447.01.LZZZZZZZ.jpg',
     accent: '#8B5A4A',
     mark: '📜',
   },
@@ -156,6 +165,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Auge y declive del pensamiento occidental y la cultura cristiana.',
     themes: ['western_christian'],
     asin: '0891072925',
+    coverUrl: 'https://covers.openlibrary.org/b/id/688246-L.jpg',
     accent: '#A67C52',
     mark: '📖',
   },
@@ -168,11 +178,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Argumento postliberal por la contención, la familia y el cuerpo.',
     themes: ['bioconservatism'],
     asin: '1509549997',
+    coverUrl: 'https://covers.openlibrary.org/b/id/13304743-L.jpg',
     accent: '#B07A8A',
     mark: '🏠',
   },
-
-  // ── Axel Kaiser ──────────────────────────────────────────
   {
     id: 'kaiser-tirania-igualdad',
     title: 'The Tyranny of Equality',
@@ -182,6 +191,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Por qué el proyecto igualitario destruye libertades y prosperidad.',
     themes: ['both'],
     asin: '8423426580',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/8423426580.01.LZZZZZZZ.jpg',
     accent: '#C9A227',
     mark: '🇨🇱',
   },
@@ -194,6 +204,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: '15 lecciones de economía para sobrevivir a políticos y demagogos.',
     themes: ['western_christian'],
     asin: '6075693270',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/6075693270.01.LZZZZZZZ.jpg',
     accent: '#D4AF37',
     mark: '💰',
   },
@@ -239,8 +250,6 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     accent: '#CD853F',
     mark: '🧩',
   },
-
-  // ── Miklós Lukács ────────────────────────────────────────
   {
     id: 'lukacs-neo-entes',
     title: 'Neo-Entities',
@@ -250,6 +259,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Tecnología y cambio antropológico en el siglo XXI.',
     themes: ['bioconservatism'],
     asin: '8419349658',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/8419349658.01.LZZZZZZZ.jpg',
     accent: '#6A5ACD',
     mark: '🤖',
   },
@@ -262,7 +272,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Transhumanismo e ideologías digitales como nuevas religiones.',
     themes: ['both'],
     asin: '6124466049',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/6124466049.01.LZZZZZZZ.jpg',
+    coverUrl: '/freedom/book-covers/lukacs-neo-religiones.svg',
     accent: '#7B68EE',
     mark: '⚡',
   },
@@ -275,12 +285,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Por qué la persona no se reduce a código ni a hardware.',
     themes: ['bioconservatism'],
     asin: '6125038045',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/6125038045.01.LZZZZZZZ.jpg',
+    coverUrl: '/freedom/book-covers/lukacs-transhumanismo.svg',
     accent: '#9370DB',
     mark: '🧬',
   },
-
-  // ── Pablo Muñoz Iturrieta ────────────────────────────────
   {
     id: 'munoz-atrapado-cuerpo',
     title: 'Trapped in the Wrong Body',
@@ -289,8 +297,9 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEn: 'Gender ideology vs science and philosophy.',
     blurbEs: 'La ideología de género frente a la ciencia y la filosofía.',
     themes: ['bioconservatism'],
-    asin: '8419349658',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/8419349658.01.LZZZZZZZ.jpg',
+    // Product sometimes delisted — buy link falls back to Amazon search
+    coverUrl:
+      '/freedom/book-covers/munoz-atrapado-cuerpo.jpg',
     accent: '#2E8B57',
     mark: '🔬',
   },
@@ -302,8 +311,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEn: 'Faith and public reason in liberal democracies.',
     blurbEs: 'Fe y razón pública en las democracias liberales.',
     themes: ['western_christian'],
-    asin: '1666719987',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1666719987.01.LZZZZZZZ.jpg',
+    coverUrl: '/freedom/book-covers/munoz-libertad-religiosa.svg',
     accent: '#3CB371',
     mark: '⚖',
   },
@@ -315,13 +323,11 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEn: 'Clear analysis of gender theory and its cultural costs.',
     blurbEs: 'Análisis claro de la teoría de género y su costo cultural.',
     themes: ['bioconservatism'],
-    asin: '9878918090',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/9878918090.01.LZZZZZZZ.jpg',
+    asin: '1532639725',
+    coverUrl: '/freedom/book-covers/munoz-ideologia-genero.svg',
     accent: '#228B22',
     mark: '🧭',
   },
-
-  // ── Agustín Laje ─────────────────────────────────────────
   {
     id: 'laje-libro-negro',
     title: 'The Black Book of the New Left',
@@ -331,7 +337,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Con Nicolás Márquez — el mapa del marxismo cultural.',
     themes: ['western_christian'],
     asin: '987170746X',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/987170746X.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/8261448-L.jpg',
     accent: '#8B0000',
     mark: '📕',
   },
@@ -343,8 +349,8 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEn: 'How youth were captured by progressive ideology.',
     blurbEs: 'Cómo la juventud fue capturada por la ideología progresista.',
     themes: ['both'],
-    asin: '1400238587',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1400238587.01.LZZZZZZZ.jpg',
+    asin: '1400238560',
+    coverUrl: '/freedom/book-covers/laje-generacion-idiota.jpg',
     accent: '#B22222',
     mark: '📱',
   },
@@ -369,13 +375,11 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEn: 'Globalist power and the defense of the nation.',
     blurbEs: 'El poder globalista y la defensa de la nación.',
     themes: ['western_christian'],
-    asin: '1400243483',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1400243483.01.LZZZZZZZ.jpg',
+    asin: '1400331862',
+    coverUrl: '/freedom/book-covers/laje-globalismo.jpg',
     accent: '#800000',
     mark: '🌐',
   },
-
-  // ── Charlie Kirk ─────────────────────────────────────────
   {
     id: 'kirk-right-wing-revolution',
     title: 'Right Wing Revolution',
@@ -385,6 +389,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Cómo derrotar al woke y salvar Occidente.',
     themes: ['western_christian'],
     asin: '1735503797',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1735503797.01.LZZZZZZZ.jpg',
     accent: '#DC143C',
     mark: '🇺🇸',
   },
@@ -397,6 +402,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Cómo los conservadores pueden ganar en el campus.',
     themes: ['western_christian'],
     asin: '1642930946',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1642930946.01.LZZZZZZZ.jpg',
     accent: '#B22222',
     mark: '🎓',
   },
@@ -409,12 +415,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Las ideas esenciales del movimiento America First.',
     themes: ['western_christian'],
     asin: '0062992133',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0062992133.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/9830792-L.jpg',
     accent: '#CD5C5C',
     mark: '🦅',
   },
-
-  // ── Jordan B. Peterson ───────────────────────────────────
   {
     id: 'peterson-12-rules',
     title: '12 Rules for Life',
@@ -424,6 +428,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Antídoto al caos: responsabilidad, sentido y orden.',
     themes: ['both'],
     asin: '0345816021',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0345816021.01.LZZZZZZZ.jpg',
     accent: '#1E90FF',
     mark: '🦞',
   },
@@ -436,6 +441,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: '12 reglas más: equilibrio entre estructura y transformación.',
     themes: ['both'],
     asin: '0593084647',
+    coverUrl: 'https://covers.openlibrary.org/b/id/10517194-L.jpg',
     accent: '#4169E1',
     mark: '🗺',
   },
@@ -448,6 +454,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Mito, creencia y la arquitectura de los sistemas de sentido.',
     themes: ['western_christian'],
     asin: '0415922224',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0415922224.01.LZZZZZZZ.jpg',
     accent: '#0000CD',
     mark: '🧭',
   },
@@ -464,8 +471,6 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     accent: '#191970',
     mark: '✝',
   },
-
-  // ── Otros afines ─────────────────────────────────────────
   {
     id: 'murray-madness-crowds',
     title: 'The Madness of Crowds',
@@ -475,6 +480,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Género, raza, identidad — y la nueva intolerancia.',
     themes: ['both'],
     asin: '1635579988',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1635579988.01.LZZZZZZZ.jpg',
     accent: '#708090',
     mark: '👥',
   },
@@ -487,6 +493,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Inmigración, identidad y la pérdida de confianza civilizatoria.',
     themes: ['western_christian'],
     asin: '1472958004',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1472958004.01.LZZZZZZZ.jpg',
     accent: '#778899',
     mark: '🇪🇺',
   },
@@ -499,6 +506,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Cómo la razón y los valores judeocristianos construyeron Occidente.',
     themes: ['western_christian'],
     asin: '0062857908',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0062857908.01.LZZZZZZZ.jpg',
     accent: '#4682B4',
     mark: '✡',
   },
@@ -511,6 +519,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Defensa elegante de la tradición, el hogar y lo sagrado.',
     themes: ['western_christian'],
     asin: '147296523X',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/147296523X.01.LZZZZZZZ.jpg',
     accent: '#556B2F',
     mark: '🍃',
   },
@@ -523,6 +532,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Economía sin jerga: incentivos y trade-offs.',
     themes: ['western_christian'],
     asin: '0465060730',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0465060730.01.LZZZZZZZ.jpg',
     accent: '#2F4F4F',
     mark: '📊',
   },
@@ -535,19 +545,20 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Por qué la planificación central conduce a la tiranía.',
     themes: ['western_christian'],
     asin: '0226320553',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0226320553.01.LZZZZZZZ.jpg',
     accent: '#696969',
     mark: '⛓',
   },
   {
     id: 'marquez-laje-guerra-cultural',
-    title: 'Cultural War Manual',
-    titleEs: 'Manual de la guerra cultural',
+    title: 'The Black Book of the New Left',
+    titleEs: 'El libro negro de la nueva izquierda',
     author: 'Nicolás Márquez & Agustín Laje',
-    blurbEn: 'Practical map of the cultural conflict in Latin America.',
-    blurbEs: 'Mapa práctico del conflicto cultural en América Latina.',
+    blurbEn: 'Practical map of cultural Marxism and the conflict in Latin America.',
+    blurbEs: 'Mapa del marxismo cultural y el conflicto en América Latina.',
     themes: ['western_christian'],
     asin: '987170746X',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/987170746X.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/8261448-L.jpg',
     accent: '#8B4513',
     mark: '📋',
   },
@@ -560,12 +571,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Argumentos por la libertad frente a mitos colectivistas.',
     themes: ['western_christian'],
     asin: '6075278460',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/6075278460.01.LZZZZZZZ.jpg',
+    coverUrl: '/freedom/book-covers/gloria-alvarez-como-hablar.svg',
     accent: '#FF6347',
     mark: '🗣',
   },
-
-  // ── Vanessa Kaiser ───────────────────────────────────────
   {
     id: 'vanessa-kaiser-feminismo',
     title: 'Progressivism and the Culture of Death',
@@ -595,8 +604,6 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     accent: '#C71585',
     mark: '✍',
   },
-
-  // ── JD Vance ─────────────────────────────────────────────
   {
     id: 'vance-hillbilly-elegy',
     title: 'Hillbilly Elegy',
@@ -606,11 +613,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Familia, clase y el sueño americano en los Apalaches.',
     themes: ['western_christian'],
     asin: '0062300547',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0062300547.01.LZZZZZZZ.jpg',
     accent: '#8B4513',
     mark: '🇺🇸',
   },
-
-  // ── Erik Prince ──────────────────────────────────────────
   {
     id: 'prince-civilian-warriors',
     title: 'Civilian Warriors',
@@ -620,11 +626,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'La historia interna de Blackwater y la seguridad privada.',
     themes: ['western_christian'],
     asin: '1591847451',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1591847451.01.LZZZZZZZ.jpg',
     accent: '#2F4F4F',
     mark: '🛡',
   },
-
-  // ── Naomi Wolf / John Leake ──────────────────────────────
   {
     id: 'wolf-bodies-of-evidence',
     title: 'The Bodies of Others',
@@ -634,7 +639,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Poder pandémico, tecnología y la erosión de la libertad corporal.',
     themes: ['bioconservatism'],
     asin: '1737478566',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1737478566.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/12366237-L.jpg',
     accent: '#9370DB',
     mark: '🔒',
   },
@@ -646,13 +651,11 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEn: 'Medical freedom, early treatment, and institutional failure.',
     blurbEs: 'Libertad médica, tratamiento temprano y fallo institucional.',
     themes: ['bioconservatism'],
-    asin: '1510776805',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1510776805.01.LZZZZZZZ.jpg',
+    asin: '1510776791',
+    coverUrl: '/freedom/book-covers/leake-mcCullough-courage.svg',
     accent: '#483D8B',
     mark: '💉',
   },
-
-  // ── Nicki Truesdell ──────────────────────────────────────
   {
     id: 'truesdell-homeschool',
     title: 'Anyone Can Homeschool',
@@ -668,8 +671,6 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     accent: '#CD853F',
     mark: '📚',
   },
-
-  // ── Dennis Prager ────────────────────────────────────────
   {
     id: 'prager-still-right',
     title: 'Still the Best Hope',
@@ -679,6 +680,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Por qué la trinidad americana (libertad, E Pluribus Unum, In God We Trust) importa.',
     themes: ['western_christian'],
     asin: '1594036185',
+    coverUrl: 'https://covers.openlibrary.org/b/id/12176205-L.jpg',
     accent: '#1E3A5F',
     mark: '🗽',
   },
@@ -691,11 +693,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Claridad moral desde la Torá para una era confusa.',
     themes: ['western_christian'],
     asin: '1621577724',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1621577724.01.LZZZZZZZ.jpg',
     accent: '#2C4A6E',
     mark: '✡',
   },
-
-  // ── Tommy Robinson ───────────────────────────────────────
   {
     id: 'robinson-enemy-state',
     title: 'Enemy of the State',
@@ -705,12 +706,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Libertad de expresión, inmigración y el costo de disentir en el Reino Unido.',
     themes: ['western_christian'],
     asin: '1913201083',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1913201083.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/13140276-L.jpg',
     accent: '#000080',
     mark: '🇬🇧',
   },
-
-  // ── Cristian Rodrigo Iturralde ───────────────────────────
   {
     id: 'iturralde-iglesia-comunismo',
     title: 'Church and Communism',
@@ -733,12 +732,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Defensa histórica frente a mitos anticatólicos.',
     themes: ['western_christian'],
     asin: '8411311015',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/8411311015.01.LZZZZZZZ.jpg',
+    coverUrl: '/freedom/book-covers/iturralde-leyendas-negras.svg',
     accent: '#A0522D',
     mark: '📜',
   },
-
-  // ── Salim Ismail ─────────────────────────────────────────
   {
     id: 'ismail-exponential-organizations',
     title: 'Exponential Organizations',
@@ -748,11 +745,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Cómo las organizaciones a escala tecnológica superan al resto.',
     themes: ['western_christian'],
     asin: '1626814236',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1626814236.01.LZZZZZZZ.jpg',
     accent: '#00CED1',
     mark: '🚀',
   },
-
-  // ── John C. Maxwell ──────────────────────────────────────
   {
     id: 'maxwell-21-laws',
     title: 'The 21 Irrefutable Laws of Leadership',
@@ -762,6 +758,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Principios atemporales de liderazgo: carácter e influencia.',
     themes: ['western_christian'],
     asin: '0785288376',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0785288376.01.LZZZZZZZ.jpg',
     accent: '#DAA520',
     mark: '👑',
   },
@@ -774,11 +771,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'El crecimiento personal como raíz del liderazgo.',
     themes: ['western_christian'],
     asin: '0718073993',
+    coverUrl: 'https://covers.openlibrary.org/b/id/12016603-L.jpg',
     accent: '#B8860B',
     mark: '📈',
   },
-
-  // ── Alex Newman ──────────────────────────────────────────
   {
     id: 'newman-indoctrination',
     title: 'Indoctrinating Our Children to Death',
@@ -788,7 +784,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Captura de la educación y la pelea por los derechos parentales.',
     themes: ['western_christian'],
     asin: '1944229990',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1944229990.01.LZZZZZZZ.jpg',
+    coverUrl: '/freedom/book-covers/newman-indoctrination.svg',
     accent: '#556B2F',
     mark: '🏫',
   },
@@ -800,13 +796,11 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEn: 'How progressive schooling undermined literacy and liberty.',
     blurbEs: 'Cómo la escolarización progresista minó la alfabetización y la libertad.',
     themes: ['western_christian'],
-    asin: '0880801858',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0880801858.01.LZZZZZZZ.jpg',
+    asin: '1938067134',
+    coverUrl: '/freedom/book-covers/newman-crimes-educators.svg',
     accent: '#6B8E23',
     mark: '📝',
   },
-
-  // ── Dave Ramsey ──────────────────────────────────────────
   {
     id: 'ramsey-total-money',
     title: 'The Total Money Makeover',
@@ -816,11 +810,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Vida sin deudas y mayordomía bíblica del dinero.',
     themes: ['western_christian'],
     asin: '1595555277',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1595555277.01.LZZZZZZZ.jpg',
     accent: '#228B22',
     mark: '💵',
   },
-
-  // ── Robert Kiyosaki ──────────────────────────────────────
   {
     id: 'kiyosaki-rich-dad',
     title: 'Rich Dad Poor Dad',
@@ -830,6 +823,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Activos vs pasivos: bases de la libertad financiera.',
     themes: ['western_christian'],
     asin: '1612680194',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1612680194.01.LZZZZZZZ.jpg',
     accent: '#32CD32',
     mark: '🏠',
   },
@@ -842,11 +836,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Del empleado al inversor: cambio de mentalidad.',
     themes: ['western_christian'],
     asin: '1612680054',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1612680054.01.LZZZZZZZ.jpg',
     accent: '#3CB371',
     mark: '📊',
   },
-
-  // ── Donald Trump ─────────────────────────────────────────
   {
     id: 'trump-art-of-deal',
     title: 'Trump: The Art of the Deal',
@@ -856,6 +849,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Negociación, riesgo y construcción bajo presión.',
     themes: ['western_christian'],
     asin: '0399594493',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0399594493.01.LZZZZZZZ.jpg',
     accent: '#FFD700',
     mark: '🏗',
   },
@@ -867,13 +861,12 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEn: 'America First agenda in the president’s own words.',
     blurbEs: 'Agenda America First en palabras del presidente.',
     themes: ['western_christian'],
-    asin: '1735503797',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1735503797.01.LZZZZZZZ.jpg',
+    asin: 'B0D9HS4CWN',
+    coverUrl:
+      '/freedom/book-covers/trump-save-america.jpg',
     accent: '#FF4500',
     mark: '🇺🇸',
   },
-
-  // ── Daniel Lacalle ───────────────────────────────────────
   {
     id: 'lacalle-libertad-o-igualdad',
     title: 'Freedom or Equality',
@@ -883,7 +876,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Por qué la libertad produce más prosperidad que el igualitarismo.',
     themes: ['western_christian'],
     asin: '1642934335',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1642934335.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/12387571-L.jpg',
     accent: '#C0C0C0',
     mark: '🇪🇸',
   },
@@ -896,12 +889,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Distorsión monetaria y cómo los mercados libres la corrigen.',
     themes: ['western_christian'],
     asin: '8423423433',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/8423423433.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/13713704-L.jpg',
     accent: '#A9A9A9',
     mark: '🏦',
   },
-
-  // ── Robert Malone ────────────────────────────────────────
   {
     id: 'malone-lies-my-gov',
     title: 'Lies My Gov’t Told Me',
@@ -910,12 +901,11 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEn: 'mRNA, public health power, and scientific integrity.',
     blurbEs: 'ARNm, poder de la salud pública e integridad científica.',
     themes: ['bioconservatism'],
-    asin: '1510773241',
+    asin: '151077324X',
+    coverUrl: 'https://covers.openlibrary.org/b/id/13110276-L.jpg',
     accent: '#4B0082',
     mark: '🧪',
   },
-
-  // ── Liz Wheeler ──────────────────────────────────────────
   {
     id: 'wheeler-tangle-truth',
     title: 'Tangle of Truth',
@@ -925,12 +915,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Pensamiento claro frente al spin mediático y las mentiras culturales.',
     themes: ['western_christian'],
     asin: '1637582393',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1637582393.01.LZZZZZZZ.jpg',
+    coverUrl: '/freedom/book-covers/wheeler-tangle-truth.svg',
     accent: '#FF69B4',
     mark: '🎤',
   },
-
-  // ── Alex Berenson ────────────────────────────────────────
   {
     id: 'berenson-unreported-truths',
     title: 'Unreported Truths about COVID-19',
@@ -939,8 +927,8 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEn: 'Independent reporting against pandemic orthodoxy.',
     blurbEs: 'Periodismo independiente frente a la ortodoxia pandémica.',
     themes: ['bioconservatism'],
-    asin: 'B08F5N9F8R',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/B08F5N9F8R.01.LZZZZZZZ.jpg',
+    asin: '1953039014',
+    coverUrl: 'https://covers.openlibrary.org/b/id/10143433-L.jpg',
     accent: '#8A2BE2',
     mark: '📰',
   },
@@ -953,12 +941,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Cómo el miedo y la política reconfiguraron la libertad.',
     themes: ['bioconservatism'],
     asin: '1684512489',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1684512489.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/12003730-L.jpg',
     accent: '#9932CC',
     mark: '🦠',
   },
-
-  // ── Nick Adams ───────────────────────────────────────────
   {
     id: 'adams-retaking-america',
     title: 'Retaking America',
@@ -967,8 +953,8 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEn: 'Patriotism, masculinity, and defending the West.',
     blurbEs: 'Patriotismo, masculinidad y defensa de Occidente.',
     themes: ['western_christian'],
-    asin: '1642930946',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1642930946.01.LZZZZZZZ.jpg',
+    asin: '1618688502',
+    coverUrl: 'https://covers.openlibrary.org/b/id/12721315-L.jpg',
     accent: '#B22222',
     mark: '🦅',
   },
@@ -981,12 +967,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Por qué el excepcionalismo americano aún importa.',
     themes: ['western_christian'],
     asin: '1642932302',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1642932302.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/10728905-L.jpg',
     accent: '#DC143C',
     mark: '⭐',
   },
-
-  // ── Bill O’Reilly ────────────────────────────────────────
   {
     id: 'oreilly-killing-jesus',
     title: 'Killing Jesus',
@@ -996,6 +980,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Narrativa histórica de la Pasión y el poder romano.',
     themes: ['western_christian'],
     asin: '0805098542',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0805098542.01.LZZZZZZZ.jpg',
     accent: '#8B0000',
     mark: '✝',
   },
@@ -1008,11 +993,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'El asesinato que puso a prueba la república americana.',
     themes: ['western_christian'],
     asin: '0805093079',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0805093079.01.LZZZZZZZ.jpg',
     accent: '#A52A2A',
     mark: '🎩',
   },
-
-  // ── Jack Posobiec ────────────────────────────────────────
   {
     id: 'posobiec-bulletproof',
     title: 'Bulletproof',
@@ -1021,8 +1005,8 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEn: 'Media warfare and surviving the culture war.',
     blurbEs: 'Guerra mediática y cómo sobrevivir la batalla cultural.',
     themes: ['western_christian'],
-    asin: '1637582210',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1637582210.01.LZZZZZZZ.jpg',
+    asin: '1510783369',
+    coverUrl: '/freedom/book-covers/posobiec-bulletproof.jpg',
     accent: '#2F2F2F',
     mark: '📡',
   },
@@ -1035,12 +1019,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Noticias, narrativa y contrarrestar a los medios de izquierda.',
     themes: ['western_christian'],
     asin: '1637584280',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1637584280.01.LZZZZZZZ.jpg',
+    coverUrl: '/freedom/book-covers/posobiec-human-events.svg',
     accent: '#4A4A4A',
     mark: '🗞',
   },
-
-  // ── Matt Walsh ───────────────────────────────────────────
   {
     id: 'walsh-church-of-cowards',
     title: 'Church of Cowards',
@@ -1050,6 +1032,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Un llamado de atención a un cristianismo blando y comprometido.',
     themes: ['western_christian'],
     asin: '1684510923',
+    coverUrl: 'https://covers.openlibrary.org/b/id/9304184-L.jpg',
     accent: '#000000',
     mark: '⛪',
   },
@@ -1062,11 +1045,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Parábola infantil contra la ideología de género.',
     themes: ['bioconservatism'],
     asin: '1956007059',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1956007059.01.LZZZZZZZ.jpg',
     accent: '#1C1C1C',
     mark: '🦭',
   },
-
-  // ── Peter McCullough ─────────────────────────────────────
   {
     id: 'mccullough-courage-cure',
     title: 'The Courage to Face COVID-19',
@@ -1075,13 +1057,11 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEn: 'Early treatment protocols and medical free speech.',
     blurbEs: 'Protocolos de tratamiento temprano y libertad de expresión médica.',
     themes: ['bioconservatism'],
-    asin: '1510776805',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1510776805.01.LZZZZZZZ.jpg',
+    asin: '1510776791',
+    coverUrl: '/freedom/book-covers/mccullough-courage-cure.svg',
     accent: '#5F4B8B',
     mark: '🩺',
   },
-
-  // ── Cristina Martín Jiménez ──────────────────────────────
   {
     id: 'martin-jimenez-club-bilderberg',
     title: 'The Bilderberg Club',
@@ -1091,7 +1071,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Élites globales, secretismo y redes de poder.',
     themes: ['western_christian'],
     asin: '8413841141',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/8413841141.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/13274615-L.jpg',
     accent: '#800020',
     mark: '🕵',
   },
@@ -1104,12 +1084,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Geopolítica y la caída incompleta del comunismo.',
     themes: ['western_christian'],
     asin: '8413842342',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/8413842342.01.LZZZZZZZ.jpg',
+    coverUrl: '/freedom/book-covers/martin-jimenez-perestroika.jpg',
     accent: '#9B2335',
     mark: '🌍',
   },
-
-  // ── Melania Trump ────────────────────────────────────────
   {
     id: 'melania-memoir',
     title: 'Melania',
@@ -1123,8 +1101,6 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     accent: '#E8B4B8',
     mark: '👗',
   },
-
-  // ── Roger Stone ──────────────────────────────────────────
   {
     id: 'stone-making-of-president',
     title: 'The Making of the President 2016',
@@ -1134,7 +1110,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Guerra de campaña desde la mirada de un operativo político.',
     themes: ['western_christian'],
     asin: '1510722167',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1510722167.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/13851723-L.jpg',
     accent: '#708090',
     mark: '🎯',
   },
@@ -1146,13 +1122,11 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEn: 'Hard lessons of power, media, and politics.',
     blurbEs: 'Lecciones duras de poder, medios y política.',
     themes: ['western_christian'],
-    asin: '1510773241',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1510773241.01.LZZZZZZZ.jpg',
+    asin: '1510740094',
+    coverUrl: 'https://covers.openlibrary.org/b/id/5810161-L.jpg',
     accent: '#778899',
     mark: '♟',
   },
-
-  // ── Javier Milei ─────────────────────────────────────────
   {
     id: 'milei-el-camino',
     title: 'The Path of the Libertarian',
@@ -1161,8 +1135,8 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEn: 'Austrian economics against collectivism in Argentina.',
     blurbEs: 'Economía austriaca contra el colectivismo en Argentina.',
     themes: ['western_christian'],
-    asin: '9878011058',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/9878011058.01.LZZZZZZZ.jpg',
+    asin: '8423437221',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/8423437221.01.LZZZZZZZ.jpg',
     accent: '#6B2D5B',
     mark: '🦁',
   },
@@ -1174,13 +1148,11 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEn: 'Why free markets beat state planning.',
     blurbEs: 'Por qué los mercados libres vencen a la planificación estatal.',
     themes: ['western_christian'],
-    asin: '9878010191',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/9878010191.01.LZZZZZZZ.jpg',
+    asin: '9504986099',
+    coverUrl: 'https://covers.openlibrary.org/b/id/14643473-L.jpg',
     accent: '#8B3A6B',
     mark: '🇦🇷',
   },
-
-  // ── Tucker Carlson ───────────────────────────────────────
   {
     id: 'carlson-ship-fools',
     title: 'Ship of Fools',
@@ -1190,6 +1162,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Cómo una élite autointeresada perdió a América.',
     themes: ['western_christian'],
     asin: '1501183664',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1501183664.01.LZZZZZZZ.jpg',
     accent: '#1A1A2E',
     mark: '📺',
   },
@@ -1202,11 +1175,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Ensayos sobre la decadencia mediática y el declive nacional.',
     themes: ['western_christian'],
     asin: '1501183699',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1501183699.01.LZZZZZZZ.jpg',
     accent: '#16213E',
     mark: '✏',
   },
-
-  // ── Vivek Ramaswamy ──────────────────────────────────────
   {
     id: 'ramaswamy-woke-inc',
     title: 'Woke, Inc.',
@@ -1216,6 +1188,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Cómo el corporativismo vendió el capitalismo por la política de identidad.',
     themes: ['both'],
     asin: '1546090789',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1546090789.01.LZZZZZZZ.jpg',
     accent: '#FF8C00',
     mark: '🏢',
   },
@@ -1228,11 +1201,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Identidad, agencia y recuperar la excelencia americana.',
     themes: ['western_christian'],
     asin: '1546002964',
+    coverUrl: 'https://covers.openlibrary.org/b/id/13193809-L.jpg',
     accent: '#FF7F50',
     mark: '🏆',
   },
-
-  // ── John Nosta ───────────────────────────────────────────
   {
     id: 'nosta-digital-health',
     title: 'The Digital Health Revolution',
@@ -1242,12 +1214,10 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Tecnología, medicina e innovación centrada en la persona.',
     themes: ['bioconservatism'],
     asin: '1119900128',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1119900128.01.LZZZZZZZ.jpg',
+    coverUrl: '/freedom/book-covers/nosta-digital-health.svg',
     accent: '#20B2AA',
     mark: '💻',
   },
-
-  // ── Neil Patel ───────────────────────────────────────────
   {
     id: 'patel-hustle',
     title: 'Hustle',
@@ -1256,53 +1226,83 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEn: 'Entrepreneurship, marketing, and building without permission.',
     blurbEs: 'Emprendimiento, marketing y construir sin permiso.',
     themes: ['western_christian'],
-    asin: '1119085307',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1119085307.01.LZZZZZZZ.jpg',
+    asin: '1623367164',
+    coverUrl: 'https://covers.openlibrary.org/b/id/12516014-L.jpg',
     accent: '#00BFFF',
     mark: '📣',
   },
   {
     id: 'patel-digital-marketing',
-    title: 'Digital Marketing Mastery',
-    titleEs: 'Maestría en marketing digital',
-    author: 'Neil Patel',
-    blurbEn: 'SEO, content, and growth for builders and entrepreneurs.',
-    blurbEs: 'SEO, contenido y crecimiento para constructores y emprendedores.',
+    title: 'Hacking Growth',
+    titleEs: 'Hacking Growth',
+    author: 'Sean Ellis & Morgan Brown',
+    blurbEn: 'Growth frameworks for products, marketing, and teams that scale.',
+    blurbEs: 'Frameworks de crecimiento para productos, marketing y equipos que escalan.',
     themes: ['western_christian'],
-    asin: '1119262234',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1119262234.01.LZZZZZZZ.jpg',
+    asin: '045149721X',
+    coverUrl: 'https://covers.openlibrary.org/b/id/14377164-L.jpg',
     accent: '#1E90FF',
     mark: '📈',
-  },
+  }
 ];
 
+/**
+ * Verified Amazon buy link (Associates tag).
+ * - ISBN-10 / ASIN → product page /dp/{asin}
+ * - Kindle-only / author codes still use /dp/ when present
+ * - Fallback: keyword search with author + title
+ */
 export function bookAmazonUrl(book: RecommendedBook): string {
-  if (book.asin) return amazonProductUrl(book.asin, 'com');
-  // Prefer author+title search so Spanish-market titles still resolve on Amazon
-  return amazonSearchUrl(`${book.author} ${book.titleEs || book.title}`, 'com');
+  const asin = book.asin?.trim();
+  // Kindle / product ASINs (B0…, B07…, etc.) and ISBN-10
+  if (asin && /^B0[0-9A-Z]{8,}$/i.test(asin)) {
+    return amazonProductUrl(asin, 'com');
+  }
+  if (asin && /^[0-9A-Z]{10}$/i.test(asin)) {
+    return amazonProductUrl(asin, 'com');
+  }
+  if (asin && asin.length >= 10 && !asin.includes(' ')) {
+    return amazonProductUrl(asin, 'com');
+  }
+  return amazonSearchUrl(
+    `${book.author} ${book.title || book.titleEs}`.trim(),
+    'com'
+  );
 }
 
 /**
  * Candidate cover image URLs (try in order).
- * Amazon P-image from ASIN is primary; explicit coverUrl wins if set.
+ * Explicit coverUrl first; then Amazon CDN patterns from ASIN/ISBN.
  */
 export function bookCoverCandidates(book: RecommendedBook): string[] {
   const urls: string[] = [];
   if (book.coverUrl) urls.push(book.coverUrl);
   if (book.asin) {
     const a = book.asin.trim();
-    // Common Amazon CDN patterns for product photos
-    urls.push(
-      `https://images-na.ssl-images-amazon.com/images/P/${a}.01.LZZZZZZZ.jpg`
-    );
-    urls.push(
-      `https://m.media-amazon.com/images/P/${a}.01._SCLZZZZZZZ_SX400_.jpg`
-    );
-    urls.push(
-      `https://images-na.ssl-images-amazon.com/images/P/${a}.01._SX300_SY400_QL70_ML2_.jpg`
-    );
+    // Skip author-store style IDs that are not product ASINs
+    const looksProduct =
+      /^B0[0-9A-Z]{8,}$/i.test(a) || /^[0-9A-Z]{10}$/i.test(a);
+    if (looksProduct) {
+      // Associates product image widget (often more reliable than bare P/ paths)
+      urls.push(
+        `https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=${encodeURIComponent(a)}&Format=_SL400_&ID=AsinImage&MarketPlace=US&ServiceVersion=20070822&WS=1`
+      );
+      urls.push(
+        `https://images-na.ssl-images-amazon.com/images/P/${a}.01.LZZZZZZZ.jpg`
+      );
+      urls.push(
+        `https://m.media-amazon.com/images/P/${a}.01._SCLZZZZZZZ_SX400_.jpg`
+      );
+      urls.push(
+        `https://images-na.ssl-images-amazon.com/images/P/${a}.01._SX300_SY400_QL70_ML2_.jpg`
+      );
+      // Open Library by ISBN-10 (when ASIN is ISBN-10)
+      if (/^[0-9]{9}[0-9Xx]$/.test(a)) {
+        urls.push(`https://covers.openlibrary.org/b/isbn/${a}-L.jpg`);
+      }
+    }
   }
-  return urls;
+  return [...new Set(urls)];
 }
 
 /** Search queries for Open Library / Google Books cover lookup (best first). */

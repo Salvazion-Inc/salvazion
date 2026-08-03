@@ -15,23 +15,25 @@ export type YouTubeChannel = {
   handle?: string;
   accent: string;
   mark: string;
-  /** Optional direct avatar / banner image URL */
+  /** Optional direct avatar / banner image URL (preferred over unavatar) */
   imageUrl?: string;
 };
 
-/** Avatar for channel cards — prefers @handle via unavatar.io */
+/** Avatar for channel cards — prefers explicit imageUrl, then @handle via unavatar */
 export function youtubeChannelImage(ch: YouTubeChannel): string | null {
   if (ch.imageUrl) return ch.imageUrl;
   if (ch.handle) {
     const h = ch.handle.replace(/^@/, '');
-    return `https://unavatar.io/youtube/@${encodeURIComponent(h)}?fallback=false`;
+    // unavatar with default fallback so the card never stays empty
+    return `https://unavatar.io/youtube/@${encodeURIComponent(h)}`;
   }
   // Derive @ from youtube.com/@slug
   const m = ch.url.match(/youtube\.com\/@([^/?#]+)/i);
   if (m?.[1]) {
-    return `https://unavatar.io/youtube/@${encodeURIComponent(m[1])}?fallback=false`;
+    return `https://unavatar.io/youtube/@${encodeURIComponent(m[1])}`;
   }
-  return null;
+  // Last resort: monogram from channel name
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(ch.name)}&background=${ch.accent.replace('#', '')}&color=fff&size=256&bold=true&format=png`;
 }
 
 export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
@@ -70,6 +72,8 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
     name: 'Agustín Laje',
     handle: '@agustinlaje',
     url: 'https://www.youtube.com/@agustinlaje',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Agust%C3%ADn_Laje_in_2025.jpg/400px-Agust%C3%ADn_Laje_in_2025.jpg',
     focusEs: 'Batalla cultural, familia y crítica al progresismo',
     focusEn: 'Culture war, family, and critique of progressivism',
     accent: '#8B0000',
@@ -80,6 +84,8 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
     name: 'Axel Kaiser',
     handle: '@AxelKaiserOficial',
     url: 'https://www.youtube.com/@AxelKaiserOficial',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Axel_Kaiser%2C_2026.jpg/400px-Axel_Kaiser%2C_2026.jpg',
     focusEs: 'Libertad económica y crítica al igualitarismo',
     focusEn: 'Economic liberty and critique of egalitarianism',
     accent: '#C9A227',
@@ -90,6 +96,8 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
     name: 'Vanessa Kaiser',
     handle: '@VanessaKaiserOficial',
     url: 'https://www.youtube.com/@VanessaKaiserOficial',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/7/7c/Senado_2026_Vanessa_Olimpia_Kaiser_Barents_von_Hohenhagen.jpg',
     focusEs: 'Libertad, educación y crítica al feminismo radical',
     focusEn: 'Liberty, education, and critique of radical feminism',
     accent: '#DB7093',
@@ -130,6 +138,8 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
     name: 'Dennis Prager',
     handle: '@DennisPrager',
     url: 'https://www.youtube.com/@DennisPrager',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Dennis_Prager_2023_AmericaFest_%283x4_cropped%29.jpg/400px-Dennis_Prager_2023_AmericaFest_%283x4_cropped%29.jpg',
     focusEs: 'Torá, moral y cultura judeocristiana',
     focusEn: 'Torah, morality, and Judeo-Christian culture',
     accent: '#2C4A6E',
@@ -138,8 +148,10 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
   {
     id: 'dailywire',
     name: 'Daily Wire',
-    handle: '@DailyWirePlus',
-    url: 'https://www.youtube.com/@DailyWirePlus',
+    handle: '@DailyWire',
+    url: 'https://www.youtube.com/@DailyWire',
+    imageUrl:
+      'https://yt3.googleusercontent.com/GgphyKn0EGYHdSCGE1-ryv4Z-47OmZBk7Jal8ZCxC-GYTYkKwfObbxn89ckXa9HIFq0d35JaqQ=s240-c-k-c0x00ffffff-no-rj',
     focusEs: 'Shapiro, Walsh y cultura conservadora',
     focusEn: 'Shapiro, Walsh, and conservative culture',
     accent: '#000000',
@@ -188,8 +200,10 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
   {
     id: 'javier-milei',
     name: 'Javier Milei',
-    handle: '@JavierMilei',
-    url: 'https://www.youtube.com/@JavierMilei',
+    handle: '@JMilei',
+    url: 'https://www.youtube.com/@JMilei',
+    imageUrl:
+      'https://yt3.googleusercontent.com/Mq2gx0XnRLMaS0E7_bM4l8GuVPOricx2Zdazn1AcCV8Lfi0fhYdK9maPn4STJNeIo7ExwEXXBg=s240-c-k-c0x00ffffff-no-rj',
     focusEs: 'Economía austriaca y libertad en español',
     focusEn: 'Austrian economics and liberty in Spanish',
     accent: '#6B2D5B',
@@ -230,6 +244,8 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
     name: 'John C. Maxwell',
     handle: '@JohnCMaxwellCo',
     url: 'https://www.youtube.com/@JohnCMaxwellCo',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/John_C._Maxwell_%28cropped%29.jpg/400px-John_C._Maxwell_%28cropped%29.jpg',
     focusEs: 'Liderazgo y carácter',
     focusEn: 'Leadership and character',
     accent: '#DAA520',
@@ -240,6 +256,8 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
     name: 'Tommy Robinson',
     handle: '@TommyRobinsonNews',
     url: 'https://www.youtube.com/@TommyRobinsonNews',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Tommy_Robinson_2025.png/400px-Tommy_Robinson_2025.png',
     focusEs: 'Libertad de expresión y soberanía en el Reino Unido',
     focusEn: 'Free speech and sovereignty in the UK',
     accent: '#000080',
@@ -258,8 +276,10 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
   {
     id: 'liz-wheeler',
     name: 'Liz Wheeler',
-    handle: '@TheLizWheeler',
-    url: 'https://www.youtube.com/@TheLizWheeler',
+    handle: '@LizWheeler',
+    url: 'https://www.youtube.com/@LizWheeler',
+    imageUrl:
+      'https://yt3.googleusercontent.com/NOAamE04PmJlkmbiPwagZ3JnSxe-QOFD-whtmkk6AEvL32-cg_3oxS8z8JeRhbK8z3aHnEk5=s240-c-k-c0x00ffffff-no-rj',
     focusEs: 'Medios, cultura y verdad sin spin',
     focusEn: 'Media, culture, and truth without spin',
     accent: '#FF69B4',
@@ -300,6 +320,9 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
     name: 'Cristina Martín Jiménez',
     handle: '@CristinaMartinJimenez',
     url: 'https://www.youtube.com/@CristinaMartinJimenez',
+    // Portrait not available on Commons; use clean monogram-style photo fallback via ui-avatars
+    imageUrl:
+      'https://ui-avatars.com/api/?name=Cristina+Martin&background=800020&color=fff&size=256&bold=true&format=png',
     focusEs: 'Geopolítica y redes de poder',
     focusEn: 'Geopolitics and power networks',
     accent: '#800020',
@@ -310,6 +333,8 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
     name: 'Nick Adams',
     handle: '@OfficialNickAdams',
     url: 'https://www.youtube.com/@OfficialNickAdams',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Nick_Adams_Special_Envoy.png/400px-Nick_Adams_Special_Envoy.png',
     focusEs: 'Patriotismo y cultura americana',
     focusEn: 'Patriotism and American culture',
     accent: '#B22222',
@@ -328,8 +353,10 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
   {
     id: 'peter-mccullough',
     name: 'Peter McCullough',
-    handle: '@PeterAMcCulloughMD',
-    url: 'https://www.youtube.com/@PeterAMcCulloughMD',
+    handle: '@PeterMcCulloughMD',
+    url: 'https://www.youtube.com/@PeterMcCulloughMD',
+    imageUrl:
+      'https://yt3.googleusercontent.com/hR1BU46Zg0een100Q-t45MrVXZHEOFRSXrPyUzAt_fvp6jH1CGqtN1BuX8ArYKJBUlQSjJRY=s240-c-k-c0x00ffffff-no-rj',
     focusEs: 'Medicina y debate científico abierto',
     focusEn: 'Medicine and open scientific debate',
     accent: '#5F4B8B',
@@ -338,8 +365,10 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
   {
     id: 'salvazion',
     name: 'Salvazion',
-    handle: '@salvazion_',
-    url: 'https://www.youtube.com/@salvazion_',
+    handle: '@salvazion',
+    url: 'https://www.youtube.com/@salvazion',
+    imageUrl:
+      'https://yt3.googleusercontent.com/ytc/AIdro_n9L3MUdjitYl_K1iQquDvEiFlL6P2mVh1q6P-bVvmzCA=s240-c-k-c0x00ffffff-no-rj',
     focusEs: 'Canal y clips del movimiento Salvazion',
     focusEn: 'Salvazion movement channel and clips',
     accent: '#7BC98A',

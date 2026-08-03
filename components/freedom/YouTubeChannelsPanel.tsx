@@ -16,7 +16,7 @@ type Props = {
 };
 
 /**
- * YouTube channels of library authors — avatars centered (no head crop).
+ * Official YouTube channels — one open action (no duplicate lesson CTA).
  */
 export default function YouTubeChannelsPanel({
   className = '',
@@ -26,54 +26,51 @@ export default function YouTubeChannelsPanel({
   const es = lang !== 'en';
   const [opened, setOpened] = useState<Set<string>>(() => new Set());
   const [imgFail, setImgFail] = useState<Set<string>>(() => new Set());
+  const pts = getFreedomPoints('learn_article_video');
 
-  const markWatched = (ch: YouTubeChannel, kind: 'video' | 'lesson') => {
-    if (opened.has(ch.id)) return;
-    logAction(kind === 'lesson' ? 'learn_lesson' : 'learn_article_video');
-    setOpened((prev) => new Set([...prev, ch.id]));
-    onScored?.();
+  const openChannel = (ch: YouTubeChannel) => {
+    if (!opened.has(ch.id)) {
+      logAction('learn_article_video');
+      setOpened((prev) => new Set([...prev, ch.id]));
+      onScored?.();
+    }
   };
-
-  const ptsVideo = getFreedomPoints('learn_article_video');
-  const ptsLesson = getFreedomPoints('learn_lesson');
 
   return (
     <section
-      className={`space-y-2.5 ${className}`}
+      className={`space-y-2 ${className}`}
       aria-label={es ? 'Canales de YouTube' : 'YouTube channels'}
     >
       <div className="px-0.5">
         <h2 className="text-sm font-semibold text-[var(--sage)]">
-          {es ? 'Canales de YouTube' : 'YouTube channels'}
+          {es ? 'YouTube' : 'YouTube'}
         </h2>
-        <p className="text-[10px] text-[var(--sage)]/70 mt-0.5 leading-relaxed">
+        <p className="text-[10px] text-[var(--sage)]/70 mt-0.5">
           {es
-            ? 'Videos cortos y mini-cursos de los mismos autores de la biblioteca · Freedom'
-            : 'Short videos and mini-courses from the same library authors · Freedom'}
+            ? 'Canales oficiales · +' + pts + ' Freedom al abrir'
+            : 'Official channels · +' + pts + ' Freedom on open'}
         </p>
       </div>
 
-      <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 snap-x snap-mandatory">
+      <div className="flex gap-2.5 overflow-x-auto pb-1 -mx-1 px-1 snap-x snap-mandatory">
         {YOUTUBE_CHANNELS.map((ch) => {
           const done = opened.has(ch.id);
-          const focus = es ? ch.focusEs : ch.focusEn;
           const img = youtubeChannelImage(ch);
           const showImg = !!img && !imgFail.has(ch.id);
           return (
             <article
               key={ch.id}
-              className="snap-start shrink-0 w-[13.5rem] card-soft overflow-hidden flex flex-col border"
+              className="snap-start shrink-0 w-[10.5rem] card-soft overflow-hidden flex flex-col border"
               style={{
                 borderColor: done
                   ? 'var(--border-strong)'
                   : `${ch.accent}55`,
               }}
             >
-              {/* Square avatar area — full face, centered, no wide crop */}
               <div
-                className="relative w-full aspect-square flex items-center justify-center overflow-hidden"
+                className="relative w-full aspect-square overflow-hidden"
                 style={{
-                  background: `linear-gradient(145deg, ${ch.accent}45, #0a0a0a 80%)`,
+                  background: `linear-gradient(145deg, ${ch.accent}40, #0a0a0a 85%)`,
                 }}
               >
                 {showImg ? (
@@ -82,7 +79,6 @@ export default function YouTubeChannelsPanel({
                     src={img}
                     alt=""
                     className="absolute inset-0 w-full h-full object-cover"
-                    // Bias slightly upward so faces/heads stay in frame
                     style={{ objectPosition: 'center 18%' }}
                     loading="lazy"
                     referrerPolicy="no-referrer"
@@ -91,38 +87,34 @@ export default function YouTubeChannelsPanel({
                     }
                   />
                 ) : (
-                  <span className="text-4xl relative z-[1]" aria-hidden>
+                  <span
+                    className="absolute inset-0 flex items-center justify-center text-3xl"
+                    aria-hidden
+                  >
                     {ch.mark}
                   </span>
                 )}
-                <div
-                  className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent pointer-events-none"
-                  aria-hidden
-                />
-                <span className="absolute bottom-2 left-2 text-[9px] font-semibold text-white/95 bg-red-600/90 px-1.5 py-0.5 rounded z-[1]">
-                  YouTube
-                </span>
               </div>
-              <div className="p-2.5 flex flex-col flex-1 gap-1.5">
-                <h3 className="text-[12px] font-semibold text-white leading-snug line-clamp-2">
+              <div className="p-2.5 flex flex-col flex-1 gap-1.5 min-h-[7.5rem]">
+                <h3 className="text-[12px] font-semibold text-white leading-snug line-clamp-2 min-h-[2rem]">
                   {ch.name}
                 </h3>
                 {ch.handle ? (
-                  <p className="text-[10px] text-[var(--accent)]">{ch.handle}</p>
+                  <p className="text-[10px] text-[var(--accent)] truncate">
+                    {ch.handle}
+                  </p>
                 ) : null}
-                <p className="text-[10px] text-[var(--sage)]/80 leading-relaxed line-clamp-3 flex-1">
-                  {focus}
-                </p>
                 <a
                   href={ch.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => markWatched(ch, 'video')}
-                  className="mt-auto text-center text-[11px] font-medium min-h-[36px] flex items-center justify-center rounded-lg border transition hover:opacity-90"
+                  onClick={() => openChannel(ch)}
+                  className="btn-outline-sm mt-auto w-full"
                   style={{
-                    borderColor: 'rgba(255,0,0,0.4)',
-                    color: '#FF6B6B',
-                    background: 'rgba(255,0,0,0.08)',
+                    borderColor: done
+                      ? 'var(--border-strong)'
+                      : 'rgba(255,0,0,0.35)',
+                    color: done ? 'var(--sage)' : '#FF6B6B',
                   }}
                 >
                   {done
@@ -130,32 +122,14 @@ export default function YouTubeChannelsPanel({
                       ? '✓ Abierto'
                       : '✓ Opened'
                     : es
-                      ? `Ver canal · +${ptsVideo}`
-                      : `Open channel · +${ptsVideo}`}
+                      ? `Abrir · +${pts}`
+                      : `Open · +${pts}`}
                 </a>
-                <button
-                  type="button"
-                  onClick={() => {
-                    markWatched(ch, 'lesson');
-                    window.open(ch.url, '_blank', 'noopener,noreferrer');
-                  }}
-                  className="text-center text-[10px] min-h-[32px] rounded-lg border border-[var(--border-soft)] text-[var(--sage)] hover:border-[var(--border-strong)]"
-                >
-                  {es
-                    ? `Mini-curso / lección · +${ptsLesson}`
-                    : `Mini-course / lesson · +${ptsLesson}`}
-                </button>
               </div>
             </article>
           );
         })}
       </div>
-
-      <p className="text-[9px] text-[var(--sage)]/50 px-0.5 leading-relaxed">
-        {es
-          ? `Video corto +${ptsVideo} · Lección +${ptsLesson} Freedom al abrir un canal (una vez por canal en esta sesión).`
-          : `Short video +${ptsVideo} · Lesson +${ptsLesson} Freedom when you open a channel (once per channel this session).`}
-      </p>
     </section>
   );
 }

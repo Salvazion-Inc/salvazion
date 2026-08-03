@@ -214,14 +214,14 @@ export default function ProfilePage() {
                 <button
                   type="button"
                   onClick={() => setEditing(true)}
-                  className="py-3 rounded-xl border border-[var(--border-strong)] text-[var(--accent)] text-sm font-medium hover:bg-[var(--surface-active)] min-h-[48px]"
+                  className="btn-secondary"
                 >
                   {t('profile.editProfile')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowSettings(true)}
-                  className="py-3 rounded-xl border border-[var(--border-strong)] bg-[var(--surface-active)] text-[var(--accent)] text-sm font-medium hover:border-[var(--accent)] min-h-[48px]"
+                  className="btn-secondary"
                 >
                   {t('settings.open')}
                 </button>

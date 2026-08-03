@@ -1,6 +1,6 @@
 /**
- * YouTube channels of authors featured in the recommended library.
- * Short videos + lessons / mini-courses live here (Freedom · Learn).
+ * Official YouTube channels (verified handles) for Freedom · Learn.
+ * Only real, large/official channels — no squatted or fan accounts.
  */
 
 export type YouTubeChannel = {
@@ -24,18 +24,20 @@ export function youtubeChannelImage(ch: YouTubeChannel): string | null {
   if (ch.imageUrl) return ch.imageUrl;
   if (ch.handle) {
     const h = ch.handle.replace(/^@/, '');
-    // unavatar with default fallback so the card never stays empty
     return `https://unavatar.io/youtube/@${encodeURIComponent(h)}`;
   }
-  // Derive @ from youtube.com/@slug
   const m = ch.url.match(/youtube\.com\/@([^/?#]+)/i);
   if (m?.[1]) {
     return `https://unavatar.io/youtube/@${encodeURIComponent(m[1])}`;
   }
-  // Last resort: monogram from channel name
   return `https://ui-avatars.com/api/?name=${encodeURIComponent(ch.name)}&background=${ch.accent.replace('#', '')}&color=fff&size=256&bold=true&format=png`;
 }
 
+/**
+ * Verified official channels only (checked 2026-08).
+ * Removed: squatted @tpusa / @charliekirk1776 / @salvazion, dead handles, and
+ * people without a clear public official channel.
+ */
 export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
   {
     id: 'jordan-peterson',
@@ -50,8 +52,10 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
   {
     id: 'charlie-kirk',
     name: 'Charlie Kirk',
-    handle: '@charliekirk1776',
-    url: 'https://www.youtube.com/@charliekirk1776',
+    handle: '@RealCharlieKirk',
+    url: 'https://www.youtube.com/@RealCharlieKirk',
+    imageUrl:
+      'https://yt3.googleusercontent.com/J6Zx0VftbF4QakX14hkMKlLQ2HfoinS3ISt2S3VoCxP0iXk1kFCUZQlrFqNpapoNkRj5GKGc=s240-c-k-c0x00ffffff-no-rj',
     focusEs: 'Campus, fe, libertad y cultura americana',
     focusEn: 'Campus, faith, liberty, and American culture',
     accent: '#DC143C',
@@ -60,8 +64,10 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
   {
     id: 'tpusa',
     name: 'Turning Point USA',
-    handle: '@tpusa',
-    url: 'https://www.youtube.com/@tpusa',
+    handle: '@TurningPointUSA',
+    url: 'https://www.youtube.com/@TurningPointUSA',
+    imageUrl:
+      'https://yt3.googleusercontent.com/uf9sZRZaAS8Wnc36BjKpC8Gv8b4TQJ0EbunicclJnn-4nTuvskY3iohx3qb6I8ix37lbY49w=s240-c-k-c0x00ffffff-no-rj',
     focusEs: 'Mini-cursos y charlas de libertad en campus',
     focusEn: 'Campus liberty talks and short courses',
     accent: '#B22222',
@@ -70,10 +76,10 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
   {
     id: 'agustin-laje',
     name: 'Agustín Laje',
-    handle: '@agustinlaje',
-    url: 'https://www.youtube.com/@agustinlaje',
+    handle: '@AgustinLajeOk',
+    url: 'https://www.youtube.com/@AgustinLajeOk',
     imageUrl:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Agust%C3%ADn_Laje_in_2025.jpg/400px-Agust%C3%ADn_Laje_in_2025.jpg',
+      'https://yt3.googleusercontent.com/R5xOBRi8YnK9GoZLZ9o27tyaF00mcowzFosKgYQbQtzkdny09dmXFaJ4Z_F25KWVZRpIj5BH=s240-c-k-c0x00ffffff-no-rj',
     focusEs: 'Batalla cultural, familia y crítica al progresismo',
     focusEn: 'Culture war, family, and critique of progressivism',
     accent: '#8B0000',
@@ -82,10 +88,10 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
   {
     id: 'axel-kaiser',
     name: 'Axel Kaiser',
-    handle: '@AxelKaiserOficial',
-    url: 'https://www.youtube.com/@AxelKaiserOficial',
+    handle: '@AxelKaiserb',
+    url: 'https://www.youtube.com/@AxelKaiserb',
     imageUrl:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Axel_Kaiser%2C_2026.jpg/400px-Axel_Kaiser%2C_2026.jpg',
+      'https://yt3.googleusercontent.com/iRVUOhLrMwYlzc6gqD-aCH6a54Z7l4rHZK3RMep3ZoBB3aWV1xLDbDat4YLRDtjZUFbtJpvO=s240-c-k-c0x00ffffff-no-rj',
     focusEs: 'Libertad económica y crítica al igualitarismo',
     focusEn: 'Economic liberty and critique of egalitarianism',
     accent: '#C9A227',
@@ -94,10 +100,10 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
   {
     id: 'vanessa-kaiser',
     name: 'Vanessa Kaiser',
-    handle: '@VanessaKaiserOficial',
-    url: 'https://www.youtube.com/@VanessaKaiserOficial',
+    handle: '@vanessa.kaiser',
+    url: 'https://www.youtube.com/@vanessa.kaiser',
     imageUrl:
-      'https://upload.wikimedia.org/wikipedia/commons/7/7c/Senado_2026_Vanessa_Olimpia_Kaiser_Barents_von_Hohenhagen.jpg',
+      'https://yt3.googleusercontent.com/ronE1doWvTGVFft8k7IWNisisCmH2Q_miRL0JY3b7Jew2wtVzrxyrfmv7GD3L6wHXeNYf8KMwQ=s240-c-k-c0x00ffffff-no-rj',
     focusEs: 'Libertad, educación y crítica al feminismo radical',
     focusEn: 'Liberty, education, and critique of radical feminism',
     accent: '#DB7093',
@@ -128,22 +134,12 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
     name: 'PragerU',
     handle: '@prageru',
     url: 'https://www.youtube.com/@prageru',
-    focusEs: 'Mini-lecciones de 5 min: fe, historia y libertad',
-    focusEn: '5-min lessons: faith, history, and liberty',
+    imageUrl:
+      'https://yt3.googleusercontent.com/AKCYsayX6Z56Uqou3kjJBkODb5UXZyeOXJe98u6een5DXxRQ2hEkK3woTcgMc1Ar3yYEt0QMTjs=s240-c-k-c0x00ffffff-no-rj',
+    focusEs: 'Mini-lecciones de 5 min: fe, historia y libertad (Dennis Prager)',
+    focusEn: '5-min lessons: faith, history, and liberty (Dennis Prager)',
     accent: '#1E3A5F',
     mark: '📘',
-  },
-  {
-    id: 'dennis-prager',
-    name: 'Dennis Prager',
-    handle: '@DennisPrager',
-    url: 'https://www.youtube.com/@DennisPrager',
-    imageUrl:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Dennis_Prager_2023_AmericaFest_%283x4_cropped%29.jpg/400px-Dennis_Prager_2023_AmericaFest_%283x4_cropped%29.jpg',
-    focusEs: 'Torá, moral y cultura judeocristiana',
-    focusEn: 'Torah, morality, and Judeo-Christian culture',
-    accent: '#2C4A6E',
-    mark: '✡',
   },
   {
     id: 'dailywire',
@@ -242,26 +238,12 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
   {
     id: 'john-maxwell',
     name: 'John C. Maxwell',
-    handle: '@JohnCMaxwellCo',
-    url: 'https://www.youtube.com/@JohnCMaxwellCo',
-    imageUrl:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/John_C._Maxwell_%28cropped%29.jpg/400px-John_C._Maxwell_%28cropped%29.jpg',
+    handle: '@JohnCMaxwellLead',
+    url: 'https://www.youtube.com/@JohnCMaxwellLead',
     focusEs: 'Liderazgo y carácter',
     focusEn: 'Leadership and character',
     accent: '#DAA520',
     mark: '👑',
-  },
-  {
-    id: 'tommy-robinson',
-    name: 'Tommy Robinson',
-    handle: '@TommyRobinsonNews',
-    url: 'https://www.youtube.com/@TommyRobinsonNews',
-    imageUrl:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Tommy_Robinson_2025.png/400px-Tommy_Robinson_2025.png',
-    focusEs: 'Libertad de expresión y soberanía en el Reino Unido',
-    focusEn: 'Free speech and sovereignty in the UK',
-    accent: '#000080',
-    mark: '🇬🇧',
   },
   {
     id: 'alex-newman',
@@ -316,31 +298,6 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
     mark: '🇪🇸',
   },
   {
-    id: 'cristina-martin',
-    name: 'Cristina Martín Jiménez',
-    handle: '@CristinaMartinJimenez',
-    url: 'https://www.youtube.com/@CristinaMartinJimenez',
-    // Portrait not available on Commons; use clean monogram-style photo fallback via ui-avatars
-    imageUrl:
-      'https://ui-avatars.com/api/?name=Cristina+Martin&background=800020&color=fff&size=256&bold=true&format=png',
-    focusEs: 'Geopolítica y redes de poder',
-    focusEn: 'Geopolitics and power networks',
-    accent: '#800020',
-    mark: '🕵',
-  },
-  {
-    id: 'nick-adams',
-    name: 'Nick Adams',
-    handle: '@OfficialNickAdams',
-    url: 'https://www.youtube.com/@OfficialNickAdams',
-    imageUrl:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Nick_Adams_Special_Envoy.png/400px-Nick_Adams_Special_Envoy.png',
-    focusEs: 'Patriotismo y cultura americana',
-    focusEn: 'Patriotism and American culture',
-    accent: '#B22222',
-    mark: '🦅',
-  },
-  {
     id: 'robert-malone',
     name: 'Robert Malone',
     handle: '@rwmalonemd',
@@ -361,17 +318,5 @@ export const YOUTUBE_CHANNELS: YouTubeChannel[] = [
     focusEn: 'Medicine and open scientific debate',
     accent: '#5F4B8B',
     mark: '🩺',
-  },
-  {
-    id: 'salvazion',
-    name: 'Salvazion',
-    handle: '@salvazion',
-    url: 'https://www.youtube.com/@salvazion',
-    imageUrl:
-      'https://yt3.googleusercontent.com/ytc/AIdro_n9L3MUdjitYl_K1iQquDvEiFlL6P2mVh1q6P-bVvmzCA=s240-c-k-c0x00ffffff-no-rj',
-    focusEs: 'Canal y clips del movimiento Salvazion',
-    focusEn: 'Salvazion movement channel and clips',
-    accent: '#7BC98A',
-    mark: '🦁',
   },
 ];

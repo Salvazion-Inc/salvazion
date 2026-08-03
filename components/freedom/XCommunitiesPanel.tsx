@@ -100,16 +100,15 @@ export default function XCommunitiesPanel({
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => markConnect(c)}
-                  className="btn-primary text-sm py-2.5 w-full text-center inline-flex items-center justify-center gap-2"
+                  className="btn-primary"
                 >
-                  <span aria-hidden>𝕏</span>
                   {done
                     ? es
-                      ? 'Abrir Green Lion Kings'
-                      : 'Open Green Lion Kings'
+                      ? 'Abrir en X'
+                      : 'Open on X'
                     : es
-                      ? `Unirme en X · +${pts} Freedom`
-                      : `Join on X · +${pts} Freedom`}
+                      ? `Unirme · +${pts}`
+                      : `Join · +${pts}`}
                 </a>
               </div>
             </article>

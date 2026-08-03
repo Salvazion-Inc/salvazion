@@ -185,16 +185,12 @@ export default function CalendarPage() {
           </span>
         </div>
 
-        <div className="glass rounded-xl px-3 py-2 mb-3 text-[11px] text-[var(--off-white)]/80 leading-relaxed">
-          {t('calendar.coachGuideSimple')}
-        </div>
-
         <OutdoorClimatePanel className="mb-4" />
 
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="btn-toolbar mb-4">
           <button
             type="button"
-            className="btn-outline-sm min-h-[36px]"
+            className="btn-outline-sm"
             onClick={() => {
               const n = duplicateToTomorrow(selectedDate);
               flash(t('calendar.copiedTomorrow', { n }));
@@ -205,7 +201,7 @@ export default function CalendarPage() {
           </button>
           <button
             type="button"
-            className="btn-outline-sm min-h-[36px]"
+            className="btn-outline-sm"
             onClick={() => {
               const n = duplicateToWeek(selectedDate);
               flash(t('calendar.copiedWeek', { n }));
@@ -216,7 +212,7 @@ export default function CalendarPage() {
           </button>
           <button
             type="button"
-            className="btn-outline-sm min-h-[36px]"
+            className="btn-outline-sm"
             onClick={() => {
               if (window.confirm(t('calendar.resetDefaultConfirm'))) {
                 resetToDefaultDay(selectedDate);
@@ -231,7 +227,7 @@ export default function CalendarPage() {
           {counts.total > 0 && (
             <button
               type="button"
-              className="btn-ghost text-red-400/80 text-[11px] min-h-[36px]"
+              className="btn-ghost text-red-400/80"
               onClick={() => {
                 if (window.confirm(t('calendar.clearConfirm'))) {
                   clearDay(selectedDate);

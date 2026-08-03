@@ -129,21 +129,10 @@ export default function FreedomPage() {
             {/* 2) YouTube channels = short video + mini-course */}
             <YouTubeChannelsPanel onScored={() => refresh()} />
 
-            {/* 3) Debate last */}
-            <section className="card-soft p-4 border border-[var(--border-soft)]">
-              <div className="mb-3">
-                <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] font-medium">
-                  Freedom · Debate
-                </p>
-                <h2 className="text-base font-semibold text-white leading-tight">
-                  Habla y debate con Salvazion
-                </h2>
-                <p className="text-[11px] text-[var(--sage)]/85 mt-1 leading-relaxed">
-                  Defiende la cultura cristiano-occidental y el bio-conservadurismo.
-                  Rechaza globalismo, agenda woke, LGBTQ, Deep State, ideologías de
-                  izquierda y transhumanismo. Argumenta con razón y fe.
-                </p>
-              </div>
+            <section className="card-soft p-3.5 border border-[var(--border-soft)]">
+              <h2 className="text-sm font-semibold text-white leading-tight mb-2">
+                Debate
+              </h2>
               <VoiceAgent
                 profile={profile}
                 scores={scores}
@@ -180,26 +169,44 @@ export default function FreedomPage() {
         )}
 
         {activeTab === 'contribute' && (
-          <div className="space-y-3">
-            <h2 className="text-sm font-semibold text-[var(--sage)]">Aportar</h2>
-            <p className="text-[11px] text-[var(--sage)]/80">Trabajo, proyectos, startups, ministerio.</p>
-            {actions.filter(a => a.category === 'contribute').map(action => {
-              const done = loggedToday.has(action.actionType);
-              return (
-                <div key={action.id} className={'glass rounded-xl p-4 border ' + (done ? 'border-[var(--border-strong)]' : 'border-[var(--border-soft)]')}>
-                  <div className="flex justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-medium text-white">{action.icon} {action.label}</p>
-                      <p className="text-xs text-[#D8E1D9]/60 mt-1">{action.description}</p>
+          <div className="space-y-2.5">
+            <p className="text-[11px] text-[var(--sage)]/80 px-0.5">
+              Trabajo, proyectos, startups, ministerio.
+            </p>
+            {actions
+              .filter((a) => a.category === 'contribute')
+              .map((action) => {
+                const done = loggedToday.has(action.actionType);
+                return (
+                  <div
+                    key={action.id}
+                    className={`card-soft p-3.5 border flex items-center gap-3 ${
+                      done
+                        ? 'border-[var(--border-strong)]'
+                        : 'border-[var(--border-soft)]'
+                    }`}
+                  >
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-white truncate">
+                        {action.icon} {action.label}
+                      </p>
+                      <p className="text-[11px] text-[var(--sage)]/75 mt-0.5 line-clamp-2">
+                        {action.description}
+                      </p>
                     </div>
-                    <button disabled={done} onClick={() => !done && handleLog(action.actionType, action.label)}
-                      className={done ? 'btn-sm' : 'btn-sm'}>
+                    <button
+                      type="button"
+                      disabled={done}
+                      onClick={() =>
+                        !done && handleLog(action.actionType, action.label)
+                      }
+                      className="btn-sm"
+                    >
                       {done ? '✓' : '+' + getFreedomPoints(action.actionType)}
                     </button>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         )}
       </main>

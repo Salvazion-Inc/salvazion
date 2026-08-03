@@ -14,8 +14,8 @@ type Props = {
 
 /**
  * Book cover with multi-source fallback:
- * 1) Explicit coverUrl / Amazon ASIN
- * 2) Open Library + Google Books lookup
+ * 1) Explicit coverUrl / ISBN Open Library / Amazon candidates
+ * 2) Open Library + Google Books live lookup
  * 3) Accent + mark placeholder
  *
  * Rejects Amazon 1×1 / tiny placeholder GIFs that report HTTP 200.
@@ -27,6 +27,7 @@ export default function BookCover({ book, className = '' }: Props) {
   const [remoteDone, setRemoteDone] = useState(false);
   const [failed, setFailed] = useState(false);
 
+  // Prefer live-resolved remote over static when both available
   const active =
     !failed && remoteUrl
       ? remoteUrl
@@ -36,38 +37,47 @@ export default function BookCover({ book, className = '' }: Props) {
 
   const advance = () => {
     if (remoteUrl && active === remoteUrl) {
+      // Remote failed — fall back through remaining static candidates
       setRemoteUrl(null);
+      if (idx < candidates.length) return;
       setFailed(true);
       return;
     }
     if (idx + 1 < candidates.length) {
       setIdx((i) => i + 1);
     } else {
-      // Exhaust static candidates → remote lookup
       setIdx(candidates.length);
     }
   };
 
-  // Look up a real cover when static candidates fail OR when we only have a
-  // generated placeholder (ui-avatars) and can upgrade to a publisher image.
+  // Always kick off remote lookup in parallel so we upgrade placeholders / broken Amazon 1×1s.
   useEffect(() => {
     if (remoteDone || remoteUrl) return;
-    const onlyPlaceholder =
-      candidates.length > 0 &&
-      candidates.every((u) => /ui-avatars\.com/i.test(u));
-    if (candidates.length > 0 && idx < candidates.length && !onlyPlaceholder) {
-      return;
-    }
+
+    // If we already have a solid local jpg/svg, still try remote only when
+    // all candidates look like Amazon P/ paths or empty (likely broken in browser).
+    const onlyFragile =
+      candidates.length === 0 ||
+      candidates.every(
+        (u) =>
+          /images-na\.ssl-images-amazon\.com\/images\/P\//i.test(u) ||
+          /m\.media-amazon\.com\/images\/P\//i.test(u) ||
+          /ui-avatars\.com/i.test(u) ||
+          /\.svg(\?|$)/i.test(u)
+      );
+
+    // Wait until static chain is exhausted OR only fragile sources remain
+    if (!onlyFragile && idx < candidates.length) return;
 
     let cancelled = false;
     const queries = bookCoverSearchQueries(book);
 
     (async () => {
-      // 1) Open Library — try ES title first, then EN
+      // 1) Open Library
       for (const q of queries) {
         try {
           const olRes = await fetch(
-            `https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=4&fields=cover_i,isbn,title,author_name`
+            `https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=5&fields=cover_i,isbn,title,author_name`
           );
           if (!olRes.ok) continue;
           const data = (await olRes.json()) as {
@@ -96,14 +106,13 @@ export default function BookCover({ book, className = '' }: Props) {
         }
       }
 
-      // 2) Google Books — title + author (EN then ES)
+      // 2) Google Books
       for (const title of [book.title, book.titleEs]) {
         try {
-          const gq = encodeURIComponent(
-            `intitle:${title}+inauthor:${book.author}`
-          );
+          const authorQ = book.author.split(/[&,]/)[0].trim();
+          const gq = encodeURIComponent(`intitle:${title}+inauthor:${authorQ}`);
           const gRes = await fetch(
-            `https://www.googleapis.com/books/v1/volumes?q=${gq}&maxResults=3&printType=books&fields=items(volumeInfo/imageLinks,volumeInfo/title)`
+            `https://www.googleapis.com/books/v1/volumes?q=${gq}&maxResults=4&printType=books&fields=items(volumeInfo/imageLinks,volumeInfo/title)`
           );
           if (!gRes.ok) continue;
           const data = (await gRes.json()) as {
@@ -135,7 +144,6 @@ export default function BookCover({ book, className = '' }: Props) {
 
       if (!cancelled) {
         setRemoteDone(true);
-        // Keep showing static candidates (e.g. branded placeholder) if any remain
         if (candidates.length === 0 || idx >= candidates.length) {
           setFailed(true);
         }
@@ -165,10 +173,11 @@ export default function BookCover({ book, className = '' }: Props) {
           alt=""
           className="absolute inset-0 w-full h-full object-cover object-center"
           loading="lazy"
+          decoding="async"
           referrerPolicy="no-referrer"
           onLoad={(e) => {
             const img = e.currentTarget;
-            // Amazon often returns a 1×1 transparent GIF with HTTP 200
+            // Amazon / OL often return 1×1 transparent GIF with HTTP 200
             if (img.naturalWidth <= 2 || img.naturalHeight <= 2) {
               advance();
             }

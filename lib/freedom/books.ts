@@ -35,7 +35,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Defensa clásica de la fe cristiana que forjó Occidente.',
     themes: ['western_christian'],
     asin: '0060652926',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0060652926.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/0060652926-L.jpg',
     accent: '#C4A574',
     mark: '✝',
   },
@@ -48,7 +48,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Contra el relativismo moral y la reingeniería de la naturaleza humana.',
     themes: ['both'],
     asin: '0060652942',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0060652942.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/0060652942-L.jpg',
     accent: '#8B7355',
     mark: '⚖',
   },
@@ -61,7 +61,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Cómo el cristianismo rehizo Occidente — y aún lo hace.',
     themes: ['western_christian'],
     asin: '0465093507',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0465093507.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/0465093507-L.jpg',
     accent: '#9B6B4A',
     mark: '🏛',
   },
@@ -74,7 +74,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Comunidades cristianas resilientes en una era postcristiana.',
     themes: ['western_christian'],
     asin: '0735213291',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0735213291.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/0735213291-L.jpg',
     accent: '#6B8F6E',
     mark: '🛡',
   },
@@ -100,7 +100,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Cómo el individualismo expresivo desmanteló la antropología cristiana.',
     themes: ['both'],
     asin: '1433556332',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1433556332.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/1433556332-L.jpg',
     accent: '#5C6B8A',
     mark: '🧠',
   },
@@ -113,7 +113,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Guía accesible a la cultura de la identidad y la respuesta cristiana.',
     themes: ['both'],
     asin: '1433579308',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1433579308.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/1433579308-L.jpg',
     accent: '#4A7A8A',
     mark: '🌍',
   },
@@ -152,7 +152,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Crítica del orden liberal y recuperación de la tradición arraigada.',
     themes: ['western_christian'],
     asin: '0300223447',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0300223447.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/0300223447-L.jpg',
     accent: '#8B5A4A',
     mark: '📜',
   },
@@ -191,7 +191,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Por qué el proyecto igualitario destruye libertades y prosperidad.',
     themes: ['both'],
     asin: '8423426580',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/8423426580.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/8423426580-L.jpg',
     accent: '#C9A227',
     mark: '🇨🇱',
   },
@@ -204,7 +204,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: '15 lecciones de economía para sobrevivir a políticos y demagogos.',
     themes: ['western_christian'],
     asin: '6075693270',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/6075693270.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/6075693270-L.jpg',
     accent: '#D4AF37',
     mark: '💰',
   },
@@ -230,8 +230,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Siete ideas progresistas que infectan nuestro pensamiento y sociedad.',
     themes: ['both'],
     asin: '6075699953',
-    coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/P/6075699953.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/6075699953.01.LZZZZZZZ.jpg',
     accent: '#DAA520',
     mark: '📉',
   },
@@ -245,8 +244,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
       'Porqué marxistas, leninistas y nazi-fascistas son gemelos ideológicos.',
     themes: ['bioconservatism'],
     asin: '6076391758',
-    coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/P/6076391758.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/6076391758.01.LZZZZZZZ.jpg',
     accent: '#CD853F',
     mark: '🧩',
   },
@@ -272,7 +270,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Transhumanismo e ideologías digitales como nuevas religiones.',
     themes: ['both'],
     asin: '6124466049',
-    coverUrl: '/freedom/book-covers/lukacs-neo-religiones.svg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/13488092-L.jpg',
     accent: '#7B68EE',
     mark: '⚡',
   },
@@ -285,7 +283,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Por qué la persona no se reduce a código ni a hardware.',
     themes: ['bioconservatism'],
     asin: '6125038045',
-    coverUrl: '/freedom/book-covers/lukacs-transhumanismo.svg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/8646710-L.jpg',
     accent: '#9370DB',
     mark: '🧬',
   },
@@ -298,8 +296,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'La ideología de género frente a la ciencia y la filosofía.',
     themes: ['bioconservatism'],
     // Product sometimes delisted — buy link falls back to Amazon search
-    coverUrl:
-      '/freedom/book-covers/munoz-atrapado-cuerpo.jpg',
+    coverUrl: '/freedom/book-covers/munoz-atrapado-cuerpo.jpg',
     accent: '#2E8B57',
     mark: '🔬',
   },
@@ -311,7 +308,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEn: 'Faith and public reason in liberal democracies.',
     blurbEs: 'Fe y razón pública en las democracias liberales.',
     themes: ['western_christian'],
-    coverUrl: '/freedom/book-covers/munoz-libertad-religiosa.svg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/5954136-L.jpg',
     accent: '#3CB371',
     mark: '⚖',
   },
@@ -324,7 +321,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Análisis claro de la teoría de género y su costo cultural.',
     themes: ['bioconservatism'],
     asin: '1532639725',
-    coverUrl: '/freedom/book-covers/munoz-ideologia-genero.svg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/10838229-L.jpg',
     accent: '#228B22',
     mark: '🧭',
   },
@@ -389,7 +386,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Cómo derrotar al woke y salvar Occidente.',
     themes: ['western_christian'],
     asin: '1735503797',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1735503797.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/1735503797-L.jpg',
     accent: '#DC143C',
     mark: '🇺🇸',
   },
@@ -402,7 +399,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Cómo los conservadores pueden ganar en el campus.',
     themes: ['western_christian'],
     asin: '1642930946',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1642930946.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/1642930946-L.jpg',
     accent: '#B22222',
     mark: '🎓',
   },
@@ -428,7 +425,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Antídoto al caos: responsabilidad, sentido y orden.',
     themes: ['both'],
     asin: '0345816021',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0345816021.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/0345816021-L.jpg',
     accent: '#1E90FF',
     mark: '🦞',
   },
@@ -454,7 +451,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Mito, creencia y la arquitectura de los sistemas de sentido.',
     themes: ['western_christian'],
     asin: '0415922224',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0415922224.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/0415922224-L.jpg',
     accent: '#0000CD',
     mark: '🧭',
   },
@@ -480,7 +477,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Género, raza, identidad — y la nueva intolerancia.',
     themes: ['both'],
     asin: '1635579988',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1635579988.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/1635579988-L.jpg',
     accent: '#708090',
     mark: '👥',
   },
@@ -493,7 +490,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Inmigración, identidad y la pérdida de confianza civilizatoria.',
     themes: ['western_christian'],
     asin: '1472958004',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1472958004.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/1472958004-L.jpg',
     accent: '#778899',
     mark: '🇪🇺',
   },
@@ -506,7 +503,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Cómo la razón y los valores judeocristianos construyeron Occidente.',
     themes: ['western_christian'],
     asin: '0062857908',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0062857908.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/0062857908-L.jpg',
     accent: '#4682B4',
     mark: '✡',
   },
@@ -519,7 +516,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Defensa elegante de la tradición, el hogar y lo sagrado.',
     themes: ['western_christian'],
     asin: '147296523X',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/147296523X.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/147296523X-L.jpg',
     accent: '#556B2F',
     mark: '🍃',
   },
@@ -532,7 +529,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Economía sin jerga: incentivos y trade-offs.',
     themes: ['western_christian'],
     asin: '0465060730',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0465060730.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/0465060730-L.jpg',
     accent: '#2F4F4F',
     mark: '📊',
   },
@@ -545,7 +542,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Por qué la planificación central conduce a la tiranía.',
     themes: ['western_christian'],
     asin: '0226320553',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0226320553.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/0226320553-L.jpg',
     accent: '#696969',
     mark: '⛓',
   },
@@ -571,7 +568,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Argumentos por la libertad frente a mitos colectivistas.',
     themes: ['western_christian'],
     asin: '6075278460',
-    coverUrl: '/freedom/book-covers/gloria-alvarez-como-hablar.svg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/13314878-L.jpg',
     accent: '#FF6347',
     mark: '🗣',
   },
@@ -586,8 +583,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
       'Claves para entender el proyecto ideológico y político de la Nueva Izquierda.',
     themes: ['both'],
     asin: '9566172192',
-    coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/P/9566172192.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/9566172192.01.LZZZZZZZ.jpg',
     accent: '#DB7093',
     mark: '♀',
   },
@@ -613,7 +609,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Familia, clase y el sueño americano en los Apalaches.',
     themes: ['western_christian'],
     asin: '0062300547',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0062300547.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/0062300547-L.jpg',
     accent: '#8B4513',
     mark: '🇺🇸',
   },
@@ -732,7 +728,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Defensa histórica frente a mitos anticatólicos.',
     themes: ['western_christian'],
     asin: '8411311015',
-    coverUrl: '/freedom/book-covers/iturralde-leyendas-negras.svg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/8243083-L.jpg',
     accent: '#A0522D',
     mark: '📜',
   },
@@ -745,7 +741,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Cómo las organizaciones a escala tecnológica superan al resto.',
     themes: ['western_christian'],
     asin: '1626814236',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1626814236.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/1626814236-L.jpg',
     accent: '#00CED1',
     mark: '🚀',
   },
@@ -758,7 +754,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Principios atemporales de liderazgo: carácter e influencia.',
     themes: ['western_christian'],
     asin: '0785288376',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0785288376.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/0785288376-L.jpg',
     accent: '#DAA520',
     mark: '👑',
   },
@@ -797,7 +793,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Cómo la escolarización progresista minó la alfabetización y la libertad.',
     themes: ['western_christian'],
     asin: '1938067134',
-    coverUrl: '/freedom/book-covers/newman-crimes-educators.svg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/9411873-L.jpg',
     accent: '#6B8E23',
     mark: '📝',
   },
@@ -810,7 +806,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Vida sin deudas y mayordomía bíblica del dinero.',
     themes: ['western_christian'],
     asin: '1595555277',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1595555277.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/1595555277-L.jpg',
     accent: '#228B22',
     mark: '💵',
   },
@@ -823,7 +819,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Activos vs pasivos: bases de la libertad financiera.',
     themes: ['western_christian'],
     asin: '1612680194',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1612680194.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/1612680194-L.jpg',
     accent: '#32CD32',
     mark: '🏠',
   },
@@ -836,7 +832,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Del empleado al inversor: cambio de mentalidad.',
     themes: ['western_christian'],
     asin: '1612680054',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1612680054.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/1612680054-L.jpg',
     accent: '#3CB371',
     mark: '📊',
   },
@@ -849,7 +845,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Negociación, riesgo y construcción bajo presión.',
     themes: ['western_christian'],
     asin: '0399594493',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0399594493.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/0399594493-L.jpg',
     accent: '#FFD700',
     mark: '🏗',
   },
@@ -862,8 +858,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Agenda America First en palabras del presidente.',
     themes: ['western_christian'],
     asin: 'B0D9HS4CWN',
-    coverUrl:
-      '/freedom/book-covers/trump-save-america.jpg',
+    coverUrl: '/freedom/book-covers/trump-save-america.jpg',
     accent: '#FF4500',
     mark: '🇺🇸',
   },
@@ -915,7 +910,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Pensamiento claro frente al spin mediático y las mentiras culturales.',
     themes: ['western_christian'],
     asin: '1637582393',
-    coverUrl: '/freedom/book-covers/wheeler-tangle-truth.svg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/1295833-L.jpg',
     accent: '#FF69B4',
     mark: '🎤',
   },
@@ -980,7 +975,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Narrativa histórica de la Pasión y el poder romano.',
     themes: ['western_christian'],
     asin: '0805098542',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0805098542.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/0805098542-L.jpg',
     accent: '#8B0000',
     mark: '✝',
   },
@@ -993,7 +988,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'El asesinato que puso a prueba la república americana.',
     themes: ['western_christian'],
     asin: '0805093079',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/0805093079.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/0805093079-L.jpg',
     accent: '#A52A2A',
     mark: '🎩',
   },
@@ -1019,7 +1014,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Noticias, narrativa y contrarrestar a los medios de izquierda.',
     themes: ['western_christian'],
     asin: '1637584280',
-    coverUrl: '/freedom/book-covers/posobiec-human-events.svg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/12366237-L.jpg',
     accent: '#4A4A4A',
     mark: '🗞',
   },
@@ -1045,7 +1040,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Parábola infantil contra la ideología de género.',
     themes: ['bioconservatism'],
     asin: '1956007059',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1956007059.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/1956007059-L.jpg',
     accent: '#1C1C1C',
     mark: '🦭',
   },
@@ -1097,7 +1092,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Memorias de la Primera Dama: resiliencia y vida privada en lo público.',
     themes: ['western_christian'],
     asin: '1510782699',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1510782699.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/1510782699-L.jpg',
     accent: '#E8B4B8',
     mark: '👗',
   },
@@ -1162,7 +1157,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Cómo una élite autointeresada perdió a América.',
     themes: ['western_christian'],
     asin: '1501183664',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1501183664.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/1501183664-L.jpg',
     accent: '#1A1A2E',
     mark: '📺',
   },
@@ -1175,7 +1170,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Ensayos sobre la decadencia mediática y el declive nacional.',
     themes: ['western_christian'],
     asin: '1501183699',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1501183699.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/1501183699-L.jpg',
     accent: '#16213E',
     mark: '✏',
   },
@@ -1188,7 +1183,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Cómo el corporativismo vendió el capitalismo por la política de identidad.',
     themes: ['both'],
     asin: '1546090789',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/P/1546090789.01.LZZZZZZZ.jpg',
+    coverUrl: 'https://covers.openlibrary.org/b/isbn/1546090789-L.jpg',
     accent: '#FF8C00',
     mark: '🏢',
   },
@@ -1214,7 +1209,7 @@ export const RECOMMENDED_BOOKS: RecommendedBook[] = [
     blurbEs: 'Tecnología, medicina e innovación centrada en la persona.',
     themes: ['bioconservatism'],
     asin: '1119900128',
-    coverUrl: '/freedom/book-covers/nosta-digital-health.svg',
+    coverUrl: 'https://covers.openlibrary.org/b/id/11549148-L.jpg',
     accent: '#20B2AA',
     mark: '💻',
   },
@@ -1272,34 +1267,27 @@ export function bookAmazonUrl(book: RecommendedBook): string {
 
 /**
  * Candidate cover image URLs (try in order).
- * Explicit coverUrl first; then Amazon CDN patterns from ASIN/ISBN.
+ * Prefer Open Library + explicit coverUrl; Amazon P/ paths last (often 1×1 placeholders in-browser).
  */
 export function bookCoverCandidates(book: RecommendedBook): string[] {
   const urls: string[] = [];
   if (book.coverUrl) urls.push(book.coverUrl);
   if (book.asin) {
     const a = book.asin.trim();
-    // Skip author-store style IDs that are not product ASINs
     const looksProduct =
       /^B0[0-9A-Z]{8,}$/i.test(a) || /^[0-9A-Z]{10}$/i.test(a);
     if (looksProduct) {
-      // Associates product image widget (often more reliable than bare P/ paths)
-      urls.push(
-        `https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=${encodeURIComponent(a)}&Format=_SL400_&ID=AsinImage&MarketPlace=US&ServiceVersion=20070822&WS=1`
-      );
-      urls.push(
-        `https://images-na.ssl-images-amazon.com/images/P/${a}.01.LZZZZZZZ.jpg`
-      );
+      // Open Library by ISBN-10 first (stable in browsers; no hotlink 1×1)
+      if (/^[0-9]{9}[0-9Xx]$/.test(a)) {
+        urls.push(`https://covers.openlibrary.org/b/isbn/${a}-L.jpg`);
+        urls.push(`https://covers.openlibrary.org/b/isbn/${a}-M.jpg`);
+      }
       urls.push(
         `https://m.media-amazon.com/images/P/${a}.01._SCLZZZZZZZ_SX400_.jpg`
       );
       urls.push(
-        `https://images-na.ssl-images-amazon.com/images/P/${a}.01._SX300_SY400_QL70_ML2_.jpg`
+        `https://images-na.ssl-images-amazon.com/images/P/${a}.01.LZZZZZZZ.jpg`
       );
-      // Open Library by ISBN-10 (when ASIN is ISBN-10)
-      if (/^[0-9]{9}[0-9Xx]$/.test(a)) {
-        urls.push(`https://covers.openlibrary.org/b/isbn/${a}-L.jpg`);
-      }
     }
   }
   return [...new Set(urls)];

@@ -102,17 +102,6 @@ export default function XArticlesFeed({
         </a>
       </div>
 
-      {focus.length > 0 && (
-        <p className="text-[10px] text-[var(--sage)]/60">
-          {t('articles.basedOnInterests')}: {focus.join(' · ')} · {t('articles.topN', { n: limit })}
-        </p>
-      )}
-      {focus.length === 0 && (
-        <p className="text-[10px] text-[var(--sage)]/60">
-          {t('articles.topN', { n: limit })}
-        </p>
-      )}
-
       {articles.length === 0 ? (
         <p className="text-xs text-[var(--sage)]/60 py-4 text-center">
           {t('articles.emptyUnread')}
@@ -176,29 +165,20 @@ export default function XArticlesFeed({
         </ul>
       )}
 
-      <p className="text-[10px] text-[var(--sage)]/50 text-center leading-relaxed pt-1">
-        {t('articles.catalogNote')}{' '}
-        <a
-          href="https://x.com/salvazion_/articles"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[var(--accent)] hover:underline"
-        >
-          x.com/salvazion_/articles
-        </a>
-      </p>
-
       {selected && (
         <div className="fixed inset-0 z-50 bg-[#040404]/95 flex flex-col">
-          <div className="px-5 pt-6 pb-3 border-b border-[var(--border-soft)] flex justify-between items-center">
+          <div className="px-5 pt-6 pb-3 border-b border-[var(--border-soft)] flex items-center gap-2">
             <button
               type="button"
               onClick={() => setSelected(null)}
-              className="text-[var(--sage)] text-sm"
+              className="back-btn"
+              aria-label={t('common.close')}
             >
-              ← {t('common.close')}
+              ←
             </button>
-            <span className="text-[10px] text-[var(--sage)]/80">{selected.source}</span>
+            <span className="text-[10px] text-[var(--sage)]/80 truncate">
+              {selected.source}
+            </span>
           </div>
           <div className="flex-1 overflow-y-auto px-5 py-5 max-w-lg mx-auto w-full">
             <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden border border-[var(--border-soft)] mb-4 bg-[var(--true-black)]">
@@ -221,11 +201,11 @@ export default function XArticlesFeed({
             <p className="text-sm text-[var(--off-white)]/85 leading-relaxed mb-6">
               {selected.preview}
             </p>
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 gap-2">
               <button
                 type="button"
                 onClick={() => handleOpenX(selected)}
-                className="btn-primary w-full"
+                className="btn-primary"
               >
                 {t('articles.readOnX')} ↗
               </button>
@@ -233,15 +213,12 @@ export default function XArticlesFeed({
                 type="button"
                 onClick={() => handleMarkRead(selected)}
                 disabled={readIds.has(selected.id)}
-                className="btn-secondary w-full"
+                className="btn-secondary"
               >
                 {readIds.has(selected.id)
                   ? `✓ ${t('articles.read')}`
                   : t('articles.markRead')}
               </button>
-              <p className="text-[11px] text-[var(--sage)]/70 text-center leading-relaxed">
-                {t('articles.openHint')}
-              </p>
             </div>
           </div>
         </div>

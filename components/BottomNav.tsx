@@ -78,10 +78,10 @@ export default function BottomNav({ variant: _variant = 'default' }: BottomNavPr
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-50 bg-[var(--true-black)]/95 border-t border-[var(--border-soft)] backdrop-blur-md px-2.5 py-2 safe-bottom"
+      className="fixed bottom-0 left-0 right-0 z-50 bg-[var(--true-black)]/95 border-t border-[var(--border-soft)] backdrop-blur-md px-2 py-1.5 safe-bottom"
       aria-label={t('nav.main')}
     >
-      <div className="flex justify-between items-center max-w-md mx-auto gap-0.5">
+      <div className="flex items-stretch max-w-md mx-auto gap-0.5">
         {items.map((item) => {
           const active = isActive(pathname, item);
           const Icon = item.Icon;
@@ -93,10 +93,8 @@ export default function BottomNav({ variant: _variant = 'default' }: BottomNavPr
               href={item.href}
               aria-current={active ? 'page' : undefined}
               aria-label={label}
-              className={`flex flex-col items-center justify-center gap-0.5 min-w-[56px] min-h-[48px] py-1.5 px-1 rounded-2xl transition-all ${
-                active
-                  ? 'scale-[1.02]'
-                  : 'opacity-80 hover:opacity-100 hover:bg-white/[0.03]'
+              className={`flex-1 min-w-0 flex flex-col items-center justify-center gap-0.5 h-12 px-0.5 rounded-xl transition-colors ${
+                active ? '' : 'opacity-80 hover:opacity-100 hover:bg-white/[0.03]'
               }`}
               style={
                 active && color
@@ -106,10 +104,9 @@ export default function BottomNav({ variant: _variant = 'default' }: BottomNavPr
                     : undefined
               }
             >
-              {/* Pillar icons always use S/H/F colors */}
-              <Icon size={22} active={active} color={color} />
+              <Icon size={20} active={active} color={color} />
               <span
-                className="text-[10px] tracking-wide font-medium max-w-[4.25rem] text-center leading-tight"
+                className="text-[10px] tracking-wide font-medium w-full text-center leading-none truncate px-0.5"
                 style={{
                   color: color
                     ? color

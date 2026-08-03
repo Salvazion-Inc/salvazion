@@ -219,7 +219,7 @@ export default function DashboardPage() {
                   <button
                     type="button"
                     onClick={startEditPurpose}
-                    className="text-[10px] font-semibold text-[var(--accent)] hover:opacity-90 px-2 py-0.5 rounded-full border border-[var(--border-soft)] hover:border-[var(--border-strong)] transition"
+                    className="btn-outline-sm"
                   >
                     {profile.purpose
                       ? t('dashboard.editPurpose')
@@ -241,15 +241,15 @@ export default function DashboardPage() {
                     aria-label={t('dashboard.purpose')}
                   />
                   <div className="flex items-center justify-between gap-2">
-                    <p className="text-[10px] text-[var(--sage)]/60">
+                    <p className="text-[10px] text-[var(--sage)]/60 tabular-nums">
                       {purposeDraft.trim().length}/500
                     </p>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 shrink-0">
                       <button
                         type="button"
                         onClick={cancelEditPurpose}
                         disabled={purposeSaving}
-                        className="px-3 py-1.5 rounded-lg text-[11px] border border-[var(--border-soft)] text-[var(--sage)] hover:border-[var(--border-strong)] disabled:opacity-50"
+                        className="btn-outline-sm"
                       >
                         {t('dashboard.cancelPurpose')}
                       </button>
@@ -257,7 +257,7 @@ export default function DashboardPage() {
                         type="button"
                         onClick={() => void savePurpose()}
                         disabled={purposeSaving}
-                        className="px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-[var(--accent-fill)] text-[#0a120c] hover:bg-[var(--accent-hover)] disabled:opacity-50"
+                        className="btn-sm"
                       >
                         {purposeSaving
                           ? t('dashboard.savingPurpose')

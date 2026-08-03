@@ -349,17 +349,17 @@ export default function RoutineBoard({ date, onChange }: Props) {
             </label>
           </div>
 
-          <div className="flex gap-2">
+          <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
-              className="btn-primary flex-1 min-h-[40px] text-sm"
+              className="btn-primary"
               onClick={attachToCalendar}
             >
               {t('calendar.attach')}
             </button>
             <button
               type="button"
-              className="btn-secondary flex-1 min-h-[40px] text-sm"
+              className="btn-secondary"
               onClick={() => setPicked(null)}
             >
               {t('common.cancel')}
@@ -454,9 +454,9 @@ export default function RoutineBoard({ date, onChange }: Props) {
                     </p>
                   </button>
 
-                  {/* Sí / No check */}
+                  {/* Sí / No — fixed pair size (does not stretch with duration height) */}
                   <div
-                    className="flex shrink-0 self-center rounded-lg border overflow-hidden"
+                    className="btn-pair"
                     style={{ borderColor: pal.border }}
                     role="group"
                     aria-label={t('calendar.fulfilled')}
@@ -464,7 +464,6 @@ export default function RoutineBoard({ date, onChange }: Props) {
                     <button
                       type="button"
                       onClick={() => setDone(ev.id, true)}
-                      className="min-w-[2.15rem] min-h-[32px] px-1.5 text-[10px] font-bold transition"
                       style={{
                         background: done ? pal.solid : 'transparent',
                         color: done
@@ -481,7 +480,6 @@ export default function RoutineBoard({ date, onChange }: Props) {
                     <button
                       type="button"
                       onClick={() => setDone(ev.id, false)}
-                      className="min-w-[2.15rem] min-h-[32px] px-1.5 text-[10px] font-bold border-l transition"
                       style={{
                         borderColor: pal.border,
                         background: !done ? 'rgba(0,0,0,0.35)' : 'transparent',
@@ -550,26 +548,28 @@ export default function RoutineBoard({ date, onChange }: Props) {
                         </select>
                       </label>
                     </div>
-                    <div className="flex gap-1 flex-wrap">
+                    <div className="btn-toolbar">
                       <button
                         type="button"
-                        className="min-h-[30px] min-w-[30px] rounded-md border text-xs"
+                        className="btn-outline-sm"
                         style={{ borderColor: pal.border, color: pal.text }}
                         onClick={() => moveBy(ev.id, -SNAP_MIN)}
+                        aria-label="-15 min"
                       >
                         ▲
                       </button>
                       <button
                         type="button"
-                        className="min-h-[30px] min-w-[30px] rounded-md border text-xs"
+                        className="btn-outline-sm"
                         style={{ borderColor: pal.border, color: pal.text }}
                         onClick={() => moveBy(ev.id, SNAP_MIN)}
+                        aria-label="+15 min"
                       >
                         ▼
                       </button>
                       <button
                         type="button"
-                        className="min-h-[30px] min-w-[30px] rounded-md border text-xs"
+                        className="btn-outline-sm"
                         style={{ borderColor: pal.border, color: pal.text }}
                         onClick={() =>
                           setDuration(
@@ -585,7 +585,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
                       </button>
                       <button
                         type="button"
-                        className="min-h-[30px] min-w-[30px] rounded-md border text-xs"
+                        className="btn-outline-sm"
                         style={{ borderColor: pal.border, color: pal.text }}
                         onClick={() =>
                           setDuration(
@@ -598,8 +598,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
                       </button>
                       <button
                         type="button"
-                        className="min-h-[30px] px-2 rounded-md border text-[10px] text-red-300/90 ml-auto"
-                        style={{ borderColor: 'rgba(248,113,113,0.35)' }}
+                        className="btn-ghost text-red-400/85 ml-auto"
                         onClick={() => {
                           remove(ev.id);
                           setExpandedId(null);

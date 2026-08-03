@@ -261,16 +261,16 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
                   </p>
                 </div>
                 <div
-                  className="flex shrink-0 self-center rounded-md border overflow-hidden"
+                  className="btn-pair"
                   style={{ borderColor: border }}
                   role="group"
+                  aria-label={t('calendar.fulfilled')}
                 >
                   <button
                     type="button"
                     onClick={() => {
                       if (!ev.completed) toggle(ev.id);
                     }}
-                    className="min-w-[1.9rem] min-h-[28px] px-1 text-[9px] font-bold"
                     style={{
                       background: ev.completed ? solid : 'transparent',
                       color: ev.completed
@@ -288,7 +288,6 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
                     onClick={() => {
                       if (ev.completed) toggle(ev.id);
                     }}
-                    className="min-w-[1.9rem] min-h-[28px] px-1 text-[9px] font-bold border-l"
                     style={{
                       borderColor: border,
                       background: !ev.completed

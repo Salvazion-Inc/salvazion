@@ -18,6 +18,7 @@ import {
   snapMinutes,
   endTimeOf,
   formatDurationHours,
+  agendaBlockHeightPx,
   seedDefaultDay,
   DAY_START_MIN,
   DAY_END_MIN,
@@ -383,6 +384,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
             const expanded = expandedId === ev.id;
             const done = !!ev.completed;
             const durMin = ev.durationMin || DEFAULT_BLOCK_MIN;
+            const blockH = agendaBlockHeightPx(durMin);
 
             return (
               <div
@@ -398,12 +400,16 @@ export default function RoutineBoard({ date, onChange }: Props) {
                     ? `0 0 0 1px ${pal.solid}33`
                     : undefined,
                 }}
+                data-duration-min={durMin}
               >
-                {/* Compact row — fixed low height */}
-                <div className="flex items-center gap-2 px-2.5 py-1.5 min-h-[44px]">
+                {/* Height scales with duration (sleep 7h ≫ exercise 30m) */}
+                <div
+                  className="flex items-stretch gap-2 px-2.5 py-1.5 transition-[height,min-height] duration-500"
+                  style={{ height: blockH, minHeight: blockH }}
+                >
                   {/* Pillar stripe */}
                   <span
-                    className="w-1 self-stretch min-h-[28px] rounded-full shrink-0"
+                    className="w-1 self-stretch rounded-full shrink-0"
                     style={{ background: pal.solid }}
                     aria-hidden
                   />
@@ -411,7 +417,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
                   {/* Time */}
                   <button
                     type="button"
-                    className="shrink-0 text-left w-[4.25rem]"
+                    className="shrink-0 text-left w-[4.25rem] self-center"
                     onClick={() =>
                       setExpandedId((id) => (id === ev.id ? null : ev.id))
                     }
@@ -433,7 +439,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
                   {/* Title */}
                   <button
                     type="button"
-                    className="min-w-0 flex-1 text-left"
+                    className="min-w-0 flex-1 text-left self-center"
                     onClick={() =>
                       setExpandedId((id) => (id === ev.id ? null : ev.id))
                     }
@@ -450,7 +456,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
 
                   {/* Sí / No check */}
                   <div
-                    className="flex shrink-0 rounded-lg border overflow-hidden"
+                    className="flex shrink-0 self-center rounded-lg border overflow-hidden"
                     style={{ borderColor: pal.border }}
                     role="group"
                     aria-label={t('calendar.fulfilled')}

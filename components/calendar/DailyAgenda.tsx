@@ -10,6 +10,7 @@ import {
   eventTitleKey,
   endTimeOf,
   formatDurationHours,
+  agendaBlockHeightPx,
   DEFAULT_BLOCK_MIN,
   type CalendarEvent,
   type CalendarPillar,
@@ -200,6 +201,7 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
             const end = endTimeOf(ev);
             const durMin = ev.durationMin || DEFAULT_BLOCK_MIN;
             const dur = formatDurationHours(durMin);
+            const blockH = agendaBlockHeightPx(durMin);
             const phase = agendaEventPhase(ev.time, end, now);
             const darken = agendaEventDarken(ambient, phase);
             const bg = mixTowardBlack(pal.soft, darken);
@@ -210,7 +212,7 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
             return (
               <li
                 key={ev.id}
-                className={`rounded-lg px-2.5 py-1.5 border flex items-center gap-2 transition-[background,border-color,opacity] duration-700 min-h-[42px] ${
+                className={`rounded-lg px-2.5 py-1.5 border flex items-stretch gap-2 transition-[background,border-color,opacity,height,min-height] duration-700 ${
                   ev.completed ? 'opacity-70' : phase === 'past' ? 'opacity-85' : 'opacity-100'
                 } ${phase === 'now' ? 'ring-1 ring-[var(--accent)]/35' : ''}`}
                 style={{
@@ -218,15 +220,18 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
                   borderColor: phase === 'now'
                     ? mixTowardBlack('var(--accent)', ambient * 0.2)
                     : border,
+                  height: blockH,
+                  minHeight: blockH,
                 }}
                 data-phase={phase}
+                data-duration-min={durMin}
               >
                 <span
-                  className="w-1 self-stretch min-h-[26px] rounded-full shrink-0"
+                  className="w-1 self-stretch rounded-full shrink-0"
                   style={{ background: solid }}
                   aria-hidden
                 />
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0 flex-1 flex flex-col justify-center py-0.5">
                   <div className="flex items-center gap-1.5">
                     <p
                       className="text-[10px] tabular-nums font-semibold shrink-0"
@@ -256,7 +261,7 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
                   </p>
                 </div>
                 <div
-                  className="flex shrink-0 rounded-md border overflow-hidden"
+                  className="flex shrink-0 self-center rounded-md border overflow-hidden"
                   style={{ borderColor: border }}
                   role="group"
                 >

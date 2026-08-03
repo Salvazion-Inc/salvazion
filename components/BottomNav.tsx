@@ -7,12 +7,11 @@ import {
   BibleIcon,
   HealthIcon,
   FreedomIcon,
-  ProfileIcon,
 } from './Icons';
 import { useI18n } from '@/components/I18nProvider';
 import { PILLAR_COLORS } from '@/lib/theme/pillars';
 
-type NavKey = 'home' | 'salvation' | 'health' | 'freedom' | 'profile';
+type NavKey = 'home' | 'salvation' | 'health' | 'freedom';
 
 interface NavItemConfig {
   href: string;
@@ -24,8 +23,16 @@ interface NavItemConfig {
   color?: string;
 }
 
+/** Four tabs: Dashboard + three pillars. Profile lives under Dashboard avatar/name. */
 const PILLAR_NAV: NavItemConfig[] = [
-  { href: '/hub/dashboard', labelKey: 'nav.home', key: 'home', Icon: HomeIcon },
+  {
+    href: '/hub/dashboard',
+    labelKey: 'nav.home',
+    key: 'home',
+    Icon: HomeIcon,
+    // Profile is opened from the dashboard hero — keep Dashboard selected there.
+    match: ['/hub/dashboard', '/hub/profile'],
+  },
   {
     href: '/hub/bible',
     labelKey: 'nav.salvation',
@@ -50,11 +57,10 @@ const PILLAR_NAV: NavItemConfig[] = [
     match: ['/hub/freedom', '/hub/swap'],
     color: PILLAR_COLORS.freedom.solid,
   },
-  { href: '/hub/profile', labelKey: 'nav.profile', key: 'profile', Icon: ProfileIcon },
 ];
 
 interface BottomNavProps {
-  /** @deprecated Always uses three-pillar nav. Kept for call-site compatibility. */
+  /** @deprecated Always uses four-tab nav. Kept for call-site compatibility. */
   variant?: 'default' | 'extended' | 'badges' | 'freedom';
 }
 

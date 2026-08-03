@@ -14,6 +14,8 @@ import {
   scoreActionForEventType,
   eventTitleKey,
   todayStr,
+  agendaBlockHeightPx,
+  DEFAULT_BLOCK_MIN,
   type CalendarEvent,
   type CalendarPillar,
   type CalendarEventType,
@@ -198,6 +200,8 @@ export default function DayPlanner({ date, onChange, className = '' }: Props) {
           {events.map((ev) => {
             const def = DAILY_AGENDA_BLOCKS.find((b) => b.type === ev.type);
             const isEditing = editingId === ev.id;
+            const durMin = ev.durationMin || DEFAULT_BLOCK_MIN;
+            const blockH = agendaBlockHeightPx(durMin);
             const pillarColor =
               ev.pillar === 'salvation'
                 ? 'var(--accent)'
@@ -213,9 +217,11 @@ export default function DayPlanner({ date, onChange, className = '' }: Props) {
                 }`}
                 style={{
                   borderColor: `color-mix(in srgb, ${pillarColor} 35%, transparent)`,
+                  minHeight: blockH,
                 }}
+                data-duration-min={durMin}
               >
-                <div className="flex items-start gap-2.5">
+                <div className="flex items-start gap-2.5 h-full min-h-[inherit]">
                   <button
                     type="button"
                     onClick={() => toggle(ev.id)}

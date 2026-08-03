@@ -356,6 +356,24 @@ export function formatDurationHours(durationMin: number): string {
   return `${Math.round(hours * 100) / 100} h`;
 }
 
+/**
+ * Vertical size (px) of an agenda/calendar block proportional to duration.
+ * Linear scale so longer blocks read as larger slices of the day:
+ *   15–30 min → floor (~42 px), 60 → 72, 120 → 144, 210 → 252, 420 (7 h) → 504.
+ */
+export const AGENDA_PX_PER_MIN = 1.2;
+export const AGENDA_BLOCK_MIN_H = 42;
+/** Soft ceiling for bad/out-of-range data only (≈ 9 h). */
+export const AGENDA_BLOCK_MAX_H = 540;
+
+export function agendaBlockHeightPx(durationMin: number): number {
+  const m = Math.max(1, durationMin || DEFAULT_BLOCK_MIN);
+  const raw = m * AGENDA_PX_PER_MIN;
+  return Math.round(
+    Math.min(AGENDA_BLOCK_MAX_H, Math.max(AGENDA_BLOCK_MIN_H, raw))
+  );
+}
+
 export function clearDay(date: string): void {
   saveEvents(loadEvents().filter((e) => e.date !== date));
 }

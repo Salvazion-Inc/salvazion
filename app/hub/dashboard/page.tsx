@@ -161,11 +161,12 @@ export default function DashboardPage() {
             aria-hidden
           />
 
-          {/* Identity row */}
+          {/* Identity row — entry to Perfil (photo + name; no separate nav tab) */}
           <Link
             href="/hub/profile"
             className="relative z-[1] flex items-center gap-3.5 px-4 pt-4 pb-3 group"
             title={t('nav.profile')}
+            aria-label={t('nav.profile')}
           >
             <div
               className="relative shrink-0 rounded-full p-[2px]"
@@ -187,6 +188,9 @@ export default function DashboardPage() {
             <div className="min-w-0 flex-1">
               <p className="text-lg font-semibold text-white leading-snug break-words group-hover:text-[var(--accent)] transition-colors">
                 {profile.name || 'Brother'}
+              </p>
+              <p className="text-[11px] text-[var(--sage)]/75 group-hover:text-[var(--accent)]/80 transition-colors mt-0.5">
+                {t('nav.profile')}
               </p>
             </div>
             <span

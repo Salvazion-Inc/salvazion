@@ -19,18 +19,27 @@ export type YouTubeChannel = {
   imageUrl?: string;
 };
 
-/** Avatar for channel cards — prefers explicit imageUrl, then @handle via unavatar */
+/** Ordered avatar candidates (first working wins in the panel). */
+export function youtubeChannelImageCandidates(ch: YouTubeChannel): string[] {
+  const urls: string[] = [];
+  if (ch.imageUrl) urls.push(ch.imageUrl);
+  const handle =
+    ch.handle?.replace(/^@/, '') ||
+    ch.url.match(/youtube\.com\/@([^/?#]+)/i)?.[1] ||
+    '';
+  if (handle) {
+    // unavatar is reliable cross-origin for browser <img>
+    urls.push(`https://unavatar.io/youtube/@${encodeURIComponent(handle)}`);
+  }
+  urls.push(
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(ch.name)}&background=${ch.accent.replace('#', '')}&color=fff&size=256&bold=true&format=png`
+  );
+  return [...new Set(urls)];
+}
+
+/** @deprecated use youtubeChannelImageCandidates */
 export function youtubeChannelImage(ch: YouTubeChannel): string | null {
-  if (ch.imageUrl) return ch.imageUrl;
-  if (ch.handle) {
-    const h = ch.handle.replace(/^@/, '');
-    return `https://unavatar.io/youtube/@${encodeURIComponent(h)}`;
-  }
-  const m = ch.url.match(/youtube\.com\/@([^/?#]+)/i);
-  if (m?.[1]) {
-    return `https://unavatar.io/youtube/@${encodeURIComponent(m[1])}`;
-  }
-  return `https://ui-avatars.com/api/?name=${encodeURIComponent(ch.name)}&background=${ch.accent.replace('#', '')}&color=fff&size=256&bold=true&format=png`;
+  return youtubeChannelImageCandidates(ch)[0] || null;
 }
 
 /**

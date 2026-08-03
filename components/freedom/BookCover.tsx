@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   bookCoverCandidates,
-  bookCoverSearchQuery,
+  bookCoverSearchQueries,
   type RecommendedBook,
 } from '@/lib/freedom/books';
 
@@ -38,15 +38,16 @@ export default function BookCover({ book, className = '' }: Props) {
     if (candidates.length > 0 && idx < candidates.length) return;
 
     let cancelled = false;
-    const q = bookCoverSearchQuery(book);
+    const queries = bookCoverSearchQueries(book);
 
     (async () => {
-      // 1) Open Library
-      try {
-        const olRes = await fetch(
-          `https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=3&fields=cover_i,isbn,title,author_name`
-        );
-        if (olRes.ok) {
+      // 1) Open Library — try ES title first, then EN
+      for (const q of queries) {
+        try {
+          const olRes = await fetch(
+            `https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=4&fields=cover_i,isbn,title,author_name`
+          );
+          if (!olRes.ok) continue;
           const data = (await olRes.json()) as {
             docs?: Array<{ cover_i?: number; isbn?: string[] }>;
           };
@@ -68,20 +69,21 @@ export default function BookCover({ book, className = '' }: Props) {
               }
             }
           }
+        } catch {
+          /* next query */
         }
-      } catch {
-        /* try Google */
       }
 
-      // 2) Google Books
-      try {
-        const gq = encodeURIComponent(
-          `intitle:${book.title}+inauthor:${book.author}`
-        );
-        const gRes = await fetch(
-          `https://www.googleapis.com/books/v1/volumes?q=${gq}&maxResults=3&printType=books&fields=items(volumeInfo/imageLinks,volumeInfo/title)`
-        );
-        if (gRes.ok) {
+      // 2) Google Books — title + author (EN then ES)
+      for (const title of [book.title, book.titleEs]) {
+        try {
+          const gq = encodeURIComponent(
+            `intitle:${title}+inauthor:${book.author}`
+          );
+          const gRes = await fetch(
+            `https://www.googleapis.com/books/v1/volumes?q=${gq}&maxResults=3&printType=books&fields=items(volumeInfo/imageLinks,volumeInfo/title)`
+          );
+          if (!gRes.ok) continue;
           const data = (await gRes.json()) as {
             items?: Array<{
               volumeInfo?: {
@@ -93,7 +95,6 @@ export default function BookCover({ book, className = '' }: Props) {
             const links = item.volumeInfo?.imageLinks;
             const raw = links?.thumbnail || links?.smallThumbnail;
             if (raw) {
-              // Prefer https + larger size
               const cover = raw
                 .replace('http://', 'https://')
                 .replace('zoom=1', 'zoom=2')
@@ -105,9 +106,9 @@ export default function BookCover({ book, className = '' }: Props) {
               }
             }
           }
+        } catch {
+          /* next */
         }
-      } catch {
-        /* fail */
       }
 
       if (!cancelled) {

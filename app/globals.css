@@ -313,6 +313,25 @@ html[data-text-scale="xxl"] nav.fixed span {
 }
 
 /**
+ * Landing nav "Enter Salvazion" — web / tablet+ only (≥ sm).
+ * English footprint (12.5rem) is the reference; longer Spanish must not
+ * stretch the pill via flex min-width:auto.
+ * True mobile (< 640px) keeps only the component Tailwind classes.
+ */
+@media (min-width: 640px) {
+  a.btn-primary.nav-enter-cta {
+    width: 12.5rem !important;
+    min-width: 0 !important;
+    max-width: 12.5rem !important;
+    flex: 0 0 12.5rem !important;
+    white-space: normal !important;
+    box-sizing: border-box;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+}
+
+/**
  * Hero CTAs — always equal width (EN/ES, mobile/desktop).
  * flex + basis:0 so label length never drives button size.
  */

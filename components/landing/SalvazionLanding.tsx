@@ -142,7 +142,7 @@ export default function SalvazionLanding() {
             />
             <Link
               href="/auth/login"
-              className="btn-primary !w-[11.75rem] sm:!w-[12.5rem] shrink-0 !px-3 sm:!px-4 !min-h-10 !text-xs sm:!text-sm !whitespace-normal text-center leading-tight"
+              className="btn-primary nav-enter-cta !w-[11.75rem] sm:!w-[12.5rem] shrink-0 !px-3 sm:!px-4 !min-h-10 !text-xs sm:!text-sm !whitespace-normal text-center leading-tight"
             >
               {t.nav.enter}
             </Link>

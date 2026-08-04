@@ -55,6 +55,11 @@ const nextConfig: NextConfig = {
                 "https://openlibrary.org",
                 "https://covers.openlibrary.org",
                 "https://www.googleapis.com",
+                // Jupiter Plugin fetches Google Fonts CSS via fetch() — must be in connect-src
+                // (without this, Plugin aborts style apply and modal renders height:0 empty)
+                "https://fonts.googleapis.com",
+                "https://fonts.gstatic.com",
+                "https://fonts.reown.com",
                 "https://nominatim.openstreetmap.org",
                 "https://overpass-api.de",
                 "https://*.tile.openstreetmap.org",

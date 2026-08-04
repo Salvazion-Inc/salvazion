@@ -18,6 +18,12 @@ type Props = {
   /** When mode is modal, only render a trigger button */
   triggerLabel?: string;
   showFallbackLink?: boolean;
+  /**
+   * modal strategy:
+   * - `jup` = open jup.ag (always works; default for Buy CTA)
+   * - `plugin` = try in-app Plugin modal, fall back to jup.ag if empty
+   */
+  modalStrategy?: 'jup' | 'plugin';
 };
 
 function loadJupiterScript(loadErrorMsg: string): Promise<void> {
@@ -51,16 +57,45 @@ function loadJupiterScript(loadErrorMsg: string): Promise<void> {
   });
 }
 
+function openJupBuy(): void {
+  // Prefer same-tab on mobile in-app browsers where popups are blocked
+  const opened = window.open(JUPITER_SWAP_URL, '_blank', 'noopener,noreferrer');
+  if (!opened) {
+    window.location.assign(JUPITER_SWAP_URL);
+  }
+}
+
+/** True when Plugin actually painted a usable UI (not the empty height:0 shell). */
+function pluginUiLooksReady(): boolean {
+  const inst = document.getElementById('jupiter-plugin-instance');
+  if (!inst) return false;
+  const rect = inst.getBoundingClientRect();
+  if (rect.height < 80 && rect.width < 80) {
+    // Modal may portal into body with fixed overlay — search for swap UI text/nodes
+    const overlay = document.querySelector(
+      '#jupiter-plugin-instance [class*="Fixed"], #jupiter-plugin-instance [class*="modal"], #jupiter-plugin-instance iframe'
+    );
+    if (overlay) return true;
+    // Any substantial content under the instance
+    if ((inst.textContent || '').trim().length > 20) return true;
+    if (inst.querySelectorAll('button, input, form').length > 0) return true;
+    return false;
+  }
+  return (inst.textContent || '').trim().length > 0 || inst.querySelectorAll('button, input').length > 0;
+}
+
 /**
  * Jupiter Plugin (Ultra) — buy/swap $SALVAZION inside Salvazion.
- * Uses Ultra routing (token is organic/unknown; Metis marks it TOKEN_NOT_TRADABLE).
- * When a wallet is already connected, passes it through; otherwise Plugin owns connect UI.
+ *
+ * Modal default: open jup.ag (reliable). Optional `plugin` strategy tries the
+ * in-app modal first and falls back if CSP/styles leave an empty shell.
  */
 export default function JupiterSwap({
   mode = 'integrated',
   className = '',
   triggerLabel,
   showFallbackLink = true,
+  modalStrategy = 'jup',
 }: Props) {
   const { t } = useI18n();
   const reactId = useId().replace(/:/g, '');
@@ -70,7 +105,6 @@ export default function JupiterSwap({
   const [ready, setReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(mode === 'integrated');
-  const inited = useRef(false);
   const passthroughRef = useRef(false);
   const walletRef = useRef(wallet);
   walletRef.current = wallet;
@@ -101,7 +135,6 @@ export default function JupiterSwap({
         throw new Error(t('swap.unavailable'));
       }
 
-      // Close previous instance when re-init (route changes / HMR / re-open modal)
       try {
         window.Jupiter.close?.();
       } catch {
@@ -109,7 +142,6 @@ export default function JupiterSwap({
       }
 
       const w = walletRef.current;
-      // Passthrough only when already connected so guests get Plugin's own wallet UI.
       const usePassthrough = Boolean(w.connected && w.publicKey);
       passthroughRef.current = usePassthrough;
 
@@ -122,23 +154,16 @@ export default function JupiterSwap({
       });
 
       window.Jupiter.init(config);
-      inited.current = true;
       setReady(true);
 
       if (usePassthrough) {
         requestAnimationFrame(() => syncWallet());
       }
+      return true;
     } catch (e) {
       setError(e instanceof Error ? e.message : t('swap.initError'));
       setReady(false);
-      // Hard fallback: open jup.ag so Buy never dead-ends
-      if (mode === 'modal' || mode === 'widget') {
-        try {
-          window.open(JUPITER_SWAP_URL, '_blank', 'noopener,noreferrer');
-        } catch {
-          // ignore popup blockers
-        }
-      }
+      return false;
     } finally {
       setLoading(false);
     }
@@ -159,29 +184,66 @@ export default function JupiterSwap({
       } catch {
         // ignore
       }
-      inited.current = false;
       passthroughRef.current = false;
     };
   }, [mode, initPlugin]);
 
-  // Keep Plugin in sync when host wallet connects/disconnects (passthrough mode)
   useEffect(() => {
     if (!ready || !passthroughRef.current) return;
     syncWallet();
   }, [ready, syncWallet, wallet.connected, wallet.publicKey?.toBase58()]);
 
-  const openModal = async () => {
+  const openBuy = async () => {
+    // Guaranteed path: open Jupiter Ultra swap page preselected SOL → $SALVAZION
+    if (modalStrategy === 'jup') {
+      openJupBuy();
+      return;
+    }
+
     setLoading(true);
-    await initPlugin();
+    const ok = await initPlugin();
+    if (!ok) {
+      openJupBuy();
+      return;
+    }
+
+    // Plugin sometimes mounts an empty height:0 shell when styles fail — fall back
+    await new Promise((r) => setTimeout(r, 1200));
+    if (!pluginUiLooksReady()) {
+      setError(t('swap.initError'));
+      openJupBuy();
+    }
+    setLoading(false);
   };
 
   if (mode === 'modal' || mode === 'widget') {
+    // Progressive enhancement: real link always works even if JS breaks
+    if (modalStrategy === 'jup') {
+      return (
+        <div className={className}>
+          <a
+            href={JUPITER_SWAP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex w-full items-center justify-center py-3 rounded-xl bg-gradient-to-r from-[#8FD99A] to-[#6B8F6E] text-[#040404] font-semibold text-sm hover:opacity-90 transition"
+          >
+            {label}
+          </a>
+          {showFallbackLink && (
+            <p className="block text-center text-[11px] text-[var(--sage)]/80 mt-2">
+              Jupiter Ultra · SOL → $SALVAZION
+            </p>
+          )}
+        </div>
+      );
+    }
+
     return (
       <div className={className}>
         <button
           type="button"
           onClick={() => {
-            void openModal();
+            void openBuy();
           }}
           disabled={loading}
           className="w-full py-3 rounded-xl bg-gradient-to-r from-[#8FD99A] to-[#6B8F6E] text-[#040404] font-semibold text-sm hover:opacity-90 transition disabled:opacity-50"

@@ -405,6 +405,7 @@ export default function WalletConnectCard({
             <div className="space-y-2">
               <JupiterSwap
                 mode="modal"
+                modalStrategy="jup"
                 triggerLabel={t('wallet.swapSalvazion')}
                 showFallbackLink={false}
               />

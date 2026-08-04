@@ -517,10 +517,15 @@ export default function SalvazionLanding() {
                 Jupiter Ultra · Solana
               </p>
               {/*
-                Opens Jupiter Plugin modal preselected SOL → $SALVAZION.
-                Ultra routes organic mints; Metis (legacy Terminal) returned TOKEN_NOT_TRADABLE.
+                Direct link to jup.ag SOL → $SALVAZION.
+                In-app Plugin modal was blocked by CSP (empty height:0 shell).
               */}
-              <JupiterSwap mode="modal" triggerLabel={t.token.buy} showFallbackLink />
+              <JupiterSwap
+                mode="modal"
+                modalStrategy="jup"
+                triggerLabel={t.token.buy}
+                showFallbackLink
+              />
             </div>
           </div>
         </div>

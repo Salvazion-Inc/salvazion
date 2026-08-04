@@ -47,7 +47,6 @@ export async function processAvatarFile(file: File): Promise<AvatarProcessResult
 
     const dataUrl = await blobToDataUrl(blob);
     if (dataUrl.length > MAX_DATA_URL_CHARS) {
-      // try harder compression
       const tighter = await new Promise<Blob | null>((resolve) =>
         canvas.toBlob((b) => resolve(b), 'image/jpeg', 0.65)
       );
@@ -75,9 +74,34 @@ function blobToDataUrl(blob: Blob): Promise<string> {
 }
 
 /**
- * Upload avatar to Supabase Storage (bucket `avatars`) when available.
- * Writes a versioned object path so mobile/web CDNs never serve a stale file,
- * and immediately persists the public URL on profiles.avatar_url (source of truth).
+ * Preferred path: server API with service role (works even if Storage RLS is wrong).
+ */
+async function uploadAvatarViaApi(blob: Blob): Promise<string | null> {
+  try {
+    const fd = new FormData();
+    fd.append('file', blob, 'avatar.jpg');
+    const res = await fetch('/api/profile/avatar', {
+      method: 'POST',
+      body: fd,
+      credentials: 'same-origin',
+    });
+    const body = (await res.json().catch(() => ({}))) as {
+      avatarUrl?: string;
+      error?: string;
+    };
+    if (!res.ok) {
+      console.warn('[Salvazion] avatar API upload failed', res.status, body.error);
+      return null;
+    }
+    return body.avatarUrl || null;
+  } catch (e) {
+    console.warn('[Salvazion] avatar API upload error', e);
+    return null;
+  }
+}
+
+/**
+ * Browser-side Storage upload (fallback when API/service role unavailable).
  */
 export async function uploadAvatarToSupabase(blob: Blob): Promise<string | null> {
   try {
@@ -88,7 +112,6 @@ export async function uploadAvatarToSupabase(blob: Blob): Promise<string | null>
     if (!user) return null;
 
     const version = Date.now();
-    // Versioned path defeats CDN/browser cache of the same Storage object
     const path = `${user.id}/avatar-${version}.jpg`;
     const legacyPath = `${user.id}/avatar.jpg`;
 
@@ -99,7 +122,7 @@ export async function uploadAvatarToSupabase(blob: Blob): Promise<string | null>
     });
 
     if (upErr) {
-      // Fallback: stable path (older policies may only allow avatar.jpg)
+      console.warn('[Salvazion] client storage upload failed', upErr.message);
       const { error: legacyErr } = await supabase.storage
         .from('avatars')
         .upload(legacyPath, blob, {
@@ -132,11 +155,9 @@ export async function uploadAvatarToSupabase(blob: Blob): Promise<string | null>
 
     const { data } = supabase.storage.from('avatars').getPublicUrl(path);
     if (!data.publicUrl) return null;
-    // Unique path — still add v for consumers that ignore path changes
     const url = `${data.publicUrl.split('?')[0]}?v=${version}`;
     await persistAvatarUrl(supabase, user.id, url);
 
-    // Best-effort cleanup of previous objects (ignore errors)
     try {
       const { data: listed } = await supabase.storage.from('avatars').list(user.id, {
         limit: 20,
@@ -145,9 +166,7 @@ export async function uploadAvatarToSupabase(blob: Blob): Promise<string | null>
         .map((f) => f.name)
         .filter((name) => name.startsWith('avatar') && name !== `avatar-${version}.jpg`)
         .map((name) => `${user.id}/${name}`);
-      if (stale.length) {
-        void supabase.storage.from('avatars').remove(stale);
-      }
+      if (stale.length) void supabase.storage.from('avatars').remove(stale);
     } catch {
       /* ignore */
     }
@@ -175,9 +194,10 @@ async function persistAvatarUrl(
 }
 
 /**
- * Save avatar: prefer Supabase Storage (multi-device) + profiles.avatar_url.
- * Falls back to local data-URL only when offline / storage unavailable.
- * Returns the URL to use in UI (remote preferred).
+ * Save avatar for multi-device use.
+ * 1) Server API (service role) — preferred
+ * 2) Direct Storage from browser — fallback
+ * 3) Local data-URL only if both fail (device-only; does NOT sync)
  */
 export async function saveAvatarImage(file: File): Promise<
   | { ok: true; avatarUrl: string; remote: boolean }
@@ -186,11 +206,21 @@ export async function saveAvatarImage(file: File): Promise<
   const processed = await processAvatarFile(file);
   if (!processed.ok) return processed;
 
-  const remote = await uploadAvatarToSupabase(processed.blob);
-  if (remote) {
-    return { ok: true, avatarUrl: remote, remote: true };
+  // Prefer API so mobile always gets profiles.avatar_url + Storage object
+  const viaApi = await uploadAvatarViaApi(processed.blob);
+  if (viaApi) {
+    return { ok: true, avatarUrl: viaApi, remote: true };
   }
 
-  // Offline / missing bucket — device-only until Storage is configured
-  return { ok: true, avatarUrl: processed.dataUrl, remote: false };
+  const viaClient = await uploadAvatarToSupabase(processed.blob);
+  if (viaClient) {
+    return { ok: true, avatarUrl: viaClient, remote: true };
+  }
+
+  // Last resort: local only — surface as soft failure so UI can warn hard
+  return {
+    ok: true,
+    avatarUrl: processed.dataUrl,
+    remote: false,
+  };
 }

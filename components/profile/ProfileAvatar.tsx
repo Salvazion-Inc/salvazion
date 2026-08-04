@@ -49,16 +49,19 @@ export default function ProfileAvatar({
   >({ active: false });
   const [sheetOpen, setSheetOpen] = useState(false);
   const [imgEpoch, setImgEpoch] = useState(0);
+  const [imgBroken, setImgBroken] = useState(false);
 
   // External sync (other device / server refresh): drop local override when prop changes
   useEffect(() => {
     setLocalOverride({ active: false });
     setImgEpoch((n) => n + 1);
+    setImgBroken(false);
   }, [avatarUrl]);
 
   const displayUrl = localOverride.active
     ? localOverride.url
     : avatarUrl || undefined;
+  const showPhoto = Boolean(displayUrl) && !imgBroken;
   const dim = SIZES[size];
 
   const openSheet = () => {
@@ -98,8 +101,8 @@ export default function ProfileAvatar({
       if (!result.remote) {
         setError(
           es
-            ? 'Foto guardada solo en este dispositivo. Activa el bucket “avatars” en Supabase para sincronizar con mobile.'
-            : 'Photo saved on this device only. Enable the Supabase “avatars” bucket to sync with mobile.'
+            ? 'No se pudo subir a la nube. La foto solo está en este dispositivo y no aparecerá en mobile. Revisa SUPABASE_SERVICE_ROLE_KEY y el bucket avatars, luego vuelve a subirla.'
+            : 'Cloud upload failed. Photo is only on this device and will not show on mobile. Check SUPABASE_SERVICE_ROLE_KEY and the avatars bucket, then upload again.'
         );
       }
     } finally {
@@ -135,7 +138,7 @@ export default function ProfileAvatar({
           }`}
           aria-label={editable ? t('profile.changePhoto') : name}
         >
-          {displayUrl ? (
+          {showPhoto ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               key={`${displayUrl}#${imgEpoch}`}
@@ -144,8 +147,8 @@ export default function ProfileAvatar({
               width={dim.px}
               height={dim.px}
               className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
               decoding="async"
+              onError={() => setImgBroken(true)}
             />
           ) : (
             <Image

@@ -1,11 +1,14 @@
-import { getSolanaRpcUrl, JUPITER_SWAP_URL, SALVAZION_MINT } from './config';
+import {
+  getSolanaRpcUrl,
+  JUPITER_SWAP_URL,
+  SALVAZION_MINT,
+  SOL_MINT,
+} from './config';
 
-/** Wrapped SOL mint on Solana mainnet */
-export const SOL_MINT = 'So11111111111111111111111111111111111111112';
+export { JUPITER_SWAP_URL, SALVAZION_MINT, SOL_MINT };
 
+/** Plugin script — v3 still ships from terminal.jup.ag */
 export const JUPITER_TERMINAL_SCRIPT = 'https://terminal.jup.ag/main-v3.js';
-
-export { JUPITER_SWAP_URL, SALVAZION_MINT };
 
 export type JupiterDisplayMode = 'modal' | 'integrated' | 'widget';
 
@@ -14,14 +17,22 @@ export interface JupiterInitConfig {
   integratedTargetId?: string;
   endpoint?: string;
   enableWalletPassthrough?: boolean;
+  /**
+   * When true (default in Terminal), only Jupiter "strict" tokens appear.
+   * $SALVAZION is organic/unknown — must be false or quotes fail as TOKEN_NOT_TRADABLE.
+   */
+  strictTokenList?: boolean;
   formProps?: {
     initialInputMint?: string;
     initialOutputMint?: string;
     fixedOutputMint?: boolean;
-    swapMode?: 'ExactIn' | 'ExactOut';
+    fixedInputMint?: boolean;
+    swapMode?: 'ExactIn' | 'ExactOut' | 'ExactInOrOut';
+    initialSlippageBps?: number;
   };
   containerStyles?: Record<string, string | number>;
   containerClassName?: string;
+  defaultExplorer?: 'Solana Explorer' | 'Solscan' | 'Solana Beach' | 'SolanaFM';
 }
 
 export function buildJupiterInitOptions(
@@ -32,11 +43,18 @@ export function buildJupiterInitOptions(
     displayMode: mode,
     endpoint: getSolanaRpcUrl(),
     enableWalletPassthrough: true,
+    // Required: mint is not on Jupiter strict list (tag: unknown)
+    strictTokenList: false,
+    defaultExplorer: 'Solscan',
     formProps: {
       initialInputMint: SOL_MINT,
       initialOutputMint: SALVAZION_MINT,
-      // Allow swapping freely; preselect $SALVAZION as output
+      // Preselect $SALVAZION buy; allow changing pair freely
       fixedOutputMint: false,
+      fixedInputMint: false,
+      swapMode: 'ExactInOrOut',
+      // Slightly wider default for thin-liquidity pairs
+      initialSlippageBps: 100,
     },
   };
 

@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { ReactNode } from 'react';
-import { SUPPORT_EMAIL, SUPPORT_MAILTO } from '@/lib/config/site';
 import { useI18n } from '@/components/I18nProvider';
+import FlatFlag from '@/components/ui/FlatFlag';
 import type { Language } from '@/lib/types';
 
 const UI = {
@@ -14,9 +14,7 @@ const UI = {
     privacy: 'Privacy',
     enter: 'Sign in',
     updated: 'Last updated',
-    contact: 'Contact',
-    langEn: 'EN',
-    langEs: 'ES',
+    language: 'Language',
   },
   es: {
     legal: 'Legal',
@@ -24,9 +22,7 @@ const UI = {
     privacy: 'Privacidad',
     enter: 'Entrar',
     updated: 'Última actualización',
-    contact: 'Contacto',
-    langEn: 'EN',
-    langEs: 'ES',
+    language: 'Idioma',
   },
 } as const;
 
@@ -71,35 +67,40 @@ export default function LegalShell({
               Salvazion
             </span>
           </Link>
-          <nav className="flex items-center gap-3 text-xs text-[var(--sage)] shrink-0">
+          <nav className="flex items-center gap-2 sm:gap-3 text-xs text-[var(--sage)] shrink-0">
+            {/* Same flag language control as landing page */}
             <div
-              className="flex rounded-lg border border-[var(--border-soft)] overflow-hidden"
+              className="flex items-center gap-1.5 p-1 rounded-full border border-[var(--border-soft)] bg-black/30"
               role="group"
-              aria-label="Language"
+              aria-label={ui.language}
             >
               <button
                 type="button"
                 onClick={() => switchLang('en')}
-                className={`px-2.5 py-1.5 min-h-[36px] ${
+                className={`relative overflow-hidden rounded-full transition ${
                   docLang === 'en'
-                    ? 'bg-[var(--surface-active)] text-[var(--accent)]'
-                    : 'hover:text-[var(--accent)]'
+                    ? 'ring-2 ring-[var(--accent)] opacity-100 scale-105'
+                    : 'opacity-65 hover:opacity-100'
                 }`}
                 aria-pressed={docLang === 'en'}
+                aria-label="English"
+                title="English"
               >
-                {ui.langEn}
+                <FlatFlag lang="en" size="md" className="rounded-full" />
               </button>
               <button
                 type="button"
                 onClick={() => switchLang('es')}
-                className={`px-2.5 py-1.5 min-h-[36px] border-l border-[var(--border-soft)] ${
+                className={`relative overflow-hidden rounded-full transition ${
                   docLang === 'es'
-                    ? 'bg-[var(--surface-active)] text-[var(--accent)]'
-                    : 'hover:text-[var(--accent)]'
+                    ? 'ring-2 ring-[var(--accent)] opacity-100 scale-105'
+                    : 'opacity-65 hover:opacity-100'
                 }`}
                 aria-pressed={docLang === 'es'}
+                aria-label="Español"
+                title="Español"
               >
-                {ui.langEs}
+                <FlatFlag lang="es" size="md" className="rounded-full" />
               </button>
             </div>
             <Link href="/terms" className="hover:text-[var(--accent)]">
@@ -131,23 +132,14 @@ export default function LegalShell({
       </main>
 
       <footer className="border-t border-[var(--border-soft)] px-5 py-6 text-center text-[11px] text-[var(--sage)]/80">
-        <p>
-          © {new Date().getFullYear()} Salvazion ·{' '}
-          <a
-            href="https://salvazion.org"
-            className="text-[var(--accent)] hover:underline"
-          >
-            salvazion.org
-          </a>
-        </p>
-        <p className="mt-1">
-          {ui.contact}:{' '}
-          <a
-            href={SUPPORT_MAILTO}
-            className="text-[var(--accent)] hover:underline"
-          >
-            {SUPPORT_EMAIL}
-          </a>
+        <p>© 2026 Salvazion Inc. All rights reserved.</p>
+        <p className="mt-2 flex items-center justify-center gap-4">
+          <Link href="/terms" className="hover:text-[var(--accent)]">
+            {ui.terms}
+          </Link>
+          <Link href="/privacy" className="hover:text-[var(--accent)]">
+            {ui.privacy}
+          </Link>
         </p>
       </footer>
     </div>

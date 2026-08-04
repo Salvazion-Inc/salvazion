@@ -15,7 +15,7 @@ interface Props {
   disabled?: boolean;
 }
 
-/** Login / sign-up with X via Supabase OAuth 2.0 */
+/** Login / sign-up with X via Supabase OAuth 2.0 only */
 export default function XAuthButton({
   next = '/hub/dashboard',
   variant = 'secondary',

@@ -25,7 +25,15 @@ export function getSolanaRpcUrl(): string {
   );
 }
 
-export const JUPITER_SWAP_URL = `https://jup.ag/swap?inputMint=So11111111111111111111111111111111111111112&outputMint=${SALVAZION_MINT}`;
+/** Wrapped SOL mint (native SOL for Jupiter sell side) */
+export const SOL_MINT = 'So11111111111111111111111111111111111111112';
+
+/**
+ * Deep-link to buy $SALVAZION on jup.ag.
+ * Use modern `sell` / `buy` query params (inputMint/outputMint no longer preselect pairs).
+ * Ultra routing can trade this mint even when Metis marks it non-strict.
+ */
+export const JUPITER_SWAP_URL = `https://jup.ag/swap?sell=${SOL_MINT}&buy=${SALVAZION_MINT}`;
 
 export function shortenAddress(address: string, chars = 4): string {
   if (!address || address.length < chars * 2 + 2) return address;

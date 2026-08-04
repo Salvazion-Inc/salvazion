@@ -34,16 +34,38 @@ function LoginForm() {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   useEffect(() => {
-    const code = searchParams.get('error');
-    const mapped = mapQueryAuthError(code);
-    const detail = searchParams.get('detail') || '';
+    // Supabase often puts OAuth failures in the URL hash as well as query params
+    // e.g. #error=server_error&error_description=Error+getting+user+profile...
+    let hashDetail = '';
+    let hashCode = '';
+    if (typeof window !== 'undefined' && window.location.hash.length > 1) {
+      const hp = new URLSearchParams(window.location.hash.slice(1));
+      hashCode = hp.get('error_code') || hp.get('error') || '';
+      hashDetail =
+        hp.get('error_description') || hp.get('error') || hp.get('detail') || '';
+      // Clean hash so refresh / share does not re-show the same noise
+      if (hashDetail || hashCode) {
+        const clean = window.location.pathname + window.location.search;
+        window.history.replaceState(null, '', clean);
+      }
+    }
 
-    if (mapped && detail) {
-      setError(`${mapped} (${detail})`);
+    const code = searchParams.get('error') || hashCode;
+    const mapped = mapQueryAuthError(code);
+    const detail = searchParams.get('detail') || hashDetail || '';
+    // Prefer a specific provider/profile mapping over the generic callback message
+    const detailMapped = detail ? mapAuthError(detail) : '';
+    const detailIsSpecific =
+      Boolean(detail) && detailMapped !== detail && !detailMapped.includes(detail);
+
+    if (detailIsSpecific) {
+      setError(detailMapped);
+    } else if (mapped && detail) {
+      setError(`${mapped} (${mapAuthError(detail)})`);
     } else if (mapped) {
       setError(mapped);
     } else if (detail) {
-      setError(detail);
+      setError(mapAuthError(detail));
     }
 
     const inv = parseInviteFromSearchParams(searchParams);

@@ -1,9 +1,11 @@
 /**
  * X login via Supabase — OAuth 2.0 only (`provider: 'x'`).
- * Does NOT redirect to deprecated Twitter OAuth 1.0a.
+ * Does NOT use deprecated Twitter OAuth 1.0a.
  *
  * Supabase: Authentication → Providers → “X / Twitter (OAuth 2.0)”
  * Credentials: Client ID + Client Secret from developer.x.com (OAuth 2.0 section)
+ *
+ * Guide: docs/auth-x.md
  */
 
 import type { Provider, User } from '@supabase/supabase-js';
@@ -29,7 +31,7 @@ export function extractXIdentity(user: User | null | undefined): XIdentity | nul
   if (!user) return null;
 
   const identities = user.identities || [];
-  // Prefer modern `x`; still read legacy twitter identities for profile display only
+  // Read legacy twitter identities only for profile display (old accounts)
   const xId =
     identities.find((i) => i.provider === 'x') ||
     identities.find((i) => i.provider === 'twitter') ||
@@ -84,9 +86,9 @@ export function xProfileUrl(username: string): string {
   return `https://x.com/${username.replace(/^@+/, '')}`;
 }
 
-/** @deprecated No-op — legacy Twitter fallback removed */
+/** @deprecated No-op — Twitter OAuth 1.0a is not used */
 export function markXProfileFetchFailed(): void {
-  /* intentionally empty — we no longer switch to Twitter OAuth 1.0a */
+  /* intentionally empty */
 }
 
 export function clearXLegacyFlag(): void {
@@ -96,6 +98,18 @@ export function clearXLegacyFlag(): void {
   } catch {
     /* ignore */
   }
+}
+
+export function isXProfileProviderError(message: string | null | undefined): boolean {
+  if (!message) return false;
+  const m = message.toLowerCase();
+  return (
+    m.includes('user profile from external provider') ||
+    m.includes('getting user profile') ||
+    m.includes('user email from external provider') ||
+    m.includes('client-not-enrolled') ||
+    m.includes('client not enrolled')
+  );
 }
 
 /**
@@ -108,13 +122,14 @@ export async function signInWithX(options?: {
     clearXLegacyFlag();
 
     const { external, projectRef } = await fetchExternalProviders();
+    // Public settings often omit `x` even when enabled; only block if explicitly false
     if (external.x === false && Object.keys(external).length > 0) {
       return {
         error:
           `X (OAuth 2.0) no está habilitado en Supabase (proyecto ${projectRef}). ` +
           `Authentication → Providers → “X / Twitter (OAuth 2.0)” → Enable + ` +
           `Client ID y Client Secret de developer.x.com → Save. ` +
-          `No uses el provider “Twitter” (OAuth 1.0a, deprecado).`,
+          `No uses el provider “Twitter” (OAuth 1.0a).`,
       };
     }
 
@@ -137,23 +152,23 @@ export async function signInWithX(options?: {
           error:
             `X (OAuth 2.0) no está activado en Supabase (${projectRef}). ` +
             `Providers → “X / Twitter (OAuth 2.0)” → Enable + Client ID/Secret → Save. ` +
-            `No actives el login con el provider Twitter V1 deprecado.`,
+            `No uses el provider Twitter (OAuth 1.0a).`,
         };
       }
       return { error: error.message };
     }
 
     if (data?.url) {
-      // Ensure we never open twitter.com OAuth 1.0a authorize endpoints by mistake
+      // Reject accidental OAuth 1.0a authorize URLs
       if (
         data.url.includes('api.twitter.com/oauth/') ||
         data.url.includes('api.x.com/oauth/authenticate') ||
-        data.url.includes('/oauth/authenticate')
+        (data.url.includes('/oauth/authenticate') && !data.url.includes('oauth2'))
       ) {
         return {
           error:
-            'Se intentó usar Twitter OAuth 1.0a (deprecado). Revisa que en Supabase solo esté ' +
-            'activo “X / Twitter (OAuth 2.0)” con Client ID/Secret, no el provider Twitter V1.',
+            'Se intentó usar Twitter OAuth 1.0a (no permitido). ' +
+            'En Supabase activa solo “X / Twitter (OAuth 2.0)” con Client ID/Secret.',
         };
       }
       window.location.assign(data.url);

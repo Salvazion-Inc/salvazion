@@ -66,13 +66,33 @@ export function mapAuthError(message: string | null | undefined): string {
     );
   }
   if (
-    m.includes('user profile from external provider') ||
-    m.includes('getting user profile')
+    m.includes('client-not-enrolled') ||
+    m.includes('client not enrolled') ||
+    m.includes('client-forbidden') ||
+    m.includes('client forbidden') ||
+    m.includes('attached to a project')
   ) {
     return (
-      'X OAuth 2.0 no pudo leer tu perfil. En Supabase activa “X / Twitter (OAuth 2.0)” con ' +
-      'Client ID + Client Secret (no Twitter V1). En developer.x.com: Request email ON, Web App, ' +
-      'callback https://kppylfrsclkdmtpobpxd.supabase.co/auth/v1/callback. docs/auth-x.md'
+      'X rechazó la lectura de perfil (client-not-enrolled / Client Forbidden). ' +
+      'Tu App OAuth (p. ej. client_id 28640212) no tiene el nivel de API correcto: ' +
+      'debe estar dentro de un Project, en Production y con Pay-per-use (u otro plan válido). ' +
+      'Ve a console.x.com / developer.x.com → mueve la app al Project → Production → ' +
+      'Pay-per-use. Luego reintenta Continuar con X. docs/auth-x.md'
+    );
+  }
+  if (
+    m.includes('user profile from external provider') ||
+    m.includes('getting user profile') ||
+    m.includes('user email from external provider') ||
+    m.includes('unexpected_failure')
+  ) {
+    return (
+      'Login con X: X te autorizó, pero Supabase no pudo leer el perfil (GET /2/users/me). ' +
+      'Causa habitual en Auth Logs: client-not-enrolled — la App no está en un Project ' +
+      'con Production + Pay-per-use. Arreglo en console.x.com (no en el código). ' +
+      'También: Request email ON, callback ' +
+      'https://kppylfrsclkdmtpobpxd.supabase.co/auth/v1/callback, y Client ID/Secret ' +
+      'OAuth 2.0 en Supabase → Providers → X / Twitter (OAuth 2.0). docs/auth-x.md'
     );
   }
 

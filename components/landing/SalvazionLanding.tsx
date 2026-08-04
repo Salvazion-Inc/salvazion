@@ -5,18 +5,31 @@ import Link from 'next/link';
 import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 import JupiterSwap from '@/components/wallet/JupiterSwap';
 import { useI18n } from '@/components/I18nProvider';
-import { SUPPORT_EMAIL, SUPPORT_MAILTO } from '@/lib/config/site';
 import { PLAN_COPY } from '@/lib/billing/plans';
 import FlatFlag from '@/components/ui/FlatFlag';
 import LandingBlog from '@/components/landing/LandingBlog';
+import { JUPITER_SWAP_URL, SALVAZION_MINT } from '@/lib/solana/config';
 
-const JUPITER_BUY =
-  'https://jup.ag/swap?inputMint=So11111111111111111111111111111111111111112&outputMint=7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2';
-const MINT = '7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2';
+const JUPITER_BUY = JUPITER_SWAP_URL;
+const MINT = SALVAZION_MINT;
 
-/** Official X (Twitter) presence */
 const X_ACCOUNT_URL = 'https://x.com/salvazion_';
-const X_ARTICLES_URL = 'https://x.com/salvazion_/articles';
+const LINKEDIN_CRISTIAN =
+  'https://www.linkedin.com/in/exponential-healthtech/';
+const LINKEDIN_BEATRIZ = 'https://www.linkedin.com/in/beatriz-isler/';
+
+function XLogo({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden
+      className={className}
+      fill="currentColor"
+    >
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.727-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" />
+    </svg>
+  );
+}
 
 export default function SalvazionLanding() {
   const { lang, setLang } = useI18n();
@@ -150,19 +163,28 @@ export default function SalvazionLanding() {
 
           <h1
             id="hero-heading"
-            className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.95] tracking-tight text-balance"
+            className="font-display font-bold leading-[0.95] tracking-tight text-[clamp(1.5rem,6.6vw,4.5rem)]"
           >
-            <span className="block neon-text">{t.hero.titleLines[0]}</span>
-            <span className="block neon-text">{t.hero.titleLines[1]}</span>
-            <span className="block text-[var(--accent)] drop-shadow-[0_0_24px_rgba(143,217,154,0.35)]">
+            {/* Exactly 3 lines on mobile — each line never wraps */}
+            <span className="block whitespace-nowrap neon-text">
+              {t.hero.titleLines[0]}
+            </span>
+            <span className="block whitespace-nowrap neon-text">
+              {t.hero.titleLines[1]}
+            </span>
+            <span className="block whitespace-nowrap text-[var(--accent)] drop-shadow-[0_0_24px_rgba(143,217,154,0.35)]">
               {t.hero.titleLines[2]}
             </span>
           </h1>
 
-          <p className="max-w-xl mx-auto mt-7 text-base sm:text-lg text-[#D8E1D9]/92 leading-relaxed text-pretty">
-            {t.hero.tagline}
-            <br />
-            <span className="text-[var(--accent)] font-medium">{t.hero.tagline2}</span>
+          <p className="mx-auto mt-7 max-w-none sm:max-w-xl text-[#D8E1D9]/92 leading-relaxed">
+            {/* One line on mobile (fluid size so Spanish fits) */}
+            <span className="block whitespace-nowrap text-[clamp(0.68rem,2.55vw+0.28rem,1.125rem)]">
+              {t.hero.tagline}
+            </span>
+            <span className="mt-1.5 block text-sm sm:text-base text-[var(--accent)] font-medium text-pretty">
+              {t.hero.tagline2}
+            </span>
           </p>
 
           <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center items-stretch sm:items-center">
@@ -263,8 +285,14 @@ export default function SalvazionLanding() {
 
           <div className="grid md:grid-cols-2 gap-4">
             <div className="card-soft p-6 sm:p-8">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[var(--accent)]/40 shrink-0 bg-black ring-2 ring-[var(--border-soft)]">
+              <a
+                href={LINKEDIN_CRISTIAN}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-4 mb-4 group rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+                aria-label="Cristian Cortés — LinkedIn"
+              >
+                <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[var(--accent)]/40 shrink-0 bg-black ring-2 ring-[var(--border-soft)] transition group-hover:border-[var(--accent)]/70">
                   <Image
                     src="/founders/cristian.jpg"
                     alt="Cristian Cortés"
@@ -277,15 +305,26 @@ export default function SalvazionLanding() {
                   <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] mb-1">
                     CEO & Founder
                   </p>
-                  <h3 className="text-xl font-semibold text-white">Cristian Cortés</h3>
+                  <h3 className="text-xl font-semibold text-white group-hover:text-[var(--accent)] transition-colors">
+                    Cristian Cortés
+                  </h3>
                   <p className="text-[11px] text-[var(--sage)]">{t.team.cristianRole}</p>
+                  <p className="mt-1.5 text-[11px] font-medium text-[var(--accent)]">
+                    LinkedIn ↗
+                  </p>
                 </div>
-              </div>
+              </a>
               <p className="text-sm text-[#D8E1D9]/80 leading-relaxed">{t.team.cristian}</p>
             </div>
             <div className="card-soft p-6 sm:p-8">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[var(--accent)]/40 shrink-0 bg-black ring-2 ring-[var(--border-soft)]">
+              <a
+                href={LINKEDIN_BEATRIZ}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-4 mb-4 group rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+                aria-label="Beatriz Isler — LinkedIn"
+              >
+                <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[var(--accent)]/40 shrink-0 bg-black ring-2 ring-[var(--border-soft)] transition group-hover:border-[var(--accent)]/70">
                   <Image
                     src="/founders/beatriz.jpg"
                     alt="Beatriz Isler"
@@ -298,10 +337,15 @@ export default function SalvazionLanding() {
                   <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] mb-1">
                     COO & Founder
                   </p>
-                  <h3 className="text-xl font-semibold text-white">Beatriz Isler</h3>
+                  <h3 className="text-xl font-semibold text-white group-hover:text-[var(--accent)] transition-colors">
+                    Beatriz Isler
+                  </h3>
                   <p className="text-[11px] text-[var(--sage)]">{t.team.beatrizRole}</p>
+                  <p className="mt-1.5 text-[11px] font-medium text-[var(--accent)]">
+                    LinkedIn ↗
+                  </p>
                 </div>
-              </div>
+              </a>
               <p className="text-sm text-[#D8E1D9]/80 leading-relaxed">{t.team.beatriz}</p>
             </div>
           </div>
@@ -321,64 +365,90 @@ export default function SalvazionLanding() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-4 sm:gap-5">
-            <div className="card-soft card-lift p-6 sm:p-8 flex flex-col">
-              <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]">
-                {lang === 'es' ? PLAN_COPY.free.nameEs : PLAN_COPY.free.name}
+          <div className="grid md:grid-cols-2 gap-4 sm:gap-5 items-stretch">
+            {/* Free — same typography / spacing / button size as Premium */}
+            <div className="card-soft card-lift p-6 sm:p-8 flex flex-col h-full">
+              <div className="flex items-center justify-between gap-2 min-h-[1.75rem]">
+                <p className="text-[10px] uppercase tracking-wider font-semibold text-[var(--sage)]">
+                  {lang === 'es' ? PLAN_COPY.free.nameEs : PLAN_COPY.free.name}
+                </p>
+                {/* Keeps header height aligned with Premium badge row */}
+                <span className="invisible text-[10px] px-2.5 py-1 rounded-full font-semibold">
+                  {t.pricing.bestValue}
+                </span>
+              </div>
+
+              <p className="mt-3 text-4xl font-bold text-white tracking-tight tabular-nums leading-none">
+                $0
               </p>
-              <p className="mt-2 text-4xl font-bold text-white tracking-tight">$0</p>
-              <p className="mt-1 text-xs text-[var(--sage)]">{t.pricing.freeNote}</p>
-              <ul className="mt-5 space-y-2 text-sm text-[#D8E1D9]/85 flex-1">
+              <p className="mt-2 text-sm text-[var(--sage)] leading-snug">
+                {lang === 'es' ? '/ mes · siempre gratis' : '/ month · always free'}
+              </p>
+              {/* Spacer matches Premium annual price line */}
+              <p className="mt-1 text-sm leading-snug min-h-[1.25rem] text-transparent select-none" aria-hidden>
+                —
+              </p>
+
+              <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.5rem]">
+                {t.pricing.freeNote}
+              </p>
+
+              <ul className="mt-5 space-y-2 text-sm text-[#D8E1D9]/90 flex-1">
                 {t.pricing.freeItems.map((item) => (
                   <li key={item} className="flex gap-2">
-                    <span className="text-[var(--accent)] shrink-0">·</span>
+                    <span className="text-[var(--accent)] shrink-0 w-4 text-center">·</span>
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
+
               <Link
                 href="/auth/signup"
-                className="btn-secondary mt-6 sm:w-auto text-center"
+                className="btn-secondary font-display font-bold mt-6 w-full text-center"
               >
                 {t.pricing.ctaFree}
               </Link>
             </div>
 
-            <div className="card-soft card-lift p-6 sm:p-8 flex flex-col border-[#8FD99A]/35 bg-gradient-to-b from-[#8FD99A]/10 to-transparent shadow-[var(--shadow-glow)]">
-              <div className="flex items-center justify-between gap-2">
-                <p className="text-[10px] uppercase tracking-wider text-[#8FD99A] font-semibold">
+            {/* Premium — identical layout scale as Free */}
+            <div className="card-soft card-lift p-6 sm:p-8 flex flex-col h-full border-[#8FD99A]/35 bg-gradient-to-b from-[#8FD99A]/10 to-transparent shadow-[var(--shadow-glow)]">
+              <div className="flex items-center justify-between gap-2 min-h-[1.75rem]">
+                <p className="text-[10px] uppercase tracking-wider font-semibold text-[#8FD99A]">
                   Premium
                 </p>
                 <span className="text-[10px] px-2.5 py-1 rounded-full bg-[#8FD99A]/18 text-[#8FD99A] font-semibold border border-[#8FD99A]/25">
                   {t.pricing.bestValue}
                 </span>
               </div>
-              <div className="mt-3 space-y-1">
-                <p className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                  {lang === 'es'
-                    ? PLAN_COPY.premium_month.priceLabelEs
-                    : PLAN_COPY.premium_month.priceLabel}
-                </p>
-                <p className="text-sm text-[#8FD99A]">
-                  {lang === 'es'
-                    ? PLAN_COPY.premium_year.priceLabelEs
-                    : PLAN_COPY.premium_year.priceLabel}
-                </p>
-              </div>
-              <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed">
+
+              <p className="mt-3 text-4xl font-bold text-white tracking-tight tabular-nums leading-none">
+                ${PLAN_COPY.premium_month.priceUsd}
+              </p>
+              <p className="mt-2 text-sm text-[var(--sage)] leading-snug">
+                {lang === 'es' ? '/ mes' : '/ month'}
+              </p>
+              <p className="mt-1 text-sm text-[#8FD99A] leading-snug min-h-[1.25rem]">
+                {lang === 'es'
+                  ? PLAN_COPY.premium_year.priceLabelEs
+                  : PLAN_COPY.premium_year.priceLabel}
+              </p>
+
+              <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.5rem]">
                 {t.pricing.premiumNote}
               </p>
+
               <ul className="mt-5 space-y-2 text-sm text-[#D8E1D9]/90 flex-1">
                 {t.pricing.premiumItems.map((item) => (
                   <li key={item} className="flex gap-2">
-                    <span className="text-[#8FD99A] shrink-0">✓</span>
+                    <span className="text-[var(--accent)] shrink-0 w-4 text-center">·</span>
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
+
               <Link
                 href="/auth/signup"
-                className="btn-primary mt-6 sm:w-auto text-center"
+                className="btn-primary font-display font-bold mt-6 w-full text-center"
               >
                 {t.pricing.ctaPremium}
               </Link>
@@ -432,28 +502,16 @@ export default function SalvazionLanding() {
       <footer className="border-t border-[var(--border-soft)] py-10">
         <div className="max-w-6xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[var(--sage)]/80">
           <p>{t.footer.copy}</p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/auth/login" className="hover:text-[var(--accent)]">
-              {t.nav.enter}
-            </Link>
-            <a href="#blog" className="hover:text-[var(--accent)]">
-              {t.nav.blog}
-            </a>
-            <a
-              href={X_ARTICLES_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[var(--accent)]"
-            >
-              {lang === 'es' ? 'Artículos X' : 'X Articles'}
-            </a>
+          <div className="flex flex-wrap items-center justify-center gap-4">
             <a
               href={X_ACCOUNT_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-[var(--accent)]"
+              className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-[var(--border-soft)] text-[var(--off-white)] hover:text-[var(--accent)] hover:border-[var(--border-strong)] transition"
+              aria-label="@salvazion_ on X"
+              title="@salvazion_ on X"
             >
-              @salvazion_
+              <XLogo className="w-4 h-4" />
             </a>
             <Link href="/terms" className="hover:text-[var(--accent)]">
               {t.footer.terms}
@@ -461,12 +519,6 @@ export default function SalvazionLanding() {
             <Link href="/privacy" className="hover:text-[var(--accent)]">
               {t.footer.privacy}
             </Link>
-            <a href="https://salvazion.org" className="hover:text-[var(--accent)]">
-              salvazion.org
-            </a>
-            <a href={SUPPORT_MAILTO} className="hover:text-[var(--accent)]">
-              {SUPPORT_EMAIL}
-            </a>
           </div>
         </div>
       </footer>
@@ -601,7 +653,7 @@ const copy = {
         'Physical Therapist, Bachelor of Kinesiology. Master in Physical Therapy with Diplomas in Rehabilitation, Exercise and Health, with experience as a University Professor and Researcher in Human Functionality, Digital Health and Aquatic Therapy. She did an International Clinical Internship in Hydrotherapy. She coordinated the “Choose Living Healthy” program of the Ministry of Health; however, her greatest achievement is to form a beautiful family (husband and four children), balancing her life as an entrepreneur. In 2022, she was recognized as a “Digital Health Champion” by the IDB (Inter-American Development Bank).',
     },
     footer: {
-      copy: '© 2026 Salvazion Inc. · All rights reserved · Faith, family and exponential technology.',
+      copy: '© 2026 Salvazion Inc. All rights reserved.',
       terms: 'Terms',
       privacy: 'Privacy',
     },
@@ -732,9 +784,9 @@ const copy = {
         'Kinesióloga, Licenciada en Kinesiología. Magíster en Terapia Física con Diplomados en Rehabilitación, Ejercicio y Salud, con experiencia como Docente e Investigadora Universitaria en Funcionalidad Humana, Salud Digital y Terapia Acuática. Realizó una Pasantía Clínica Internacional en Hidroterapia. Coordinó el programa “Elige Vivir Sano” del Ministerio de Salud; sin embargo, su mayor logro es conformar una hermosa familia (esposo y cuatro hijos), balanceando su vida como emprendedora. En 2022, fue reconocida como “Campeona en Salud Digital” por el BID (Banco Interamericano de Desarrollo).',
     },
     footer: {
-      copy: '© 2026 Salvazion Inc. · Todos los derechos reservados · Fe, familia y tecnología exponencial.',
-      terms: 'Términos',
-      privacy: 'Privacidad',
+      copy: '© 2026 Salvazion Inc. All rights reserved.',
+      terms: 'Terms',
+      privacy: 'Privacy',
     },
   },
 } as const;

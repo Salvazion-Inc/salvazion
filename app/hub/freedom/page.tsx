@@ -117,11 +117,7 @@ export default function FreedomPage() {
       <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto">
         {activeTab === 'learn' && (
           <div className="space-y-5">
-            <XArticlesFeed
-              focus={profile?.currentFocus || []}
-              limit={7}
-              onScored={() => refresh()}
-            />
+            <XArticlesFeed onScored={() => refresh()} />
 
             {/* 1) Books */}
             <BookStoreCarousel />

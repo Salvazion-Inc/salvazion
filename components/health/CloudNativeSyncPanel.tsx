@@ -57,45 +57,51 @@ export default function CloudNativeSyncPanel({ onAutoLog, onSleepSynced }: Props
   }, []);
 
   useEffect(() => {
-    void refreshStatus();
+    const id = requestAnimationFrame(() => {
+      void refreshStatus();
+    });
+    return () => cancelAnimationFrame(id);
   }, [refreshStatus]);
 
   // Handle OAuth redirect query params
   useEffect(() => {
     const connected = search.get('wearable_connected');
     const err = search.get('wearable_error');
-    if (connected) {
-      setNote(t('wearables.oauthConnected', { name: connected }));
-      // Ensure local linked device exists
-      const brand = OAUTH_BRAND[connected];
-      if (brand) {
-        const existing = loadLinkedWearables().find(
-          (d) => d.brandId === brand && d.connectMode === 'oauth'
-        );
-        if (!existing) {
-          linkWearable({
-            brandId: brand,
-            connectMode: 'oauth',
-            label: connected.charAt(0).toUpperCase() + connected.slice(1),
-          });
+    if (!connected && !err) return;
+
+    const id = requestAnimationFrame(() => {
+      if (connected) {
+        setNote(t('wearables.oauthConnected', { name: connected }));
+        const brand = OAUTH_BRAND[connected];
+        if (brand) {
+          const existing = loadLinkedWearables().find(
+            (d) => d.brandId === brand && d.connectMode === 'oauth'
+          );
+          if (!existing) {
+            linkWearable({
+              brandId: brand,
+              connectMode: 'oauth',
+              label: connected.charAt(0).toUpperCase() + connected.slice(1),
+            });
+          }
+        }
+        void refreshStatus();
+        if (typeof window !== 'undefined') {
+          const u = new URL(window.location.href);
+          u.searchParams.delete('wearable_connected');
+          window.history.replaceState({}, '', u.pathname + u.search);
         }
       }
-      void refreshStatus();
-      // Clean URL without reload
-      if (typeof window !== 'undefined') {
-        const u = new URL(window.location.href);
-        u.searchParams.delete('wearable_connected');
-        window.history.replaceState({}, '', u.pathname + u.search);
+      if (err) {
+        setError(t('wearables.oauthError', { error: err }));
+        if (typeof window !== 'undefined') {
+          const u = new URL(window.location.href);
+          u.searchParams.delete('wearable_error');
+          window.history.replaceState({}, '', u.pathname + u.search);
+        }
       }
-    }
-    if (err) {
-      setError(t('wearables.oauthError', { error: err }));
-      if (typeof window !== 'undefined') {
-        const u = new URL(window.location.href);
-        u.searchParams.delete('wearable_error');
-        window.history.replaceState({}, '', u.pathname + u.search);
-      }
-    }
+    });
+    return () => cancelAnimationFrame(id);
   }, [search, t, refreshStatus]);
 
   const applyMetrics = (
@@ -136,7 +142,9 @@ export default function CloudNativeSyncPanel({ onAutoLog, onSleepSynced }: Props
   };
 
   const connectOAuth = (id: string) => {
-    window.location.href = `/api/wearables/oauth/${id}/start?returnTo=${encodeURIComponent('/hub/health?tab=wearables')}`;
+    window.location.assign(
+      `/api/wearables/oauth/${id}/start?returnTo=${encodeURIComponent('/hub/profile?settings=1&tab=wearables')}`
+    );
   };
 
   const syncOAuth = async (id: string) => {

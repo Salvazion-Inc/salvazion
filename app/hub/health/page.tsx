@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState, useCallback, Suspense } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import Image from 'next/image';
 import BottomNav from '@/components/BottomNav';
 import { loadProfile } from '@/lib/store/profile';
 import { UserProfile } from '@/lib/types';
@@ -46,12 +47,43 @@ import {
   MealSlot,
   MealLog
 } from '@/lib/health/biomarkers';
-import PhoneSensorsPanel from '@/components/health/PhoneSensorsPanel';
-import WearablesPanel from '@/components/health/WearablesPanel';
-import CloudNativeSyncPanel from '@/components/health/CloudNativeSyncPanel';
 import WomenHealthPanel from '@/components/health/WomenHealthPanel';
 import BiomarkersPanel from '@/components/health/BiomarkersPanel';
 import PillarHubHeader from '@/components/hub/PillarHubHeader';
+
+const HEALTH_ICONS = {
+  sports: '/icons/health/sports.jpg',
+  exerciseSun: '/icons/health/exercise-sun.jpg',
+  hydration: '/icons/health/hydration.jpg',
+  nutrition: '/icons/health/nutrition.jpg',
+  sleep: '/icons/health/sleep.jpg',
+  fasting: '/icons/health/fasting.jpg',
+} as const;
+
+function SectionIcon({
+  src,
+  alt,
+  size = 28,
+}: {
+  src: string;
+  alt: string;
+  size?: number;
+}) {
+  return (
+    <span
+      className="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-lg border border-[var(--border-soft)] bg-[#0a0a0a]"
+      style={{ width: size, height: size }}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        width={size}
+        height={size}
+        className="h-full w-full object-cover"
+      />
+    </span>
+  );
+}
 
 export default function HealthPage() {
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
@@ -76,12 +108,13 @@ export default function HealthPage() {
   const [sportName, setSportName] = useState('');
   const [sportEnv, setSportEnv] = useState<SportEnvironment>('outdoor');
   const [sportFreq, setSportFreq] = useState<SportFrequency>('weekly');
-  const [activeTab, setActiveTab] = useState<
-    'exercise' | 'nutrition' | 'sleep' | 'wearables'
-  >('exercise');
+  const [activeTab, setActiveTab] = useState<'exercise' | 'nutrition' | 'sleep'>(
+    'exercise'
+  );
 
   const stage = getCurrentHealthStage();
   const en = profile?.language === 'en';
+  const fastingAllowed = stage !== 'infancia' && stage !== 'juventud';
 
   const refresh = useCallback(() => {
     const s = computeScores();
@@ -113,7 +146,7 @@ export default function HealthPage() {
     return () => cancelAnimationFrame(id);
   }, [refresh]);
 
-  // OAuth / deep-link: open Wearables tab when returning from cloud connect
+  // Wearables moved to Profile → Settings; preserve OAuth deep-links
   useEffect(() => {
     if (typeof window === 'undefined') return;
     try {
@@ -123,7 +156,14 @@ export default function HealthPage() {
         sp.has('wearable_error') ||
         sp.get('tab') === 'wearables'
       ) {
-        setActiveTab('wearables');
+        const next = new URL('/hub/profile', window.location.origin);
+        next.searchParams.set('settings', '1');
+        next.searchParams.set('tab', 'wearables');
+        for (const key of ['wearable_connected', 'wearable_error'] as const) {
+          const v = sp.get(key);
+          if (v) next.searchParams.set(key, v);
+        }
+        window.location.replace(next.toString());
       }
     } catch {
       // ignore
@@ -188,19 +228,24 @@ export default function HealthPage() {
   const sleepIdealNow = isSleepIdeal(bedTime, wakeTime, stage);
 
   const categories = [
-    { id: 'exercise', title: 'Ejercicio y sol', icon: '⚡' },
-    { id: 'nutrition', title: 'Alimentación', icon: '🥗' },
-    { id: 'sleep', title: 'Sueño', icon: '🌙' },
-    { id: 'wearables', title: 'Wearables', icon: '⌚' },
+    {
+      id: 'exercise' as const,
+      title: en ? 'Exercise & sun' : 'Ejercicio y sol',
+      iconSrc: HEALTH_ICONS.exerciseSun,
+    },
+    {
+      id: 'nutrition' as const,
+      title: en ? 'Nutrition' : 'Alimentación',
+      iconSrc: HEALTH_ICONS.nutrition,
+    },
+    {
+      id: 'sleep' as const,
+      title: en ? 'Sleep' : 'Sueño',
+      iconSrc: HEALTH_ICONS.sleep,
+    },
   ] as const;
 
-  const handleSleepSynced = (bed: string, wake: string) => {
-    setBedTime(bed);
-    setWakeTime(wake);
-    setTodaySleep(getTodaySleep());
-    setRegularity(getSleepRegularity());
-    bumpHealthData();
-  };
+  const fastingGood = isFastingWindowGood(nutrition, stage);
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
@@ -219,10 +264,6 @@ export default function HealthPage() {
               {
                 id: 'sleep' as const,
                 label: en ? 'Sleep' : 'Sueño',
-              },
-              {
-                id: 'wearables' as const,
-                label: 'Wearables',
               },
             ] as const
           ).map((tab) => (
@@ -244,7 +285,11 @@ export default function HealthPage() {
         {/* SUEÑO CIRCADIANO */}
         <section className="mb-6">
           <h2 className="text-sm font-semibold text-[var(--sage)] mb-3 flex items-center gap-2">
-            <span>🌙</span> Sueño circadiano
+            <SectionIcon
+              src={HEALTH_ICONS.sleep}
+              alt={en ? 'Sleep' : 'Sueño'}
+            />
+            {en ? 'Circadian sleep' : 'Sueño circadiano'}
           </h2>
           <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] space-y-4">
             <div className="grid grid-cols-2 gap-3">
@@ -316,16 +361,20 @@ export default function HealthPage() {
         {/* HIDRATACIÓN */}
         <section className="mb-6">
           <h2 className="text-sm font-semibold text-[var(--sage)] mb-3 flex items-center gap-2">
-            <span>💧</span> Hidratación
+            <SectionIcon
+              src={HEALTH_ICONS.hydration}
+              alt={en ? 'Hydration' : 'Hidratación'}
+            />
+            {en ? 'Hydration' : 'Hidratación'}
           </h2>
           <div className="glass rounded-2xl p-4 border border-[var(--border-soft)]">
             <div className="flex items-center justify-between mb-3">
               <div>
                 <p className="text-sm text-white font-medium">
-                  {hydration.glasses} / {hydration.goal} vasos
+                  {hydration.glasses} / {hydration.goal} {en ? 'glasses' : 'vasos'}
                 </p>
                 <p className="text-[11px] text-[var(--sage)]/80">
-                  ≈ {hydration.glasses * 250} ml · meta {hydration.goal * 250} ml
+                  ≈ {hydration.glasses * 250} ml · {en ? 'goal' : 'meta'} {hydration.goal * 250} ml
                 </p>
               </div>
               {isHydrationComplete(stage) && (
@@ -344,6 +393,7 @@ export default function HealthPage() {
               {Array.from({ length: hydration.goal }).map((_, i) => (
                 <button
                   key={i}
+                  type="button"
                   onClick={() => {
                     const target = i + 1;
                     const next = setHydrationGlasses(
@@ -355,13 +405,20 @@ export default function HealthPage() {
                       handleLog('hydration_daily', 'Hidratación diaria completada');
                     }
                   }}
-                  className={`w-8 h-8 rounded-lg border text-sm flex items-center justify-center transition-all ${
+                  className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-all overflow-hidden ${
                     i < hydration.glasses
-                      ? 'bg-[#7BC98A]/20 border-[#8FD99A] text-[#8FD99A]'
-                      : 'border-[var(--border-soft)] text-[var(--sage)]/60'
+                      ? 'bg-[#7BC98A]/20 border-[#8FD99A]'
+                      : 'border-[var(--border-soft)] opacity-45'
                   }`}
+                  aria-label={`${i + 1}`}
                 >
-                  💧
+                  <Image
+                    src={HEALTH_ICONS.hydration}
+                    alt=""
+                    width={20}
+                    height={20}
+                    className="w-5 h-5 object-cover rounded"
+                  />
                 </button>
               ))}
             </div>
@@ -380,35 +437,159 @@ export default function HealthPage() {
                 onClick={() => handleHydration(1)}
                 className="btn-secondary flex-1 py-2.5 text-sm"
               >
-                +1 vaso
+                +1 {en ? 'glass' : 'vaso'}
               </button>
             </div>
           </div>
         </section>
 
+        {/* AYUNO */}
+        <section className="mb-6">
+          <h2 className="text-sm font-semibold text-[var(--sage)] mb-3 flex items-center gap-2">
+            <SectionIcon
+              src={HEALTH_ICONS.fasting}
+              alt={en ? 'Fasting' : 'Ayuno'}
+            />
+            {en ? 'Fasting' : 'Ayuno'}
+          </h2>
+          <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] space-y-4">
+            {!fastingAllowed ? (
+              <p className="text-[11px] text-[var(--sage)]/80 leading-relaxed">
+                {en
+                  ? 'Conscious fasting is not a priority at this life stage. Focus on real food and regular meals with adult guidance.'
+                  : 'El ayuno consciente no es prioritario en esta etapa de vida. Enfócate en comida real y comidas regulares con supervisión adulta.'}
+              </p>
+            ) : (
+              <>
+                <p className="text-[11px] text-[var(--sage)]/80 leading-relaxed">
+                  {en
+                    ? 'Track your overnight fast from meal times. A healthy eating window is usually ≤ 12 h (≈ 12+ h overnight fast). Calories are optional.'
+                    : 'Registra el ayuno nocturno a partir de tus comidas. Una ventana de alimentación saludable suele ser ≤ 12 h (≈ 12+ h de ayuno nocturno). Las calorías son opcionales.'}
+                </p>
+
+                <div className="grid grid-cols-2 gap-2 text-center">
+                  <div className="bg-[#040404]/60 rounded-xl py-2.5 px-1">
+                    <p className="text-lg font-bold text-white">
+                      {nutrition.fastingHours != null ? `${nutrition.fastingHours}h` : '—'}
+                    </p>
+                    <p className="text-[10px] text-[var(--sage)]/80">
+                      {en ? 'Est. fast' : 'Ayuno est.'}
+                    </p>
+                  </div>
+                  <div className="bg-[#040404]/60 rounded-xl py-2.5 px-1">
+                    <p className="text-lg font-bold text-white">
+                      {nutrition.eatingWindowHours != null
+                        ? `${nutrition.eatingWindowHours}h`
+                        : '—'}
+                    </p>
+                    <p className="text-[10px] text-[var(--sage)]/80">
+                      {en ? 'Eating window' : 'Ventana comida'}
+                    </p>
+                  </div>
+                </div>
+
+                {(nutrition.firstMealTime || nutrition.lastMealTime) && (
+                  <p className="text-[11px] text-[#D8E1D9]/70 text-center">
+                    {nutrition.firstMealTime || '—'} → {nutrition.lastMealTime || '—'}
+                    {fastingGood && (
+                      <span className="ml-2 text-[#8FD99A]">
+                        ✓ {en ? 'Healthy window' : 'Ventana saludable'}
+                      </span>
+                    )}
+                  </p>
+                )}
+
+                <div className="flex flex-wrap gap-1.5">
+                  {(
+                    [
+                      { id: '12:12', label: '12:12' },
+                      { id: '14:10', label: '14:10' },
+                      { id: '16:8', label: '16:8' },
+                    ] as const
+                  ).map((p) => {
+                    const targetFast = Number(p.id.split(':')[0]);
+                    const active =
+                      nutrition.fastingHours != null &&
+                      nutrition.fastingHours >= targetFast - 0.5;
+                    return (
+                      <span
+                        key={p.id}
+                        className={`text-[10px] px-2.5 py-1 rounded-full border ${
+                          active
+                            ? 'border-[#8FD99A] text-[#8FD99A] bg-[var(--surface-active)]'
+                            : 'border-[var(--border-soft)] text-[var(--sage)]/80'
+                        }`}
+                      >
+                        {p.label}
+                      </span>
+                    );
+                  })}
+                </div>
+
+                <button
+                  type="button"
+                  disabled={loggedToday.has('fasting') || !fastingGood}
+                  onClick={() => {
+                    if (!fastingGood || loggedToday.has('fasting')) return;
+                    handleLog(
+                      'fasting',
+                      en ? 'Conscious fasting window' : 'Ayuno / ventana de comida saludable'
+                    );
+                  }}
+                  className={
+                    loggedToday.has('fasting')
+                      ? 'btn-secondary opacity-80 w-full py-2.5 text-sm'
+                      : fastingGood
+                        ? 'btn-primary w-full py-2.5 text-sm'
+                        : 'btn-secondary opacity-60 w-full py-2.5 text-sm'
+                  }
+                >
+                  {loggedToday.has('fasting')
+                    ? en
+                      ? '✓ Fasting logged today'
+                      : '✓ Ayuno registrado hoy'
+                    : fastingGood
+                      ? `${en ? 'Log fasting' : 'Registrar ayuno'} · +${getHealthPointsPreview('fasting')}`
+                      : en
+                        ? 'Log 2+ meals with window ≤ 12 h'
+                        : 'Registra 2+ comidas con ventana ≤ 12 h'}
+                </button>
+              </>
+            )}
+          </div>
+        </section>
 
         {/* ALIMENTACIÓN */}
         <section className="mb-6">
           <h2 className="text-sm font-semibold text-[var(--sage)] mb-3 flex items-center gap-2">
-            <span>🥗</span> Alimentación
+            <SectionIcon
+              src={HEALTH_ICONS.nutrition}
+              alt={en ? 'Nutrition' : 'Alimentación'}
+            />
+            {en ? 'Nutrition' : 'Alimentación'}
           </h2>
           <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] space-y-4">
             <p className="text-[11px] text-[var(--sage)]/80 leading-relaxed">
-              Enfoque bio-conservador: comida real, ventana de alimentación y ayuno consciente.
-              Las calorías son opcionales, no el centro.
+              {en
+                ? 'Bio-conservative focus: real food first. Calories are optional, not the center.'
+                : 'Enfoque bio-conservador: comida real primero. Las calorías son opcionales, no el centro.'}
             </p>
 
             {/* Resumen del día */}
             <div className="grid grid-cols-3 gap-2 text-center">
               <div className="bg-[#040404]/60 rounded-xl py-2.5 px-1">
                 <p className="text-lg font-bold text-white">{nutrition.meals.length}</p>
-                <p className="text-[10px] text-[var(--sage)]/80">Comidas</p>
+                <p className="text-[10px] text-[var(--sage)]/80">
+                  {en ? 'Meals' : 'Comidas'}
+                </p>
               </div>
               <div className="bg-[#040404]/60 rounded-xl py-2.5 px-1">
                 <p className="text-lg font-bold text-white">
                   {nutrition.eatingWindowHours != null ? `${nutrition.eatingWindowHours}h` : '—'}
                 </p>
-                <p className="text-[10px] text-[var(--sage)]/80">Ventana</p>
+                <p className="text-[10px] text-[var(--sage)]/80">
+                  {en ? 'Window' : 'Ventana'}
+                </p>
               </div>
               <div className="bg-[#040404]/60 rounded-xl py-2.5 px-1">
                 <p className="text-lg font-bold text-[#8FD99A]">
@@ -418,23 +599,18 @@ export default function HealthPage() {
               </div>
             </div>
 
-            {nutrition.fastingHours != null && (
-              <div className="flex items-center justify-between text-xs px-1">
-                <span className="text-[#D8E1D9]/70">
-                  Ayuno nocturno aprox: <strong className="text-white">{nutrition.fastingHours} h</strong>
-                </span>
-                {isFastingWindowGood(nutrition, stage) && (
-                  <span className="text-[#8FD99A]">✓ Ventana saludable</span>
-                )}
-              </div>
-            )}
-
             {/* Calidad */}
             {nutrition.meals.length > 0 && (
               <div className="flex gap-2 text-[11px]">
-                <span className="text-[#8FD99A]">Real {qualitySummary(nutrition).whole}</span>
-                <span className="text-[var(--sage)]">Mixta {qualitySummary(nutrition).mixed}</span>
-                <span className="text-amber-400/70">Procesada {qualitySummary(nutrition).processed}</span>
+                <span className="text-[#8FD99A]">
+                  {en ? 'Real' : 'Real'} {qualitySummary(nutrition).whole}
+                </span>
+                <span className="text-[var(--sage)]">
+                  {en ? 'Mixed' : 'Mixta'} {qualitySummary(nutrition).mixed}
+                </span>
+                <span className="text-amber-400/70">
+                  {en ? 'Processed' : 'Procesada'} {qualitySummary(nutrition).processed}
+                </span>
               </div>
             )}
 
@@ -452,10 +628,11 @@ export default function HealthPage() {
                       {m.estimatedKcal ? <span className="ml-1 text-[#8FD99A]/70">{m.estimatedKcal} kcal</span> : null}
                     </span>
                     <button
+                      type="button"
                       onClick={() => setNutrition(removeMeal(m.slot, m.time))}
                       className="text-[var(--sage)]/70 hover:text-red-400 text-[10px]"
                     >
-                      quitar
+                      {en ? 'remove' : 'quitar'}
                     </button>
                   </div>
                 ))}
@@ -464,16 +641,18 @@ export default function HealthPage() {
 
             {/* Formulario agregar comida */}
             <div className="border-t border-[var(--border-soft)] pt-3 space-y-3">
-              <p className="text-[11px] text-[var(--sage)]">Registrar comida</p>
+              <p className="text-[11px] text-[var(--sage)]">
+                {en ? 'Log a meal' : 'Registrar comida'}
+              </p>
               <div className="grid grid-cols-2 gap-2">
                 <select
                   value={mealSlot}
                   onChange={e => setMealSlot(e.target.value as MealSlot)}
                   className="bg-[#040404] border border-[var(--border-soft)] rounded-xl px-3 py-2.5 text-sm"
                 >
-                  <option value="breakfast">Desayuno</option>
-                  <option value="lunch">Almuerzo</option>
-                  <option value="dinner">Cena</option>
+                  <option value="breakfast">{en ? 'Breakfast' : 'Desayuno'}</option>
+                  <option value="lunch">{en ? 'Lunch' : 'Almuerzo'}</option>
+                  <option value="dinner">{en ? 'Dinner' : 'Cena'}</option>
                   <option value="snack">Snack</option>
                 </select>
                 <input
@@ -486,12 +665,13 @@ export default function HealthPage() {
 
               <div className="flex gap-2">
                 {([
-                  { id: 'whole' as const, label: 'Comida real' },
-                  { id: 'mixed' as const, label: 'Mixta' },
-                  { id: 'processed' as const, label: 'Ultraprocesada' }
+                  { id: 'whole' as const, label: en ? 'Real food' : 'Comida real' },
+                  { id: 'mixed' as const, label: en ? 'Mixed' : 'Mixta' },
+                  { id: 'processed' as const, label: en ? 'Ultra-processed' : 'Ultraprocesada' }
                 ]).map(q => (
                   <button
                     key={q.id}
+                    type="button"
                     onClick={() => setMealQuality(q.id)}
                     className={`flex-1 py-2 rounded-lg text-[11px] border transition-all ${
                       mealQuality === q.id
@@ -508,12 +688,13 @@ export default function HealthPage() {
                 <input
                   type="number"
                   inputMode="numeric"
-                  placeholder="kcal (opcional)"
+                  placeholder={en ? 'kcal (optional)' : 'kcal (opcional)'}
                   value={mealKcal}
                   onChange={e => setMealKcal(e.target.value)}
                   className="flex-1 bg-[#040404] border border-[var(--border-soft)] rounded-xl px-3 py-2.5 text-sm"
                 />
                 <button
+                  type="button"
                   onClick={() => {
                     const meal: MealLog = {
                       slot: mealSlot,
@@ -524,17 +705,12 @@ export default function HealthPage() {
                     const entry = addMeal(meal);
                     setNutrition(entry);
                     setMealKcal('');
-
-                    // Si ventana de ayuno saludable y aún no registró fasting hoy
-                    if (isFastingWindowGood(entry, stage) && !loggedToday.has('fasting')) {
-                      handleLog('fasting', 'Ayuno / ventana de comida saludable');
-                    } else {
-                      showToast('Comida registrada');
-                    }
+                    showToast(en ? 'Meal logged' : 'Comida registrada');
+                    bumpHealthData();
                   }}
                   className="btn-sm px-4 py-2.5 text-sm"
                 >
-                  Añadir
+                  {en ? 'Add' : 'Añadir'}
                 </button>
               </div>
             </div>
@@ -556,7 +732,11 @@ export default function HealthPage() {
         <section className="mb-6">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-sm font-semibold text-[var(--sage)] flex items-center gap-2">
-              <span>🏟️</span> Mis deportes
+              <SectionIcon
+                src={HEALTH_ICONS.sports}
+                alt={en ? 'Sports' : 'Deportes'}
+              />
+              {en ? 'My sports' : 'Mis deportes'}
             </h2>
             <button
               onClick={() => setShowSportForm(!showSportForm)}
@@ -690,12 +870,16 @@ export default function HealthPage() {
           return (
             <div className="mb-6">
               <h2 className="text-sm font-semibold text-[var(--sage)] mb-3 flex items-center gap-2">
-                <span>{cat.icon}</span> {cat.title}
+                <SectionIcon src={cat.iconSrc} alt={cat.title} /> {cat.title}
               </h2>
               <div className="space-y-2.5">
                 {filtered.map((action) => {
                   const pts = getHealthPointsPreview(action.actionType);
                   const done = loggedToday.has(action.actionType);
+                  const actionIcon =
+                    action.actionType === 'outdoor_sun_20min'
+                      ? HEALTH_ICONS.exerciseSun
+                      : HEALTH_ICONS.sports;
                   return (
                     <div
                       key={action.id}
@@ -707,7 +891,11 @@ export default function HealthPage() {
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-start gap-3 min-w-0">
-                          <span className="text-xl flex-shrink-0">{action.icon}</span>
+                          <SectionIcon
+                            src={actionIcon}
+                            alt={action.label}
+                            size={32}
+                          />
                           <div className="min-w-0">
                             <p className="text-sm font-medium text-white">{action.label}</p>
                             <p className="text-xs text-[#D8E1D9]/60 mt-0.5">
@@ -718,11 +906,12 @@ export default function HealthPage() {
                         <div className="flex-shrink-0 text-right">
                           <p className="text-xs text-[#8FD99A] font-medium mb-1.5">+{pts}</p>
                           <button
+                            type="button"
                             onClick={() => !done && handleLog(action.actionType, action.label)}
                             disabled={done}
                             className="btn-sm"
                           >
-                            {done ? '✓ Hecho' : 'Registrar'}
+                            {done ? (en ? '✓ Done' : '✓ Hecho') : en ? 'Log' : 'Registrar'}
                           </button>
                         </div>
                       </div>
@@ -749,40 +938,11 @@ export default function HealthPage() {
                 handleLog('cycle_log', 'Registro de ciclo / salud femenina');
               } else {
                 bumpHealthData();
-                showToast('Ciclo actualizado');
+                showToast(en ? 'Cycle updated' : 'Ciclo actualizado');
               }
             }}
           />
         )}
-          </>
-        )}
-
-        {/* Wearables: sensores, BLE/manual, Cloud OAuth y nativo (una sola vez) */}
-        {activeTab === 'wearables' && (
-          <>
-            <PhoneSensorsPanel
-              loggedToday={loggedToday}
-              onAutoLog={(actionType, label) => handleLog(actionType, label)}
-              onSleepSynced={handleSleepSynced}
-            />
-
-            <WearablesPanel
-              onAutoLog={(actionType, label) => handleLog(actionType, label)}
-              onSleepSynced={handleSleepSynced}
-            />
-
-            <Suspense
-              fallback={
-                <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] mb-4 text-sm text-[var(--sage)] animate-pulse">
-                  {en ? 'Loading cloud sync…' : 'Cargando sincronización cloud…'}
-                </div>
-              }
-            >
-              <CloudNativeSyncPanel
-                onAutoLog={(actionType, label) => handleLog(actionType, label)}
-                onSleepSynced={handleSleepSynced}
-              />
-            </Suspense>
           </>
         )}
       </main>

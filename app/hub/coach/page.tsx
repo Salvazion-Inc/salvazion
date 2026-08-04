@@ -31,7 +31,7 @@ export default function CoachPage() {
               title="Salvazion"
             >
               <Image
-                src="/coach/leon-verde-thumb.jpg"
+                src="/logo-icon.png"
                 alt="Salvazion"
                 width={36}
                 height={36}

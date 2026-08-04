@@ -57,7 +57,9 @@ export async function GET(
   const creds = getClientCredentials(provider)!;
   const state = generateState();
   const codeVerifier = generateCodeVerifier();
-  const returnTo = req.nextUrl.searchParams.get('returnTo') || '/hub/health';
+  const returnTo =
+    req.nextUrl.searchParams.get('returnTo') ||
+    '/hub/profile?settings=1&tab=wearables';
 
   await saveFlowState({
     provider,

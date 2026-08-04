@@ -1,6 +1,13 @@
 'use client';
 
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  Suspense,
+  type ReactNode,
+} from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -22,6 +29,9 @@ import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 import BillingCard from '@/components/billing/BillingCard';
 import ProfileAvatar from '@/components/profile/ProfileAvatar';
 import ClinicalRecordPanel from '@/components/health/ClinicalRecordPanel';
+import PhoneSensorsPanel from '@/components/health/PhoneSensorsPanel';
+import WearablesPanel from '@/components/health/WearablesPanel';
+import CloudNativeSyncPanel from '@/components/health/CloudNativeSyncPanel';
 import TextScaleControl from '@/components/settings/TextScaleControl';
 import ThemeControl from '@/components/settings/ThemeControl';
 import LanguageControl from '@/components/settings/LanguageControl';
@@ -35,6 +45,7 @@ import {
 } from '@/lib/solana/wallet-store';
 import { formatSalvazion } from '@/lib/solana/balances';
 import { shortenAddress } from '@/lib/solana/config';
+import { logAction, computeScores } from '@/lib/scoring/engine';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -45,23 +56,55 @@ export default function ProfilePage() {
   const [editing, setEditing] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [draft, setDraft] = useState<Partial<UserProfile>>({});
-  const [mounted, setMounted] = useState(false);
   const [confirmClear, setConfirmClear] = useState(false);
   const [linkedWallet, setLinkedWallet] = useState<LinkedWallet | null>(null);
   const [saving, setSaving] = useState(false);
-  const editingRef = useRef(editing);
-  editingRef.current = editing;
+  const [loggedHealthToday, setLoggedHealthToday] = useState<Set<string>>(
+    () => new Set()
+  );
+  /** Avoid clobbering open edit draft when async profile refresh lands. */
+  const editingRef = useRef(false);
 
   useEffect(() => {
-    setMounted(true);
-    setLinkedWallet(loadLinkedWallet());
+    editingRef.current = editing;
+  }, [editing]);
+
+  useEffect(() => {
+    // Defer client-only reads so React 19 lint doesn't flag sync setState-in-effect.
+    const bootId = requestAnimationFrame(() => {
+      setLinkedWallet(loadLinkedWallet());
+      try {
+        const sp = new URLSearchParams(window.location.search);
+        if (
+          sp.has('wearable_connected') ||
+          sp.has('wearable_error') ||
+          sp.get('tab') === 'wearables' ||
+          sp.get('settings') === '1'
+        ) {
+          setShowSettings(true);
+        }
+      } catch {
+        // ignore
+      }
+      try {
+        const scores = computeScores();
+        setLoggedHealthToday(
+          new Set(
+            scores.todayActions
+              .filter((a) => a.pillar === 'health')
+              .map((a) => a.type)
+          )
+        );
+      } catch {
+        // ignore
+      }
+    });
+
     const unsubWallet = subscribeLinkedWallet(setLinkedWallet);
     const unsubProfile = subscribeProfileUpdated(() => {
-      // Local cache write (avatar / save elsewhere) — refresh display
       const p = loadProfile();
       if (!p) return;
       setProfile(p);
-      // Keep open edit fields; only pull avatar from cache
       setDraft((d) => ({ ...d, avatarUrl: p.avatarUrl }));
     });
 
@@ -83,15 +126,12 @@ export default function ProfilePage() {
       }
       setProfile(p);
       setDraft((d) =>
-        editingRef.current
-          ? { ...d, avatarUrl: p.avatarUrl }
-          : p
+        editingRef.current ? { ...d, avatarUrl: p.avatarUrl } : p
       );
     };
 
     void pullServer();
 
-    // Resume app / return to tab → re-fetch avatar_url (web → mobile sync)
     const onResume = () => {
       void refreshProfileFromServer().then((p) => {
         if (!p?.onboardingCompleted) return;
@@ -106,12 +146,27 @@ export default function ProfilePage() {
     document.addEventListener('visibilitychange', onVis);
 
     return () => {
+      cancelAnimationFrame(bootId);
       unsubWallet();
       unsubProfile();
       window.removeEventListener('focus', onResume);
       document.removeEventListener('visibilitychange', onVis);
     };
   }, [router]);
+
+  const handleWearableAutoLog = useCallback((actionType: string) => {
+    const result = logAction(actionType);
+    if (result) {
+      setLoggedHealthToday(
+        new Set(
+          result.todayActions
+            .filter((a) => a.pillar === 'health')
+            .map((a) => a.type)
+        )
+      );
+      flash(t('common.changesSaved'));
+    }
+  }, [flash, t]);
 
   const handleSave = async () => {
     if (!draft.name?.trim() || saving) return;
@@ -139,7 +194,7 @@ export default function ProfilePage() {
     router.replace('/');
   };
 
-  if (!mounted || !profile) {
+  if (!profile) {
     return (
       <div className="min-h-screen bg-[var(--true-black)] flex items-center justify-center">
         <div className="text-[var(--accent)] text-lg animate-pulse" aria-live="polite">
@@ -229,7 +284,7 @@ export default function ProfilePage() {
               )}
             </div>
           )}
-          {(profile as any)._integrityWarning && (
+          {profile._integrityWarning && (
             <p className="text-xs text-amber-400 mt-2">
               ⚠ Datos de perfil podrían haber sido modificados externamente
             </p>
@@ -459,6 +514,36 @@ export default function ProfilePage() {
             <ThemeControl />
             <LanguageControl />
             <TextScaleControl />
+
+            <section className="pt-4 mt-2 border-t border-[var(--border-soft)] space-y-3">
+              <div>
+                <h3 className="text-sm font-semibold text-[var(--accent)]">
+                  {lang === 'en' ? 'Wearables & sensors' : 'Wearables y sensores'}
+                </h3>
+                <p className="text-[11px] text-[var(--sage)]/80 mt-1 leading-relaxed">
+                  {lang === 'en'
+                    ? 'Phone sensors, BLE devices, and cloud health sync. Connect once; Health Hub uses the data for scores.'
+                    : 'Sensores del teléfono, dispositivos BLE y sincronización cloud. Conéctalos aquí; Health Hub usa los datos para el score.'}
+                </p>
+              </div>
+              <PhoneSensorsPanel
+                loggedToday={loggedHealthToday}
+                onAutoLog={handleWearableAutoLog}
+              />
+              <WearablesPanel onAutoLog={handleWearableAutoLog} />
+              <Suspense
+                fallback={
+                  <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] text-sm text-[var(--sage)] animate-pulse">
+                    {lang === 'en'
+                      ? 'Loading cloud sync…'
+                      : 'Cargando sincronización cloud…'}
+                  </div>
+                }
+              >
+                <CloudNativeSyncPanel onAutoLog={handleWearableAutoLog} />
+              </Suspense>
+            </section>
+
             <button
               type="button"
               onClick={() => setShowSettings(false)}

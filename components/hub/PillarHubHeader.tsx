@@ -65,7 +65,7 @@ export default function PillarHubHeader({
           </Link>
           <div className="min-w-0">
             <h1
-              className="text-xl font-bold leading-tight tracking-tight"
+              className="text-xl font-bold leading-tight tracking-tight truncate whitespace-nowrap"
               style={{ color: pal.text }}
             >
               {title}

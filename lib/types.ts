@@ -68,6 +68,12 @@ export interface UserProfile {
   // Coach acceptance
   hasAcceptedLionCoach: boolean;
   onboardingCompleted: boolean;
+
+  /**
+   * Local-only flag when the profile cache checksum fails.
+   * Not persisted to Supabase.
+   */
+  _integrityWarning?: boolean;
 }
 
 export interface Scripture {

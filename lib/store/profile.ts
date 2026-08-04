@@ -106,7 +106,30 @@ function simpleChecksum(obj: unknown): string {
   return Math.abs(hash).toString(36);
 }
 
-function fromDb(row: any): Partial<UserProfile> {
+type ProfileDbRow = {
+  name?: string | null;
+  language?: string | null;
+  spiritual_maturity?: UserProfile['spiritualMaturity'] | null;
+  family_status?: UserProfile['familyStatus'] | null;
+  current_focus?: string[] | null;
+  struggles?: string[] | null;
+  preferred_bible_version?: UserProfile['preferredBibleVersion'] | null;
+  purpose?: string | null;
+  city?: string | null;
+  country?: string | null;
+  birth_date?: string | null;
+  sex?: string | null;
+  avatar_url?: string | null;
+  x_username?: string | null;
+  x_user_id?: string | null;
+  family_links?: UserProfile['familyLinks'] | null;
+  friends_links?: UserProfile['friendsLinks'] | null;
+  has_accepted_lion_coach?: boolean | null;
+  onboarding_completed?: boolean | null;
+  [key: string]: unknown;
+};
+
+function fromDb(row: ProfileDbRow | null | undefined): Partial<UserProfile> {
   if (!row) return {};
   return {
     name: row.name ?? '',
@@ -188,7 +211,7 @@ function loadLocal(): Partial<UserProfile> {
     const payload = parsed as StoredPayload;
     if (payload.checksum !== simpleChecksum(payload.data)) {
       console.warn('[Salvazion] Profile integrity check failed.');
-      return { ...payload.data, _integrityWarning: true } as any;
+      return { ...payload.data, _integrityWarning: true };
     }
     return payload.data;
   } catch {

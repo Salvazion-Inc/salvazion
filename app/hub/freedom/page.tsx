@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import Link from 'next/link';
 import BottomNav from '@/components/BottomNav';
 import { loadProfile } from '@/lib/store/profile';
 import { UserProfile } from '@/lib/types';
@@ -96,17 +95,6 @@ export default function FreedomPage() {
             </button>
           ))}
         </div>
-        <Link
-          href="/hub/swap"
-          className="flex items-center justify-between card-soft px-3.5 py-2.5 mt-2 active:scale-[0.99] transition"
-          style={{ borderColor: 'rgba(123, 201, 138, 0.35)' }}
-        >
-          <div>
-            <p className="text-xs font-medium" style={{ color: '#8FD99A' }}>Swap · $SALVAZION</p>
-            <p className="text-[10px] text-[var(--sage)]">Jupiter · libertad económica</p>
-          </div>
-          <span className="text-sm" style={{ color: '#7BC98A' }}>→</span>
-        </Link>
       </PillarHubHeader>
 
       <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto">

@@ -211,11 +211,45 @@ export default function BiblePage() {
       : bookMeta.nameEs
     : selectedBook;
 
+  const mainTabs = (
+    <div className="segment-soft mb-2 mt-3">
+      {(
+        [
+          { id: 'bible' as MainTab, key: 'bible.title' },
+          { id: 'prayer' as MainTab, key: 'bible.prayer' },
+          { id: 'devotional' as MainTab, key: 'bible.devotional' },
+        ] as const
+      ).map((tab) =>
+        tab.id === 'devotional' ? (
+          <Link
+            key={tab.id}
+            href="/hub/devotional"
+            data-active={mainTab === 'devotional' ? 'true' : undefined}
+          >
+            {t(tab.key)}
+          </Link>
+        ) : (
+          <button
+            key={tab.id}
+            type="button"
+            data-active={mainTab === tab.id}
+            onClick={() => {
+              setMainTab(tab.id);
+              if (tab.id !== 'bible') setChromeCollapsed(false);
+            }}
+          >
+            {t(tab.key)}
+          </button>
+        )
+      )}
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
-      {/* Header — Salvation pillar (manual collapse while reading) */}
-      <header className="page-header px-5 sticky top-0 z-40">
-        {chromeCollapsed && isReading ? (
+      {/* Header — same height chrome as Health/Freedom (title + score + main tabs) */}
+      {chromeCollapsed && isReading ? (
+        <header className="page-header px-5 sticky top-0 z-40">
           <div className="pt-3 pb-2.5 flex items-center gap-2">
             <Link href="/hub/dashboard" className="back-btn shrink-0" aria-label={t('common.back')}>
               ←
@@ -260,109 +294,78 @@ export default function BiblePage() {
               </button>
             </div>
           </div>
-        ) : (
-          <PillarHubHeader
-            as="div"
-            pillar="salvation"
-            score={salvationScore}
-            className="!pt-3 !px-0 !pb-0 bg-transparent border-0 shadow-none"
-            sticky={false}
-            actions={
-              isReading ? (
-                <button
-                  type="button"
-                  onClick={collapseChrome}
-                  className="pill-soft text-[10px]"
-                  title={t('bible.collapseChrome')}
-                >
-                  {t('bible.collapseChrome')}
-                </button>
-              ) : null
-            }
-          >
-            {/* Main tabs: Bible | Prayer | Devotional */}
-            <div className="segment-soft mb-3 mt-3">
+        </header>
+      ) : (
+        <PillarHubHeader
+          pillar="salvation"
+          score={salvationScore}
+          actions={
+            isReading ? (
+              <button
+                type="button"
+                onClick={collapseChrome}
+                className="pill-soft text-[10px]"
+                title={t('bible.collapseChrome')}
+              >
+                {t('bible.collapseChrome')}
+              </button>
+            ) : null
+          }
+        >
+          {mainTabs}
+        </PillarHubHeader>
+      )}
+
+      {/* Content — Bible tools live here so hub chrome matches Health/Freedom height */}
+      <main className="flex-1 px-5 pt-3 pb-28 overflow-hidden flex flex-col min-h-0">
+        {mainTab === 'bible' && !chromeCollapsed && (
+          <div className="shrink-0 max-w-lg mx-auto w-full mb-3 space-y-3">
+            {/* Bible sub-modes: Read + Explore tools (library / search) */}
+            <div className="segment-soft">
               {(
                 [
-                  { id: 'bible' as MainTab, key: 'bible.title' },
-                  { id: 'prayer' as MainTab, key: 'bible.prayer' },
-                  { id: 'devotional' as MainTab, key: 'bible.devotional' },
+                  { id: 'read' as BibleMode, key: 'bible.readMode' },
+                  { id: 'library' as BibleMode, key: 'bible.library' },
+                  { id: 'search' as BibleMode, key: 'bible.search' },
                 ] as const
-              ).map((tab) =>
-                tab.id === 'devotional' ? (
-                  <Link
-                    key={tab.id}
-                    href="/hub/devotional"
-                    data-active={mainTab === 'devotional' ? 'true' : undefined}
-                  >
-                    {t(tab.key)}
-                  </Link>
-                ) : (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    data-active={mainTab === tab.id}
-                    onClick={() => {
-                      setMainTab(tab.id);
-                      if (tab.id !== 'bible') setChromeCollapsed(false);
-                    }}
-                  >
-                    {t(tab.key)}
-                  </button>
-                )
-              )}
+              ).map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  data-active={bibleMode === tab.id}
+                  onClick={() => {
+                    setBibleMode(tab.id);
+                    if (tab.id !== 'read') setChromeCollapsed(false);
+                  }}
+                >
+                  {t(tab.key)}
+                </button>
+              ))}
             </div>
 
-            {/* Bible sub-modes: Read + Explore tools (library / search) */}
-            {mainTab === 'bible' && (
-              <div className="segment-soft mb-3">
-                {(
-                  [
-                    { id: 'read' as BibleMode, key: 'bible.readMode' },
-                    { id: 'library' as BibleMode, key: 'bible.library' },
-                    { id: 'search' as BibleMode, key: 'bible.search' },
-                  ] as const
-                ).map((tab) => (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    data-active={bibleMode === tab.id}
-                    onClick={() => {
-                      setBibleMode(tab.id);
-                      if (tab.id !== 'read') setChromeCollapsed(false);
-                    }}
-                  >
-                    {t(tab.key)}
-                  </button>
-                ))}
-              </div>
-            )}
+            {/* Language */}
+            <div className="flex flex-wrap gap-2">
+              {(
+                [
+                  { id: 'es' as BibleLanguage, label: 'ES · Reina Valera' },
+                  { id: 'en' as BibleLanguage, label: 'EN · King James' },
+                  { id: 'original' as BibleLanguage, label: 'Original · Heb/Gr' },
+                ] as const
+              ).map((lang) => (
+                <button
+                  key={lang.id}
+                  type="button"
+                  onClick={() => setLanguage(lang.id)}
+                  className={`pill-soft ${language === lang.id ? 'pill-soft-active' : ''}`}
+                >
+                  {lang.label}
+                </button>
+              ))}
+            </div>
 
-            {/* Language — hide on pure prayer tab */}
-            {mainTab !== 'prayer' && (
-              <div className="flex flex-wrap gap-2">
-                {(
-                  [
-                    { id: 'es' as BibleLanguage, label: 'ES · Reina Valera' },
-                    { id: 'en' as BibleLanguage, label: 'EN · King James' },
-                    { id: 'original' as BibleLanguage, label: 'Original · Heb/Gr' },
-                  ] as const
-                ).map((lang) => (
-                  <button
-                    key={lang.id}
-                    type="button"
-                    onClick={() => setLanguage(lang.id)}
-                    className={`pill-soft ${language === lang.id ? 'pill-soft-active' : ''}`}
-                  >
-                    {lang.label}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Book carousel + chapter — only when reading in Bible tab */}
-            {mainTab === 'bible' && bibleMode === 'read' && (
-              <div className="mt-3 -mx-5">
+            {/* Book carousel + chapter — only when reading */}
+            {bibleMode === 'read' && (
+              <div className="-mx-5">
                 <div className="flex items-end justify-between gap-2 px-5 mb-2">
                   <div className="min-w-0">
                     <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70">
@@ -442,12 +445,9 @@ export default function BiblePage() {
                 </div>
               </div>
             )}
-          </PillarHubHeader>
+          </div>
         )}
-      </header>
 
-      {/* Content */}
-      <main className="flex-1 px-5 pt-3 pb-28 overflow-hidden flex flex-col min-h-0">
         {mainTab === 'prayer' ? (
           <PrayerMotivesPanel
             lang={uiLang === 'en' ? 'en' : 'es'}

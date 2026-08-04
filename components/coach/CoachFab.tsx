@@ -35,8 +35,8 @@ export default function CoachFab() {
       title={label}
     >
       <Image
-        src="/coach/leon-verde-thumb.jpg"
-        alt=""
+        src="/logo-icon.png"
+        alt="Salvazion"
         width={56}
         height={56}
         className="object-cover w-full h-full"

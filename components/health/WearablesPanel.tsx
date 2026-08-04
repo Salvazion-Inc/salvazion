@@ -67,19 +67,28 @@ export default function WearablesPanel({ onAutoLog, onSleepSynced }: Props) {
   }, []);
 
   useEffect(() => {
-    refresh();
     const mon = getBleHeartRateMonitor();
-    setLiveHr(mon.current);
-    return mon.subscribe(setLiveHr);
+    const id = requestAnimationFrame(() => {
+      refresh();
+      setLiveHr(mon.current);
+    });
+    const unsub = mon.subscribe(setLiveHr);
+    return () => {
+      cancelAnimationFrame(id);
+      unsub();
+    };
   }, [refresh]);
 
   const catalogItem = useMemo(() => getCatalogItem(selectedBrand), [selectedBrand]);
 
-  useEffect(() => {
-    if (!catalogItem) return;
-    const preferred = catalogItem.connectModes[0];
-    setConnectMode(preferred);
-  }, [catalogItem]);
+  const pickBrand = useCallback(
+    (brandId: WearableBrandId) => {
+      setSelectedBrand(brandId);
+      const item = getCatalogItem(brandId);
+      if (item?.connectModes[0]) setConnectMode(item.connectModes[0]);
+    },
+    []
+  );
 
   const runAutoLog = () => {
     const logged = tryWearableAutoLogs(onAutoLog, {
@@ -107,8 +116,10 @@ export default function WearablesPanel({ onAutoLog, onSleepSynced }: Props) {
       (connectMode === 'oauth' || connectMode === 'oauth_planned') &&
       OAUTH_PROVIDERS.has(selectedBrand)
     ) {
-      const returnTo = encodeURIComponent('/hub/health?tab=wearables');
-      window.location.href = `/api/wearables/oauth/${selectedBrand}/start?returnTo=${returnTo}`;
+      const returnTo = encodeURIComponent('/hub/profile?settings=1&tab=wearables');
+      window.location.assign(
+        `/api/wearables/oauth/${selectedBrand}/start?returnTo=${returnTo}`
+      );
       return;
     }
 
@@ -373,9 +384,11 @@ export default function WearablesPanel({ onAutoLog, onSleepSynced }: Props) {
                           className="btn-sm"
                           onClick={() => {
                             const returnTo = encodeURIComponent(
-                              '/hub/health?tab=wearables'
+                              '/hub/profile?settings=1&tab=wearables'
                             );
-                            window.location.href = `/api/wearables/oauth/${d.brandId}/start?returnTo=${returnTo}`;
+                            window.location.assign(
+                              `/api/wearables/oauth/${d.brandId}/start?returnTo=${returnTo}`
+                            );
                           }}
                         >
                           {t('wearables.connectOAuth')}
@@ -404,7 +417,7 @@ export default function WearablesPanel({ onAutoLog, onSleepSynced }: Props) {
                 <button
                   key={item.brandId}
                   type="button"
-                  onClick={() => setSelectedBrand(item.brandId)}
+                  onClick={() => pickBrand(item.brandId)}
                   className={`text-left px-3 py-2 rounded-xl border text-xs transition ${
                     selectedBrand === item.brandId
                       ? 'border-[var(--border-strong)] bg-[var(--surface-active)] text-[var(--accent)]'

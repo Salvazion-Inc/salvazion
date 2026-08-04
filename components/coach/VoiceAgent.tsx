@@ -224,7 +224,7 @@ export default function VoiceAgent({
           } ${compact ? 'w-14 h-14' : 'w-20 h-20'}`}
         >
           <Image
-            src="/coach/leon-verde.jpg"
+            src="/logo-icon.png"
             alt="Salvazion"
             fill
             className="object-cover"

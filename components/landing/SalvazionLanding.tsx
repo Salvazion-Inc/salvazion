@@ -514,9 +514,13 @@ export default function SalvazionLanding() {
             <WalletConnectCard showJupiter={false} />
             <div className="card-soft p-3">
               <p className="text-center text-[10px] text-[var(--sage)] mb-2 uppercase tracking-wider">
-                Jupiter · Solana
+                Jupiter Ultra · Solana
               </p>
-              <JupiterSwap mode="modal" triggerLabel={t.token.buy} />
+              {/*
+                Opens Jupiter Plugin modal preselected SOL → $SALVAZION.
+                Ultra routes organic mints; Metis (legacy Terminal) returned TOKEN_NOT_TRADABLE.
+              */}
+              <JupiterSwap mode="modal" triggerLabel={t.token.buy} showFallbackLink />
             </div>
           </div>
         </div>

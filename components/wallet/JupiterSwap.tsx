@@ -2,10 +2,11 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
+import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import {
   buildJupiterInitOptions,
+  JUPITER_PLUGIN_SCRIPT,
   JUPITER_SWAP_URL,
-  JUPITER_TERMINAL_SCRIPT,
   type JupiterDisplayMode,
 } from '@/lib/solana/jupiter';
 import { useI18n } from '@/components/I18nProvider';
@@ -24,7 +25,7 @@ function loadJupiterScript(loadErrorMsg: string): Promise<void> {
   if (window.Jupiter?.init) return Promise.resolve();
 
   const existing = document.querySelector<HTMLScriptElement>(
-    `script[src="${JUPITER_TERMINAL_SCRIPT}"]`
+    `script[src="${JUPITER_PLUGIN_SCRIPT}"]`
   );
   if (existing) {
     return new Promise((resolve, reject) => {
@@ -41,7 +42,7 @@ function loadJupiterScript(loadErrorMsg: string): Promise<void> {
 
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = JUPITER_TERMINAL_SCRIPT;
+    script.src = JUPITER_PLUGIN_SCRIPT;
     script.async = true;
     script.dataset.preload = 'true';
     script.onload = () => resolve();
@@ -51,8 +52,9 @@ function loadJupiterScript(loadErrorMsg: string): Promise<void> {
 }
 
 /**
- * Jupiter Terminal — swap SOL / tokens / $SALVAZION inside Salvazion.
- * Syncs with the app wallet-adapter session (passthrough).
+ * Jupiter Plugin (Ultra) — buy/swap $SALVAZION inside Salvazion.
+ * Uses Ultra routing (token is organic/unknown; Metis marks it TOKEN_NOT_TRADABLE).
+ * When a wallet is already connected, passes it through; otherwise Plugin owns connect UI.
  */
 export default function JupiterSwap({
   mode = 'integrated',
@@ -62,27 +64,36 @@ export default function JupiterSwap({
 }: Props) {
   const { t } = useI18n();
   const reactId = useId().replace(/:/g, '');
-  const targetId = `jupiter-terminal-${reactId}`;
+  const targetId = `jupiter-plugin-${reactId}`;
   const wallet = useWallet();
+  const { setVisible: setWalletModalVisible } = useWalletModal();
   const [ready, setReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(mode === 'integrated');
   const inited = useRef(false);
+  const passthroughRef = useRef(false);
+  const walletRef = useRef(wallet);
+  walletRef.current = wallet;
 
   const label = triggerLabel || t('swap.defaultTrigger');
 
+  const requestConnectWallet = useCallback(() => {
+    setWalletModalVisible(true);
+  }, [setWalletModalVisible]);
+
   const syncWallet = useCallback(() => {
     if (typeof window === 'undefined' || !window.Jupiter?.syncProps) return;
+    if (!passthroughRef.current) return;
     try {
       window.Jupiter.syncProps({
-        passthroughWalletContextState: wallet,
+        passthroughWalletContextState: walletRef.current,
       });
     } catch {
-      // Terminal may not be ready yet
+      // Plugin may not be ready yet
     }
-  }, [wallet]);
+  }, []);
 
-  const initTerminal = useCallback(async () => {
+  const initPlugin = useCallback(async () => {
     setError(null);
     try {
       await loadJupiterScript(t('swap.loadError'));
@@ -90,37 +101,56 @@ export default function JupiterSwap({
         throw new Error(t('swap.unavailable'));
       }
 
-      // Close previous instance when re-init (route changes / HMR)
+      // Close previous instance when re-init (route changes / HMR / re-open modal)
       try {
         window.Jupiter.close?.();
       } catch {
         // ignore
       }
 
-      const config = buildJupiterInitOptions(
+      const w = walletRef.current;
+      // Passthrough only when already connected so guests get Plugin's own wallet UI.
+      const usePassthrough = Boolean(w.connected && w.publicKey);
+      passthroughRef.current = usePassthrough;
+
+      const config = buildJupiterInitOptions({
         mode,
-        mode === 'integrated' ? targetId : undefined
-      );
+        targetId: mode === 'integrated' ? targetId : undefined,
+        enableWalletPassthrough: usePassthrough,
+        walletContext: usePassthrough ? w : undefined,
+        onRequestConnectWallet: requestConnectWallet,
+      });
+
       window.Jupiter.init(config);
       inited.current = true;
       setReady(true);
-      // Passthrough after paint
-      requestAnimationFrame(() => syncWallet());
+
+      if (usePassthrough) {
+        requestAnimationFrame(() => syncWallet());
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : t('swap.initError'));
       setReady(false);
+      // Hard fallback: open jup.ag so Buy never dead-ends
+      if (mode === 'modal' || mode === 'widget') {
+        try {
+          window.open(JUPITER_SWAP_URL, '_blank', 'noopener,noreferrer');
+        } catch {
+          // ignore popup blockers
+        }
+      }
     } finally {
       setLoading(false);
     }
-  }, [mode, targetId, syncWallet, t]);
+  }, [mode, targetId, requestConnectWallet, syncWallet, t]);
 
-  // Integrated: mount terminal when the container is in the DOM
+  // Integrated: mount plugin when the container is in the DOM
   useEffect(() => {
     if (mode !== 'integrated') return;
     let cancelled = false;
     (async () => {
       setLoading(true);
-      if (!cancelled) await initTerminal();
+      if (!cancelled) await initPlugin();
     })();
     return () => {
       cancelled = true;
@@ -130,17 +160,19 @@ export default function JupiterSwap({
         // ignore
       }
       inited.current = false;
+      passthroughRef.current = false;
     };
-  }, [mode, initTerminal]);
+  }, [mode, initPlugin]);
 
-  // Keep Jupiter in sync with connect/disconnect
+  // Keep Plugin in sync when host wallet connects/disconnects (passthrough mode)
   useEffect(() => {
-    if (ready) syncWallet();
-  }, [ready, syncWallet, wallet.connected, wallet.publicKey]);
+    if (!ready || !passthroughRef.current) return;
+    syncWallet();
+  }, [ready, syncWallet, wallet.connected, wallet.publicKey?.toBase58()]);
 
   const openModal = async () => {
     setLoading(true);
-    await initTerminal();
+    await initPlugin();
   };
 
   if (mode === 'modal' || mode === 'widget') {
@@ -148,14 +180,26 @@ export default function JupiterSwap({
       <div className={className}>
         <button
           type="button"
-          onClick={openModal}
+          onClick={() => {
+            void openModal();
+          }}
           disabled={loading}
           className="w-full py-3 rounded-xl bg-gradient-to-r from-[#8FD99A] to-[#6B8F6E] text-[#040404] font-semibold text-sm hover:opacity-90 transition disabled:opacity-50"
         >
           {loading ? t('swap.opening') : label}
         </button>
         {error && (
-          <p className="text-xs text-red-400 mt-2">{error}</p>
+          <p className="text-xs text-red-400 mt-2">
+            {error}{' '}
+            <a
+              href={JUPITER_SWAP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-[#8FD99A]"
+            >
+              {t('swap.continueOnJup')}
+            </a>
+          </p>
         )}
         {showFallbackLink && (
           <a
@@ -197,7 +241,7 @@ export default function JupiterSwap({
         className="w-full overflow-hidden rounded-2xl border border-[var(--border-soft)] bg-[#0a0a0a]"
         style={{ minHeight: loading ? 0 : 560 }}
       />
-      {showFallbackLink && ready && (
+      {showFallbackLink && (
         <a
           href={JUPITER_SWAP_URL}
           target="_blank"

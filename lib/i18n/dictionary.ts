@@ -306,9 +306,9 @@ export const dictionary = {
     },
     swap: {
       title: 'Swap Jupiter',
-      subtitle: 'Compra y vende con el mejor enrutamiento de Jupiter en Solana',
+      subtitle: 'Compra y vende $SALVAZION con Jupiter Ultra en Solana',
       mint: 'Mint',
-      terminal: 'Jupiter Terminal',
+      terminal: 'Jupiter Plugin',
       mainnet: 'Mainnet',
       disclaimer:
         'Los swaps se firman en tu billetera. Salvazion no custodia fondos. Usa un RPC propio en producción para mejor fiabilidad.',
@@ -319,9 +319,9 @@ export const dictionary = {
       opening: 'Abriendo Jupiter…',
       loading: 'Cargando Jupiter…',
       unavailable: 'Jupiter no está disponible en este navegador.',
-      loadError: 'No se pudo cargar Jupiter Terminal',
+      loadError: 'No se pudo cargar Jupiter Plugin',
       initError: 'Error al iniciar Jupiter',
-      defaultTrigger: 'Swap con Jupiter',
+      defaultTrigger: 'Comprar $SALVAZION',
     },
     sensors: {
       title: 'Sensores del celular',
@@ -1158,9 +1158,9 @@ export const dictionary = {
     },
     swap: {
       title: 'Jupiter Swap',
-      subtitle: 'Buy and sell with Jupiter’s best routing on Solana',
+      subtitle: 'Buy and sell $SALVAZION with Jupiter Ultra on Solana',
       mint: 'Mint',
-      terminal: 'Jupiter Terminal',
+      terminal: 'Jupiter Plugin',
       mainnet: 'Mainnet',
       disclaimer:
         'Swaps are signed in your wallet. Salvazion does not custody funds. Use your own RPC in production for reliability.',
@@ -1171,9 +1171,9 @@ export const dictionary = {
       opening: 'Opening Jupiter…',
       loading: 'Loading Jupiter…',
       unavailable: 'Jupiter is not available in this browser.',
-      loadError: 'Could not load Jupiter Terminal',
+      loadError: 'Could not load Jupiter Plugin',
       initError: 'Error starting Jupiter',
-      defaultTrigger: 'Swap with Jupiter',
+      defaultTrigger: 'Buy $SALVAZION',
     },
     sensors: {
       title: 'Phone sensors',

@@ -41,11 +41,11 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              // Jupiter Terminal loads from terminal.jup.ag
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://terminal.jup.ag https://*.jup.ag",
-              "style-src 'self' 'unsafe-inline' https://terminal.jup.ag https://*.jup.ag https://fonts.googleapis.com https://fonts.reown.com",
-              "img-src 'self' data: blob: https: https://images-na.ssl-images-amazon.com https://m.media-amazon.com https://covers.openlibrary.org https://books.google.com",
-              "font-src 'self' data: https://terminal.jup.ag https://*.jup.ag https://fonts.gstatic.com https://fonts.reown.com",
+              // Jupiter Plugin (Ultra) — plugin.jup.ag; legacy terminal.jup.ag still allowed
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plugin.jup.ag https://terminal.jup.ag https://*.jup.ag",
+              "style-src 'self' 'unsafe-inline' https://plugin.jup.ag https://terminal.jup.ag https://*.jup.ag https://fonts.googleapis.com https://fonts.reown.com",
+              "img-src 'self' data: blob: https: https://images-na.ssl-images-amazon.com https://m.media-amazon.com https://covers.openlibrary.org https://books.google.com https://ipfs.io https://*.ipfs.io",
+              "font-src 'self' data: https://plugin.jup.ag https://terminal.jup.ag https://*.jup.ag https://fonts.gstatic.com https://fonts.reown.com",
               // Supabase + Solana RPC + wallets + Jupiter APIs
               [
                 "connect-src 'self'",
@@ -82,14 +82,19 @@ const nextConfig: NextConfig = {
                 "https://*.solflare.com",
                 "https://jup.ag",
                 "https://*.jup.ag",
+                "https://plugin.jup.ag",
+                "https://terminal.jup.ag",
                 "https://quote-api.jup.ag",
                 "https://price.jup.ag",
                 "https://api.jup.ag",
                 "https://lite-api.jup.ag",
                 "https://token.jup.ag",
+                "https://tokens.jup.ag",
                 "https://stats.jup.ag",
                 "https://cache.jup.ag",
                 "https://worker.jup.ag",
+                "https://ipfs.io",
+                "https://*.ipfs.io",
                 "wss://*.jup.ag",
                 // WalletConnect / Reown (Jupiter Mobile QR)
                 "https://*.walletconnect.com",
@@ -107,7 +112,7 @@ const nextConfig: NextConfig = {
               ].join(" "),
               "worker-src 'self' blob:",
               "child-src 'self' blob:",
-              "frame-src 'self' https://*.phantom.app https://*.solflare.com https://jup.ag https://*.jup.ag https://terminal.jup.ag https://verify.walletconnect.com https://verify.walletconnect.org https://*.walletconnect.com https://*.walletconnect.org https://www.openstreetmap.org https://openstreetmap.org",
+              "frame-src 'self' https://*.phantom.app https://*.solflare.com https://jup.ag https://*.jup.ag https://plugin.jup.ag https://terminal.jup.ag https://verify.walletconnect.com https://verify.walletconnect.org https://*.walletconnect.com https://*.walletconnect.org https://www.openstreetmap.org https://openstreetmap.org",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",

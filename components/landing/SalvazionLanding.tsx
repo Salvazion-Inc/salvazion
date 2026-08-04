@@ -15,7 +15,6 @@ import {
 } from '@/components/Icons';
 import { SUPPORT_EMAIL, SUPPORT_MAILTO } from '@/lib/config/site';
 import { PLAN_COPY, PREMIUM_FEATURE_LIST } from '@/lib/billing/plans';
-import { GREEN_LION_KINGS_URL } from '@/lib/freedom/x-communities';
 import FlatFlag from '@/components/ui/FlatFlag';
 import LandingBlog from '@/components/landing/LandingBlog';
 
@@ -23,26 +22,9 @@ const JUPITER_BUY =
   'https://jup.ag/swap?inputMint=So11111111111111111111111111111111111111112&outputMint=7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2';
 const MINT = '7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2';
 
-/** Official X (Twitter) presence — Freedom / community */
+/** Official X (Twitter) presence */
 const X_ACCOUNT_URL = 'https://x.com/salvazion_';
 const X_ARTICLES_URL = 'https://x.com/salvazion_/articles';
-const X_COMMUNITY_LINKS = [
-  {
-    id: 'green-lion-kings',
-    href: GREEN_LION_KINGS_URL,
-    accent: '#8FD99A',
-  },
-  {
-    id: 'x-articles',
-    href: X_ARTICLES_URL,
-    accent: '#4A9EFF',
-  },
-  {
-    id: 'x-account',
-    href: X_ACCOUNT_URL,
-    accent: '#F5F7F5',
-  },
-] as const;
 
 export default function SalvazionLanding() {
   const { lang, setLang } = useI18n();
@@ -76,23 +58,20 @@ export default function SalvazionLanding() {
             <a href="#app" className="hover:text-[var(--accent)] transition-colors">
               {t.nav.app}
             </a>
-            <a href="#blog" className="hover:text-[var(--accent)] transition-colors">
-              {t.nav.blog}
-            </a>
             <a href="#pricing" className="hover:text-[var(--accent)] transition-colors">
               {t.nav.pricing}
             </a>
-            <a href="#community" className="hover:text-[var(--accent)] transition-colors">
-              {t.nav.community}
-            </a>
-            <a href="#purpose" className="hover:text-[var(--accent)] transition-colors">
-              {t.nav.purpose}
+            <a href="#salvators" className="hover:text-[var(--accent)] transition-colors">
+              {t.nav.salvators}
             </a>
             <a href="#token" className="hover:text-[var(--accent)] transition-colors">
               {t.nav.token}
             </a>
             <a href="#team" className="hover:text-[var(--accent)] transition-colors">
               {t.nav.team}
+            </a>
+            <a href="#blog" className="hover:text-[var(--accent)] transition-colors">
+              {t.nav.blog}
             </a>
           </div>
 
@@ -210,7 +189,7 @@ export default function SalvazionLanding() {
         </div>
       </section>
 
-      {/* One App — fused product (no separate AI pillars) */}
+      {/* One App + Purpose fused */}
       <section id="app" className="py-16 sm:py-20 border-t border-[var(--border-soft)]">
         <div className="max-w-6xl mx-auto px-5">
           <div className="text-center mb-10">
@@ -221,9 +200,12 @@ export default function SalvazionLanding() {
             <p className="mt-3 max-w-2xl mx-auto text-sm text-[var(--sage)] leading-relaxed">
               {t.app.subtitle}
             </p>
+            <p className="mt-5 max-w-3xl mx-auto text-base sm:text-lg leading-relaxed text-[#D8E1D9]/85">
+              {t.app.purposeBody}
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-4 mb-12">
+          <div className="grid md:grid-cols-3 gap-4 mb-10">
             {t.app.areas.map((area) => (
               <div
                 key={area.name}
@@ -254,34 +236,18 @@ export default function SalvazionLanding() {
             ))}
           </div>
 
-          <div className="text-center mb-8">
-            <h3 className="text-lg font-semibold text-white tracking-tight">{t.app.featuresTitle}</h3>
-            <p className="mt-1 text-xs text-[var(--sage)]">{t.app.featuresSubtitle}</p>
+          <div className="grid sm:grid-cols-3 gap-3 max-w-4xl mx-auto mb-10">
+            {t.app.values.map((v) => (
+              <div key={v.title} className="card-soft p-4 text-left">
+                <p className="text-xs font-semibold text-[var(--accent)] uppercase tracking-wider">
+                  {v.title}
+                </p>
+                <p className="text-xs text-[var(--sage)] mt-1.5 leading-relaxed">{v.body}</p>
+              </div>
+            ))}
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {features.map((f) => {
-              const Icon = f.Icon;
-              return (
-                <div
-                  key={f.key}
-                  className="flex gap-3 glass rounded-2xl p-4 border border-[var(--border-soft)]"
-                >
-                  <div className="shrink-0 mt-0.5">
-                    <Icon size={28} active />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-white">{t.app.features[f.key].title}</h3>
-                    <p className="text-xs text-[var(--sage)] mt-1 leading-relaxed">
-                      {t.app.features[f.key].body}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="mt-10 text-center">
+          <div className="text-center">
             <Link href="/auth/login" className="btn-primary sm:w-auto sm:min-w-[220px] inline-flex">
               {t.app.cta}
             </Link>
@@ -369,26 +335,36 @@ export default function SalvazionLanding() {
           <p className="mt-6 text-center text-[11px] text-[var(--sage)]/80 leading-relaxed max-w-xl mx-auto">
             {t.pricing.stripeNote}
           </p>
-        </div>
-      </section>
 
-      {/* Purpose */}
-      <section id="purpose" className="py-16 sm:py-20 border-t border-[var(--border-soft)]">
-        <div className="max-w-3xl mx-auto px-5 text-center">
-          <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">
-            {t.purpose.eyebrow}
-          </p>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight mb-6">{t.purpose.title}</h2>
-          <p className="text-base sm:text-lg leading-relaxed text-[#D8E1D9]/85">{t.purpose.body}</p>
-          <div className="mt-8 grid sm:grid-cols-3 gap-3 text-left">
-            {t.purpose.values.map((v) => (
-              <div key={v.title} className="card-soft p-4">
-                <p className="text-xs font-semibold text-[var(--accent)] uppercase tracking-wider">
-                  {v.title}
-                </p>
-                <p className="text-xs text-[var(--sage)] mt-1.5 leading-relaxed">{v.body}</p>
-              </div>
-            ))}
+          {/* What you can do — features moved from App into Pricing */}
+          <div className="mt-14 text-center mb-8">
+            <h3 className="text-lg font-semibold text-white tracking-tight">
+              {t.pricing.featuresTitle}
+            </h3>
+            <p className="mt-1 text-xs text-[var(--sage)]">{t.pricing.featuresSubtitle}</p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {features.map((f) => {
+              const Icon = f.Icon;
+              return (
+                <div
+                  key={f.key}
+                  className="flex gap-3 glass rounded-2xl p-4 border border-[var(--border-soft)]"
+                >
+                  <div className="shrink-0 mt-0.5">
+                    <Icon size={28} active />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-white">
+                      {t.pricing.features[f.key].title}
+                    </h3>
+                    <p className="text-xs text-[var(--sage)] mt-1 leading-relaxed">
+                      {t.pricing.features[f.key].body}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -441,108 +417,6 @@ export default function SalvazionLanding() {
           <p className="mt-5 text-center text-sm sm:text-base text-[#D8E1D9]/90 max-w-2xl mx-auto leading-relaxed">
             {t.salvators.caption}
           </p>
-        </div>
-      </section>
-
-      {/* Matrix — Spiritual Revival (from salvazion.org Canva) */}
-      <section
-        id="revival"
-        className="py-16 sm:py-20 border-t border-[var(--border-soft)] bg-zinc-950/40"
-        aria-labelledby="revival-heading"
-      >
-        <div className="max-w-5xl mx-auto px-5">
-          <div className="text-center mb-8">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">
-              {t.revival.eyebrow}
-            </p>
-            <h2
-              id="revival-heading"
-              className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-[var(--accent)] neon-text"
-            >
-              {t.revival.title}
-            </h2>
-          </div>
-          <div className="relative rounded-3xl overflow-hidden border border-[var(--border-soft)] card-soft bg-black">
-            <video
-              key={`matrix-${lang}`}
-              className="w-full aspect-video object-cover"
-              src={
-                lang === 'es'
-                  ? '/videos/matrix-spiritual-revival-es.mp4'
-                  : '/videos/matrix-spiritual-revival-en.mp4'
-              }
-              poster="/videos/matrix-spiritual-revival-poster.jpg"
-              autoPlay
-              muted
-              loop
-              playsInline
-              controls
-              preload="metadata"
-              aria-label={t.revival.title}
-            />
-          </div>
-          <p className="mt-5 text-center text-sm text-[var(--sage)] max-w-xl mx-auto leading-relaxed">
-            {t.revival.body}
-          </p>
-        </div>
-      </section>
-
-      {/* Blog — all @salvazion_ X Articles · filter Salvation / Health / Freedom */}
-      <LandingBlog lang={lang} copy={t.blog} />
-
-      {/* Community on X */}
-      <section
-        id="community"
-        className="py-16 sm:py-20 border-t border-[var(--border-soft)] bg-zinc-950/30"
-        aria-labelledby="community-heading"
-      >
-        <div className="max-w-5xl mx-auto px-5">
-          <div className="text-center mb-10">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">
-              {t.community.eyebrow}
-            </p>
-            <h2
-              id="community-heading"
-              className="font-display text-3xl sm:text-4xl font-bold tracking-tight"
-            >
-              {t.community.title}
-            </h2>
-            <p className="mt-3 max-w-2xl mx-auto text-sm text-[var(--sage)] leading-relaxed">
-              {t.community.subtitle}
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-3 gap-4">
-            {X_COMMUNITY_LINKS.map((link) => {
-              const item = t.community.links[link.id];
-              return (
-                <a
-                  key={link.id}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="card-soft p-6 flex flex-col min-h-[180px] border-t-2 transition hover:border-[var(--border-strong)] hover:bg-white/[0.03] group"
-                  style={{ borderTopColor: link.accent }}
-                >
-                  <p
-                    className="text-[10px] uppercase tracking-[0.2em] mb-2"
-                    style={{ color: link.accent }}
-                  >
-                    {item.badge}
-                  </p>
-                  <h3 className="text-lg font-semibold text-white tracking-tight group-hover:text-[var(--accent)] transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-[#D8E1D9]/80 leading-relaxed flex-1">
-                    {item.body}
-                  </p>
-                  <p className="mt-4 text-xs font-medium text-[var(--accent)]">
-                    {item.cta} ↗
-                  </p>
-                </a>
-              );
-            })}
-          </div>
         </div>
       </section>
 
@@ -665,24 +539,8 @@ export default function SalvazionLanding() {
         </div>
       </section>
 
-      {/* CTA final */}
-      <section className="py-16 border-t border-[var(--border-soft)]">
-        <div className="max-w-2xl mx-auto px-5 text-center">
-          <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight mb-3">{t.final.title}</h2>
-          <p className="text-sm text-[var(--sage)] mb-6">{t.final.body}</p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/auth/signup" className="btn-primary sm:w-auto sm:min-w-[180px]">
-              {t.final.cta}
-            </Link>
-            <Link href="/terms" className="btn-ghost text-xs">
-              {t.final.terms}
-            </Link>
-            <Link href="/privacy" className="btn-ghost text-xs">
-              {t.final.privacy}
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* Blog last — all @salvazion_ X Articles · filter Salvation / Health / Freedom */}
+      <LandingBlog lang={lang} copy={t.blog} />
 
       </main>
 
@@ -693,14 +551,6 @@ export default function SalvazionLanding() {
             <Link href="/auth/login" className="hover:text-[var(--accent)]">
               {t.nav.enter}
             </Link>
-            <a
-              href={GREEN_LION_KINGS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[var(--accent)]"
-            >
-              Green Lion Kings
-            </a>
             <a href="#blog" className="hover:text-[var(--accent)]">
               {t.nav.blog}
             </a>
@@ -721,10 +571,10 @@ export default function SalvazionLanding() {
               @salvazion_
             </a>
             <Link href="/terms" className="hover:text-[var(--accent)]">
-              {t.final.terms}
+              {t.footer.terms}
             </Link>
             <Link href="/privacy" className="hover:text-[var(--accent)]">
-              {t.final.privacy}
+              {t.footer.privacy}
             </Link>
             <a href="https://salvazion.org" className="hover:text-[var(--accent)]">
               salvazion.org
@@ -754,8 +604,7 @@ const copy = {
       app: 'The App',
       blog: 'Blog',
       pricing: 'Pricing',
-      community: 'Community',
-      purpose: 'Purpose',
+      salvators: 'Salvators',
       token: 'Token',
       team: 'Team',
       enter: 'Enter Hub',
@@ -772,12 +621,12 @@ const copy = {
       socialHint: 'Gmail · X · email · install as PWA',
     },
     app: {
-      eyebrow: 'One App',
+      eyebrow: 'One App · Our Purpose',
       title: 'Everything fused into a single Hub',
       subtitle:
         'Salvation, Health and Freedom live together in one App: daily scores, Bible and devotionals, health with sensors and wearables, Freedom library, community invites, Green Lion coach and $SALVAZION on Solana.',
-      featuresTitle: 'What you can do today',
-      featuresSubtitle: 'Live product — freemium Hub with Premium tools.',
+      purposeBody:
+        'Our Purpose is make Salvation, Health and Freedom great again, through a Global Community that defends Western Christian Culture and BioConservatism in a Spiritual Warfare.',
       cta: 'Open the App',
       areas: [
         {
@@ -802,6 +651,43 @@ const copy = {
           inApp: 'Freedom hub · Community · $SALVAZION swap',
         },
       ],
+      values: [
+        {
+          title: 'Faith',
+          body: 'Christ at the center. Scripture, prayer and virtue as the foundation of every build.',
+        },
+        {
+          title: 'Family',
+          body: 'The Community starts at home: marriage, children, siblings and real community.',
+        },
+        {
+          title: 'Freedom',
+          body: 'Personal and economic sovereignty against relativism and centralized control.',
+        },
+      ],
+    },
+    pricing: {
+      eyebrow: 'Freemium',
+      title: 'Start free. Go Premium when ready.',
+      subtitle:
+        'Base access to Salvation, Health and Freedom is free. Premium unlocks the Green Lion AI coach, AI devotionals, cloud wearables and advanced tools.',
+      freeNote: 'Forever free to start the journey',
+      freeItems: [
+        'Dashboard, daily scores and onboarding',
+        'Full offline Bible (ES · EN · originals)',
+        'Daily rules-based devotional',
+        'Manual health logging and basic Freedom browse',
+        'Solana wallet connect and profile',
+        'Basic Phalanx invites',
+      ],
+      premiumNote: 'Full access + advanced tools across the App',
+      bestValue: 'Best value yearly',
+      ctaFree: 'Create free account',
+      ctaPremium: 'Join & upgrade to Premium',
+      stripeNote:
+        'Secure payments with Stripe (Salvazion, Inc.). Cancel or change plans anytime in the customer portal.',
+      featuresTitle: 'What you can do today',
+      featuresSubtitle: 'Live product — freemium Hub with Premium tools.',
       features: {
         bible: {
           title: 'Full offline Bible',
@@ -829,46 +715,6 @@ const copy = {
         },
       },
     },
-    pricing: {
-      eyebrow: 'Freemium',
-      title: 'Start free. Go Premium when ready.',
-      subtitle:
-        'Base access to Salvation, Health and Freedom is free. Premium unlocks the Green Lion AI coach, AI devotionals, cloud wearables and advanced tools.',
-      freeNote: 'Forever free to start the journey',
-      freeItems: [
-        'Dashboard, daily scores and onboarding',
-        'Full offline Bible (ES · EN · originals)',
-        'Daily rules-based devotional',
-        'Manual health logging and basic Freedom browse',
-        'Solana wallet connect and profile',
-        'Basic Phalanx invites',
-      ],
-      premiumNote: 'Full access + advanced tools across the App',
-      bestValue: 'Best value yearly',
-      ctaFree: 'Create free account',
-      ctaPremium: 'Join & upgrade to Premium',
-      stripeNote:
-        'Secure payments with Stripe (Salvazion, Inc.). Cancel or change plans anytime in the customer portal.',
-    },
-    purpose: {
-      eyebrow: 'Massive Transformative Purpose',
-      title: 'Our purpose',
-      body: 'Our Purpose is make Salvation, Health and Freedom great again, through a Global Community that defends Western Christian Culture and BioConservatism in a Spiritual Warfare.',
-      values: [
-        {
-          title: 'Faith',
-          body: 'Christ at the center. Scripture, prayer and virtue as the foundation of every build.',
-        },
-        {
-          title: 'Family',
-          body: 'The Community starts at home: marriage, children, siblings and real community.',
-        },
-        {
-          title: 'Freedom',
-          body: 'Personal and economic sovereignty against relativism and centralized control.',
-        },
-      ],
-    },
     salvators: {
       chapter: 'Chapter 01',
       title: 'The 12 Salvators',
@@ -883,42 +729,12 @@ const copy = {
       buy: 'Buy $SALVAZION',
       openJupiter: 'Open on Jupiter',
     },
-    revival: {
-      eyebrow: 'Spiritual Revival',
-      title: "This is not a meme, it's a Spiritual Revival and a change of era.",
-      body: 'Not entertainment. A call to faith, family, health and freedom — for a generation that refuses to sleep.',
-    },
-    community: {
-      eyebrow: 'On X',
-      title: 'Join the tribe on X',
-      subtitle:
-        'Community, long-form Freedom articles and the official Salvazion account — open on X and walk with us.',
-      links: {
-        'green-lion-kings': {
-          badge: 'X Community',
-          title: 'Green Lion Kings',
-          body: 'Faith, family, Western Christian culture, BioConservatism and Freedom. Connect with the Salvazion tribe.',
-          cta: 'Join community',
-        },
-        'x-articles': {
-          badge: 'Long-form',
-          title: 'X Articles',
-          body: 'Read @salvazion_ long-form on faith, family, health, freedom, technology and Western Christian culture.',
-          cta: 'Read articles',
-        },
-        'x-account': {
-          badge: 'Official',
-          title: '@salvazion_',
-          body: 'Follow Salvazion on X for updates, signals and the daily path of Salvation, Health and Freedom.',
-          cta: 'Follow on X',
-        },
-      },
-    },
     blog: {
       eyebrow: 'Blog · @salvazion_',
       title: 'Salvazion Articles on X',
       subtitle:
         'Long-form writing on Salvation, Health and Freedom — faith, family, body, sovereignty and Western Christian Culture. Every piece opens on X.',
+      articleCountLabel: '{count} articles in the library',
       filters: {
         all: 'All',
         salvation: 'Salvation',
@@ -930,7 +746,7 @@ const copy = {
       of: 'of',
       empty: 'No articles in this pillar yet.',
       seoNote:
-        'Filter by Salvation · Health · Freedom to explore the full library — each title links to the original article on X.',
+        'Filter by Salvation · Health · Freedom to explore the full library — each title links to the original article on X. Switch language to read titles and previews in Spanish.',
       viewAllOnX: 'Open full library on X',
     },
     team: {
@@ -947,15 +763,10 @@ const copy = {
       beatriz:
         'Physical Therapist, Bachelor of Kinesiology. Master in Physical Therapy with Diplomas in Rehabilitation, Exercise and Health, with experience as a University Professor and Researcher in Human Functionality, Digital Health and Aquatic Therapy. She did an International Clinical Internship in Hydrotherapy. She coordinated the “Choose Living Healthy” program of the Ministry of Health; however, her greatest achievement is to form a beautiful family (husband and four children), balancing her life as an entrepreneur. In 2022, she was recognized as a “Digital Health Champion” by the IDB (Inter-American Development Bank).',
     },
-    final: {
-      title: 'The Community awaits',
-      body: 'Create your free account and walk with us in one App — upgrade to Premium anytime.',
-      cta: 'Join now',
-      terms: 'Terms',
-      privacy: 'Privacy',
-    },
     footer: {
       copy: '© 2026 Salvazion Inc. · All rights reserved · Faith, family and exponential technology.',
+      terms: 'Terms',
+      privacy: 'Privacy',
     },
   },
   es: {
@@ -963,8 +774,7 @@ const copy = {
       app: 'La App',
       blog: 'Blog',
       pricing: 'Precios',
-      community: 'Comunidad',
-      purpose: 'Propósito',
+      salvators: 'Salvators',
       token: 'Token',
       team: 'Equipo',
       enter: 'Entrar al Hub',
@@ -981,12 +791,12 @@ const copy = {
       socialHint: 'Gmail · X · email · PWA en el teléfono',
     },
     app: {
-      eyebrow: 'Una sola App',
+      eyebrow: 'Una sola App · Nuestro propósito',
       title: 'Todo fusionado en un solo Hub',
       subtitle:
         'Salvation, Health y Freedom viven juntos en una App: scores diarios, Biblia y devocionales, salud con sensores y wearables, biblioteca Freedom, comunidad Phalanx, coach León Verde y $SALVAZION en Solana.',
-      featuresTitle: 'Lo que ya puedes hacer',
-      featuresSubtitle: 'Producto vivo — Hub freemium con herramientas Premium.',
+      purposeBody:
+        'Nuestro Propósito es hacer Salvación, Salud y Libertad geniales otra vez, con una Comunidad Global que defiende la Cultura Cristiana Occidental y el BioConservadurismo en una Guerra Espiritual.',
       cta: 'Abrir la App',
       areas: [
         {
@@ -1011,6 +821,43 @@ const copy = {
           inApp: 'Freedom hub · Comunidad · Swap $SALVAZION',
         },
       ],
+      values: [
+        {
+          title: 'Fe',
+          body: 'Cristo al centro. Escritura, oración y virtud como base de toda construcción.',
+        },
+        {
+          title: 'Familia',
+          body: 'La Comunidad empieza en casa: matrimonio, hijos, hermanos y comunidad real.',
+        },
+        {
+          title: 'Libertad',
+          body: 'Soberanía personal y económica frente al relativismo y el control centralizado.',
+        },
+      ],
+    },
+    pricing: {
+      eyebrow: 'Freemium',
+      title: 'Empieza gratis. Pasa a Premium cuando quieras.',
+      subtitle:
+        'El acceso base a Salvation, Health y Freedom es gratis. Premium desbloquea el coach León Verde con IA, devocionales IA, wearables en la nube y herramientas avanzadas.',
+      freeNote: 'Gratis para siempre para empezar el camino',
+      freeItems: [
+        'Dashboard, scores diarios y onboarding',
+        'Biblia completa offline (ES · EN · originales)',
+        'Devocional diario por reglas',
+        'Salud manual y Freedom básico',
+        'Billetera Solana y perfil',
+        'Invitaciones Phalanx básicas',
+      ],
+      premiumNote: 'Acceso completo + herramientas avanzadas en toda la App',
+      bestValue: 'Mejor valor anual',
+      ctaFree: 'Crear cuenta gratis',
+      ctaPremium: 'Unirme y pasar a Premium',
+      stripeNote:
+        'Pagos seguros con Stripe (Salvazion, Inc.). Cancela o cambia de plan cuando quieras en el portal de cliente.',
+      featuresTitle: 'Lo que ya puedes hacer',
+      featuresSubtitle: 'Producto vivo — Hub freemium con herramientas Premium.',
       features: {
         bible: {
           title: 'Biblia completa offline',
@@ -1038,46 +885,6 @@ const copy = {
         },
       },
     },
-    pricing: {
-      eyebrow: 'Freemium',
-      title: 'Empieza gratis. Pasa a Premium cuando quieras.',
-      subtitle:
-        'El acceso base a Salvation, Health y Freedom es gratis. Premium desbloquea el coach León Verde con IA, devocionales IA, wearables en la nube y herramientas avanzadas.',
-      freeNote: 'Gratis para siempre para empezar el camino',
-      freeItems: [
-        'Dashboard, scores diarios y onboarding',
-        'Biblia completa offline (ES · EN · originales)',
-        'Devocional diario por reglas',
-        'Salud manual y Freedom básico',
-        'Billetera Solana y perfil',
-        'Invitaciones Phalanx básicas',
-      ],
-      premiumNote: 'Acceso completo + herramientas avanzadas en toda la App',
-      bestValue: 'Mejor valor anual',
-      ctaFree: 'Crear cuenta gratis',
-      ctaPremium: 'Unirme y pasar a Premium',
-      stripeNote:
-        'Pagos seguros con Stripe (Salvazion, Inc.). Cancela o cambia de plan cuando quieras en el portal de cliente.',
-    },
-    purpose: {
-      eyebrow: 'Massive Transformative Purpose',
-      title: 'Nuestro propósito',
-      body: 'Nuestro Propósito es hacer Salvación, Salud y Libertad geniales otra vez, con una Comunidad Global que defiende la Cultura Cristiana Occidental y el Bio Conservadurismo en una Guerra Espiritual.',
-      values: [
-        {
-          title: 'Fe',
-          body: 'Cristo al centro. Escritura, oración y virtud como base de toda construcción.',
-        },
-        {
-          title: 'Familia',
-          body: 'La Comunidad empieza en casa: matrimonio, hijos, hermanos y comunidad real.',
-        },
-        {
-          title: 'Libertad',
-          body: 'Soberanía personal y económica frente al relativismo y el control centralizado.',
-        },
-      ],
-    },
     salvators: {
       chapter: 'Chapter 01',
       title: 'Los 12 Salvators',
@@ -1092,42 +899,12 @@ const copy = {
       buy: 'Comprar $SALVAZION',
       openJupiter: 'Abrir en Jupiter',
     },
-    revival: {
-      eyebrow: 'Avivamiento espiritual',
-      title: 'Esto no es un meme: es un avivamiento espiritual y un cambio de era.',
-      body: 'No es entretenimiento. Es un llamado a la fe, la familia, la salud y la libertad — para una generación que se niega a dormir.',
-    },
-    community: {
-      eyebrow: 'En X',
-      title: 'Únete a la tribu en X',
-      subtitle:
-        'Comunidad, artículos Freedom de largo formato y la cuenta oficial de Salvazion — ábrelos en X y camina con nosotros.',
-      links: {
-        'green-lion-kings': {
-          badge: 'Comunidad X',
-          title: 'Green Lion Kings',
-          body: 'Fe, familia, cultura cristiano-occidental, BioConservadurismo y Freedom. Conecta con la tribu Salvazion.',
-          cta: 'Unirme a la comunidad',
-        },
-        'x-articles': {
-          badge: 'Long-form',
-          title: 'Artículos de X',
-          body: 'Lee los artículos de @salvazion_ sobre fe, familia, salud, libertad, tecnología y Cultura Cristiana Occidental.',
-          cta: 'Leer artículos',
-        },
-        'x-account': {
-          badge: 'Oficial',
-          title: '@salvazion_',
-          body: 'Sigue a Salvazion en X para novedades, señales y el camino diario de Salvation, Health y Freedom.',
-          cta: 'Seguir en X',
-        },
-      },
-    },
     blog: {
       eyebrow: 'Blog · @salvazion_',
       title: 'Artículos de Salvazion en X',
       subtitle:
         'Textos de largo formato sobre Salvation, Health y Freedom — fe, familia, cuerpo, soberanía y Cultura Cristiana Occidental. Cada pieza se abre en X.',
+      articleCountLabel: '{count} artículos en la biblioteca',
       filters: {
         all: 'Todos',
         salvation: 'Salvation',
@@ -1139,7 +916,7 @@ const copy = {
       of: 'de',
       empty: 'Aún no hay artículos en este pilar.',
       seoNote:
-        'Filtra por Salvation · Health · Freedom para explorar la biblioteca completa — cada título enlaza al artículo original en X.',
+        'Filtra por Salvation · Health · Freedom para explorar la biblioteca completa — cada título enlaza al artículo original en X. Cambia el idioma para ver títulos y previews en español.',
       viewAllOnX: 'Abrir biblioteca completa en X',
     },
     team: {
@@ -1156,15 +933,10 @@ const copy = {
       beatriz:
         'Kinesióloga, Licenciada en Kinesiología. Magíster en Terapia Física con Diplomados en Rehabilitación, Ejercicio y Salud, con experiencia como Docente e Investigadora Universitaria en Funcionalidad Humana, Salud Digital y Terapia Acuática. Realizó una Pasantía Clínica Internacional en Hidroterapia. Coordinó el programa “Elige Vivir Sano” del Ministerio de Salud; sin embargo, su mayor logro es conformar una hermosa familia (esposo y cuatro hijos), balanceando su vida como emprendedora. En 2022, fue reconocida como “Campeona en Salud Digital” por el BID (Banco Interamericano de Desarrollo).',
     },
-    final: {
-      title: 'La Comunidad te espera',
-      body: 'Crea tu cuenta gratis y camina con nosotros en una sola App — pasa a Premium cuando quieras.',
-      cta: 'Unirme ahora',
-      terms: 'Términos',
-      privacy: 'Privacidad',
-    },
     footer: {
       copy: '© 2026 Salvazion Inc. · Todos los derechos reservados · Fe, familia y tecnología exponencial.',
+      terms: 'Términos',
+      privacy: 'Privacidad',
     },
   },
 } as const;

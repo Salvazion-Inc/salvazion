@@ -6,6 +6,7 @@
  */
 
 import catalogJson from '@/data/freedom/x-articles-catalog.json';
+import esMapJson from '@/data/freedom/x-articles-es.json';
 import type { PillarId } from '@/lib/theme/pillars';
 
 export type InterestFocus =
@@ -25,7 +26,11 @@ export interface XArticle {
   id: string;
   statusId?: string | null;
   title: string;
+  /** Spanish title for marketing blog / i18n */
+  titleEs: string;
   preview: string;
+  /** Spanish preview for marketing blog / i18n */
+  previewEs: string;
   image: string;
   url: string;
   createdAt?: string | null;
@@ -38,6 +43,9 @@ export interface XArticle {
   tags: string[];
   readMin: number;
 }
+
+type EsEntry = { titleEs?: string; previewEs?: string };
+const ES_MAP = esMapJson as Record<string, EsEntry>;
 
 const STORAGE_READ = 'salvazion_x_articles_read';
 const STORAGE_VALUE_JOURNEY = 'salvazion_value_journey';
@@ -193,11 +201,16 @@ function normalizeEntry(raw: {
     raw.pillar && (['salvation', 'health', 'freedom'] as const).includes(raw.pillar)
       ? raw.pillar
       : inferPillar(raw.title, raw.preview, interests, tags);
+  const es = ES_MAP[raw.id] || {};
+  const preview =
+    raw.preview || 'Long-form de @salvazion_ en X. Ábrelo para leer el contenido completo.';
   return {
     id: raw.id,
     statusId: raw.statusId,
     title,
-    preview: raw.preview || 'Long-form de @salvazion_ en X. Ábrelo para leer el contenido completo.',
+    titleEs: es.titleEs || title,
+    preview,
+    previewEs: es.previewEs || preview,
     image: raw.image || '/logo-icon.png',
     url: raw.url || `https://x.com/i/article/${raw.id}`,
     createdAt: raw.createdAt,
@@ -213,6 +226,23 @@ function normalizeEntry(raw: {
 export const X_ARTICLES: XArticle[] = (catalogJson as Array<Parameters<typeof normalizeEntry>[0]>).map(
   normalizeEntry
 );
+
+/** Localized title + preview for marketing blog (EN default / ES on language switch) */
+export function localizeArticle(
+  article: XArticle,
+  lang: 'en' | 'es'
+): { title: string; preview: string } {
+  if (lang === 'es') {
+    return {
+      title: article.titleEs || article.title,
+      preview: article.previewEs || article.preview,
+    };
+  }
+  return { title: article.title, preview: article.preview };
+}
+
+/** Total articles in the public catalog (verified marketing count) */
+export const X_ARTICLES_COUNT = X_ARTICLES.length;
 
 /** Articles sorted newest-first (for marketing blog) */
 export function getBlogArticles(pillar?: ArticlePillar | 'all'): XArticle[] {

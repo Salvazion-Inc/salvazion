@@ -3,9 +3,11 @@
 import { useMemo, useState } from 'react';
 import {
   X_ARTICLES,
+  X_ARTICLES_COUNT,
   formatArticleDate,
   getBlogArticles,
   getBlogPillarCounts,
+  localizeArticle,
   type ArticlePillar,
   type XArticle,
 } from '@/lib/freedom/x-articles';
@@ -29,6 +31,7 @@ export interface LandingBlogCopy {
   empty: string;
   seoNote: string;
   viewAllOnX: string;
+  articleCountLabel: string;
 }
 
 interface Props {
@@ -58,6 +61,7 @@ function ArticleCard({
 }) {
   const accent = PILLAR_ACCENT[article.pillar];
   const date = formatArticleDate(article.createdAt, lang);
+  const { title, preview } = localizeArticle(article, lang);
 
   return (
     <article
@@ -65,9 +69,11 @@ function ArticleCard({
       itemType="https://schema.org/BlogPosting"
       className="group flex flex-col glass rounded-2xl overflow-hidden border border-[var(--border-soft)] hover:border-[var(--border-strong)] transition h-full"
       style={{ borderTopWidth: 2, borderTopColor: accent }}
+      lang={lang}
     >
       <meta itemProp="author" content="@salvazion_" />
       <meta itemProp="isPartOf" content="Salvazion Blog" />
+      <meta itemProp="inLanguage" content={lang === 'es' ? 'es' : 'en'} />
       {article.createdAt ? (
         <meta itemProp="datePublished" content={article.createdAt} />
       ) : null}
@@ -112,7 +118,7 @@ function ArticleCard({
             itemProp="headline"
             className="text-sm sm:text-[15px] font-semibold text-white leading-snug line-clamp-2 group-hover:text-[var(--accent)] transition-colors"
           >
-            {article.title}
+            {title}
           </h3>
           {date ? (
             <time
@@ -126,7 +132,7 @@ function ArticleCard({
             itemProp="description"
             className="mt-2 text-xs text-[var(--sage)] leading-relaxed line-clamp-3 flex-1"
           >
-            {article.preview}
+            {preview}
           </p>
           <p className="mt-3 text-[11px] font-medium text-[var(--accent)]">
             {readOnX} ↗
@@ -181,6 +187,9 @@ export default function LandingBlog({ lang, copy }: Props) {
           </h2>
           <p className="mt-3 max-w-2xl mx-auto text-sm text-[var(--sage)] leading-relaxed">
             {copy.subtitle}
+          </p>
+          <p className="mt-2 text-sm font-medium text-white/90">
+            {copy.articleCountLabel.replace('{count}', String(X_ARTICLES_COUNT))}
           </p>
           <p className="mt-2 text-[11px] text-[var(--sage)]/70">
             {copy.seoNote}
@@ -239,7 +248,7 @@ export default function LandingBlog({ lang, copy }: Props) {
         <p className="text-center text-[11px] text-[var(--sage)]/80 mb-6">
           {copy.showing}{' '}
           <strong className="text-white font-medium">{filtered.length}</strong>{' '}
-          {copy.of} {X_ARTICLES.length}
+          {copy.of} {X_ARTICLES_COUNT}
         </p>
 
         {filtered.length === 0 ? (
@@ -293,25 +302,31 @@ export default function LandingBlog({ lang, copy }: Props) {
           }
         >
           <ul>
-            {X_ARTICLES.map((a) => (
-              <li key={`index-${a.id}`}>
-                <a href={a.url} rel="noopener noreferrer">
-                  {a.title} — {a.pillar}
-                </a>
-              </li>
-            ))}
+            {X_ARTICLES.map((a) => {
+              const loc = localizeArticle(a, lang);
+              return (
+                <li key={`index-${a.id}`}>
+                  <a href={a.url} rel="noopener noreferrer">
+                    {loc.title} — {a.pillar}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
         <noscript>
           <ul>
-            {X_ARTICLES.map((a) => (
-              <li key={`ns-${a.id}`}>
-                <a href={a.url}>
-                  {a.title} ({a.pillar})
-                </a>
-              </li>
-            ))}
+            {X_ARTICLES.map((a) => {
+              const loc = localizeArticle(a, lang);
+              return (
+                <li key={`ns-${a.id}`}>
+                  <a href={a.url}>
+                    {loc.title} ({a.pillar})
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </noscript>
 

@@ -24,7 +24,16 @@ function ChannelAvatar({
 }) {
   const candidates = youtubeChannelImageCandidates(ch);
   const [idx, setIdx] = useState(0);
-  const src = idx < candidates.length ? candidates[idx] : null;
+  const [failed, setFailed] = useState(false);
+  const src = !failed && idx < candidates.length ? candidates[idx] : null;
+
+  const next = () => {
+    setIdx((i) => {
+      if (i + 1 < candidates.length) return i + 1;
+      setFailed(true);
+      return i;
+    });
+  };
 
   return (
     <div
@@ -39,11 +48,16 @@ function ChannelAvatar({
           key={src}
           src={src}
           alt=""
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover"
           style={{ objectPosition: 'center 18%' }}
           loading="eager"
+          decoding="async"
           referrerPolicy="no-referrer"
-          onError={() => setIdx((i) => i + 1)}
+          onLoad={(e) => {
+            const img = e.currentTarget;
+            if (img.naturalWidth <= 2 || img.naturalHeight <= 2) next();
+          }}
+          onError={() => next()}
         />
       ) : (
         <span

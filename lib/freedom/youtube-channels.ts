@@ -19,22 +19,29 @@ export type YouTubeChannel = {
   imageUrl?: string;
 };
 
+/** Same-origin hosted avatar (always loads with the app). */
+export function youtubeChannelLocalAvatar(ch: YouTubeChannel): string {
+  return `/freedom/youtube-avatars/${ch.id}.jpg`;
+}
+
 /** Ordered avatar candidates (first working wins in the panel). */
 export function youtubeChannelImageCandidates(ch: YouTubeChannel): string[] {
   const urls: string[] = [];
-  if (ch.imageUrl) urls.push(ch.imageUrl);
+  // Prefer local hosted file — no CORS / CDN / adblock issues
+  urls.push(youtubeChannelLocalAvatar(ch));
+  if (ch.imageUrl?.startsWith('/')) urls.push(ch.imageUrl);
+  if (ch.imageUrl && !ch.imageUrl.startsWith('/')) urls.push(ch.imageUrl);
   const handle =
     ch.handle?.replace(/^@/, '') ||
     ch.url.match(/youtube\.com\/@([^/?#]+)/i)?.[1] ||
     '';
   if (handle) {
-    // unavatar is reliable cross-origin for browser <img>
     urls.push(`https://unavatar.io/youtube/@${encodeURIComponent(handle)}`);
   }
   urls.push(
     `https://ui-avatars.com/api/?name=${encodeURIComponent(ch.name)}&background=${ch.accent.replace('#', '')}&color=fff&size=256&bold=true&format=png`
   );
-  return [...new Set(urls)];
+  return [...new Set(urls.filter(Boolean))];
 }
 
 /** @deprecated use youtubeChannelImageCandidates */

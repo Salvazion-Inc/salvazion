@@ -4,6 +4,67 @@ import { extractXIdentity } from '@/lib/auth/x-oauth';
 
 const STORAGE_KEY = 'salvazion_profile';
 const STORAGE_VERSION = 2;
+/** Dispatched after local profile cache is written (web + Capacitor). */
+export const PROFILE_UPDATED_EVENT = 'salvazion:profile-updated';
+
+function isHttpUrl(url?: string | null): boolean {
+  return !!url && /^https?:\/\//i.test(url);
+}
+
+/** X/Twitter CDN avatars — safe to replace with a custom upload. */
+function isXCdnAvatar(url?: string | null): boolean {
+  return !!url && /twimg\.com|twitter\.com|pbs\.twimg/i.test(url);
+}
+
+/** User-uploaded / Storage avatar (or any non-X remote). */
+function isCustomRemoteAvatar(url?: string | null): boolean {
+  return isHttpUrl(url) && !isXCdnAvatar(url);
+}
+
+function isDataAvatar(url?: string | null): boolean {
+  return !!url && /^data:image\//i.test(url);
+}
+
+/**
+ * Cache-bust remote avatars (same Storage path after replace) using profile version.
+ * Preserves existing query keys other than t/v when possible.
+ */
+export function withAvatarCacheBust(
+  url: string | undefined,
+  version?: string | number | null
+): string | undefined {
+  if (!url || !isHttpUrl(url)) return url;
+  try {
+    const u = new URL(url);
+    const v =
+      version != null && String(version).length > 0
+        ? String(version)
+        : String(Date.now());
+    u.searchParams.set('v', v);
+    // drop legacy upload `t` so a single bust key wins
+    u.searchParams.delete('t');
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
+function emitProfileUpdated() {
+  if (typeof window === 'undefined') return;
+  try {
+    window.dispatchEvent(new CustomEvent(PROFILE_UPDATED_EVENT));
+  } catch {
+    /* ignore */
+  }
+}
+
+/** Subscribe to local profile cache updates (after save / server sync). */
+export function subscribeProfileUpdated(cb: () => void): () => void {
+  if (typeof window === 'undefined') return () => {};
+  const handler = () => cb();
+  window.addEventListener(PROFILE_UPDATED_EVENT, handler);
+  return () => window.removeEventListener(PROFILE_UPDATED_EVENT, handler);
+}
 
 /** Display "City, Country" from separate stored fields. */
 export function formatLocation(
@@ -103,7 +164,7 @@ function toDb(profile: Partial<UserProfile>) {
   };
 }
 
-function saveLocal(profile: Partial<UserProfile>) {
+function saveLocal(profile: Partial<UserProfile>, opts?: { emit?: boolean }) {
   if (typeof window === 'undefined') return;
   const current = loadLocal();
   const merged = { ...current, ...profile };
@@ -114,6 +175,7 @@ function saveLocal(profile: Partial<UserProfile>) {
     checksum: simpleChecksum(merged),
   };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+  if (opts?.emit !== false) emitProfileUpdated();
 }
 
 function loadLocal(): Partial<UserProfile> {
@@ -139,8 +201,13 @@ function loadLocal(): Partial<UserProfile> {
  * Covers race conditions when the DB trigger has not run yet, or was missing.
  */
 /**
- * Merge X OAuth identity into profile fields (name, avatar, handle).
+ * Merge X OAuth identity into profile fields (name, handle, avatar).
  * Safe to call on every session start.
+ *
+ * CRITICAL: never overwrite a custom avatar (Supabase Storage / data URL)
+ * with the X CDN photo. Mobile localStorage often still has the old X URL
+ * after the user changed their photo on web — checking only local would
+ * clobber profiles.avatar_url on the server.
  */
 export async function applyXIdentityToProfile(): Promise<Partial<UserProfile> | null> {
   try {
@@ -154,32 +221,50 @@ export async function applyXIdentityToProfile(): Promise<Partial<UserProfile> | 
     if (!x) return null;
 
     const local = loadLocal();
+
+    // Always read server avatar before deciding to write anything
+    let serverAvatar: string | null = null;
+    let serverName = '';
+    try {
+      const { data: row } = await supabase
+        .from('profiles')
+        .select('avatar_url, name')
+        .eq('id', user.id)
+        .maybeSingle();
+      serverAvatar = (row?.avatar_url as string | null) || null;
+      serverName = (row?.name as string) || '';
+    } catch {
+      /* offline — fall through with local-only rules */
+    }
+
     const patch: Partial<UserProfile> = {
       xUsername: x.username,
       xUserId: x.userId,
     };
 
-    // Prefer X display name only when profile name is empty
-    if (!local.name?.trim() && x.displayName) {
-      patch.name = x.displayName;
-    } else if (!local.name?.trim()) {
-      patch.name = x.username;
+    // Prefer X display name only when both local + server name are empty
+    if (!local.name?.trim() && !serverName.trim()) {
+      if (x.displayName) patch.name = x.displayName;
+      else patch.name = x.username;
     }
 
-    // Prefer X avatar when none set (or previous was also from X/twitter CDN)
-    if (x.avatarUrl) {
-      if (
-        !local.avatarUrl ||
-        /twimg\.com|twitter\.com|pbs\.twimg/i.test(local.avatarUrl)
-      ) {
-        patch.avatarUrl = x.avatarUrl;
-      }
+    // Custom photo on server, local device, or in-memory data URL → never replace with X
+    const hasCustomAvatar =
+      isCustomRemoteAvatar(serverAvatar) ||
+      isCustomRemoteAvatar(local.avatarUrl) ||
+      isDataAvatar(local.avatarUrl);
+
+    const serverEmptyOrX = !serverAvatar || isXCdnAvatar(serverAvatar);
+    const localEmptyOrX = !local.avatarUrl || isXCdnAvatar(local.avatarUrl);
+
+    if (x.avatarUrl && !hasCustomAvatar && serverEmptyOrX && localEmptyOrX) {
+      patch.avatarUrl = x.avatarUrl;
     }
 
-    // Persist to local immediately
+    // Local-only fields (handle always; name/avatar only when decided above)
     saveLocal(patch);
 
-    // Upsert X fields + name/avatar to Supabase
+    // Upsert X identity. Only touch avatar_url when we are filling empty/X slots.
     const payload: Record<string, unknown> = {
       id: user.id,
       x_username: x.username,
@@ -187,7 +272,12 @@ export async function applyXIdentityToProfile(): Promise<Partial<UserProfile> | 
       updated_at: new Date().toISOString(),
     };
     if (patch.name) payload.name = patch.name;
-    if (patch.avatarUrl && /^https?:\/\//i.test(patch.avatarUrl)) {
+    if (
+      patch.avatarUrl &&
+      isHttpUrl(patch.avatarUrl) &&
+      !hasCustomAvatar &&
+      serverEmptyOrX
+    ) {
       payload.avatar_url = patch.avatarUrl;
     }
 
@@ -280,6 +370,9 @@ export async function ensureProfileForUser(preferredName?: string): Promise<void
  * Load profile (async).
  * Source of truth: Supabase when authenticated. Local cache as fallback / offline.
  * familyLinks & friendsLinks are merged from localStorage (not yet in DB schema).
+ *
+ * Avatar rule: server https URL always wins over device cache (web ↔ mobile sync).
+ * Local data: URLs only fill in when the server has no avatar yet.
  */
 export async function loadProfileAsync(): Promise<Partial<UserProfile>> {
   const local = loadLocal();
@@ -317,14 +410,23 @@ export async function loadProfileAsync(): Promise<Partial<UserProfile>> {
           profile.xUsername = x?.username || local.xUsername;
           profile.xUserId = x?.userId || local.xUserId;
         }
-        // Keep local data-URL avatar if server has none yet
-        if (!profile.avatarUrl && local.avatarUrl) {
+
+        // Avatar: server is source of truth across devices
+        if (profile.avatarUrl && isHttpUrl(profile.avatarUrl)) {
+          profile.avatarUrl = withAvatarCacheBust(
+            profile.avatarUrl,
+            data.updated_at || Date.now()
+          );
+        } else if (local.avatarUrl) {
+          // Server empty → keep local (data URL offline upload, or prior device photo)
           profile.avatarUrl = local.avatarUrl;
         }
-        // Apply X identity if still missing handle (non-blocking)
+
+        // Apply X identity if still missing handle (non-blocking; must not clobber avatar)
         if (!profile.xUsername) {
           void applyXIdentityToProfile();
         }
+        // Replace local cache with server-merged profile so mobile drops stale avatars
         saveLocal(profile);
         return profile;
       }

@@ -7,6 +7,7 @@ import {
   loadProfile,
   loadProfileAsync,
   saveProfile,
+  subscribeProfileUpdated,
 } from '@/lib/store/profile';
 import { UserProfile } from '@/lib/types';
 import {
@@ -66,6 +67,12 @@ export default function DashboardPage() {
       const synced = await syncScoresFromServer();
       refresh(p, synced);
     })();
+
+    // Keep hero avatar/name in sync when profile is saved elsewhere (e.g. Profile page)
+    return subscribeProfileUpdated(() => {
+      const p = loadProfile();
+      if (p) setProfile(p);
+    });
   }, [router, refresh]);
 
   const recentBadges = useMemo(() => {

@@ -12,8 +12,10 @@ type Props = {
 };
 
 /**
- * Simple reliable book cover:
- * try local/static candidates in order; skip 1×1 placeholders; show mark fallback.
+ * Book cover image with local-first candidates.
+ * Parent must give an explicit height (or aspect box); this fills 100% of it.
+ * Do not put both `relative` and `absolute` on the root — Tailwind conflict
+ * collapses height to 0 when children are position:absolute.
  */
 export default function BookCover({ book, className = '' }: Props) {
   const candidates = useMemo(() => bookCoverCandidates(book), [book]);
@@ -23,13 +25,16 @@ export default function BookCover({ book, className = '' }: Props) {
   const src = !failed && idx < candidates.length ? candidates[idx] : null;
 
   const next = () => {
-    if (idx + 1 < candidates.length) setIdx((i) => i + 1);
-    else setFailed(true);
+    setIdx((i) => {
+      if (i + 1 < candidates.length) return i + 1;
+      setFailed(true);
+      return i;
+    });
   };
 
   return (
     <div
-      className={`relative overflow-hidden bg-[#0a0a0a] ${className}`}
+      className={`relative h-full w-full overflow-hidden bg-[#0a0a0a] ${className}`}
       style={{
         background: src
           ? '#0a0a0a'
@@ -42,7 +47,7 @@ export default function BookCover({ book, className = '' }: Props) {
           key={src}
           src={src}
           alt=""
-          className="absolute inset-0 w-full h-full object-cover object-center"
+          className="absolute inset-0 h-full w-full object-cover object-center"
           loading="eager"
           decoding="async"
           referrerPolicy="no-referrer"

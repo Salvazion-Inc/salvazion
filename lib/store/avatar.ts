@@ -76,7 +76,8 @@ function blobToDataUrl(blob: Blob): Promise<string> {
 
 /**
  * Upload avatar to Supabase Storage (bucket `avatars`) when available.
- * Returns public URL or null if storage is not configured.
+ * Returns public URL or null if storage is not configured / failed.
+ * Uses short cacheControl + bust query so other devices see the new file.
  */
 export async function uploadAvatarToSupabase(blob: Blob): Promise<string | null> {
   try {
@@ -87,11 +88,27 @@ export async function uploadAvatarToSupabase(blob: Blob): Promise<string | null>
     if (!user) return null;
 
     const path = `${user.id}/avatar.jpg`;
-    const { error } = await supabase.storage.from('avatars').upload(path, blob, {
-      upsert: true,
-      contentType: 'image/jpeg',
-      cacheControl: '3600',
-    });
+
+    // Prefer update; fall back to upload (first time)
+    let error =
+      (
+        await supabase.storage.from('avatars').upload(path, blob, {
+          upsert: true,
+          contentType: 'image/jpeg',
+          // Short CDN cache so mobile/web pick up replacements of the same path
+          cacheControl: '60',
+        })
+      ).error || null;
+
+    if (error) {
+      // Some projects only allow update after insert
+      const retry = await supabase.storage.from('avatars').update(path, blob, {
+        contentType: 'image/jpeg',
+        cacheControl: '60',
+        upsert: true,
+      });
+      error = retry.error;
+    }
 
     if (error) {
       console.warn('[Salvazion] avatar upload skipped', error.message);
@@ -99,8 +116,9 @@ export async function uploadAvatarToSupabase(blob: Blob): Promise<string | null>
     }
 
     const { data } = supabase.storage.from('avatars').getPublicUrl(path);
-    // cache-bust so UI refreshes after replace
-    const url = data.publicUrl ? `${data.publicUrl}?t=${Date.now()}` : null;
+    if (!data.publicUrl) return null;
+    // Stable public path + version query (also stored on profiles.avatar_url)
+    const url = `${data.publicUrl.split('?')[0]}?v=${Date.now()}`;
     return url;
   } catch (e) {
     console.warn('[Salvazion] avatar upload failed', e);
@@ -109,19 +127,22 @@ export async function uploadAvatarToSupabase(blob: Blob): Promise<string | null>
 }
 
 /**
- * Save avatar: try Supabase Storage + profiles.avatar_url, always keep local copy.
+ * Save avatar: prefer Supabase Storage (multi-device) + profiles.avatar_url.
+ * Falls back to local data-URL only when offline / storage unavailable.
  * Returns the URL to use in UI (remote preferred).
  */
 export async function saveAvatarImage(file: File): Promise<
-  | { ok: true; avatarUrl: string }
+  | { ok: true; avatarUrl: string; remote: boolean }
   | { ok: false; error: string }
 > {
   const processed = await processAvatarFile(file);
   if (!processed.ok) return processed;
 
-  let avatarUrl = processed.dataUrl;
   const remote = await uploadAvatarToSupabase(processed.blob);
-  if (remote) avatarUrl = remote;
+  if (remote) {
+    return { ok: true, avatarUrl: remote, remote: true };
+  }
 
-  return { ok: true, avatarUrl };
+  // Offline / missing bucket — device-only until Storage is configured
+  return { ok: true, avatarUrl: processed.dataUrl, remote: false };
 }

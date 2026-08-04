@@ -62,8 +62,8 @@ function BookCard({
       className="snap-start shrink-0 w-[10.5rem] h-[17.5rem] card-soft overflow-hidden flex flex-col border"
       style={{ borderColor: `${book.accent}55` }}
     >
-      <div className="relative h-[8.5rem] shrink-0">
-        <BookCover book={book} className="absolute inset-0" />
+      <div className="h-[8.5rem] w-full shrink-0">
+        <BookCover book={book} />
       </div>
       <div className="p-2.5 flex flex-col flex-1 min-h-0 gap-1">
         <h3 className="text-[12px] font-semibold text-white leading-snug line-clamp-2 min-h-[2rem]">

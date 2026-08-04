@@ -6,12 +6,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import BottomNav from '@/components/BottomNav';
 import {
+  loadProfile,
   loadProfileAsync,
   saveProfile,
   signOut,
   calculateAge,
   getLifeStage,
   getLifeStageLabel,
+  subscribeProfileUpdated,
 } from '@/lib/store/profile';
 import { UserProfile } from '@/lib/types';
 import { createClient } from '@/lib/supabase/client';
@@ -46,7 +48,15 @@ export default function ProfilePage() {
   useEffect(() => {
     setMounted(true);
     setLinkedWallet(loadLinkedWallet());
-    const unsub = subscribeLinkedWallet(setLinkedWallet);
+    const unsubWallet = subscribeLinkedWallet(setLinkedWallet);
+    const unsubProfile = subscribeProfileUpdated(() => {
+      // Local cache write (avatar / save elsewhere) — refresh display
+      const p = loadProfile();
+      if (!p) return;
+      setProfile(p);
+      // Keep open edit fields; only pull avatar (and empty-slot fields) from cache
+      setDraft((d) => ({ ...d, avatarUrl: p.avatarUrl }));
+    });
 
     (async () => {
       try {
@@ -68,7 +78,10 @@ export default function ProfilePage() {
       setDraft(p);
     })();
 
-    return unsub;
+    return () => {
+      unsubWallet();
+      unsubProfile();
+    };
   }, [router]);
 
   const handleSave = async () => {

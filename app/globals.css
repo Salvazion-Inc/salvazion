@@ -696,11 +696,11 @@ html[data-text-scale="xxl"] nav.fixed span {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 0.35rem;
+  padding: 0.5rem 0.28rem;
   border-radius: var(--radius-md);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  line-height: 1.1;
+  line-height: 1.15;
   color: var(--sage);
   border: none;
   background: transparent;
@@ -711,6 +711,15 @@ html[data-text-scale="xxl"] nav.fixed span {
   text-overflow: ellipsis;
   box-sizing: border-box;
   transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* 4+ segments (e.g. Health: Ejercicio · Alimentación · Sueño · Wearables) */
+.segment-soft:has(> :nth-child(4)) button,
+.segment-soft:has(> :nth-child(4)) a {
+  font-size: 0.62rem;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
+  letter-spacing: -0.01em;
 }
 .segment-soft button[data-active="true"],
 .segment-soft button.is-active,

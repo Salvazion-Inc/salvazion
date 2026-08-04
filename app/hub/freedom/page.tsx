@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import BottomNav from '@/components/BottomNav';
-import { loadProfile, getLifeStageLabel } from '@/lib/store/profile';
+import { loadProfile } from '@/lib/store/profile';
 import { UserProfile } from '@/lib/types';
 import { computeScores, logAction } from '@/lib/scoring/engine';
 import { ComputedScores } from '@/lib/scoring/types';
@@ -33,7 +33,6 @@ export default function FreedomPage() {
   const [activeTab, setActiveTab] = useState<'learn' | 'connect' | 'contribute'>('learn');
 
   const stage = getCurrentFreedomStage();
-  const stageLabel = getLifeStageLabel(stage);
 
   const refresh = useCallback(() => {
     const s = computeScores();
@@ -78,11 +77,7 @@ export default function FreedomPage() {
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
-      <PillarHubHeader
-        pillar="freedom"
-        score={freedomScore}
-        subtitle={`${profile?.name || 'Salvazion'} · ${stageLabel}`}
-      >
+      <PillarHubHeader pillar="freedom" score={freedomScore}>
         <div className="segment-soft mb-2 mt-3">
           {(
             [

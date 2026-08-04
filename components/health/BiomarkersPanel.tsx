@@ -5,6 +5,7 @@ import {
   BiomarkerReport,
   biomarkerStatusColor,
   computeBiomarkerReport,
+  type BiomarkerCategory,
 } from '@/lib/health/sensor-biomarkers';
 import { loadDayIndicators } from '@/lib/health/phone-sensors';
 
@@ -13,20 +14,63 @@ type Props = {
   lang?: 'es' | 'en';
   /** Bump to force recompute after sensors / logs change */
   refreshKey?: number;
+  /**
+   * Health tab that owns this panel — only markers for this category.
+   * Required so biomarkers are never duplicated across tabs.
+   */
+  category: BiomarkerCategory;
+};
+
+const CATEGORY_META: Record<
+  BiomarkerCategory,
+  { titleEs: string; titleEn: string; blurbEs: string; blurbEn: string; indexEs: string; indexEn: string }
+> = {
+  exercise: {
+    titleEs: 'Biomarcadores · Ejercicio',
+    titleEn: 'Biomarkers · Exercise',
+    blurbEs:
+      'Actividad, sol, eficiencia de movimiento y anti-sedentarismo (sensores + hábitos). No sustituyen analítica clínica.',
+    blurbEn:
+      'Activity, outdoor light, movement efficiency and anti-sedentary load. Habit guidance — not lab results.',
+    indexEs: 'Índice ejercicio',
+    indexEn: 'Exercise index',
+  },
+  nutrition: {
+    titleEs: 'Biomarcadores · Alimentación',
+    titleEn: 'Biomarkers · Nutrition',
+    blurbEs:
+      'Hidratación y calidad de comidas según tus registros. Orientan hábitos; no reemplazan nutrición clínica.',
+    blurbEn:
+      'Hydration and meal quality from your logs. Habit guidance — not clinical nutrition advice.',
+    indexEs: 'Índice alimentación',
+    indexEn: 'Nutrition index',
+  },
+  sleep: {
+    titleEs: 'Biomarcadores · Sueño',
+    titleEn: 'Biomarkers · Sleep',
+    blurbEs:
+      'Recuperación y estabilidad circadiana a partir de sueño y sensores de reposo.',
+    blurbEn:
+      'Recovery and circadian stability from sleep logs and rest sensors.',
+    indexEs: 'Índice sueño',
+    indexEn: 'Sleep index',
+  },
 };
 
 export default function BiomarkersPanel({
   isFemale = false,
   lang = 'es',
   refreshKey = 0,
+  category,
 }: Props) {
   const es = lang !== 'en';
+  const meta = CATEGORY_META[category];
   const [report, setReport] = useState<BiomarkerReport | null>(null);
 
   const recompute = useCallback(() => {
     const day = loadDayIndicators();
-    setReport(computeBiomarkerReport({ isFemale, day }));
-  }, [isFemale]);
+    setReport(computeBiomarkerReport({ isFemale, day, category }));
+  }, [isFemale, category]);
 
   useEffect(() => {
     recompute();
@@ -45,7 +89,7 @@ export default function BiomarkersPanel({
       <div className="flex items-center justify-between mb-3 gap-2">
         <h2 className="text-sm font-semibold text-[var(--sage)] flex items-center gap-2">
           <span>◈</span>
-          {es ? 'Biomarcadores (sensores + hábitos)' : 'Biomarkers (sensors + habits)'}
+          {es ? meta.titleEs : meta.titleEn}
         </h2>
         <button
           type="button"
@@ -58,12 +102,10 @@ export default function BiomarkersPanel({
 
       <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] space-y-4">
         <p className="text-[11px] text-[var(--sage)]/80 leading-relaxed">
-          {es
-            ? 'Índices estimados desde sensores del celular (pasos, GPS, reposo) y tus registros. Orientan hábitos; no reemplazan analítica clínica.'
-            : 'Estimates from phone sensors (steps, GPS, rest) and your logs. Habit guidance — not lab results.'}
+          {es ? meta.blurbEs : meta.blurbEn}
         </p>
 
-        {/* Composite */}
+        {/* Category composite (only markers of this tab) */}
         <div className="flex items-center gap-4 rounded-xl border border-[var(--border-soft)] bg-[#040404]/55 px-3.5 py-3">
           <div className="relative w-16 h-16 shrink-0 flex items-center justify-center">
             <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
@@ -86,7 +128,7 @@ export default function BiomarkersPanel({
           </div>
           <div className="min-w-0">
             <p className="text-[10px] uppercase tracking-wider text-[var(--accent)]">
-              {es ? 'Índice Salvazion Health' : 'Salvazion Health Index'}
+              {es ? meta.indexEs : meta.indexEn}
             </p>
             <p className="text-xs text-[#D8E1D9]/85 mt-1 leading-relaxed">
               {report.highlights.map((h) => (es ? h.es : h.en)).join(' ')}
@@ -122,7 +164,7 @@ export default function BiomarkersPanel({
                 </div>
                 <div className="text-right shrink-0">
                   <p className={`text-sm font-bold tabular-nums ${biomarkerStatusColor(bm.status)}`}>
-                    {bm.score != null ? `${bm.score}${bm.unit === '/100' ? '' : ''}` : '—'}
+                    {bm.score != null ? `${bm.score}` : '—'}
                     {bm.score != null && bm.unit === '/100' ? (
                       <span className="text-[10px] font-normal text-[var(--sage)]">/100</span>
                     ) : null}

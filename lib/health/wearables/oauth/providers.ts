@@ -1,6 +1,9 @@
 /**
  * OAuth provider configs for wearable cloud APIs.
  * Credentials come from env — never ship secrets to the client.
+ *
+ * Fitbit: legacy Web API shuts down 2026-09-30. Use Google Health API + Google OAuth.
+ * @see https://developers.google.com/health
  */
 
 import { getAppBaseUrl } from '@/lib/config/site';
@@ -17,37 +20,52 @@ export interface OAuthProviderConfig {
   scopes: string[];
   /** Use PKCE (recommended for public + confidential hybrid flows) */
   usePkce: boolean;
-  /** Fitbit requires Basic auth on token endpoint */
+  /** Some providers require Basic auth on token endpoint */
   tokenAuth: 'body' | 'basic';
   clientIdEnv: string;
   clientSecretEnv: string;
+  /** Optional legacy env keys (e.g. old Fitbit Web API vars) */
+  clientIdEnvFallback?: string;
+  clientSecretEnvFallback?: string;
   /** Extra token body params */
   extraTokenParams?: Record<string, string>;
   /** Extra authorize params */
   extraAuthParams?: Record<string, string>;
 }
 
+/** Google Health API scopes (restricted — require OAuth app verification for production). */
+export const GOOGLE_HEALTH_SCOPES = [
+  'https://www.googleapis.com/auth/googlehealth.activity_and_fitness.readonly',
+  'https://www.googleapis.com/auth/googlehealth.health_metrics_and_measurements.readonly',
+  'https://www.googleapis.com/auth/googlehealth.sleep.readonly',
+  'https://www.googleapis.com/auth/googlehealth.profile.readonly',
+] as const;
+
 export const OAUTH_PROVIDERS: Record<OAuthProviderId, OAuthProviderConfig> = {
+  /**
+   * Fitbit / Pixel Watch data via Google Health API (replaces legacy Fitbit Web API).
+   * Provider id stays `fitbit` for routes & UI; auth is Google OAuth 2.0.
+   */
   fitbit: {
     id: 'fitbit',
     brandId: 'fitbit',
-    name: 'Fitbit',
-    authUrl: 'https://www.fitbit.com/oauth2/authorize',
-    tokenUrl: 'https://api.fitbit.com/oauth2/token',
-    revokeUrl: 'https://api.fitbit.com/oauth2/revoke',
-    scopes: [
-      'activity',
-      'heartrate',
-      'sleep',
-      'profile',
-      'weight',
-      'oxygen_saturation',
-      'respiratory_rate',
-    ],
+    name: 'Fitbit · Google Health',
+    authUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
+    tokenUrl: 'https://oauth2.googleapis.com/token',
+    scopes: [...GOOGLE_HEALTH_SCOPES],
     usePkce: true,
-    tokenAuth: 'basic',
-    clientIdEnv: 'FITBIT_CLIENT_ID',
-    clientSecretEnv: 'FITBIT_CLIENT_SECRET',
+    tokenAuth: 'body',
+    clientIdEnv: 'GOOGLE_HEALTH_CLIENT_ID',
+    clientSecretEnv: 'GOOGLE_HEALTH_CLIENT_SECRET',
+    // Temporary fallback while teams still have FITBIT_* names in env
+    clientIdEnvFallback: 'FITBIT_CLIENT_ID',
+    clientSecretEnvFallback: 'FITBIT_CLIENT_SECRET',
+    extraAuthParams: {
+      access_type: 'offline',
+      // Needed to obtain a refresh token on first connect
+      prompt: 'consent',
+      // Do NOT set include_granted_scopes — legacy fitness.* scopes can break Health API
+    },
   },
   oura: {
     id: 'oura',
@@ -103,22 +121,29 @@ export function getProvider(id: string): OAuthProviderConfig | null {
   return null;
 }
 
+function readEnvPair(p: OAuthProviderConfig): {
+  clientId: string;
+  clientSecret: string;
+} | null {
+  const clientId =
+    process.env[p.clientIdEnv] ||
+    (p.clientIdEnvFallback ? process.env[p.clientIdEnvFallback] : undefined);
+  const clientSecret =
+    process.env[p.clientSecretEnv] ||
+    (p.clientSecretEnvFallback ? process.env[p.clientSecretEnvFallback] : undefined);
+  if (!clientId || !clientSecret) return null;
+  return { clientId, clientSecret };
+}
+
 export function isProviderConfigured(id: OAuthProviderId): boolean {
-  const p = OAUTH_PROVIDERS[id];
-  const clientId = process.env[p.clientIdEnv];
-  const clientSecret = process.env[p.clientSecretEnv];
-  return Boolean(clientId && clientSecret);
+  return Boolean(readEnvPair(OAUTH_PROVIDERS[id]));
 }
 
 export function getClientCredentials(id: OAuthProviderId): {
   clientId: string;
   clientSecret: string;
 } | null {
-  const p = OAUTH_PROVIDERS[id];
-  const clientId = process.env[p.clientIdEnv];
-  const clientSecret = process.env[p.clientSecretEnv];
-  if (!clientId || !clientSecret) return null;
-  return { clientId, clientSecret };
+  return readEnvPair(OAUTH_PROVIDERS[id]);
 }
 
 export { getAppBaseUrl };

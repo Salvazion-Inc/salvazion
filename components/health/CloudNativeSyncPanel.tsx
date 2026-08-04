@@ -136,7 +136,7 @@ export default function CloudNativeSyncPanel({ onAutoLog, onSleepSynced }: Props
   };
 
   const connectOAuth = (id: string) => {
-    window.location.href = `/api/wearables/oauth/${id}/start?returnTo=/hub/health`;
+    window.location.href = `/api/wearables/oauth/${id}/start?returnTo=${encodeURIComponent('/hub/health?tab=wearables')}`;
   };
 
   const syncOAuth = async (id: string) => {
@@ -221,14 +221,11 @@ export default function CloudNativeSyncPanel({ onAutoLog, onSleepSynced }: Props
 
   return (
     <section className="mb-6">
-      <div className="flex items-start justify-between gap-2 mb-3">
-        <div>
-          <h2 className="text-sm font-semibold text-[var(--sage)] flex items-center gap-2">
-            <span>☁️</span> {t('wearables.cloudTitle')}
-          </h2>
-          <p className="text-[11px] text-[var(--sage)]/80 mt-0.5">{t('wearables.cloudSubtitle')}</p>
-        </div>
-        <span className="pill-soft text-[10px] shrink-0">{t('wearables.faseD')}</span>
+      <div className="mb-3">
+        <h2 className="text-sm font-semibold text-[var(--sage)] flex items-center gap-2">
+          <span>☁️</span> {t('wearables.cloudTitle')}
+        </h2>
+        <p className="text-[11px] text-[var(--sage)]/80 mt-0.5">{t('wearables.cloudSubtitle')}</p>
       </div>
 
       <div className="card-soft p-4 space-y-4">
@@ -326,10 +323,6 @@ export default function CloudNativeSyncPanel({ onAutoLog, onSleepSynced }: Props
             {note}
           </p>
         )}
-
-        <p className="text-[10px] text-[var(--sage)]/60 leading-relaxed">
-          {t('wearables.cloudDisclaimer')}
-        </p>
       </div>
     </section>
   );

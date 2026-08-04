@@ -46,13 +46,11 @@ export default function BiblePage() {
   const [readCount, setReadCount] = useState(0);
   const [bookAnimDir, setBookAnimDir] = useState<BookAnimDir>('fade');
   const [bookAnimKey, setBookAnimKey] = useState(0);
-  /** Auto-collapses header when reading a chapter */
+  /** Compact reading chrome — expanded by default; user collapses manually */
   const [chromeCollapsed, setChromeCollapsed] = useState(false);
   const [salvationScore, setSalvationScore] = useState(0);
   const verseRefs = useRef<Map<number, HTMLParagraphElement>>(new Map());
   const prevBookIdxRef = useRef(0);
-  /** Skip auto-collapse only right after user expands */
-  const userExpandedRef = useRef(false);
 
   const availableChapters = getAvailableChapters(selectedBook, language);
   const totalChapters = getTotalChapters();
@@ -110,17 +108,12 @@ export default function BiblePage() {
     };
   }, [selectedBook, selectedChapter, language, bibleMode]);
 
-  // Auto-collapse top chrome when reading a chapter
+  // Expand chrome when leaving the reader (library / search / prayer)
   useEffect(() => {
     if (mainTab !== 'bible' || bibleMode !== 'read') {
       setChromeCollapsed(false);
-      userExpandedRef.current = false;
-      return;
     }
-    if (loadingChapter || !chapter) return;
-    if (userExpandedRef.current) return;
-    setChromeCollapsed(true);
-  }, [mainTab, bibleMode, loadingChapter, chapter, selectedBook, selectedChapter]);
+  }, [mainTab, bibleMode]);
 
   // Scroll to focused verse from search/concordance
   useEffect(() => {
@@ -147,7 +140,6 @@ export default function BiblePage() {
 
   const openVerse = useCallback(
     (bookId: string, chapterNum: number, verse?: number) => {
-      userExpandedRef.current = false;
       selectBook(bookId, chapterNum);
       setFocusVerse(verse ?? null);
       setBibleMode('read');
@@ -158,7 +150,6 @@ export default function BiblePage() {
 
   const openBookFromLibrary = useCallback(
     (bookId: string) => {
-      userExpandedRef.current = false;
       selectBook(bookId);
       setBibleMode('read');
     },
@@ -166,7 +157,6 @@ export default function BiblePage() {
   );
 
   const goPrev = () => {
-    userExpandedRef.current = false;
     if (selectedChapter > 1) {
       setSelectedChapter(selectedChapter - 1);
       setFocusVerse(null);
@@ -180,7 +170,6 @@ export default function BiblePage() {
   };
 
   const goNext = () => {
-    userExpandedRef.current = false;
     const book = getBook(selectedBook);
     if (!book) return;
     if (selectedChapter < book.chapters) {
@@ -195,12 +184,10 @@ export default function BiblePage() {
   };
 
   const expandChrome = () => {
-    userExpandedRef.current = true;
     setChromeCollapsed(false);
   };
 
   const collapseChrome = () => {
-    userExpandedRef.current = false;
     setChromeCollapsed(true);
   };
 
@@ -226,7 +213,7 @@ export default function BiblePage() {
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
-      {/* Header — Salvation pillar (auto-collapses while reading) */}
+      {/* Header — Salvation pillar (manual collapse while reading) */}
       <header className="page-header px-5 sticky top-0 z-40">
         {chromeCollapsed && isReading ? (
           <div className="pt-3 pb-2.5 flex items-center gap-2">
@@ -278,7 +265,6 @@ export default function BiblePage() {
             as="div"
             pillar="salvation"
             score={salvationScore}
-            subtitle={`${readCount} / ${totalChapters} ${t('bible.chapters')}`}
             className="!pt-3 !px-0 !pb-0 bg-transparent border-0 shadow-none"
             sticky={false}
             actions={
@@ -318,10 +304,7 @@ export default function BiblePage() {
                     data-active={mainTab === tab.id}
                     onClick={() => {
                       setMainTab(tab.id);
-                      if (tab.id !== 'bible') {
-                        setChromeCollapsed(false);
-                        userExpandedRef.current = false;
-                      }
+                      if (tab.id !== 'bible') setChromeCollapsed(false);
                     }}
                   >
                     {t(tab.key)}
@@ -346,12 +329,7 @@ export default function BiblePage() {
                     data-active={bibleMode === tab.id}
                     onClick={() => {
                       setBibleMode(tab.id);
-                      if (tab.id !== 'read') {
-                        setChromeCollapsed(false);
-                        userExpandedRef.current = false;
-                      } else {
-                        userExpandedRef.current = false;
-                      }
+                      if (tab.id !== 'read') setChromeCollapsed(false);
                     }}
                   >
                     {t(tab.key)}
@@ -385,23 +363,44 @@ export default function BiblePage() {
             {/* Book carousel + chapter — only when reading in Bible tab */}
             {mainTab === 'bible' && bibleMode === 'read' && (
               <div className="mt-3 -mx-5">
+                <div className="flex items-end justify-between gap-2 px-5 mb-2">
+                  <div className="min-w-0">
+                    <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70">
+                      {t('bible.library')}
+                    </p>
+                    <p className="text-xs text-[var(--off-white)]/90 truncate">
+                      {bookDisplayName}
+                      {selectedBookIdx >= 0 ? (
+                        <span className="text-[var(--sage)]/70">
+                          {' '}
+                          · {selectedBookIdx + 1}/{books.length}
+                        </span>
+                      ) : null}
+                    </p>
+                  </div>
+                  <p
+                    className="text-[11px] font-semibold tabular-nums shrink-0 text-right"
+                    style={{ color: 'var(--off-white)' }}
+                    title={t('bible.chapters')}
+                  >
+                    <span className="text-[var(--accent)]">{readCount}</span>
+                    <span className="text-[var(--sage)]/80">
+                      {' '}
+                      / {totalChapters} {t('bible.chapters')}
+                    </span>
+                  </p>
+                </div>
                 <BookCarousel
                   books={books}
                   selectedBookId={selectedBook}
                   uiLang={uiLang === 'en' ? 'en' : 'es'}
-                  onSelect={(id) => {
-                    userExpandedRef.current = false;
-                    selectBook(id);
-                  }}
+                  onSelect={(id) => selectBook(id)}
                   size="md"
                 />
                 <div className="flex gap-2 mt-2.5 px-5">
                   <select
                     value={selectedBook}
-                    onChange={(e) => {
-                      userExpandedRef.current = false;
-                      selectBook(e.target.value);
-                    }}
+                    onChange={(e) => selectBook(e.target.value)}
                     className="input-soft flex-1 py-2.5 text-sm"
                     aria-label={t('bible.library')}
                   >
@@ -428,7 +427,6 @@ export default function BiblePage() {
                   <select
                     value={selectedChapter}
                     onChange={(e) => {
-                      userExpandedRef.current = false;
                       setSelectedChapter(Number(e.target.value));
                       setFocusVerse(null);
                     }}
@@ -442,11 +440,6 @@ export default function BiblePage() {
                     ))}
                   </select>
                 </div>
-                {selectedBookIdx >= 0 && (
-                  <p className="px-5 mt-1.5 text-[10px] text-[var(--sage)]/70 tabular-nums">
-                    {selectedBookIdx + 1} / {books.length}
-                  </p>
-                )}
               </div>
             )}
           </PillarHubHeader>
@@ -614,7 +607,6 @@ export default function BiblePage() {
                 onClick={() => {
                   setBibleMode('library');
                   setChromeCollapsed(false);
-                  userExpandedRef.current = false;
                 }}
                 className="btn-secondary flex-1 py-3 text-xs"
               >

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, Suspense } from 'react';
 import BottomNav from '@/components/BottomNav';
-import { loadProfile, getLifeStageLabel } from '@/lib/store/profile';
+import { loadProfile } from '@/lib/store/profile';
 import { UserProfile } from '@/lib/types';
 import { computeScores, logAction } from '@/lib/scoring/engine';
 import { ComputedScores } from '@/lib/scoring/types';
@@ -51,7 +51,6 @@ import WearablesPanel from '@/components/health/WearablesPanel';
 import CloudNativeSyncPanel from '@/components/health/CloudNativeSyncPanel';
 import WomenHealthPanel from '@/components/health/WomenHealthPanel';
 import BiomarkersPanel from '@/components/health/BiomarkersPanel';
-import ClinicalRecordPanel from '@/components/health/ClinicalRecordPanel';
 import PillarHubHeader from '@/components/hub/PillarHubHeader';
 
 export default function HealthPage() {
@@ -77,10 +76,11 @@ export default function HealthPage() {
   const [sportName, setSportName] = useState('');
   const [sportEnv, setSportEnv] = useState<SportEnvironment>('outdoor');
   const [sportFreq, setSportFreq] = useState<SportFrequency>('weekly');
-  const [activeTab, setActiveTab] = useState<'exercise' | 'nutrition' | 'sleep'>('exercise');
+  const [activeTab, setActiveTab] = useState<
+    'exercise' | 'nutrition' | 'sleep' | 'wearables'
+  >('exercise');
 
   const stage = getCurrentHealthStage();
-  const stageLabel = getLifeStageLabel(stage);
   const en = profile?.language === 'en';
 
   const refresh = useCallback(() => {
@@ -112,6 +112,23 @@ export default function HealthPage() {
     const id = requestAnimationFrame(() => refresh());
     return () => cancelAnimationFrame(id);
   }, [refresh]);
+
+  // OAuth / deep-link: open Wearables tab when returning from cloud connect
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      if (
+        sp.has('wearable_connected') ||
+        sp.has('wearable_error') ||
+        sp.get('tab') === 'wearables'
+      ) {
+        setActiveTab('wearables');
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
 
   const showToast = (msg: string) => {
     setToast(msg);
@@ -173,16 +190,21 @@ export default function HealthPage() {
   const categories = [
     { id: 'exercise', title: 'Ejercicio y sol', icon: '⚡' },
     { id: 'nutrition', title: 'Alimentación', icon: '🥗' },
-    { id: 'sleep', title: 'Sueño', icon: '🌙' }
+    { id: 'sleep', title: 'Sueño', icon: '🌙' },
+    { id: 'wearables', title: 'Wearables', icon: '⌚' },
   ] as const;
+
+  const handleSleepSynced = (bed: string, wake: string) => {
+    setBedTime(bed);
+    setWakeTime(wake);
+    setTodaySleep(getTodaySleep());
+    setRegularity(getSleepRegularity());
+    bumpHealthData();
+  };
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
-      <PillarHubHeader
-        pillar="health"
-        score={healthScore}
-        subtitle={`${profile?.name || 'Salvazion'} · ${stageLabel}`}
-      >
+      <PillarHubHeader pillar="health" score={healthScore}>
         <div className="segment-soft mb-2 mt-3">
           {(
             [
@@ -197,6 +219,10 @@ export default function HealthPage() {
               {
                 id: 'sleep' as const,
                 label: en ? 'Sleep' : 'Sueño',
+              },
+              {
+                id: 'wearables' as const,
+                label: 'Wearables',
               },
             ] as const
           ).map((tab) => (
@@ -275,6 +301,13 @@ export default function HealthPage() {
             </button>
           </div>
         </section>
+
+        <BiomarkersPanel
+          category="sleep"
+          isFemale={profile?.sex === 'female'}
+          lang={en ? 'en' : 'es'}
+          refreshKey={healthRefreshKey}
+        />
           </>
         )}
 
@@ -507,6 +540,13 @@ export default function HealthPage() {
             </div>
           </div>
         </section>
+
+        <BiomarkersPanel
+          category="nutrition"
+          isFemale={profile?.sex === 'female'}
+          lang={en ? 'en' : 'es'}
+          refreshKey={healthRefreshKey}
+        />
           </>
         )}
 
@@ -693,51 +733,13 @@ export default function HealthPage() {
             </div>
           );
         })()}
-          </>
-        )}
 
-        {/* Herramientas comunes de Health (siempre visibles) */}
         <BiomarkersPanel
+          category="exercise"
           isFemale={profile?.sex === 'female'}
           lang={en ? 'en' : 'es'}
           refreshKey={healthRefreshKey}
         />
-
-        <PhoneSensorsPanel
-          loggedToday={loggedToday}
-          onAutoLog={(actionType, label) => handleLog(actionType, label)}
-          onSleepSynced={(bed, wake) => {
-            setBedTime(bed);
-            setWakeTime(wake);
-            setTodaySleep(getTodaySleep());
-            setRegularity(getSleepRegularity());
-            bumpHealthData();
-          }}
-        />
-
-        <WearablesPanel
-          onAutoLog={(actionType, label) => handleLog(actionType, label)}
-          onSleepSynced={(bed, wake) => {
-            setBedTime(bed);
-            setWakeTime(wake);
-            setTodaySleep(getTodaySleep());
-            setRegularity(getSleepRegularity());
-            bumpHealthData();
-          }}
-        />
-
-        <Suspense fallback={null}>
-          <CloudNativeSyncPanel
-            onAutoLog={(actionType, label) => handleLog(actionType, label)}
-            onSleepSynced={(bed, wake) => {
-              setBedTime(bed);
-              setWakeTime(wake);
-              setTodaySleep(getTodaySleep());
-              setRegularity(getSleepRegularity());
-              bumpHealthData();
-            }}
-          />
-        </Suspense>
 
         {profile?.sex === 'female' && (
           <WomenHealthPanel
@@ -752,16 +754,37 @@ export default function HealthPage() {
             }}
           />
         )}
+          </>
+        )}
 
-        <ClinicalRecordPanel
-          profile={profile}
-          lang={en ? 'en' : 'es'}
-          refreshKey={healthRefreshKey}
-        />
+        {/* Wearables: sensores, BLE/manual, Cloud OAuth y nativo (una sola vez) */}
+        {activeTab === 'wearables' && (
+          <>
+            <PhoneSensorsPanel
+              loggedToday={loggedToday}
+              onAutoLog={(actionType, label) => handleLog(actionType, label)}
+              onSleepSynced={handleSleepSynced}
+            />
 
-        <p className="text-[10px] text-[var(--sage)]/60 text-center leading-relaxed px-2 mb-4">
-          Fase B: sensores · Fase C: BLE/manual · Fase D: OAuth (Fitbit/Oura/WHOOP/Garmin) + HealthKit / Health Connect nativo.
-        </p>
+            <WearablesPanel
+              onAutoLog={(actionType, label) => handleLog(actionType, label)}
+              onSleepSynced={handleSleepSynced}
+            />
+
+            <Suspense
+              fallback={
+                <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] mb-4 text-sm text-[var(--sage)] animate-pulse">
+                  {en ? 'Loading cloud sync…' : 'Cargando sincronización cloud…'}
+                </div>
+              }
+            >
+              <CloudNativeSyncPanel
+                onAutoLog={(actionType, label) => handleLog(actionType, label)}
+                onSleepSynced={handleSleepSynced}
+              />
+            </Suspense>
+          </>
+        )}
       </main>
 
       {toast && (

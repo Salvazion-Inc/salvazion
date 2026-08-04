@@ -21,6 +21,7 @@ import { createClient } from '@/lib/supabase/client';
 import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 import BillingCard from '@/components/billing/BillingCard';
 import ProfileAvatar from '@/components/profile/ProfileAvatar';
+import ClinicalRecordPanel from '@/components/health/ClinicalRecordPanel';
 import TextScaleControl from '@/components/settings/TextScaleControl';
 import ThemeControl from '@/components/settings/ThemeControl';
 import LanguageControl from '@/components/settings/LanguageControl';
@@ -357,6 +358,12 @@ export default function ProfilePage() {
             </div>
           )}
         </div>
+
+        {/* Clinical FHIR export lives on Profile (identity + data portability), not Health tabs */}
+        <ClinicalRecordPanel
+          profile={profile}
+          lang={lang === 'en' ? 'en' : 'es'}
+        />
 
         {/* Premium subscription */}
         <div className="mb-6">

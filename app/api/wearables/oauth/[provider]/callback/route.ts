@@ -43,9 +43,11 @@ export async function GET(
     await saveOAuthTokens(tokens);
     await clearFlowState();
     const returnTo = flow.returnTo.startsWith('/') ? flow.returnTo : '/hub/health';
-    return NextResponse.redirect(
-      `${base}${returnTo}?wearable_connected=${provider}`
-    );
+    // Merge query (returnTo may already include ?tab=wearables)
+    const dest = new URL(returnTo, base);
+    dest.searchParams.set('wearable_connected', provider);
+    dest.searchParams.set('tab', 'wearables');
+    return NextResponse.redirect(dest.toString());
   } catch (e) {
     const msg = e instanceof Error ? e.message : 'token_exchange_failed';
     return NextResponse.redirect(

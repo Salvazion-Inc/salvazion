@@ -282,6 +282,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
   const stats = useMemo(() => getDayCompletionStats(date), [date, events]);
   const showSummary = isDaySummaryWindow(date);
   const pickedDef = picked ? ROUTINE_BLOCKS.find((b) => b.key === picked) : null;
+  const pickedPal = pickedDef ? pillarPalette(pickedDef.pillar) : null;
   const isToday = date === todayStr();
 
   const sortedEvents = useMemo(
@@ -471,10 +472,10 @@ export default function RoutineBoard({ date, onChange }: Props) {
       </div>
 
       {/* Attach panel */}
-      {picked && pickedDef && (
+      {picked && pickedDef && pickedPal && (
         <div
           className="card-soft p-3 space-y-2.5 border"
-          style={{ borderColor: pillarPalette(pickedDef.pillar).border }}
+          style={{ borderColor: pickedPal.border }}
         >
           <div>
             <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]">
@@ -482,7 +483,10 @@ export default function RoutineBoard({ date, onChange }: Props) {
             </p>
             <p
               className="text-sm font-semibold"
-              style={{ color: pillarPalette(pickedDef.pillar).text }}
+              style={{
+                // Attach panel sits on dark chrome — use solid (light), not plate ink
+                color: pickedPal.lightPlate ? pickedPal.solid : pickedPal.text,
+              }}
             >
               {t(pickedDef.titleKey)}
             </p>
@@ -601,11 +605,16 @@ export default function RoutineBoard({ date, onChange }: Props) {
                   {
                     // CSS var drives glow / badge accent from pillar color
                     '--now-glow': pal.solid,
+                    // Salvation = light plate + dark ink (Oración, Devocional…)
                     background: isNow
-                      ? `linear-gradient(135deg, ${pal.soft} 0%, color-mix(in srgb, ${pal.solid} 22%, #0a120c) 100%)`
+                      ? pal.lightPlate
+                        ? `linear-gradient(135deg, ${pal.soft} 0%, color-mix(in srgb, ${pal.solid} 72%, #c8d0c8) 100%)`
+                        : `linear-gradient(135deg, ${pal.soft} 0%, color-mix(in srgb, ${pal.solid} 22%, #0a120c) 100%)`
                       : pal.soft,
                     borderColor: isNow
-                      ? pal.solid
+                      ? pal.lightPlate
+                        ? 'color-mix(in srgb, #121412 28%, #F5F7F5)'
+                        : pal.solid
                       : expanded || dirty
                         ? pal.solid
                         : pal.border,
@@ -620,6 +629,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
                 }
                 data-duration-min={durMin}
                 data-phase={isToday ? phase : undefined}
+                data-pillar={ev.pillar}
                 aria-current={isNow ? 'true' : undefined}
               >
                 {/* Height scales with duration (sleep 7h ≫ exercise 30m) */}
@@ -631,18 +641,20 @@ export default function RoutineBoard({ date, onChange }: Props) {
                     paddingBottom: isNow ? 10 : undefined,
                   }}
                 >
-                  {/* Pillar stripe */}
+                  {/* Pillar stripe — dark charcoal on white Salvation plates */}
                   <span
                     className={`self-stretch rounded-full shrink-0 ${
                       isNow ? 'w-1.5 now-block-stripe' : 'w-1'
                     }`}
                     style={
-                      isNow
-                        ? ({
-                            '--now-glow': pal.solid,
-                            background: pal.solid,
-                          } as CSSProperties)
-                        : { background: pal.solid }
+                      {
+                        '--now-glow': pal.lightPlate
+                          ? 'color-mix(in srgb, #121412 55%, #F5F7F5)'
+                          : pal.solid,
+                        background: pal.lightPlate
+                          ? 'color-mix(in srgb, #121412 55%, #F5F7F5)'
+                          : pal.solid,
+                      } as CSSProperties
                     }
                     aria-hidden
                   />
@@ -703,7 +715,11 @@ export default function RoutineBoard({ date, onChange }: Props) {
                   <div
                     className="btn-pair"
                     style={{
-                      borderColor: isNow ? pal.solid : pal.border,
+                      borderColor: isNow
+                        ? pal.lightPlate
+                          ? 'color-mix(in srgb, #121412 30%, transparent)'
+                          : pal.solid
+                        : pal.border,
                       boxShadow: isNow
                         ? `0 0 10px color-mix(in srgb, ${pal.solid} 25%, transparent)`
                         : undefined,
@@ -715,10 +731,14 @@ export default function RoutineBoard({ date, onChange }: Props) {
                       type="button"
                       onClick={() => setDone(ev.id, true)}
                       style={{
-                        background: done ? pal.solid : 'transparent',
+                        background: done
+                          ? pal.lightPlate
+                            ? '#121412'
+                            : pal.solid
+                          : 'transparent',
                         color: done
-                          ? ev.pillar === 'salvation'
-                            ? '#111'
+                          ? pal.lightPlate
+                            ? '#F5F7F5'
                             : '#0a120c'
                           : pal.muted,
                       }}
@@ -732,8 +752,16 @@ export default function RoutineBoard({ date, onChange }: Props) {
                       onClick={() => setDone(ev.id, false)}
                       style={{
                         borderColor: pal.border,
-                        background: !done ? 'rgba(0,0,0,0.35)' : 'transparent',
-                        color: !done ? pal.text : pal.muted,
+                        background: !done
+                          ? pal.lightPlate
+                            ? 'rgba(18, 20, 18, 0.12)'
+                            : 'rgba(0,0,0,0.35)'
+                          : 'transparent',
+                        color: !done
+                          ? pal.lightPlate
+                            ? pal.text
+                            : pal.control
+                          : pal.muted,
                       }}
                       aria-pressed={!done}
                       title={t('calendar.noPending')}
@@ -748,7 +776,9 @@ export default function RoutineBoard({ date, onChange }: Props) {
                       <i
                         style={{
                           width: `${Math.round(progress * 100)}%`,
-                          background: `linear-gradient(90deg, ${pal.solid}, color-mix(in srgb, ${pal.solid} 70%, #fff))`,
+                          background: pal.lightPlate
+                            ? 'linear-gradient(90deg, #3a3f3a, #121412)'
+                            : `linear-gradient(90deg, ${pal.solid}, color-mix(in srgb, ${pal.solid} 70%, #fff))`,
                         }}
                       />
                     </div>
@@ -918,8 +948,15 @@ function PaletteChip({
       }`}
       style={{
         background: pal.soft,
-        borderColor: selected ? pal.solid : pal.border,
+        borderColor: selected
+          ? pal.lightPlate
+            ? 'color-mix(in srgb, #121412 40%, #F5F7F5)'
+            : pal.solid
+          : pal.border,
         color: pal.text,
+        boxShadow: selected
+          ? `0 0 0 1px ${pal.lightPlate ? 'rgba(18,20,18,0.25)' : pal.solid + '44'}`
+          : undefined,
       }}
     >
       {label}

@@ -332,7 +332,6 @@ export const dictionary = {
     sensors: {
       title: 'Sensores del celular',
       subtitle: 'Pasos, actividad, GPS y sueño · Health',
-      faseB: 'Fase B',
       loading: 'Cargando sensores…',
       motion: 'Movimiento',
       gps: 'GPS',
@@ -368,13 +367,10 @@ export const dictionary = {
       intensityLight: 'Suave',
       intensityModerate: 'Moderado',
       intensityVigorous: 'Vigoroso',
-      disclaimer:
-        'Estimaciones del navegador (PWA). No sustituyen un wearable clínico. En app nativa se conectarán HealthKit / Health Connect.',
     },
     wearables: {
       title: 'Wearables y monitores',
       subtitle: 'Relojes, anillos, bandas y cintas · Health',
-      faseC: 'Fase C',
       yourDevices: 'Tus dispositivos',
       addDevice: '+ Vincular',
       empty: 'Aún no hay wearables. Vincula un reloj, anillo, banda o monitor.',
@@ -382,6 +378,10 @@ export const dictionary = {
       labelPlaceholder: 'Nombre (opcional), ej. Mi Oura',
       confirmLink: 'Vincular dispositivo',
       linked: 'Dispositivo vinculado',
+      linkedManualFallback:
+        'Vinculado en modo manual. Introduce las métricas de la app del dispositivo.',
+      linkedNativeHint:
+        'Dispositivo registrado. Sincroniza abajo con HealthKit / Health Connect o guarda métricas manuales.',
       unlink: 'Quitar',
       lastSync: 'Sync',
       connectBle: 'Conectar BLE',
@@ -406,8 +406,8 @@ export const dictionary = {
       autoLogged: 'Acciones de Health actualizadas desde el wearable',
       modeBle: 'Bluetooth FC',
       modeManual: 'Manual',
-      modeOauth: 'API (pronto)',
-      modeOs: 'Health OS (pronto)',
+      modeOauth: 'Cloud OAuth',
+      modeOs: 'Health Connect',
       catWatch: 'Reloj',
       catRing: 'Anillo',
       catBand: 'Banda',
@@ -427,11 +427,8 @@ export const dictionary = {
       fieldSpo2: 'SpO₂',
       fieldReadiness: 'Readiness',
       fieldWeight: 'Peso kg',
-      disclaimer:
-        'BLE: monitores con servicio estándar de FC. OAuth y HealthKit/Health Connect: sección Cloud & nativo abajo.',
       cloudTitle: 'Cloud OAuth y nativo',
       cloudSubtitle: 'Fitbit · Oura · WHOOP · Garmin · HealthKit · Health Connect',
-      faseD: 'Fase D',
       oauthProviders: 'Cuentas cloud',
       oauthLoading: 'Cargando proveedores…',
       connectOAuth: 'Conectar',
@@ -440,7 +437,7 @@ export const dictionary = {
       syncing: 'Sincronizando…',
       statusConnected: 'Conectado',
       statusReady: 'Listo (credenciales OK)',
-      statusNotConfigured: 'Faltan CLIENT_ID/SECRET en env',
+      statusNotConfigured: 'No disponible aún (cuenta cloud no configurada en el servidor)',
       oauthConnected: 'Conectado a {name}',
       oauthDisconnected: 'Desconectado {name}',
       oauthError: 'OAuth: {error}',
@@ -450,15 +447,13 @@ export const dictionary = {
       nativeChecking: 'Detectando plataforma nativa…',
       syncNative: 'Sincronizar desde el sistema de salud',
       nativePluginMissing:
-        'Shell nativo sin plugin SalvazionHealth. Ver native/capacitor/README.md',
+        'La app nativa aún no tiene el plugin de salud. Usa OAuth o registro manual en web.',
       nativeDenied: 'Permiso de salud denegado',
       nativeWebOnly:
-        'HealthKit / Health Connect solo en app nativa (Capacitor). En web usa OAuth o manual.',
+        'HealthKit / Health Connect solo en la app nativa. En el navegador usa Cloud OAuth o registro manual.',
       healthkitSynced: 'HealthKit sincronizado',
       healthConnectSynced: 'Health Connect sincronizado',
       modeHealthkit: 'HealthKit',
-      cloudDisclaimer:
-        'Configura FITBIT_*, OURA_*, WHOOP_*, GARMIN_* y NEXT_PUBLIC_APP_URL. Tokens en cookies httpOnly cifradas. Shell nativo: native/capacitor.',
     },
     premium: {
       billing: 'Suscripción',
@@ -1186,7 +1181,6 @@ export const dictionary = {
     sensors: {
       title: 'Phone sensors',
       subtitle: 'Steps, activity, GPS and sleep · Health',
-      faseB: 'Phase B',
       loading: 'Loading sensors…',
       motion: 'Motion',
       gps: 'GPS',
@@ -1222,13 +1216,10 @@ export const dictionary = {
       intensityLight: 'Light',
       intensityModerate: 'Moderate',
       intensityVigorous: 'Vigorous',
-      disclaimer:
-        'Browser estimates (PWA). Not a clinical wearable. Native app will connect HealthKit / Health Connect.',
     },
     wearables: {
       title: 'Wearables & monitors',
       subtitle: 'Watches, rings, bands and straps · Health',
-      faseC: 'Phase C',
       yourDevices: 'Your devices',
       addDevice: '+ Link',
       empty: 'No wearables yet. Link a watch, ring, band or monitor.',
@@ -1236,6 +1227,10 @@ export const dictionary = {
       labelPlaceholder: 'Name (optional), e.g. My Oura',
       confirmLink: 'Link device',
       linked: 'Device linked',
+      linkedManualFallback:
+        'Linked in manual mode. Enter metrics from your device app.',
+      linkedNativeHint:
+        'Device registered. Sync below with HealthKit / Health Connect or save metrics manually.',
       unlink: 'Remove',
       lastSync: 'Sync',
       connectBle: 'Connect BLE',
@@ -1259,8 +1254,8 @@ export const dictionary = {
       autoLogged: 'Health actions updated from wearable',
       modeBle: 'Bluetooth HR',
       modeManual: 'Manual',
-      modeOauth: 'API (soon)',
-      modeOs: 'Health OS (soon)',
+      modeOauth: 'Cloud OAuth',
+      modeOs: 'Health Connect',
       catWatch: 'Watch',
       catRing: 'Ring',
       catBand: 'Band',
@@ -1280,11 +1275,8 @@ export const dictionary = {
       fieldSpo2: 'SpO₂',
       fieldReadiness: 'Readiness',
       fieldWeight: 'Weight kg',
-      disclaimer:
-        'BLE: standard heart-rate GATT monitors. OAuth and HealthKit/Health Connect: see Cloud & native section below.',
       cloudTitle: 'Cloud OAuth & native',
       cloudSubtitle: 'Fitbit · Oura · WHOOP · Garmin · HealthKit · Health Connect',
-      faseD: 'Phase D',
       oauthProviders: 'Cloud accounts',
       oauthLoading: 'Loading providers…',
       connectOAuth: 'Connect',
@@ -1293,7 +1285,7 @@ export const dictionary = {
       syncing: 'Syncing…',
       statusConnected: 'Connected',
       statusReady: 'Ready (credentials OK)',
-      statusNotConfigured: 'Missing CLIENT_ID/SECRET env',
+      statusNotConfigured: 'Not available yet (cloud account not configured on server)',
       oauthConnected: 'Connected to {name}',
       oauthDisconnected: 'Disconnected {name}',
       oauthError: 'OAuth: {error}',
@@ -1303,15 +1295,13 @@ export const dictionary = {
       nativeChecking: 'Detecting native platform…',
       syncNative: 'Sync from system health',
       nativePluginMissing:
-        'Native shell without SalvazionHealth plugin. See native/capacitor/README.md',
+        'Native app is missing the health plugin. Use OAuth or manual entry on the web.',
       nativeDenied: 'Health permission denied',
       nativeWebOnly:
-        'HealthKit / Health Connect only in the native app (Capacitor). On web use OAuth or manual.',
+        'HealthKit / Health Connect only in the native app. In the browser use Cloud OAuth or manual entry.',
       healthkitSynced: 'HealthKit synced',
       healthConnectSynced: 'Health Connect synced',
       modeHealthkit: 'HealthKit',
-      cloudDisclaimer:
-        'Set FITBIT_*, OURA_*, WHOOP_*, GARMIN_* and NEXT_PUBLIC_APP_URL. Tokens in sealed httpOnly cookies. Native shell: native/capacitor.',
     },
     premium: {
       billing: 'Subscription',

@@ -1,4 +1,7 @@
-# Wearables Phase D — OAuth + HealthKit / Health Connect
+# Wearables — OAuth + HealthKit / Health Connect
+
+**Full portal setup (Fitbit · Oura · WHOOP · Garmin):**  
+→ [wearables-oauth-setup.md](./wearables-oauth-setup.md)
 
 ## OAuth (web + native webview)
 
@@ -11,10 +14,10 @@
 
 Also set:
 
-- `NEXT_PUBLIC_APP_URL` — public site URL (no trailing slash)
+- `NEXT_PUBLIC_APP_URL` — public site URL (no trailing slash), e.g. `https://salvazion.org`
 - `WEARABLES_TOKEN_SECRET` — long random string to seal tokens in cookies
 
-See wearables section in `.env.example`.
+See wearables section in `.env.example` and `scripts/verify-wearables-oauth.mjs`.
 
 ### Flow
 

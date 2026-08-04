@@ -97,8 +97,37 @@ export default function WearablesPanel({ onAutoLog, onSleepSynced }: Props) {
     setCombined(c);
   };
 
+  const OAUTH_PROVIDERS = new Set(['fitbit', 'oura', 'whoop', 'garmin']);
+
   const handleLink = () => {
     setError(null);
+
+    // OAuth brands: start real cloud connect (not a stub “soon” link)
+    if (
+      (connectMode === 'oauth' || connectMode === 'oauth_planned') &&
+      OAUTH_PROVIDERS.has(selectedBrand)
+    ) {
+      const returnTo = encodeURIComponent('/hub/health?tab=wearables');
+      window.location.href = `/api/wearables/oauth/${selectedBrand}/start?returnTo=${returnTo}`;
+      return;
+    }
+
+    // HealthKit / Health Connect: register device, user syncs via cloud/native panel
+    if (connectMode === 'oauth_planned') {
+      // No live OAuth for this brand yet → force manual so the flow is usable
+      const device = linkWearable({
+        brandId: selectedBrand,
+        label: customLabel || undefined,
+        connectMode: 'manual',
+      });
+      setShowAdd(false);
+      setCustomLabel('');
+      setActiveDeviceId(device.id);
+      refresh();
+      setNote(t('wearables.linkedManualFallback'));
+      return;
+    }
+
     const device = linkWearable({
       brandId: selectedBrand,
       label: customLabel || undefined,
@@ -108,7 +137,11 @@ export default function WearablesPanel({ onAutoLog, onSleepSynced }: Props) {
     setCustomLabel('');
     setActiveDeviceId(device.id);
     refresh();
-    setNote(t('wearables.linked'));
+    setNote(
+      connectMode === 'healthkit' || connectMode === 'health_connect'
+        ? t('wearables.linkedNativeHint')
+        : t('wearables.linked')
+    );
   };
 
   const handleUnlink = (id: string) => {
@@ -221,14 +254,11 @@ export default function WearablesPanel({ onAutoLog, onSleepSynced }: Props) {
 
   return (
     <section className="mb-6">
-      <div className="flex items-start justify-between gap-2 mb-3">
-        <div>
-          <h2 className="text-sm font-semibold text-[var(--sage)] flex items-center gap-2">
-            <span>⌚</span> {t('wearables.title')}
-          </h2>
-          <p className="text-[11px] text-[var(--sage)]/80 mt-0.5">{t('wearables.subtitle')}</p>
-        </div>
-        <span className="pill-soft text-[10px] shrink-0">{t('wearables.faseC')}</span>
+      <div className="mb-3">
+        <h2 className="text-sm font-semibold text-[var(--sage)] flex items-center gap-2">
+          <span>⌚</span> {t('wearables.title')}
+        </h2>
+        <p className="text-[11px] text-[var(--sage)]/80 mt-0.5">{t('wearables.subtitle')}</p>
       </div>
 
       <div className="card-soft p-4 space-y-4">
@@ -334,6 +364,21 @@ export default function WearablesPanel({ onAutoLog, onSleepSynced }: Props) {
                           className="btn-sm"
                         >
                           {t('wearables.connectBle')}
+                        </button>
+                      )}
+                    {d.connectMode === 'oauth' &&
+                      OAUTH_PROVIDERS.has(d.brandId) && (
+                        <button
+                          type="button"
+                          className="btn-sm"
+                          onClick={() => {
+                            const returnTo = encodeURIComponent(
+                              '/hub/health?tab=wearables'
+                            );
+                            window.location.href = `/api/wearables/oauth/${d.brandId}/start?returnTo=${returnTo}`;
+                          }}
+                        >
+                          {t('wearables.connectOAuth')}
                         </button>
                       )}
                     <button
@@ -499,10 +544,6 @@ export default function WearablesPanel({ onAutoLog, onSleepSynced }: Props) {
             {note}
           </p>
         )}
-
-        <p className="text-[10px] text-[var(--sage)]/60 leading-relaxed">
-          {t('wearables.disclaimer')}
-        </p>
       </div>
     </section>
   );

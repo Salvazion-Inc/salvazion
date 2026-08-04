@@ -362,7 +362,8 @@ export function formatDurationHours(durationMin: number): string {
  *   15–30 min → floor (~42 px), 60 → 72, 120 → 144, 210 → 252, 420 (7 h) → 504.
  */
 export const AGENDA_PX_PER_MIN = 1.2;
-export const AGENDA_BLOCK_MIN_H = 42;
+/** Enough room for time + title + Sí/No without clipping short Salvation blocks. */
+export const AGENDA_BLOCK_MIN_H = 48;
 /** Soft ceiling for bad/out-of-range data only (≈ 9 h). */
 export const AGENDA_BLOCK_MAX_H = 540;
 

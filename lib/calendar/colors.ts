@@ -1,11 +1,51 @@
 import type { CalendarPillar } from '@/lib/calendar/engine';
 import { PILLAR_COLORS as BASE, pillarPalette as basePalette } from '@/lib/theme/pillars';
 
-/** Re-export pillar colors for calendar (same source of truth). */
+/** Re-export pillar colors for calendar (same source of truth for solid/accents). */
 export const PILLAR_COLORS = BASE;
 
-export function pillarPalette(pillar: CalendarPillar) {
-  return basePalette(pillar);
+/**
+ * Calendar/agenda surface palette.
+ * Salvation is the white pillar: on calendar cards we use a solid light plate
+ * with dark ink so titles (Oración, Devocional, Lectura bíblica…) stay readable.
+ * Health/Freedom keep translucent tint + light text on the dark app chrome.
+ * `control` is for Sí/No faces that sit on dark chrome (always light enough).
+ */
+export type CalendarPillarPalette = {
+  solid: string;
+  soft: string;
+  border: string;
+  text: string;
+  muted: string;
+  /** Foreground on dark controls (Sí/No inactive, badges on dark). */
+  control: string;
+  /** True when labels use dark ink on a light plate. */
+  lightPlate: boolean;
+};
+
+export function pillarPalette(pillar: CalendarPillar): CalendarPillarPalette {
+  const base = basePalette(pillar);
+  if (pillar === 'salvation') {
+    return {
+      solid: base.solid,
+      // Near-opaque white plate — the “white block” identity of Salvation
+      soft: 'rgba(245, 247, 245, 0.94)',
+      border: 'rgba(210, 218, 210, 0.95)',
+      text: '#121412',
+      muted: 'rgba(18, 20, 18, 0.62)',
+      control: '#F5F7F5',
+      lightPlate: true,
+    };
+  }
+  return {
+    solid: base.solid,
+    soft: base.soft,
+    border: base.border,
+    text: base.text,
+    muted: base.muted,
+    control: base.text,
+    lightPlate: false,
+  };
 }
 
 /**
@@ -106,6 +146,23 @@ export function agendaEventDarken(
   if (phase === 'past') return Math.min(0.78, ambient + 0.18 + ambient * 0.15);
   if (phase === 'now') return Math.max(0.06, ambient * 0.55);
   return Math.max(0.02, ambient * 0.72);
+}
+
+/**
+ * Ambient darken for a calendar block. Salvation light plates darken gently
+ * so dark ink remains readable (never pure black background + black text).
+ */
+export function agendaBlockDarken(
+  pillar: CalendarPillar,
+  ambient: number,
+  phase: AgendaEventPhase
+): number {
+  const raw = agendaEventDarken(ambient, phase);
+  if (pillar === 'salvation') {
+    // Cap so the white plate stays light enough for dark labels
+    return Math.min(0.28, raw * 0.4);
+  }
+  return raw;
 }
 
 /**

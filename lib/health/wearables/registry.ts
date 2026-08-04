@@ -46,14 +46,15 @@ export const WEARABLE_CATALOG: WearableCatalogItem[] = [
   },
   {
     brandId: 'fitbit',
-    name: 'Fitbit',
-    nameEs: 'Fitbit',
+    name: 'Fitbit (Google Health)',
+    nameEs: 'Fitbit (Google Health)',
     category: 'band',
     connectModes: ['oauth', 'manual'],
     metrics: ['heart_rate', 'steps', 'active_minutes', 'sleep_hours', 'calories', 'spo2'],
     icon: '⌚',
-    note: 'OAuth 2.0 + PKCE. Requires FITBIT_CLIENT_ID/SECRET.',
-    noteEs: 'OAuth 2.0 + PKCE. Requiere FITBIT_CLIENT_ID/SECRET.',
+    note: 'Uses Google Health API (legacy Fitbit Web API ends Sep 2026). Needs GOOGLE_HEALTH_CLIENT_ID/SECRET.',
+    noteEs:
+      'Usa Google Health API (la Fitbit Web API legacy termina en sep 2026). Requiere GOOGLE_HEALTH_CLIENT_ID/SECRET.',
   },
   {
     brandId: 'samsung',
@@ -111,9 +112,11 @@ export const WEARABLE_CATALOG: WearableCatalogItem[] = [
     name: 'Withings (scale / watch)',
     nameEs: 'Withings (báscula / reloj)',
     category: 'scale',
-    connectModes: ['manual', 'oauth_planned'],
+    connectModes: ['manual'],
     metrics: ['weight_kg', 'body_fat', 'heart_rate', 'sleep_hours'],
     icon: '⚖️',
+    note: 'Log weight and vitals manually from the Withings app.',
+    noteEs: 'Registra peso y vitals manualmente desde la app Withings.',
   },
   {
     brandId: 'xiaomi',

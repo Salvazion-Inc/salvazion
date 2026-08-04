@@ -25,7 +25,7 @@ import {
   pillarPalette,
   agendaAmbientDarken,
   agendaEventPhase,
-  agendaEventDarken,
+  agendaBlockDarken,
   agendaEventProgress,
   agendaEventRemainingMin,
   agendaShellStyle,
@@ -205,18 +205,24 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
           style={shell}
         >
           {timeline.map((ev) => {
-            const pal = pillarPalette(ev.pillar as CalendarPillar);
+            const pillar = ev.pillar as CalendarPillar;
+            const pal = pillarPalette(pillar);
             const end = endTimeOf(ev);
             const durMin = ev.durationMin || DEFAULT_BLOCK_MIN;
             const dur = formatDurationHours(durMin);
             const blockH = agendaBlockHeightPx(durMin);
             const phase = agendaEventPhase(ev.time, end, now);
             const isNow = phase === 'now';
-            const darken = agendaEventDarken(ambient, phase);
+            const darken = agendaBlockDarken(pillar, ambient, phase);
+            // Salvation keeps a light plate + dark ink; others tint + light text
             const bg = mixTowardBlack(pal.soft, darken);
             const border = mixTowardBlack(pal.border, darken * 0.75);
-            const text = mixTowardBlack(pal.text, darken * 0.35);
-            const muted = mixTowardBlack(pal.muted, darken * 0.4);
+            const text = pal.lightPlate
+              ? mixTowardBlack(pal.text, Math.min(darken * 0.25, 0.12))
+              : mixTowardBlack(pal.text, darken * 0.35);
+            const muted = pal.lightPlate
+              ? mixTowardBlack(pal.muted, Math.min(darken * 0.2, 0.1))
+              : mixTowardBlack(pal.muted, darken * 0.4);
             const solid = mixTowardBlack(pal.solid, darken * 0.25);
             const progress = isNow
               ? agendaEventProgress(ev.time, end, now)
@@ -232,6 +238,10 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
               }
               return `${remainingMin} min`;
             })();
+            // "Ahora" gradient: for white Salvation plate, stay light (dark ink)
+            const nowBg = pal.lightPlate
+              ? `linear-gradient(135deg, ${bg} 0%, color-mix(in srgb, ${pal.solid} 70%, #c8d0c8) 100%)`
+              : `linear-gradient(135deg, ${bg} 0%, color-mix(in srgb, ${pal.solid} 18%, #0a120c) 100%)`;
             return (
               <li
                 key={ev.id}
@@ -245,9 +255,7 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
                 style={
                   {
                     '--now-glow': pal.solid,
-                    background: isNow
-                      ? `linear-gradient(135deg, ${bg} 0%, color-mix(in srgb, ${pal.solid} 18%, #0a120c) 100%)`
-                      : bg,
+                    background: isNow ? nowBg : bg,
                     borderColor: isNow
                       ? mixTowardBlack(pal.solid, ambient * 0.12)
                       : border,
@@ -259,13 +267,18 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
                 }
                 data-phase={phase}
                 data-duration-min={durMin}
+                data-pillar={pillar}
                 aria-current={isNow ? 'true' : undefined}
               >
                 <span
                   className={`self-stretch rounded-full shrink-0 ${
                     isNow ? 'w-1.5 now-block-stripe' : 'w-1'
                   }`}
-                  style={{ background: solid }}
+                  style={{
+                    background: pal.lightPlate
+                      ? 'color-mix(in srgb, #121412 55%, #F5F7F5)'
+                      : solid,
+                  }}
                   aria-hidden
                 />
                 <div className="min-w-0 flex-1 flex flex-col justify-center py-0.5">
@@ -325,12 +338,12 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
                       if (!ev.completed) toggle(ev.id);
                     }}
                     style={{
-                      background: ev.completed ? solid : 'transparent',
+                      background: ev.completed ? pal.solid : 'transparent',
                       color: ev.completed
-                        ? ev.pillar === 'salvation'
-                          ? '#111'
-                          : '#0a120c'
-                        : muted,
+                        ? '#111'
+                        : pal.lightPlate
+                          ? pal.muted
+                          : muted,
                     }}
                     aria-pressed={!!ev.completed}
                   >
@@ -344,9 +357,16 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
                     style={{
                       borderColor: border,
                       background: !ev.completed
-                        ? 'rgba(0,0,0,0.3)'
+                        ? pal.lightPlate
+                          ? 'rgba(18, 20, 18, 0.12)'
+                          : 'rgba(0,0,0,0.3)'
                         : 'transparent',
-                      color: !ev.completed ? text : muted,
+                      // Dark control faces need light ink (pal.control)
+                      color: !ev.completed
+                        ? pal.lightPlate
+                          ? pal.text
+                          : pal.control
+                        : muted,
                     }}
                     aria-pressed={!ev.completed}
                   >
@@ -358,7 +378,9 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
                     <i
                       style={{
                         width: `${Math.round(progress * 100)}%`,
-                        background: `linear-gradient(90deg, ${pal.solid}, color-mix(in srgb, ${pal.solid} 70%, #fff))`,
+                        background: pal.lightPlate
+                          ? 'linear-gradient(90deg, #3a3f3a, #121412)'
+                          : `linear-gradient(90deg, ${pal.solid}, color-mix(in srgb, ${pal.solid} 70%, #fff))`,
                       }}
                     />
                   </div>

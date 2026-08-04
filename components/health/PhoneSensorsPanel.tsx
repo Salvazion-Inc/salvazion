@@ -231,14 +231,11 @@ export default function PhoneSensorsPanel({
 
   return (
     <section className="mb-6">
-      <div className="flex items-start justify-between gap-2 mb-3">
-        <div>
-          <h2 className="text-sm font-semibold text-[var(--sage)] flex items-center gap-2">
-            <span>📡</span> {t('sensors.title')}
-          </h2>
-          <p className="text-[11px] text-[var(--sage)]/80 mt-0.5">{t('sensors.subtitle')}</p>
-        </div>
-        <span className="pill-soft text-[10px] shrink-0">{t('sensors.faseB')}</span>
+      <div className="mb-3">
+        <h2 className="text-sm font-semibold text-[var(--sage)] flex items-center gap-2">
+          <span>📡</span> {t('sensors.title')}
+        </h2>
+        <p className="text-[11px] text-[var(--sage)]/80 mt-0.5">{t('sensors.subtitle')}</p>
       </div>
 
       <div className="card-soft p-4 space-y-4">
@@ -417,9 +414,6 @@ export default function PhoneSensorsPanel({
           </p>
         )}
 
-        <p className="text-[10px] text-[var(--sage)]/60 leading-relaxed">
-          {t('sensors.disclaimer')}
-        </p>
       </div>
     </section>
   );

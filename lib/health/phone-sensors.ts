@@ -1,5 +1,5 @@
 /**
- * Phone sensors (PWA Fase B)
+ * Phone sensors (PWA): motion, steps, GPS outdoor, rest/sleep.
  * — DeviceMotion: steps + activity intensity
  * — Geolocation: outdoor distance / minutes
  * — Rest mode: sleep bed/wake proxies from phone timestamps

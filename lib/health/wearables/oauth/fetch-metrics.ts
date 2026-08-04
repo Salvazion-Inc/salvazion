@@ -27,76 +27,207 @@ async function authGet(url: string, token: string): Promise<unknown> {
   return res.json();
 }
 
-// ─── Fitbit ────────────────────────────────────────────────────
+// ─── Fitbit via Google Health API (legacy Fitbit Web API ends 2026-09-30) ───
 
-async function fetchFitbit(token: string, date: string): Promise<OAuthMetricsMap> {
+function civilDayRange(date: string) {
+  const [y, m, d] = date.split('-').map((n) => parseInt(n, 10));
+  return {
+    start: {
+      date: { year: y, month: m, day: d },
+      time: { hours: 0, minutes: 0, seconds: 0, nanos: 0 },
+    },
+    end: {
+      date: { year: y, month: m, day: d },
+      time: { hours: 23, minutes: 59, seconds: 59, nanos: 0 },
+    },
+  };
+}
+
+async function googleHealthDailyRollUp(
+  token: string,
+  dataType: string,
+  date: string
+): Promise<Record<string, unknown> | null> {
+  const res = await fetch(
+    `https://health.googleapis.com/v4/users/me/dataTypes/${dataType}/dataPoints:dailyRollUp`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        range: civilDayRange(date),
+        windowSizeDays: 1,
+      }),
+      cache: 'no-store',
+    }
+  );
+  if (!res.ok) return null;
+  return (await res.json().catch(() => null)) as Record<string, unknown> | null;
+}
+
+function firstRollup(
+  json: Record<string, unknown> | null
+): Record<string, unknown> | null {
+  const rows = json?.rollupDataPoints;
+  if (!Array.isArray(rows) || !rows.length) return null;
+  return rows[0] as Record<string, unknown>;
+}
+
+function numField(obj: unknown, ...keys: string[]): number | undefined {
+  if (!obj || typeof obj !== 'object') return undefined;
+  const rec = obj as Record<string, unknown>;
+  for (const k of keys) {
+    const v = rec[k];
+    if (v == null) continue;
+    const n = typeof v === 'number' ? v : Number(v);
+    if (Number.isFinite(n)) return n;
+  }
+  return undefined;
+}
+
+/**
+ * Fitbit / Pixel Watch metrics through Google Health API v4.
+ * @see https://developers.google.com/health/endpoints
+ */
+async function fetchFitbitViaGoogleHealth(
+  token: string,
+  date: string
+): Promise<OAuthMetricsMap> {
   const metrics: OAuthMetricsMap = {};
 
+  // Identity (optional — useful for logging)
   try {
-    const activity = (await authGet(
-      `https://api.fitbit.com/1/user/-/activities/date/${date}.json`,
-      token
-    )) as {
-      summary?: {
-        steps?: number;
-        fairlyActiveMinutes?: number;
-        veryActiveMinutes?: number;
-        caloriesOut?: number;
-        distances?: Array<{ activity: string; distance: number }>;
-      };
-    };
-    const s = activity.summary;
-    if (s?.steps != null) metrics.steps = s.steps;
-    const active =
-      (s?.fairlyActiveMinutes || 0) + (s?.veryActiveMinutes || 0);
-    if (active) metrics.active_minutes = active;
-    if (s?.caloriesOut != null) metrics.calories = s.caloriesOut;
-    const totalDist = s?.distances?.find((d) => d.activity === 'total')?.distance;
-    if (totalDist != null) metrics.distance_km = totalDist;
+    await authGet('https://health.googleapis.com/v4/users/me/identity', token);
   } catch {
-    /* partial ok */
+    /* non-fatal */
   }
 
+  // Steps (daily sum)
   try {
-    const sleep = (await authGet(
-      `https://api.fitbit.com/1.2/user/-/sleep/date/${date}.json`,
-      token
-    )) as {
-      summary?: { totalMinutesAsleep?: number };
-      sleep?: Array<{ startTime?: string; endTime?: string }>;
-    };
-    const mins = sleep.summary?.totalMinutesAsleep;
-    if (mins != null) metrics.sleep_hours = Math.round((mins / 60) * 10) / 10;
-    const main = sleep.sleep?.[0];
-    if (main?.startTime) metrics.sleep_bed = main.startTime.slice(11, 16);
-    if (main?.endTime) metrics.sleep_wake = main.endTime.slice(11, 16);
+    const stepsJson = await googleHealthDailyRollUp(token, 'steps', date);
+    const row = firstRollup(stepsJson);
+    const steps = numField(row?.steps, 'countSum', 'count');
+    if (steps != null) metrics.steps = Math.round(steps);
   } catch {
     /* partial */
   }
 
+  // Distance (km)
   try {
-    const hr = (await authGet(
-      `https://api.fitbit.com/1/user/-/activities/heart/date/${date}/1d.json`,
-      token
-    )) as {
-      'activities-heart'?: Array<{
-        value?: { restingHeartRate?: number };
+    const distJson = await googleHealthDailyRollUp(token, 'distance', date);
+    const row = firstRollup(distJson);
+    // Prefer km; some payloads use meters
+    const km = numField(row?.distance, 'kilometersSum', 'kilometers');
+    const m = numField(row?.distance, 'metersSum', 'meters');
+    if (km != null) metrics.distance_km = Math.round(km * 100) / 100;
+    else if (m != null) metrics.distance_km = Math.round((m / 1000) * 100) / 100;
+  } catch {
+    /* partial */
+  }
+
+  // Active minutes
+  try {
+    const actJson = await googleHealthDailyRollUp(token, 'active-minutes', date);
+    const row = firstRollup(actJson);
+    const mins = numField(
+      row?.activeMinutes ?? row?.active_minutes,
+      'minutesSum',
+      'minutes',
+      'countSum'
+    );
+    if (mins != null) metrics.active_minutes = Math.round(mins);
+  } catch {
+    /* partial */
+  }
+
+  // Calories
+  try {
+    const calJson = await googleHealthDailyRollUp(token, 'total-calories', date);
+    const row = firstRollup(calJson);
+    const kcal = numField(
+      row?.totalCalories ?? row?.calories ?? row?.total_calories,
+      'kcalSum',
+      'kcal',
+      'caloriesSum'
+    );
+    if (kcal != null) metrics.calories = Math.round(kcal);
+  } catch {
+    /* partial */
+  }
+
+  // Resting HR
+  try {
+    const rhrJson = await googleHealthDailyRollUp(
+      token,
+      'resting-heart-rate',
+      date
+    );
+    const row = firstRollup(rhrJson);
+    const bpm = numField(
+      row?.restingHeartRate ?? row?.resting_heart_rate,
+      'bpmAverage',
+      'bpm',
+      'beatsPerMinute'
+    );
+    if (bpm != null) metrics.resting_hr = Math.round(bpm);
+  } catch {
+    /* partial */
+  }
+
+  // SpO2
+  try {
+    const spo2Json = await googleHealthDailyRollUp(
+      token,
+      'oxygen-saturation',
+      date
+    );
+    const row = firstRollup(spo2Json);
+    const pct = numField(
+      row?.oxygenSaturation ?? row?.oxygen_saturation,
+      'percentageAverage',
+      'percentage',
+      'avg'
+    );
+    if (pct != null) metrics.spo2 = Math.round(pct * 10) / 10;
+  } catch {
+    /* partial */
+  }
+
+  // Sleep (reconciled wearable stream for the civil day)
+  try {
+    const filter = encodeURIComponent(
+      `sleep.interval.civil_end_time >= "${date}T00:00:00"`
+    );
+    const url =
+      `https://health.googleapis.com/v4/users/me/dataTypes/sleep/dataPoints:reconcile` +
+      `?dataSourceFamily=${encodeURIComponent('users/me/dataSourceFamilies/google-wearables')}` +
+      `&filter=${filter}`;
+    const sleepJson = (await authGet(url, token)) as {
+      dataPoints?: Array<{
+        sleep?: {
+          interval?: { startTime?: string; endTime?: string };
+          summary?: { minutesAsleep?: string | number };
+        };
       }>;
     };
-    const rhr = hr['activities-heart']?.[0]?.value?.restingHeartRate;
-    if (rhr != null) metrics.resting_hr = rhr;
+    const main = sleepJson.dataPoints?.[0]?.sleep;
+    if (main?.summary?.minutesAsleep != null) {
+      const mins = Number(main.summary.minutesAsleep);
+      if (Number.isFinite(mins)) {
+        metrics.sleep_hours = Math.round((mins / 60) * 10) / 10;
+      }
+    }
+    if (main?.interval?.startTime) {
+      metrics.sleep_bed = main.interval.startTime.slice(11, 16);
+    }
+    if (main?.interval?.endTime) {
+      metrics.sleep_wake = main.interval.endTime.slice(11, 16);
+    }
   } catch {
     /* partial */
-  }
-
-  try {
-    const spo2 = (await authGet(
-      `https://api.fitbit.com/1/user/-/spo2/date/${date}.json`,
-      token
-    )) as { value?: { avg?: number } };
-    if (spo2.value?.avg != null) metrics.spo2 = spo2.value.avg;
-  } catch {
-    /* optional scope */
   }
 
   return metrics;
@@ -372,7 +503,7 @@ export async function fetchProviderMetrics(
 
   switch (provider) {
     case 'fitbit':
-      return fetchFitbit(token, date);
+      return fetchFitbitViaGoogleHealth(token, date);
     case 'oura':
       return fetchOura(token, date);
     case 'whoop':

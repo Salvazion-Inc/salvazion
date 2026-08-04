@@ -21,6 +21,9 @@ import { getCycleSnapshot, type CyclePhase } from './cycle';
 
 export type BiomarkerStatus = 'optimal' | 'good' | 'attention' | 'low' | 'unknown';
 
+/** Health Hub tab that owns this biomarker (no cross-tab duplicates). */
+export type BiomarkerCategory = 'exercise' | 'nutrition' | 'sleep';
+
 export interface Biomarker {
   id: string;
   labelEs: string;
@@ -35,6 +38,25 @@ export interface Biomarker {
   tipEn: string;
   /** Código LOINC aproximado si existe */
   loinc?: string;
+  /** Which Health tab shows this marker */
+  category: BiomarkerCategory;
+}
+
+/** Canonical id → tab assignment (single home, no duplication). */
+export const BIOMARKER_CATEGORY: Record<string, BiomarkerCategory> = {
+  activity_load: 'exercise',
+  outdoor_exposure: 'exercise',
+  movement_efficiency: 'exercise',
+  anti_sedentary: 'exercise',
+  cycle_phase_readiness: 'exercise',
+  hydration: 'nutrition',
+  nutrition_quality: 'nutrition',
+  recovery: 'sleep',
+  circadian_stability: 'sleep',
+};
+
+export function categoryForBiomarkerId(id: string): BiomarkerCategory {
+  return BIOMARKER_CATEGORY[id] ?? 'exercise';
 }
 
 export interface BiomarkerReport {
@@ -72,6 +94,7 @@ function activityLoad(day: DaySensorIndicators): Biomarker {
     unit: '/100',
     status: statusFromScore(score),
     source: 'phone_sensor',
+    category: 'exercise',
     tipEs:
       score < 50
         ? 'Camina o entrena 15–20 min. Usa el sensor de pasos del celular.'
@@ -96,6 +119,7 @@ function outdoorExposure(day: DaySensorIndicators): Biomarker {
     display: `${day.outdoorMinutes} min · ${(day.distanceMeters / 1000).toFixed(2)} km`,
     status: statusFromScore(score),
     source: 'phone_sensor',
+    category: 'exercise',
     tipEs:
       score < 50
         ? 'Sal 20 min al aire libre (GPS). Luz natural regula el ritmo circadiano.'
@@ -120,6 +144,7 @@ function movementEfficiency(day: DaySensorIndicators): Biomarker {
     display: day.activeMinutes > 0 ? `${Math.round(cadence)} pasos/min act.` : '—',
     status: day.activeMinutes > 0 ? statusFromScore(score) : 'unknown',
     source: 'derived',
+    category: 'exercise',
     tipEs: 'Ritmo de caminata sostenido mejora el metabolismo y el ánimo.',
     tipEn: 'Steady walking cadence supports metabolism and mood.',
   };
@@ -152,6 +177,7 @@ function recoveryScore(
     unit: '/100',
     status: statusFromScore(score),
     source: 'derived',
+    category: 'sleep',
     tipEs:
       score < 60
         ? 'Prioriza 7–9 h de sueño y cierra el modo reposo del celular al despertar.'
@@ -174,6 +200,7 @@ function circadianStability(regScore: number, samples: number): Biomarker {
     display: samples < 2 ? 'Pocos datos' : `${regScore}/100`,
     status: statusFromScore(score),
     source: 'self_report',
+    category: 'sleep',
     tipEs: 'Despierta a la misma hora (±30 min) 7 días seguidos.',
     tipEn: 'Wake within ±30 min at the same time for 7 days.',
   };
@@ -189,6 +216,7 @@ function hydrationBiomarker(glasses: number, goal: number): Biomarker {
     display: `${glasses}/${goal} vasos`,
     status: statusFromScore(score),
     source: 'self_report',
+    category: 'nutrition',
     tipEs: 'Meta ~2–2.5 L/día según etapa. El ciclo menstrual puede subir la necesidad.',
     tipEn: 'Aim ~2–2.5 L/day by life stage. Cycle days may need more.',
   };
@@ -207,6 +235,7 @@ function nutritionBiomarker(stage: string): Biomarker {
       display: 'Sin comidas',
       status: 'unknown',
       source: 'self_report',
+      category: 'nutrition',
       tipEs: 'Registra comidas reales (enteras > procesadas).',
       tipEn: 'Log real meals (whole > processed).',
     };
@@ -221,6 +250,7 @@ function nutritionBiomarker(stage: string): Biomarker {
     display: `${q.whole} enteras · ${q.processed} proc.`,
     status: statusFromScore(score),
     source: 'self_report',
+    category: 'nutrition',
     tipEs: fastingOk
       ? 'Ventana de ayuno razonable. Prioriza comida real.'
       : 'Cierra la cocina temprano y prioriza comida real.',
@@ -252,6 +282,7 @@ function cycleAwareBiomarker(isFemale: boolean): Biomarker | null {
         : `Día ${snap.dayInCycle} · ${snap.phase}`,
     status: snap.phase === 'unknown' ? 'unknown' : statusFromScore(score),
     source: 'self_report',
+    category: 'exercise',
     tipEs: snap.tips[0] || 'Registra tu periodo para consejos por fase.',
     tipEn: 'Log your period for phase-aware coaching.',
     loinc: '92608-8', // menstruation
@@ -270,6 +301,7 @@ function sedentaryRisk(day: DaySensorIndicators): Biomarker {
     display: `${Math.round(active)} min-eq activos`,
     status: statusFromScore(score),
     source: 'phone_sensor',
+    category: 'exercise',
     tipEs: 'Levántate cada hora: 2–3 min de movimiento rompen el sedentarismo.',
     tipEn: 'Stand hourly: 2–3 min of movement breaks sedentarism.',
   };
@@ -278,6 +310,8 @@ function sedentaryRisk(day: DaySensorIndicators): Biomarker {
 export function computeBiomarkerReport(opts?: {
   isFemale?: boolean;
   day?: DaySensorIndicators;
+  /** If set, only markers for this Health tab (no cross-tab duplicates). */
+  category?: BiomarkerCategory;
 }): BiomarkerReport {
   const day = opts?.day ?? (typeof window !== 'undefined' ? loadDayIndicators() : emptyDayIndicators());
   const stage = getCurrentHealthStage();
@@ -286,7 +320,7 @@ export function computeBiomarkerReport(opts?: {
   const hydration = getTodayHydration(stage);
   const isFemale = !!opts?.isFemale;
 
-  const biomarkers: Biomarker[] = [
+  let biomarkers: Biomarker[] = [
     activityLoad(day),
     outdoorExposure(day),
     movementEfficiency(day),
@@ -299,6 +333,16 @@ export function computeBiomarkerReport(opts?: {
 
   const cycleBm = cycleAwareBiomarker(isFemale);
   if (cycleBm) biomarkers.push(cycleBm);
+
+  // Ensure category is always set from the map (forward-compatible)
+  biomarkers = biomarkers.map((b) => ({
+    ...b,
+    category: b.category || categoryForBiomarkerId(b.id),
+  }));
+
+  if (opts?.category) {
+    biomarkers = biomarkers.filter((b) => b.category === opts.category);
+  }
 
   const scored = biomarkers.filter((b) => b.score != null) as (Biomarker & { score: number })[];
   const compositeScore =
@@ -323,10 +367,28 @@ export function computeBiomarkerReport(opts?: {
     });
   }
   if (!highlights.length) {
-    highlights.push({
-      es: 'Activa sensores y registra sueño/hidratación para ver biomarcadores.',
-      en: 'Enable sensors and log sleep/hydration to populate biomarkers.',
-    });
+    const emptyByCat: Record<BiomarkerCategory, { es: string; en: string }> = {
+      exercise: {
+        es: 'Mueve el cuerpo y usa sensores de pasos/GPS para llenar biomarcadores de ejercicio.',
+        en: 'Move and use step/GPS sensors to populate exercise biomarkers.',
+      },
+      nutrition: {
+        es: 'Registra comidas e hidratación para ver biomarcadores de alimentación.',
+        en: 'Log meals and hydration to populate nutrition biomarkers.',
+      },
+      sleep: {
+        es: 'Registra sueño y regularidad para ver biomarcadores de descanso.',
+        en: 'Log sleep and regularity to populate rest biomarkers.',
+      },
+    };
+    highlights.push(
+      opts?.category
+        ? emptyByCat[opts.category]
+        : {
+            es: 'Activa sensores y registra sueño/hidratación para ver biomarcadores.',
+            en: 'Enable sensors and log sleep/hydration to populate biomarkers.',
+          }
+    );
   }
 
   return {

@@ -79,11 +79,6 @@ export async function GET(
     url.searchParams.set('code_challenge_method', 'S256');
   }
 
-  // Fitbit extras
-  if (provider === 'fitbit') {
-    url.searchParams.set('expires_in', '604800');
-  }
-
   for (const [k, v] of Object.entries(config.extraAuthParams || {})) {
     url.searchParams.set(k, v);
   }

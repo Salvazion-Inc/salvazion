@@ -441,8 +441,8 @@ export const dictionary = {
       plan: 'Plan',
       renews: 'Renueva',
       ends: 'Termina',
-      ctaMonthly: 'Premium $20 / mes',
-      ctaAnnual: 'Premium $15 / mes · anual',
+      ctaMonthly: 'Premium $49 / mes',
+      ctaAnnual: 'Premium $39 / mes · anual',
       manage: 'Gestionar suscripción',
       redirecting: 'Redirigiendo a Stripe…',
       seePlans: 'Ver planes Premium',
@@ -454,7 +454,7 @@ export const dictionary = {
       error: 'No se pudo iniciar el pago. Revisa la configuración de Stripe.',
       pageTitle: 'Premium',
       pageSubtitle:
-        'Freemium con suscripción Premium. Mensual $20 o Anual $15/mes (facturado $180/año) vía Stripe.',
+        'Freemium con suscripción Premium. Mensual $49 o Anual $39/mes (facturado $468/año) vía Stripe.',
       youArePremium: 'Tu plan: Premium',
       youAreFree: 'Tu plan: Free',
       bestValue: 'Mejor valor',
@@ -821,7 +821,7 @@ export const dictionary = {
       acceptCall: 'Acepto el llamado',
       shareTitle: 'Únete a mi Comunidad — Salvazion',
       shareBody:
-        '¡Únete a mi Comunidad en Salvazion!\n\nEstoy construyendo Salvation, Health y Freedom con el León Verde. Quiero que formes parte de mi círculo ({relation}).\n\nEntra a la app y crecemos juntos en fe, familia y virtud.\n\nhttps://app.salvazion.org\n\n#Salvazion #Comunidad',
+        '¡Únete a mi Comunidad en Salvazion!\n\nEstoy construyendo Salvation, Health y Freedom con el León Verde. Quiero que formes parte de mi círculo ({relation}).\n\nEntra a la app y crecemos juntos en fe, familia y virtud.\n\nhttps://salvazion.org\n\n#Salvazion #Comunidad',
     },
     badges: {
       title: 'Insignias',
@@ -1270,8 +1270,8 @@ export const dictionary = {
       plan: 'Plan',
       renews: 'Renews',
       ends: 'Ends',
-      ctaMonthly: 'Premium $20 / month',
-      ctaAnnual: 'Premium $15 / mo · annual',
+      ctaMonthly: 'Premium $49 / month',
+      ctaAnnual: 'Premium $39 / mo · annual',
       manage: 'Manage subscription',
       redirecting: 'Redirecting to Stripe…',
       seePlans: 'See Premium plans',
@@ -1283,7 +1283,7 @@ export const dictionary = {
       error: 'Could not start checkout. Check Stripe configuration.',
       pageTitle: 'Premium',
       pageSubtitle:
-        'Freemium with Premium subscription. Monthly $20 or Annual $15/mo ($180/year) via Stripe.',
+        'Freemium with Premium subscription. Monthly $49 or Annual $39/mo ($468/year) via Stripe.',
       youArePremium: 'Your plan: Premium',
       youAreFree: 'Your plan: Free',
       bestValue: 'Best value',
@@ -1649,7 +1649,7 @@ export const dictionary = {
       acceptCall: 'I accept the call',
       shareTitle: 'Join my Community — Salvazion',
       shareBody:
-        'Join my Community on Salvazion!\n\nI am building Salvation, Health, and Freedom with the Green Lion. I want you in my circle ({relation}).\n\nOpen the app and grow with me in faith, family, and virtue.\n\nhttps://app.salvazion.org\n\n#Salvazion #Community',
+        'Join my Community on Salvazion!\n\nI am building Salvation, Health, and Freedom with the Green Lion. I want you in my circle ({relation}).\n\nOpen the app and grow with me in faith, family, and virtue.\n\nhttps://salvazion.org\n\n#Salvazion #Community',
     },
     badges: {
       title: 'Badges',

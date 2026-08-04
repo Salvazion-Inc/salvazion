@@ -21,7 +21,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '1. Controller',
         paragraphs: [
-          `Data controller: Salvazion / product team associated with app.salvazion.org. Contact: ${SUPPORT_EMAIL}.`,
+          `Data controller: Salvazion / product team associated with salvazion.org. Contact: ${SUPPORT_EMAIL}.`,
         ],
       },
       {
@@ -139,7 +139,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '1. Responsable',
         paragraphs: [
-          `Responsable del tratamiento: Salvazion / equipo del producto asociado al dominio app.salvazion.org. Contacto: ${SUPPORT_EMAIL}.`,
+          `Responsable del tratamiento: Salvazion / equipo del producto asociado al dominio salvazion.org. Contacto: ${SUPPORT_EMAIL}.`,
         ],
       },
       {

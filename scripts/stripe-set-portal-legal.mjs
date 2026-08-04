@@ -30,9 +30,9 @@ if (!key) {
   process.exit(1);
 }
 
-const PRIVACY = 'https://app.salvazion.org/privacy';
-const TERMS = 'https://app.salvazion.org/terms';
-const RETURN = 'https://app.salvazion.org/hub/profile';
+const PRIVACY = 'https://salvazion.org/privacy';
+const TERMS = 'https://salvazion.org/terms';
+const RETURN = 'https://salvazion.org/hub/profile';
 const CONFIG_ID = process.env.STRIPE_PORTAL_CONFIG_ID || 'bpc_1T89xrHOw5ZkjRlZPibVGLmB';
 
 // Support / From policy: info@salvazion.org — set in Stripe Dashboard

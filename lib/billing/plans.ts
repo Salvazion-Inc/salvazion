@@ -3,8 +3,8 @@
  * Premium: full access + advanced tools via Stripe (Salvazion, Inc.).
  *
  * Pricing (USD):
- * - Monthly: $20 / month
- * - Annual:  $15 / month equivalent ($180 / year)
+ * - Monthly: $49 / month
+ * - Annual:  $39 / month equivalent ($468 / year)
  */
 
 export const PREMIUM_PRODUCT_ID =
@@ -13,12 +13,12 @@ export const PREMIUM_PRODUCT_ID =
 export const STRIPE_PRICE_MONTHLY =
   process.env.NEXT_PUBLIC_STRIPE_PRICE_MONTHLY ||
   process.env.STRIPE_PRICE_MONTHLY ||
-  'price_1Ty0iyHOw5ZkjRlZMsCZPQWY';
+  'price_1U0WEWHOw5ZkjRlZHXRW0gAX';
 
 export const STRIPE_PRICE_ANNUAL =
   process.env.NEXT_PUBLIC_STRIPE_PRICE_ANNUAL ||
   process.env.STRIPE_PRICE_ANNUAL ||
-  'price_1Ty0iyHOw5ZkjRlZQBQYbfQ7';
+  'price_1U0WEXHOw5ZkjRlZOwkxysed';
 
 export type BillingInterval = 'month' | 'year';
 
@@ -45,22 +45,22 @@ export const PLAN_COPY = {
     id: 'premium_month' as const,
     name: 'Premium Monthly',
     nameEs: 'Premium Mensual',
-    priceUsd: 20,
+    priceUsd: 49,
     interval: 'month' as BillingInterval,
     priceId: STRIPE_PRICE_MONTHLY,
-    priceLabel: '$20 / month',
-    priceLabelEs: '$20 / mes',
+    priceLabel: '$49 / month',
+    priceLabelEs: '$49 / mes',
   },
   premium_year: {
     id: 'premium_year' as const,
     name: 'Premium Annual',
     nameEs: 'Premium Anual',
-    priceUsd: 180,
-    monthlyEquivalent: 15,
+    priceUsd: 468,
+    monthlyEquivalent: 39,
     interval: 'year' as BillingInterval,
     priceId: STRIPE_PRICE_ANNUAL,
-    priceLabel: '$15 / mo · billed yearly ($180)',
-    priceLabelEs: '$15 / mes · facturado anual ($180)',
+    priceLabel: '$39 / mo · billed yearly ($468)',
+    priceLabelEs: '$39 / mes · facturado anual ($468)',
   },
 };
 
@@ -135,7 +135,19 @@ export function priceIdForInterval(interval: BillingInterval): string {
   return interval === 'year' ? STRIPE_PRICE_ANNUAL : STRIPE_PRICE_MONTHLY;
 }
 
+/** Current + legacy Premium price IDs (Stripe prices are immutable). */
+const PREMIUM_PRICE_IDS = new Set(
+  [
+    STRIPE_PRICE_MONTHLY,
+    STRIPE_PRICE_ANNUAL,
+    // Previous $20 / $15 plans
+    'price_1Ty0iyHOw5ZkjRlZMsCZPQWY',
+    'price_1Ty0iyHOw5ZkjRlZQBQYbfQ7',
+    'price_1Ty0isHOw5ZkjRlZ6t5TRGje',
+  ].filter(Boolean)
+);
+
 export function isPremiumPriceId(priceId: string | null | undefined): boolean {
   if (!priceId) return false;
-  return priceId === STRIPE_PRICE_MONTHLY || priceId === STRIPE_PRICE_ANNUAL;
+  return PREMIUM_PRICE_IDS.has(priceId);
 }

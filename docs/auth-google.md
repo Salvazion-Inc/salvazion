@@ -9,15 +9,16 @@ Las keys de Google **no van en Vercel**. Van en **Supabase**.
    - External (o Internal si es Workspace)  
    - App name: Salvazion  
    - Support email: el tuyo  
-   - Application home page: `https://app.salvazion.org`  
-   - Privacy: `https://app.salvazion.org/privacy`  
-   - Terms: `https://app.salvazion.org/terms`  
+   - Application home page: `https://salvazion.org`  
+   - Privacy: `https://salvazion.org/privacy`  
+   - Terms: `https://salvazion.org/terms`  
    - Save  
 3. **APIs & Services → Credentials → Create credentials → OAuth client ID**  
    - Application type: **Web application**  
    - Name: Salvazion App  
    - **Authorized JavaScript origins:**
      ```
+     https://salvazion.org
      https://app.salvazion.org
      http://localhost:3000
      ```
@@ -39,9 +40,11 @@ Las keys de Google **no van en Vercel**. Van en **Supabase**.
 
 **Authentication → URL Configuration**
 
-- Site URL: `https://app.salvazion.org`
+- Site URL: `https://salvazion.org`
 - Redirect:
   ```
+  https://salvazion.org/auth/callback
+  https://salvazion.org/auth/confirm
   https://app.salvazion.org/auth/callback
   https://app.salvazion.org/auth/confirm
   http://localhost:3000/auth/callback
@@ -49,7 +52,7 @@ Las keys de Google **no van en Vercel**. Van en **Supabase**.
 
 ## 4) Probar
 
-`https://app.salvazion.org/auth/login` → **Continuar con Gmail**
+`https://salvazion.org/auth/login` → **Continuar con Gmail**
 
 No hace falta ninguna variable nueva en Vercel (solo las de Supabase que ya tienes).
 

@@ -89,7 +89,7 @@ Docs: https://supabase.com/docs/guides/auth/auth-smtp
 Dashboard → **Settings → Public business information** (o Business details):
 
 - **Support email:** `info@salvazion.org`
-- **Support phone / URL** (opcional): `https://app.salvazion.org` o `https://www.salvazion.org`
+- **Support phone / URL** (opcional): `https://salvazion.org`
 
 Las respuestas de clientes a emails de Stripe van a este soporte.
 

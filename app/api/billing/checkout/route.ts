@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
       custom_text: {
         submit: {
           message:
-            'By confirming you agree to Salvazion [Terms of Service](https://app.salvazion.org/terms) and [Privacy Policy](https://app.salvazion.org/privacy).',
+            'By confirming you agree to Salvazion [Terms of Service](https://salvazion.org/terms) and [Privacy Policy](https://salvazion.org/privacy).',
         },
       },
       subscription_data: {

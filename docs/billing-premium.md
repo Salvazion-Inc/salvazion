@@ -7,14 +7,14 @@ Freemium app with **Premium** subscription on the **Salvazion, Inc.** Stripe acc
 | Plan | Price |
 |------|--------|
 | Free | $0 |
-| Premium Monthly | **$20 / month** |
-| Premium Annual | **$15 / month** equivalent (**$180 / year**) |
+| Premium Monthly | **$49 / month** |
+| Premium Annual | **$39 / month** equivalent (**$468 / year**) |
 
 ### Stripe objects (live)
 
 - Product: `prod_UxwcMVMNlKeczI` — *Salvazion Premium*
-- Monthly price: `price_1Ty0iyHOw5ZkjRlZMsCZPQWY` (`salvazion_premium_monthly`)
-- Annual price: `price_1Ty0iyHOw5ZkjRlZQBQYbfQ7` (`salvazion_premium_annual`)
+- Monthly price: `price_1U0WEWHOw5ZkjRlZHXRW0gAX` (`salvazion_premium_monthly_49`)
+- Annual price: `price_1U0WEXHOw5ZkjRlZOwkxysed` (`salvazion_premium_annual_39`)
 
 ## Free vs Premium (current features)
 
@@ -45,8 +45,8 @@ Freemium app with **Premium** subscription on the **Salvazion, Inc.** Stripe acc
 STRIPE_SECRET_KEY=sk_live_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 SUPABASE_SERVICE_ROLE_KEY=...   # for webhook → subscriptions table
-NEXT_PUBLIC_STRIPE_PRICE_MONTHLY=price_1Ty0iyHOw5ZkjRlZMsCZPQWY
-NEXT_PUBLIC_STRIPE_PRICE_ANNUAL=price_1Ty0iyHOw5ZkjRlZQBQYbfQ7
+NEXT_PUBLIC_STRIPE_PRICE_MONTHLY=price_1U0WEWHOw5ZkjRlZHXRW0gAX
+NEXT_PUBLIC_STRIPE_PRICE_ANNUAL=price_1U0WEXHOw5ZkjRlZOwkxysed
 ```
 
 ## Webhook

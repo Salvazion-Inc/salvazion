@@ -18,13 +18,16 @@
    Authentication → Emails → SMTP Settings → Enable Custom SMTP  
    Guía completa: [`docs/email.md`](../docs/email.md)
 4. Authentication → URL Configuration:
-   - **Site URL (producción):** `https://app.salvazion.org`  
-     (la app; **no** uses `www.salvazion.org` — ese es el sitio Canva antiguo)
+   - **Site URL (producción):** `https://salvazion.org`
    - **Redirect URLs** (añade todas):
-     - `https://app.salvazion.org/auth/callback`
-     - `https://app.salvazion.org/auth/confirm`
-     - `https://www.app.salvazion.org/auth/callback`
-     - `https://www.app.salvazion.org/auth/confirm`
+     - `https://salvazion.org/auth/callback`
+     - `https://salvazion.org/auth/confirm`
+     - `https://www.salvazion.org/auth/callback`
+     - `https://www.salvazion.org/auth/confirm`
+     - `https://app.salvazion.org/auth/callback` (legacy)
+     - `https://app.salvazion.org/auth/confirm` (legacy)
+     - `https://www.app.salvazion.org/auth/callback` (legacy)
+     - `https://www.app.salvazion.org/auth/confirm` (legacy)
      - `http://localhost:3000/auth/callback`
      - `http://localhost:3000/auth/confirm`
      - (opcional Preview) `https://*-tu-equipo.vercel.app/auth/callback`

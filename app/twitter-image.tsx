@@ -92,7 +92,7 @@ export default function TwitterImage() {
             fontWeight: 600,
           }}
         >
-          <span>app.salvazion.org</span>
+          <span>salvazion.org</span>
           <span style={{ color: '#9BB0A0', fontWeight: 500 }}>
             Free to start · Premium available
           </span>

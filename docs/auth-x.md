@@ -38,9 +38,9 @@ Puedes **desactivar** el provider **Twitter** (OAuth 1.0a) si ya no lo quieres.
    ```
    https://kppylfrsclkdmtpobpxd.supabase.co/auth/v1/callback
    ```
-6. Website: `https://app.salvazion.org`
-7. **Terms of service URL:** `https://app.salvazion.org/terms`
-8. **Privacy policy URL:** `https://app.salvazion.org/privacy`
+6. Website: `https://salvazion.org`
+7. **Terms of service URL:** `https://salvazion.org/terms`
+8. **Privacy policy URL:** `https://salvazion.org/privacy`
 9. **Save**
 10. **Keys and tokens** → sección **OAuth 2.0 Client ID and Client Secret**  
    - Copia Client ID  

@@ -134,10 +134,10 @@ export default function LegalShell({
         <p>
           © {new Date().getFullYear()} Salvazion ·{' '}
           <a
-            href="https://app.salvazion.org"
+            href="https://salvazion.org"
             className="text-[var(--accent)] hover:underline"
           >
-            app.salvazion.org
+            salvazion.org
           </a>
         </p>
         <p className="mt-1">

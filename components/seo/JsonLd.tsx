@@ -1,10 +1,32 @@
 import { SEO, absoluteUrl } from '@/lib/seo/config';
+import { X_ARTICLES } from '@/lib/freedom/x-articles';
 
 /**
- * JSON-LD for Organization, WebSite, SoftwareApplication and founders.
+ * JSON-LD for Organization, WebSite, SoftwareApplication, Blog and founders.
  * Rendered on the public marketing home only.
  */
 export default function JsonLd() {
+  /** Blog ItemList — titles + X URLs for SEO (capped for payload size) */
+  const blogItems = X_ARTICLES.slice(0, 100).map((a, i) => ({
+    '@type': 'ListItem' as const,
+    position: i + 1,
+    item: {
+      '@type': 'BlogPosting' as const,
+      headline: a.title,
+      url: a.url,
+      image: a.image,
+      datePublished: a.createdAt || undefined,
+      description: a.preview?.slice(0, 200),
+      author: {
+        '@type': 'Person' as const,
+        name: 'Salvazion',
+        url: 'https://x.com/salvazion_',
+      },
+      keywords: `Salvazion, ${a.pillar}, Salvation, Health, Freedom`,
+      about: a.pillar,
+    },
+  }));
+
   const graphs = [
     {
       '@type': 'Organization',
@@ -110,7 +132,45 @@ export default function JsonLd() {
         'Phalanx community invites',
         'Green Lion AI coach (Premium)',
         '$SALVAZION on Solana',
+        'Salvazion Blog — X Articles on Salvation, Health and Freedom',
       ],
+    },
+    {
+      '@type': 'Blog',
+      '@id': `${absoluteUrl()}/#blog`,
+      name: 'Salvazion Blog',
+      description:
+        'Long-form articles from @salvazion_ on Salvation, Health and Freedom — faith, family, body, sovereignty and Western Christian Culture. Read on X.',
+      url: `${absoluteUrl()}/#blog`,
+      inLanguage: ['en', 'es'],
+      publisher: { '@id': `${absoluteUrl()}/#organization` },
+      author: {
+        '@type': 'Organization',
+        name: SEO.siteName,
+        url: 'https://x.com/salvazion_',
+      },
+      blogPost: blogItems.map((li) => li.item),
+      numberOfItems: X_ARTICLES.length,
+      keywords: [
+        'Salvazion',
+        'Salvation',
+        'Health',
+        'Freedom',
+        'X Articles',
+        '@salvazion_',
+        'Western Christian Culture',
+        'BioConservatism',
+      ],
+    },
+    {
+      '@type': 'ItemList',
+      '@id': `${absoluteUrl()}/#blog-itemlist`,
+      name: 'Salvazion Articles on X',
+      description:
+        'Catalog of Salvazion long-form articles linked to X, organized by Salvation, Health and Freedom.',
+      numberOfItems: X_ARTICLES.length,
+      itemListOrder: 'https://schema.org/ItemListOrderDescending',
+      itemListElement: blogItems,
     },
   ];
 

@@ -67,7 +67,7 @@ async function main() {
     )
   );
 
-  const prod = 'https://app.salvazion.org';
+  const prod = 'https://salvazion.org';
   console.log('=== PRODUCTION', prod, '===');
   try {
     const pages = ['/', '/hub/swap', '/hub/profile'];

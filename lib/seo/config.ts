@@ -1,5 +1,5 @@
 /**
- * Central SEO / social metadata for the Salvazion app (app.salvazion.org).
+ * Central SEO / social metadata for the Salvazion app (salvazion.org).
  */
 import { APP_URL, MARKETING_URL, SUPPORT_EMAIL } from '@/lib/config/site';
 
@@ -22,12 +22,19 @@ export const SEO = {
     'Salvazion',
     'Salvation Health Freedom',
     'Make Salvation Health and Freedom Great Again',
+    'Salvazion blog',
+    'Salvazion articles',
+    'Salvazion X articles',
+    '@salvazion_',
     'Christian app',
     'Bible offline',
     'devotional',
     'BioConservatism',
     'Western Christian Culture',
     'faith health freedom',
+    'Salvation articles',
+    'Health articles',
+    'Freedom articles',
     'Solana',
     'SALVAZION token',
     'Green Lion coach',
@@ -38,6 +45,8 @@ export const SEO = {
     'devocional',
     'BioConservadurismo',
     'cultura cristiana occidental',
+    'artículos Salvazion',
+    'blog Salvazion',
   ],
   locale: 'en_US',
   alternateLocale: 'es_ES',
@@ -69,8 +78,8 @@ export const SEO = {
   ],
   pricing: {
     free: 0,
-    premiumMonthly: 20,
-    premiumAnnual: 180,
+    premiumMonthly: 49,
+    premiumAnnual: 468,
     currency: 'USD',
   },
 } as const;

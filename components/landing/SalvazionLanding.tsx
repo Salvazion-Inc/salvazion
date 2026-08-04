@@ -15,11 +15,34 @@ import {
 } from '@/components/Icons';
 import { SUPPORT_EMAIL, SUPPORT_MAILTO } from '@/lib/config/site';
 import { PLAN_COPY, PREMIUM_FEATURE_LIST } from '@/lib/billing/plans';
+import { GREEN_LION_KINGS_URL } from '@/lib/freedom/x-communities';
 import FlatFlag from '@/components/ui/FlatFlag';
+import LandingBlog from '@/components/landing/LandingBlog';
 
 const JUPITER_BUY =
   'https://jup.ag/swap?inputMint=So11111111111111111111111111111111111111112&outputMint=7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2';
 const MINT = '7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2';
+
+/** Official X (Twitter) presence — Freedom / community */
+const X_ACCOUNT_URL = 'https://x.com/salvazion_';
+const X_ARTICLES_URL = 'https://x.com/salvazion_/articles';
+const X_COMMUNITY_LINKS = [
+  {
+    id: 'green-lion-kings',
+    href: GREEN_LION_KINGS_URL,
+    accent: '#8FD99A',
+  },
+  {
+    id: 'x-articles',
+    href: X_ARTICLES_URL,
+    accent: '#4A9EFF',
+  },
+  {
+    id: 'x-account',
+    href: X_ACCOUNT_URL,
+    accent: '#F5F7F5',
+  },
+] as const;
 
 export default function SalvazionLanding() {
   const { lang, setLang } = useI18n();
@@ -49,12 +72,18 @@ export default function SalvazionLanding() {
             </span>
           </Link>
 
-          <div className="hidden lg:flex items-center gap-6 text-[11px] uppercase tracking-[0.15em] text-[var(--sage)]">
+          <div className="hidden lg:flex items-center gap-5 xl:gap-6 text-[11px] uppercase tracking-[0.15em] text-[var(--sage)]">
             <a href="#app" className="hover:text-[var(--accent)] transition-colors">
               {t.nav.app}
             </a>
+            <a href="#blog" className="hover:text-[var(--accent)] transition-colors">
+              {t.nav.blog}
+            </a>
             <a href="#pricing" className="hover:text-[var(--accent)] transition-colors">
               {t.nav.pricing}
+            </a>
+            <a href="#community" className="hover:text-[var(--accent)] transition-colors">
+              {t.nav.community}
             </a>
             <a href="#purpose" className="hover:text-[var(--accent)] transition-colors">
               {t.nav.purpose}
@@ -196,11 +225,29 @@ export default function SalvazionLanding() {
 
           <div className="grid md:grid-cols-3 gap-4 mb-12">
             {t.app.areas.map((area) => (
-              <div key={area.name} className="card-soft p-6 flex flex-col min-h-[200px]">
-                <span className="text-2xl mb-3" aria-hidden>
-                  {area.icon}
-                </span>
-                <h3 className="text-xl font-bold text-[var(--accent)] tracking-tight">{area.name}</h3>
+              <div
+                key={area.name}
+                className="card-soft p-6 flex flex-col min-h-[200px] border-t-2"
+                style={{ borderTopColor: area.accent }}
+              >
+                <div
+                  className="mb-4 w-16 h-16 rounded-2xl overflow-hidden border border-[var(--border-soft)] shrink-0 shadow-[0_0_24px_-8px_rgba(143,217,154,0.45)]"
+                  style={{ boxShadow: `0 0 28px -8px ${area.accent}99` }}
+                >
+                  <Image
+                    src={area.icon}
+                    alt=""
+                    width={64}
+                    height={64}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h3
+                  className="text-xl font-bold tracking-tight"
+                  style={{ color: area.accent }}
+                >
+                  {area.name}
+                </h3>
                 <p className="mt-2 text-sm text-[#D8E1D9]/80 leading-relaxed flex-1">{area.body}</p>
                 <p className="mt-4 text-[11px] text-[var(--sage)] uppercase tracking-wider">{area.inApp}</p>
               </div>
@@ -440,6 +487,65 @@ export default function SalvazionLanding() {
         </div>
       </section>
 
+      {/* Blog — all @salvazion_ X Articles · filter Salvation / Health / Freedom */}
+      <LandingBlog lang={lang} copy={t.blog} />
+
+      {/* Community on X */}
+      <section
+        id="community"
+        className="py-16 sm:py-20 border-t border-[var(--border-soft)] bg-zinc-950/30"
+        aria-labelledby="community-heading"
+      >
+        <div className="max-w-5xl mx-auto px-5">
+          <div className="text-center mb-10">
+            <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">
+              {t.community.eyebrow}
+            </p>
+            <h2
+              id="community-heading"
+              className="font-display text-3xl sm:text-4xl font-bold tracking-tight"
+            >
+              {t.community.title}
+            </h2>
+            <p className="mt-3 max-w-2xl mx-auto text-sm text-[var(--sage)] leading-relaxed">
+              {t.community.subtitle}
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-4">
+            {X_COMMUNITY_LINKS.map((link) => {
+              const item = t.community.links[link.id];
+              return (
+                <a
+                  key={link.id}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="card-soft p-6 flex flex-col min-h-[180px] border-t-2 transition hover:border-[var(--border-strong)] hover:bg-white/[0.03] group"
+                  style={{ borderTopColor: link.accent }}
+                >
+                  <p
+                    className="text-[10px] uppercase tracking-[0.2em] mb-2"
+                    style={{ color: link.accent }}
+                  >
+                    {item.badge}
+                  </p>
+                  <h3 className="text-lg font-semibold text-white tracking-tight group-hover:text-[var(--accent)] transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-sm text-[#D8E1D9]/80 leading-relaxed flex-1">
+                    {item.body}
+                  </p>
+                  <p className="mt-4 text-xs font-medium text-[var(--accent)]">
+                    {item.cta} ↗
+                  </p>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* Token */}
       <section id="token" className="py-16 sm:py-20 border-t border-[var(--border-soft)]">
         <div className="max-w-3xl mx-auto px-5 text-center">
@@ -471,7 +577,7 @@ export default function SalvazionLanding() {
         </div>
       </section>
 
-      {/* Team — founders + family portraits from salvazion.org Canva */}
+      {/* Team — founders headshots + family portrait (Gobierno Corporativo) */}
       <section id="team" className="py-16 sm:py-20 border-t border-[var(--border-soft)] bg-zinc-950/30">
         <div className="max-w-5xl mx-auto px-5">
           <div className="text-center mb-10">
@@ -486,38 +592,25 @@ export default function SalvazionLanding() {
             </p>
           </div>
 
-          {/* Family dual portrait */}
-          <div className="mb-8 rounded-3xl overflow-hidden border border-[var(--border-soft)] card-soft">
-            <div className="grid sm:grid-cols-2">
-              <div className="relative aspect-[4/5] sm:aspect-auto sm:min-h-[320px] bg-[#040404]">
-                <Image
-                  src="/founders/cristian.jpg"
-                  alt="Cristian Cortés Fernández"
-                  fill
-                  className="object-cover object-top"
-                  sizes="(max-width: 640px) 100vw, 50vw"
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#040404] via-[#040404]/50 to-transparent p-4">
-                  <p className="text-xs text-[var(--accent)] uppercase tracking-wider">
-                    CEO & Founder
-                  </p>
-                  <p className="text-lg font-semibold text-white">Cristian Cortés</p>
-                </div>
-              </div>
-              <div className="relative aspect-[4/5] sm:aspect-auto sm:min-h-[320px] bg-[#040404]">
-                <Image
-                  src="/founders/beatriz.jpg"
-                  alt="Beatriz Isler Muñoz"
-                  fill
-                  className="object-cover object-top"
-                  sizes="(max-width: 640px) 100vw, 50vw"
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#040404] via-[#040404]/50 to-transparent p-4">
-                  <p className="text-xs text-[var(--accent)] uppercase tracking-wider">
-                    COO & Founder
-                  </p>
-                  <p className="text-lg font-semibold text-white">Beatriz Isler</p>
-                </div>
+          {/* Family founders portrait — polished brand banner */}
+          <div className="mb-8 rounded-3xl overflow-hidden border border-[var(--border-soft)] card-soft shadow-[0_0_40px_-12px_rgba(34,197,94,0.25)]">
+            <div className="relative aspect-[16/9] sm:aspect-[2/1] min-h-[240px] sm:min-h-[340px] bg-[#040404]">
+              <Image
+                src="/founders/family.jpg"
+                alt="Cristian Cortés y Beatriz Isler — Founders de Salvazion"
+                fill
+                className="object-cover object-[center_30%]"
+                sizes="(max-width: 1024px) 100vw, 960px"
+                priority={false}
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#040404] via-[#040404]/25 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6">
+                <p className="text-[10px] sm:text-xs text-[var(--accent)] uppercase tracking-[0.25em]">
+                  Founders Family
+                </p>
+                <p className="mt-1 text-lg sm:text-2xl font-semibold text-white tracking-tight">
+                  Cristian Cortés &amp; Beatriz Isler
+                </p>
               </div>
             </div>
             <p className="px-5 py-4 text-center text-sm text-[var(--sage)] border-t border-[var(--border-soft)]">
@@ -528,13 +621,13 @@ export default function SalvazionLanding() {
           <div className="grid md:grid-cols-2 gap-4">
             <div className="card-soft p-6 sm:p-8">
               <div className="flex items-start gap-4 mb-4">
-                <div className="relative w-16 h-16 rounded-full overflow-hidden border border-[var(--border-strong)] shrink-0 bg-black">
+                <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[var(--accent)]/40 shrink-0 bg-black ring-2 ring-[var(--border-soft)]">
                   <Image
                     src="/founders/cristian.jpg"
-                    alt=""
+                    alt="Cristian Cortés"
                     fill
-                    className="object-cover object-top"
-                    sizes="64px"
+                    className="object-cover object-[center_18%]"
+                    sizes="80px"
                   />
                 </div>
                 <div>
@@ -549,13 +642,13 @@ export default function SalvazionLanding() {
             </div>
             <div className="card-soft p-6 sm:p-8">
               <div className="flex items-start gap-4 mb-4">
-                <div className="relative w-16 h-16 rounded-full overflow-hidden border border-[var(--border-strong)] shrink-0 bg-black">
+                <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[var(--accent)]/40 shrink-0 bg-black ring-2 ring-[var(--border-soft)]">
                   <Image
                     src="/founders/beatriz.jpg"
-                    alt=""
+                    alt="Beatriz Isler"
                     fill
-                    className="object-cover object-top"
-                    sizes="64px"
+                    className="object-cover object-[center_18%]"
+                    sizes="80px"
                   />
                 </div>
                 <div>
@@ -600,18 +693,40 @@ export default function SalvazionLanding() {
             <Link href="/auth/login" className="hover:text-[var(--accent)]">
               {t.nav.enter}
             </Link>
+            <a
+              href={GREEN_LION_KINGS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[var(--accent)]"
+            >
+              Green Lion Kings
+            </a>
+            <a href="#blog" className="hover:text-[var(--accent)]">
+              {t.nav.blog}
+            </a>
+            <a
+              href={X_ARTICLES_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[var(--accent)]"
+            >
+              {lang === 'es' ? 'Artículos X' : 'X Articles'}
+            </a>
+            <a
+              href={X_ACCOUNT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[var(--accent)]"
+            >
+              @salvazion_
+            </a>
             <Link href="/terms" className="hover:text-[var(--accent)]">
               {t.final.terms}
             </Link>
             <Link href="/privacy" className="hover:text-[var(--accent)]">
               {t.final.privacy}
             </Link>
-            <a
-              href="https://www.salvazion.org"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[var(--accent)]"
-            >
+            <a href="https://salvazion.org" className="hover:text-[var(--accent)]">
               salvazion.org
             </a>
             <a href={SUPPORT_MAILTO} className="hover:text-[var(--accent)]">
@@ -637,7 +752,9 @@ const copy = {
   en: {
     nav: {
       app: 'The App',
+      blog: 'Blog',
       pricing: 'Pricing',
+      community: 'Community',
       purpose: 'Purpose',
       token: 'Token',
       team: 'Team',
@@ -665,19 +782,22 @@ const copy = {
       areas: [
         {
           name: 'Salvation',
-          icon: '✝',
+          icon: '/icons/agenda/salvation.jpg',
+          accent: '#F5F7F5',
           body: 'Faith at the center. Full offline Bible, daily devotionals, prayer motives, discipline calendar and measurable spiritual scores.',
           inApp: 'Bible · Devotional · Prayer · Coach León Verde',
         },
         {
           name: 'Health',
-          icon: '🌿',
+          icon: '/icons/agenda/health.jpg',
+          accent: '#4A9EFF',
           body: 'The body is a temple. Sleep, hydration, meals, sports, phone sensors, Bluetooth HR and cloud wearables (Premium).',
           inApp: 'Health hub · sensors · wearables · biomarkers',
         },
         {
           name: 'Freedom',
-          icon: '🦅',
+          icon: '/icons/agenda/freedom.jpg',
+          accent: '#8FD99A',
           body: 'Freedom with responsibility: curated books, X articles, YouTube channels, Phalanx community and economic sovereignty on Solana.',
           inApp: 'Freedom hub · Community · $SALVAZION swap',
         },
@@ -768,6 +888,51 @@ const copy = {
       title: "This is not a meme, it's a Spiritual Revival and a change of era.",
       body: 'Not entertainment. A call to faith, family, health and freedom — for a generation that refuses to sleep.',
     },
+    community: {
+      eyebrow: 'On X',
+      title: 'Join the tribe on X',
+      subtitle:
+        'Community, long-form Freedom articles and the official Salvazion account — open on X and walk with us.',
+      links: {
+        'green-lion-kings': {
+          badge: 'X Community',
+          title: 'Green Lion Kings',
+          body: 'Faith, family, Western Christian culture, BioConservatism and Freedom. Connect with the Salvazion tribe.',
+          cta: 'Join community',
+        },
+        'x-articles': {
+          badge: 'Long-form',
+          title: 'X Articles',
+          body: 'Read @salvazion_ long-form on faith, family, health, freedom, technology and Western Christian culture.',
+          cta: 'Read articles',
+        },
+        'x-account': {
+          badge: 'Official',
+          title: '@salvazion_',
+          body: 'Follow Salvazion on X for updates, signals and the daily path of Salvation, Health and Freedom.',
+          cta: 'Follow on X',
+        },
+      },
+    },
+    blog: {
+      eyebrow: 'Blog · @salvazion_',
+      title: 'Salvazion Articles on X',
+      subtitle:
+        'Long-form writing on Salvation, Health and Freedom — faith, family, body, sovereignty and Western Christian Culture. Every piece opens on X.',
+      filters: {
+        all: 'All',
+        salvation: 'Salvation',
+        health: 'Health',
+        freedom: 'Freedom',
+      },
+      readOnX: 'Read on X',
+      showing: 'Showing',
+      of: 'of',
+      empty: 'No articles in this pillar yet.',
+      seoNote:
+        'Filter by Salvation · Health · Freedom to explore the full library — each title links to the original article on X.',
+      viewAllOnX: 'Open full library on X',
+    },
     team: {
       eyebrow: 'Founders',
       title: 'An ordinary family, but with “good genes”',
@@ -796,7 +961,9 @@ const copy = {
   es: {
     nav: {
       app: 'La App',
+      blog: 'Blog',
       pricing: 'Precios',
+      community: 'Comunidad',
       purpose: 'Propósito',
       token: 'Token',
       team: 'Equipo',
@@ -824,19 +991,22 @@ const copy = {
       areas: [
         {
           name: 'Salvation',
-          icon: '✝',
+          icon: '/icons/agenda/salvation.jpg',
+          accent: '#F5F7F5',
           body: 'La fe al centro. Biblia completa offline, devocional diario, motivos de oración, calendario de disciplina y scores espirituales medibles.',
           inApp: 'Biblia · Devocional · Oración · Coach León Verde',
         },
         {
           name: 'Health',
-          icon: '🌿',
+          icon: '/icons/agenda/health.jpg',
+          accent: '#4A9EFF',
           body: 'El cuerpo es templo. Sueño, hidratación, comidas, deportes, sensores del celular, HR Bluetooth y wearables en la nube (Premium).',
           inApp: 'Health hub · sensores · wearables · biomarcadores',
         },
         {
           name: 'Freedom',
-          icon: '🦅',
+          icon: '/icons/agenda/freedom.jpg',
+          accent: '#8FD99A',
           body: 'Libertad con responsabilidad: libros curados, artículos en X, canales de YouTube, comunidad Phalanx y soberanía económica en Solana.',
           inApp: 'Freedom hub · Comunidad · Swap $SALVAZION',
         },
@@ -926,6 +1096,51 @@ const copy = {
       eyebrow: 'Avivamiento espiritual',
       title: 'Esto no es un meme: es un avivamiento espiritual y un cambio de era.',
       body: 'No es entretenimiento. Es un llamado a la fe, la familia, la salud y la libertad — para una generación que se niega a dormir.',
+    },
+    community: {
+      eyebrow: 'En X',
+      title: 'Únete a la tribu en X',
+      subtitle:
+        'Comunidad, artículos Freedom de largo formato y la cuenta oficial de Salvazion — ábrelos en X y camina con nosotros.',
+      links: {
+        'green-lion-kings': {
+          badge: 'Comunidad X',
+          title: 'Green Lion Kings',
+          body: 'Fe, familia, cultura cristiano-occidental, BioConservadurismo y Freedom. Conecta con la tribu Salvazion.',
+          cta: 'Unirme a la comunidad',
+        },
+        'x-articles': {
+          badge: 'Long-form',
+          title: 'Artículos de X',
+          body: 'Lee los artículos de @salvazion_ sobre fe, familia, salud, libertad, tecnología y Cultura Cristiana Occidental.',
+          cta: 'Leer artículos',
+        },
+        'x-account': {
+          badge: 'Oficial',
+          title: '@salvazion_',
+          body: 'Sigue a Salvazion en X para novedades, señales y el camino diario de Salvation, Health y Freedom.',
+          cta: 'Seguir en X',
+        },
+      },
+    },
+    blog: {
+      eyebrow: 'Blog · @salvazion_',
+      title: 'Artículos de Salvazion en X',
+      subtitle:
+        'Textos de largo formato sobre Salvation, Health y Freedom — fe, familia, cuerpo, soberanía y Cultura Cristiana Occidental. Cada pieza se abre en X.',
+      filters: {
+        all: 'Todos',
+        salvation: 'Salvation',
+        health: 'Health',
+        freedom: 'Freedom',
+      },
+      readOnX: 'Leer en X',
+      showing: 'Mostrando',
+      of: 'de',
+      empty: 'Aún no hay artículos en este pilar.',
+      seoNote:
+        'Filtra por Salvation · Health · Freedom para explorar la biblioteca completa — cada título enlaza al artículo original en X.',
+      viewAllOnX: 'Abrir biblioteca completa en X',
     },
     team: {
       eyebrow: 'Fundadores',

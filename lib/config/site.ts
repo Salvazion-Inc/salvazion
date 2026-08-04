@@ -1,25 +1,37 @@
 /**
  * Public product domains for Salvazion.
  *
- * - Marketing (Canva, sitio antiguo): https://www.salvazion.org
- * - Product app (this Next.js / Vercel deploy): https://app.salvazion.org
- *   Optional alias: https://www.app.salvazion.org
+ * Primary product (this Next.js / Vercel app):
+ *   https://salvazion.org
+ *   https://www.salvazion.org  → redirect to apex (Vercel)
+ *
+ * Legacy product alias (kept for bookmarks / OAuth grace period):
+ *   https://app.salvazion.org
+ *   https://www.app.salvazion.org
  *
  * Email policy: all product / transactional mail uses info@salvazion.org
  * (see lib/email/* and docs/email.md).
  */
 
-/** Marketing site — do not point this Next.js project here */
-export const MARKETING_HOST = 'www.salvazion.org';
-export const MARKETING_URL = `https://${MARKETING_HOST}`;
+/** Apex / primary public host */
+export const APP_HOST = 'salvazion.org';
+/** www form of the primary host */
+export const APP_HOST_WWW = 'www.salvazion.org';
 
-/** Primary app host (current product) */
-export const APP_HOST = 'app.salvazion.org';
-/** Optional www form of the app subdomain */
-export const APP_HOST_WWW = 'www.app.salvazion.org';
+/** Legacy app subdomain (still accepted; prefer apex) */
+export const APP_HOST_LEGACY = 'app.salvazion.org';
+export const APP_HOST_LEGACY_WWW = 'www.app.salvazion.org';
 
 export const APP_URL = `https://${APP_HOST}`;
 export const APP_URL_WWW = `https://${APP_HOST_WWW}`;
+export const APP_URL_LEGACY = `https://${APP_HOST_LEGACY}`;
+
+/**
+ * @deprecated Marketing was the Canva site; product now lives on the apex.
+ * Kept as alias of APP_URL for older imports (SEO, legal).
+ */
+export const MARKETING_HOST = APP_HOST;
+export const MARKETING_URL = APP_URL;
 
 /**
  * Canonical support / contact / From address for the product.
@@ -59,6 +71,8 @@ export function getAppBaseUrl(): string {
 export const APP_ALLOWED_HOSTS = [
   APP_HOST,
   APP_HOST_WWW,
+  APP_HOST_LEGACY,
+  APP_HOST_LEGACY_WWW,
   'localhost',
   '127.0.0.1',
 ] as const;

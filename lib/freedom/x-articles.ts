@@ -2,9 +2,11 @@
  * X Articles library — @salvazion_
  * Long-form pieces with cover image + title; open on X to read.
  * Ranked by user interests (profile.currentFocus) and unread state.
+ * Pillars (Salvation · Health · Freedom) power marketing blog filters + SEO.
  */
 
 import catalogJson from '@/data/freedom/x-articles-catalog.json';
+import type { PillarId } from '@/lib/theme/pillars';
 
 export type InterestFocus =
   | 'fe'
@@ -15,6 +17,9 @@ export type InterestFocus =
   | 'oracion'
   | 'liderazgo'
   | 'perseverancia';
+
+/** Primary Salvazion pillar for blog filters / SEO */
+export type ArticlePillar = PillarId;
 
 export interface XArticle {
   id: string;
@@ -28,6 +33,8 @@ export interface XArticle {
   verified: boolean;
   /** Interest tags for ranking */
   interests: InterestFocus[];
+  /** Primary pillar: salvation | health | freedom */
+  pillar: ArticlePillar;
   tags: string[];
   readMin: number;
 }
@@ -47,6 +54,56 @@ const INTEREST_RULES: { interest: InterestFocus; keys: string[] }[] = [
   { interest: 'perseverancia', keys: ['virtue', 'discipline', 'constancy', 'persever'] },
 ];
 
+/**
+ * Pillar keyword rules for marketing blog filters (SEO: Salvation · Health · Freedom).
+ * Title hits score higher than body. Default pillar is Freedom (largest corpus).
+ */
+const PILLAR_RULES: { pillar: ArticlePillar; keys: string[] }[] = [
+  {
+    pillar: 'salvation',
+    keys: [
+      'faith', 'christ', 'christian', 'bible', 'prayer', 'gospel', 'salvation',
+      'church', 'jesus', 'worship', 'devotion', 'christmas', 'spiritual',
+      'revival', 'religion', 'theology', 'scripture', 'heaven', 'revelation',
+      'luther', 'vatican', 'crusade', 'templar', 'billy graham', 'stoicism',
+      'virtue', 'soul', 'prophet', 'western christian', 'spiritual warfare',
+      'islamic world', 'how can i get to heaven', 'fe ', 'oración', 'dios',
+      'biblia', 'iglesia', 'cristianismo', 'salvación',
+    ],
+  },
+  {
+    pillar: 'health',
+    keys: [
+      'health', 'medical', 'medicine', 'longevity', 'transhuman', 'biotech',
+      'biotechnology', 'wellbeing', 'pandemic', 'monkeypox', 'bird flu',
+      'disease', 'fitness', 'nutrition', 'vaccine', 'exercise', 'diet',
+      'obesity', 'cancer', 'diabetes', 'mental health', 'depression',
+      'anxiety', 'pharma', 'hormone', 'fertility', 'birth rate',
+      'population collapse', 'aging', 'supplement', 'fasting', 'covid',
+      'plandemia', 'virus', 'genome', 'dna', 'crispr', 'neuro', 'addiction',
+      'synthetic meat', 'eating bugs', 'insects', 'internet of bodies',
+      'graphene', 'laughter', "women's sports", 'trans women', 'biohacking',
+      'biomarker', 'sleep', 'hydration', 'ludopathy', 'salud', 'medicina',
+      'longevidad', 'vacuna', 'deporte',
+    ],
+  },
+  {
+    pillar: 'freedom',
+    keys: [
+      'freedom', 'liberty', 'solana', 'bitcoin', 'crypto', 'trump', 'desantis',
+      'politic', 'geopolitic', 'nato', 'border', 'immigration', 'communism',
+      'milei', 'musk', 'sovereignty', 'patriot', 'deep state', 'web3',
+      'blockchain', 'meloni', 'bukele', 'zuckerberg', 'bezos', 'monopoly',
+      'dei', 'war', 'journalism', 'homeless', 'polariz', 'democracy',
+      'censorship', 'media', 'elite', 'epstein', 'china', 'russia', 'europe',
+      'military', 'speech', 'privacy', 'surveillance', 'artificial intelligence',
+      'machine learning', 'nvidia', 'elon', 'economy', 'inflation', 'token',
+      'defi', 'rothschild', 'rockefeller', 'orwell', 'jack ma', 'bunker',
+      'libertad', 'soberanía', 'frontera', 'censura',
+    ],
+  },
+];
+
 function inferInterests(title: string, preview: string, tags: string[] = []): InterestFocus[] {
   const hay = `${title} ${preview} ${tags.join(' ')}`.toLowerCase();
   const found = new Set<InterestFocus>();
@@ -57,6 +114,53 @@ function inferInterests(title: string, preview: string, tags: string[] = []): In
   }
   if (found.size === 0) found.add('libertad');
   return [...found];
+}
+
+function scorePillar(hay: string, titleHay: string, keys: string[]): number {
+  let score = 0;
+  for (const key of keys) {
+    const k = key.toLowerCase();
+    if (titleHay.includes(k)) score += 4;
+    else if (hay.includes(k)) score += 1;
+  }
+  return score;
+}
+
+/** Map app interest tags → pillar boost */
+function interestPillarBoost(interests: InterestFocus[]): Record<ArticlePillar, number> {
+  const boost: Record<ArticlePillar, number> = { salvation: 0, health: 0, freedom: 0 };
+  for (const i of interests) {
+    if (i === 'fe' || i === 'oracion' || i === 'familia') boost.salvation += 2;
+    else if (i === 'salud') boost.health += 3;
+    else if (i === 'libertad' || i === 'liderazgo' || i === 'proposito' || i === 'perseverancia') {
+      boost.freedom += 2;
+    }
+  }
+  return boost;
+}
+
+export function inferPillar(
+  title: string,
+  preview: string,
+  interests: InterestFocus[] = [],
+  tags: string[] = []
+): ArticlePillar {
+  const titleHay = title.toLowerCase();
+  const hay = `${title} ${preview} ${tags.join(' ')}`.toLowerCase();
+  const boost = interestPillarBoost(interests);
+  const scores: Record<ArticlePillar, number> = {
+    salvation: boost.salvation,
+    health: boost.health,
+    freedom: boost.freedom,
+  };
+  for (const rule of PILLAR_RULES) {
+    scores[rule.pillar] += scorePillar(hay, titleHay, rule.keys);
+  }
+  const ordered = (Object.entries(scores) as [ArticlePillar, number][]).sort(
+    (a, b) => b[1] - a[1]
+  );
+  if (ordered[0][1] <= 0) return 'freedom';
+  return ordered[0][0];
 }
 
 function estimateReadMin(preview: string): number {
@@ -76,6 +180,7 @@ function normalizeEntry(raw: {
   source?: string;
   verified?: boolean;
   tags?: string[];
+  pillar?: ArticlePillar;
 }): XArticle {
   const tags = raw.tags || [];
   const interests = inferInterests(raw.title, raw.preview, tags);
@@ -84,6 +189,10 @@ function normalizeEntry(raw: {
     const d = formatArticleDate(raw.createdAt);
     title = d ? `Artículo @salvazion_ · ${d}` : 'Artículo @salvazion_';
   }
+  const pillar =
+    raw.pillar && (['salvation', 'health', 'freedom'] as const).includes(raw.pillar)
+      ? raw.pillar
+      : inferPillar(raw.title, raw.preview, interests, tags);
   return {
     id: raw.id,
     statusId: raw.statusId,
@@ -95,6 +204,7 @@ function normalizeEntry(raw: {
     source: raw.source || '@salvazion_',
     verified: !!raw.verified && raw.title !== 'Artículo @salvazion_',
     interests,
+    pillar,
     tags,
     readMin: estimateReadMin(raw.preview || ''),
   };
@@ -103,6 +213,33 @@ function normalizeEntry(raw: {
 export const X_ARTICLES: XArticle[] = (catalogJson as Array<Parameters<typeof normalizeEntry>[0]>).map(
   normalizeEntry
 );
+
+/** Articles sorted newest-first (for marketing blog) */
+export function getBlogArticles(pillar?: ArticlePillar | 'all'): XArticle[] {
+  let list = [...X_ARTICLES];
+  if (pillar && pillar !== 'all') {
+    list = list.filter((a) => a.pillar === pillar);
+  }
+  list.sort((a, b) => {
+    const ta = Date.parse(a.createdAt || '') || 0;
+    const tb = Date.parse(b.createdAt || '') || 0;
+    return tb - ta;
+  });
+  return list;
+}
+
+export function getBlogPillarCounts(): Record<ArticlePillar | 'all', number> {
+  const counts: Record<ArticlePillar | 'all', number> = {
+    all: X_ARTICLES.length,
+    salvation: 0,
+    health: 0,
+    freedom: 0,
+  };
+  for (const a of X_ARTICLES) {
+    counts[a.pillar] += 1;
+  }
+  return counts;
+}
 
 export function formatArticleDate(createdAt?: string | null, lang: 'es' | 'en' = 'en'): string {
   if (!createdAt) return '';

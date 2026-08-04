@@ -480,13 +480,9 @@ export const dictionary = {
         'Freemium con suscripción Premium. Mensual $49 o Anual $39/mes (facturado $468/año) vía Stripe.',
       youArePremium: 'Tu plan: Premium',
       youAreFree: 'Tu plan: Free',
-      bestValue: 'Mejor valor',
-      free1: 'Dashboard, scores y onboarding',
-      free2: 'Biblia y devocional diario (reglas)',
-      free3: 'Salud manual + Freedom básico',
-      free4: 'Wallet Solana y perfil',
+      bestValue: 'Mejor valor anual',
       stripeNote:
-        'Pagos seguros con Stripe (Salvazion, Inc.). Cancela o cambia de plan en el portal de cliente en cualquier momento.',
+        'Pagos seguros con Stripe (Salvazion, Inc.). Cancela o cambia de plan cuando quieras en el portal de cliente.',
     },
     wallet: {
       title: 'Billetera Web3',
@@ -1331,11 +1327,7 @@ export const dictionary = {
         'Freemium with Premium subscription. Monthly $49 or Annual $39/mo ($468/year) via Stripe.',
       youArePremium: 'Your plan: Premium',
       youAreFree: 'Your plan: Free',
-      bestValue: 'Best value',
-      free1: 'Dashboard, scores and onboarding',
-      free2: 'Bible and daily devotional (rules)',
-      free3: 'Manual health + basic Freedom',
-      free4: 'Solana wallet and profile',
+      bestValue: 'Best value yearly',
       stripeNote:
         'Secure payments with Stripe (Salvazion, Inc.). Cancel or change plans anytime in the customer portal.',
     },

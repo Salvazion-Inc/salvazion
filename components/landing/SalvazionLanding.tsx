@@ -6,7 +6,11 @@ import Link from 'next/link';
 import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 import JupiterSwap from '@/components/wallet/JupiterSwap';
 import { useI18n } from '@/components/I18nProvider';
-import { PLAN_COPY } from '@/lib/billing/plans';
+import {
+  PLAN_COPY,
+  PREMIUM_FEATURE_LIST,
+  PRICING_TABLE,
+} from '@/lib/billing/plans';
 import LanguageFlagSwitch from '@/components/ui/LanguageFlagSwitch';
 import XLogo, { textWithXLogo } from '@/components/ui/XLogo';
 import LandingBlog from '@/components/landing/LandingBlog';
@@ -142,7 +146,7 @@ export default function SalvazionLanding() {
             />
             <Link
               href="/auth/login"
-              className="btn-primary nav-enter-cta !w-[11.75rem] sm:!w-[12.5rem] shrink-0 !px-3 sm:!px-4 !min-h-10 !text-xs sm:!text-sm !whitespace-normal text-center leading-tight"
+              className="btn-primary nav-enter-cta !w-[11.75rem] shrink-0 !px-3 sm:!px-4 !min-h-10 !text-xs sm:!text-sm !whitespace-normal sm:!whitespace-nowrap text-center leading-tight sm:leading-none"
             >
               {t.nav.enter}
             </Link>
@@ -407,7 +411,9 @@ export default function SalvazionLanding() {
                 </p>
                 {/* Keeps header height aligned with Premium badge row */}
                 <span className="invisible text-[10px] px-2.5 py-1 rounded-full font-semibold">
-                  {t.pricing.bestValue}
+                  {lang === 'es'
+                    ? PRICING_TABLE.bestValue.es
+                    : PRICING_TABLE.bestValue.en}
                 </span>
               </div>
 
@@ -423,16 +429,21 @@ export default function SalvazionLanding() {
               </p>
 
               <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.5rem]">
-                {t.pricing.freeNote}
+                {lang === 'es'
+                  ? PRICING_TABLE.freeNote.es
+                  : PRICING_TABLE.freeNote.en}
               </p>
 
               <ul className="mt-5 space-y-2 text-sm text-[#D8E1D9]/90 flex-1">
-                {t.pricing.freeItems.map((item) => (
-                  <li key={item} className="flex gap-2">
-                    <span className="text-[var(--accent)] shrink-0 w-4 text-center">·</span>
-                    <span>{textWithXLogo(item)}</span>
-                  </li>
-                ))}
+                {PRICING_TABLE.freeItems.map((item) => {
+                  const label = lang === 'es' ? item.es : item.en;
+                  return (
+                    <li key={item.en} className="flex gap-2">
+                      <span className="text-[var(--accent)] shrink-0 w-4 text-center">·</span>
+                      <span>{textWithXLogo(label)}</span>
+                    </li>
+                  );
+                })}
               </ul>
 
               <Link
@@ -450,7 +461,9 @@ export default function SalvazionLanding() {
                   Premium
                 </p>
                 <span className="text-[10px] px-2.5 py-1 rounded-full bg-[#8FD99A]/18 text-[#8FD99A] font-semibold border border-[#8FD99A]/25">
-                  {t.pricing.bestValue}
+                  {lang === 'es'
+                    ? PRICING_TABLE.bestValue.es
+                    : PRICING_TABLE.bestValue.en}
                 </span>
               </div>
 
@@ -467,16 +480,21 @@ export default function SalvazionLanding() {
               </p>
 
               <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.5rem]">
-                {t.pricing.premiumNote}
+                {lang === 'es'
+                  ? PRICING_TABLE.premiumNote.es
+                  : PRICING_TABLE.premiumNote.en}
               </p>
 
               <ul className="mt-5 space-y-2 text-sm text-[#D8E1D9]/90 flex-1">
-                {t.pricing.premiumItems.map((item) => (
-                  <li key={item} className="flex gap-2">
-                    <span className="text-[var(--accent)] shrink-0 w-4 text-center">·</span>
-                    <span>{textWithXLogo(item)}</span>
-                  </li>
-                ))}
+                {PREMIUM_FEATURE_LIST.map((item) => {
+                  const label = lang === 'es' ? item.es : item.en;
+                  return (
+                    <li key={item.id} className="flex gap-2">
+                      <span className="text-[var(--accent)] shrink-0 w-4 text-center">·</span>
+                      <span>{textWithXLogo(label)}</span>
+                    </li>
+                  );
+                })}
               </ul>
 
               <Link
@@ -489,7 +507,9 @@ export default function SalvazionLanding() {
           </div>
 
           <p className="mt-6 text-center text-[11px] text-[var(--sage)]/80 leading-relaxed max-w-xl mx-auto">
-            {t.pricing.stripeNote}
+            {lang === 'es'
+              ? PRICING_TABLE.stripeNote.es
+              : PRICING_TABLE.stripeNote.en}
           </p>
         </div>
       </section>
@@ -617,35 +637,8 @@ const copy = {
     pricing: {
       eyebrow: 'Freemium',
       title: 'Start free. Go Premium when ready.',
-      freeNote: 'Forever free to start the journey',
-      freeItems: [
-        'Dashboard, daily scores and onboarding',
-        'Full offline Bible (ES · EN · originals) — read, search and concordance',
-        'Daily rules-based devotional',
-        'Manual health logs, phone sensors and BLE heart rate',
-        'Freedom library browse — books, X articles and YouTube',
-        'Basic Phalanx invites for family and friends',
-        'Solana wallet connect (Jupiter Mobile, Phantom, Solflare)',
-        '$SALVAZION swap via Jupiter — we never hold your keys',
-        'Profile and basic badges',
-      ],
-      premiumNote: 'Everything in Free, plus full access and advanced tools',
-      premiumItems: [
-        'Salvazion AI (chat coach)',
-        'Salvazion voice / TTS',
-        'Unlimited AI devotionals — Scripture, virtue and BioConservatism',
-        'Cloud wearables OAuth (Fitbit, Oura, WHOOP, Garmin)',
-        'Advanced health: biomarkers, clinical record, women’s health',
-        'Full calendar and discipline planner',
-        'Advanced prayer motives tools',
-        'Full Freedom library + swap terminal',
-        'Unlimited Phalanx invites and tracking',
-      ],
-      bestValue: 'Best value yearly',
       ctaFree: 'Create free account',
       ctaPremium: 'Join & upgrade to Premium',
-      stripeNote:
-        'Secure payments with Stripe (Salvazion, Inc.). Cancel or change plans anytime in the customer portal.',
     },
     token: {
       subtitle: 'Buy $SALVAZION Patriot Bitcoin on Solana',
@@ -743,35 +736,8 @@ const copy = {
     pricing: {
       eyebrow: 'Freemium',
       title: 'Empieza gratis. Pasa a Premium cuando quieras.',
-      freeNote: 'Gratis para siempre para empezar el camino',
-      freeItems: [
-        'Dashboard, scores diarios y onboarding',
-        'Biblia completa offline (ES · EN · originales) — lectura, búsqueda y concordancia',
-        'Devocional diario por reglas',
-        'Salud manual, sensores del teléfono y HR Bluetooth',
-        'Biblioteca Freedom — libros, artículos en X y YouTube',
-        'Invitaciones Phalanx básicas para familia y amigos',
-        'Billetera Solana (Jupiter Mobile, Phantom, Solflare)',
-        'Swap $SALVAZION con Jupiter — no custodiamos tus llaves',
-        'Perfil y badges básicos',
-      ],
-      premiumNote: 'Todo lo de Gratis, más acceso completo y herramientas avanzadas',
-      premiumItems: [
-        'Salvazion con IA (chat coach)',
-        'Voz de Salvazion / TTS',
-        'Devocionales IA ilimitados — Escritura, virtud y BioConservadurismo',
-        'Wearables en la nube (Fitbit, Oura, WHOOP, Garmin)',
-        'Salud avanzada: biomarcadores, registro clínico, salud femenina',
-        'Calendario completo y planificador de disciplina',
-        'Herramientas avanzadas de motivos de oración',
-        'Biblioteca Freedom completa + terminal de swap',
-        'Invitaciones Phalanx ilimitadas y seguimiento',
-      ],
-      bestValue: 'Mejor valor anual',
       ctaFree: 'Crear cuenta gratis',
       ctaPremium: 'Unirme y pasar a Premium',
-      stripeNote:
-        'Pagos seguros con Stripe (Salvazion, Inc.). Cancela o cambia de plan cuando quieras en el portal de cliente.',
     },
     token: {
       subtitle: 'Compra $SALVAZION Patriot Bitcoin en Solana',

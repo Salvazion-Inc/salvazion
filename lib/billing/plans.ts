@@ -64,7 +64,7 @@ export const PLAN_COPY = {
   },
 };
 
-/** Features available without subscription */
+/** Features available without subscription (capability ids) */
 export const FREE_FEATURE_LIST = [
   'account_onboarding',
   'dashboard_scores',
@@ -78,7 +78,69 @@ export const FREE_FEATURE_LIST = [
   'badges_basic',
 ] as const;
 
-/** Premium-only capabilities (current product surface) */
+/**
+ * Pricing table copy — single source for landing + in-app Premium page.
+ * Keep EN/ES lists in lockstep (same order and count).
+ */
+export const PRICING_TABLE = {
+  freeNote: {
+    en: 'Forever free to start the journey',
+    es: 'Gratis para siempre para empezar el camino',
+  },
+  premiumNote: {
+    en: 'Everything in Free, plus full access and advanced tools',
+    es: 'Todo lo de Gratis, más acceso completo y herramientas avanzadas',
+  },
+  bestValue: {
+    en: 'Best value yearly',
+    es: 'Mejor valor anual',
+  },
+  stripeNote: {
+    en: 'Secure payments with Stripe (Salvazion, Inc.). Cancel or change plans anytime in the customer portal.',
+    es: 'Pagos seguros con Stripe (Salvazion, Inc.). Cancela o cambia de plan cuando quieras en el portal de cliente.',
+  },
+  /** Free plan bullets (landing + app) */
+  freeItems: [
+    {
+      en: 'Dashboard, daily scores and onboarding',
+      es: 'Dashboard, scores diarios y onboarding',
+    },
+    {
+      en: 'Full offline Bible (ES · EN · originals) — read, search and concordance',
+      es: 'Biblia completa offline (ES · EN · originales) — lectura, búsqueda y concordancia',
+    },
+    {
+      en: 'Daily rules-based devotional',
+      es: 'Devocional diario por reglas',
+    },
+    {
+      en: 'Manual health logs, phone sensors and BLE heart rate',
+      es: 'Salud manual, sensores del teléfono y HR Bluetooth',
+    },
+    {
+      en: 'Freedom library browse — books, X articles and YouTube',
+      es: 'Biblioteca Freedom — libros, artículos en X y YouTube',
+    },
+    {
+      en: 'Basic Phalanx invites for family and friends',
+      es: 'Invitaciones Phalanx básicas para familia y amigos',
+    },
+    {
+      en: 'Solana wallet connect (Jupiter Mobile, Phantom, Solflare)',
+      es: 'Billetera Solana (Jupiter Mobile, Phantom, Solflare)',
+    },
+    {
+      en: '$SALVAZION swap via Jupiter — we never hold your keys',
+      es: 'Swap $SALVAZION con Jupiter — no custodiamos tus llaves',
+    },
+    {
+      en: 'Profile and basic badges',
+      es: 'Perfil y badges básicos',
+    },
+  ],
+} as const;
+
+/** Premium-only capabilities (current product surface) — display copy matches landing */
 export const PREMIUM_FEATURE_LIST: {
   id: PremiumFeature;
   en: string;
@@ -86,8 +148,8 @@ export const PREMIUM_FEATURE_LIST: {
 }[] = [
   {
     id: 'coach_ai',
-    en: 'Salvazion AI (chat)',
-    es: 'Salvazion con IA (chat)',
+    en: 'Salvazion AI (chat coach)',
+    es: 'Salvazion con IA (chat coach)',
   },
   {
     id: 'coach_tts',
@@ -96,8 +158,8 @@ export const PREMIUM_FEATURE_LIST: {
   },
   {
     id: 'devotional_ai',
-    en: 'Unlimited AI devotionals',
-    es: 'Devocionales IA ilimitados',
+    en: 'Unlimited AI devotionals — Scripture, virtue and BioConservatism',
+    es: 'Devocionales IA ilimitados — Escritura, virtud y BioConservadurismo',
   },
   {
     id: 'wearables_cloud',
@@ -106,17 +168,17 @@ export const PREMIUM_FEATURE_LIST: {
   },
   {
     id: 'health_advanced',
-    en: 'Advanced health: biomarkers, clinical record, women\'s health',
+    en: "Advanced health: biomarkers, clinical record, women's health",
     es: 'Salud avanzada: biomarcadores, registro clínico, salud femenina',
   },
   {
     id: 'calendar_advanced',
-    en: 'Full calendar & discipline planner',
+    en: 'Full calendar and discipline planner',
     es: 'Calendario completo y planificador de disciplina',
   },
   {
     id: 'prayer_advanced',
-    en: 'Prayer motives advanced tools',
+    en: 'Advanced prayer motives tools',
     es: 'Herramientas avanzadas de motivos de oración',
   },
   {
@@ -126,7 +188,7 @@ export const PREMIUM_FEATURE_LIST: {
   },
   {
     id: 'phalanx_unlimited',
-    en: 'Unlimited Phalanx invites & tracking',
+    en: 'Unlimited Phalanx invites and tracking',
     es: 'Invitaciones Phalanx ilimitadas y seguimiento',
   },
 ];

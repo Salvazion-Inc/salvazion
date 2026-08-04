@@ -314,20 +314,25 @@ html[data-text-scale="xxl"] nav.fixed span {
 
 /**
  * Landing nav "Enter Salvazion" — web / tablet+ only (≥ sm).
- * English footprint (12.5rem) is the reference; longer Spanish must not
- * stretch the pill via flex min-width:auto.
- * True mobile (< 640px) keeps only the component Tailwind classes.
+ * Match English single-line height: never wrap (ES was 2 lines → taller).
+ * Same outer box for EN/ES; mobile (< 640px) keeps component classes only.
  */
 @media (min-width: 640px) {
   a.btn-primary.nav-enter-cta {
-    width: 12.5rem !important;
-    min-width: 0 !important;
-    max-width: 12.5rem !important;
-    flex: 0 0 12.5rem !important;
-    white-space: normal !important;
+    /* Wide enough for “Entrar a Salvazion” on one line at text-sm */
+    width: 14rem !important;
+    min-width: 14rem !important;
+    max-width: 14rem !important;
+    flex: 0 0 14rem !important;
+    height: 2.5rem !important;
+    min-height: 2.5rem !important;
+    max-height: 2.5rem !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    white-space: nowrap !important;
+    line-height: 1 !important;
     box-sizing: border-box;
-    line-height: 1.15;
-    text-wrap: balance;
+    overflow: hidden;
   }
 }
 

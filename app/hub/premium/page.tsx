@@ -12,7 +12,11 @@ import {
   startCheckout,
   useEntitlement,
 } from '@/lib/billing/client';
-import { PLAN_COPY, PREMIUM_FEATURE_LIST } from '@/lib/billing/plans';
+import {
+  PLAN_COPY,
+  PREMIUM_FEATURE_LIST,
+  PRICING_TABLE,
+} from '@/lib/billing/plans';
 
 export default function PremiumPage() {
   const router = useRouter();
@@ -103,18 +107,27 @@ export default function PremiumPage() {
           )}
         </div>
 
-        {/* Plans */}
+        {/* Plans — same feature table as landing pricing */}
         <div className="grid gap-3">
           <div className="glass rounded-2xl p-5 border border-[var(--border-soft)]">
             <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]">
               {lang === 'es' ? PLAN_COPY.free.nameEs : PLAN_COPY.free.name}
             </p>
-            <p className="text-2xl font-bold text-white mt-1">$0</p>
+            <p className="text-2xl font-bold text-white mt-1">
+              {PLAN_COPY.free.priceLabel}
+            </p>
+            <p className="mt-2 text-[11px] text-[var(--sage)]/90 leading-snug">
+              {lang === 'es'
+                ? PRICING_TABLE.freeNote.es
+                : PRICING_TABLE.freeNote.en}
+            </p>
             <ul className="mt-3 space-y-1.5 text-xs text-[var(--sage)]">
-              <li>· {t('premium.free1')}</li>
-              <li>· {t('premium.free2')}</li>
-              <li>· {t('premium.free3')}</li>
-              <li>· {t('premium.free4')}</li>
+              {PRICING_TABLE.freeItems.map((item) => (
+                <li key={item.en} className="flex gap-2">
+                  <span className="text-[var(--accent)] shrink-0">·</span>
+                  <span>{lang === 'es' ? item.es : item.en}</span>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -124,7 +137,9 @@ export default function PremiumPage() {
                 Premium
               </p>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#8FD99A]/20 text-[#8FD99A]">
-                {t('premium.bestValue')}
+                {lang === 'es'
+                  ? PRICING_TABLE.bestValue.es
+                  : PRICING_TABLE.bestValue.en}
               </span>
             </div>
             <div className="mt-2 space-y-1">
@@ -139,10 +154,15 @@ export default function PremiumPage() {
                   : PLAN_COPY.premium_year.priceLabel}
               </p>
             </div>
+            <p className="mt-2 text-[11px] text-[#D8E1D9]/90 leading-snug">
+              {lang === 'es'
+                ? PRICING_TABLE.premiumNote.es
+                : PRICING_TABLE.premiumNote.en}
+            </p>
             <ul className="mt-4 space-y-2 text-xs text-[#D8E1D9]">
               {PREMIUM_FEATURE_LIST.map((f) => (
                 <li key={f.id} className="flex gap-2">
-                  <span className="text-[#8FD99A]">✓</span>
+                  <span className="text-[#8FD99A] shrink-0">✓</span>
                   <span>{lang === 'es' ? f.es : f.en}</span>
                 </li>
               ))}
@@ -189,7 +209,9 @@ export default function PremiumPage() {
         )}
 
         <p className="text-[11px] text-[var(--sage)]/70 text-center leading-relaxed px-2">
-          {t('premium.stripeNote')}
+          {lang === 'es'
+            ? PRICING_TABLE.stripeNote.es
+            : PRICING_TABLE.stripeNote.en}
         </p>
       </main>
 

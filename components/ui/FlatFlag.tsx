@@ -22,16 +22,19 @@ const FLAGS: Record<
 
 type Size = 'sm' | 'md' | 'lg';
 
-/** Rectangular flag chips (list cards, profile). Circular switches set their own box. */
+/**
+ * Rectangular flag chips (list cards, profile, language switch).
+ * Default object-contain so USA stars / Chile star are not cropped.
+ */
 const SIZE: Record<Size, string> = {
   sm: 'h-5 w-8',
-  md: 'h-7 w-11 sm:h-8 sm:w-[3.25rem]',
+  md: 'h-7 w-11 sm:h-8 sm:w-12',
   lg: 'h-10 w-16',
 };
 
 const INTRINSIC: Record<Size, { w: number; h: number }> = {
   sm: { w: 32, h: 20 },
-  md: { w: 44, h: 28 },
+  md: { w: 48, h: 32 },
   lg: { w: 64, h: 40 },
 };
 
@@ -53,7 +56,7 @@ export default function FlatFlag({
       alt={f.alt}
       width={dim.w}
       height={dim.h}
-      className={`block object-cover ${SIZE[size]} ${className}`}
+      className={`block object-contain object-center ${SIZE[size]} ${className}`}
       draggable={false}
     />
   );

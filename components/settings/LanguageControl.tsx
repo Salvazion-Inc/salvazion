@@ -34,11 +34,13 @@ export default function LanguageControl({ compact = false }: { compact?: boolean
               aria-pressed={active}
               aria-label={opt.label}
             >
-              <FlatFlag
-                lang={opt.id}
-                size="sm"
-                className="rounded-[2px] ring-1 ring-black/20"
-              />
+              <span className="inline-flex h-5 w-8 shrink-0 items-center justify-center overflow-hidden rounded-[2px] bg-black/40 ring-1 ring-black/20">
+                <FlatFlag
+                  lang={opt.id}
+                  size="sm"
+                  className="!h-full !w-full object-contain"
+                />
+              </span>
               <span>{opt.id.toUpperCase()}</span>
             </button>
           );
@@ -77,8 +79,12 @@ export default function LanguageControl({ compact = false }: { compact?: boolean
                   : 'border-[#6B8F6E]/30 text-[#B7F7AC]/70 hover:border-[#8FD99A]/40'
               }`}
             >
-              <span className="rounded-[3px] overflow-hidden ring-1 ring-white/10 shadow-sm">
-                <FlatFlag lang={opt.id} size="lg" />
+              <span className="inline-flex h-10 w-16 items-center justify-center overflow-hidden rounded-[3px] bg-black/40 ring-1 ring-white/10 shadow-sm">
+                <FlatFlag
+                  lang={opt.id}
+                  size="lg"
+                  className="!h-full !w-full object-contain"
+                />
               </span>
               <span className="text-sm font-semibold">{opt.label}</span>
               <span className="text-[10px] opacity-70">{opt.id.toUpperCase()}</span>

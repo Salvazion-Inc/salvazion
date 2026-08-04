@@ -372,7 +372,7 @@ export async function ensureProfileForUser(preferredName?: string): Promise<void
  * familyLinks & friendsLinks are merged from localStorage (not yet in DB schema).
  *
  * Avatar rule: server https URL always wins over device cache (web ↔ mobile sync).
- * Local data: URLs only fill in when the server has no avatar yet.
+ * Local data URLs only fill in when the server has no remote avatar yet.
  */
 export async function loadProfileAsync(): Promise<Partial<UserProfile>> {
   const local = loadLocal();
@@ -385,6 +385,7 @@ export async function loadProfileAsync(): Promise<Partial<UserProfile>> {
     if (user) {
       await ensureProfileForUser();
 
+      // Prefer a lean select first for avatar freshness (mobile often has stale localStorage)
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -411,22 +412,31 @@ export async function loadProfileAsync(): Promise<Partial<UserProfile>> {
           profile.xUserId = x?.userId || local.xUserId;
         }
 
-        // Avatar: server is source of truth across devices
-        if (profile.avatarUrl && isHttpUrl(profile.avatarUrl)) {
+        // Avatar: server remote URL is always source of truth across devices.
+        // Drop stale localStorage photos (old X CDN, previous Storage path, data: URLs)
+        // whenever the server has an http(s) avatar.
+        const serverAvatar = profile.avatarUrl;
+        if (serverAvatar && isHttpUrl(serverAvatar)) {
           profile.avatarUrl = withAvatarCacheBust(
-            profile.avatarUrl,
+            serverAvatar,
             data.updated_at || Date.now()
           );
-        } else if (local.avatarUrl) {
-          // Server empty → keep local (data URL offline upload, or prior device photo)
+        } else if (isDataAvatar(local.avatarUrl)) {
+          // Server empty → keep offline-only upload on this device
           profile.avatarUrl = local.avatarUrl;
+        } else if (local.avatarUrl && isHttpUrl(local.avatarUrl)) {
+          // Server empty but device still has a remote URL (e.g. mid-sync)
+          profile.avatarUrl = local.avatarUrl;
+        } else {
+          profile.avatarUrl = undefined;
         }
 
         // Apply X identity if still missing handle (non-blocking; must not clobber avatar)
         if (!profile.xUsername) {
           void applyXIdentityToProfile();
         }
-        // Replace local cache with server-merged profile so mobile drops stale avatars
+
+        // Always rewrite local cache so mobile drops stale avatars from other sessions
         saveLocal(profile);
         return profile;
       }
@@ -435,6 +445,14 @@ export async function loadProfileAsync(): Promise<Partial<UserProfile>> {
     console.warn('[Salvazion] Supabase profile load failed, using local', e);
   }
   return local;
+}
+
+/**
+ * Re-fetch profile from Supabase and update local cache.
+ * Call on app resume / tab focus so mobile picks up web avatar changes.
+ */
+export async function refreshProfileFromServer(): Promise<Partial<UserProfile>> {
+  return loadProfileAsync();
 }
 
 /** Sync load for existing components (reads local cache). Prefer loadProfileAsync when possible. */

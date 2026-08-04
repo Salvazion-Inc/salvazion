@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -8,6 +8,7 @@ import BottomNav from '@/components/BottomNav';
 import {
   loadProfile,
   loadProfileAsync,
+  refreshProfileFromServer,
   saveProfile,
   signOut,
   calculateAge,
@@ -44,6 +45,8 @@ export default function ProfilePage() {
   const [mounted, setMounted] = useState(false);
   const [confirmClear, setConfirmClear] = useState(false);
   const [linkedWallet, setLinkedWallet] = useState<LinkedWallet | null>(null);
+  const editingRef = useRef(editing);
+  editingRef.current = editing;
 
   useEffect(() => {
     setMounted(true);
@@ -54,11 +57,11 @@ export default function ProfilePage() {
       const p = loadProfile();
       if (!p) return;
       setProfile(p);
-      // Keep open edit fields; only pull avatar (and empty-slot fields) from cache
+      // Keep open edit fields; only pull avatar from cache
       setDraft((d) => ({ ...d, avatarUrl: p.avatarUrl }));
     });
 
-    (async () => {
+    const pullServer = async () => {
       try {
         const supabase = createClient();
         const {
@@ -75,12 +78,34 @@ export default function ProfilePage() {
         return;
       }
       setProfile(p);
-      setDraft(p);
-    })();
+      setDraft((d) =>
+        editingRef.current
+          ? { ...d, avatarUrl: p.avatarUrl }
+          : p
+      );
+    };
+
+    void pullServer();
+
+    // Resume app / return to tab → re-fetch avatar_url (web → mobile sync)
+    const onResume = () => {
+      void refreshProfileFromServer().then((p) => {
+        if (!p?.onboardingCompleted) return;
+        setProfile(p);
+        setDraft((d) => ({ ...d, avatarUrl: p.avatarUrl }));
+      });
+    };
+    const onVis = () => {
+      if (document.visibilityState === 'visible') onResume();
+    };
+    window.addEventListener('focus', onResume);
+    document.addEventListener('visibilitychange', onVis);
 
     return () => {
       unsubWallet();
       unsubProfile();
+      window.removeEventListener('focus', onResume);
+      document.removeEventListener('visibilitychange', onVis);
     };
   }, [router]);
 

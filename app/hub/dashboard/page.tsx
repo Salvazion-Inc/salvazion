@@ -6,6 +6,7 @@ import Link from 'next/link';
 import {
   loadProfile,
   loadProfileAsync,
+  refreshProfileFromServer,
   saveProfile,
   subscribeProfileUpdated,
 } from '@/lib/store/profile';
@@ -69,10 +70,28 @@ export default function DashboardPage() {
     })();
 
     // Keep hero avatar/name in sync when profile is saved elsewhere (e.g. Profile page)
-    return subscribeProfileUpdated(() => {
+    const unsub = subscribeProfileUpdated(() => {
       const p = loadProfile();
       if (p) setProfile(p);
     });
+
+    // Mobile/web resume: pull latest avatar_url from Supabase (photo changed on other device)
+    const onResume = () => {
+      void refreshProfileFromServer().then((p) => {
+        if (p?.onboardingCompleted) setProfile(p);
+      });
+    };
+    const onVis = () => {
+      if (document.visibilityState === 'visible') onResume();
+    };
+    window.addEventListener('focus', onResume);
+    document.addEventListener('visibilitychange', onVis);
+
+    return () => {
+      unsub();
+      window.removeEventListener('focus', onResume);
+      document.removeEventListener('visibilitychange', onVis);
+    };
   }, [router, refresh]);
 
   const recentBadges = useMemo(() => {

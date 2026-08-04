@@ -78,49 +78,26 @@ Flujo:
 3. La app llama `accept_phalanx_invite` → ambas cuentas quedan **conectadas**
 4. Al abrir Perfil se sincronizan conexiones desde Supabase
 
-## 6. Avatar de perfil (Storage opcional)
-La foto funciona **offline** (comprimida en el dispositivo). Para multi-dispositivo:
+## 6. Avatar de perfil (multi-dispositivo web ↔ mobile)
 
-1. SQL Editor — si el proyecto ya existía sin `avatar_url`:
-```sql
-alter table public.profiles add column if not exists avatar_url text;
-```
+La foto puede guardarse **solo en el dispositivo** (localStorage) si no hay Storage.
+Para **sincronizar web ↔ mobile**, ejecuta el SQL listo:
 
-2. Storage → New bucket:
-   - Name: `avatars`
-   - **Public** bucket: ON
+**Archivo:** [`avatars-storage.sql`](./avatars-storage.sql)
 
-3. Storage → Policies (o SQL):
-```sql
--- Public read
-create policy "Avatar images are publicly accessible"
-  on storage.objects for select
-  using (bucket_id = 'avatars');
+1. Abre **Supabase → SQL Editor**
+2. Pega **todo** el contenido de `avatars-storage.sql`
+3. **Run**
+4. En Results deberías ver `ok = true` para columna y bucket, y `policy_count = 4`
 
--- Users upload/update only their folder: {user_id}/avatar.jpg
-create policy "Users can upload own avatar"
-  on storage.objects for insert
-  with check (
-    bucket_id = 'avatars'
-    and auth.uid()::text = (storage.foldername(name))[1]
-  );
+Eso crea/actualiza:
+- columna `profiles.avatar_url`
+- bucket público `avatars`
+- policies de lectura pública + write solo en carpeta `{user_id}/…`
 
-create policy "Users can update own avatar"
-  on storage.objects for update
-  using (
-    bucket_id = 'avatars'
-    and auth.uid()::text = (storage.foldername(name))[1]
-  );
-
-create policy "Users can delete own avatar"
-  on storage.objects for delete
-  using (
-    bucket_id = 'avatars'
-    and auth.uid()::text = (storage.foldername(name))[1]
-  );
-```
-
-Sin el bucket, la foto se guarda igual en el dispositivo (localStorage).
+Verificación rápida en el dashboard:
+- **Storage → Buckets → `avatars`** debe existir y estar **Public**
+- Cambia la foto en web y confirma que aparece un archivo bajo `avatars/{user_id}/`
 
 ## 7. Instalar dependencias
 ```bash

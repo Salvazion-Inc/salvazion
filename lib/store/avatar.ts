@@ -76,8 +76,8 @@ function blobToDataUrl(blob: Blob): Promise<string> {
 
 /**
  * Upload avatar to Supabase Storage (bucket `avatars`) when available.
- * Returns public URL or null if storage is not configured / failed.
- * Uses short cacheControl + bust query so other devices see the new file.
+ * Writes a versioned object path so mobile/web CDNs never serve a stale file,
+ * and immediately persists the public URL on profiles.avatar_url (source of truth).
  */
 export async function uploadAvatarToSupabase(blob: Blob): Promise<string | null> {
   try {
@@ -87,42 +87,90 @@ export async function uploadAvatarToSupabase(blob: Blob): Promise<string | null>
     } = await supabase.auth.getUser();
     if (!user) return null;
 
-    const path = `${user.id}/avatar.jpg`;
+    const version = Date.now();
+    // Versioned path defeats CDN/browser cache of the same Storage object
+    const path = `${user.id}/avatar-${version}.jpg`;
+    const legacyPath = `${user.id}/avatar.jpg`;
 
-    // Prefer update; fall back to upload (first time)
-    let error =
-      (
-        await supabase.storage.from('avatars').upload(path, blob, {
+    const { error: upErr } = await supabase.storage.from('avatars').upload(path, blob, {
+      upsert: true,
+      contentType: 'image/jpeg',
+      cacheControl: '3600',
+    });
+
+    if (upErr) {
+      // Fallback: stable path (older policies may only allow avatar.jpg)
+      const { error: legacyErr } = await supabase.storage
+        .from('avatars')
+        .upload(legacyPath, blob, {
           upsert: true,
           contentType: 'image/jpeg',
-          // Short CDN cache so mobile/web pick up replacements of the same path
           cacheControl: '60',
-        })
-      ).error || null;
-
-    if (error) {
-      // Some projects only allow update after insert
-      const retry = await supabase.storage.from('avatars').update(path, blob, {
-        contentType: 'image/jpeg',
-        cacheControl: '60',
-        upsert: true,
-      });
-      error = retry.error;
-    }
-
-    if (error) {
-      console.warn('[Salvazion] avatar upload skipped', error.message);
-      return null;
+        });
+      if (legacyErr) {
+        const retry = await supabase.storage.from('avatars').update(legacyPath, blob, {
+          contentType: 'image/jpeg',
+          cacheControl: '60',
+          upsert: true,
+        });
+        if (retry.error) {
+          console.warn('[Salvazion] avatar upload skipped', retry.error.message);
+          return null;
+        }
+        const { data } = supabase.storage.from('avatars').getPublicUrl(legacyPath);
+        if (!data.publicUrl) return null;
+        const url = `${data.publicUrl.split('?')[0]}?v=${version}`;
+        await persistAvatarUrl(supabase, user.id, url);
+        return url;
+      }
+      const { data } = supabase.storage.from('avatars').getPublicUrl(legacyPath);
+      if (!data.publicUrl) return null;
+      const url = `${data.publicUrl.split('?')[0]}?v=${version}`;
+      await persistAvatarUrl(supabase, user.id, url);
+      return url;
     }
 
     const { data } = supabase.storage.from('avatars').getPublicUrl(path);
     if (!data.publicUrl) return null;
-    // Stable public path + version query (also stored on profiles.avatar_url)
-    const url = `${data.publicUrl.split('?')[0]}?v=${Date.now()}`;
+    // Unique path — still add v for consumers that ignore path changes
+    const url = `${data.publicUrl.split('?')[0]}?v=${version}`;
+    await persistAvatarUrl(supabase, user.id, url);
+
+    // Best-effort cleanup of previous objects (ignore errors)
+    try {
+      const { data: listed } = await supabase.storage.from('avatars').list(user.id, {
+        limit: 20,
+      });
+      const stale = (listed || [])
+        .map((f) => f.name)
+        .filter((name) => name.startsWith('avatar') && name !== `avatar-${version}.jpg`)
+        .map((name) => `${user.id}/${name}`);
+      if (stale.length) {
+        void supabase.storage.from('avatars').remove(stale);
+      }
+    } catch {
+      /* ignore */
+    }
+
     return url;
   } catch (e) {
     console.warn('[Salvazion] avatar upload failed', e);
     return null;
+  }
+}
+
+async function persistAvatarUrl(
+  supabase: ReturnType<typeof createClient>,
+  userId: string,
+  url: string
+): Promise<void> {
+  const { error } = await supabase.from('profiles').upsert({
+    id: userId,
+    avatar_url: url,
+    updated_at: new Date().toISOString(),
+  });
+  if (error) {
+    console.warn('[Salvazion] profiles.avatar_url persist failed', error.message);
   }
 }
 

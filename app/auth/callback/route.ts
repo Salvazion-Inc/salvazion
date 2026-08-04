@@ -107,6 +107,25 @@ export async function GET(request: Request) {
         ...(googleIdentity?.identity_data || {}),
       } as Record<string, unknown>;
 
+      // Never overwrite a user-uploaded / Storage avatar with OAuth CDN photos.
+      // Mobile re-login used to clobber profiles.avatar_url → web photo never sticks.
+      const { data: existing } = await supabase
+        .from('profiles')
+        .select('name, avatar_url')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      const existingAvatar =
+        typeof existing?.avatar_url === 'string' ? existing.avatar_url : '';
+      const isOAuthCdn = (url: string) =>
+        /twimg\.com|twitter\.com|pbs\.twimg|googleusercontent\.com|ggpht\.com/i.test(
+          url
+        );
+      const hasCustomAvatar =
+        !!existingAvatar &&
+        /^https?:\/\//i.test(existingAvatar) &&
+        !isOAuthCdn(existingAvatar);
+
       const payload: Record<string, unknown> = {
         id: user.id,
         updated_at: new Date().toISOString(),
@@ -117,7 +136,10 @@ export async function GET(request: Request) {
         (typeof meta.name === 'string' && meta.name) ||
         (typeof meta.given_name === 'string' && meta.given_name) ||
         null;
-      if (displayName) payload.name = displayName;
+      // Only fill name when empty — do not stomp a profile name the user set
+      if (displayName && !String(existing?.name || '').trim()) {
+        payload.name = displayName;
+      }
 
       const avatar =
         (typeof meta.avatar_url === 'string' && meta.avatar_url) ||
@@ -125,8 +147,11 @@ export async function GET(request: Request) {
         (typeof meta.profile_image_url_https === 'string' &&
           meta.profile_image_url_https) ||
         null;
-      if (avatar) {
-        payload.avatar_url = String(avatar).replace('_normal', '_400x400');
+      if (avatar && !hasCustomAvatar) {
+        // Empty or previous OAuth CDN only — safe to seed from provider
+        if (!existingAvatar || isOAuthCdn(existingAvatar)) {
+          payload.avatar_url = String(avatar).replace('_normal', '_400x400');
+        }
       }
 
       if (xIdentity) {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { saveAvatarImage } from '@/lib/store/avatar';
 import { saveProfile } from '@/lib/store/profile';
@@ -48,8 +48,14 @@ export default function ProfileAvatar({
     { active: false } | { active: true; url?: string }
   >({ active: false });
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [imgEpoch, setImgEpoch] = useState(0);
 
-  // If parent avatarUrl changes externally, drop override when it matches
+  // External sync (other device / server refresh): drop local override when prop changes
+  useEffect(() => {
+    setLocalOverride({ active: false });
+    setImgEpoch((n) => n + 1);
+  }, [avatarUrl]);
+
   const displayUrl = localOverride.active
     ? localOverride.url
     : avatarUrl || undefined;
@@ -85,8 +91,17 @@ export default function ProfileAvatar({
         return;
       }
       setLocalOverride({ active: true, url: result.avatarUrl });
+      setImgEpoch((n) => n + 1);
+      // Always persist to profiles (remote URL already written by upload when possible)
       await saveProfile({ avatarUrl: result.avatarUrl });
       onChange?.(result.avatarUrl);
+      if (!result.remote) {
+        setError(
+          es
+            ? 'Foto guardada solo en este dispositivo. Activa el bucket “avatars” en Supabase para sincronizar con mobile.'
+            : 'Photo saved on this device only. Enable the Supabase “avatars” bucket to sync with mobile.'
+        );
+      }
     } finally {
       setBusy(false);
       if (cameraInputRef.current) cameraInputRef.current.value = '';
@@ -123,11 +138,14 @@ export default function ProfileAvatar({
           {displayUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
+              key={`${displayUrl}#${imgEpoch}`}
               src={displayUrl}
               alt={name}
               width={dim.px}
               height={dim.px}
               className="w-full h-full object-cover"
+              referrerPolicy="no-referrer"
+              decoding="async"
             />
           ) : (
             <Image

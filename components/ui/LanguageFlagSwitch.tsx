@@ -53,7 +53,8 @@ export default function LanguageFlagSwitch({
             type="button"
             onClick={() => onChange(opt.id)}
             className={[
-              'relative shrink-0 overflow-hidden rounded-[3px]',
+              /* Softer corners (~8px) without circle-cropping the stars */
+              'relative shrink-0 overflow-hidden rounded-lg',
               'bg-[#0a0a0a]',
               'transition-[box-shadow,opacity,transform] duration-200 ease-out',
               'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]',
@@ -66,12 +67,15 @@ export default function LanguageFlagSwitch({
             aria-label={opt.label}
             title={opt.label}
           >
-            {/* Full flag art — contain avoids cropping stars */}
-            <span className="absolute inset-0 flex items-center justify-center p-[1px]" aria-hidden>
+            {/* Inset keep stars clear of rounded corner clip */}
+            <span
+              className="absolute inset-0 flex items-center justify-center p-[2px] sm:p-[3px]"
+              aria-hidden
+            >
               <FlatFlag
                 lang={opt.id}
                 size="sm"
-                className="!h-full !w-full !max-w-none object-contain object-center"
+                className="!h-full !w-full !max-w-none object-contain object-center rounded-md"
               />
             </span>
           </button>

@@ -174,7 +174,7 @@ export const dictionary = {
     articles: {
       title: 'Artículos · @salvazion_',
       subtitle:
-        'Long-form en profundidad · desarrollo espiritual · mejorar salud · potenciar libertad',
+        'Long-form en profundidad · espíritu · salud · libertad',
       readCount: 'leídos',
       forYou: 'Para ti',
       unread: 'Sin leer',
@@ -313,6 +313,15 @@ export const dictionary = {
       disclaimer:
         'Los swaps se firman en tu billetera. Salvazion no custodia fondos. Usa un RPC propio en producción para mejor fiabilidad.',
       connectWallet: 'Conecta tu billetera Solana',
+      openJupNewTab: 'Abrir jup.ag en nueva pestaña ↗',
+      continueOnJup: 'Continuar en jup.ag ↗',
+      openJupFull: '¿Problemas? Abre Jupiter completo ↗',
+      opening: 'Abriendo Jupiter…',
+      loading: 'Cargando Jupiter…',
+      unavailable: 'Jupiter no está disponible en este navegador.',
+      loadError: 'No se pudo cargar Jupiter Terminal',
+      initError: 'Error al iniciar Jupiter',
+      defaultTrigger: 'Swap con Jupiter',
     },
     sensors: {
       title: 'Sensores del celular',
@@ -1018,8 +1027,7 @@ export const dictionary = {
     },
     articles: {
       title: 'Articles · @salvazion_',
-      subtitle:
-        'Deep long-form · spiritual growth · better health · greater freedom',
+      subtitle: 'Deep long-form · spirit · health · freedom',
       readCount: 'read',
       forYou: 'For you',
       unread: 'Unread',
@@ -1157,6 +1165,15 @@ export const dictionary = {
       disclaimer:
         'Swaps are signed in your wallet. Salvazion does not custody funds. Use your own RPC in production for reliability.',
       connectWallet: 'Connect your Solana wallet',
+      openJupNewTab: 'Open jup.ag in a new tab ↗',
+      continueOnJup: 'Continue on jup.ag ↗',
+      openJupFull: 'Having trouble? Open full Jupiter ↗',
+      opening: 'Opening Jupiter…',
+      loading: 'Loading Jupiter…',
+      unavailable: 'Jupiter is not available in this browser.',
+      loadError: 'Could not load Jupiter Terminal',
+      initError: 'Error starting Jupiter',
+      defaultTrigger: 'Swap with Jupiter',
     },
     sensors: {
       title: 'Phone sensors',

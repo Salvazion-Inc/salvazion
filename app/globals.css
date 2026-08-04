@@ -312,31 +312,40 @@ html[data-text-scale="xxl"] nav.fixed span {
   box-sizing: border-box;
 }
 
-/** Side-by-side CTAs (hero): both columns same width */
+/**
+ * Hero CTAs — always equal width (EN/ES, mobile/desktop).
+ * flex + basis:0 so label length never drives button size.
+ */
 .btn-marketing-pair {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   gap: 0.75rem;
   width: 100%;
-  max-width: 36rem;
+  max-width: 17.5rem; /* same compact footprint on mobile */
   margin-inline: auto;
 }
 @media (min-width: 640px) {
   .btn-marketing-pair {
-    grid-template-columns: 1fr 1fr;
+    flex-direction: row;
+    max-width: 36rem;
   }
 }
 .btn-marketing-pair > .btn-primary,
 .btn-marketing-pair > .btn-secondary,
 .btn-marketing-pair > a {
-  width: 100%;
-  max-width: none;
+  flex: 1 1 0;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
   min-height: 2.85rem;
-  white-space: normal;
+  white-space: normal !important;
   text-align: center;
   text-wrap: balance;
-  padding-left: 0.85rem;
-  padding-right: 0.85rem;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0.85rem !important;
+  padding-right: 0.85rem !important;
   box-sizing: border-box;
 }
 

@@ -34,7 +34,7 @@ export default function LanguageControl({ compact = false }: { compact?: boolean
               aria-pressed={active}
               aria-label={opt.label}
             >
-              <span className="inline-flex h-5 w-8 shrink-0 items-center justify-center overflow-hidden rounded-[2px] bg-black/40 ring-1 ring-black/20">
+              <span className="inline-flex h-5 w-8 shrink-0 items-center justify-center overflow-hidden rounded-md bg-black/40 p-px ring-1 ring-black/20">
                 <FlatFlag
                   lang={opt.id}
                   size="sm"
@@ -79,7 +79,7 @@ export default function LanguageControl({ compact = false }: { compact?: boolean
                   : 'border-[#6B8F6E]/30 text-[#B7F7AC]/70 hover:border-[#8FD99A]/40'
               }`}
             >
-              <span className="inline-flex h-10 w-16 items-center justify-center overflow-hidden rounded-[3px] bg-black/40 ring-1 ring-white/10 shadow-sm">
+              <span className="inline-flex h-10 w-16 items-center justify-center overflow-hidden rounded-lg bg-black/40 p-0.5 ring-1 ring-white/10 shadow-sm">
                 <FlatFlag
                   lang={opt.id}
                   size="lg"

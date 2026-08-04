@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import WalletConnectCard from '@/components/wallet/WalletConnectCard';
@@ -17,6 +18,71 @@ const X_ACCOUNT_URL = 'https://x.com/salvazion_';
 const LINKEDIN_CRISTIAN =
   'https://www.linkedin.com/in/exponential-healthtech/';
 const LINKEDIN_BEATRIZ = 'https://www.linkedin.com/in/beatriz-isler/';
+
+async function copyToClipboard(text: string): Promise<boolean> {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {
+    // fallback below
+  }
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  } catch {
+    return false;
+  }
+}
+
+function TokenMintCopy({
+  mint,
+  copyLabel,
+  copiedLabel,
+}: {
+  mint: string;
+  copyLabel: string;
+  copiedLabel: string;
+}) {
+  const [copied, setCopied] = useState(false);
+
+  const onCopy = useCallback(async () => {
+    const ok = await copyToClipboard(mint);
+    if (!ok) return;
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 2000);
+  }, [mint]);
+
+  return (
+    <button
+      type="button"
+      onClick={() => void onCopy()}
+      className="group mx-auto mb-8 flex max-w-full items-center gap-2 rounded-xl border border-[var(--border-soft)] bg-[#0a0a0a] px-3 py-2.5 text-left transition hover:border-[var(--border-strong)] hover:bg-[var(--surface-active)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] active:scale-[0.99]"
+      aria-label={copied ? copiedLabel : copyLabel}
+      title={copied ? copiedLabel : copyLabel}
+    >
+      <span className="min-w-0 flex-1 break-all font-mono text-[10px] sm:text-xs text-[var(--off-white)]/90">
+        <span className="text-[var(--sage)]">CA:</span> {mint}
+      </span>
+      <span
+        className={`shrink-0 text-[10px] font-semibold uppercase tracking-wider ${
+          copied ? 'text-[var(--accent)]' : 'text-[var(--sage)] group-hover:text-[var(--accent)]'
+        }`}
+      >
+        {copied ? copiedLabel : copyLabel}
+      </span>
+    </button>
+  );
+}
 
 export default function SalvazionLanding() {
   const { lang, setLang } = useI18n();
@@ -147,10 +213,16 @@ export default function SalvazionLanding() {
           </p>
 
           <div className="btn-marketing-pair mt-9">
-            <Link href="/auth/signup" className="btn-primary">
+            <Link
+              href="/auth/signup"
+              className="btn-primary !w-full !min-w-0 !whitespace-normal text-center leading-snug"
+            >
               {t.hero.ctaPrimary}
             </Link>
-            <Link href="/auth/login" className="btn-secondary">
+            <Link
+              href="/auth/login"
+              className="btn-secondary !w-full !min-w-0 !whitespace-normal text-center leading-snug"
+            >
               {t.hero.ctaLogin}
             </Link>
           </div>
@@ -432,12 +504,13 @@ export default function SalvazionLanding() {
             $SALVAZION
           </h2>
           <p className="text-sm text-[var(--sage)] mb-6">{t.token.subtitle}</p>
-          <div className="font-mono text-[10px] sm:text-xs bg-[#0a0a0a] border border-[var(--border-soft)] px-3 py-2.5 rounded-xl mb-8 inline-block break-all max-w-full">
-            CA: {MINT}
-          </div>
+          <TokenMintCopy
+            mint={MINT}
+            copyLabel={t.token.copyCa}
+            copiedLabel={t.token.copiedCa}
+          />
 
           <div className="max-w-md mx-auto text-left space-y-4">
-            <p className="text-center text-xs text-[var(--sage)]">{t.token.connect}</p>
             <WalletConnectCard showJupiter={false} />
             <div className="card-soft p-3">
               <p className="text-center text-[10px] text-[var(--sage)] mb-2 uppercase tracking-wider">
@@ -566,14 +639,15 @@ const copy = {
     },
     token: {
       subtitle: 'Buy $SALVAZION Patriot Bitcoin on Solana',
-      connect: 'Connect your Solana wallet',
       buy: 'Buy $SALVAZION',
+      copyCa: 'Copy',
+      copiedCa: 'Copied',
     },
     blog: {
       eyebrow: 'Blog · @salvazion_',
       title: 'Salvazion Articles on X',
       subtitle:
-        'Deep long-form on X. Salvation: spiritual growth, Scripture, prayer, virtue and family. Health: habits, body, mind, longevity and BioConservatism. Freedom: sovereignty, craft, community and Western Christian Culture — so you can grow faith, strengthen health and multiply liberty. Every piece opens on X.',
+        'Deep long-form on X to grow your spirit, strengthen your health and expand your freedom. Every piece opens on X.',
       filters: {
         all: 'All',
         salvation: 'Salvation',
@@ -691,14 +765,15 @@ const copy = {
     },
     token: {
       subtitle: 'Compra $SALVAZION Patriot Bitcoin en Solana',
-      connect: 'Conecta tu billetera Solana',
       buy: 'Comprar $SALVAZION',
+      copyCa: 'Copiar',
+      copiedCa: 'Copiado',
     },
     blog: {
       eyebrow: 'Blog · @salvazion_',
       title: 'Artículos de Salvazion en X',
       subtitle:
-        'Long-form en profundidad en X. Salvation: desarrollo espiritual, Escritura, oración, virtud y familia. Health: hábitos, cuerpo, mente, longevidad y BioConservadurismo. Freedom: soberanía, oficio, comunidad y Cultura Cristiana Occidental — para crecer en fe, mejorar tu salud y potenciar tu libertad. Cada pieza se abre en X.',
+        'Long-form en profundidad en X para crecer en espíritu, fortalecer tu salud y potenciar tu libertad. Cada pieza se abre en X.',
       filters: {
         all: 'Todos',
         salvation: 'Salvation',

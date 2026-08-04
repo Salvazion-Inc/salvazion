@@ -8,6 +8,7 @@ import {
   JUPITER_TERMINAL_SCRIPT,
   type JupiterDisplayMode,
 } from '@/lib/solana/jupiter';
+import { useI18n } from '@/components/I18nProvider';
 
 type Props = {
   /** integrated = embed in page; modal = popup; widget = floating */
@@ -18,7 +19,7 @@ type Props = {
   showFallbackLink?: boolean;
 };
 
-function loadJupiterScript(): Promise<void> {
+function loadJupiterScript(loadErrorMsg: string): Promise<void> {
   if (typeof window === 'undefined') return Promise.resolve();
   if (window.Jupiter?.init) return Promise.resolve();
 
@@ -32,7 +33,7 @@ function loadJupiterScript(): Promise<void> {
         return;
       }
       existing.addEventListener('load', () => resolve(), { once: true });
-      existing.addEventListener('error', () => reject(new Error('Jupiter script failed')), {
+      existing.addEventListener('error', () => reject(new Error(loadErrorMsg)), {
         once: true,
       });
     });
@@ -44,7 +45,7 @@ function loadJupiterScript(): Promise<void> {
     script.async = true;
     script.dataset.preload = 'true';
     script.onload = () => resolve();
-    script.onerror = () => reject(new Error('No se pudo cargar Jupiter Terminal'));
+    script.onerror = () => reject(new Error(loadErrorMsg));
     document.head.appendChild(script);
   });
 }
@@ -56,9 +57,10 @@ function loadJupiterScript(): Promise<void> {
 export default function JupiterSwap({
   mode = 'integrated',
   className = '',
-  triggerLabel = 'Swap con Jupiter',
+  triggerLabel,
   showFallbackLink = true,
 }: Props) {
+  const { t } = useI18n();
   const reactId = useId().replace(/:/g, '');
   const targetId = `jupiter-terminal-${reactId}`;
   const wallet = useWallet();
@@ -66,6 +68,8 @@ export default function JupiterSwap({
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(mode === 'integrated');
   const inited = useRef(false);
+
+  const label = triggerLabel || t('swap.defaultTrigger');
 
   const syncWallet = useCallback(() => {
     if (typeof window === 'undefined' || !window.Jupiter?.syncProps) return;
@@ -81,9 +85,9 @@ export default function JupiterSwap({
   const initTerminal = useCallback(async () => {
     setError(null);
     try {
-      await loadJupiterScript();
+      await loadJupiterScript(t('swap.loadError'));
       if (!window.Jupiter?.init) {
-        throw new Error('Jupiter no está disponible en este navegador.');
+        throw new Error(t('swap.unavailable'));
       }
 
       // Close previous instance when re-init (route changes / HMR)
@@ -103,12 +107,12 @@ export default function JupiterSwap({
       // Passthrough after paint
       requestAnimationFrame(() => syncWallet());
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Error al iniciar Jupiter');
+      setError(e instanceof Error ? e.message : t('swap.initError'));
       setReady(false);
     } finally {
       setLoading(false);
     }
-  }, [mode, targetId, syncWallet]);
+  }, [mode, targetId, syncWallet, t]);
 
   // Integrated: mount terminal when the container is in the DOM
   useEffect(() => {
@@ -148,7 +152,7 @@ export default function JupiterSwap({
           disabled={loading}
           className="w-full py-3 rounded-xl bg-gradient-to-r from-[#8FD99A] to-[#6B8F6E] text-[#040404] font-semibold text-sm hover:opacity-90 transition disabled:opacity-50"
         >
-          {loading ? 'Abriendo Jupiter…' : triggerLabel}
+          {loading ? t('swap.opening') : label}
         </button>
         {error && (
           <p className="text-xs text-red-400 mt-2">{error}</p>
@@ -160,7 +164,7 @@ export default function JupiterSwap({
             rel="noopener noreferrer"
             className="block text-center text-[11px] text-[var(--sage)]/80 hover:text-[#8FD99A] mt-2"
           >
-            Abrir jup.ag en nueva pestaña ↗
+            {t('swap.openJupNewTab')}
           </a>
         )}
       </div>
@@ -172,7 +176,7 @@ export default function JupiterSwap({
     <div className={`w-full ${className}`}>
       {loading && (
         <div className="min-h-[280px] flex items-center justify-center text-[#8FD99A] text-sm animate-pulse">
-          Cargando Jupiter…
+          {t('swap.loading')}
         </div>
       )}
       {error && (
@@ -184,7 +188,7 @@ export default function JupiterSwap({
             rel="noopener noreferrer"
             className="text-sm text-[#8FD99A] hover:underline"
           >
-            Continuar en jup.ag ↗
+            {t('swap.continueOnJup')}
           </a>
         </div>
       )}
@@ -200,7 +204,7 @@ export default function JupiterSwap({
           rel="noopener noreferrer"
           className="block text-center text-[11px] text-[var(--sage)]/80 hover:text-[#8FD99A] mt-3"
         >
-          ¿Problemas? Abre Jupiter completo ↗
+          {t('swap.openJupFull')}
         </a>
       )}
     </div>

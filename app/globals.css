@@ -170,6 +170,89 @@ html[data-text-scale="xxl"] nav.fixed span {
   filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent) 28%, transparent));
 }
 
+/* Coach FAB — Salvazion logo pulse (same language as calendar "Ahora") */
+@keyframes coach-fab-breathe {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent),
+      0 0 16px color-mix(in srgb, var(--accent) 22%, transparent),
+      0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1.5px color-mix(in srgb, var(--accent) 70%, transparent),
+      0 0 28px color-mix(in srgb, var(--accent) 38%, transparent),
+      0 0 0 6px color-mix(in srgb, var(--accent) 10%, transparent);
+  }
+}
+@keyframes coach-fab-dot-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.55;
+  }
+}
+.coach-fab-pulse {
+  position: relative;
+  animation: coach-fab-breathe 2.4s ease-in-out infinite;
+  will-change: box-shadow;
+}
+.coach-fab-pulse-dot {
+  animation: coach-fab-dot-pulse 1.4s ease-in-out infinite;
+}
+
+/* Motivational speech cloud above Coach FAB */
+.coach-fab-cloud {
+  position: relative;
+  padding: 0.65rem 0.8rem 0.75rem;
+  border-radius: 1rem 1rem 0.35rem 1rem;
+  border: 1px solid var(--border-soft);
+  background: linear-gradient(
+    155deg,
+    rgba(14, 22, 16, 0.98) 0%,
+    rgba(6, 10, 7, 0.96) 100%
+  );
+  backdrop-filter: blur(12px) saturate(1.15);
+  -webkit-backdrop-filter: blur(12px) saturate(1.15);
+}
+.coach-fab-cloud-cta:hover {
+  filter: brightness(1.06);
+}
+.coach-fab-cloud-tail,
+.coach-fab-cloud-tail-border {
+  position: absolute;
+  right: 1.15rem;
+  bottom: -7px;
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 8px solid transparent;
+  pointer-events: none;
+}
+.coach-fab-cloud-tail-border {
+  bottom: -8px;
+  border-left-width: 8px;
+  border-right-width: 8px;
+  border-top-width: 9px;
+  z-index: -1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coach-fab-pulse,
+  .coach-fab-pulse-dot {
+    animation: none;
+  }
+  .coach-fab-cloud {
+    transition: none !important;
+  }
+}
+
 .glass {
   background: rgba(4, 4, 4, 0.72);
   backdrop-filter: blur(var(--header-blur)) saturate(1.15);

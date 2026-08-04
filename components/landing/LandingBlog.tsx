@@ -26,10 +26,14 @@ export interface LandingBlogCopy {
     health: string;
     freedom: string;
   };
+  searchPlaceholder: string;
+  searchAria: string;
+  clearSearch: string;
   readOnX: string;
   showing: string;
   of: string;
   empty: string;
+  emptySearch: string;
   viewAllOnX: string;
 }
 
@@ -154,12 +158,13 @@ function ArticleCard({
  */
 export default function LandingBlog({ lang, copy }: Props) {
   const [filter, setFilter] = useState<BlogFilter>('all');
+  const [query, setQuery] = useState('');
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(false);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const counts = useMemo(() => getBlogPillarCounts(), []);
 
-  const filtered = useMemo(() => getBlogArticles(filter), [filter]);
+  const filtered = useMemo(() => getBlogArticles(filter, query), [filter, query]);
 
   const updateScrollState = useCallback(() => {
     const el = scrollerRef.current;
@@ -181,15 +186,14 @@ export default function LandingBlog({ lang, copy }: Props) {
     };
   }, [filtered, updateScrollState]);
 
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (el) el.scrollTo({ left: 0 });
+    updateScrollState();
+  }, [query, filter, updateScrollState]);
+
   const onFilter = (next: BlogFilter) => {
     setFilter(next);
-    requestAnimationFrame(() => {
-      const el = scrollerRef.current;
-      if (el) {
-        el.scrollTo({ left: 0, behavior: 'smooth' });
-      }
-      updateScrollState();
-    });
   };
 
   const scrollByDir = (dir: -1 | 1) => {
@@ -229,6 +233,55 @@ export default function LandingBlog({ lang, copy }: Props) {
             {textWithXLogo(copy.subtitle)}
           </p>
         </header>
+
+        {/* Keyword search */}
+        <div className="max-w-xl mx-auto mb-5">
+          <label className="sr-only" htmlFor="blog-article-search">
+            {copy.searchAria}
+          </label>
+          <div className="relative flex items-center">
+            <span
+              className="absolute left-3 pointer-events-none text-[var(--sage)]"
+              aria-hidden
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                className="opacity-80"
+              >
+                <circle cx="11" cy="11" r="5.5" stroke="currentColor" strokeWidth="1.6" />
+                <path
+                  d="M15.5 15.5 19 19"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </span>
+            <input
+              id="blog-article-search"
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={copy.searchPlaceholder}
+              autoComplete="off"
+              spellCheck={false}
+              className="input-soft w-full text-sm py-2.5 pl-10 pr-10 min-h-[44px]"
+            />
+            {query.trim() ? (
+              <button
+                type="button"
+                onClick={() => setQuery('')}
+                className="absolute right-2 text-[11px] font-medium text-[var(--sage)] hover:text-white px-2 py-1 rounded-md"
+                aria-label={copy.clearSearch}
+              >
+                ✕
+              </button>
+            ) : null}
+          </div>
+        </div>
 
         {/* Pillar filters — Salvation · Health · Freedom */}
         <div
@@ -281,6 +334,12 @@ export default function LandingBlog({ lang, copy }: Props) {
           {copy.showing}{' '}
           <strong className="text-white font-medium">{filtered.length}</strong>{' '}
           {copy.of} {X_ARTICLES_COUNT}
+          {query.trim() ? (
+            <span className="text-[var(--accent)]/90">
+              {' '}
+              · “{query.trim()}”
+            </span>
+          ) : null}
           <span className="text-[var(--sage)]/60">
             {' '}
             · {lang === 'es' ? 'Desliza a los lados' : 'Swipe sideways'}
@@ -288,7 +347,9 @@ export default function LandingBlog({ lang, copy }: Props) {
         </p>
 
         {filtered.length === 0 ? (
-          <p className="text-center text-sm text-[var(--sage)] py-12">{copy.empty}</p>
+          <p className="text-center text-sm text-[var(--sage)] py-12">
+            {query.trim() ? copy.emptySearch : copy.empty}
+          </p>
         ) : (
           <div className="relative px-1 sm:px-2">
             <button

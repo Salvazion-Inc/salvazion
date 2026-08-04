@@ -355,11 +355,55 @@ export function localizeArticle(
 /** Total articles in the public catalog (verified marketing count) */
 export const X_ARTICLES_COUNT = X_ARTICLES.length;
 
-/** Articles sorted newest-first (for marketing blog) */
-export function getBlogArticles(pillar?: ArticlePillar | 'all'): XArticle[] {
+/** Normalize free-text into search tokens (accents stripped, min length 2). */
+export function normalizeArticleSearchQuery(query: string): string[] {
+  return query
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '')
+    .split(/[\s,;|/]+/)
+    .map((s) => s.trim())
+    .filter((s) => s.length >= 2);
+}
+
+function articleSearchHaystack(article: XArticle): string {
+  return [
+    article.title,
+    article.titleEs,
+    article.preview,
+    article.previewEs,
+    article.pillar,
+    ...(article.tags || []),
+    ...(article.interests || []),
+  ]
+    .join(' ')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '');
+}
+
+/** True when every keyword token appears in title, preview, tags or pillar. */
+export function articleMatchesQuery(article: XArticle, query: string): boolean {
+  const tokens = normalizeArticleSearchQuery(query);
+  if (!tokens.length) return true;
+  const hay = articleSearchHaystack(article);
+  return tokens.every((t) => hay.includes(t));
+}
+
+/**
+ * Articles sorted newest-first (landing blog + Freedom feed).
+ * Optional pillar filter + free-text keyword search (title, preview, tags).
+ */
+export function getBlogArticles(
+  pillar?: ArticlePillar | 'all',
+  query?: string
+): XArticle[] {
   let list = [...X_ARTICLES];
   if (pillar && pillar !== 'all') {
     list = list.filter((a) => a.pillar === pillar);
+  }
+  if (query?.trim()) {
+    list = list.filter((a) => articleMatchesQuery(a, query));
   }
   list.sort((a, b) => {
     const ta = Date.parse(a.createdAt || '') || 0;

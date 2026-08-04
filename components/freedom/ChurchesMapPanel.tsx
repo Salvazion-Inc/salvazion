@@ -3,16 +3,25 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useI18n } from '@/components/I18nProvider';
 import { loadProfile } from '@/lib/store/profile';
-
-type Church = {
-  id: string;
-  name: string;
-  lat: number;
-  lon: number;
-  denomination?: string;
-  address?: string;
-  distanceM?: number;
-};
+import { logAction } from '@/lib/scoring/engine';
+import { getFreedomPoints } from '@/lib/freedom/engine';
+import { PILLAR_COLORS } from '@/lib/theme/pillars';
+import {
+  type ChurchDenomFamily,
+  type ChurchPlace,
+  DENOM_FAMILIES,
+  MAX_RESULTS,
+  SEARCH_RADIUS_M,
+  buildOverpassQuery,
+  classifyDenomFamily,
+  denomFamilyLabel,
+  directionsUrl,
+  formatDistance,
+  haversineMeters,
+  humanizeDenomination,
+  isChristianAssemblyOrEvangelical,
+  placeUrl,
+} from '@/lib/freedom/churches';
 
 type Geo = {
   lat: number;
@@ -21,137 +30,12 @@ type Geo = {
   source: 'gps' | 'city';
 };
 
-const SEARCH_RADIUS_M = 10_000;
-const MAX_RESULTS = 30;
+type Props = {
+  className?: string;
+  onScored?: () => void;
+};
 
-/** Denominations treated as Catholic (excluded). */
-const CATHOLIC_DENOM =
-  /^(roman_?)?catholic$|greek_catholic|ukrainian_catholic|maronite|melkite|chaldean|syro.?malabar|syro.?malankara|coptic_catholic|armenian_catholic|byzantine_catholic/i;
-
-/** Name patterns that strongly indicate a Catholic parish/cathedral. */
-const CATHOLIC_NAME =
-  /\b(cat[oó]lic[ao]s?|catholic|catedral|cathedral|bas[ií]lica|basilica|sagrado\s+coraz[oó]n|inmaculada\s+concepci[oó]n|nuestra\s+se[nñ]ora|parroquia\s+(san|santa|nuestra)|iglesia\s+parroquial)\b/i;
-
-/** Explicit non-Christian religions (excluded). */
-const NON_CHRISTIAN_RELIGION =
-  /^(muslim|islam|islamic|jewish|judaism|buddhist|buddhism|hindu|hinduism|sikh|shinto|taoist|bahai|bahá.?í|pagan|jain|zoroastrian|scientology)$/i;
-
-/** Groups often tagged under christian but not “Iglesias/Asambleas cristianas” for this map. */
-const EXCLUDED_DENOM =
-  /mormon|latter.?day|lds|jehovah|testigo|unitarian|scientology|catholic/i;
-
-/**
- * Christian (non-Catholic) denominations we want to surface.
- * Assemblies of God / Christian Assemblies are especially relevant in LATAM.
- */
-const CHRISTIAN_DENOM =
-  /protestant|evangelical|evangelic|baptist|pentecostal|methodist|presbyterian|lutheran|anglican|adventist|assemblies?_of_god|asamblea|nondenominational|non.?denominational|reformed|charismatic|holiness|brethren|anabaptist|mennonite|quaker|orthodox|coptic|armenian_apostolic|assyrian|wesleyan|episcopal|congregational|free_church|independent|full_gospel|foursquare|calvary|vineyard|christian|iglesia|asambleas/i;
-
-const CHRISTIAN_NAME =
-  /\b(iglesia|asamblea|asambleas|evangelic|evang[eé]lic|cristian|christian|templo|assembly|assemblies|pentecost|bautista|adventist|metodista|presbiterian|luteran|anglican|reformad|carism[aá]tic|nazareno|alianza|vi[nñ]a|calvary|foursquare|dios\s+es\s+amor|universal|bethel|ebenezer|peniel|shalom)\b/i;
-
-function haversineMeters(
-  lat1: number,
-  lon1: number,
-  lat2: number,
-  lon2: number
-): number {
-  const R = 6371000;
-  const toRad = (d: number) => (d * Math.PI) / 180;
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
-  return 2 * R * Math.asin(Math.sqrt(a));
-}
-
-function formatDistance(m: number, es: boolean): string {
-  if (m < 1000) return es ? `${Math.round(m)} m` : `${Math.round(m)} m`;
-  const km = m / 1000;
-  return es ? `${km.toFixed(1)} km` : `${km.toFixed(1)} km`;
-}
-
-function isCatholic(tags: Record<string, string>, name: string): boolean {
-  const denom = (tags.denomination || '').trim();
-  const religion = (tags.religion || '').trim();
-  if (denom && CATHOLIC_DENOM.test(denom)) return true;
-  if (religion && /catholic/i.test(religion)) return true;
-  if (CATHOLIC_NAME.test(name)) return true;
-  // Common OSM operator for Catholic dioceses
-  if (
-    /cathol|di[oó]cesis|archidi[oó]cesis|obispado|vaticano/i.test(
-      tags.operator || ''
-    )
-  ) {
-    return true;
-  }
-  return false;
-}
-
-function isExcludedDenom(tags: Record<string, string>, name: string): boolean {
-  const denom = (tags.denomination || '').trim();
-  if (denom && EXCLUDED_DENOM.test(denom)) return true;
-  if (/\b(mormon|testigos?\s+de\s+jehov[aá]|jehovah|latter.?day|lds)\b/i.test(name)) {
-    return true;
-  }
-  return false;
-}
-
-function isNonChristianReligion(tags: Record<string, string>): boolean {
-  const religion = (tags.religion || '').trim();
-  if (!religion) return false;
-  if (/^christian$/i.test(religion)) return false;
-  return NON_CHRISTIAN_RELIGION.test(religion) || !/christian/i.test(religion);
-}
-
-/**
- * Keep only Christian churches / assemblies that are not Catholic
- * and not another religion.
- */
-function isChristianNonCatholic(
-  tags: Record<string, string>,
-  name: string
-): boolean {
-  if (isCatholic(tags, name)) return false;
-  if (isExcludedDenom(tags, name)) return false;
-  if (isNonChristianReligion(tags)) return false;
-
-  const religion = (tags.religion || '').trim().toLowerCase();
-  const denom = (tags.denomination || '').trim();
-  const amenity = (tags.amenity || '').trim();
-  const building = (tags.building || '').trim();
-
-  // Explicit Christian religion (already non-Catholic / non-excluded)
-  if (religion === 'christian') return true;
-
-  // Known Christian denomination without religion tag
-  if (denom && CHRISTIAN_DENOM.test(denom) && !CATHOLIC_DENOM.test(denom)) {
-    return true;
-  }
-
-  // Name strongly suggests evangelical / assembly / Christian church
-  if (CHRISTIAN_NAME.test(name) && !CATHOLIC_NAME.test(name)) {
-    // Avoid bare "templo" alone for non-Christian temples
-    if (/^\s*templo\s*$/i.test(name) && religion && religion !== 'christian') {
-      return false;
-    }
-    return true;
-  }
-
-  // place_of_worship without religion/denomination is often Catholic in LATAM —
-  // only keep if name looks Christian non-Catholic (handled above).
-  if (amenity === 'place_of_worship' && !religion && !denom) {
-    return false;
-  }
-
-  // building=church alone is too noisy (many Catholic) — require name signal
-  if (building === 'church' && !religion) {
-    return CHRISTIAN_NAME.test(name) && !CATHOLIC_NAME.test(name);
-  }
-
-  return false;
-}
+const FREEDOM = PILLAR_COLORS.freedom;
 
 function requestGps(): Promise<{ lat: number; lon: number } | null> {
   return new Promise((resolve) => {
@@ -214,22 +98,179 @@ async function reverseGeocodeLabel(
   }
 }
 
+/** Compact Salvazion mini-map: user + church pins in Freedom green. */
+function PinMap({
+  geo,
+  churches,
+  es,
+}: {
+  geo: Geo;
+  churches: ChurchPlace[];
+  es: boolean;
+}) {
+  const W = 320;
+  const H = 180;
+  const pad = 18;
+
+  const bounds = useMemo(() => {
+    const lats = [geo.lat, ...churches.map((c) => c.lat)];
+    const lons = [geo.lon, ...churches.map((c) => c.lon)];
+    let minLat = Math.min(...lats);
+    let maxLat = Math.max(...lats);
+    let minLon = Math.min(...lons);
+    let maxLon = Math.max(...lons);
+    // Minimum span so a single pin isn't stretched edge-to-edge
+    const latPad = Math.max((maxLat - minLat) * 0.15, 0.008);
+    const lonPad = Math.max((maxLon - minLon) * 0.15, 0.01);
+    minLat -= latPad;
+    maxLat += latPad;
+    minLon -= lonPad;
+    maxLon += lonPad;
+    return { minLat, maxLat, minLon, maxLon };
+  }, [geo, churches]);
+
+  const project = (lat: number, lon: number) => {
+    const x =
+      pad +
+      ((lon - bounds.minLon) / Math.max(bounds.maxLon - bounds.minLon, 1e-9)) *
+        (W - pad * 2);
+    const y =
+      pad +
+      (1 - (lat - bounds.minLat) / Math.max(bounds.maxLat - bounds.minLat, 1e-9)) *
+        (H - pad * 2);
+    return { x, y };
+  };
+
+  const you = project(geo.lat, geo.lon);
+
+  return (
+    <div
+      className="relative rounded-xl overflow-hidden border aspect-[16/9]"
+      style={{
+        borderColor: FREEDOM.border,
+        background:
+          'radial-gradient(ellipse at 50% 40%, rgba(123,201,138,0.12) 0%, #0a0f0b 55%, #040404 100%)',
+      }}
+      role="img"
+      aria-label={
+        es
+          ? `Mapa con ${churches.length} iglesias cerca`
+          : `Map with ${churches.length} churches nearby`
+      }
+    >
+      {/* Soft grid */}
+      <svg
+        viewBox={`0 0 ${W} ${H}`}
+        className="absolute inset-0 w-full h-full"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        <defs>
+          <pattern id="salv-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+            <path
+              d="M 24 0 L 0 0 0 24"
+              fill="none"
+              stroke="rgba(143,217,154,0.06)"
+              strokeWidth="1"
+            />
+          </pattern>
+          <radialGradient id="you-glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor={FREEDOM.solid} stopOpacity="0.45" />
+            <stop offset="100%" stopColor={FREEDOM.solid} stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        <rect width={W} height={H} fill="url(#salv-grid)" />
+
+        {/* Radius ring around user */}
+        <circle cx={you.x} cy={you.y} r={36} fill="url(#you-glow)" />
+        <circle
+          cx={you.x}
+          cy={you.y}
+          r={28}
+          fill="none"
+          stroke={FREEDOM.solid}
+          strokeOpacity="0.2"
+          strokeWidth="1"
+          strokeDasharray="3 4"
+        />
+
+        {churches.map((c) => {
+          const p = project(c.lat, c.lon);
+          return (
+            <g key={c.id}>
+              <line
+                x1={you.x}
+                y1={you.y}
+                x2={p.x}
+                y2={p.y}
+                stroke={FREEDOM.solid}
+                strokeOpacity="0.12"
+                strokeWidth="1"
+              />
+              <circle
+                cx={p.x}
+                cy={p.y}
+                r={5.5}
+                fill={FREEDOM.solid}
+                stroke="#041008"
+                strokeWidth="1.5"
+              />
+              <circle cx={p.x} cy={p.y - 0.5} r={1.4} fill="#041008" opacity="0.55" />
+            </g>
+          );
+        })}
+
+        {/* You */}
+        <circle
+          cx={you.x}
+          cy={you.y}
+          r={7}
+          fill="#F5F7F5"
+          stroke={FREEDOM.solid}
+          strokeWidth="2.2"
+        />
+        <circle cx={you.x} cy={you.y} r={2.2} fill={FREEDOM.solid} />
+      </svg>
+
+      <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between gap-2 pointer-events-none">
+        <span
+          className="text-[9px] font-medium px-2 py-0.5 rounded-full border"
+          style={{
+            color: FREEDOM.text,
+            borderColor: FREEDOM.border,
+            background: 'rgba(4,4,4,0.72)',
+          }}
+        >
+          {es ? 'Tú' : 'You'} · {churches.length}{' '}
+          {es ? 'iglesias' : 'churches'}
+        </span>
+        <span
+          className="text-[9px] px-2 py-0.5 rounded-full"
+          style={{ color: FREEDOM.muted, background: 'rgba(4,4,4,0.55)' }}
+        >
+          ~{Math.round(SEARCH_RADIUS_M / 1000)} km
+        </span>
+      </div>
+    </div>
+  );
+}
+
 /**
- * Christian churches & assemblies near the user (Freedom · Connect).
- * GPS-first; OpenStreetMap Overpass — free, no API key.
- * Excludes Catholic and non-Christian places of worship.
+ * Christian Assemblies & Evangelical churches (Freedom · Connect).
+ * Salvazion design · GPS · denomination filters · directions.
  */
-export default function ChurchesMapPanel({ className = '' }: { className?: string }) {
+export default function ChurchesMapPanel({ className = '', onScored }: Props) {
   const { lang } = useI18n();
   const es = lang !== 'en';
   const [geo, setGeo] = useState<Geo | null>(null);
-  const [churches, setChurches] = useState<Church[]>([]);
+  const [churches, setChurches] = useState<ChurchPlace[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [queryCity, setQueryCity] = useState('');
   const [gpsStatus, setGpsStatus] = useState<'idle' | 'locating' | 'ok' | 'denied'>(
     'idle'
   );
+  const [familyFilter, setFamilyFilter] = useState<ChurchDenomFamily | 'all'>('all');
+  const [connected, setConnected] = useState<Set<string>>(() => new Set());
 
   const profilePlace = useMemo(() => {
     const p = loadProfile();
@@ -243,23 +284,10 @@ export default function ChurchesMapPanel({ className = '' }: { className?: strin
       setError(null);
       setChurches([]);
       setGeo({ lat, lon, label, source });
+      setFamilyFilter('all');
 
       try {
-        // Overpass: Christian worship + assemblies; client filters out Catholic.
-        const radius = SEARCH_RADIUS_M;
-        const overpass = `
-[out:json][timeout:25];
-(
-  node["amenity"="place_of_worship"]["religion"="christian"](around:${radius},${lat},${lon});
-  way["amenity"="place_of_worship"]["religion"="christian"](around:${radius},${lat},${lon});
-  relation["amenity"="place_of_worship"]["religion"="christian"](around:${radius},${lat},${lon});
-  node["amenity"="place_of_worship"]["denomination"~"protestant|evangelical|evangelic|baptist|pentecostal|methodist|presbyterian|lutheran|anglican|adventist|assemblies_of_god|nondenominational|non-denominational|reformed|charismatic|orthodox|wesleyan|episcopal|congregational|full_gospel|foursquare",i](around:${radius},${lat},${lon});
-  way["amenity"="place_of_worship"]["denomination"~"protestant|evangelical|evangelic|baptist|pentecostal|methodist|presbyterian|lutheran|anglican|adventist|assemblies_of_god|nondenominational|non-denominational|reformed|charismatic|orthodox|wesleyan|episcopal|congregational|full_gospel|foursquare",i](around:${radius},${lat},${lon});
-  node["amenity"="place_of_worship"]["name"~"asamblea|asambleas|evangelic|evang[eé]lic|iglesia cristiana|assembly of god|assemblies of god|pentecost|bautista|adventist",i](around:${radius},${lat},${lon});
-  way["amenity"="place_of_worship"]["name"~"asamblea|asambleas|evangelic|evang[eé]lic|iglesia cristiana|assembly of god|assemblies of god|pentecost|bautista|adventist",i](around:${radius},${lat},${lon});
-);
-out center 80;
-`;
+        const overpass = buildOverpassQuery(lat, lon, SEARCH_RADIUS_M);
         const opRes = await fetch('https://overpass-api.de/api/interpreter', {
           method: 'POST',
           body: overpass,
@@ -277,7 +305,7 @@ out center 80;
           }>;
         };
 
-        const list: Church[] = [];
+        const list: ChurchPlace[] = [];
         for (const el of op.elements || []) {
           const clat = el.lat ?? el.center?.lat;
           const clon = el.lon ?? el.center?.lon;
@@ -287,35 +315,29 @@ out center 80;
             tags.name ||
             tags['name:es'] ||
             tags['name:en'] ||
-            (es ? 'Iglesia cristiana' : 'Christian church');
+            (es ? 'Asamblea / Iglesia cristiana' : 'Christian assembly / church');
 
-          if (!isChristianNonCatholic(tags, name)) continue;
+          if (!isChristianAssemblyOrEvangelical(tags, name)) continue;
 
-          // Skip if denomination explicitly catholic (extra safety)
-          if (tags.denomination && CATHOLIC_DENOM.test(tags.denomination)) continue;
-
+          const family = classifyDenomFamily(tags.denomination, name);
           list.push({
             id: `${el.type}-${el.id}`,
             name,
             lat: clat,
             lon: clon,
-            denomination:
-              tags.denomination ||
-              (tags.religion === 'christian'
-                ? es
-                  ? 'cristiana'
-                  : 'christian'
-                : undefined),
+            denomination: humanizeDenomination(tags.denomination, es),
+            family,
             address:
               [tags['addr:street'], tags['addr:housenumber'], tags['addr:city']]
                 .filter(Boolean)
                 .join(' ')
                 .trim() || undefined,
             distanceM: haversineMeters(lat, lon, clat, clon),
+            website: tags.website || tags['contact:website'] || undefined,
+            phone: tags.phone || tags['contact:phone'] || undefined,
           });
         }
 
-        // Dedupe by name + rounded coords
         const seen = new Set<string>();
         const unique = list
           .filter((c) => {
@@ -330,8 +352,8 @@ out center 80;
         if (unique.length === 0) {
           setError(
             es
-              ? 'No hay iglesias ni asambleas cristianas indexadas cerca. Abre el mapa para buscar manualmente.'
-              : 'No Christian churches or assemblies indexed nearby. Open the map to search manually.'
+              ? 'No hay asambleas ni iglesias evangélicas indexadas cerca. Prueba otra ciudad o abre cómo llegar en Maps.'
+              : 'No assemblies or evangelical churches indexed nearby. Try another city or open directions in Maps.'
           );
         }
       } catch {
@@ -353,8 +375,8 @@ out center 80;
       if (!q) {
         setError(
           es
-            ? 'Activa el GPS o indica tu ciudad para buscar iglesias.'
-            : 'Enable GPS or enter your city to find churches.'
+            ? 'Activa el GPS o indica tu ciudad.'
+            : 'Enable GPS or enter your city.'
         );
         setLoading(false);
         return;
@@ -384,10 +406,12 @@ out center 80;
           setLoading(false);
           return;
         }
-        const lat = parseFloat(nom[0].lat);
-        const lon = parseFloat(nom[0].lon);
-        const label = nom[0].display_name || q;
-        await fetchChurchesNear(lat, lon, label, 'city');
+        await fetchChurchesNear(
+          parseFloat(nom[0].lat),
+          parseFloat(nom[0].lon),
+          nom[0].display_name || q,
+          'city'
+        );
       } catch {
         setError(
           es
@@ -408,20 +432,14 @@ out center 80;
     if (!coords) {
       setGpsStatus('denied');
       setLoading(false);
-      // Fall back to profile / city field
       const place = queryCity.trim() || profilePlace;
       if (place) {
-        setError(
-          es
-            ? 'No se pudo usar el GPS. Buscando por ciudad…'
-            : 'Could not use GPS. Searching by city…'
-        );
         await searchByCity(place);
       } else {
         setError(
           es
-            ? 'Activa el GPS del celular o escribe tu ciudad para encontrar iglesias cristianas cerca.'
-            : 'Enable phone GPS or enter your city to find Christian churches nearby.'
+            ? 'Activa el GPS o escribe tu ciudad para encontrar asambleas e iglesias evangélicas.'
+            : 'Enable GPS or enter your city to find assemblies and evangelical churches.'
         );
       }
       return;
@@ -430,12 +448,11 @@ out center 80;
     const label = await reverseGeocodeLabel(
       coords.lat,
       coords.lon,
-      es ? 'Tu ubicación GPS' : 'Your GPS location'
+      es ? 'Tu ubicación' : 'Your location'
     );
     await fetchChurchesNear(coords.lat, coords.lon, label, 'gps');
   }, [es, fetchChurchesNear, profilePlace, queryCity, searchByCity]);
 
-  // Auto: GPS first, then profile city
   useEffect(() => {
     setQueryCity(profilePlace);
     void (async () => {
@@ -447,7 +464,7 @@ out center 80;
         const label = await reverseGeocodeLabel(
           coords.lat,
           coords.lon,
-          es ? 'Tu ubicación GPS' : 'Your GPS location'
+          es ? 'Tu ubicación' : 'Your location'
         );
         await fetchChurchesNear(coords.lat, coords.lon, label, 'gps');
         return;
@@ -459,189 +476,312 @@ out center 80;
         setLoading(false);
         setError(
           es
-            ? 'Activa el GPS del celular o escribe tu ciudad para encontrar iglesias y asambleas cristianas.'
-            : 'Enable phone GPS or enter your city to find Christian churches and assemblies.'
+            ? 'Activa el GPS o escribe tu ciudad para encontrar asambleas e iglesias evangélicas cerca.'
+            : 'Enable GPS or enter your city to find assemblies and evangelical churches nearby.'
         );
       }
     })();
-    // Only on mount / language / profile place
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profilePlace, es]);
 
-  const mapEmbed =
-    geo &&
-    `https://www.openstreetmap.org/export/embed.html?bbox=${
-      geo.lon - 0.05
-    }%2C${geo.lat - 0.035}%2C${geo.lon + 0.05}%2C${
-      geo.lat + 0.035
-    }&layer=mapnik&marker=${geo.lat}%2C${geo.lon}`;
+  const familyCounts = useMemo(() => {
+    const counts = new Map<ChurchDenomFamily, number>();
+    for (const c of churches) {
+      counts.set(c.family, (counts.get(c.family) || 0) + 1);
+    }
+    return counts;
+  }, [churches]);
 
-  const mapLink = geo
-    ? `https://www.openstreetmap.org/search?query=${encodeURIComponent(
-        es
-          ? `iglesia cristiana OR asamblea cristiana`
-          : `christian church OR christian assembly`
-      )}#map=14/${geo.lat}/${geo.lon}`
-    : `https://www.openstreetmap.org/search?query=${encodeURIComponent(
-        es
-          ? `iglesia cristiana ${queryCity || profilePlace}`
-          : `christian church ${queryCity || profilePlace}`
-      )}`;
+  const activeFamilies = useMemo(
+    () => DENOM_FAMILIES.filter((f) => (familyCounts.get(f) || 0) > 0),
+    [familyCounts]
+  );
 
-  const locationHint =
-    geo?.source === 'gps'
-      ? es
-        ? 'Ubicación exacta por GPS del celular'
-        : 'Exact location from phone GPS'
-      : es
-        ? 'Ubicación por ciudad · puedes activar el GPS'
-        : 'Location by city · you can enable GPS';
+  const filtered = useMemo(() => {
+    if (familyFilter === 'all') return churches;
+    return churches.filter((c) => c.family === familyFilter);
+  }, [churches, familyFilter]);
+
+  const markConnect = (church: ChurchPlace) => {
+    if (connected.has(church.id)) return;
+    logAction('connect_real');
+    setConnected((prev) => new Set([...prev, church.id]));
+    onScored?.();
+  };
+
+  const pts = getFreedomPoints('connect_real');
 
   return (
     <section
       className={`space-y-2.5 ${className}`}
-      aria-label={es ? 'Iglesias y asambleas cristianas' : 'Christian churches and assemblies'}
+      aria-label={
+        es
+          ? 'Asambleas cristianas e iglesias evangélicas'
+          : 'Christian assemblies and evangelical churches'
+      }
     >
       <div className="px-0.5">
         <h2 className="text-sm font-semibold text-[var(--sage)]">
-          {es ? 'Iglesias y asambleas cristianas cerca' : 'Christian churches & assemblies nearby'}
+          {es
+            ? 'Asambleas e iglesias evangélicas cerca'
+            : 'Assemblies & evangelical churches nearby'}
         </h2>
         <p className="text-[10px] text-[var(--sage)]/70 mt-0.5 leading-relaxed">
           {es
-            ? `${locationHint} · Solo cristianas (no católicas ni otras religiones) · OpenStreetMap`
-            : `${locationHint} · Christian only (not Catholic or other religions) · OpenStreetMap`}
+            ? 'Conecta en persona · Asambleas de Dios, evangélicas y denominaciones cristianas'
+            : 'Connect in person · Assemblies of God, evangelical and Christian denominations'}
         </p>
       </div>
 
-      <div className="card-soft p-3 space-y-3 border border-[var(--border-soft)]">
-        <div className="flex gap-2 flex-wrap">
-          <button
-            type="button"
-            className="btn-primary px-3 text-xs min-h-[40px] shrink-0 flex-1 sm:flex-none"
-            onClick={() => void locateWithGps()}
-            disabled={loading && gpsStatus === 'locating'}
-          >
-            {gpsStatus === 'locating'
-              ? es
-                ? 'Obteniendo GPS…'
-                : 'Getting GPS…'
-              : gpsStatus === 'ok'
-                ? es
-                  ? '↻ Actualizar GPS'
-                  : '↻ Refresh GPS'
-                : es
-                  ? '📍 Usar mi ubicación'
-                  : '📍 Use my location'}
-          </button>
-        </div>
-
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={queryCity}
-            onChange={(e) => setQueryCity(e.target.value)}
-            placeholder={
-              es ? 'Ciudad, País (si no hay GPS)' : 'City, Country (if no GPS)'
-            }
-            className="input-soft flex-1 text-sm py-2 min-h-[40px]"
-          />
-          <button
-            type="button"
-            className="btn-secondary px-3 text-xs min-h-[40px] shrink-0"
-            onClick={() => void searchByCity(queryCity)}
-            disabled={loading}
-          >
-            {loading && gpsStatus !== 'locating'
-              ? '…'
-              : es
-                ? 'Buscar'
-                : 'Search'}
-          </button>
-        </div>
-
-        {geo && (
-          <p className="text-[10px] text-[var(--sage)]/80 leading-relaxed">
-            {geo.source === 'gps' ? '📍 ' : '🏙 '}
-            {geo.label}
-            <span className="opacity-70">
-              {' '}
-              · {geo.lat.toFixed(5)}, {geo.lon.toFixed(5)}
-            </span>
-          </p>
-        )}
-
-        {geo && mapEmbed && (
-          <div className="rounded-xl overflow-hidden border border-[var(--border-soft)] aspect-[16/10] bg-black">
-            <iframe
-              title={es ? 'Mapa de iglesias cristianas' : 'Christian churches map'}
-              src={mapEmbed}
-              className="w-full h-full border-0"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-          </div>
-        )}
-
-        {loading && (
-          <p className="text-xs text-[var(--sage)] text-center py-2">
-            {gpsStatus === 'locating'
-              ? es
-                ? 'Obteniendo tu ubicación exacta…'
-                : 'Getting your exact location…'
-              : es
-                ? 'Buscando iglesias y asambleas cristianas…'
-                : 'Finding Christian churches and assemblies…'}
-          </p>
-        )}
-
-        {error && !loading && (
-          <p className="text-[11px] text-[var(--sage)] leading-relaxed">{error}</p>
-        )}
-
-        {churches.length > 0 && (
-          <ul className="space-y-1.5 max-h-56 overflow-y-auto">
-            {churches.map((c) => (
-              <li key={c.id}>
-                <a
-                  href={`https://www.openstreetmap.org/?mlat=${c.lat}&mlon=${c.lon}#map=17/${c.lat}/${c.lon}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-start gap-2 rounded-lg border border-[var(--border-soft)] px-2.5 py-2 hover:border-[var(--border-strong)] transition"
-                >
-                  <span className="text-[var(--accent)] text-sm shrink-0" aria-hidden>
-                    ✝
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-[12px] font-semibold text-white leading-snug">
-                      {c.name}
-                    </p>
-                    <p className="text-[10px] text-[var(--sage)]/80 mt-0.5 line-clamp-2">
-                      {[
-                        c.distanceM != null
-                          ? formatDistance(c.distanceM, es)
-                          : null,
-                        c.denomination,
-                        c.address,
-                      ]
-                        .filter(Boolean)
-                        .join(' · ')}
-                    </p>
-                  </div>
-                  <span className="text-[var(--sage)] text-xs shrink-0">↗</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
-
-        <a
-          href={mapLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn-secondary w-full text-center text-xs py-2.5 min-h-[40px]"
+      <div
+        className="card-soft overflow-hidden border"
+        style={{ borderColor: `${FREEDOM.solid}44` }}
+      >
+        {/* Header band */}
+        <div
+          className="px-3.5 pt-3.5 pb-3 space-y-3"
+          style={{
+            background: `linear-gradient(135deg, ${FREEDOM.soft} 0%, transparent 60%)`,
+          }}
         >
-          {es ? 'Abrir mapa completo ↗' : 'Open full map ↗'}
-        </a>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              className="btn-primary px-3 text-xs min-h-[40px] flex-1 sm:flex-none"
+              onClick={() => void locateWithGps()}
+              disabled={loading && gpsStatus === 'locating'}
+            >
+              {gpsStatus === 'locating'
+                ? es
+                  ? 'Obteniendo GPS…'
+                  : 'Getting GPS…'
+                : gpsStatus === 'ok'
+                  ? es
+                    ? 'Actualizar GPS'
+                    : 'Refresh GPS'
+                  : es
+                    ? 'Usar mi ubicación'
+                    : 'Use my location'}
+            </button>
+          </div>
+
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={queryCity}
+              onChange={(e) => setQueryCity(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') void searchByCity(queryCity);
+              }}
+              placeholder={
+                es ? 'Ciudad, País (si no hay GPS)' : 'City, Country (if no GPS)'
+              }
+              className="input-soft flex-1 text-sm py-2 min-h-[40px]"
+              aria-label={es ? 'Ciudad' : 'City'}
+            />
+            <button
+              type="button"
+              className="btn-secondary px-3 text-xs min-h-[40px] shrink-0"
+              onClick={() => void searchByCity(queryCity)}
+              disabled={loading}
+            >
+              {loading && gpsStatus !== 'locating' ? '…' : es ? 'Buscar' : 'Search'}
+            </button>
+          </div>
+
+          {geo && (
+            <p className="text-[10px] leading-relaxed" style={{ color: FREEDOM.muted }}>
+              <span className="text-white/90 font-medium">{geo.label}</span>
+              <span className="opacity-70">
+                {' '}
+                ·{' '}
+                {geo.source === 'gps'
+                  ? es
+                    ? 'GPS del celular'
+                    : 'Phone GPS'
+                  : es
+                    ? 'Por ciudad'
+                    : 'By city'}
+              </span>
+            </p>
+          )}
+        </div>
+
+        <div className="px-3.5 pb-3.5 space-y-3">
+          {geo && !loading && churches.length > 0 && (
+            <PinMap geo={geo} churches={filtered.slice(0, 40)} es={es} />
+          )}
+
+          {/* Denomination chips — only families present nearby */}
+          {!loading && activeFamilies.length > 0 && (
+            <div
+              className="flex gap-1.5 overflow-x-auto pb-0.5 -mx-0.5 px-0.5"
+              role="tablist"
+              aria-label={es ? 'Denominaciones' : 'Denominations'}
+            >
+              <button
+                type="button"
+                role="tab"
+                aria-selected={familyFilter === 'all'}
+                onClick={() => setFamilyFilter('all')}
+                className="shrink-0 text-[10px] font-medium px-2.5 py-1.5 rounded-full border transition"
+                style={{
+                  borderColor:
+                    familyFilter === 'all' ? FREEDOM.border : 'var(--border-soft)',
+                  color: familyFilter === 'all' ? FREEDOM.text : 'var(--sage)',
+                  background:
+                    familyFilter === 'all' ? FREEDOM.soft : 'transparent',
+                }}
+              >
+                {es ? 'Todas' : 'All'} · {churches.length}
+              </button>
+              {activeFamilies.map((f) => {
+                const active = familyFilter === f;
+                const n = familyCounts.get(f) || 0;
+                return (
+                  <button
+                    key={f}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => setFamilyFilter(f)}
+                    className="shrink-0 text-[10px] font-medium px-2.5 py-1.5 rounded-full border transition"
+                    style={{
+                      borderColor: active ? FREEDOM.border : 'var(--border-soft)',
+                      color: active ? FREEDOM.text : 'var(--sage)',
+                      background: active ? FREEDOM.soft : 'transparent',
+                    }}
+                  >
+                    {denomFamilyLabel(f, es)} · {n}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {loading && (
+            <p
+              className="text-xs text-center py-4 animate-pulse"
+              style={{ color: FREEDOM.text }}
+            >
+              {gpsStatus === 'locating'
+                ? es
+                  ? 'Obteniendo tu ubicación…'
+                  : 'Getting your location…'
+                : es
+                  ? 'Buscando asambleas e iglesias evangélicas…'
+                  : 'Finding assemblies and evangelical churches…'}
+            </p>
+          )}
+
+          {error && !loading && (
+            <p className="text-[11px] text-[var(--sage)] leading-relaxed py-1">{error}</p>
+          )}
+
+          {filtered.length > 0 && (
+            <ul className="space-y-1.5 max-h-72 overflow-y-auto">
+              {filtered.map((c) => {
+                const done = connected.has(c.id);
+                return (
+                  <li key={c.id}>
+                    <div
+                      className="rounded-xl border px-2.5 py-2.5 transition"
+                      style={{
+                        borderColor: done ? FREEDOM.border : 'var(--border-soft)',
+                        background: done ? FREEDOM.soft : 'rgba(0,0,0,0.2)',
+                      }}
+                    >
+                      <div className="flex items-start gap-2.5">
+                        <span
+                          className="mt-0.5 w-8 h-8 rounded-lg border flex items-center justify-center shrink-0 text-sm font-semibold"
+                          style={{
+                            borderColor: FREEDOM.border,
+                            color: FREEDOM.text,
+                            background: 'rgba(4,4,4,0.55)',
+                          }}
+                          aria-hidden
+                        >
+                          ✝
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[12px] font-semibold text-white leading-snug">
+                            {c.name}
+                          </p>
+                          <p className="text-[10px] mt-0.5 leading-relaxed" style={{ color: FREEDOM.muted }}>
+                            {[
+                              c.distanceM != null ? formatDistance(c.distanceM) : null,
+                              c.denomination || denomFamilyLabel(c.family, es),
+                              c.address,
+                            ]
+                              .filter(Boolean)
+                              .join(' · ')}
+                          </p>
+                          <div className="flex flex-wrap gap-1.5 mt-2">
+                            <a
+                              href={directionsUrl(c.lat, c.lon, c.name)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => markConnect(c)}
+                              className="text-[10px] font-semibold px-2.5 py-1 rounded-lg min-h-[28px] inline-flex items-center"
+                              style={{
+                                background: FREEDOM.solid,
+                                color: '#041008',
+                              }}
+                            >
+                              {es ? 'Cómo llegar' : 'Directions'}
+                            </a>
+                            <a
+                              href={placeUrl(c.lat, c.lon, c.name)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[10px] font-medium px-2.5 py-1 rounded-lg min-h-[28px] inline-flex items-center border"
+                              style={{
+                                borderColor: FREEDOM.border,
+                                color: FREEDOM.text,
+                              }}
+                            >
+                              {es ? 'Ver en mapa' : 'View map'}
+                            </a>
+                            {c.website ? (
+                              <a
+                                href={
+                                  c.website.startsWith('http')
+                                    ? c.website
+                                    : `https://${c.website}`
+                                }
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-[10px] font-medium px-2.5 py-1 rounded-lg min-h-[28px] inline-flex items-center border border-[var(--border-soft)] text-[var(--sage)]"
+                              >
+                                Web
+                              </a>
+                            ) : null}
+                            {done ? (
+                              <span
+                                className="text-[10px] font-medium px-2 py-1 inline-flex items-center"
+                                style={{ color: FREEDOM.text }}
+                              >
+                                ✓ +{pts}
+                              </span>
+                            ) : null}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+
+          {!loading && churches.length > 0 && filtered.length === 0 && (
+            <p className="text-[11px] text-[var(--sage)] text-center py-2">
+              {es
+                ? 'No hay resultados en esta denominación. Elige “Todas”.'
+                : 'No results in this denomination. Choose “All”.'}
+            </p>
+          )}
+        </div>
       </div>
     </section>
   );

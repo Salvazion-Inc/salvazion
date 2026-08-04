@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { Suspense, useEffect, useState, useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
 import BottomNav from '@/components/BottomNav';
 import { loadProfile } from '@/lib/store/profile';
 import { UserProfile } from '@/lib/types';
@@ -22,14 +23,36 @@ import PillarHubHeader from '@/components/hub/PillarHubHeader';
 import InvitePhalanx from '@/components/invite/InvitePhalanx';
 import VoiceAgent from '@/components/coach/VoiceAgent';
 
+type FreedomTab = 'learn' | 'connect' | 'contribute';
+
+function parseFreedomTab(raw: string | null): FreedomTab | null {
+  if (raw === 'learn' || raw === 'connect' || raw === 'contribute') return raw;
+  return null;
+}
+
 export default function FreedomPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#040404] flex items-center justify-center">
+          <div className="text-[#8FD99A] animate-pulse">Cargando Freedom...</div>
+        </div>
+      }
+    >
+      <FreedomPageInner />
+    </Suspense>
+  );
+}
+
+function FreedomPageInner() {
+  const searchParams = useSearchParams();
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
   const [scores, setScores] = useState<ComputedScores | null>(null);
   const [actions, setActions] = useState<FreedomActionDef[]>([]);
   const [loggedToday, setLoggedToday] = useState<Set<string>>(new Set());
   const [mounted, setMounted] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'learn' | 'connect' | 'contribute'>('learn');
+  const [activeTab, setActiveTab] = useState<FreedomTab>('learn');
 
   const stage = getCurrentFreedomStage();
 
@@ -46,6 +69,12 @@ export default function FreedomPage() {
     setMounted(true);
     refresh();
   }, [refresh]);
+
+  // Deep-link from coach FAB clouds: /hub/freedom?tab=connect|learn|contribute
+  useEffect(() => {
+    const tab = parseFreedomTab(searchParams.get('tab'));
+    if (tab) setActiveTab(tab);
+  }, [searchParams]);
 
   const showToast = (msg: string) => {
     setToast(msg);
@@ -143,7 +172,7 @@ export default function FreedomPage() {
               }}
             />
 
-            <ChurchesMapPanel />
+            <ChurchesMapPanel onScored={() => refresh()} />
           </div>
         )}
 

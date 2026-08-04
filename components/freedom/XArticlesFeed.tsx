@@ -145,6 +145,7 @@ export default function XArticlesFeed({
   const { t, lang } = useI18n();
   const locale = lang === 'en' ? 'en' : 'es';
   const [filter, setFilter] = useState<BlogFilter>('all');
+  const [query, setQuery] = useState('');
   const [readIds, setReadIds] = useState<Set<string>>(new Set());
   const [selected, setSelected] = useState<XArticle | null>(null);
   const [progress, setProgress] = useState({ read: 0, total: 0 });
@@ -169,7 +170,7 @@ export default function XArticlesFeed({
     refresh();
   }, [refresh]);
 
-  const filtered = useMemo(() => getBlogArticles(filter), [filter]);
+  const filtered = useMemo(() => getBlogArticles(filter, query), [filter, query]);
 
   const updateScrollState = useCallback(() => {
     const el = scrollerRef.current;
@@ -191,13 +192,14 @@ export default function XArticlesFeed({
     };
   }, [filtered, updateScrollState]);
 
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (el) el.scrollTo({ left: 0 });
+    updateScrollState();
+  }, [query, filter, updateScrollState]);
+
   const onFilter = (next: BlogFilter) => {
     setFilter(next);
-    requestAnimationFrame(() => {
-      const el = scrollerRef.current;
-      if (el) el.scrollTo({ left: 0, behavior: 'smooth' });
-      updateScrollState();
-    });
   };
 
   const scrollByDir = (dir: -1 | 1) => {
@@ -256,6 +258,53 @@ export default function XArticlesFeed({
         </a>
       </div>
 
+      {/* Keyword search */}
+      <div className="relative flex items-center">
+        <label className="sr-only" htmlFor="app-article-search">
+          {t('articles.searchAria')}
+        </label>
+        <span
+          className="absolute left-2.5 pointer-events-none text-[var(--sage)]"
+          aria-hidden
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            className="opacity-80"
+          >
+            <circle cx="11" cy="11" r="5.5" stroke="currentColor" strokeWidth="1.6" />
+            <path
+              d="M15.5 15.5 19 19"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+            />
+          </svg>
+        </span>
+        <input
+          id="app-article-search"
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={t('articles.searchPlaceholder')}
+          autoComplete="off"
+          spellCheck={false}
+          className="input-soft w-full text-sm py-2 pl-9 pr-9 min-h-[40px]"
+        />
+        {query.trim() ? (
+          <button
+            type="button"
+            onClick={() => setQuery('')}
+            className="absolute right-1.5 text-[10px] font-medium text-[var(--sage)] hover:text-white px-2 py-1 rounded-md"
+            aria-label={t('articles.clearSearch')}
+          >
+            ✕
+          </button>
+        ) : null}
+      </div>
+
       {/* Pillar filters — same UX as landing blog */}
       <div
         className="flex flex-wrap gap-1.5"
@@ -306,6 +355,12 @@ export default function XArticlesFeed({
         {t('articles.showing')}{' '}
         <strong className="text-white font-medium">{filtered.length}</strong>{' '}
         {t('articles.of')} {X_ARTICLES_COUNT}
+        {query.trim() ? (
+          <span className="text-[var(--accent)]/90">
+            {' '}
+            · “{query.trim()}”
+          </span>
+        ) : null}
         <span className="text-[var(--sage)]/55">
           {' '}
           · {t('articles.swipeHint')}
@@ -314,7 +369,7 @@ export default function XArticlesFeed({
 
       {filtered.length === 0 ? (
         <p className="text-xs text-[var(--sage)]/60 py-6 text-center">
-          {t('articles.empty')}
+          {query.trim() ? t('articles.emptySearch') : t('articles.empty')}
         </p>
       ) : (
         <div className="relative">

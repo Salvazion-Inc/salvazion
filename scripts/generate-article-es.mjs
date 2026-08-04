@@ -27,6 +27,38 @@ const TITLE_PHRASES = [
     /The High-Performance Blockchain Revolutionizing Web3/gi,
     'La blockchain de alto rendimiento que revoluciona Web3',
   ],
+  [
+    /What would the world be like if SpaceX and Tesla merged\?/gi,
+    '¿Cómo sería el mundo si SpaceX y Tesla se fusionaran?',
+  ],
+  [
+    /Christian Masculinity Under Ideological Fire/gi,
+    'Masculinidad cristiana bajo fuego ideológico',
+  ],
+  [
+    /The Chinese Communist Party: Tyranny That Poisons the World/gi,
+    'El Partido Comunista Chino: la tiranía que envenena al mundo',
+  ],
+  [
+    /Grok: The Truth-Seeking AI Chosen by Salvazion/gi,
+    'Grok: la IA que busca la verdad elegida por Salvazion',
+  ],
+  [
+    /Intermittent Fasting: Body, Spirit and Freedom/gi,
+    'Ayuno intermitente: cuerpo, espíritu y libertad',
+  ],
+  [
+    /Solana \+ Musk Ecosystem: The Perfect Stack/gi,
+    'Solana + ecosistema Musk: el stack perfecto',
+  ],
+  [
+    /Salvation, Health and Freedom the tripod that holds the human person upright/gi,
+    'Salvación, Salud y Libertad: el trípode que sostiene a la persona en pie',
+  ],
+  [
+    /The Lion: Christ and the Spirit of Salvazion/gi,
+    'El León: Cristo y el Espíritu de Salvazion',
+  ],
   [/Is the Trump Meme real\?/gi, '¿Es real el meme de Trump?'],
   [/Philosophy for a Resilient Life/gi, 'Filosofía para una vida resiliente'],
   [/The Best Politician in the World Today/gi, 'El mejor político del mundo hoy'],
@@ -376,6 +408,34 @@ const TITLE_WORDS = [
 ];
 
 const PREVIEW_OPENERS = [
+  [
+    /^True masculinity, forged in the image of God as protector, provider and priest of the home, faces a coordinated assault from the woke movement, radical feminism, moral relativism, post-truth culture/i,
+    'La verdadera masculinidad, forjada a imagen de Dios como protector, proveedor y sacerdote del hogar, enfrenta un asalto coordinado del movimiento woke, el feminismo radical, el relativismo moral y la cultura de la posverdad',
+  ],
+  [
+    /^The Chinese Communist Party is not an ordinary government\. It is a Marxist-Leninist structure that has perfected total control over the spirit, mind, body, and soul of hundreds of millions of people/i,
+    'El Partido Comunista Chino no es un gobierno ordinario. Es una estructura marxista-leninista que ha perfeccionado el control total sobre el espíritu, la mente, el cuerpo y el alma de cientos de millones de personas',
+  ],
+  [
+    /^Grok has established itself as the artificial intelligence model most aligned with the disinterested pursuit of truth, surpassing its competitors in freedom of expression, token efficiency, and(?: rejection of ideological filters)?/i,
+    'Grok se ha consolidado como el modelo de inteligencia artificial más alineado con la búsqueda desinteresada de la verdad, superando a sus competidores en libertad de expresión, eficiencia de tokens y rechazo de filtros ideológicos',
+  ],
+  [
+    /^Intermittent fasting restores the original design of the human body, strengthens the spirit against the slavery of the flesh, and frees the person from the chains of industrial consumerism/i,
+    'El ayuno intermitente restaura el diseño original del cuerpo humano, fortalece el espíritu frente a la esclavitud de la carne y libera a la persona de las cadenas del consumismo industrial',
+  ],
+  [
+    /^The potential union of SpaceX and Tesla would concentrate under one roof the largest vertical stack of energy, artificial intelligence, robotics, orbital connectivity and manufacturing in modern/i,
+    'La posible unión de SpaceX y Tesla concentraría bajo un mismo techo la mayor pila vertical de energía, inteligencia artificial, robótica, conectividad orbital y manufactura de la era moderna',
+  ],
+  [
+    /^The technological base you choose to build on decides whether your project serves human freedom or ends up reinforcing chains of control/i,
+    'La base tecnológica que eliges para construir decide si tu proyecto sirve a la libertad humana o termina reforzando cadenas de control',
+  ],
+  [
+    /^Without Salvation man becomes flesh without direction\. Without Health the temple of the Spirit weakens and stops serving\. Without Freedom both faith and body end under systems that hate them/i,
+    'Sin Salvación el hombre se vuelve carne sin dirección. Sin Salud el templo del Espíritu se debilita y deja de servir. Sin Libertad, fe y cuerpo quedan bajo sistemas que los odian',
+  ],
   [
     /^In the spiritual warfare we wage for the sovereignty of free men, families and nations, technology is never neutral\./i,
     'En la guerra espiritual que libramos por la soberanía de hombres libres, familias y naciones, la tecnología nunca es neutral.',

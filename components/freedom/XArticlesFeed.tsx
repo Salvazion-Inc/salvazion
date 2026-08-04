@@ -122,15 +122,18 @@ export default function XArticlesFeed({
                   }`}
                 >
                   <div className="flex gap-0 min-h-[5.5rem]">
-                    <div className="relative w-[5.5rem] shrink-0 bg-[var(--true-black)]">
+                    <div className="relative w-[5.75rem] shrink-0 self-stretch bg-[var(--true-black)] overflow-hidden">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={article.image}
                         alt=""
-                        className="absolute inset-0 w-full h-full object-cover"
+                        className="absolute inset-0 w-full h-full object-cover object-center"
                         loading="lazy"
+                        referrerPolicy="no-referrer"
                         onError={(e) => {
                           e.currentTarget.src = '/logo-icon.png';
+                          e.currentTarget.className =
+                            'absolute inset-0 w-full h-full object-contain object-center p-2 opacity-80';
                         }}
                       />
                     </div>
@@ -186,9 +189,12 @@ export default function XArticlesFeed({
               <img
                 src={selected.image}
                 alt=""
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover object-center"
+                referrerPolicy="no-referrer"
                 onError={(e) => {
                   e.currentTarget.src = '/logo-icon.png';
+                  e.currentTarget.className =
+                    'absolute inset-0 w-full h-full object-contain object-center p-6 opacity-80';
                 }}
               />
             </div>

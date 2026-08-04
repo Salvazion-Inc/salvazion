@@ -122,18 +122,18 @@ export default function XArticlesFeed({
                   }`}
                 >
                   <div className="flex gap-0 min-h-[5.5rem]">
-                    <div className="relative w-[5.75rem] shrink-0 self-stretch bg-[var(--true-black)] overflow-hidden">
+                    <div className="relative w-[5.75rem] shrink-0 self-stretch bg-[var(--true-black)] overflow-hidden flex items-center justify-center">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={article.image}
                         alt=""
-                        className="absolute inset-0 w-full h-full object-cover object-center"
+                        className="absolute inset-0 m-auto max-w-full max-h-full w-full h-full object-contain object-center"
                         loading="lazy"
                         referrerPolicy="no-referrer"
                         onError={(e) => {
                           e.currentTarget.src = '/logo-icon.png';
                           e.currentTarget.className =
-                            'absolute inset-0 w-full h-full object-contain object-center p-2 opacity-80';
+                            'absolute inset-0 m-auto max-w-[70%] max-h-[70%] w-auto h-auto object-contain object-center p-1 opacity-80';
                         }}
                       />
                     </div>
@@ -184,17 +184,17 @@ export default function XArticlesFeed({
             </span>
           </div>
           <div className="flex-1 overflow-y-auto px-5 py-5 max-w-lg mx-auto w-full">
-            <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden border border-[var(--border-soft)] mb-4 bg-[var(--true-black)]">
+            <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden border border-[var(--border-soft)] mb-4 bg-[var(--true-black)] flex items-center justify-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={selected.image}
                 alt=""
-                className="absolute inset-0 w-full h-full object-cover object-center"
+                className="absolute inset-0 m-auto max-w-full max-h-full w-full h-full object-contain object-center"
                 referrerPolicy="no-referrer"
                 onError={(e) => {
                   e.currentTarget.src = '/logo-icon.png';
                   e.currentTarget.className =
-                    'absolute inset-0 w-full h-full object-contain object-center p-6 opacity-80';
+                    'absolute inset-0 m-auto max-w-[40%] max-h-[40%] w-auto h-auto object-contain object-center opacity-80';
                 }}
               />
             </div>

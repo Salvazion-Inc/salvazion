@@ -86,13 +86,13 @@ export const PREMIUM_FEATURE_LIST: {
 }[] = [
   {
     id: 'coach_ai',
-    en: 'Green Lion AI coach (chat)',
-    es: 'Coach León Verde con IA (chat)',
+    en: 'Salvazion AI (chat)',
+    es: 'Salvazion con IA (chat)',
   },
   {
     id: 'coach_tts',
-    en: 'Coach voice / TTS',
-    es: 'Voz del coach / TTS',
+    en: 'Salvazion voice / TTS',
+    es: 'Voz de Salvazion / TTS',
   },
   {
     id: 'devotional_ai',

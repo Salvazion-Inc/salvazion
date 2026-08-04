@@ -63,51 +63,90 @@ const INTEREST_RULES: { interest: InterestFocus; keys: string[] }[] = [
 ];
 
 /**
- * Pillar keyword rules for marketing blog filters (SEO: Salvation · Health · Freedom).
- * Title hits score higher than body. Default pillar is Freedom (largest corpus).
+ * Pillar rules for blog filters (Salvation · Health · Freedom).
+ * Title matches dominate body matches to avoid false positives from long previews.
  */
 const PILLAR_RULES: { pillar: ArticlePillar; keys: string[] }[] = [
   {
     pillar: 'salvation',
     keys: [
-      'faith', 'christ', 'christian', 'bible', 'prayer', 'gospel', 'salvation',
-      'church', 'jesus', 'worship', 'devotion', 'christmas', 'spiritual',
-      'revival', 'religion', 'theology', 'scripture', 'heaven', 'revelation',
-      'luther', 'vatican', 'crusade', 'templar', 'billy graham', 'stoicism',
-      'virtue', 'soul', 'prophet', 'western christian', 'spiritual warfare',
-      'islamic world', 'how can i get to heaven', 'fe ', 'oración', 'dios',
-      'biblia', 'iglesia', 'cristianismo', 'salvación',
+      // strong faith / scripture
+      'christian', 'christianity', 'bible', 'gospel', 'jesus', 'christ ',
+      'prayer', 'praises', 'spiritual gift', 'spiritual warfare', 'kingdom of god',
+      'one true god', 'christian habits', 'billy graham', 'martin luther',
+      'vatican', 'revelation', 'crusades', 'monaster', 'templar', 'occult',
+      'satanism', 'cabal', 'stoicism', 'christmas', 'heaven', 'eternal life',
+      'western christian', 'salvazion', 'the lion: christ', 'alerci',
+      'islamic world', 'virtuous people', 'virtue', 'faith', 'religion',
+      'theology', 'scripture', 'church', 'worship', 'devotion', 'salvation',
+      'prophet', 'soul', 'biblia', 'iglesia', 'cristianismo', 'salvación',
+      'oración', 'dios', 'creating value in society by promoting christian',
+      'importance of family and marriage',
     ],
   },
   {
     pillar: 'health',
     keys: [
-      'health', 'medical', 'medicine', 'longevity', 'transhuman', 'biotech',
-      'biotechnology', 'wellbeing', 'pandemic', 'monkeypox', 'bird flu',
-      'disease', 'fitness', 'nutrition', 'vaccine', 'exercise', 'diet',
-      'obesity', 'cancer', 'diabetes', 'mental health', 'depression',
-      'anxiety', 'pharma', 'hormone', 'fertility', 'birth rate',
-      'population collapse', 'aging', 'supplement', 'fasting', 'covid',
-      'plandemia', 'virus', 'genome', 'dna', 'crispr', 'neuro', 'addiction',
-      'synthetic meat', 'eating bugs', 'insects', 'internet of bodies',
-      'graphene', 'laughter', "women's sports", 'trans women', 'biohacking',
-      'biomarker', 'sleep', 'hydration', 'ludopathy', 'salud', 'medicina',
-      'longevidad', 'vacuna', 'deporte',
+      // clinical / body / biotech
+      'health', 'healthtech', 'healthcare', 'medicine', 'medical', 'telehealth',
+      'telemedicine', 'ehealth', 'mhealth', 'digital health', 'nanomedicine',
+      'biomarker', 'longevity', 'transhuman', 'transhumanism', 'biotech',
+      'biotechnology', 'synthetic biology', 'bioethics', 'vaccine', 'covid',
+      'plandemia', 'monkeypox', 'bird flu', 'pandemic', 'disease', 'cancer',
+      'diabetes', 'stroke', 'hypertension', 'insomnia', 'sleep disorder',
+      'mental health', 'depression and anxiety', 'depression ​and anxiety',
+      'ludopathy', 'addiction',
+      'drugs', 'eating bugs', 'insects', 'synthetic meat', 'sugar, fat, and alcohol',
+      'superfoods', 'nutrition', 'diet', 'exercise', 'workout', 'fitness',
+      'lose weight', 'fat burner', 'lower back pain', 'exoskeleton',
+      'internet of bodies', 'fatphobia', 'laughter and happiness in medicine',
+      'women\'s sports', 'trans women', 'gender ideology', 'morphological freedom',
+      'procreative freedom', 'eugenics', 'abortion', 'euthanasia',
+      'big pharma', 'adrenochrome', 'chemtrails', 'biological weapons',
+      'population collapse', 'birth rate', 'depopulation', 'robotic prosthes',
+      'digital twin in health', 'digital therapeutics', 'wearables in health',
+      'genetics in human', 'clinical trial', '3d printing in health',
+      'robotics and robots in health', 'ai in healthcare', 'machine learning and artificial intelligence in healthcare',
+      'metaverse in health', 'virtual, augmented', 'blockchain, crypto and web3 in health',
+      'standards and interoperability in digital health', 'create value in healthtech',
+      'converging technologies', 'anthropological war', 'homotrans',
+      'neurochemistry', 'beta-endorphins', 'dopamine', 'serotonin',
+      'salud', 'medicina', 'longevidad', 'vacuna', 'deporte',
     ],
   },
   {
     pillar: 'freedom',
     keys: [
-      'freedom', 'liberty', 'solana', 'bitcoin', 'crypto', 'trump', 'desantis',
-      'politic', 'geopolitic', 'nato', 'border', 'immigration', 'communism',
-      'milei', 'musk', 'sovereignty', 'patriot', 'deep state', 'web3',
-      'blockchain', 'meloni', 'bukele', 'zuckerberg', 'bezos', 'monopoly',
-      'dei', 'war', 'journalism', 'homeless', 'polariz', 'democracy',
-      'censorship', 'media', 'elite', 'epstein', 'china', 'russia', 'europe',
-      'military', 'speech', 'privacy', 'surveillance', 'artificial intelligence',
-      'machine learning', 'nvidia', 'elon', 'economy', 'inflation', 'token',
-      'defi', 'rothschild', 'rockefeller', 'orwell', 'jack ma', 'bunker',
-      'libertad', 'soberanía', 'frontera', 'censura',
+      // sovereignty, politics, tech, markets
+      'freedom', 'liberty', 'libertarian', 'solana', 'bitcoin', 'crypto', 'web3',
+      'blockchain', 'dao', 'defi', 'token', 'dogecoin', 'ethereum', 'satoshi',
+      'trump', 'desantis', 'milei', 'meloni', 'bukele', 'musk', 'elon',
+      'orban', 'orbán', 'thatcher', 'reagan', 'maga', 'politic', 'politician',
+      'geopolitic', 'nato', 'immigration', 'communism', 'socialism', 'capitalism',
+      'free market', 'sovereignty', 'sovereignist', 'patriot', 'deep state',
+      'censorship', 'propaganda', 'media', 'journalism', 'monopoly', 'elite',
+      'epstein', 'globalism', 'globalist', 'woke', 'progressivism', 'feminism',
+      'lgbtq', 'collectivism', 'nationalism', 'populism', 'zionism',
+      'federal reserve', 'cbdc', 'bilderberg', 'world economic forum',
+      'united nations', 'terrorism', 'war', 'military', 'weapons', 'gun',
+      'democracy', 'monarchy', 'fascism', 'anarchism', 'conservatism',
+      'founding fathers', 'american dream', 'silicon valley', 'nvidia',
+      'machine learning', 'artificial intelligence', 'agi', 'quantum',
+      'cybersecurity', 'hacker', 'snowden', 'assange', 'startup', 'venture',
+      'business', 'economy', 'inflation', 'investor', 'growth hacking',
+      'network effects', 'no-code', 'exponential technolog', 'gepard',
+      'homeless', 'prison', 'crime', 'delinquency', 'gangs', 'trafficking',
+      'corruption', 'voter fraud', 'racism', 'indigenism', 'colonialism',
+      'rothschild', 'rockefeller', 'powerful families', 'meta capitalist',
+      'blackrock', 'vanguard', 'area 51', 'qanon', 'project blue beam',
+      'mkultra', 'bunker', 'chernobyl', 'twin towers', 'abraham accords',
+      'hamas', 'iran', 'russian revolution', 'orwell', 'arendt', 'scruton',
+      'shakespeare', 'da vinci', 'tesla', 'edison', 'henry ford', 'steve jobs',
+      'jack ma', 'bezos', 'zuckerberg', 'bill gates', 'harari', 'buterin',
+      'tucker carlson', 'weinsten', 'charlemagne', 'benjamin franklin',
+      'spanishness', 'hispanidad', 'qolitica', 'renaissance', 'graphene',
+      '5g technology', 'dark web', 'project 2025', 'mandate for leadership',
+      'libertad', 'soberanía', 'frontera', 'censura', 'politica',
     ],
   },
 ];
@@ -124,50 +163,92 @@ function inferInterests(title: string, preview: string, tags: string[] = []): In
   return [...found];
 }
 
-function scorePillar(hay: string, titleHay: string, keys: string[]): number {
+function scorePillarKeys(titleHay: string, bodyHay: string, keys: string[]): number {
   let score = 0;
   for (const key of keys) {
     const k = key.toLowerCase();
-    if (titleHay.includes(k)) score += 4;
-    else if (hay.includes(k)) score += 1;
+    if (titleHay.includes(k)) {
+      // Longer / more specific title phrases win harder
+      score += k.length >= 12 ? 12 : k.length >= 6 ? 8 : 5;
+    } else if (bodyHay.includes(k)) {
+      score += k.length >= 12 ? 2 : 1;
+    }
   }
   return score;
 }
 
-/** Map app interest tags → pillar boost */
-function interestPillarBoost(interests: InterestFocus[]): Record<ArticlePillar, number> {
-  const boost: Record<ArticlePillar, number> = { salvation: 0, health: 0, freedom: 0 };
-  for (const i of interests) {
-    if (i === 'fe' || i === 'oracion' || i === 'familia') boost.salvation += 2;
-    else if (i === 'salud') boost.health += 3;
-    else if (i === 'libertad' || i === 'liderazgo' || i === 'proposito' || i === 'perseverancia') {
-      boost.freedom += 2;
-    }
-  }
-  return boost;
-}
-
+/**
+ * Infer primary pillar. Title dominates; body is a tie-breaker only.
+ * Default: Freedom (largest Salvazion corpus).
+ */
 export function inferPillar(
   title: string,
   preview: string,
-  interests: InterestFocus[] = [],
+  _interests: InterestFocus[] = [],
   tags: string[] = []
 ): ArticlePillar {
   const titleHay = title.toLowerCase();
-  const hay = `${title} ${preview} ${tags.join(' ')}`.toLowerCase();
-  const boost = interestPillarBoost(interests);
+  const bodyHay = `${preview} ${tags.join(' ')}`.toLowerCase();
+
+  // Explicit title overrides for known multi-theme pieces
+  if (
+    /lion.*christ|christ.*salvazion|gospel|bible better|kingdom of god|christian habits|one true god|spiritual gifts?|prayers? and\s+praises|billy graham|martin luther|vatican|crusades|monaster|how can i get to heaven|spiritual warfare|western christian|alerci|stoicism|christmas/i.test(
+      title
+    )
+  ) {
+    return 'salvation';
+  }
+  // Avoid false positives: "Great Depression" ≠ mental-health depression
+  if (/\bgreat depression\b/i.test(title)) {
+    // fall through to keyword scoring / freedom default
+  } else if (
+    /healthtech|healthcare|telehealth|telemedicine|ehealth|mhealth|biomarker|longevity|transhuman|biotech|vaccine|covid|plandemia|monkeypox|mental health|diabetes|cancer|stroke|hypertension|insomnia|sleep disorder|exercise and|workout|nutrition|superfood|synthetic meat|eating bugs|ludopathy|big pharma|digital health|nanomedicine|wearables in health|robotic prosthes|genetics in human|clinical trial|3d printing in health|digital therapeutics|women.?s sports|trans women|gender ideology|morphological freedom|procreative freedom|eugenics|abortion|euthanasia|internet of bodies|exoskeleton|fatphobia|laughter.*medicine|neurochemistry|beta-endorphin|dopamine.*serotonin|create value in healthtech|anthropological war|homotrans|synthetic biology|bioethics|population collapse|birth rate|depopulation|adrenochrome|chemtrails|biological weapon|drugs:.*health|socio-health|lose weight|fat burner|lower back pain|machine learning.*healthcare|ai in healthcare|robotics.*health|metaverse in health|blockchain.*web3 in health|virtual, augmented|medical devices|standards and interoperability in digital health|depression\s+and\s+anxiety|health problems|in medicine|in health\b|in healthcare/i.test(
+      title
+    )
+  ) {
+    return 'health';
+  }
+
   const scores: Record<ArticlePillar, number> = {
-    salvation: boost.salvation,
-    health: boost.health,
-    freedom: boost.freedom,
+    salvation: 0,
+    health: 0,
+    freedom: 0,
   };
   for (const rule of PILLAR_RULES) {
-    scores[rule.pillar] += scorePillar(hay, titleHay, rule.keys);
+    scores[rule.pillar] = scorePillarKeys(titleHay, bodyHay, rule.keys);
   }
+
+  // Title-only decisive pass: if one pillar clearly leads on title tokens, use it
+  const titleOnly: Record<ArticlePillar, number> = {
+    salvation: 0,
+    health: 0,
+    freedom: 0,
+  };
+  for (const rule of PILLAR_RULES) {
+    for (const key of rule.keys) {
+      const k = key.toLowerCase();
+      if (titleHay.includes(k)) {
+        titleOnly[rule.pillar] += k.length >= 12 ? 12 : k.length >= 6 ? 8 : 5;
+      }
+    }
+  }
+  const titleOrdered = (Object.entries(titleOnly) as [ArticlePillar, number][]).sort(
+    (a, b) => b[1] - a[1]
+  );
+  if (titleOrdered[0][1] >= 8 && titleOrdered[0][1] > titleOrdered[1][1] + 3) {
+    return titleOrdered[0][0];
+  }
+
   const ordered = (Object.entries(scores) as [ArticlePillar, number][]).sort(
     (a, b) => b[1] - a[1]
   );
   if (ordered[0][1] <= 0) return 'freedom';
+  // Prefer Freedom on near-ties (politics/tech default corpus)
+  if (ordered[0][1] === ordered[1][1]) {
+    if (ordered.some(([p, s]) => p === 'freedom' && s === ordered[0][1])) {
+      return 'freedom';
+    }
+  }
   return ordered[0][0];
 }
 
@@ -223,9 +304,39 @@ function normalizeEntry(raw: {
   };
 }
 
-export const X_ARTICLES: XArticle[] = (catalogJson as Array<Parameters<typeof normalizeEntry>[0]>).map(
-  normalizeEntry
-);
+/** Dedupe catalog by id + normalized title (prefer article URL entries). */
+function dedupeCatalog(
+  raw: Array<Parameters<typeof normalizeEntry>[0]>
+): Array<Parameters<typeof normalizeEntry>[0]> {
+  const norm = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  const quality = (a: Parameters<typeof normalizeEntry>[0]) => {
+    let s = 0;
+    if (a.id && String(a.id) !== 'undefined') s += 10;
+    if (a.url?.includes('/i/article/')) s += 5;
+    if (a.verified) s += 2;
+    return s;
+  };
+  const byTitle = new Map<string, Parameters<typeof normalizeEntry>[0]>();
+  for (const a of raw) {
+    if (!a?.id || String(a.id) === 'undefined') continue;
+    const key = norm(a.title || '');
+    const prev = byTitle.get(key);
+    if (!prev || quality(a) > quality(prev)) byTitle.set(key, a);
+  }
+  const seen = new Set<string>();
+  const out: Array<Parameters<typeof normalizeEntry>[0]> = [];
+  for (const a of byTitle.values()) {
+    const id = String(a.id);
+    if (seen.has(id)) continue;
+    seen.add(id);
+    out.push(a);
+  }
+  return out;
+}
+
+export const X_ARTICLES: XArticle[] = dedupeCatalog(
+  catalogJson as Array<Parameters<typeof normalizeEntry>[0]>
+).map(normalizeEntry);
 
 /** Localized title + preview for marketing blog (EN default / ES on language switch) */
 export function localizeArticle(

@@ -16,6 +16,7 @@ import { markContentComplete } from '@/lib/freedom/engine';
 import { logAction } from '@/lib/scoring/engine';
 import { useI18n } from '@/components/I18nProvider';
 import { PILLAR_COLORS, type PillarId } from '@/lib/theme/pillars';
+import { textWithXLogo } from '@/components/ui/XLogo';
 
 type BlogFilter = 'all' | ArticlePillar;
 
@@ -123,8 +124,9 @@ function ArticleCard({
           <p className="mt-2 text-xs text-[var(--sage)] leading-relaxed line-clamp-3 flex-1">
             {preview}
           </p>
-          <p className="mt-3 text-[11px] font-medium text-[var(--accent)]">
-            {readOnX} ↗
+          <p className="mt-3 text-[11px] font-medium text-[var(--accent)] inline-flex items-center gap-1">
+            {textWithXLogo(readOnX)}
+            <span aria-hidden>↗</span>
           </p>
         </div>
       </button>
@@ -237,11 +239,11 @@ export default function XArticlesFeed({
             id="x-articles-heading"
             className="text-sm font-semibold text-[var(--sage)]"
           >
-            {t('articles.title')}
+            {textWithXLogo(t('articles.title'))}
           </h2>
           <p className="text-[10px] text-[var(--sage)]/70 mt-0.5">
-            {t('articles.subtitle')} · {progress.read}/{progress.total}{' '}
-            {t('articles.readCount')}
+            {textWithXLogo(t('articles.subtitle'))} · {progress.read}/
+            {progress.total} {t('articles.readCount')}
           </p>
         </div>
         <a
@@ -374,9 +376,10 @@ export default function XArticlesFeed({
           href="https://x.com/salvazion_/articles"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[11px] font-medium text-[var(--accent)] hover:underline"
+          className="text-[11px] font-medium text-[var(--accent)] hover:underline inline-flex items-center gap-1"
         >
-          {t('articles.viewAllOnX')} ↗
+          {textWithXLogo(t('articles.viewAllOnX'))}
+          <span aria-hidden>↗</span>
         </a>
       </div>
 
@@ -436,15 +439,16 @@ export default function XArticlesFeed({
               {selectedLoc.preview}
             </p>
             <p className="text-[11px] text-[var(--sage)]/70 mb-6">
-              {t('articles.openHint')}
+              {textWithXLogo(t('articles.openHint'))}
             </p>
             <div className="grid grid-cols-1 gap-2">
               <button
                 type="button"
                 onClick={() => handleOpenX(selected)}
-                className="btn-primary"
+                className="btn-primary inline-flex items-center justify-center gap-1.5"
               >
-                {t('articles.readOnX')} ↗
+                {textWithXLogo(t('articles.readOnX'), 'w-3.5 h-3.5 shrink-0')}
+                <span aria-hidden>↗</span>
               </button>
               <button
                 type="button"

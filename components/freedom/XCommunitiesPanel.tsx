@@ -8,6 +8,7 @@ import {
 import { logAction } from '@/lib/scoring/engine';
 import { getFreedomPoints } from '@/lib/freedom/engine';
 import { useI18n } from '@/components/I18nProvider';
+import XLogo, { textWithXLogo } from '@/components/ui/XLogo';
 
 type Props = {
   className?: string;
@@ -40,13 +41,23 @@ export default function XCommunitiesPanel({
       aria-label={es ? 'Comunidades en X' : 'X Communities'}
     >
       <div className="px-0.5">
-        <h2 className="text-sm font-semibold text-[var(--sage)]">
-          {es ? 'Comunidad en X' : 'X Community'}
+        <h2 className="text-sm font-semibold text-[var(--sage)] inline-flex items-center gap-1.5">
+          {es ? (
+            <>
+              Comunidad en <XLogo className="w-3.5 h-3.5" />
+            </>
+          ) : (
+            <>
+              <XLogo className="w-3.5 h-3.5" /> Community
+            </>
+          )}
         </h2>
         <p className="text-[10px] text-[var(--sage)]/70 mt-0.5 leading-relaxed">
-          {es
-            ? 'Conecta con la tribu Salvazion en X · Green Lion Kings'
-            : 'Connect with the Salvazion tribe on X · Green Lion Kings'}
+          {textWithXLogo(
+            es
+              ? 'Conecta con la tribu Salvazion en X · Green Lion Kings'
+              : 'Connect with the Salvazion tribe on X · Green Lion Kings'
+          )}
         </p>
       </div>
 
@@ -79,17 +90,17 @@ export default function XCommunitiesPanel({
                   }}
                   aria-hidden
                 >
-                  𝕏
+                  <XLogo className="w-5 h-5" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] font-medium">
-                    {c.brand}
+                  <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] font-medium inline-flex items-center gap-1">
+                    {textWithXLogo(c.brand)}
                   </p>
                   <h3 className="text-base font-semibold text-white leading-tight mt-0.5">
                     {c.name}
                   </h3>
                   <p className="text-[11px] text-[var(--sage)]/90 mt-1.5 leading-relaxed">
-                    {blurb}
+                    {textWithXLogo(blurb)}
                   </p>
                 </div>
               </div>
@@ -100,15 +111,18 @@ export default function XCommunitiesPanel({
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => markConnect(c)}
-                  className="btn-primary"
+                  className="btn-primary inline-flex items-center justify-center gap-1.5"
                 >
-                  {done
-                    ? es
-                      ? 'Abrir en X'
-                      : 'Open on X'
-                    : es
-                      ? `Unirme · +${pts}`
-                      : `Join · +${pts}`}
+                  {done ? (
+                    <>
+                      {es ? 'Abrir en' : 'Open on'}{' '}
+                      <XLogo className="w-3.5 h-3.5 shrink-0" />
+                    </>
+                  ) : es ? (
+                    `Unirme · +${pts}`
+                  ) : (
+                    `Join · +${pts}`
+                  )}
                 </a>
               </div>
             </article>

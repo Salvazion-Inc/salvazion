@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -22,6 +22,7 @@ import TextScaleControl from '@/components/settings/TextScaleControl';
 import ThemeControl from '@/components/settings/ThemeControl';
 import LanguageControl from '@/components/settings/LanguageControl';
 import { useI18n } from '@/components/I18nProvider';
+import XLogo, { textWithXLogo } from '@/components/ui/XLogo';
 import {
   loadLinkedWallet,
   subscribeLinkedWallet,
@@ -135,7 +136,7 @@ export default function ProfilePage() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 mt-1.5 text-sm font-medium text-[#8FD99A] hover:underline"
             >
-              <span aria-hidden className="text-xs opacity-80">𝕏</span>
+              <XLogo className="w-3.5 h-3.5 shrink-0 opacity-90" />
               @{profile.xUsername.replace(/^@+/, '')}
             </a>
           )}
@@ -185,7 +186,7 @@ export default function ProfilePage() {
               {email && <Row label={t('profile.email')} value={email} />}
               {profile.xUsername && (
                 <Row
-                  label={t('profile.xUsername')}
+                  label={textWithXLogo(t('profile.xUsername'))}
                   value={`@${profile.xUsername.replace(/^@+/, '')}`}
                 />
               )}
@@ -398,10 +399,18 @@ export default function ProfilePage() {
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
+function Row({
+  label,
+  value,
+}: {
+  label: ReactNode;
+  value: string;
+}) {
   return (
     <div className="flex justify-between gap-4 text-sm">
-      <span className="text-[var(--sage)] shrink-0">{label}</span>
+      <span className="text-[var(--sage)] shrink-0 inline-flex items-center gap-1">
+        {label}
+      </span>
       <span className="text-right text-[#D8E1D9] line-clamp-2">{value}</span>
     </div>
   );

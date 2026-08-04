@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { ReactNode } from 'react';
 import { useI18n } from '@/components/I18nProvider';
-import FlatFlag from '@/components/ui/FlatFlag';
+import LanguageFlagSwitch from '@/components/ui/LanguageFlagSwitch';
 import type { Language } from '@/lib/types';
 
 const UI = {
@@ -68,41 +68,12 @@ export default function LegalShell({
             </span>
           </Link>
           <nav className="flex items-center gap-2 sm:gap-3 text-xs text-[var(--sage)] shrink-0">
-            {/* Same flag language control as landing page */}
-            <div
-              className="flex items-center gap-1.5 p-1 rounded-full border border-[var(--border-soft)] bg-black/30"
-              role="group"
-              aria-label={ui.language}
-            >
-              <button
-                type="button"
-                onClick={() => switchLang('en')}
-                className={`relative overflow-hidden rounded-full transition ${
-                  docLang === 'en'
-                    ? 'ring-2 ring-[var(--accent)] opacity-100 scale-105'
-                    : 'opacity-65 hover:opacity-100'
-                }`}
-                aria-pressed={docLang === 'en'}
-                aria-label="English"
-                title="English"
-              >
-                <FlatFlag lang="en" size="md" className="rounded-full" />
-              </button>
-              <button
-                type="button"
-                onClick={() => switchLang('es')}
-                className={`relative overflow-hidden rounded-full transition ${
-                  docLang === 'es'
-                    ? 'ring-2 ring-[var(--accent)] opacity-100 scale-105'
-                    : 'opacity-65 hover:opacity-100'
-                }`}
-                aria-pressed={docLang === 'es'}
-                aria-label="Español"
-                title="Español"
-              >
-                <FlatFlag lang="es" size="md" className="rounded-full" />
-              </button>
-            </div>
+            <LanguageFlagSwitch
+              value={docLang}
+              onChange={switchLang}
+              ariaLabel={ui.language}
+              size="md"
+            />
             <Link href="/terms" className="hover:text-[var(--accent)]">
               {ui.terms}
             </Link>
@@ -158,11 +129,11 @@ export function P({ children }: { children: ReactNode }) {
   return <p className="text-[var(--off-white)]/85">{children}</p>;
 }
 
-export function Ul({ items }: { items: string[] }) {
+export function Ul({ items }: { items: ReactNode[] }) {
   return (
     <ul className="list-disc pl-5 space-y-1.5 text-[var(--off-white)]/85">
-      {items.map((item) => (
-        <li key={item.slice(0, 48)}>{item}</li>
+      {items.map((item, i) => (
+        <li key={i}>{item}</li>
       ))}
     </ul>
   );

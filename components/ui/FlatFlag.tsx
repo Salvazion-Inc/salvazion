@@ -22,10 +22,17 @@ const FLAGS: Record<
 
 type Size = 'sm' | 'md' | 'lg';
 
+/** Rectangular flag chips (list cards, profile). Circular switches set their own box. */
 const SIZE: Record<Size, string> = {
   sm: 'h-5 w-8',
-  md: 'h-7 w-[44px] sm:h-8 sm:w-[51px]',
+  md: 'h-7 w-11 sm:h-8 sm:w-[3.25rem]',
   lg: 'h-10 w-16',
+};
+
+const INTRINSIC: Record<Size, { w: number; h: number }> = {
+  sm: { w: 32, h: 20 },
+  md: { w: 44, h: 28 },
+  lg: { w: 64, h: 40 },
 };
 
 export default function FlatFlag({
@@ -38,13 +45,14 @@ export default function FlatFlag({
   className?: string;
 }) {
   const f = FLAGS[lang];
+  const dim = INTRINSIC[size];
   return (
     // eslint-disable-next-line @next/next/no-img-element -- flat SVG asset, no optimization needed
     <img
       src={f.src}
       alt={f.alt}
-      width={size === 'lg' ? 64 : size === 'sm' ? 32 : 51}
-      height={size === 'lg' ? 40 : size === 'sm' ? 20 : 32}
+      width={dim.w}
+      height={dim.h}
       className={`block object-cover ${SIZE[size]} ${className}`}
       draggable={false}
     />

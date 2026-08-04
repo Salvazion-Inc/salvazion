@@ -6,30 +6,17 @@ import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 import JupiterSwap from '@/components/wallet/JupiterSwap';
 import { useI18n } from '@/components/I18nProvider';
 import { PLAN_COPY } from '@/lib/billing/plans';
-import FlatFlag from '@/components/ui/FlatFlag';
+import LanguageFlagSwitch from '@/components/ui/LanguageFlagSwitch';
+import XLogo, { textWithXLogo } from '@/components/ui/XLogo';
 import LandingBlog from '@/components/landing/LandingBlog';
-import { JUPITER_SWAP_URL, SALVAZION_MINT } from '@/lib/solana/config';
+import { SALVAZION_MINT } from '@/lib/solana/config';
 
-const JUPITER_BUY = JUPITER_SWAP_URL;
 const MINT = SALVAZION_MINT;
 
 const X_ACCOUNT_URL = 'https://x.com/salvazion_';
 const LINKEDIN_CRISTIAN =
   'https://www.linkedin.com/in/exponential-healthtech/';
 const LINKEDIN_BEATRIZ = 'https://www.linkedin.com/in/beatriz-isler/';
-
-function XLogo({ className = '' }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden
-      className={className}
-      fill="currentColor"
-    >
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.727-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" />
-    </svg>
-  );
-}
 
 export default function SalvazionLanding() {
   const { lang, setLang } = useI18n();
@@ -81,40 +68,12 @@ export default function SalvazionLanding() {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            <div
-              className="flex items-center gap-1.5 p-1 rounded-full border border-[var(--border-soft)] bg-black/30"
-              role="group"
-              aria-label={t.nav.language}
-            >
-              <button
-                type="button"
-                onClick={() => setLang('en')}
-                className={`relative overflow-hidden rounded-full transition ${
-                  lang === 'en'
-                    ? 'ring-2 ring-[var(--accent)] opacity-100 scale-105'
-                    : 'opacity-65 hover:opacity-100'
-                }`}
-                aria-pressed={lang === 'en'}
-                aria-label="English"
-                title="English"
-              >
-                <FlatFlag lang="en" size="md" className="rounded-full" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setLang('es')}
-                className={`relative overflow-hidden rounded-full transition ${
-                  lang === 'es'
-                    ? 'ring-2 ring-[var(--accent)] opacity-100 scale-105'
-                    : 'opacity-65 hover:opacity-100'
-                }`}
-                aria-pressed={lang === 'es'}
-                aria-label="Español"
-                title="Español"
-              >
-                <FlatFlag lang="es" size="md" className="rounded-full" />
-              </button>
-            </div>
+            <LanguageFlagSwitch
+              value={lang}
+              onChange={setLang}
+              ariaLabel={t.nav.language}
+              size="md"
+            />
             <Link
               href="/auth/login"
               className="btn-primary !w-auto sm:!min-w-0 !px-4 sm:!px-5 !min-h-10 !text-xs sm:!text-sm"
@@ -234,8 +193,12 @@ export default function SalvazionLanding() {
                 >
                   {area.name}
                 </h3>
-                <p className="mt-2 text-sm text-[#D8E1D9]/80 leading-relaxed flex-1">{area.body}</p>
-                <p className="mt-4 text-[11px] text-[var(--sage)] uppercase tracking-wider">{area.inApp}</p>
+                <p className="mt-2 text-sm text-[#D8E1D9]/80 leading-relaxed flex-1">
+                  {textWithXLogo(area.body)}
+                </p>
+                <p className="mt-4 text-[11px] text-[var(--sage)] uppercase tracking-wider">
+                  {textWithXLogo(area.inApp)}
+                </p>
               </div>
             ))}
           </div>
@@ -360,9 +323,6 @@ export default function SalvazionLanding() {
             <h2 className="section-title text-3xl sm:text-4xl md:text-[2.65rem]">
               {t.pricing.title}
             </h2>
-            <p className="mt-4 text-sm sm:text-base text-[var(--sage)] leading-relaxed text-pretty">
-              {t.pricing.subtitle}
-            </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4 sm:gap-5 items-stretch">
@@ -397,7 +357,7 @@ export default function SalvazionLanding() {
                 {t.pricing.freeItems.map((item) => (
                   <li key={item} className="flex gap-2">
                     <span className="text-[var(--accent)] shrink-0 w-4 text-center">·</span>
-                    <span>{item}</span>
+                    <span>{textWithXLogo(item)}</span>
                   </li>
                 ))}
               </ul>
@@ -441,7 +401,7 @@ export default function SalvazionLanding() {
                 {t.pricing.premiumItems.map((item) => (
                   <li key={item} className="flex gap-2">
                     <span className="text-[var(--accent)] shrink-0 w-4 text-center">·</span>
-                    <span>{item}</span>
+                    <span>{textWithXLogo(item)}</span>
                   </li>
                 ))}
               </ul>
@@ -485,14 +445,6 @@ export default function SalvazionLanding() {
               </p>
               <JupiterSwap mode="modal" triggerLabel={t.token.buy} />
             </div>
-            <a
-              href={JUPITER_BUY}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-secondary text-sm"
-            >
-              {t.token.openJupiter} ↗
-            </a>
           </div>
         </div>
       </section>
@@ -503,6 +455,9 @@ export default function SalvazionLanding() {
         <div className="max-w-6xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[var(--sage)]/80">
           <p>{t.footer.copy}</p>
           <div className="flex flex-wrap items-center justify-center gap-4">
+            <Link href="/terms" className="hover:text-[var(--accent)]">
+              {t.footer.terms}
+            </Link>
             <a
               href={X_ACCOUNT_URL}
               target="_blank"
@@ -511,11 +466,8 @@ export default function SalvazionLanding() {
               aria-label="@salvazion_ on X"
               title="@salvazion_ on X"
             >
-              <XLogo className="w-4 h-4" />
+              <XLogo className="w-4 h-4" title="X" />
             </a>
-            <Link href="/terms" className="hover:text-[var(--accent)]">
-              {t.footer.terms}
-            </Link>
             <Link href="/privacy" className="hover:text-[var(--accent)]">
               {t.footer.privacy}
             </Link>
@@ -550,7 +502,7 @@ const copy = {
       ctaLogin: 'I have an account',
     },
     app: {
-      eyebrow: 'One App · Our Purpose',
+      eyebrow: 'Our Purpose · One App',
       title: 'Everything fused into a single App',
       body:
         'Our Purpose is make Salvation, Health and Freedom great again, through a Global Community that defends Western Christian Culture and BioConservatism in a Spiritual Warfare.',
@@ -582,8 +534,6 @@ const copy = {
     pricing: {
       eyebrow: 'Freemium',
       title: 'Start free. Go Premium when ready.',
-      subtitle:
-        'Base access to Salvation, Health and Freedom is free. Premium unlocks Salvazion AI, unlimited AI devotionals, cloud wearables and advanced tools.',
       freeNote: 'Forever free to start the journey',
       freeItems: [
         'Dashboard, daily scores and onboarding',
@@ -618,14 +568,12 @@ const copy = {
       subtitle: 'Buy $SALVAZION Patriot Bitcoin on Solana',
       connect: 'Connect your Solana wallet',
       buy: 'Buy $SALVAZION',
-      openJupiter: 'Open on Jupiter',
     },
     blog: {
       eyebrow: 'Blog · @salvazion_',
       title: 'Salvazion Articles on X',
       subtitle:
-        'Long-form writing on Salvation, Health and Freedom — faith, family, body, sovereignty and Western Christian Culture. Every piece opens on X.',
-      articleCountLabel: '{count} articles in the library',
+        'Deep long-form on X. Salvation: spiritual growth, Scripture, prayer, virtue and family. Health: habits, body, mind, longevity and BioConservatism. Freedom: sovereignty, craft, community and Western Christian Culture — so you can grow faith, strengthen health and multiply liberty. Every piece opens on X.',
       filters: {
         all: 'All',
         salvation: 'Salvation',
@@ -636,8 +584,6 @@ const copy = {
       showing: 'Showing',
       of: 'of',
       empty: 'No articles in this pillar yet.',
-      seoNote:
-        'Filter by Salvation · Health · Freedom to explore the full library — each title links to the original article on X. Switch language to read titles and previews in Spanish.',
       viewAllOnX: 'Open full library on X',
     },
     team: {
@@ -681,7 +627,7 @@ const copy = {
       ctaLogin: 'Ya tengo cuenta',
     },
     app: {
-      eyebrow: 'Una sola App · Nuestro propósito',
+      eyebrow: 'Nuestro propósito · Una sola App',
       title: 'Todo fusionado en una sola App',
       body:
         'Nuestro Propósito es hacer Salvación, Salud y Libertad geniales otra vez, con una Comunidad Global que defiende la Cultura Cristiana Occidental y el BioConservadurismo en una Guerra Espiritual.',
@@ -713,8 +659,6 @@ const copy = {
     pricing: {
       eyebrow: 'Freemium',
       title: 'Empieza gratis. Pasa a Premium cuando quieras.',
-      subtitle:
-        'El acceso base a Salvation, Health y Freedom es gratis. Premium desbloquea Salvazion con IA, devocionales IA ilimitados, wearables en la nube y herramientas avanzadas.',
       freeNote: 'Gratis para siempre para empezar el camino',
       freeItems: [
         'Dashboard, scores diarios y onboarding',
@@ -749,14 +693,12 @@ const copy = {
       subtitle: 'Compra $SALVAZION Patriot Bitcoin en Solana',
       connect: 'Conecta tu billetera Solana',
       buy: 'Comprar $SALVAZION',
-      openJupiter: 'Abrir en Jupiter',
     },
     blog: {
       eyebrow: 'Blog · @salvazion_',
       title: 'Artículos de Salvazion en X',
       subtitle:
-        'Textos de largo formato sobre Salvation, Health y Freedom — fe, familia, cuerpo, soberanía y Cultura Cristiana Occidental. Cada pieza se abre en X.',
-      articleCountLabel: '{count} artículos en la biblioteca',
+        'Long-form en profundidad en X. Salvation: desarrollo espiritual, Escritura, oración, virtud y familia. Health: hábitos, cuerpo, mente, longevidad y BioConservadurismo. Freedom: soberanía, oficio, comunidad y Cultura Cristiana Occidental — para crecer en fe, mejorar tu salud y potenciar tu libertad. Cada pieza se abre en X.',
       filters: {
         all: 'Todos',
         salvation: 'Salvation',
@@ -767,8 +709,6 @@ const copy = {
       showing: 'Mostrando',
       of: 'de',
       empty: 'Aún no hay artículos en este pilar.',
-      seoNote:
-        'Filtra por Salvation · Health · Freedom para explorar la biblioteca completa — cada título enlaza al artículo original en X. Cambia el idioma para ver títulos y previews en español.',
       viewAllOnX: 'Abrir biblioteca completa en X',
     },
     team: {

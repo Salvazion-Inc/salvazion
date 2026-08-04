@@ -173,7 +173,8 @@ export const dictionary = {
     },
     articles: {
       title: 'Artículos · @salvazion_',
-      subtitle: 'Biblioteca completa · Salvation · Health · Freedom',
+      subtitle:
+        'Long-form en profundidad · desarrollo espiritual · mejorar salud · potenciar libertad',
       readCount: 'leídos',
       forYou: 'Para ti',
       unread: 'Sin leer',
@@ -1017,7 +1018,8 @@ export const dictionary = {
     },
     articles: {
       title: 'Articles · @salvazion_',
-      subtitle: 'Full library · Salvation · Health · Freedom',
+      subtitle:
+        'Deep long-form · spiritual growth · better health · greater freedom',
       readCount: 'read',
       forYou: 'For you',
       unread: 'Unread',

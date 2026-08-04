@@ -14,6 +14,7 @@ import {
   saveValueJourneyStep,
 } from '@/lib/freedom/x-articles';
 import { useI18n } from '@/components/I18nProvider';
+import { textWithXLogo } from '@/components/ui/XLogo';
 
 interface Props {
   /** Show replay card after the journey is done (default true) */
@@ -134,14 +135,18 @@ export default function ValueJourney({
           {step.icon}
         </div>
         <h2 className="font-display text-2xl font-bold text-white leading-tight">
-          {copy.title}
+          {textWithXLogo(copy.title)}
         </h2>
-        <p className="text-sm text-[var(--off-white)]/90 leading-relaxed">{copy.body}</p>
+        <p className="text-sm text-[var(--off-white)]/90 leading-relaxed">
+          {textWithXLogo(copy.body)}
+        </p>
         <div className="rounded-xl border border-[var(--border-strong)] bg-[var(--surface-active)] px-4 py-3">
           <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] mb-1">
             {t('valueJourney.benefit')}
           </p>
-          <p className="text-xs text-[var(--off-white)] leading-relaxed">{copy.benefit}</p>
+          <p className="text-xs text-[var(--off-white)] leading-relaxed">
+            {textWithXLogo(copy.benefit)}
+          </p>
         </div>
         {step.href && step.id !== 'ready' && (
           <Link

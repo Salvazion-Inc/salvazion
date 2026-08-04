@@ -12,6 +12,7 @@ import {
   type XArticle,
 } from '@/lib/freedom/x-articles';
 import { PILLAR_COLORS, type PillarId } from '@/lib/theme/pillars';
+import { textWithXLogo } from '@/components/ui/XLogo';
 
 export type BlogFilter = 'all' | ArticlePillar;
 
@@ -29,9 +30,7 @@ export interface LandingBlogCopy {
   showing: string;
   of: string;
   empty: string;
-  seoNote: string;
   viewAllOnX: string;
-  articleCountLabel: string;
 }
 
 interface Props {
@@ -139,8 +138,9 @@ function ArticleCard({
           >
             {preview}
           </p>
-          <p className="mt-3 text-[11px] font-medium text-[var(--accent)]">
-            {readOnX} ↗
+          <p className="mt-3 text-[11px] font-medium text-[var(--accent)] inline-flex items-center gap-1">
+            {textWithXLogo(readOnX)}
+            <span aria-hidden>↗</span>
           </p>
         </div>
       </a>
@@ -212,22 +212,21 @@ export default function LandingBlog({ lang, copy }: Props) {
 
       <div className="max-w-6xl mx-auto px-5">
         <header className="text-center mb-10 sm:mb-12 max-w-2xl mx-auto">
-          <p className="section-eyebrow mb-3">{copy.eyebrow}</p>
+          <p className="section-eyebrow mb-3 inline-flex items-center justify-center gap-1.5 flex-wrap">
+            {textWithXLogo(copy.eyebrow)}
+          </p>
           <h2
             id="blog-heading"
             className="section-title text-3xl sm:text-4xl md:text-[2.65rem]"
             itemProp="headline"
           >
-            {copy.title}
+            {textWithXLogo(
+              copy.title,
+              'inline-block w-[0.75em] h-[0.75em] align-[-0.08em] mx-1'
+            )}
           </h2>
           <p className="mt-4 text-sm sm:text-base text-[var(--sage)] leading-relaxed text-pretty">
-            {copy.subtitle}
-          </p>
-          <p className="mt-3 text-sm font-semibold text-white/90 tabular-nums">
-            {copy.articleCountLabel.replace('{count}', String(X_ARTICLES_COUNT))}
-          </p>
-          <p className="mt-2 text-[11px] text-[var(--sage)]/70 leading-relaxed">
-            {copy.seoNote}
+            {textWithXLogo(copy.subtitle)}
           </p>
         </header>
 
@@ -392,9 +391,10 @@ export default function LandingBlog({ lang, copy }: Props) {
             href="https://x.com/salvazion_/articles"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-primary sm:w-auto sm:min-w-[220px] inline-flex"
+            className="btn-primary sm:w-auto sm:min-w-[220px] inline-flex items-center gap-1.5"
           >
-            {copy.viewAllOnX} ↗
+            {textWithXLogo(copy.viewAllOnX, 'inline-block w-3.5 h-3.5 align-[-0.1em] mx-0.5')}
+            <span aria-hidden>↗</span>
           </a>
         </div>
       </div>

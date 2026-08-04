@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState, type ReactNode } from 'react';
+import { Fragment, useEffect, useState, type ReactNode } from 'react';
 import LegalShell, { H2, P, Ul } from '@/components/legal/LegalShell';
 import { useI18n } from '@/components/I18nProvider';
 import type { Language } from '@/lib/types';
 import type { LegalDoc } from '@/lib/legal/terms';
 import { SUPPORT_EMAIL, SUPPORT_MAILTO } from '@/lib/config/site';
+import XLogo from '@/components/ui/XLogo';
 
 /**
  * Renders a bilingual legal document. English is principal; user can switch EN/ES.
@@ -40,18 +41,57 @@ export default function LegalDocument({
     >
       {doc.sections.map((section, idx) => (
         <section key={`${section.heading || 'intro'}-${idx}`}>
-          {section.heading ? <H2>{section.heading}</H2> : null}
-          {section.intro ? <P>{section.intro}</P> : null}
+          {section.heading ? (
+            <H2>{renderLegalRichText(section.heading, relatedHref, relatedLabel)}</H2>
+          ) : null}
+          {section.intro ? (
+            <P>{renderLegalRichText(section.intro, relatedHref, relatedLabel)}</P>
+          ) : null}
           {section.paragraphs?.map((p, i) => (
-            <P key={i}>
-              {linkifyContact(p, relatedHref, relatedLabel)}
-            </P>
+            <P key={i}>{renderLegalRichText(p, relatedHref, relatedLabel)}</P>
           ))}
-          {section.bullets ? <Ul items={section.bullets} /> : null}
+          {section.bullets ? (
+            <Ul
+              items={section.bullets.map((b) =>
+                renderLegalRichText(b, relatedHref, relatedLabel)
+              )}
+            />
+          ) : null}
         </section>
       ))}
     </LegalShell>
   );
+}
+
+/**
+ * Legal copy: inject email/path links and replace standalone “X” with brand logo.
+ */
+function renderLegalRichText(
+  text: string,
+  relatedHref: string,
+  relatedLabel: string
+): ReactNode {
+  if (!text.includes('X') && !text.includes(SUPPORT_EMAIL) && !text.includes('/privacy') && !text.includes('/terms')) {
+    return text;
+  }
+
+  // Split platform X first, then linkify each plain fragment
+  const parts = text.split(/(\bX\b)/g);
+  return parts.map((part, i) => {
+    if (part === 'X') {
+      return (
+        <XLogo
+          key={`x-${i}`}
+          className="inline-block w-[0.9em] h-[0.9em] align-[-0.12em] mx-0.5"
+        />
+      );
+    }
+    return (
+      <Fragment key={`t-${i}`}>
+        {linkifyContact(part, relatedHref, relatedLabel)}
+      </Fragment>
+    );
+  });
 }
 
 /** Light link injection for email and related legal path */
@@ -60,6 +100,7 @@ function linkifyContact(
   relatedHref: string,
   relatedLabel: string
 ): ReactNode {
+  if (!text) return text;
   // Related doc path mention
   if (text.includes('/privacy') || text.includes('/terms')) {
     const parts = text.split(/(\/privacy|\/terms)/);
@@ -82,7 +123,7 @@ function linkifyContact(
 }
 
 function linkifyEmail(text: string, keyBase: number): ReactNode {
-  if (!text.includes(SUPPORT_EMAIL)) return text;
+  if (!text || !text.includes(SUPPORT_EMAIL)) return text;
   const parts = text.split(SUPPORT_EMAIL);
   const nodes: ReactNode[] = [];
   parts.forEach((part, i) => {

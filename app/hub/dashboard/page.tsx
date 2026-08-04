@@ -116,13 +116,14 @@ export default function DashboardPage() {
 
   if (!mounted || !profile || !scores) {
     return (
-      <div className="min-h-screen bg-[var(--true-black)] flex items-center justify-center">
+      <div className="min-h-[100dvh] flex flex-col items-center justify-center gap-3">
         <div
-          className="text-[var(--accent)] text-lg animate-pulse"
-          aria-live="polite"
-        >
+          className="skeleton-pulse w-12 h-12 rounded-full"
+          aria-hidden
+        />
+        <p className="text-[var(--accent)] text-sm font-medium" aria-live="polite">
           {t('common.lionPreparing')}
-        </div>
+        </p>
       </div>
     );
   }
@@ -132,16 +133,16 @@ export default function DashboardPage() {
   const scoreLabel = `${t('dashboard.salvazionScore')} ${global}: ${t('nav.salvation')} ${salvation}, ${t('nav.health')} ${health}, ${t('nav.freedom')} ${freedom}`;
 
   return (
-    <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] flex flex-col">
-      <main className="flex-1 flex flex-col items-center px-5 pt-5 pb-32 max-w-lg mx-auto w-full">
+    <div className="min-h-[100dvh] text-[var(--off-white)] flex flex-col">
+      <main className="flex-1 flex flex-col items-center px-5 pt-5 pb-8 max-w-lg mx-auto w-full">
         {/* Hero: identity + purpose + score — one surface */}
         <section
-          className="relative w-full max-w-sm mb-5 overflow-hidden rounded-[1.35rem] border border-[var(--border-soft)]"
+          className="relative w-full max-w-sm mb-5 overflow-hidden rounded-[1.5rem] border border-[var(--border-soft)] card-soft"
           style={{
             background:
-              'linear-gradient(165deg, color-mix(in srgb, var(--accent) 7%, #080808) 0%, #050505 42%, #040404 100%)',
+              'linear-gradient(165deg, color-mix(in srgb, var(--accent) 9%, #0a0f0b) 0%, #050505 48%, #040404 100%)',
             boxShadow:
-              '0 0 0 1px color-mix(in srgb, var(--accent) 6%, transparent), 0 18px 48px rgba(0,0,0,0.45)',
+              '0 0 0 1px color-mix(in srgb, var(--accent) 8%, transparent), 0 20px 50px rgba(0,0,0,0.42)',
           }}
         >
           {/* Soft pillar glow accents */}

@@ -30,7 +30,6 @@ const PILLAR_NAV: NavItemConfig[] = [
     labelKey: 'nav.home',
     key: 'home',
     Icon: HomeIcon,
-    // Profile is opened from the dashboard hero — keep Dashboard selected there.
     match: ['/hub/dashboard', '/hub/profile'],
   },
   {
@@ -77,43 +76,43 @@ export default function BottomNav({ variant: _variant = 'default' }: BottomNavPr
   const items = PILLAR_NAV;
 
   return (
-    <nav
-      className="fixed bottom-0 left-0 right-0 z-50 bg-[var(--true-black)]/95 border-t border-[var(--border-soft)] backdrop-blur-md px-2 py-1.5 safe-bottom"
-      aria-label={t('nav.main')}
-    >
-      <div className="flex items-stretch max-w-md mx-auto gap-0.5">
+    <nav className="bottom-nav-dock" aria-label={t('nav.main')}>
+      <div className="bottom-nav-dock-inner" role="list">
         {items.map((item) => {
           const active = isActive(pathname, item);
           const Icon = item.Icon;
           const label = t(item.labelKey);
           const color = item.color;
+          const activeColor = color || 'var(--accent)';
+
           return (
             <Link
               key={item.key}
               href={item.href}
+              role="listitem"
               aria-current={active ? 'page' : undefined}
               aria-label={label}
-              className={`flex-1 min-w-0 flex flex-col items-center justify-center gap-0.5 h-12 px-0.5 rounded-xl transition-colors ${
-                active ? '' : 'opacity-80 hover:opacity-100 hover:bg-white/[0.03]'
-              }`}
+              data-active={active ? 'true' : 'false'}
+              className="bottom-nav-item"
               style={
-                active && color
-                  ? { background: `${color}14` }
-                  : active
-                    ? { background: 'var(--surface-active)' }
-                    : undefined
+                active
+                  ? {
+                      background: color
+                        ? `${color}18`
+                        : 'var(--surface-active)',
+                      boxShadow: color
+                        ? `0 0 0 1px ${color}33 inset`
+                        : '0 0 0 1px rgba(143,217,154,0.2) inset',
+                    }
+                  : undefined
               }
             >
-              <Icon size={20} active={active} color={color} />
+              <Icon size={22} active={active} color={color} />
               <span
-                className="text-[10px] tracking-wide font-medium w-full text-center leading-none truncate px-0.5"
+                className="bottom-nav-label"
                 style={{
-                  color: color
-                    ? color
-                    : active
-                      ? 'var(--accent)'
-                      : 'var(--sage)',
-                  opacity: active ? 1 : color ? 0.88 : 0.8,
+                  color: active ? activeColor : 'var(--sage)',
+                  opacity: active ? 1 : 0.82,
                 }}
               >
                 {label}

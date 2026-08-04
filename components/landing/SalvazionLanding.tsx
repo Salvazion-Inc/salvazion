@@ -23,21 +23,24 @@ export default function SalvazionLanding() {
   const t = copy[lang];
 
   return (
-    <div className="min-h-screen bg-[#040404] text-[#D8E1D9]">
+    <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] selection:bg-[rgba(143,217,154,0.28)]">
       {/* Skip link — keyboard / a11y + crawlable landmark */}
       <a
         href="#main"
-        className="absolute left-[-10000px] top-auto z-[100] overflow-hidden focus:left-3 focus:top-3 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-[var(--accent)] focus:text-[#0a120c] focus:text-sm focus:font-semibold focus:overflow-visible focus:w-auto focus:h-auto"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:px-4 focus:py-2.5 focus:rounded-full focus:bg-[var(--accent)] focus:text-[#0a120c] focus:text-sm focus:font-semibold focus:shadow-[var(--shadow-glow)]"
       >
         {lang === 'es' ? 'Saltar al contenido' : 'Skip to content'}
       </a>
-      {/* Nav */}
+      {/* Nav — floating glass bar */}
       <nav
-        className="fixed top-0 left-0 right-0 z-50 glass border-b border-[var(--border-soft)]"
+        className="fixed top-0 left-0 right-0 z-50 glass-strong border-b border-[var(--border-soft)]/80"
         aria-label={lang === 'es' ? 'Principal' : 'Primary'}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-5 py-3.5 flex items-center justify-between gap-3">
-          <Link href="/" className="flex items-center gap-2.5 min-w-0">
+        <div className="max-w-6xl mx-auto px-4 sm:px-5 py-3 sm:py-3.5 flex items-center justify-between gap-3">
+          <Link
+            href="/"
+            className="flex items-center gap-2.5 min-w-0 rounded-full focus-visible:outline-none"
+          >
             <div className="w-9 h-9 rounded-full border border-[var(--border-strong)] flex items-center justify-center lion-glow overflow-hidden bg-[#040404] shrink-0">
               <Image src="/logo-icon.png" alt="Salvazion" width={36} height={36} className="object-cover" />
             </div>
@@ -46,63 +49,62 @@ export default function SalvazionLanding() {
             </span>
           </Link>
 
-          <div className="hidden lg:flex items-center gap-5 xl:gap-6 text-[11px] uppercase tracking-[0.15em] text-[var(--sage)]">
-            <a href="#app" className="hover:text-[var(--accent)] transition-colors">
+          <div className="hidden lg:flex items-center gap-6 xl:gap-7 text-[11px] uppercase tracking-[0.16em] text-[var(--sage)]">
+            <a href="#app" className="nav-link-marketing">
               {t.nav.app}
             </a>
-            <a href="#pricing" className="hover:text-[var(--accent)] transition-colors">
-              {t.nav.pricing}
-            </a>
-            <a href="#token" className="hover:text-[var(--accent)] transition-colors">
-              {t.nav.token}
-            </a>
-            <a href="#team" className="hover:text-[var(--accent)] transition-colors">
+            <a href="#team" className="nav-link-marketing">
               {t.nav.team}
             </a>
-            <a href="#blog" className="hover:text-[var(--accent)] transition-colors">
+            <a href="#pricing" className="nav-link-marketing">
+              {t.nav.pricing}
+            </a>
+            <a href="#blog" className="nav-link-marketing">
               {t.nav.blog}
+            </a>
+            <a href="#token" className="nav-link-marketing">
+              {t.nav.token}
             </a>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Language flags — flat USA (EN) / Chile (ES). No ES/EN text. */}
             <div
-              className="flex items-center gap-2"
+              className="flex items-center gap-1.5 p-1 rounded-full border border-[var(--border-soft)] bg-black/30"
               role="group"
               aria-label={t.nav.language}
             >
               <button
                 type="button"
                 onClick={() => setLang('en')}
-                className={`relative overflow-hidden rounded-[3px] transition ring-offset-2 ring-offset-[#040404] shadow-sm ${
+                className={`relative overflow-hidden rounded-full transition ${
                   lang === 'en'
-                    ? 'ring-2 ring-[var(--accent)] opacity-100'
-                    : 'opacity-70 hover:opacity-100'
+                    ? 'ring-2 ring-[var(--accent)] opacity-100 scale-105'
+                    : 'opacity-65 hover:opacity-100'
                 }`}
                 aria-pressed={lang === 'en'}
                 aria-label="English"
                 title="English"
               >
-                <FlatFlag lang="en" size="md" className="rounded-[3px]" />
+                <FlatFlag lang="en" size="md" className="rounded-full" />
               </button>
               <button
                 type="button"
                 onClick={() => setLang('es')}
-                className={`relative overflow-hidden rounded-[3px] transition ring-offset-2 ring-offset-[#040404] shadow-sm ${
+                className={`relative overflow-hidden rounded-full transition ${
                   lang === 'es'
-                    ? 'ring-2 ring-[var(--accent)] opacity-100'
-                    : 'opacity-70 hover:opacity-100'
+                    ? 'ring-2 ring-[var(--accent)] opacity-100 scale-105'
+                    : 'opacity-65 hover:opacity-100'
                 }`}
                 aria-pressed={lang === 'es'}
                 aria-label="Español"
                 title="Español"
               >
-                <FlatFlag lang="es" size="md" className="rounded-[3px]" />
+                <FlatFlag lang="es" size="md" className="rounded-full" />
               </button>
             </div>
             <Link
               href="/auth/login"
-              className="px-4 py-2 rounded-full bg-[var(--accent-fill)] text-[#0a120c] text-xs sm:text-sm font-semibold hover:bg-[var(--accent-hover)] transition"
+              className="btn-primary !w-auto sm:!min-w-0 !px-4 sm:!px-5 !min-h-10 !text-xs sm:!text-sm"
             >
               {t.nav.enter}
             </Link>
@@ -113,7 +115,7 @@ export default function SalvazionLanding() {
       {/* Hero — same Canva home video (green smoke) */}
       <main id="main">
       <section
-        className="relative min-h-[92vh] flex items-center justify-center overflow-hidden pt-20"
+        className="relative min-h-[min(100dvh,920px)] flex items-center justify-center overflow-hidden pt-20"
         aria-labelledby="hero-heading"
       >
         {/*
@@ -130,42 +132,44 @@ export default function SalvazionLanding() {
           preload="auto"
           aria-hidden
         />
-        <div className="absolute inset-0 bg-[#040404]/55" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#040404]/40 via-transparent to-[#040404]" />
+        <div className="absolute inset-0 bg-[#040404]/50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#040404]/55 via-transparent to-[#040404]" />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#040404] to-transparent" />
 
         <div className="relative z-10 max-w-5xl mx-auto px-5 text-center py-16 sm:py-24">
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-7">
             <Image
               src="/logo.png"
               alt="Salvazion Green Lion"
               width={200}
               height={200}
-              className="lion-glow w-36 h-36 sm:w-48 sm:h-48 object-contain"
+              className="lion-glow w-36 h-36 sm:w-48 sm:h-48 object-contain drop-shadow-[0_0_40px_rgba(143,217,154,0.25)]"
               priority
             />
           </div>
 
           <h1
             id="hero-heading"
-            className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.95] neon-text whitespace-pre-line"
+            className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.95] tracking-tight text-balance"
           >
-            {t.hero.title}
+            <span className="block neon-text">{t.hero.titleLines[0]}</span>
+            <span className="block neon-text">{t.hero.titleLines[1]}</span>
+            <span className="block text-[var(--accent)] drop-shadow-[0_0_24px_rgba(143,217,154,0.35)]">
+              {t.hero.titleLines[2]}
+            </span>
           </h1>
-          <p className="font-display mt-3 text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--accent)]">
-            {t.hero.sub}
-          </p>
 
-          <p className="max-w-2xl mx-auto mt-6 text-base sm:text-lg text-[#D8E1D9]/90 leading-relaxed">
+          <p className="max-w-xl mx-auto mt-7 text-base sm:text-lg text-[#D8E1D9]/92 leading-relaxed text-pretty">
             {t.hero.tagline}
             <br />
             <span className="text-[var(--accent)] font-medium">{t.hero.tagline2}</span>
           </p>
 
-          <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/auth/signup" className="btn-primary sm:w-auto sm:min-w-[200px] px-8">
+          <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center items-stretch sm:items-center">
+            <Link href="/auth/signup" className="btn-primary sm:!w-auto sm:!min-w-[220px] !px-8">
               {t.hero.ctaPrimary}
             </Link>
-            <Link href="/auth/login" className="btn-secondary sm:w-auto sm:min-w-[200px] px-8">
+            <Link href="/auth/login" className="btn-secondary sm:!w-auto sm:!min-w-[220px] !px-8">
               {t.hero.ctaLogin}
             </Link>
           </div>
@@ -173,23 +177,21 @@ export default function SalvazionLanding() {
       </section>
 
       {/* One App + Purpose fused */}
-      <section id="app" className="py-16 sm:py-20 border-t border-[var(--border-soft)]">
+      <section id="app" className="section-pad border-t border-[var(--border-soft)]">
         <div className="max-w-6xl mx-auto px-5">
-          <div className="text-center mb-10">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">
-              {t.app.eyebrow}
-            </p>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">{t.app.title}</h2>
-            <p className="mt-4 max-w-3xl mx-auto text-base sm:text-lg leading-relaxed text-[#D8E1D9]/85">
+          <div className="text-center mb-12 max-w-3xl mx-auto">
+            <p className="section-eyebrow mb-3">{t.app.eyebrow}</p>
+            <h2 className="section-title text-3xl sm:text-4xl md:text-[2.65rem]">{t.app.title}</h2>
+            <p className="mt-5 text-base sm:text-lg leading-relaxed text-[#D8E1D9]/88 text-pretty">
               {t.app.body}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-4 mb-10">
+          <div className="grid md:grid-cols-3 gap-4 sm:gap-5 mb-11">
             {t.app.areas.map((area) => (
               <div
                 key={area.name}
-                className="card-soft p-6 flex flex-col min-h-[200px] border-t-2"
+                className="card-soft card-lift p-6 sm:p-7 flex flex-col min-h-[220px] border-t-2"
                 style={{ borderTopColor: area.accent }}
               >
                 <div
@@ -224,136 +226,19 @@ export default function SalvazionLanding() {
         </div>
       </section>
 
-      {/* Pricing — freemium as built */}
-      <section id="pricing" className="py-16 sm:py-20 border-t border-[var(--border-soft)] bg-zinc-950/40">
+      {/* Team — founders (before pricing) */}
+      <section id="team" className="section-pad border-t border-[var(--border-soft)] bg-zinc-950/35">
         <div className="max-w-5xl mx-auto px-5">
-          <div className="text-center mb-10">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">
-              {t.pricing.eyebrow}
-            </p>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
-              {t.pricing.title}
-            </h2>
-            <p className="mt-3 max-w-2xl mx-auto text-sm text-[var(--sage)] leading-relaxed">
-              {t.pricing.subtitle}
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="card-soft p-6 sm:p-8 flex flex-col">
-              <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]">
-                {lang === 'es' ? PLAN_COPY.free.nameEs : PLAN_COPY.free.name}
-              </p>
-              <p className="mt-2 text-4xl font-bold text-white tracking-tight">$0</p>
-              <p className="mt-1 text-xs text-[var(--sage)]">{t.pricing.freeNote}</p>
-              <ul className="mt-5 space-y-2 text-sm text-[#D8E1D9]/85 flex-1">
-                {t.pricing.freeItems.map((item) => (
-                  <li key={item} className="flex gap-2">
-                    <span className="text-[var(--accent)] shrink-0">·</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href="/auth/signup"
-                className="btn-secondary mt-6 sm:w-auto text-center"
-              >
-                {t.pricing.ctaFree}
-              </Link>
-            </div>
-
-            <div className="rounded-2xl p-6 sm:p-8 flex flex-col border border-[#8FD99A]/40 bg-[#8FD99A]/5">
-              <div className="flex items-center justify-between gap-2">
-                <p className="text-[10px] uppercase tracking-wider text-[#8FD99A]">Premium</p>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#8FD99A]/20 text-[#8FD99A]">
-                  {t.pricing.bestValue}
-                </span>
-              </div>
-              <div className="mt-3 space-y-1">
-                <p className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                  {lang === 'es'
-                    ? PLAN_COPY.premium_month.priceLabelEs
-                    : PLAN_COPY.premium_month.priceLabel}
-                </p>
-                <p className="text-sm text-[#8FD99A]">
-                  {lang === 'es'
-                    ? PLAN_COPY.premium_year.priceLabelEs
-                    : PLAN_COPY.premium_year.priceLabel}
-                </p>
-              </div>
-              <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed">
-                {t.pricing.premiumNote}
-              </p>
-              <ul className="mt-5 space-y-2 text-sm text-[#D8E1D9]/90 flex-1">
-                {t.pricing.premiumItems.map((item) => (
-                  <li key={item} className="flex gap-2">
-                    <span className="text-[#8FD99A] shrink-0">✓</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href="/auth/signup"
-                className="btn-primary mt-6 sm:w-auto text-center"
-              >
-                {t.pricing.ctaPremium}
-              </Link>
-            </div>
-          </div>
-
-          <p className="mt-6 text-center text-[11px] text-[var(--sage)]/80 leading-relaxed max-w-xl mx-auto">
-            {t.pricing.stripeNote}
-          </p>
-        </div>
-      </section>
-
-      {/* Token */}
-      <section id="token" className="py-16 sm:py-20 border-t border-[var(--border-soft)]">
-        <div className="max-w-3xl mx-auto px-5 text-center">
-          <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">Solana</p>
-          <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tighter mb-2">$SALVAZION</h2>
-          <p className="text-sm text-[var(--sage)] mb-6">{t.token.subtitle}</p>
-          <div className="font-mono text-[10px] sm:text-xs bg-[#0a0a0a] border border-[var(--border-soft)] px-3 py-2.5 rounded-xl mb-8 inline-block break-all max-w-full">
-            CA: {MINT}
-          </div>
-
-          <div className="max-w-md mx-auto text-left space-y-4">
-            <p className="text-center text-xs text-[var(--sage)]">{t.token.connect}</p>
-            <WalletConnectCard showJupiter={false} />
-            <div className="card-soft p-3">
-              <p className="text-center text-[10px] text-[var(--sage)] mb-2 uppercase tracking-wider">
-                Jupiter · Solana
-              </p>
-              <JupiterSwap mode="modal" triggerLabel={t.token.buy} />
-            </div>
-            <a
-              href={JUPITER_BUY}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-secondary text-sm"
-            >
-              {t.token.openJupiter} ↗
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Team — founders headshots + family portrait (Gobierno Corporativo) */}
-      <section id="team" className="py-16 sm:py-20 border-t border-[var(--border-soft)] bg-zinc-950/30">
-        <div className="max-w-5xl mx-auto px-5">
-          <div className="text-center mb-10">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">
-              {t.team.eyebrow}
-            </p>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
+          <div className="text-center mb-12 max-w-3xl mx-auto">
+            <p className="section-eyebrow mb-3">{t.team.eyebrow}</p>
+            <h2 className="section-title text-3xl sm:text-4xl md:text-[2.65rem]">
               {t.team.title}
             </h2>
-            <p className="mt-4 text-sm sm:text-base text-[#D8E1D9]/85 max-w-3xl mx-auto leading-relaxed">
+            <p className="mt-5 text-sm sm:text-base text-[#D8E1D9]/88 leading-relaxed text-pretty">
               {t.team.intro}
             </p>
           </div>
 
-          {/* Family founders portrait — polished brand banner */}
           <div className="mb-8 rounded-3xl overflow-hidden border border-[var(--border-soft)] card-soft shadow-[0_0_40px_-12px_rgba(34,197,94,0.25)]">
             <div className="relative aspect-[16/9] sm:aspect-[2/1] min-h-[240px] sm:min-h-[340px] bg-[#040404]">
               <Image
@@ -423,8 +308,124 @@ export default function SalvazionLanding() {
         </div>
       </section>
 
-      {/* Blog last — all @salvazion_ X Articles · filter Salvation / Health / Freedom */}
+      {/* Pricing — freemium as built */}
+      <section id="pricing" className="section-pad border-t border-[var(--border-soft)] bg-zinc-950/40">
+        <div className="max-w-5xl mx-auto px-5">
+          <div className="text-center mb-12 max-w-2xl mx-auto">
+            <p className="section-eyebrow mb-3">{t.pricing.eyebrow}</p>
+            <h2 className="section-title text-3xl sm:text-4xl md:text-[2.65rem]">
+              {t.pricing.title}
+            </h2>
+            <p className="mt-4 text-sm sm:text-base text-[var(--sage)] leading-relaxed text-pretty">
+              {t.pricing.subtitle}
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4 sm:gap-5">
+            <div className="card-soft card-lift p-6 sm:p-8 flex flex-col">
+              <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]">
+                {lang === 'es' ? PLAN_COPY.free.nameEs : PLAN_COPY.free.name}
+              </p>
+              <p className="mt-2 text-4xl font-bold text-white tracking-tight">$0</p>
+              <p className="mt-1 text-xs text-[var(--sage)]">{t.pricing.freeNote}</p>
+              <ul className="mt-5 space-y-2 text-sm text-[#D8E1D9]/85 flex-1">
+                {t.pricing.freeItems.map((item) => (
+                  <li key={item} className="flex gap-2">
+                    <span className="text-[var(--accent)] shrink-0">·</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/auth/signup"
+                className="btn-secondary mt-6 sm:w-auto text-center"
+              >
+                {t.pricing.ctaFree}
+              </Link>
+            </div>
+
+            <div className="card-soft card-lift p-6 sm:p-8 flex flex-col border-[#8FD99A]/35 bg-gradient-to-b from-[#8FD99A]/10 to-transparent shadow-[var(--shadow-glow)]">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-[10px] uppercase tracking-wider text-[#8FD99A] font-semibold">
+                  Premium
+                </p>
+                <span className="text-[10px] px-2.5 py-1 rounded-full bg-[#8FD99A]/18 text-[#8FD99A] font-semibold border border-[#8FD99A]/25">
+                  {t.pricing.bestValue}
+                </span>
+              </div>
+              <div className="mt-3 space-y-1">
+                <p className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                  {lang === 'es'
+                    ? PLAN_COPY.premium_month.priceLabelEs
+                    : PLAN_COPY.premium_month.priceLabel}
+                </p>
+                <p className="text-sm text-[#8FD99A]">
+                  {lang === 'es'
+                    ? PLAN_COPY.premium_year.priceLabelEs
+                    : PLAN_COPY.premium_year.priceLabel}
+                </p>
+              </div>
+              <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed">
+                {t.pricing.premiumNote}
+              </p>
+              <ul className="mt-5 space-y-2 text-sm text-[#D8E1D9]/90 flex-1">
+                {t.pricing.premiumItems.map((item) => (
+                  <li key={item} className="flex gap-2">
+                    <span className="text-[#8FD99A] shrink-0">✓</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/auth/signup"
+                className="btn-primary mt-6 sm:w-auto text-center"
+              >
+                {t.pricing.ctaPremium}
+              </Link>
+            </div>
+          </div>
+
+          <p className="mt-6 text-center text-[11px] text-[var(--sage)]/80 leading-relaxed max-w-xl mx-auto">
+            {t.pricing.stripeNote}
+          </p>
+        </div>
+      </section>
+
+      {/* Blog — @salvazion_ X Articles */}
       <LandingBlog lang={lang} copy={t.blog} />
+
+      {/* Token — last section */}
+      <section id="token" className="section-pad border-t border-[var(--border-soft)]">
+        <div className="max-w-3xl mx-auto px-5 text-center">
+          <p className="section-eyebrow mb-3">Solana</p>
+          <h2 className="section-title text-4xl sm:text-5xl tracking-tighter mb-3 text-[var(--accent)] neon-text">
+            $SALVAZION
+          </h2>
+          <p className="text-sm text-[var(--sage)] mb-6">{t.token.subtitle}</p>
+          <div className="font-mono text-[10px] sm:text-xs bg-[#0a0a0a] border border-[var(--border-soft)] px-3 py-2.5 rounded-xl mb-8 inline-block break-all max-w-full">
+            CA: {MINT}
+          </div>
+
+          <div className="max-w-md mx-auto text-left space-y-4">
+            <p className="text-center text-xs text-[var(--sage)]">{t.token.connect}</p>
+            <WalletConnectCard showJupiter={false} />
+            <div className="card-soft p-3">
+              <p className="text-center text-[10px] text-[var(--sage)] mb-2 uppercase tracking-wider">
+                Jupiter · Solana
+              </p>
+              <JupiterSwap mode="modal" triggerLabel={t.token.buy} />
+            </div>
+            <a
+              href={JUPITER_BUY}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary text-sm"
+            >
+              {t.token.openJupiter} ↗
+            </a>
+          </div>
+        </div>
+      </section>
 
       </main>
 
@@ -485,8 +486,12 @@ const copy = {
       language: 'Language',
     },
     hero: {
-      title: 'MAKE SALVATION,\nHEALTH AND\nFREEDOM',
-      sub: 'GREAT AGAIN',
+      /** Full motto in exactly three lines */
+      titleLines: [
+        'MAKE SALVATION,',
+        'HEALTH AND FREEDOM',
+        'GREAT AGAIN',
+      ] as const,
       tagline: 'The secular world strips spirit, mind, body and soul.',
       tagline2: 'Salvazion gives them back — in one App.',
       ctaPrimary: 'Create free account',
@@ -494,9 +499,9 @@ const copy = {
     },
     app: {
       eyebrow: 'One App · Our Purpose',
-      title: 'Everything fused into a single Hub',
+      title: 'Everything fused into a single App',
       body:
-        'Our Purpose is make Salvation, Health and Freedom great again, through a Global Community that defends Western Christian Culture and BioConservatism in a Spiritual Warfare. Salvation, Health and Freedom live together in one App: daily scores, Bible and devotionals, health with sensors and wearables, Freedom library, community invites, Salvazion AI and $SALVAZION on Solana.',
+        'Our Purpose is make Salvation, Health and Freedom great again, through a Global Community that defends Western Christian Culture and BioConservatism in a Spiritual Warfare.',
       cta: 'Open the App',
       areas: [
         {
@@ -511,14 +516,14 @@ const copy = {
           icon: '/icons/agenda/health.jpg',
           accent: '#4A9EFF',
           body: 'The body is a temple. Sleep, hydration, meals, sports, phone sensors, Bluetooth HR and cloud wearables (Premium).',
-          inApp: 'Health hub · sensors · wearables · biomarkers',
+          inApp: 'Health · sensors · wearables · biomarkers',
         },
         {
           name: 'Freedom',
           icon: '/icons/agenda/freedom.jpg',
           accent: '#8FD99A',
           body: 'Freedom with responsibility: curated books, X articles, YouTube channels, Phalanx community and economic sovereignty on Solana.',
-          inApp: 'Freedom hub · Community · $SALVAZION swap',
+          inApp: 'Freedom · Community · $SALVAZION swap',
         },
       ],
     },
@@ -612,18 +617,22 @@ const copy = {
       language: 'Idioma',
     },
     hero: {
-      title: 'MAKE SALVATION,\nHEALTH AND\nFREEDOM',
-      sub: 'GREAT AGAIN',
-      tagline: 'El mundo secular te quita el espíritu, la mente, el cuerpo y el alma.',
+      /** Motto completo en exactamente tres líneas */
+      titleLines: [
+        'MAKE SALVATION,',
+        'HEALTH AND FREEDOM',
+        'GREAT AGAIN',
+      ] as const,
+      tagline: 'El mundo secular te quita el espíritu, mente, cuerpo y alma.',
       tagline2: 'Salvazion te los devuelve — en una sola App.',
       ctaPrimary: 'Crear cuenta gratis',
       ctaLogin: 'Ya tengo cuenta',
     },
     app: {
       eyebrow: 'Una sola App · Nuestro propósito',
-      title: 'Todo fusionado en un solo Hub',
+      title: 'Todo fusionado en una sola App',
       body:
-        'Nuestro Propósito es hacer Salvación, Salud y Libertad geniales otra vez, con una Comunidad Global que defiende la Cultura Cristiana Occidental y el BioConservadurismo en una Guerra Espiritual. Salvation, Health y Freedom viven juntos en una App: scores diarios, Biblia y devocionales, salud con sensores y wearables, biblioteca Freedom, comunidad Phalanx, Salvazion con IA y $SALVAZION en Solana.',
+        'Nuestro Propósito es hacer Salvación, Salud y Libertad geniales otra vez, con una Comunidad Global que defiende la Cultura Cristiana Occidental y el BioConservadurismo en una Guerra Espiritual.',
       cta: 'Abrir la App',
       areas: [
         {
@@ -638,14 +647,14 @@ const copy = {
           icon: '/icons/agenda/health.jpg',
           accent: '#4A9EFF',
           body: 'El cuerpo es templo. Sueño, hidratación, comidas, deportes, sensores del celular, HR Bluetooth y wearables en la nube (Premium).',
-          inApp: 'Health hub · sensores · wearables · biomarcadores',
+          inApp: 'Health · sensores · wearables · biomarcadores',
         },
         {
           name: 'Freedom',
           icon: '/icons/agenda/freedom.jpg',
           accent: '#8FD99A',
           body: 'Libertad con responsabilidad: libros curados, artículos en X, canales de YouTube, comunidad Phalanx y soberanía económica en Solana.',
-          inApp: 'Freedom hub · Comunidad · Swap $SALVAZION',
+          inApp: 'Freedom · Comunidad · Swap $SALVAZION',
         },
       ],
     },

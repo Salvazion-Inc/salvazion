@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   X_ARTICLES,
   X_ARTICLES_COUNT,
@@ -47,8 +47,8 @@ const PILLAR_ACCENT: Record<PillarId, string> = {
   freedom: PILLAR_COLORS.freedom.text,
 };
 
-/** Initial visible cards — rest remain in DOM (hidden) for SEO crawl of all links */
-const PAGE_SIZE = 24;
+/** Card width in the horizontal track */
+const CARD_WIDTH = 'min(82vw, 300px)';
 
 function ArticleCard({
   article,
@@ -67,8 +67,13 @@ function ArticleCard({
     <article
       itemScope
       itemType="https://schema.org/BlogPosting"
-      className="group flex flex-col glass rounded-2xl overflow-hidden border border-[var(--border-soft)] hover:border-[var(--border-strong)] transition h-full"
-      style={{ borderTopWidth: 2, borderTopColor: accent }}
+      className="group flex flex-col card-soft card-lift overflow-hidden h-full snap-start shrink-0"
+      style={{
+        borderTopWidth: 2,
+        borderTopColor: accent,
+        width: CARD_WIDTH,
+        maxWidth: 300,
+      }}
       lang={lang}
     >
       <meta itemProp="author" content="@salvazion_" />
@@ -145,27 +150,59 @@ function ArticleCard({
 
 /**
  * Public marketing blog: all @salvazion_ X Articles, filterable by pillar.
- * Real external links + schema.org microdata for SEO.
+ * Horizontal carousel (left / right) instead of vertical list.
  */
 export default function LandingBlog({ lang, copy }: Props) {
   const [filter, setFilter] = useState<BlogFilter>('all');
-  const [visible, setVisible] = useState(PAGE_SIZE);
+  const [canPrev, setCanPrev] = useState(false);
+  const [canNext, setCanNext] = useState(false);
+  const scrollerRef = useRef<HTMLDivElement>(null);
   const counts = useMemo(() => getBlogPillarCounts(), []);
 
   const filtered = useMemo(() => getBlogArticles(filter), [filter]);
 
-  const shown = filtered.slice(0, visible);
-  const hasMore = visible < filtered.length;
+  const updateScrollState = useCallback(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const max = el.scrollWidth - el.clientWidth;
+    setCanPrev(el.scrollLeft > 4);
+    setCanNext(el.scrollLeft < max - 4);
+  }, []);
+
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    updateScrollState();
+    el.addEventListener('scroll', updateScrollState, { passive: true });
+    window.addEventListener('resize', updateScrollState);
+    return () => {
+      el.removeEventListener('scroll', updateScrollState);
+      window.removeEventListener('resize', updateScrollState);
+    };
+  }, [filtered, updateScrollState]);
 
   const onFilter = (next: BlogFilter) => {
     setFilter(next);
-    setVisible(PAGE_SIZE);
+    requestAnimationFrame(() => {
+      const el = scrollerRef.current;
+      if (el) {
+        el.scrollTo({ left: 0, behavior: 'smooth' });
+      }
+      updateScrollState();
+    });
+  };
+
+  const scrollByDir = (dir: -1 | 1) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const step = Math.min(el.clientWidth * 0.85, 320);
+    el.scrollBy({ left: dir * step, behavior: 'smooth' });
   };
 
   return (
     <section
       id="blog"
-      className="py-16 sm:py-20 border-t border-[var(--border-soft)] bg-zinc-950/30"
+      className="section-pad border-t border-[var(--border-soft)] bg-zinc-950/30"
       aria-labelledby="blog-heading"
       itemScope
       itemType="https://schema.org/Blog"
@@ -174,40 +211,36 @@ export default function LandingBlog({ lang, copy }: Props) {
       <meta itemProp="description" content={copy.subtitle} />
 
       <div className="max-w-6xl mx-auto px-5">
-        <header className="text-center mb-8 sm:mb-10">
-          <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--accent)] mb-2">
-            {copy.eyebrow}
-          </p>
+        <header className="text-center mb-10 sm:mb-12 max-w-2xl mx-auto">
+          <p className="section-eyebrow mb-3">{copy.eyebrow}</p>
           <h2
             id="blog-heading"
-            className="font-display text-3xl sm:text-4xl font-bold tracking-tight"
+            className="section-title text-3xl sm:text-4xl md:text-[2.65rem]"
             itemProp="headline"
           >
             {copy.title}
           </h2>
-          <p className="mt-3 max-w-2xl mx-auto text-sm text-[var(--sage)] leading-relaxed">
+          <p className="mt-4 text-sm sm:text-base text-[var(--sage)] leading-relaxed text-pretty">
             {copy.subtitle}
           </p>
-          <p className="mt-2 text-sm font-medium text-white/90">
+          <p className="mt-3 text-sm font-semibold text-white/90 tabular-nums">
             {copy.articleCountLabel.replace('{count}', String(X_ARTICLES_COUNT))}
           </p>
-          <p className="mt-2 text-[11px] text-[var(--sage)]/70">
+          <p className="mt-2 text-[11px] text-[var(--sage)]/70 leading-relaxed">
             {copy.seoNote}
           </p>
         </header>
 
         {/* Pillar filters — Salvation · Health · Freedom */}
         <div
-          className="flex flex-wrap justify-center gap-2 mb-8"
+          className="flex flex-wrap justify-center gap-2 mb-6"
           role="tablist"
           aria-label={lang === 'es' ? 'Filtrar por pilar' : 'Filter by pillar'}
         >
           {FILTERS.map((key) => {
             const active = filter === key;
             const accent =
-              key === 'all'
-                ? 'var(--accent)'
-                : PILLAR_ACCENT[key as PillarId];
+              key === 'all' ? 'var(--accent)' : PILLAR_ACCENT[key as PillarId];
             const label = copy.filters[key];
             const count = counts[key];
             return (
@@ -245,19 +278,63 @@ export default function LandingBlog({ lang, copy }: Props) {
           })}
         </div>
 
-        <p className="text-center text-[11px] text-[var(--sage)]/80 mb-6">
+        <p className="text-center text-[11px] text-[var(--sage)]/80 mb-4">
           {copy.showing}{' '}
           <strong className="text-white font-medium">{filtered.length}</strong>{' '}
           {copy.of} {X_ARTICLES_COUNT}
+          <span className="text-[var(--sage)]/60">
+            {' '}
+            · {lang === 'es' ? 'Desliza a los lados' : 'Swipe sideways'}
+          </span>
         </p>
 
         {filtered.length === 0 ? (
           <p className="text-center text-sm text-[var(--sage)] py-12">{copy.empty}</p>
         ) : (
-          <>
-            {/* Visible cards */}
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {shown.map((article) => (
+          <div className="relative px-1 sm:px-2">
+            <button
+              type="button"
+              onClick={() => scrollByDir(-1)}
+              disabled={!canPrev}
+              aria-label={lang === 'es' ? 'Anterior' : 'Previous'}
+              className="carousel-btn left-0 sm:left-1"
+              style={{ top: '50%', transform: 'translateY(-50%)' }}
+            >
+              ‹
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollByDir(1)}
+              disabled={!canNext}
+              aria-label={lang === 'es' ? 'Siguiente' : 'Next'}
+              className="carousel-btn right-0 sm:right-1"
+              style={{ top: '50%', transform: 'translateY(-50%)' }}
+            >
+              ›
+            </button>
+
+            <div
+              ref={scrollerRef}
+              className="carousel-track px-1"
+              role="region"
+              aria-roledescription="carousel"
+              aria-label={
+                lang === 'es'
+                  ? 'Carrusel de artículos Salvazion'
+                  : 'Salvazion articles carousel'
+              }
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'ArrowLeft') {
+                  e.preventDefault();
+                  scrollByDir(-1);
+                } else if (e.key === 'ArrowRight') {
+                  e.preventDefault();
+                  scrollByDir(1);
+                }
+              }}
+            >
+              {filtered.map((article) => (
                 <ArticleCard
                   key={article.id}
                   article={article}
@@ -266,27 +343,7 @@ export default function LandingBlog({ lang, copy }: Props) {
                 />
               ))}
             </div>
-
-            {/*
-              SEO: remaining filtered articles stay as crawlable anchors
-              (visually compact) so Google still sees every X link.
-            */}
-            {hasMore ? (
-              <div className="mt-6 text-center">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setVisible((v) => Math.min(v + PAGE_SIZE, filtered.length))
-                  }
-                  className="btn-secondary sm:w-auto sm:min-w-[200px] inline-flex"
-                >
-                  {lang === 'es'
-                    ? `Ver más (${Math.min(PAGE_SIZE, filtered.length - visible)})`
-                    : `Show more (${Math.min(PAGE_SIZE, filtered.length - visible)})`}
-                </button>
-              </div>
-            ) : null}
-          </>
+          </div>
         )}
 
         {/*

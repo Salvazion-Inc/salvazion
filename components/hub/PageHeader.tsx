@@ -15,6 +15,7 @@ interface Props {
 
 /**
  * Shared hub chrome — consistent back + title + optional action.
+ * Sticky glass header with 44px+ touch targets (2026 mobile UX).
  */
 export default function PageHeader({
   title,
@@ -28,28 +29,30 @@ export default function PageHeader({
   const back = backLabel || t('common.back');
 
   return (
-    <header
-      className={`page-header sticky top-0 z-40 px-5 pt-5 pb-3 ${className}`}
-    >
-      <div className="max-w-lg mx-auto flex items-start justify-between gap-3">
-        <div className="flex items-start gap-2.5 min-w-0">
+    <header className={`page-header sticky top-0 z-40 px-4 sm:px-5 pt-4 pb-3 ${className}`}>
+      <div className="max-w-lg mx-auto flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5 min-w-0 flex-1">
           <Link
             href={backHref}
-            className="back-btn shrink-0 mt-0.5"
+            className="back-btn shrink-0"
             aria-label={back}
           >
             ←
           </Link>
           <div className="min-w-0">
-            <h1 className="text-lg font-semibold text-[var(--accent)] tracking-tight truncate">
+            <h1 className="text-base sm:text-lg font-semibold text-[var(--accent)] tracking-tight truncate leading-tight">
               {title}
             </h1>
             {subtitle ? (
-              <p className="text-xs text-[var(--sage)] mt-0.5 line-clamp-2">{subtitle}</p>
+              <p className="text-[11px] sm:text-xs text-[var(--sage)] mt-0.5 line-clamp-2 leading-snug">
+                {subtitle}
+              </p>
             ) : null}
           </div>
         </div>
-        {right ? <div className="shrink-0">{right}</div> : null}
+        {right ? (
+          <div className="shrink-0 flex items-center gap-2">{right}</div>
+        ) : null}
       </div>
     </header>
   );

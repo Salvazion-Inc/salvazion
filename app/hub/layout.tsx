@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function HubLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-[var(--true-black)]">
+    <div className="hub-shell pb-[calc(4.5rem+env(safe-area-inset-bottom))]">
       {children}
       <CoachFab />
     </div>

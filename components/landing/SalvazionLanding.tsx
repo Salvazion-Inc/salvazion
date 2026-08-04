@@ -176,8 +176,9 @@ export default function SalvazionLanding() {
 
         <div className="relative z-10 max-w-5xl mx-auto px-5 text-center py-16 sm:py-24">
           <div className="flex justify-center mb-7">
+            {/* Transparent black fill so hero green-smoke video shows through the mark */}
             <Image
-              src="/logo.png"
+              src="/logo-transparent.png"
               alt="Salvazion Green Lion"
               width={200}
               height={200}

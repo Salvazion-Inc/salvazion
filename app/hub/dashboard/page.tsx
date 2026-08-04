@@ -29,10 +29,12 @@ import { BadgesIcon } from '@/components/Icons';
 import ProgressCharts from '@/components/progress/ProgressCharts';
 import DailyAgenda from '@/components/calendar/DailyAgenda';
 import { PILLAR_COLORS } from '@/lib/theme/pillars';
+import { useFlashToast } from '@/components/ui/FlashToast';
 
 export default function DashboardPage() {
   const router = useRouter();
   const { t } = useI18n();
+  const { flash, toast: saveToast } = useFlashToast();
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
   const [scores, setScores] = useState<ComputedScores | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -133,6 +135,7 @@ export default function DashboardPage() {
       await saveProfile(merged);
       setProfile(merged);
       setEditingPurpose(false);
+      flash(t('common.changesSaved'));
     } catch {
       setPurposeError(t('dashboard.purposeSaveError'));
     } finally {
@@ -160,6 +163,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-[100dvh] text-[var(--off-white)] flex flex-col">
+      {saveToast}
       <main className="flex-1 flex flex-col items-center px-5 pt-5 pb-8 max-w-lg mx-auto w-full">
         {/* Hero: identity + purpose + score — one surface */}
         <section

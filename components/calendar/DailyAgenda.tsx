@@ -1,6 +1,12 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type CSSProperties,
+} from 'react';
 import Link from 'next/link';
 import {
   ensureDayAgenda,
@@ -20,6 +26,8 @@ import {
   agendaAmbientDarken,
   agendaEventPhase,
   agendaEventDarken,
+  agendaEventProgress,
+  agendaEventRemainingMin,
   agendaShellStyle,
   mixTowardBlack,
   localDayProgress,
@@ -203,52 +211,90 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
             const dur = formatDurationHours(durMin);
             const blockH = agendaBlockHeightPx(durMin);
             const phase = agendaEventPhase(ev.time, end, now);
+            const isNow = phase === 'now';
             const darken = agendaEventDarken(ambient, phase);
             const bg = mixTowardBlack(pal.soft, darken);
             const border = mixTowardBlack(pal.border, darken * 0.75);
             const text = mixTowardBlack(pal.text, darken * 0.35);
             const muted = mixTowardBlack(pal.muted, darken * 0.4);
             const solid = mixTowardBlack(pal.solid, darken * 0.25);
+            const progress = isNow
+              ? agendaEventProgress(ev.time, end, now)
+              : 0;
+            const remainingMin = isNow
+              ? agendaEventRemainingMin(ev.time, end, now)
+              : 0;
+            const remainingLabel = (() => {
+              if (remainingMin >= 60) {
+                const h = Math.floor(remainingMin / 60);
+                const m = remainingMin % 60;
+                return m > 0 ? `${h}h ${m}m` : `${h}h`;
+              }
+              return `${remainingMin} min`;
+            })();
             return (
               <li
                 key={ev.id}
-                className={`rounded-lg px-2.5 py-1.5 border flex items-stretch gap-2 transition-[background,border-color,opacity,height,min-height] duration-700 ${
-                  ev.completed ? 'opacity-70' : phase === 'past' ? 'opacity-85' : 'opacity-100'
-                } ${phase === 'now' ? 'ring-1 ring-[var(--accent)]/35' : ''}`}
-                style={{
-                  background: bg,
-                  borderColor: phase === 'now'
-                    ? mixTowardBlack('var(--accent)', ambient * 0.2)
-                    : border,
-                  height: blockH,
-                  minHeight: blockH,
-                }}
+                className={`rounded-lg px-2.5 py-1.5 border flex items-stretch gap-2 transition-[background,border-color,opacity,height,min-height] duration-700 relative ${
+                  ev.completed
+                    ? 'opacity-70'
+                    : phase === 'past'
+                      ? 'opacity-85'
+                      : 'opacity-100'
+                } ${isNow ? 'now-block' : ''}`}
+                style={
+                  {
+                    '--now-glow': pal.solid,
+                    background: isNow
+                      ? `linear-gradient(135deg, ${bg} 0%, color-mix(in srgb, ${pal.solid} 18%, #0a120c) 100%)`
+                      : bg,
+                    borderColor: isNow
+                      ? mixTowardBlack(pal.solid, ambient * 0.12)
+                      : border,
+                    borderWidth: isNow ? 1.5 : 1,
+                    height: blockH,
+                    minHeight: blockH,
+                    paddingBottom: isNow ? 10 : undefined,
+                  } as CSSProperties
+                }
                 data-phase={phase}
                 data-duration-min={durMin}
+                aria-current={isNow ? 'true' : undefined}
               >
                 <span
-                  className="w-1 self-stretch rounded-full shrink-0"
+                  className={`self-stretch rounded-full shrink-0 ${
+                    isNow ? 'w-1.5 now-block-stripe' : 'w-1'
+                  }`}
                   style={{ background: solid }}
                   aria-hidden
                 />
                 <div className="min-w-0 flex-1 flex flex-col justify-center py-0.5">
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 flex-wrap">
                     <p
                       className="text-[10px] tabular-nums font-semibold shrink-0"
                       style={{ color: muted }}
                     >
-                      {ev.time || '00:00'}
+                      {isNow ? clockLabel : ev.time || '00:00'}
                     </p>
-                    {phase === 'now' && (
-                      <span className="text-[9px] uppercase tracking-wider text-[var(--accent)]">
+                    {isNow && (
+                      <span
+                        className="now-block-badge"
+                        style={{ '--now-glow': pal.solid } as CSSProperties}
+                      >
+                        <i className="now-block-badge-dot" aria-hidden />
                         {t('agenda.now')}
+                        {remainingMin > 0 && (
+                          <span className="font-semibold normal-case tracking-normal opacity-80">
+                            · {remainingLabel}
+                          </span>
+                        )}
                       </span>
                     )}
                   </div>
                   <p
                     className={`text-[12px] font-semibold leading-snug truncate transition-colors duration-500 ${
                       ev.completed ? 'line-through opacity-70' : ''
-                    }`}
+                    } ${isNow ? 'text-[13px]' : ''}`}
                     style={{ color: text }}
                   >
                     {labelFor(ev)}
@@ -257,12 +303,19 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
                     className="text-[9px] tabular-nums transition-colors duration-500 opacity-80"
                     style={{ color: muted }}
                   >
-                    {end} · {dur}
+                    {isNow
+                      ? `${ev.time || '00:00'}–${end} · ${remainingLabel}`
+                      : `${end} · ${dur}`}
                   </p>
                 </div>
                 <div
                   className="btn-pair"
-                  style={{ borderColor: border }}
+                  style={{
+                    borderColor: isNow ? solid : border,
+                    boxShadow: isNow
+                      ? `0 0 10px color-mix(in srgb, ${pal.solid} 25%, transparent)`
+                      : undefined,
+                  }}
                   role="group"
                   aria-label={t('calendar.fulfilled')}
                 >
@@ -300,6 +353,16 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
                     {t('calendar.no')}
                   </button>
                 </div>
+                {isNow && (
+                  <div className="now-block-progress" aria-hidden>
+                    <i
+                      style={{
+                        width: `${Math.round(progress * 100)}%`,
+                        background: `linear-gradient(90deg, ${pal.solid}, color-mix(in srgb, ${pal.solid} 70%, #fff))`,
+                      }}
+                    />
+                  </div>
+                )}
               </li>
             );
           })}

@@ -39,12 +39,13 @@ export function timeToMinutes(time: string | undefined): number {
 
 export type AgendaEventPhase = 'past' | 'now' | 'future';
 
-export function agendaEventPhase(
+/** Normalize start/end/current minutes so overnight blocks compare correctly. */
+function agendaWindowMinutes(
   startTime: string | undefined,
   endTime: string | undefined,
   now: Date = new Date()
-): AgendaEventPhase {
-  const nowM = now.getHours() * 60 + now.getMinutes();
+): { start: number; end: number; cur: number } {
+  const nowM = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
   const start = timeToMinutes(startTime);
   let end = timeToMinutes(endTime);
   // Overnight blocks (e.g. sleep 00:00–07:00) already have end > start in normal cases;
@@ -53,9 +54,45 @@ export function agendaEventPhase(
   let cur = nowM;
   // For wrap windows that cross midnight, map early-morning "now" into the wrap range
   if (end > 24 * 60 && cur < start) cur += 24 * 60;
+  return { start, end, cur };
+}
+
+export function agendaEventPhase(
+  startTime: string | undefined,
+  endTime: string | undefined,
+  now: Date = new Date()
+): AgendaEventPhase {
+  const { start, end, cur } = agendaWindowMinutes(startTime, endTime, now);
   if (cur < start) return 'future';
   if (cur >= end) return 'past';
   return 'now';
+}
+
+/**
+ * Progress inside the current block (0 → 1). Returns 0 if not in the window.
+ */
+export function agendaEventProgress(
+  startTime: string | undefined,
+  endTime: string | undefined,
+  now: Date = new Date()
+): number {
+  const { start, end, cur } = agendaWindowMinutes(startTime, endTime, now);
+  const span = end - start;
+  if (span <= 0) return 0;
+  if (cur < start) return 0;
+  if (cur >= end) return 1;
+  return Math.min(1, Math.max(0, (cur - start) / span));
+}
+
+/** Whole minutes remaining in the current block (0 if not active). */
+export function agendaEventRemainingMin(
+  startTime: string | undefined,
+  endTime: string | undefined,
+  now: Date = new Date()
+): number {
+  const { start, end, cur } = agendaWindowMinutes(startTime, endTime, now);
+  if (cur < start || cur >= end) return 0;
+  return Math.max(0, Math.ceil(end - cur));
 }
 
 /**

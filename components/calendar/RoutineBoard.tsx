@@ -1,6 +1,13 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from 'react';
 import {
   ROUTINE_BLOCKS,
   getEventsForDate,
@@ -20,6 +27,7 @@ import {
   formatDurationHours,
   agendaBlockHeightPx,
   seedDefaultDay,
+  todayStr,
   DAY_START_MIN,
   DAY_END_MIN,
   SNAP_MIN,
@@ -28,14 +36,35 @@ import {
   type CalendarPillar,
   type AgendaBlockDef,
 } from '@/lib/calendar/engine';
-import { pillarPalette } from '@/lib/calendar/colors';
+import {
+  pillarPalette,
+  agendaEventPhase,
+  agendaEventProgress,
+  agendaEventRemainingMin,
+} from '@/lib/calendar/colors';
 import { logAction } from '@/lib/scoring/engine';
 import { useI18n } from '@/components/I18nProvider';
+import { useFlashToast } from '@/components/ui/FlashToast';
 
 type Props = {
   date: string;
   onChange?: () => void;
 };
+
+type EditDraft = {
+  id: string;
+  time: string;
+  durationMin: number;
+};
+
+function isDraftDirty(draft: EditDraft, events: CalendarEvent[]): boolean {
+  const ev = events.find((e) => e.id === draft.id);
+  if (!ev) return false;
+  return (
+    (ev.time || '00:00') !== draft.time ||
+    (ev.durationMin || DEFAULT_BLOCK_MIN) !== draft.durationMin
+  );
+}
 
 function buildTimeOptions(): string[] {
   const opts: string[] = [];
@@ -52,13 +81,18 @@ const DURATION_OPTIONS = [15, 30, 45, 60, 90, 120, 180, 210, 240, 420];
  * Compact routine board: slim blocks, clear Sí/No completion, day %.
  */
 export default function RoutineBoard({ date, onChange }: Props) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [picked, setPicked] = useState<string | null>(null);
   const [attachTime, setAttachTime] = useState('08:00');
   const [attachDur, setAttachDur] = useState(DEFAULT_BLOCK_MIN);
   const [filter, setFilter] = useState<CalendarPillar | 'all'>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [editDraft, setEditDraft] = useState<EditDraft | null>(null);
+  const [now, setNow] = useState(() => new Date());
+  const nowBlockRef = useRef<HTMLDivElement | null>(null);
+  const didScrollRef = useRef(false);
+  const { flash, toast: saveToast } = useFlashToast();
 
   const sync = useCallback(() => {
     setEvents(getEventsForDate(date));
@@ -68,9 +102,26 @@ export default function RoutineBoard({ date, onChange }: Props) {
   useEffect(() => {
     setPicked(null);
     setExpandedId(null);
+    setEditDraft(null);
+    didScrollRef.current = false;
     seedDefaultDay(date);
     setEvents(getEventsForDate(date));
   }, [date]);
+
+  // Live clock so the "Ahora" block tracks the user's local time.
+  useEffect(() => {
+    const tick = () => setNow(new Date());
+    tick();
+    const id = window.setInterval(tick, 15_000);
+    const onVis = () => {
+      if (document.visibilityState === 'visible') tick();
+    };
+    document.addEventListener('visibilitychange', onVis);
+    return () => {
+      window.clearInterval(id);
+      document.removeEventListener('visibilitychange', onVis);
+    };
+  }, []);
 
   const labelFor = (ev: CalendarEvent) => {
     const key = eventTitleKey(ev);
@@ -94,29 +145,106 @@ export default function RoutineBoard({ date, onChange }: Props) {
     placeBlock(date, picked, attachTime, attachDur);
     setPicked(null);
     sync();
+    flash(t('common.changesSaved'));
   };
 
-  const moveBy = (id: string, deltaMin: number) => {
-    const ev = events.find((e) => e.id === id);
+  const openEditor = (ev: CalendarEvent) => {
+    setExpandedId(ev.id);
+    setEditDraft({
+      id: ev.id,
+      time: ev.time || '00:00',
+      durationMin: ev.durationMin || DEFAULT_BLOCK_MIN,
+    });
+  };
+
+  const closeEditor = (opts?: { discard?: boolean }) => {
+    if (
+      opts?.discard !== true &&
+      editDraft &&
+      isDraftDirty(editDraft, events)
+    ) {
+      // Keep open if dirty and not explicitly discarding
+      return;
+    }
+    setExpandedId(null);
+    setEditDraft(null);
+  };
+
+  const toggleEditor = (ev: CalendarEvent) => {
+    if (expandedId === ev.id) {
+      if (editDraft && isDraftDirty(editDraft, events)) {
+        // Closing with unsaved edits — use Cancel or Guardar
+        flash(t('common.unsavedChanges'));
+        return;
+      }
+      closeEditor({ discard: true });
+      return;
+    }
+    if (
+      expandedId &&
+      editDraft &&
+      isDraftDirty(editDraft, events) &&
+      expandedId !== ev.id
+    ) {
+      flash(t('common.unsavedChanges'));
+      return;
+    }
+    openEditor(ev);
+  };
+
+  const patchDraft = (patch: Partial<Omit<EditDraft, 'id'>>) => {
+    setEditDraft((d) => (d ? { ...d, ...patch } : d));
+  };
+
+  const moveDraftBy = (deltaMin: number) => {
+    setEditDraft((d) => {
+      if (!d) return d;
+      const next = snapMinutes(
+        Math.max(
+          DAY_START_MIN,
+          Math.min(
+            DAY_END_MIN - SNAP_MIN,
+            timeToMinutes(d.time || '00:00') + deltaMin
+          )
+        )
+      );
+      return { ...d, time: minutesToTime(next) };
+    });
+  };
+
+  const bumpDraftDuration = (deltaMin: number) => {
+    setEditDraft((d) => {
+      if (!d) return d;
+      return {
+        ...d,
+        durationMin: Math.max(SNAP_MIN, d.durationMin + deltaMin),
+      };
+    });
+  };
+
+  const saveDraft = () => {
+    if (!editDraft) return;
+    const ev = events.find((e) => e.id === editDraft.id);
     if (!ev) return;
-    const next = snapMinutes(
-      Math.max(
-        DAY_START_MIN,
-        Math.min(DAY_END_MIN - SNAP_MIN, timeToMinutes(ev.time || '00:00') + deltaMin)
-      )
-    );
-    moveEventToTime(id, minutesToTime(next));
+    const timeChanged = (ev.time || '00:00') !== editDraft.time;
+    const durChanged =
+      (ev.durationMin || DEFAULT_BLOCK_MIN) !== editDraft.durationMin;
+    if (!timeChanged && !durChanged) {
+      flash(t('common.saved'));
+      setExpandedId(null);
+      setEditDraft(null);
+      return;
+    }
+    if (timeChanged) moveEventToTime(editDraft.id, editDraft.time);
+    if (durChanged) {
+      updateEvent(editDraft.id, {
+        durationMin: Math.max(SNAP_MIN, editDraft.durationMin),
+      });
+    }
     sync();
-  };
-
-  const setTime = (id: string, time: string) => {
-    moveEventToTime(id, time);
-    sync();
-  };
-
-  const setDuration = (id: string, durationMin: number) => {
-    updateEvent(id, { durationMin: Math.max(SNAP_MIN, durationMin) });
-    sync();
+    flash(t('common.changesSaved'));
+    setExpandedId(null);
+    setEditDraft(null);
   };
 
   /** Explicit yes / no completion (not only toggle). */
@@ -130,11 +258,17 @@ export default function RoutineBoard({ date, onChange }: Props) {
       if (action) logAction(action);
     }
     sync();
+    flash(t('common.updated'));
   };
 
   const remove = (id: string) => {
     removeEvent(id);
+    if (expandedId === id) {
+      setExpandedId(null);
+      setEditDraft(null);
+    }
     sync();
+    flash(t('common.updated'));
   };
 
   const palette = useMemo(
@@ -148,6 +282,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
   const stats = useMemo(() => getDayCompletionStats(date), [date, events]);
   const showSummary = isDaySummaryWindow(date);
   const pickedDef = picked ? ROUTINE_BLOCKS.find((b) => b.key === picked) : null;
+  const isToday = date === todayStr();
 
   const sortedEvents = useMemo(
     () =>
@@ -156,6 +291,40 @@ export default function RoutineBoard({ date, onChange }: Props) {
       ),
     [events]
   );
+
+  const currentEventId = useMemo(() => {
+    if (!isToday) return null;
+    for (const ev of sortedEvents) {
+      const end = endTimeOf(ev);
+      if (agendaEventPhase(ev.time, end, now) === 'now') return ev.id;
+    }
+    return null;
+  }, [isToday, sortedEvents, now]);
+
+  // Scroll current block into view once per day selection.
+  useEffect(() => {
+    if (!currentEventId || didScrollRef.current) return;
+    const el = nowBlockRef.current;
+    if (!el) return;
+    didScrollRef.current = true;
+    const timer = window.setTimeout(() => {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 120);
+    return () => window.clearTimeout(timer);
+  }, [currentEventId, sortedEvents.length]);
+
+  const clockLabel = useMemo(() => {
+    try {
+      return now.toLocaleTimeString(lang === 'es' ? 'es' : 'en', {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    } catch {
+      return `${String(now.getHours()).padStart(2, '0')}:${String(
+        now.getMinutes()
+      ).padStart(2, '0')}`;
+    }
+  }, [now, lang]);
 
   const filters: { id: CalendarPillar | 'all'; label: string; color?: string }[] = [
     { id: 'all', label: t('agenda.all') },
@@ -166,6 +335,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
 
   return (
     <div className="space-y-3">
+      {saveToast}
       {/* Day completion ring / bar */}
       <div
         className={`card-soft p-3.5 border ${
@@ -385,32 +555,95 @@ export default function RoutineBoard({ date, onChange }: Props) {
             const done = !!ev.completed;
             const durMin = ev.durationMin || DEFAULT_BLOCK_MIN;
             const blockH = agendaBlockHeightPx(durMin);
+            const isNow = isToday && currentEventId === ev.id;
+            const phase = isToday
+              ? agendaEventPhase(ev.time, end, now)
+              : 'future';
+            const progress = isNow
+              ? agendaEventProgress(ev.time, end, now)
+              : 0;
+            const remainingMin = isNow
+              ? agendaEventRemainingMin(ev.time, end, now)
+              : 0;
+            const remainingLabel = (() => {
+              if (remainingMin >= 60) {
+                const h = Math.floor(remainingMin / 60);
+                const m = remainingMin % 60;
+                return m > 0 ? `${h}h ${m}m` : `${h}h`;
+              }
+              return `${remainingMin} min`;
+            })();
+            const draft =
+              expanded && editDraft?.id === ev.id ? editDraft : null;
+            const dirty = draft ? isDraftDirty(draft, events) : false;
+            const displayTime = draft?.time ?? ev.time ?? '00:00';
+            const displayDur =
+              draft?.durationMin ?? ev.durationMin ?? DEFAULT_BLOCK_MIN;
+            const displayEnd = draft
+              ? endTimeOf({
+                  ...ev,
+                  time: draft.time,
+                  durationMin: draft.durationMin,
+                })
+              : end;
 
             return (
               <div
                 key={ev.id}
+                ref={isNow ? nowBlockRef : undefined}
                 role="listitem"
-                className={`rounded-xl border overflow-hidden transition-all ${
-                  done ? 'opacity-80' : ''
+                className={`rounded-xl border overflow-hidden transition-all relative ${
+                  isNow ? 'now-block' : ''
+                } ${done && !isNow ? 'opacity-80' : ''} ${
+                  phase === 'past' && !isNow ? 'opacity-75' : ''
                 }`}
-                style={{
-                  background: pal.soft,
-                  borderColor: expanded ? pal.solid : pal.border,
-                  boxShadow: expanded
-                    ? `0 0 0 1px ${pal.solid}33`
-                    : undefined,
-                }}
+                style={
+                  {
+                    // CSS var drives glow / badge accent from pillar color
+                    '--now-glow': pal.solid,
+                    background: isNow
+                      ? `linear-gradient(135deg, ${pal.soft} 0%, color-mix(in srgb, ${pal.solid} 22%, #0a120c) 100%)`
+                      : pal.soft,
+                    borderColor: isNow
+                      ? pal.solid
+                      : expanded || dirty
+                        ? pal.solid
+                        : pal.border,
+                    borderWidth: isNow || dirty ? 1.5 : 1,
+                    boxShadow: isNow
+                      ? undefined
+                      : expanded || dirty
+                        ? `0 0 0 1px ${pal.solid}33`
+                        : undefined,
+                    transform: isNow ? 'scale(1.01)' : undefined,
+                  } as CSSProperties
+                }
                 data-duration-min={durMin}
+                data-phase={isToday ? phase : undefined}
+                aria-current={isNow ? 'true' : undefined}
               >
                 {/* Height scales with duration (sleep 7h ≫ exercise 30m) */}
                 <div
-                  className="flex items-stretch gap-2 px-2.5 py-1.5 transition-[height,min-height] duration-500"
-                  style={{ height: blockH, minHeight: blockH }}
+                  className="flex items-stretch gap-2 px-2.5 py-1.5 transition-[height,min-height] duration-500 relative"
+                  style={{
+                    height: blockH,
+                    minHeight: blockH,
+                    paddingBottom: isNow ? 10 : undefined,
+                  }}
                 >
                   {/* Pillar stripe */}
                   <span
-                    className="w-1 self-stretch rounded-full shrink-0"
-                    style={{ background: pal.solid }}
+                    className={`self-stretch rounded-full shrink-0 ${
+                      isNow ? 'w-1.5 now-block-stripe' : 'w-1'
+                    }`}
+                    style={
+                      isNow
+                        ? ({
+                            '--now-glow': pal.solid,
+                            background: pal.solid,
+                          } as CSSProperties)
+                        : { background: pal.solid }
+                    }
                     aria-hidden
                   />
 
@@ -418,36 +651,48 @@ export default function RoutineBoard({ date, onChange }: Props) {
                   <button
                     type="button"
                     className="shrink-0 text-left w-[4.25rem] self-center"
-                    onClick={() =>
-                      setExpandedId((id) => (id === ev.id ? null : ev.id))
-                    }
+                    onClick={() => toggleEditor(ev)}
                   >
                     <p
                       className="text-[11px] font-semibold tabular-nums leading-tight"
                       style={{ color: pal.text }}
                     >
-                      {ev.time || '00:00'}
+                      {isNow && !draft ? clockLabel : displayTime}
                     </p>
                     <p
                       className="text-[9px] tabular-nums opacity-70 leading-tight"
                       style={{ color: pal.muted }}
                     >
-                      {end} · {formatDurationHours(durMin)}
+                      {isNow && !draft
+                        ? `${ev.time || '00:00'}–${end}`
+                        : `${displayEnd} · ${formatDurationHours(displayDur)}`}
                     </p>
                   </button>
 
-                  {/* Title */}
+                  {/* Title + Ahora badge */}
                   <button
                     type="button"
                     className="min-w-0 flex-1 text-left self-center"
-                    onClick={() =>
-                      setExpandedId((id) => (id === ev.id ? null : ev.id))
-                    }
+                    onClick={() => toggleEditor(ev)}
                   >
+                    {isNow && (
+                      <span
+                        className="now-block-badge mb-0.5"
+                        style={{ '--now-glow': pal.solid } as CSSProperties}
+                      >
+                        <i className="now-block-badge-dot" aria-hidden />
+                        {t('agenda.now')}
+                        {remainingMin > 0 && (
+                          <span className="font-semibold normal-case tracking-normal opacity-80">
+                            · {remainingLabel}
+                          </span>
+                        )}
+                      </span>
+                    )}
                     <p
                       className={`text-[12px] font-semibold leading-snug truncate ${
                         done ? 'line-through opacity-65' : ''
-                      }`}
+                      } ${isNow ? 'text-[13px]' : ''}`}
                       style={{ color: pal.text }}
                     >
                       {labelFor(ev)}
@@ -457,7 +702,12 @@ export default function RoutineBoard({ date, onChange }: Props) {
                   {/* Sí / No — fixed pair size (does not stretch with duration height) */}
                   <div
                     className="btn-pair"
-                    style={{ borderColor: pal.border }}
+                    style={{
+                      borderColor: isNow ? pal.solid : pal.border,
+                      boxShadow: isNow
+                        ? `0 0 10px color-mix(in srgb, ${pal.solid} 25%, transparent)`
+                        : undefined,
+                    }}
                     role="group"
                     aria-label={t('calendar.fulfilled')}
                   >
@@ -491,13 +741,33 @@ export default function RoutineBoard({ date, onChange }: Props) {
                       {t('calendar.no')}
                     </button>
                   </div>
+
+                  {/* Elapsed progress inside current block */}
+                  {isNow && (
+                    <div className="now-block-progress" aria-hidden>
+                      <i
+                        style={{
+                          width: `${Math.round(progress * 100)}%`,
+                          background: `linear-gradient(90deg, ${pal.solid}, color-mix(in srgb, ${pal.solid} 70%, #fff))`,
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
 
-                {expanded && (
+                {expanded && draft && (
                   <div
                     className="px-2.5 pb-2.5 pt-1 space-y-2 border-t"
                     style={{ borderColor: `${pal.border}` }}
                   >
+                    {dirty && (
+                      <p
+                        className="text-[10px] font-medium"
+                        style={{ color: pal.text }}
+                      >
+                        {t('common.unsavedChanges')}
+                      </p>
+                    )}
                     <div className="flex flex-wrap items-center gap-2">
                       <label
                         className="flex items-center gap-1 text-[10px]"
@@ -505,13 +775,15 @@ export default function RoutineBoard({ date, onChange }: Props) {
                       >
                         <span>{t('calendar.time')}</span>
                         <select
-                          value={ev.time || '00:00'}
-                          onChange={(e) => setTime(ev.id, e.target.value)}
+                          value={draft.time}
+                          onChange={(e) =>
+                            patchDraft({ time: e.target.value })
+                          }
                           className="min-h-[30px] rounded-md border bg-[var(--true-black)] px-1.5 text-[11px] text-[var(--off-white)]"
                           style={{ borderColor: pal.border }}
                         >
-                          {!TIME_OPTIONS.includes(ev.time || '') && ev.time && (
-                            <option value={ev.time}>{ev.time}</option>
+                          {!TIME_OPTIONS.includes(draft.time) && (
+                            <option value={draft.time}>{draft.time}</option>
                           )}
                           {TIME_OPTIONS.map((tm) => (
                             <option key={tm} value={tm}>
@@ -526,18 +798,18 @@ export default function RoutineBoard({ date, onChange }: Props) {
                       >
                         <span>{t('calendar.duration')}</span>
                         <select
-                          value={ev.durationMin || DEFAULT_BLOCK_MIN}
+                          value={draft.durationMin}
                           onChange={(e) =>
-                            setDuration(ev.id, Number(e.target.value))
+                            patchDraft({
+                              durationMin: Number(e.target.value),
+                            })
                           }
                           className="min-h-[30px] rounded-md border bg-[var(--true-black)] px-1.5 text-[11px] text-[var(--off-white)]"
                           style={{ borderColor: pal.border }}
                         >
-                          {!DURATION_OPTIONS.includes(ev.durationMin || 0) && (
-                            <option value={ev.durationMin || DEFAULT_BLOCK_MIN}>
-                              {formatDurationHours(
-                                ev.durationMin || DEFAULT_BLOCK_MIN
-                              )}
+                          {!DURATION_OPTIONS.includes(draft.durationMin) && (
+                            <option value={draft.durationMin}>
+                              {formatDurationHours(draft.durationMin)}
                             </option>
                           )}
                           {DURATION_OPTIONS.map((d) => (
@@ -553,7 +825,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
                         type="button"
                         className="btn-outline-sm"
                         style={{ borderColor: pal.border, color: pal.text }}
-                        onClick={() => moveBy(ev.id, -SNAP_MIN)}
+                        onClick={() => moveDraftBy(-SNAP_MIN)}
                         aria-label="-15 min"
                       >
                         ▲
@@ -562,7 +834,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
                         type="button"
                         className="btn-outline-sm"
                         style={{ borderColor: pal.border, color: pal.text }}
-                        onClick={() => moveBy(ev.id, SNAP_MIN)}
+                        onClick={() => moveDraftBy(SNAP_MIN)}
                         aria-label="+15 min"
                       >
                         ▼
@@ -571,15 +843,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
                         type="button"
                         className="btn-outline-sm"
                         style={{ borderColor: pal.border, color: pal.text }}
-                        onClick={() =>
-                          setDuration(
-                            ev.id,
-                            Math.max(
-                              SNAP_MIN,
-                              (ev.durationMin || DEFAULT_BLOCK_MIN) - 15
-                            )
-                          )
-                        }
+                        onClick={() => bumpDraftDuration(-15)}
                       >
                         −
                       </button>
@@ -587,24 +851,38 @@ export default function RoutineBoard({ date, onChange }: Props) {
                         type="button"
                         className="btn-outline-sm"
                         style={{ borderColor: pal.border, color: pal.text }}
-                        onClick={() =>
-                          setDuration(
-                            ev.id,
-                            (ev.durationMin || DEFAULT_BLOCK_MIN) + 15
-                          )
-                        }
+                        onClick={() => bumpDraftDuration(15)}
                       >
                         +
                       </button>
                       <button
                         type="button"
                         className="btn-ghost text-red-400/85 ml-auto"
-                        onClick={() => {
-                          remove(ev.id);
-                          setExpandedId(null);
-                        }}
+                        onClick={() => remove(ev.id)}
                       >
                         {t('common.delete')}
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 pt-0.5">
+                      <button
+                        type="button"
+                        className="btn-secondary text-sm py-2"
+                        onClick={() => closeEditor({ discard: true })}
+                      >
+                        {t('common.cancel')}
+                      </button>
+                      <button
+                        type="button"
+                        className="btn-primary text-sm py-2"
+                        onClick={saveDraft}
+                        disabled={!dirty}
+                        style={
+                          dirty
+                            ? undefined
+                            : { opacity: 0.55, cursor: 'not-allowed' }
+                        }
+                      >
+                        {dirty ? t('common.saveChanges') : t('common.saved')}
                       </button>
                     </div>
                   </div>

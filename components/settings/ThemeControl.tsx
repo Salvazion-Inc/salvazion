@@ -1,19 +1,40 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useTheme } from '@/components/ThemeProvider';
 import { useI18n } from '@/components/I18nProvider';
 import { THEME_PRESETS, type ThemeId } from '@/lib/store/theme';
+import { useFlashToast } from '@/components/ui/FlashToast';
 
 /**
  * Aesthetic / color palette picker — keeps Salvazion essence (dark, tech, soft glow).
+ * Draft selection + explicit Guardar so the user knows the theme was applied.
  */
 export default function ThemeControl() {
   const { theme, setTheme } = useTheme();
   const { t, lang } = useI18n();
-  const active = THEME_PRESETS.find((p) => p.id === theme) || THEME_PRESETS[0];
+  const { flash, toast: saveToast } = useFlashToast();
+  const [draft, setDraft] = useState<ThemeId>(theme);
+
+  useEffect(() => {
+    setDraft(theme);
+  }, [theme]);
+
+  const active =
+    THEME_PRESETS.find((p) => p.id === draft) ||
+    THEME_PRESETS.find((p) => p.id === theme) ||
+    THEME_PRESETS[0];
+  const dirty = draft !== theme;
+
+  const apply = () => {
+    if (!dirty) return;
+    setTheme(draft);
+    flash(t('common.changesSaved'));
+  };
 
   return (
     <div className="glass rounded-2xl p-5 space-y-4">
+      {saveToast}
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-wider text-[var(--sage)]/60">
@@ -42,14 +63,14 @@ export default function ThemeControl() {
         aria-label={t('theme.title')}
       >
         {THEME_PRESETS.map((opt) => {
-          const isActive = theme === opt.id;
+          const isActive = draft === opt.id;
           return (
             <button
               key={opt.id}
               type="button"
               role="radio"
               aria-checked={isActive}
-              onClick={() => setTheme(opt.id as ThemeId)}
+              onClick={() => setDraft(opt.id as ThemeId)}
               className={`text-left rounded-xl border px-3 py-3 transition-all min-h-[4.75rem] ${
                 isActive
                   ? 'border-[var(--accent)] bg-[var(--surface-active)] shadow-[0_0_16px_color-mix(in_srgb,var(--accent)_22%,transparent)]'
@@ -98,6 +119,28 @@ export default function ThemeControl() {
           <span className="flex-1 h-8 rounded-lg border border-[var(--border-strong)] bg-[var(--surface-active)]" />
           <span className="flex-1 h-8 rounded-lg bg-[var(--sage-dim)]/40" />
         </div>
+      </div>
+
+      {dirty && (
+        <p className="text-[11px] text-[var(--accent)]">{t('common.unsavedChanges')}</p>
+      )}
+      <div className="grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          className="btn-secondary text-sm py-2.5"
+          disabled={!dirty}
+          onClick={() => setDraft(theme)}
+        >
+          {t('common.cancel')}
+        </button>
+        <button
+          type="button"
+          className="btn-primary text-sm py-2.5"
+          disabled={!dirty}
+          onClick={apply}
+        >
+          {dirty ? t('common.saveChanges') : t('common.saved')}
+        </button>
       </div>
     </div>
   );

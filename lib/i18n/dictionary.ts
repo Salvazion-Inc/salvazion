@@ -8,6 +8,12 @@ export const dictionary = {
   es: {
     common: {
       save: 'Guardar',
+      saveChanges: 'Guardar cambios',
+      update: 'Actualizar',
+      saved: 'Guardado',
+      updated: 'Actualizado',
+      changesSaved: 'Cambios guardados',
+      unsavedChanges: 'Tienes cambios sin guardar',
       cancel: 'Cancelar',
       back: 'Volver',
       next: 'Siguiente',
@@ -858,6 +864,12 @@ export const dictionary = {
   en: {
     common: {
       save: 'Save',
+      saveChanges: 'Save changes',
+      update: 'Update',
+      saved: 'Saved',
+      updated: 'Updated',
+      changesSaved: 'Changes saved',
+      unsavedChanges: 'You have unsaved changes',
       cancel: 'Cancel',
       back: 'Back',
       next: 'Next',

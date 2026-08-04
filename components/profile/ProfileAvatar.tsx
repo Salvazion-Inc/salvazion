@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { saveAvatarImage } from '@/lib/store/avatar';
 import { saveProfile } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
+import { useFlashToast } from '@/components/ui/FlashToast';
 
 type Size = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -39,6 +40,7 @@ export default function ProfileAvatar({
 }: Props) {
   const { t, lang } = useI18n();
   const es = lang !== 'en';
+  const { flash, toast: saveToast } = useFlashToast();
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
@@ -104,6 +106,8 @@ export default function ProfileAvatar({
             ? 'No se pudo subir a la nube. La foto solo está en este dispositivo y no aparecerá en mobile. Revisa SUPABASE_SERVICE_ROLE_KEY y el bucket avatars, luego vuelve a subirla.'
             : 'Cloud upload failed. Photo is only on this device and will not show on mobile. Check SUPABASE_SERVICE_ROLE_KEY and the avatars bucket, then upload again.'
         );
+      } else {
+        flash(t('common.changesSaved'));
       }
     } finally {
       setBusy(false);
@@ -121,6 +125,7 @@ export default function ProfileAvatar({
       setLocalOverride({ active: true, url: undefined });
       await saveProfile({ avatarUrl: '' });
       onChange?.(undefined);
+      flash(t('common.updated'));
     } finally {
       setBusy(false);
     }
@@ -128,6 +133,7 @@ export default function ProfileAvatar({
 
   return (
     <div className={`inline-flex flex-col items-center ${className}`}>
+      {saveToast}
       <div className="relative inline-block">
         <button
           type="button"

@@ -26,6 +26,7 @@ import ThemeControl from '@/components/settings/ThemeControl';
 import LanguageControl from '@/components/settings/LanguageControl';
 import { useI18n } from '@/components/I18nProvider';
 import XLogo, { textWithXLogo } from '@/components/ui/XLogo';
+import { useFlashToast } from '@/components/ui/FlashToast';
 import {
   loadLinkedWallet,
   subscribeLinkedWallet,
@@ -37,6 +38,7 @@ import { shortenAddress } from '@/lib/solana/config';
 export default function ProfilePage() {
   const router = useRouter();
   const { t, lang } = useI18n();
+  const { flash, toast: saveToast } = useFlashToast();
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
@@ -45,6 +47,7 @@ export default function ProfilePage() {
   const [mounted, setMounted] = useState(false);
   const [confirmClear, setConfirmClear] = useState(false);
   const [linkedWallet, setLinkedWallet] = useState<LinkedWallet | null>(null);
+  const [saving, setSaving] = useState(false);
   const editingRef = useRef(editing);
   editingRef.current = editing;
 
@@ -110,11 +113,25 @@ export default function ProfilePage() {
   }, [router]);
 
   const handleSave = async () => {
-    if (!draft.name?.trim()) return;
-    await saveProfile({ ...draft, onboardingCompleted: true });
-    setProfile({ ...draft, onboardingCompleted: true });
-    setEditing(false);
+    if (!draft.name?.trim() || saving) return;
+    setSaving(true);
+    try {
+      await saveProfile({ ...draft, onboardingCompleted: true });
+      setProfile({ ...draft, onboardingCompleted: true });
+      setEditing(false);
+      flash(t('common.changesSaved'));
+    } finally {
+      setSaving(false);
+    }
   };
+
+  const profileDirty =
+    editing &&
+    !!profile &&
+    (draft.name !== profile.name ||
+      draft.purpose !== profile.purpose ||
+      draft.city !== profile.city ||
+      draft.country !== profile.country);
 
   const handleClear = async () => {
     await signOut();
@@ -136,6 +153,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] flex flex-col">
+      {saveToast}
       {/* Header */}
       <header className="flex items-center justify-between px-5 pt-6 pb-2">
         <div className="flex items-center gap-2.5">
@@ -306,21 +324,34 @@ export default function ProfilePage() {
                   className="w-full bg-[#040404] border border-[var(--border-soft)] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#8FD99A]"
                 />
               </div>
+              {profileDirty && (
+                <p className="text-[11px] text-[var(--accent)]">
+                  {t('common.unsavedChanges')}
+                </p>
+              )}
               <div className="flex gap-2 pt-2">
                 <button
+                  type="button"
                   onClick={() => {
                     setDraft(profile);
                     setEditing(false);
                   }}
                   className="flex-1 py-2.5 rounded-xl border border-[var(--border-strong)] text-sm"
+                  disabled={saving}
                 >
-                  Cancelar
+                  {t('common.cancel')}
                 </button>
                 <button
-                  onClick={handleSave}
+                  type="button"
+                  onClick={() => void handleSave()}
                   className="btn-primary flex-1 py-2.5 text-sm"
+                  disabled={saving || !draft.name?.trim()}
                 >
-                  Guardar
+                  {saving
+                    ? t('common.loading')
+                    : profileDirty
+                      ? t('common.saveChanges')
+                      : t('common.save')}
                 </button>
               </div>
             </div>

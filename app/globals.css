@@ -189,6 +189,106 @@ html[data-text-scale="xxl"] nav.fixed span {
   filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent) 22%, transparent));
 }
 
+/* Calendar / agenda — current block ("Ahora") */
+@keyframes now-block-breathe {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--now-glow, var(--accent)) 55%, transparent),
+      0 0 18px color-mix(in srgb, var(--now-glow, var(--accent)) 28%, transparent),
+      0 0 0 0 color-mix(in srgb, var(--now-glow, var(--accent)) 0%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1.5px color-mix(in srgb, var(--now-glow, var(--accent)) 75%, transparent),
+      0 0 28px color-mix(in srgb, var(--now-glow, var(--accent)) 40%, transparent),
+      0 0 0 6px color-mix(in srgb, var(--now-glow, var(--accent)) 10%, transparent);
+  }
+}
+@keyframes now-dot-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.55;
+  }
+}
+@keyframes now-stripe-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+.now-block {
+  position: relative;
+  z-index: 1;
+  animation: now-block-breathe 2.4s ease-in-out infinite;
+}
+.now-block-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.1rem 0.45rem 0.1rem 0.3rem;
+  border-radius: 999px;
+  font-size: 0.5625rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: #0a120c;
+  background: linear-gradient(
+    105deg,
+    var(--accent-fill) 0%,
+    color-mix(in srgb, var(--now-glow, var(--accent)) 85%, #fff) 100%
+  );
+  box-shadow: 0 0 10px color-mix(in srgb, var(--now-glow, var(--accent)) 35%, transparent);
+}
+.now-block-badge-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: #0a120c;
+  animation: now-dot-pulse 1.4s ease-in-out infinite;
+}
+.now-block-stripe {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--now-glow, var(--accent)) 100%, #fff) 0%,
+    var(--now-glow, var(--accent)) 40%,
+    color-mix(in srgb, var(--now-glow, var(--accent)) 70%, #000) 100%
+  );
+  background-size: 100% 200%;
+  animation: now-stripe-shimmer 2.8s linear infinite;
+}
+.now-block-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  pointer-events: none;
+}
+.now-block-progress > i {
+  display: block;
+  height: 100%;
+  border-radius: 0 2px 2px 0;
+  transition: width 0.8s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .now-block,
+  .now-block-badge-dot,
+  .now-block-stripe {
+    animation: none;
+  }
+}
+
 /* —— Soft UI primitives (fixed heights → no layout shift / descuadre) —— */
 .btn-primary {
   display: inline-flex;

@@ -386,14 +386,14 @@ export default function LandingBlog({ lang, copy }: Props) {
           </ul>
         </noscript>
 
-        <div className="mt-10 text-center">
+        <div className="mt-10 flex justify-center">
           <a
             href="https://x.com/salvazion_/articles"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-primary sm:w-auto sm:min-w-[220px] inline-flex items-center gap-1.5"
+            className="btn-primary btn-marketing inline-flex items-center justify-center gap-1.5"
           >
-            {textWithXLogo(copy.viewAllOnX, 'inline-block w-3.5 h-3.5 align-[-0.1em] mx-0.5')}
+            {textWithXLogo(copy.viewAllOnX, 'inline-block w-3.5 h-3.5 align-[-0.1em] mx-0.5 shrink-0')}
             <span aria-hidden>↗</span>
           </a>
         </div>

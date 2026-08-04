@@ -76,7 +76,7 @@ export default function SalvazionLanding() {
             />
             <Link
               href="/auth/login"
-              className="btn-primary !w-auto sm:!min-w-0 !px-4 sm:!px-5 !min-h-10 !text-xs sm:!text-sm"
+              className="btn-primary !w-[11.75rem] sm:!w-[12.5rem] shrink-0 !px-3 sm:!px-4 !min-h-10 !text-xs sm:!text-sm !whitespace-normal text-center leading-tight"
             >
               {t.nav.enter}
             </Link>
@@ -146,11 +146,11 @@ export default function SalvazionLanding() {
             </span>
           </p>
 
-          <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center items-stretch sm:items-center">
-            <Link href="/auth/signup" className="btn-primary sm:!w-auto sm:!min-w-[220px] !px-8">
+          <div className="btn-marketing-pair mt-9">
+            <Link href="/auth/signup" className="btn-primary">
               {t.hero.ctaPrimary}
             </Link>
-            <Link href="/auth/login" className="btn-secondary sm:!w-auto sm:!min-w-[220px] !px-8">
+            <Link href="/auth/login" className="btn-secondary">
               {t.hero.ctaLogin}
             </Link>
           </div>
@@ -203,8 +203,8 @@ export default function SalvazionLanding() {
             ))}
           </div>
 
-          <div className="text-center">
-            <Link href="/auth/login" className="btn-primary sm:w-auto sm:min-w-[220px] inline-flex">
+          <div className="text-center flex justify-center">
+            <Link href="/auth/login" className="btn-primary btn-marketing">
               {t.app.cta}
             </Link>
           </div>
@@ -364,7 +364,7 @@ export default function SalvazionLanding() {
 
               <Link
                 href="/auth/signup"
-                className="btn-secondary font-display font-bold mt-6 w-full text-center"
+                className="btn-secondary font-display font-bold mt-6 w-full min-h-[3rem] !whitespace-normal text-center text-balance leading-snug"
               >
                 {t.pricing.ctaFree}
               </Link>
@@ -408,7 +408,7 @@ export default function SalvazionLanding() {
 
               <Link
                 href="/auth/signup"
-                className="btn-primary font-display font-bold mt-6 w-full text-center"
+                className="btn-primary font-display font-bold mt-6 w-full min-h-[3rem] !whitespace-normal text-center text-balance leading-snug"
               >
                 {t.pricing.ctaPremium}
               </Link>

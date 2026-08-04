@@ -296,6 +296,50 @@ html[data-text-scale="xxl"] nav.fixed span {
   cursor: not-allowed;
 }
 
+/**
+ * Marketing CTAs — equal footprint across EN / ES.
+ * Spanish labels run longer; width must not depend on string length.
+ */
+.btn-marketing {
+  width: 100%;
+  max-width: 17.5rem; /* ~280px fits longest Spanish CTAs */
+  min-height: 2.85rem;
+  white-space: normal;
+  text-align: center;
+  text-wrap: balance;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  box-sizing: border-box;
+}
+
+/** Side-by-side CTAs (hero): both columns same width */
+.btn-marketing-pair {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 36rem;
+  margin-inline: auto;
+}
+@media (min-width: 640px) {
+  .btn-marketing-pair {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.btn-marketing-pair > .btn-primary,
+.btn-marketing-pair > .btn-secondary,
+.btn-marketing-pair > a {
+  width: 100%;
+  max-width: none;
+  min-height: 2.85rem;
+  white-space: normal;
+  text-align: center;
+  text-wrap: balance;
+  padding-left: 0.85rem;
+  padding-right: 0.85rem;
+  box-sizing: border-box;
+}
+
 .btn-ghost {
   display: inline-flex;
   align-items: center;

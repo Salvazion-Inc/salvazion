@@ -19,7 +19,7 @@ type Size = 'sm' | 'md';
  * object-contain keeps USA stars + Chile star fully inside the frame.
  */
 const FRAME: Record<Size, string> = {
-  sm: 'h-5 w-8', // 20×32
+  sm: 'h-6 w-9', // 24×36 — easier touch target on auth
   md: 'h-7 w-11 sm:h-8 sm:w-12', // 28×44 / 32×48
 };
 

@@ -5,15 +5,8 @@ import { useSearchParams } from 'next/navigation';
 import BottomNav from '@/components/BottomNav';
 import { loadProfile } from '@/lib/store/profile';
 import { UserProfile } from '@/lib/types';
-import { computeScores, logAction } from '@/lib/scoring/engine';
+import { computeScores } from '@/lib/scoring/engine';
 import { ComputedScores } from '@/lib/scoring/types';
-import {
-  getCurrentFreedomStage,
-  getFreedomActions,
-  getFreedomPoints,
-  FreedomActionDef,
-} from '@/lib/freedom/engine';
-import { evaluateBadges } from '@/lib/badges/engine';
 import XArticlesFeed from '@/components/freedom/XArticlesFeed';
 import BookStoreCarousel from '@/components/freedom/BookStoreCarousel';
 import YouTubeChannelsPanel from '@/components/freedom/YouTubeChannelsPanel';
@@ -22,6 +15,7 @@ import ChurchesMapPanel from '@/components/freedom/ChurchesMapPanel';
 import PillarHubHeader from '@/components/hub/PillarHubHeader';
 import InvitePhalanx from '@/components/invite/InvitePhalanx';
 import VoiceAgent from '@/components/coach/VoiceAgent';
+import Link from 'next/link';
 
 type FreedomTab = 'learn' | 'connect' | 'contribute';
 
@@ -48,22 +42,19 @@ function FreedomPageInner() {
   const searchParams = useSearchParams();
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
   const [scores, setScores] = useState<ComputedScores | null>(null);
-  const [actions, setActions] = useState<FreedomActionDef[]>([]);
   const [loggedToday, setLoggedToday] = useState<Set<string>>(new Set());
   const [mounted, setMounted] = useState(false);
-  const [toast, setToast] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<FreedomTab>('learn');
-
-  const stage = getCurrentFreedomStage();
 
   const refresh = useCallback(() => {
     const s = computeScores();
     setScores(s);
     const p = loadProfile();
     setProfile(p);
-    setActions(getFreedomActions(stage));
-    setLoggedToday(new Set(s.todayActions.filter(a => a.pillar === 'freedom').map(a => a.type)));
-  }, [stage]);
+    setLoggedToday(
+      new Set(s.todayActions.filter((a) => a.pillar === 'freedom').map((a) => a.type))
+    );
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -75,23 +66,6 @@ function FreedomPageInner() {
     const tab = parseFreedomTab(searchParams.get('tab'));
     if (tab) setActiveTab(tab);
   }, [searchParams]);
-
-  const showToast = (msg: string) => {
-    setToast(msg);
-    setTimeout(() => setToast(null), 2500);
-  };
-
-  const handleLog = (actionType: string, label: string) => {
-    const result = logAction(actionType);
-    if (result) {
-      setScores(result);
-      setLoggedToday(prev => new Set([...prev, actionType]));
-      if (profile) {
-        evaluateBadges({ onboardingCompleted: profile.onboardingCompleted });
-      }
-      showToast('+' + getFreedomPoints(actionType) + ' Freedom · ' + label);
-    }
-  };
 
   if (!mounted || !scores) {
     return (
@@ -177,51 +151,35 @@ function FreedomPageInner() {
         )}
 
         {activeTab === 'contribute' && (
-          <div className="space-y-2.5">
-            <p className="text-[11px] text-[var(--sage)]/80 px-0.5">
-              Trabajo, proyectos, startups, ministerio.
-            </p>
-            {actions
-              .filter((a) => a.category === 'contribute')
-              .map((action) => {
-                const done = loggedToday.has(action.actionType);
-                return (
-                  <div
-                    key={action.id}
-                    className={`card-soft p-3.5 border flex items-center gap-3 ${
-                      done
-                        ? 'border-[var(--border-strong)]'
-                        : 'border-[var(--border-soft)]'
-                    }`}
-                  >
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-white truncate">
-                        {action.icon} {action.label}
-                      </p>
-                      <p className="text-[11px] text-[var(--sage)]/75 mt-0.5 line-clamp-2">
-                        {action.description}
-                      </p>
-                    </div>
-                    <button
-                      type="button"
-                      disabled={done}
-                      onClick={() =>
-                        !done && handleLog(action.actionType, action.label)
-                      }
-                      className="btn-sm"
-                    >
-                      {done ? '✓' : '+' + getFreedomPoints(action.actionType)}
-                    </button>
-                  </div>
-                );
-              })}
+          <div className="space-y-3">
+            <div className="card-soft p-4 border border-[var(--border-soft)] space-y-3">
+              <p className="text-sm font-semibold text-white">
+                Trabajo · proyectos · ministerio
+              </p>
+              <p className="text-[12px] text-[var(--sage)] leading-relaxed">
+                {profile?.language === 'en'
+                  ? 'Real contribution shows when you mark Work or Contribute on the daily agenda — not with empty point buttons.'
+                  : 'Tu aporte real se refleja al marcar Trabajo o Aportar en la agenda diaria — no con botones de puntos vacíos.'}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <Link href="/hub/dashboard" className="btn-sm">
+                  {profile?.language === 'en' ? 'Open agenda' : 'Abrir agenda'}
+                </Link>
+                <Link href="/hub/calendar" className="btn-outline-sm">
+                  {profile?.language === 'en' ? 'Edit calendar' : 'Editar calendario'}
+                </Link>
+              </div>
+              {loggedToday.has('contribute_project') && (
+                <p className="text-[11px] text-[#8FD99A]">
+                  {profile?.language === 'en'
+                    ? '✓ Contribute already scored today'
+                    : '✓ Aportar ya contabilizado hoy'}
+                </p>
+              )}
+            </div>
           </div>
         )}
       </main>
-
-      {toast && (
-        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 toast-soft">{toast}</div>
-      )}
 
       <BottomNav variant="freedom" />
     </div>

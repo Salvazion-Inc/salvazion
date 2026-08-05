@@ -71,7 +71,10 @@ export interface DaySensorIndicators {
 }
 
 const STORAGE_DAY = 'salvazion_sensor_day';
+/** Past days archived so weekly body charts keep phone data after rollover */
+const STORAGE_DAY_HISTORY = 'salvazion_sensor_day_history';
 const STORAGE_REST = 'salvazion_sensor_rest_active';
+const MAX_DAY_HISTORY = 14;
 
 function today(): string {
   return new Date().toISOString().slice(0, 10);
@@ -170,14 +173,52 @@ export function emptyDayIndicators(date = today()): DaySensorIndicators {
   };
 }
 
+function loadDayHistoryMap(): Record<string, DaySensorIndicators> {
+  if (typeof window === 'undefined') return {};
+  try {
+    const raw = localStorage.getItem(STORAGE_DAY_HISTORY);
+    return raw ? (JSON.parse(raw) as Record<string, DaySensorIndicators>) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveDayHistoryMap(map: Record<string, DaySensorIndicators>): void {
+  if (typeof window === 'undefined') return;
+  const dates = Object.keys(map).sort();
+  // Keep only the newest MAX_DAY_HISTORY days
+  if (dates.length > MAX_DAY_HISTORY) {
+    for (const d of dates.slice(0, dates.length - MAX_DAY_HISTORY)) {
+      delete map[d];
+    }
+  }
+  localStorage.setItem(STORAGE_DAY_HISTORY, JSON.stringify(map));
+}
+
+/** Archive a finished day so weekly body charts still see phone metrics. */
+function archiveDayIndicators(day: DaySensorIndicators): void {
+  if (!day?.date) return;
+  const map = loadDayHistoryMap();
+  map[day.date] = day;
+  saveDayHistoryMap(map);
+}
+
 export function loadDayIndicators(date = today()): DaySensorIndicators {
   if (typeof window === 'undefined') return emptyDayIndicators(date);
   try {
     const raw = localStorage.getItem(STORAGE_DAY);
-    if (!raw) return emptyDayIndicators(date);
-    const data = JSON.parse(raw) as DaySensorIndicators;
-    if (data.date !== date) return emptyDayIndicators(date);
-    return data;
+    if (raw) {
+      const data = JSON.parse(raw) as DaySensorIndicators;
+      if (data.date === date) return data;
+      // Day rolled over: archive yesterday before returning empty for new date
+      if (data.date && data.date !== date) {
+        archiveDayIndicators(data);
+      }
+    }
+    // Past days: history archive
+    const hist = loadDayHistoryMap()[date];
+    if (hist) return hist;
+    return emptyDayIndicators(date);
   } catch {
     return emptyDayIndicators(date);
   }
@@ -186,7 +227,19 @@ export function loadDayIndicators(date = today()): DaySensorIndicators {
 export function saveDayIndicators(day: DaySensorIndicators): void {
   if (typeof window === 'undefined') return;
   day.updatedAt = new Date().toISOString();
+  // If current storage is a different date, archive it first
+  try {
+    const raw = localStorage.getItem(STORAGE_DAY);
+    if (raw) {
+      const prev = JSON.parse(raw) as DaySensorIndicators;
+      if (prev.date && prev.date !== day.date) archiveDayIndicators(prev);
+    }
+  } catch {
+    /* ignore */
+  }
   localStorage.setItem(STORAGE_DAY, JSON.stringify(day));
+  // Keep history of the active day updated for charts mid-day
+  archiveDayIndicators(day);
 }
 
 export function markAutoLogged(actionType: string, date = today()): DaySensorIndicators {

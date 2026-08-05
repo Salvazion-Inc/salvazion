@@ -131,3 +131,69 @@ export function hrSessionToMetrics(session: LiveHeartRateSession) {
     active_minutes: session.activeMinutes || undefined,
   };
 }
+
+/**
+ * Map combined phone+wearable indicators into DaySensorIndicators shape
+ * so biomarker scoring uses the same "truth" as TodayFromDevices.
+ */
+export function toDaySensorIndicators(
+  combined: CombinedHealthIndicators
+): DaySensorIndicators {
+  const sleepMin =
+    combined.sleepHours != null
+      ? Math.round(combined.sleepHours * 60)
+      : combined.phone.restDurationMin;
+  return {
+    date: combined.date,
+    steps: combined.steps,
+    activeMinutes: combined.activeMinutes,
+    vigorousMinutes: combined.vigorousMinutes,
+    distanceMeters: combined.distanceMeters,
+    outdoorMinutes: combined.outdoorMinutes,
+    restDurationMin: sleepMin ?? undefined,
+    restBedTime:
+      combined.wearable.sleepBed || combined.phone.restBedTime,
+    restWakeTime:
+      combined.wearable.sleepWake || combined.phone.restWakeTime,
+    sessions: combined.phone.sessions,
+    autoLogged: combined.phone.autoLogged,
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+export type DayBodyPoint = {
+  date: string;
+  steps: number;
+  activeMinutes: number;
+  sleepHours: number | null;
+  hasData: boolean;
+};
+
+/**
+ * Last N days of body metrics for weekly "Cuerpo" charts.
+ * Merges phone sensors (with day archive) + wearable samples.
+ */
+export function getBodyHistory(days = 7): DayBodyPoint[] {
+  const points: DayBodyPoint[] = [];
+  const now = new Date();
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(now.getDate() - i);
+    const date = d.toISOString().slice(0, 10);
+    const c = getCombinedHealthIndicators(date);
+    const hasData =
+      c.sources.phone ||
+      c.sources.wearable ||
+      c.steps > 0 ||
+      c.activeMinutes > 0 ||
+      c.sleepHours != null;
+    points.push({
+      date,
+      steps: c.steps,
+      activeMinutes: c.activeMinutes,
+      sleepHours: c.sleepHours,
+      hasData,
+    });
+  }
+  return points;
+}

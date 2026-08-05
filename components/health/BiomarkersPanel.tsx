@@ -1,13 +1,18 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import Link from 'next/link';
 import {
   BiomarkerReport,
   biomarkerStatusColor,
   computeBiomarkerReport,
   type BiomarkerCategory,
 } from '@/lib/health/sensor-biomarkers';
-import { loadDayIndicators } from '@/lib/health/phone-sensors';
+import {
+  getCombinedHealthIndicators,
+  toDaySensorIndicators,
+  type CombinedHealthIndicators,
+} from '@/lib/health/wearables';
 
 type Props = {
   isFemale?: boolean;
@@ -29,9 +34,9 @@ const CATEGORY_META: Record<
     titleEs: 'Biomarcadores · Ejercicio',
     titleEn: 'Biomarkers · Exercise',
     blurbEs:
-      'Actividad, sol, eficiencia de movimiento y anti-sedentarismo (sensores + hábitos). No sustituyen analítica clínica.',
+      'Actividad, sol y movimiento desde wearables + teléfono y hábitos. No sustituyen analítica clínica.',
     blurbEn:
-      'Activity, outdoor light, movement efficiency and anti-sedentary load. Habit guidance — not lab results.',
+      'Activity, outdoor light and movement from wearables + phone and habits. Not lab results.',
     indexEs: 'Índice ejercicio',
     indexEn: 'Exercise index',
   },
@@ -49,9 +54,9 @@ const CATEGORY_META: Record<
     titleEs: 'Biomarcadores · Sueño',
     titleEn: 'Biomarkers · Sleep',
     blurbEs:
-      'Recuperación y estabilidad circadiana a partir de sueño y sensores de reposo.',
+      'Recuperación y ritmo circadiano desde sueño del wearable, reposo del teléfono y registros.',
     blurbEn:
-      'Recovery and circadian stability from sleep logs and rest sensors.',
+      'Recovery and circadian rhythm from wearable sleep, phone rest, and your logs.',
     indexEs: 'Índice sueño',
     indexEn: 'Sleep index',
   },
@@ -66,9 +71,15 @@ export default function BiomarkersPanel({
   const es = lang !== 'en';
   const meta = CATEGORY_META[category];
   const [report, setReport] = useState<BiomarkerReport | null>(null);
+  const [sources, setSources] = useState<CombinedHealthIndicators['sources'] | null>(
+    null
+  );
 
   const recompute = useCallback(() => {
-    const day = loadDayIndicators();
+    // Same truth as "Hoy desde dispositivos": phone + wearable merged
+    const combined = getCombinedHealthIndicators();
+    const day = toDaySensorIndicators(combined);
+    setSources(combined.sources);
     setReport(computeBiomarkerReport({ isFemale, day, category }));
   }, [isFemale, category]);
 
@@ -83,6 +94,23 @@ export default function BiomarkersPanel({
       </section>
     );
   }
+
+  const sourceLabel =
+    sources?.wearable && sources?.phone
+      ? es
+        ? 'Teléfono + wearable'
+        : 'Phone + wearable'
+      : sources?.wearable
+        ? es
+          ? 'Wearable'
+          : 'Wearable'
+        : sources?.phone
+          ? es
+            ? 'Teléfono'
+            : 'Phone'
+          : es
+            ? 'Hábitos / sin dispositivo'
+            : 'Habits / no device';
 
   return (
     <section className="mb-6">
@@ -104,6 +132,19 @@ export default function BiomarkersPanel({
         <p className="text-[11px] text-[var(--sage)]/80 leading-relaxed">
           {es ? meta.blurbEs : meta.blurbEn}
         </p>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-[var(--sage)]/70">
+          <span>
+            {es ? 'Fuente' : 'Source'}: {sourceLabel}
+          </span>
+          {!sources?.wearable && !sources?.phone && (
+            <Link
+              href="/hub/profile?settings=1&tab=wearables"
+              className="text-[var(--accent)] hover:underline"
+            >
+              {es ? 'Conectar dispositivo →' : 'Connect device →'}
+            </Link>
+          )}
+        </div>
 
         {/* Category composite (only markers of this tab) */}
         <div className="flex items-center gap-4 rounded-xl border border-[var(--border-soft)] bg-[#040404]/55 px-3.5 py-3">

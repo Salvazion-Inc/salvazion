@@ -84,6 +84,7 @@ export default function YouTubeChannelsPanel({
   const pts = getFreedomPoints('learn_article_video');
 
   const openChannel = (ch: YouTubeChannel) => {
+    // First open of the day scores learn_article_video (engine dedupes per type/day)
     if (!opened.has(ch.id)) {
       logAction('learn_article_video');
       setOpened((prev) => new Set([...prev, ch.id]));
@@ -100,8 +101,8 @@ export default function YouTubeChannelsPanel({
         <h2 className="text-sm font-semibold text-[var(--sage)]">YouTube</h2>
         <p className="text-[10px] text-[var(--sage)]/70 mt-0.5">
           {es
-            ? `Canales oficiales · +${pts} Freedom al abrir`
-            : `Official channels · +${pts} Freedom on open`}
+            ? `Canales oficiales · +${pts} Freedom la 1ª vez al día`
+            : `Official channels · +${pts} Freedom once per day`}
         </p>
       </div>
 

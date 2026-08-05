@@ -13,7 +13,7 @@ import {
   type XArticle,
 } from '@/lib/freedom/x-articles';
 import { markContentComplete } from '@/lib/freedom/engine';
-import { logAction } from '@/lib/scoring/engine';
+import { hasLoggedActionToday, logAction } from '@/lib/scoring/engine';
 import { useI18n } from '@/components/I18nProvider';
 import { PILLAR_COLORS, type PillarId } from '@/lib/theme/pillars';
 import { textWithXLogo } from '@/components/ui/XLogo';
@@ -216,10 +216,15 @@ export default function XArticlesFeed({
   const handleMarkRead = (article: XArticle) => {
     markArticleRead(article.id);
     markContentComplete(`x-article-${article.id}`);
+    const alreadyScored = hasLoggedActionToday('learn_article_video');
     logAction('learn_article_video');
     refresh();
     setSelected(null);
-    setToast(t('articles.markedRead'));
+    setToast(
+      alreadyScored
+        ? t('articles.read')
+        : t('articles.markedRead')
+    );
     setTimeout(() => setToast(null), 2200);
     onScored?.();
   };

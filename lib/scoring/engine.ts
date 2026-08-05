@@ -220,10 +220,13 @@ async function pushActionToServer(action: ScoreAction, streaks: StreakState) {
 }
 
 /**
- * Pull today's actions + streaks from Supabase and overwrite local cache.
- * Call on dashboard mount / after login so multi-device stays consistent.
+ * Pull last N days of actions + streaks from Supabase into local cache.
+ * Call on dashboard mount / after login so multi-device weekly charts work.
  */
-export async function syncScoresFromServer(): Promise<ComputedScores> {
+export async function syncScoresFromServer(
+  opts?: { days?: number }
+): Promise<ComputedScores> {
+  const historyDays = Math.max(1, Math.min(30, opts?.days ?? 7));
   try {
     const supabase = createClient();
     const {
@@ -232,21 +235,21 @@ export async function syncScoresFromServer(): Promise<ComputedScores> {
 
     if (!user) return computeScores();
 
-    const date = today();
+    const start = new Date();
+    start.setDate(start.getDate() - (historyDays - 1));
+    const startDate = start.toISOString().slice(0, 10);
 
-    // Today's actions
+    // Multi-day actions for weekly charts across devices
     const { data: rows, error: actionsErr } = await supabase
       .from('score_actions')
       .select('id, action_type, pillar, points, label, action_date, created_at')
       .eq('user_id', user.id)
-      .eq('action_date', date)
+      .gte('action_date', startDate)
       .order('created_at', { ascending: true });
 
     if (actionsErr) {
       console.warn('[Salvazion] sync actions failed', actionsErr);
     } else if (rows) {
-      // Merge: keep local actions that are not yet on server (optimistic ones),
-      // but prefer server as source of truth for the day.
       const serverActions: ScoreAction[] = rows.map((r) => ({
         id: r.id,
         type: r.action_type,
@@ -257,17 +260,24 @@ export async function syncScoresFromServer(): Promise<ComputedScores> {
         date: r.action_date,
       }));
 
-      // Keep any local actions from today that don't exist on server yet
-      // (race: just logged, not yet inserted)
-      const localToday = loadActions().filter((a) => a.date === date);
       const serverIds = new Set(serverActions.map((a) => a.id));
-      const pendingLocal = localToday.filter(
-        (a) => !serverIds.has(a.id) && a.id.includes('-') // client-generated ids have timestamp
+      const serverKeys = new Set(
+        serverActions.map((a) => `${a.date}::${a.type}`)
       );
 
-      // For non-today history we keep local for now (full history sync can come later)
-      const otherDays = loadActions().filter((a) => a.date !== date);
-      saveActions([...otherDays, ...serverActions, ...pendingLocal]);
+      // Keep local outside the window + pending locals not yet on server
+      // (client ids look like "bible_chapter-173…")
+      const localAll = loadActions();
+      const outsideWindow = localAll.filter((a) => a.date < startDate);
+      const pendingLocal = localAll.filter((a) => {
+        if (a.date < startDate) return false;
+        if (serverIds.has(a.id)) return false;
+        // Prefer server as truth when same type+day already exists
+        if (serverKeys.has(`${a.date}::${a.type}`)) return false;
+        return a.id.includes('-');
+      });
+
+      saveActions([...outsideWindow, ...serverActions, ...pendingLocal]);
     }
 
     // Streaks
@@ -299,8 +309,34 @@ export async function syncScoresFromServer(): Promise<ComputedScores> {
 
 // ─── Public API (same surface as before) ─────────────────────
 
+/** True if this action type was already scored today (one log per type/day). */
+export function hasLoggedActionToday(actionType: string, date = today()): boolean {
+  return loadActions().some((a) => a.date === date && a.type === actionType);
+}
+
+/** Set of action types already scored on a date (default today). */
+export function getLoggedActionTypesToday(date = today()): Set<string> {
+  return new Set(
+    loadActions().filter((a) => a.date === date).map((a) => a.type)
+  );
+}
+
+function evaluateBadgesAfterLog(): void {
+  // Avoid circular import at module load: badges → scoring.
+  void Promise.all([
+    import('@/lib/badges/engine'),
+    import('@/lib/store/profile'),
+  ])
+    .then(([{ evaluateBadges }, { loadProfile }]) => {
+      const p = loadProfile();
+      evaluateBadges({ onboardingCompleted: !!p?.onboardingCompleted });
+    })
+    .catch(() => {});
+}
+
 /**
  * Registra una acción (optimistic local + push a Supabase).
+ * At most one score per action type per calendar day (agenda + hub + wearable share truth).
  * Devuelve scores recalculados de inmediato.
  */
 export function logAction(actionType: string): ComputedScores | null {
@@ -312,6 +348,12 @@ export function logAction(actionType: string): ComputedScores | null {
   if (points <= 0) return computeScores();
 
   const date = today();
+
+  // Canonical: one type per day — calendar, Bible hub, Health, Freedom, wearables.
+  if (hasLoggedActionToday(actionType, date)) {
+    return computeScores();
+  }
+
   const action: ScoreAction = {
     id: `${actionType}-${Date.now()}`,
     type: actionType,
@@ -330,6 +372,7 @@ export function logAction(actionType: string): ComputedScores | null {
 
   // Background sync — does not block UI
   pushActionToServer(action, streaks);
+  evaluateBadgesAfterLog();
 
   return computeScores();
 }

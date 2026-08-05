@@ -19,10 +19,16 @@ import {
   getBook,
 } from '@/lib/bible/engine';
 import { BibleLanguage, BibleChapter } from '@/lib/bible/types';
-import { logAction, getPointsForAction, computeScores } from '@/lib/scoring/engine';
+import {
+  logAction,
+  getPointsForAction,
+  computeScores,
+  hasLoggedActionToday,
+} from '@/lib/scoring/engine';
 import { loadProfile, calculateAge, getLifeStage } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
 import PillarHubHeader from '@/components/hub/PillarHubHeader';
+import { useFlashToast } from '@/components/ui/FlashToast';
 
 /** Salvation hub: Bible (read + explore), Prayer, Devotional */
 type MainTab = 'bible' | 'prayer' | 'devotional';
@@ -33,6 +39,7 @@ type BookAnimDir = 'left' | 'right' | 'fade';
 export default function BiblePage() {
   const books = getBooks();
   const { t, lang: uiLang } = useI18n();
+  const { flash, toast: softToast } = useFlashToast(3200);
   const [mainTab, setMainTab] = useState<MainTab>('bible');
   const [bibleMode, setBibleMode] = useState<BibleMode>('read');
   const [language, setLanguage] = useState<BibleLanguage>('es');
@@ -43,6 +50,7 @@ export default function BiblePage() {
   const [loadingChapter, setLoadingChapter] = useState(false);
   const [read, setRead] = useState(false);
   const [justLogged, setJustLogged] = useState(false);
+  const [autoCompleted, setAutoCompleted] = useState(false);
   const [readCount, setReadCount] = useState(0);
   const [bookAnimDir, setBookAnimDir] = useState<BookAnimDir>('fade');
   const [bookAnimKey, setBookAnimKey] = useState(0);
@@ -128,15 +136,65 @@ export default function BiblePage() {
     }
   }, [focusVerse, loadingChapter, chapter]);
 
-  const handleMarkRead = () => {
-    if (read) return;
-    markChapterRead(selectedBook, selectedChapter);
-    logAction('bible_chapter');
-    setRead(true);
-    setJustLogged(true);
-    setReadCount(getReadCount());
-    setSalvationScore(computeScores().salvation);
-  };
+  const handleMarkRead = useCallback(
+    (opts?: { auto?: boolean }) => {
+      if (read) return;
+      const wasScoredToday = hasLoggedActionToday('bible_chapter');
+      markChapterRead(selectedBook, selectedChapter);
+      logAction('bible_chapter');
+      setRead(true);
+      setJustLogged(true);
+      setAutoCompleted(!!opts?.auto);
+      setReadCount(getReadCount());
+      const scores = computeScores();
+      setSalvationScore(scores.salvation);
+
+      if (opts?.auto) {
+        const pts = getPointsForAction('bible_chapter');
+        flash(
+          wasScoredToday
+            ? t('bible.autoReadAlreadyScored')
+            : t('bible.autoReadToast', { pts }),
+          { tone: 'soft', durationMs: 3400 }
+        );
+      }
+    },
+    [read, selectedBook, selectedChapter, flash, t]
+  );
+
+  // Reset auto banner when chapter changes
+  useEffect(() => {
+    setAutoCompleted(false);
+  }, [selectedBook, selectedChapter]);
+
+  // Natural log: after ~40s on chapter + scroll near end, auto-mark read (1×/day via logAction)
+  useEffect(() => {
+    if (read || !chapter || mainTab !== 'bible' || bibleMode !== 'read') return;
+    const openedAt = Date.now();
+    let done = false;
+
+    const tryAuto = () => {
+      if (done || read) return;
+      const elapsed = Date.now() - openedAt;
+      if (elapsed < 40_000) return;
+      const scrollEl =
+        document.scrollingElement || document.documentElement;
+      const nearBottom =
+        scrollEl.scrollTop + window.innerHeight >=
+        scrollEl.scrollHeight - 160;
+      if (!nearBottom) return;
+      done = true;
+      handleMarkRead({ auto: true });
+    };
+
+    const onScroll = () => tryAuto();
+    const id = window.setInterval(tryAuto, 8_000);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.clearInterval(id);
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [read, chapter, mainTab, bibleMode, handleMarkRead]);
 
   const openVerse = useCallback(
     (bookId: string, chapterNum: number, verse?: number) => {
@@ -247,6 +305,7 @@ export default function BiblePage() {
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
+      {softToast}
       {/* Header — same height chrome as Health/Freedom (title + score + main tabs) */}
       {chromeCollapsed && isReading ? (
         <header className="page-header px-5 sticky top-0 z-40">
@@ -587,16 +646,26 @@ export default function BiblePage() {
 
             <button
               type="button"
-              onClick={handleMarkRead}
+              onClick={() => handleMarkRead()}
               disabled={read}
               className={read ? 'btn-secondary opacity-80' : 'btn-primary'}
             >
               {read
                 ? justLogged
-                  ? `✓ ${t('bible.chapterRead')} · +${pts} Salvation`
+                  ? autoCompleted
+                    ? `✓ ${t('bible.autoReadShort')}`
+                    : `✓ ${t('bible.chapterRead')} · +${pts} Salvation`
                   : `✓ ${t('bible.alreadyRead')}`
                 : `${t('bible.markRead')} · +${pts} Salvation`}
             </button>
+            {autoCompleted && (
+              <p
+                className="text-[11px] text-[var(--sage)]/80 text-center mt-2 leading-relaxed"
+                role="status"
+              >
+                {t('bible.autoReadHint')}
+              </p>
+            )}
 
             <div className="flex gap-2 mt-3 mb-6">
               <button type="button" onClick={goPrev} className="btn-secondary flex-1 py-3 text-xs">

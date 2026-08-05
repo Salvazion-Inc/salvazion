@@ -94,7 +94,9 @@ export function scoreActionForEventType(type: CalendarEventType): string | null 
     case 'dinner':
     case 'meal':
     case 'meal_window':
-      return 'hydration_daily';
+      // Meals are discipline (calendar %) only — hydration points come from
+      // glasses / wearables, not from marking a meal block done.
+      return null;
     case 'sleep':
     case 'nap':
       return 'sleep_ideal';
@@ -214,6 +216,35 @@ export function getDayCompletionStats(date: string): {
   const done = events.filter((e) => e.completed).length;
   const percent = total === 0 ? 0 : Math.round((done / total) * 100);
   return { total, done, percent };
+}
+
+export type DayDisciplinePoint = {
+  date: string;
+  percent: number;
+  done: number;
+  total: number;
+};
+
+/**
+ * Last N days of calendar completion % for weekly discipline charts.
+ * Uses local events only (no extra forms required).
+ */
+export function getDisciplineHistory(days = 7): DayDisciplinePoint[] {
+  const points: DayDisciplinePoint[] = [];
+  const now = new Date();
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(now.getDate() - i);
+    const date = d.toISOString().slice(0, 10);
+    const stats = getDayCompletionStats(date);
+    points.push({
+      date,
+      percent: stats.percent,
+      done: stats.done,
+      total: stats.total,
+    });
+  }
+  return points;
 }
 
 /** True when local clock is in evening of `date` (or date is in the past). */
@@ -360,13 +391,15 @@ export function formatDurationHours(durationMin: number): string {
 
 /**
  * Layout density for agenda/calendar rows.
- * compact ≤20m · cozy ≤45m · roomy longer (sleep, work…).
+ * compact under 15m (rare) · cozy 15–45m (pray 07:00, bible 07:15, 30-min) · roomy longer.
+ * 15-min default slots share the same two-line face as 30-min blocks.
  */
 export type AgendaBlockLayout = 'compact' | 'cozy' | 'roomy';
 
 export function agendaBlockLayout(durationMin: number): AgendaBlockLayout {
   const m = Math.max(1, durationMin || DEFAULT_BLOCK_MIN);
-  if (m <= 20) return 'compact';
+  // Keep compact only for ultra-short custom slots; 15-min routine uses cozy face.
+  if (m < 15) return 'compact';
   if (m <= 45) return 'cozy';
   return 'roomy';
 }
@@ -374,12 +407,12 @@ export function agendaBlockLayout(durationMin: number): AgendaBlockLayout {
 /**
  * Vertical size (px) of an agenda/calendar block proportional to duration.
  * Compact slots use a fixed single-line height so type/title never clips.
- *   15 min → 40 px (compact), 30 → 52 (cozy), 60 → 72, 120 → 144, 420 → 504.
+ *   15 min → 52 px (cozy), 30 → 52 (cozy), 60 → 72, 120 → 144, 420 → 504.
  */
 export const AGENDA_PX_PER_MIN = 1.2;
-/** Single-line compact row (15–20 min activities). */
+/** Single-line compact row (under 15 min custom activities). */
 export const AGENDA_BLOCK_COMPACT_H = 40;
-/** Cozy two-line short block (≈30–45 min). */
+/** Cozy two-line short block (15–45 min, incl. pray 07:00 / bible 07:15). */
 export const AGENDA_BLOCK_COZY_H = 52;
 /** Floor for roomy proportional blocks. */
 export const AGENDA_BLOCK_MIN_H = 64;

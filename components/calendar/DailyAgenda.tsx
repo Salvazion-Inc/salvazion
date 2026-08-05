@@ -17,6 +17,7 @@ import {
   endTimeOf,
   agendaBlockHeightPx,
   agendaBlockLayout,
+  getDayCompletionStats,
   DEFAULT_BLOCK_MIN,
   type CalendarEvent,
   type CalendarPillar,
@@ -35,6 +36,7 @@ import {
 import { logAction } from '@/lib/scoring/engine';
 import { useI18n } from '@/components/I18nProvider';
 import AgendaActivityFace from '@/components/calendar/AgendaActivityFace';
+import { useFlashToast } from '@/components/ui/FlashToast';
 
 type Props = {
   onScored?: () => void;
@@ -47,6 +49,7 @@ type Props = {
  */
 export default function DailyAgenda({ onScored, className = '' }: Props) {
   const { t, lang } = useI18n();
+  const { flash, toast: softToast } = useFlashToast(2800);
   const date = todayStr();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [now, setNow] = useState(() => new Date());
@@ -121,18 +124,53 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
 
   const toggle = (id: string) => {
     const before = events.find((e) => e.id === id);
+    const wasDoneBefore = events.filter((e) => e.completed).length;
     const updated = toggleEventComplete(id);
     if (!updated) return;
+
     if (updated.completed && before && !before.completed) {
       const action = scoreActionForEventType(updated.type);
       if (action) logAction(action);
-      onScored?.();
+
+      const stats = getDayCompletionStats(date);
+      const title = labelFor(updated);
+      if (wasDoneBefore === 0) {
+        flash(
+          t('agenda.softFirstDone', {
+            title,
+            percent: stats.percent,
+          }),
+          { tone: 'soft', durationMs: 3200 }
+        );
+      } else if (action) {
+        flash(
+          t('agenda.softScored', {
+            title,
+            percent: stats.percent,
+          }),
+          { tone: 'soft', durationMs: 2800 }
+        );
+      } else {
+        flash(
+          t('agenda.softDiscipline', {
+            title,
+            percent: stats.percent,
+            done: stats.done,
+            total: stats.total,
+          }),
+          { tone: 'soft', durationMs: 2600 }
+        );
+      }
     }
+
+    // Always notify parent so score rings + discipline charts refresh
+    onScored?.();
     reload();
   };
 
   return (
     <div className={`space-y-3 ${className}`}>
+      {softToast}
       <div className="flex items-start justify-between gap-2 px-0.5">
         <div className="min-w-0">
           <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70">

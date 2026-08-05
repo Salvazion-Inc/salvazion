@@ -254,13 +254,36 @@ export default function RoutineBoard({ date, onChange }: Props) {
     const before = events.find((e) => e.id === id);
     if (!before) return;
     if (!!before.completed === done) return;
+    const wasDoneBefore = events.filter((e) => e.completed).length;
     const updated = toggleEventComplete(id);
     if (updated?.completed && before && !before.completed) {
       const action = scoreActionForEventType(updated.type);
       if (action) logAction(action);
+      const stats = getDayCompletionStats(date);
+      const title = labelFor(updated);
+      if (wasDoneBefore === 0) {
+        flash(
+          t('agenda.softFirstDone', {
+            title,
+            percent: stats.percent,
+          }),
+          { tone: 'soft', durationMs: 3200 }
+        );
+      } else {
+        flash(
+          t('agenda.softDiscipline', {
+            title,
+            percent: stats.percent,
+            done: stats.done,
+            total: stats.total,
+          }),
+          { tone: 'soft', durationMs: 2600 }
+        );
+      }
+    } else {
+      flash(t('common.updated'));
     }
     sync();
-    flash(t('common.updated'));
   };
 
   const remove = (id: string) => {

@@ -28,8 +28,11 @@ import { useI18n } from '@/components/I18nProvider';
 import { BadgesIcon } from '@/components/Icons';
 import ProgressCharts from '@/components/progress/ProgressCharts';
 import DailyAgenda from '@/components/calendar/DailyAgenda';
+import ActivationChecklist from '@/components/hub/ActivationChecklist';
 import { PILLAR_COLORS } from '@/lib/theme/pillars';
 import { useFlashToast } from '@/components/ui/FlashToast';
+import { runPassiveHealthSync } from '@/lib/health/wearables';
+import { logAction } from '@/lib/scoring/engine';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -67,8 +70,27 @@ export default function DashboardPage() {
         return;
       }
       setProfile(p);
-      const synced = await syncScoresFromServer();
+      // Pull last 7 days so weekly charts work across devices
+      const synced = await syncScoresFromServer({ days: 7 });
       refresh(p, synced);
+
+      // Wearables → score without opening Settings
+      try {
+        const passive = await runPassiveHealthSync({
+          lang: p.language === 'en' ? 'en' : 'es',
+          onLog: (type) => {
+            logAction(type);
+          },
+        });
+        if (passive.autoLogged.length) {
+          refresh(p);
+          flash(t('health.devices.autoLogged'));
+        } else {
+          refresh(p);
+        }
+      } catch {
+        /* offline / no wearables */
+      }
     })();
 
     // Keep hero avatar/name in sync when profile is saved elsewhere (e.g. Profile page)
@@ -77,10 +99,15 @@ export default function DashboardPage() {
       if (p) setProfile(p);
     });
 
-    // Mobile/web resume: pull latest avatar_url from Supabase (photo changed on other device)
+    // Mobile/web resume: pull latest avatar + re-check wearables
     const onResume = () => {
       void refreshProfileFromServer().then((p) => {
         if (p?.onboardingCompleted) setProfile(p);
+      });
+      void runPassiveHealthSync({
+        onLog: (type) => logAction(type),
+      }).then((r) => {
+        if (r.autoLogged.length) refresh();
       });
     };
     const onVis = () => {
@@ -94,6 +121,7 @@ export default function DashboardPage() {
       window.removeEventListener('focus', onResume);
       document.removeEventListener('visibilitychange', onVis);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount + resume only
   }, [router, refresh]);
 
   const recentBadges = useMemo(() => {
@@ -232,17 +260,19 @@ export default function DashboardPage() {
             </span>
           </Link>
 
-          {/* Purpose — view / edit from Dashboard */}
-          <div className="relative z-[1] px-4 pb-3">
+          {/* Purpose — compact when set */}
+          <div className="relative z-[1] px-4 pb-2">
             <div
-              className="rounded-xl px-3.5 py-3 border"
+              className={`rounded-xl border ${
+                editingPurpose ? 'px-3.5 py-3' : 'px-3 py-2'
+              }`}
               style={{
                 borderColor: 'color-mix(in srgb, var(--accent) 18%, transparent)',
                 background:
                   'linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, transparent), transparent)',
               }}
             >
-              <div className="flex items-center justify-between gap-2 mb-1.5">
+              <div className="flex items-center justify-between gap-2 mb-1">
                 <p className="text-[9px] uppercase tracking-[0.14em] text-[var(--sage)]/65">
                   {t('dashboard.purpose')}
                 </p>
@@ -264,7 +294,7 @@ export default function DashboardPage() {
                   <textarea
                     value={purposeDraft}
                     onChange={(e) => setPurposeDraft(e.target.value)}
-                    rows={4}
+                    rows={3}
                     maxLength={500}
                     placeholder={t('dashboard.purposePlaceholder')}
                     className="w-full bg-[#040404]/90 border border-[var(--border-soft)] rounded-lg px-3 py-2.5 text-[13px] text-[var(--off-white)] placeholder:text-[var(--sage)]/50 focus:outline-none focus:border-[var(--accent)] resize-none leading-relaxed"
@@ -308,12 +338,12 @@ export default function DashboardPage() {
                   onClick={startEditPurpose}
                   className="w-full text-left group"
                 >
-                  <p className="text-[13px] leading-relaxed text-[var(--off-white)]/90 line-clamp-4 group-hover:text-white transition-colors">
-                    <span className="text-[var(--accent)]/70 font-display text-base leading-none mr-0.5">
+                  <p className="text-[12px] leading-snug text-[var(--off-white)]/90 line-clamp-2 group-hover:text-white transition-colors">
+                    <span className="text-[var(--accent)]/70 font-display text-sm leading-none mr-0.5">
                       “
                     </span>
                     {profile.purpose}
-                    <span className="text-[var(--accent)]/70 font-display text-base leading-none ml-0.5">
+                    <span className="text-[var(--accent)]/70 font-display text-sm leading-none ml-0.5">
                       ”
                     </span>
                   </p>
@@ -322,7 +352,7 @@ export default function DashboardPage() {
                 <button
                   type="button"
                   onClick={startEditPurpose}
-                  className="w-full text-left text-[12px] text-[var(--sage)]/80 leading-relaxed hover:text-[var(--accent)] transition-colors"
+                  className="w-full text-left text-[11px] text-[var(--sage)]/80 leading-relaxed hover:text-[var(--accent)] transition-colors"
                 >
                   {t('dashboard.purposeEmpty')}
                 </button>
@@ -487,109 +517,80 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        {/* Weekly score chart */}
+        {/* First-run: 3 gestures (hides when done) */}
+        <div className="w-full max-w-sm mb-4">
+          <ActivationChecklist
+            refreshKey={scores.todayActions.length + scores.global}
+          />
+        </div>
+
+        {/* Daily agenda first — primary daily action */}
+        <div className="w-full max-w-sm mb-5">
+          <DailyAgenda onScored={() => refresh(profile || undefined)} />
+        </div>
+
+        {/* Weekly discipline / score / body charts */}
         <div className="w-full max-w-sm mb-5">
           <ProgressCharts scores={scores} />
         </div>
 
-        {/* Daily agenda */}
-        <div className="w-full max-w-sm mb-5">
-          <DailyAgenda onScored={() => refresh(profile || undefined, scores || undefined)} />
-        </div>
-
-        {/* Insignias y logros — unified */}
+        {/* Badges — compact */}
         <div className="w-full max-w-sm mb-2">
-          <div className="card-soft p-4">
+          <div className="card-soft p-3">
             <Link
               href="/hub/badges"
-              className="flex items-start justify-between gap-3 mb-3 group"
+              className="flex items-center justify-between gap-3 group"
             >
-              <div className="flex items-center gap-3 min-w-0">
-                <BadgesIcon size={28} active />
+              <div className="flex items-center gap-2.5 min-w-0">
+                <BadgesIcon size={22} active />
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-[var(--off-white)] group-hover:text-[var(--accent)] transition-colors">
                     {t('dashboard.badgesTitle')}
                   </p>
-                  <p className="text-[11px] text-[var(--sage)]">
-                    {t('dashboard.badgesSub')}
+                  <p className="text-[10px] text-[var(--sage)]">
+                    {badgeProgress.earned}/{badgeProgress.total}{' '}
+                    {t('charts.unlocked')}
+                    {recentBadges.length > 0
+                      ? ` · ${t('dashboard.badgesSub')}`
+                      : ''}
                   </p>
                 </div>
               </div>
-              <span className="text-[var(--accent)] shrink-0 mt-1">→</span>
+              <div className="flex items-center gap-2 shrink-0">
+                <BadgeRing
+                  earned={badgeProgress.earned}
+                  total={badgeProgress.total}
+                  size={44}
+                />
+                <span className="text-[var(--accent)] text-sm">→</span>
+              </div>
             </Link>
 
-            <div className="flex items-center gap-4">
-              <BadgeRing earned={badgeProgress.earned} total={badgeProgress.total} />
-              <div className="min-w-0 flex-1">
-                <p className="text-xs font-medium text-[var(--off-white)]">
-                  {badgeProgress.earned}/{badgeProgress.total} {t('charts.unlocked')}
-                </p>
-                <div className="mt-2 h-1.5 rounded-full bg-[var(--surface)] overflow-hidden">
-                  <div
-                    className="h-full rounded-full bg-[var(--accent-fill)] transition-all duration-700"
-                    style={{
-                      width: `${
-                        badgeProgress.total
-                          ? (badgeProgress.earned / badgeProgress.total) * 100
-                          : 0
-                      }%`,
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-
             {newBadges.length > 0 && (
-              <div className="mt-4 space-y-2">
-                {newBadges.map((b) => (
+              <div className="mt-3 space-y-1.5 pt-2 border-t border-[var(--border-soft)]">
+                {newBadges.slice(0, 2).map((b) => (
                   <div
                     key={b.id}
-                    className="rounded-xl p-2.5 border border-[var(--border-strong)] bg-[var(--surface)]/60 flex items-center gap-3"
+                    className="rounded-lg p-2 border border-[var(--border-strong)] bg-[var(--surface)]/60 flex items-center gap-2.5"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={b.iconSrc}
                       alt=""
-                      width={36}
-                      height={36}
-                      className="w-9 h-9 rounded-full object-cover border border-[var(--border-strong)] lion-glow shrink-0"
+                      width={28}
+                      height={28}
+                      className="w-7 h-7 rounded-full object-cover border border-[var(--border-strong)] lion-glow shrink-0"
                     />
                     <div className="min-w-0">
-                      <p className="text-[10px] text-[var(--accent)] uppercase tracking-wide">
+                      <p className="text-[9px] text-[var(--accent)] uppercase tracking-wide">
                         {t('dashboard.newBadge')}
                       </p>
-                      <p className="text-sm font-semibold text-white truncate">{b.name}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {recentBadges.length > 0 && (
-              <div className="mt-4 pt-3 border-t border-[var(--border-soft)]">
-                <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70 mb-2">
-                  {t('charts.recentBadges')}
-                </p>
-                <div className="flex gap-3 overflow-x-auto pb-1">
-                  {recentBadges.map((b) => (
-                    <div
-                      key={b.id}
-                      className="shrink-0 w-16 flex flex-col items-center gap-1"
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={b.iconSrc}
-                        alt=""
-                        width={44}
-                        height={44}
-                        className="w-11 h-11 rounded-full object-cover border border-[var(--border-strong)] lion-glow"
-                      />
-                      <p className="text-[9px] text-center text-[var(--off-white)]/85 leading-tight line-clamp-2">
+                      <p className="text-xs font-semibold text-white truncate">
                         {b.name}
                       </p>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>

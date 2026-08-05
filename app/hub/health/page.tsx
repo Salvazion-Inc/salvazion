@@ -49,7 +49,9 @@ import {
 } from '@/lib/health/biomarkers';
 import WomenHealthPanel from '@/components/health/WomenHealthPanel';
 import BiomarkersPanel from '@/components/health/BiomarkersPanel';
+import TodayFromDevices from '@/components/health/TodayFromDevices';
 import PillarHubHeader from '@/components/hub/PillarHubHeader';
+import { useI18n } from '@/components/I18nProvider';
 
 const HEALTH_ICONS = {
   sports: '/icons/health/sports.jpg',
@@ -86,6 +88,7 @@ function SectionIcon({
 }
 
 export default function HealthPage() {
+  const { t } = useI18n();
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
   const [scores, setScores] = useState<ComputedScores | null>(null);
   const [actions, setActions] = useState<HealthActionDef[]>([]);
@@ -280,8 +283,22 @@ export default function HealthPage() {
       </PillarHubHeader>
 
       <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto">
+        {/* Always visible: auto metrics first — no form required */}
+        <div className="mb-5">
+          <TodayFromDevices
+            refreshKey={healthRefreshKey}
+            onAutoLogged={() => {
+              refresh();
+              bumpHealthData();
+            }}
+          />
+        </div>
+
         {activeTab === 'sleep' && (
           <>
+        <p className="text-[11px] text-[var(--sage)]/75 mb-3 px-0.5">
+          {t('health.devices.manualOptional')}
+        </p>
         {/* SUEÑO CIRCADIANO */}
         <section className="mb-6">
           <h2 className="text-sm font-semibold text-[var(--sage)] mb-3 flex items-center gap-2">
@@ -855,7 +872,7 @@ export default function HealthPage() {
           </div>
         </section>
 
-        {/* Otras acciones de ejercicio */}
+        {/* Manual exercise log only for types not already scored today (agenda / devices) */}
         {(() => {
           const cat = categories.find((c) => c.id === 'exercise');
           if (!cat) return null;
@@ -864,18 +881,21 @@ export default function HealthPage() {
               a.category === 'exercise' &&
               a.actionType !== 'sleep_ideal' &&
               a.actionType !== 'hydration_daily' &&
-              a.actionType !== 'fasting'
+              a.actionType !== 'fasting' &&
+              !loggedToday.has(a.actionType)
           );
           if (filtered.length === 0) return null;
           return (
             <div className="mb-6">
-              <h2 className="text-sm font-semibold text-[var(--sage)] mb-3 flex items-center gap-2">
+              <h2 className="text-sm font-semibold text-[var(--sage)] mb-1 flex items-center gap-2">
                 <SectionIcon src={cat.iconSrc} alt={cat.title} /> {cat.title}
               </h2>
+              <p className="text-[11px] text-[var(--sage)]/70 mb-3 px-0.5">
+                {t('health.devices.manualOptional')}
+              </p>
               <div className="space-y-2.5">
                 {filtered.map((action) => {
                   const pts = getHealthPointsPreview(action.actionType);
-                  const done = loggedToday.has(action.actionType);
                   const actionIcon =
                     action.actionType === 'outdoor_sun_20min'
                       ? HEALTH_ICONS.exerciseSun
@@ -883,11 +903,7 @@ export default function HealthPage() {
                   return (
                     <div
                       key={action.id}
-                      className={`glass rounded-xl p-4 border transition-all ${
-                        done
-                          ? 'border-[var(--border-strong)] bg-[var(--surface-active)]'
-                          : 'border-[var(--border-soft)]'
-                      }`}
+                      className="glass rounded-xl p-4 border border-[var(--border-soft)] transition-all"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-start gap-3 min-w-0">
@@ -907,11 +923,10 @@ export default function HealthPage() {
                           <p className="text-xs text-[#8FD99A] font-medium mb-1.5">+{pts}</p>
                           <button
                             type="button"
-                            onClick={() => !done && handleLog(action.actionType, action.label)}
-                            disabled={done}
+                            onClick={() => handleLog(action.actionType, action.label)}
                             className="btn-sm"
                           >
-                            {done ? (en ? '✓ Done' : '✓ Hecho') : en ? 'Log' : 'Registrar'}
+                            {en ? 'Confirm' : 'Confirmar'}
                           </button>
                         </div>
                       </div>

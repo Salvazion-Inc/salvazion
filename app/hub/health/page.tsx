@@ -149,7 +149,7 @@ export default function HealthPage() {
     return () => cancelAnimationFrame(id);
   }, [refresh]);
 
-  // Wearables moved to Profile → Settings; preserve OAuth deep-links
+  // Deep-link: /hub/health?tab=sleep|nutrition|exercise (+ wearables → profile)
   useEffect(() => {
     if (typeof window === 'undefined') return;
     try {
@@ -167,6 +167,11 @@ export default function HealthPage() {
           if (v) next.searchParams.set(key, v);
         }
         window.location.replace(next.toString());
+        return;
+      }
+      const tab = sp.get('tab');
+      if (tab === 'sleep' || tab === 'nutrition' || tab === 'exercise') {
+        setActiveTab(tab);
       }
     } catch {
       // ignore

@@ -8,6 +8,7 @@ import {
   useState,
   type CSSProperties,
 } from 'react';
+import Link from 'next/link';
 import {
   ROUTINE_BLOCKS,
   getEventsForDate,
@@ -27,6 +28,7 @@ import {
   formatDurationHours,
   agendaBlockHeightPx,
   agendaBlockLayout,
+  hrefForCalendarEvent,
   seedDefaultDay,
   todayStr,
   DAY_START_MIN,
@@ -690,7 +692,10 @@ export default function RoutineBoard({ date, onChange }: Props) {
                     pal={pal}
                     done={done}
                     isNow={isNow}
-                    onOpen={() => toggleEditor(ev)}
+                    openHref={hrefForCalendarEvent(ev)}
+                    openLabel={t('agenda.openActivity', { title: labelFor(ev) })}
+                    onEdit={() => toggleEditor(ev)}
+                    editLabel={t('agenda.editSchedule')}
                     nowBadge={
                       isNow ? (
                         <span
@@ -788,6 +793,14 @@ export default function RoutineBoard({ date, onChange }: Props) {
                     className="px-2.5 pb-2.5 pt-1 space-y-2 border-t"
                     style={{ borderColor: `${pal.border}` }}
                   >
+                    <Link
+                      href={hrefForCalendarEvent(ev)}
+                      className="inline-flex items-center gap-1.5 text-[12px] font-semibold"
+                      style={{ color: pal.lightPlate ? pal.solid : pal.text }}
+                    >
+                      {t('agenda.openActivity', { title: labelFor(ev) })}
+                      <span aria-hidden>→</span>
+                    </Link>
                     {dirty && (
                       <p
                         className="text-[10px] font-medium"

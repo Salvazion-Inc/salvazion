@@ -1,6 +1,7 @@
 'use client';
 
 import type { CSSProperties, ReactNode } from 'react';
+import Link from 'next/link';
 import {
   agendaBlockLayout,
   formatDurationHours,
@@ -23,7 +24,17 @@ type Props = {
   nowBadge?: ReactNode;
   /** Sí/No controls */
   actions: ReactNode;
+  /**
+   * Preferred: navigate to activity destination (Bible, Health tab, etc.).
+   * Renders as a real link for accessibility + open-in-new-tab.
+   */
+  openHref?: string;
+  /** Fallback / secondary open when no href (legacy) */
   onOpen?: () => void;
+  /** Optional edit affordance (schedule) — shown next to actions when set */
+  onEdit?: () => void;
+  editLabel?: string;
+  openLabel?: string;
   /** Optional leading stripe (caller can also put outside) */
   showStripe?: boolean;
   className?: string;
@@ -38,8 +49,7 @@ const PILLAR_MARK: Record<CalendarPillar, string> = {
 
 /**
  * Adaptive activity face for calendar/agenda rows.
- * Compact (short slots): single dense line — type never gets crushed.
- * Cozy / roomy: more hierarchy while keeping type primary.
+ * Tapping the main body opens the linked activity (Bible, Devotional, Health…).
  */
 export default function AgendaActivityFace({
   layout,
@@ -53,7 +63,11 @@ export default function AgendaActivityFace({
   isNow,
   nowBadge,
   actions,
+  openHref,
   onOpen,
+  onEdit,
+  editLabel = 'Edit',
+  openLabel,
   showStripe = true,
   className = '',
   style,
@@ -62,6 +76,8 @@ export default function AgendaActivityFace({
   const mark = PILLAR_MARK[pillar];
   const compact = layout === 'compact';
   const cozy = layout === 'cozy';
+  const canOpen = !!(openHref || onOpen);
+  const a11yOpen = openLabel || title;
 
   const typeChip = (
     <span
@@ -82,10 +98,7 @@ export default function AgendaActivityFace({
       }}
       title={title}
     >
-      <span
-        className="opacity-80 tabular-nums"
-        aria-hidden
-      >
+      <span className="opacity-80 tabular-nums" aria-hidden>
         {mark}
       </span>
       <span className="truncate normal-case tracking-normal font-semibold">
@@ -94,8 +107,72 @@ export default function AgendaActivityFace({
     </span>
   );
 
+  const openChevron = canOpen ? (
+    <span
+      className="text-[11px] font-semibold shrink-0 opacity-55 group-hover/open:opacity-100 group-hover/open:translate-x-0.5 transition-all"
+      style={{ color: pal.text }}
+      aria-hidden
+    >
+      →
+    </span>
+  ) : null;
+
+  const openInteractiveClass = canOpen
+    ? 'group/open min-w-0 flex-1 text-left rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--accent)] active:scale-[0.99] transition cursor-pointer'
+    : 'min-w-0 flex-1 text-left';
+
+  const wrapOpen = (inner: ReactNode, classNameInner: string) => {
+    if (openHref) {
+      return (
+        <Link
+          href={openHref}
+          className={`${openInteractiveClass} ${classNameInner}`}
+          aria-label={a11yOpen}
+          title={a11yOpen}
+        >
+          {inner}
+        </Link>
+      );
+    }
+    return (
+      <button
+        type="button"
+        className={`${openInteractiveClass} ${classNameInner}`}
+        onClick={onOpen}
+        disabled={!onOpen}
+        aria-label={a11yOpen}
+        title={a11yOpen}
+      >
+        {inner}
+      </button>
+    );
+  };
+
+  const editBtn =
+    onEdit != null ? (
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onEdit();
+        }}
+        className="shrink-0 w-8 h-8 rounded-lg border text-[12px] font-semibold flex items-center justify-center transition-colors hover:opacity-100 opacity-80"
+        style={{
+          borderColor: pal.border,
+          color: pal.muted,
+          background: pal.lightPlate
+            ? 'rgba(18,20,18,0.06)'
+            : 'rgba(0,0,0,0.2)',
+        }}
+        aria-label={editLabel}
+        title={editLabel}
+      >
+        ✎
+      </button>
+    ) : null;
+
   if (compact) {
-    // One dense line: time · type chip · duration · Sí/No
     return (
       <div
         className={`flex items-center gap-1.5 w-full min-h-0 h-full px-0.5 ${className}`}
@@ -119,35 +196,35 @@ export default function AgendaActivityFace({
             aria-hidden
           />
         )}
-        <button
-          type="button"
-          className="min-w-0 flex-1 flex items-center gap-1.5 text-left"
-          onClick={onOpen}
-        >
-          <span
-            className="text-[11px] font-semibold tabular-nums shrink-0 leading-none"
-            style={{ color: pal.text }}
-          >
-            {timeLabel}
-          </span>
-          {typeChip}
-          {isNow && nowBadge ? (
-            <span className="shrink-0 scale-90 origin-left">{nowBadge}</span>
-          ) : (
+        {wrapOpen(
+          <>
             <span
-              className="text-[9px] tabular-nums shrink-0 opacity-75 ml-auto"
-              style={{ color: pal.muted }}
+              className="text-[11px] font-semibold tabular-nums shrink-0 leading-none"
+              style={{ color: pal.text }}
             >
-              {dur}
+              {timeLabel}
             </span>
-          )}
-        </button>
+            {typeChip}
+            {isNow && nowBadge ? (
+              <span className="shrink-0 scale-90 origin-left">{nowBadge}</span>
+            ) : (
+              <span
+                className="text-[9px] tabular-nums shrink-0 opacity-75 ml-auto"
+                style={{ color: pal.muted }}
+              >
+                {dur}
+              </span>
+            )}
+            {openChevron}
+          </>,
+          'flex items-center gap-1.5'
+        )}
+        {editBtn}
         <div className="shrink-0 scale-[0.92] origin-right">{actions}</div>
       </div>
     );
   }
 
-  // Cozy + roomy: type is the hero line; meta is secondary
   return (
     <div
       className={`flex items-stretch gap-2 w-full min-h-0 h-full ${className}`}
@@ -172,64 +249,65 @@ export default function AgendaActivityFace({
         />
       )}
 
-      <button
-        type="button"
-        className={`min-w-0 flex-1 text-left flex flex-col ${
-          cozy ? 'justify-center gap-0.5' : 'justify-center gap-1 py-0.5'
-        }`}
-        onClick={onOpen}
-      >
-        <div className="flex items-center gap-1.5 flex-wrap min-w-0">
-          <span
-            className={`font-semibold tabular-nums shrink-0 leading-none ${
-              cozy ? 'text-[11px]' : 'text-[12px]'
-            }`}
-            style={{ color: pal.text }}
-          >
-            {timeLabel}
-          </span>
-          {rangeLabel ? (
+      {wrapOpen(
+        <>
+          <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+            <span
+              className={`font-semibold tabular-nums shrink-0 leading-none ${
+                cozy ? 'text-[11px]' : 'text-[12px]'
+              }`}
+              style={{ color: pal.text }}
+            >
+              {timeLabel}
+            </span>
+            {rangeLabel ? (
+              <span
+                className="text-[9px] tabular-nums opacity-75 shrink-0"
+                style={{ color: pal.muted }}
+              >
+                {rangeLabel}
+              </span>
+            ) : null}
             <span
               className="text-[9px] tabular-nums opacity-75 shrink-0"
               style={{ color: pal.muted }}
             >
-              {rangeLabel}
+              · {dur}
             </span>
-          ) : null}
-          <span
-            className="text-[9px] tabular-nums opacity-75 shrink-0"
-            style={{ color: pal.muted }}
-          >
-            · {dur}
-          </span>
-          {isNow && nowBadge ? (
-            <span className="shrink-0">{nowBadge}</span>
-          ) : null}
-        </div>
+            {isNow && nowBadge ? (
+              <span className="shrink-0">{nowBadge}</span>
+            ) : null}
+          </div>
 
-        <div className="flex items-center gap-1.5 min-w-0">
-          <span
-            className="inline-flex items-center justify-center w-4 h-4 rounded text-[9px] font-extrabold shrink-0"
-            style={{
-              color: pal.lightPlate ? '#F5F7F5' : '#0a120c',
-              background: pal.lightPlate ? '#121412' : pal.solid,
-            }}
-            aria-hidden
-          >
-            {mark}
-          </span>
-          <p
-            className={`font-semibold leading-snug truncate min-w-0 ${
-              done ? 'line-through opacity-65' : ''
-            } ${isNow ? 'text-[13px]' : cozy ? 'text-[12px]' : 'text-[13px]'}`}
-            style={{ color: pal.text }}
-          >
-            {title}
-          </p>
-        </div>
-      </button>
+          <div className="flex items-center gap-1.5 min-w-0">
+            <span
+              className="inline-flex items-center justify-center w-4 h-4 rounded text-[9px] font-extrabold shrink-0"
+              style={{
+                color: pal.lightPlate ? '#F5F7F5' : '#0a120c',
+                background: pal.lightPlate ? '#121412' : pal.solid,
+              }}
+              aria-hidden
+            >
+              {mark}
+            </span>
+            <p
+              className={`font-semibold leading-snug truncate min-w-0 ${
+                done ? 'line-through opacity-65' : ''
+              } ${isNow ? 'text-[13px]' : cozy ? 'text-[12px]' : 'text-[13px]'}`}
+              style={{ color: pal.text }}
+            >
+              {title}
+            </p>
+            {openChevron}
+          </div>
+        </>,
+        `flex flex-col ${cozy ? 'justify-center gap-0.5' : 'justify-center gap-1 py-0.5'}`
+      )}
 
-      <div className="shrink-0 self-center">{actions}</div>
+      <div className="shrink-0 self-center flex items-center gap-1.5">
+        {editBtn}
+        {actions}
+      </div>
     </div>
   );
 }

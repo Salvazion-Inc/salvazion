@@ -94,6 +94,26 @@ export default function BiblePage() {
     setSalvationScore(computeScores().salvation);
   }, []);
 
+  // Deep-link from agenda: /hub/bible?tab=bible|prayer (devotional is its own route)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const tab = new URLSearchParams(window.location.search).get('tab');
+      if (tab === 'prayer') {
+        setMainTab('prayer');
+        setChromeCollapsed(false);
+      } else if (tab === 'bible' || tab === 'read') {
+        setMainTab('bible');
+        setBibleMode('read');
+      } else if (tab === 'devotional') {
+        // Devotional lives on its own page
+        window.location.replace('/hub/devotional');
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
   useEffect(() => {
     if (bibleMode !== 'read') return;
     let cancelled = false;

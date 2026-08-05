@@ -116,26 +116,26 @@ export function scoreActionForEventType(type: CalendarEventType): string | null 
  * Palette blocks (default 30 min unless noted).
  */
 export const ROUTINE_BLOCKS: AgendaBlockDef[] = [
-  // Salvation
-  { key: 'pray', titleKey: 'agenda.blocks.pray', pillar: 'salvation', type: 'prayer', defaultTime: '07:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/bible' },
-  { key: 'bible', titleKey: 'agenda.blocks.bible', pillar: 'salvation', type: 'bible', defaultTime: '07:15', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/bible' },
+  // Salvation — deep links open the right hub surface
+  { key: 'pray', titleKey: 'agenda.blocks.pray', pillar: 'salvation', type: 'prayer', defaultTime: '07:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/bible?tab=prayer' },
+  { key: 'bible', titleKey: 'agenda.blocks.bible', pillar: 'salvation', type: 'bible', defaultTime: '07:15', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/bible?tab=bible' },
   { key: 'devotional', titleKey: 'agenda.blocks.devotional', pillar: 'salvation', type: 'devotional', defaultTime: '13:30', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/devotional' },
-  { key: 'worship', titleKey: 'agenda.blocks.worship', pillar: 'salvation', type: 'worship', defaultTime: '10:00', durationMin: DEFAULT_BLOCK_MIN },
-  { key: 'meeting', titleKey: 'agenda.blocks.meeting', pillar: 'salvation', type: 'meeting', defaultTime: '19:00', durationMin: DEFAULT_BLOCK_MIN },
-  // Health
-  { key: 'sleep', titleKey: 'agenda.blocks.sleep', pillar: 'health', type: 'sleep', defaultTime: '00:00', durationMin: 420, href: '/hub/health' },
-  { key: 'nap', titleKey: 'agenda.blocks.nap', pillar: 'health', type: 'nap', defaultTime: '14:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/health' },
-  { key: 'breakfast', titleKey: 'agenda.blocks.breakfast', pillar: 'health', type: 'breakfast', defaultTime: '09:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/health' },
-  { key: 'lunch', titleKey: 'agenda.blocks.lunch', pillar: 'health', type: 'lunch', defaultTime: '14:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/health' },
-  { key: 'dinner', titleKey: 'agenda.blocks.dinner', pillar: 'health', type: 'dinner', defaultTime: '19:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/health' },
-  { key: 'outdoor', titleKey: 'agenda.blocks.outdoor', pillar: 'health', type: 'outdoor', defaultTime: '18:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/health' },
-  { key: 'exercise', titleKey: 'agenda.blocks.exercise', pillar: 'health', type: 'exercise', defaultTime: '07:30', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/health' },
-  { key: 'sport', titleKey: 'agenda.blocks.sport', pillar: 'health', type: 'sport', defaultTime: '17:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/health' },
-  { key: 'gym', titleKey: 'agenda.blocks.gym', pillar: 'health', type: 'gym', defaultTime: '18:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/health' },
+  { key: 'worship', titleKey: 'agenda.blocks.worship', pillar: 'salvation', type: 'worship', defaultTime: '10:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/bible?tab=prayer' },
+  { key: 'meeting', titleKey: 'agenda.blocks.meeting', pillar: 'salvation', type: 'meeting', defaultTime: '19:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/freedom?tab=connect' },
+  // Health — tab matches exercise / nutrition / sleep panels
+  { key: 'sleep', titleKey: 'agenda.blocks.sleep', pillar: 'health', type: 'sleep', defaultTime: '00:00', durationMin: 420, href: '/hub/health?tab=sleep' },
+  { key: 'nap', titleKey: 'agenda.blocks.nap', pillar: 'health', type: 'nap', defaultTime: '14:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/health?tab=sleep' },
+  { key: 'breakfast', titleKey: 'agenda.blocks.breakfast', pillar: 'health', type: 'breakfast', defaultTime: '09:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/health?tab=nutrition' },
+  { key: 'lunch', titleKey: 'agenda.blocks.lunch', pillar: 'health', type: 'lunch', defaultTime: '14:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/health?tab=nutrition' },
+  { key: 'dinner', titleKey: 'agenda.blocks.dinner', pillar: 'health', type: 'dinner', defaultTime: '19:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/health?tab=nutrition' },
+  { key: 'outdoor', titleKey: 'agenda.blocks.outdoor', pillar: 'health', type: 'outdoor', defaultTime: '18:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/health?tab=exercise' },
+  { key: 'exercise', titleKey: 'agenda.blocks.exercise', pillar: 'health', type: 'exercise', defaultTime: '07:30', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/health?tab=exercise' },
+  { key: 'sport', titleKey: 'agenda.blocks.sport', pillar: 'health', type: 'sport', defaultTime: '17:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/health?tab=exercise' },
+  { key: 'gym', titleKey: 'agenda.blocks.gym', pillar: 'health', type: 'gym', defaultTime: '18:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/health?tab=exercise' },
   // Freedom
-  { key: 'learn', titleKey: 'agenda.blocks.learn', pillar: 'freedom', type: 'learn', defaultTime: '20:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/freedom' },
-  { key: 'work', titleKey: 'agenda.blocks.work', pillar: 'freedom', type: 'work', defaultTime: '10:00', durationMin: DEFAULT_BLOCK_MIN },
-  { key: 'family', titleKey: 'agenda.blocks.family', pillar: 'freedom', type: 'family', defaultTime: '21:00', durationMin: DEFAULT_BLOCK_MIN },
+  { key: 'learn', titleKey: 'agenda.blocks.learn', pillar: 'freedom', type: 'learn', defaultTime: '20:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/freedom?tab=learn' },
+  { key: 'work', titleKey: 'agenda.blocks.work', pillar: 'freedom', type: 'work', defaultTime: '10:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/freedom?tab=contribute' },
+  { key: 'family', titleKey: 'agenda.blocks.family', pillar: 'freedom', type: 'family', defaultTime: '21:00', durationMin: DEFAULT_BLOCK_MIN, href: '/hub/freedom?tab=connect' },
 ];
 
 export const DAILY_AGENDA_BLOCKS = ROUTINE_BLOCKS;
@@ -319,6 +319,66 @@ export function getBlockDef(keyOrType: string): AgendaBlockDef | undefined {
     ROUTINE_BLOCKS.find((b) => b.key === keyOrType) ||
     ROUTINE_BLOCKS.find((b) => b.type === keyOrType)
   );
+}
+
+/**
+ * Destination path for tapping a calendar/agenda block.
+ * Prefer blockKey → type → pillar fallback so every row is openable.
+ */
+export function hrefForCalendarEvent(
+  ev: Pick<CalendarEvent, 'type' | 'blockKey' | 'title' | 'pillar'>
+): string {
+  if (ev.blockKey) {
+    const byKey = getBlockDef(ev.blockKey);
+    if (byKey?.href) return byKey.href;
+  }
+  const byType = getBlockDef(ev.type) || getBlockDef(ev.title || '');
+  if (byType?.href) return byType.href;
+
+  // Fallback by event type (covers custom / legacy rows)
+  switch (ev.type) {
+    case 'prayer':
+    case 'worship':
+      return '/hub/bible?tab=prayer';
+    case 'bible':
+      return '/hub/bible?tab=bible';
+    case 'devotional':
+      return '/hub/devotional';
+    case 'sleep':
+    case 'nap':
+      return '/hub/health?tab=sleep';
+    case 'breakfast':
+    case 'lunch':
+    case 'dinner':
+    case 'meal':
+    case 'meal_window':
+      return '/hub/health?tab=nutrition';
+    case 'exercise':
+    case 'sport':
+    case 'gym':
+    case 'outdoor':
+      return '/hub/health?tab=exercise';
+    case 'learn':
+    case 'inspire':
+      return '/hub/freedom?tab=learn';
+    case 'work':
+    case 'collaborate':
+    case 'contribute':
+      return '/hub/freedom?tab=contribute';
+    case 'family':
+    case 'meeting':
+    case 'congregate':
+    case 'church':
+    case 'connect':
+      return '/hub/freedom?tab=connect';
+    default:
+      break;
+  }
+
+  if (ev.pillar === 'salvation') return '/hub/bible';
+  if (ev.pillar === 'health') return '/hub/health';
+  if (ev.pillar === 'freedom') return '/hub/freedom';
+  return '/hub/dashboard';
 }
 
 /** Attach palette block to calendar (default 30 min unless overridden) */

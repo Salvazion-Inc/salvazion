@@ -18,6 +18,7 @@ import {
   agendaBlockHeightPx,
   agendaBlockLayout,
   getDayCompletionStats,
+  hrefForCalendarEvent,
   DEFAULT_BLOCK_MIN,
   type CalendarEvent,
   type CalendarPillar,
@@ -339,6 +340,8 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
                   pal={facePal}
                   done={!!ev.completed}
                   isNow={isNow}
+                  openHref={hrefForCalendarEvent(ev)}
+                  openLabel={t('agenda.openActivity', { title: labelFor(ev) })}
                   nowBadge={
                     isNow ? (
                       <span

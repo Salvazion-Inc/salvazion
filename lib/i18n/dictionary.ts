@@ -658,6 +658,8 @@ export const dictionary = {
       softFirstDone: 'Primer Sí · {title} · disciplina {percent}%',
       softScored: '{title} · score actualizado · disciplina {percent}%',
       softDiscipline: '{title} · {done}/{total} · {percent}%',
+      openActivity: 'Abrir {title}',
+      editSchedule: 'Ajustar horario',
       blocks: {
         pray: 'Oración',
         bible: 'Lectura bíblica',
@@ -1602,6 +1604,8 @@ export const dictionary = {
       softFirstDone: 'First Yes · {title} · discipline {percent}%',
       softScored: '{title} · score updated · discipline {percent}%',
       softDiscipline: '{title} · {done}/{total} · {percent}%',
+      openActivity: 'Open {title}',
+      editSchedule: 'Edit schedule',
       blocks: {
         pray: 'Prayer',
         bible: 'Bible reading',

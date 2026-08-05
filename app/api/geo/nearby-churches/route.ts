@@ -38,14 +38,27 @@ export async function POST(req: Request) {
     );
     const es = body.lang !== 'en';
 
-    const [elements, reverse] = await Promise.all([
-      fetchOverpassChurches(lat, lon, radiusM),
+    // Reverse geocode is independent of Overpass — profile city/country must
+    // still update when the map query fails or times out.
+    const reversePromise =
       body.reverse === false
         ? Promise.resolve(null)
-        : reverseGeocode(lat, lon).catch(() => null),
-    ]);
+        : reverseGeocode(lat, lon).catch((e) => {
+            console.warn('[geo/nearby-churches] reverse', e);
+            return null;
+          });
 
-    const churches = churchesFromOverpassElements(elements, lat, lon, es);
+    const churchesPromise = fetchOverpassChurches(lat, lon, radiusM)
+      .then((elements) => churchesFromOverpassElements(elements, lat, lon, es))
+      .catch((e) => {
+        console.warn('[geo/nearby-churches] overpass', e);
+        return [] as ReturnType<typeof churchesFromOverpassElements>;
+      });
+
+    const [churches, reverse] = await Promise.all([
+      churchesPromise,
+      reversePromise,
+    ]);
 
     return NextResponse.json({
       churches,
@@ -56,6 +69,7 @@ export async function POST(req: Request) {
       label: reverse?.label || null,
       city: reverse?.city || null,
       country: reverse?.country || null,
+      reverseOk: Boolean(reverse?.city || reverse?.country || reverse?.label),
     });
   } catch (e) {
     console.error('[geo/nearby-churches]', e);

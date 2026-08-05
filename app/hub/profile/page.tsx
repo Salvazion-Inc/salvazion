@@ -426,33 +426,6 @@ export default function ProfilePage() {
           <BillingCard />
         </div>
 
-        {/* Salvazion Inc. business console — only info@salvazion.org */}
-        {isBusinessAdminEmail(email) && (
-          <div className="mb-6">
-            <Link
-              href="/hub/business"
-              className="card-soft block p-4 border border-[var(--border-strong)] hover:border-[#8FD99A]/50 transition group"
-            >
-              <p className="text-[10px] uppercase tracking-wider text-[var(--accent)]">
-                Salvazion Inc.
-              </p>
-              <p className="text-sm font-semibold text-white group-hover:text-[#8FD99A] transition mt-0.5">
-                {lang === 'en'
-                  ? 'Business KPIs & funnel'
-                  : 'KPI de negocio y funnel'}
-              </p>
-              <p className="text-[11px] text-[var(--sage)] mt-1 leading-relaxed">
-                {lang === 'en'
-                  ? 'MRR, ARR, paid conversion, churn — operator only.'
-                  : 'MRR, ARR, conversión a pago, churn — solo operador.'}
-              </p>
-              <p className="text-[11px] text-[#8FD99A] mt-2 font-medium">
-                {lang === 'en' ? 'Open console →' : 'Abrir consola →'}
-              </p>
-            </Link>
-          </div>
-        )}
-
         {/* Solana wallet + $SALVAZION amount on profile */}
         <div className="mb-6">
           <WalletConnectCard
@@ -460,10 +433,27 @@ export default function ProfilePage() {
           />
         </div>
 
-        {/* Privacy note */}
+        {/* Privacy note + legal links */}
         <div className="glass rounded-2xl p-4 mb-6 text-xs text-[var(--sage)] leading-relaxed">
           <p className="font-medium text-[var(--accent)] mb-1">{t('profile.privacyTitle')}</p>
           <p>{t('profile.privacyBody')}</p>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mt-3 pt-3 border-t border-[var(--border-soft)]">
+            <Link
+              href="/terms"
+              className="text-[11px] font-medium text-[#8FD99A] hover:underline"
+            >
+              {lang === 'en' ? 'Terms of Service' : 'Términos de servicio'}
+            </Link>
+            <span className="text-[var(--sage)]/40" aria-hidden>
+              ·
+            </span>
+            <Link
+              href="/privacy"
+              className="text-[11px] font-medium text-[#8FD99A] hover:underline"
+            >
+              {lang === 'en' ? 'Privacy Policy' : 'Política de privacidad'}
+            </Link>
+          </div>
         </div>
 
         <button
@@ -477,7 +467,7 @@ export default function ProfilePage() {
         </button>
 
         {/* Danger zone */}
-        <div className="border border-red-500/30 rounded-2xl p-4">
+        <div className="border border-red-500/30 rounded-2xl p-4 mb-6">
           <p className="text-sm text-red-400/90 mb-3">{t('profile.dangerZone')}</p>
           {!confirmClear ? (
             <button
@@ -506,6 +496,33 @@ export default function ProfilePage() {
             </div>
           )}
         </div>
+
+        {/* Salvazion Inc. business console — only info@salvazion.org (end of profile) */}
+        {isBusinessAdminEmail(email) && (
+          <div className="mb-2">
+            <Link
+              href="/hub/business"
+              className="card-soft block p-4 border border-[var(--border-strong)] hover:border-[#8FD99A]/50 transition group"
+            >
+              <p className="text-[10px] uppercase tracking-wider text-[var(--accent)]">
+                Salvazion Inc.
+              </p>
+              <p className="text-sm font-semibold text-white group-hover:text-[#8FD99A] transition mt-0.5">
+                {lang === 'en'
+                  ? 'Business KPIs & funnel'
+                  : 'KPI de negocio y funnel'}
+              </p>
+              <p className="text-[11px] text-[var(--sage)] mt-1 leading-relaxed">
+                {lang === 'en'
+                  ? 'MRR, ARR, paid conversion, churn — operator only.'
+                  : 'MRR, ARR, conversión a pago, churn — solo operador.'}
+              </p>
+              <p className="text-[11px] text-[#8FD99A] mt-2 font-medium">
+                {lang === 'en' ? 'Open console →' : 'Abrir consola →'}
+              </p>
+            </Link>
+          </div>
+        )}
       </main>
 
       {/* Settings panel (separate from profile body) */}

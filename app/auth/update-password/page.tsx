@@ -76,7 +76,7 @@ export default function UpdatePasswordPage() {
 
   if (!ready) {
     return (
-      <div className="min-h-screen bg-[var(--true-black)] flex items-center justify-center text-[var(--accent)]">
+      <div className="marketing-shell flex items-center justify-center text-[var(--accent)]">
         {t('common.loading')}
       </div>
     );
@@ -84,7 +84,7 @@ export default function UpdatePasswordPage() {
 
   if (noSession) {
     return (
-      <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] flex flex-col items-center justify-center px-5">
+      <div className="marketing-shell text-[var(--off-white)] flex flex-col items-center justify-center px-5 py-10">
         <div className="w-full max-w-sm text-center glass rounded-2xl p-8">
           <h1 className="text-xl font-bold text-[var(--accent)] mb-2">
             {t('auth.invalidLink')}
@@ -99,7 +99,7 @@ export default function UpdatePasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] flex flex-col items-center justify-center px-5">
+    <div className="marketing-shell text-[var(--off-white)] flex flex-col items-center justify-center px-5 py-10">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[var(--border-strong)] flex items-center justify-center lion-glow overflow-hidden">
@@ -111,7 +111,7 @@ export default function UpdatePasswordPage() {
           <p className="text-sm text-[var(--sage)] mt-1">{t('auth.newPasswordSubtitle')}</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="glass rounded-2xl p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="card-soft p-6 space-y-4 shadow-[var(--shadow-premium)]">
           <div>
             <label className="block text-xs text-[var(--sage)] mb-1.5">
               {t('auth.newPassword')}

@@ -113,7 +113,7 @@ function SignupForm() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] flex flex-col items-center justify-center px-5">
+      <div className="marketing-shell text-[var(--off-white)] flex flex-col items-center justify-center px-5 py-10">
         <div className="w-full max-w-sm text-center glass rounded-2xl p-8">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[var(--border-strong)] flex items-center justify-center lion-glow overflow-hidden bg-[var(--true-black)]">
             <Image src="/logo-icon.png" alt="Salvazion" width={64} height={64} className="object-cover" />
@@ -135,7 +135,7 @@ function SignupForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] flex flex-col items-center justify-center px-5">
+    <div className="marketing-shell text-[var(--off-white)] flex flex-col items-center justify-center px-5 py-10">
       <div className="w-full max-w-sm">
         <div className="flex justify-end mb-4">
           <LanguageControl compact />
@@ -161,7 +161,7 @@ function SignupForm() {
           </div>
         )}
 
-        <div className="glass rounded-2xl p-6 space-y-4">
+        <div className="card-soft p-6 space-y-4 shadow-[var(--shadow-premium)]">
           <TermsAccept
             checked={acceptedTerms}
             onChange={setAcceptedTerms}
@@ -260,7 +260,7 @@ function SignupForm() {
 function SignupFallback() {
   const { t } = useI18n();
   return (
-    <div className="min-h-screen bg-[var(--true-black)] flex items-center justify-center text-[var(--accent)]">
+    <div className="marketing-shell flex items-center justify-center text-[var(--accent)]">
       {t('common.loading')}
     </div>
   );

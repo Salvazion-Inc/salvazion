@@ -93,7 +93,7 @@ export default function SalvazionLanding() {
   const t = copy[lang];
 
   return (
-    <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] selection:bg-[rgba(143,217,154,0.28)]">
+    <div className="marketing-shell text-[var(--off-white)] selection:bg-[rgba(143,217,154,0.28)]">
       {/* Skip link — keyboard / a11y + crawlable landmark */}
       <a
         href="#main"

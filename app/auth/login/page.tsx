@@ -213,7 +213,7 @@ function LoginForm() {
   const subtitle = mode === 'forgot' ? t('auth.recoverSubtitle') : t('auth.loginSubtitle');
 
   return (
-    <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] flex flex-col items-center justify-center px-5">
+    <div className="marketing-shell text-[var(--off-white)] flex flex-col items-center justify-center px-5 py-10">
       <div className="w-full max-w-sm">
         <div className="flex justify-end mb-4">
           <LanguageControl compact />
@@ -226,7 +226,7 @@ function LoginForm() {
           <p className="text-sm text-[var(--sage)] mt-1">{subtitle}</p>
         </div>
 
-        <div className="glass rounded-2xl p-6 space-y-4">
+        <div className="card-soft p-6 space-y-4 shadow-[var(--shadow-premium)]">
           {mode === 'password' && (
             <>
               <TermsAccept
@@ -382,7 +382,7 @@ function LoginForm() {
 function LoginFallback() {
   const { t } = useI18n();
   return (
-    <div className="min-h-screen bg-[var(--true-black)] flex items-center justify-center text-[var(--accent)]">
+    <div className="marketing-shell flex items-center justify-center text-[var(--accent)]">
       {t('common.loading')}
     </div>
   );

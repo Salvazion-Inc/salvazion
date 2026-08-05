@@ -50,11 +50,11 @@ export default function PillarHubHeader({
 
   return (
     <Root
-      className={`page-header px-5 pt-6 pb-3 ${
+      className={`page-header px-5 pt-[max(1.25rem,env(safe-area-inset-top))] pb-3 ${
         sticky ? 'sticky top-0 z-40' : ''
       } ${className}`}
     >
-      <div className="flex items-start justify-between gap-3 mb-3">
+      <div className="flex items-start justify-between gap-3 mb-3 max-w-lg mx-auto">
         <div className="flex items-start gap-2.5 min-w-0">
           <Link
             href="/hub/dashboard"
@@ -65,13 +65,13 @@ export default function PillarHubHeader({
           </Link>
           <div className="min-w-0">
             <h1
-              className="text-xl font-bold leading-tight tracking-tight truncate whitespace-nowrap"
+              className="font-display text-xl font-bold leading-tight tracking-tight truncate whitespace-nowrap"
               style={{ color: pal.text }}
             >
               {title}
             </h1>
             {subtitle ? (
-              <p className="text-[11px] text-[var(--sage)]/80 mt-0.5 truncate">
+              <p className="text-[11px] text-[var(--sage)]/85 mt-0.5 truncate text-pretty">
                 {subtitle}
               </p>
             ) : null}
@@ -80,7 +80,7 @@ export default function PillarHubHeader({
         {actions ? <div className="shrink-0 flex items-center gap-1.5">{actions}</div> : null}
       </div>
 
-      <div className="flex justify-center mb-1">
+      <div className="flex justify-center mb-1 max-w-lg mx-auto">
         <div
           className="relative w-[7.25rem] h-[7.25rem] flex items-center justify-center"
           role="img"
@@ -129,7 +129,9 @@ export default function PillarHubHeader({
         </div>
       </div>
 
-      {children}
+      {children ? (
+        <div className="max-w-lg mx-auto w-full">{children}</div>
+      ) : null}
     </Root>
   );
 }

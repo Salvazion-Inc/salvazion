@@ -245,20 +245,50 @@ export async function fetchOverpassChurches(
   throw lastErr || new Error('overpass failed');
 }
 
+/** Pull city-like name from Nominatim address (varies by country). */
+function cityFromNominatimAddress(a: Record<string, string | undefined>): string {
+  return (
+    a.city ||
+    a.town ||
+    a.village ||
+    a.municipality ||
+    a.city_district ||
+    a.suburb ||
+    a.neighbourhood ||
+    a.hamlet ||
+    a.locality ||
+    a.county ||
+    a.state_district ||
+    ''
+  );
+}
+
 /** Nominatim reverse geocode → city + country (server-side). */
 export async function reverseGeocode(
   lat: number,
   lon: number
 ): Promise<ReverseGeoResult> {
-  const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=12&addressdetails=1`;
-  const res = await fetch(url, {
-    headers: {
-      Accept: 'application/json',
-      'User-Agent': GEO_USER_AGENT,
-    },
-    cache: 'no-store',
-  });
-  if (!res.ok) {
+  // zoom 14 prefers city/suburb; fallback zoom 10 if thin address
+  const tryZoom = async (zoom: number) => {
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=${zoom}&addressdetails=1`;
+    const res = await fetch(url, {
+      headers: {
+        Accept: 'application/json',
+        'User-Agent': GEO_USER_AGENT,
+      },
+      cache: 'no-store',
+    });
+    if (!res.ok) return null;
+    return (await res.json()) as {
+      display_name?: string;
+      address?: Record<string, string | undefined>;
+    };
+  };
+
+  let data = await tryZoom(14);
+  if (!data) data = await tryZoom(10);
+
+  if (!data) {
     return {
       label: `${lat.toFixed(4)}, ${lon.toFixed(4)}`,
       city: '',
@@ -267,31 +297,21 @@ export async function reverseGeocode(
       lon,
     };
   }
-  const data = (await res.json()) as {
-    display_name?: string;
-    address?: {
-      suburb?: string;
-      neighbourhood?: string;
-      city?: string;
-      town?: string;
-      village?: string;
-      municipality?: string;
-      county?: string;
-      state?: string;
-      country?: string;
-    };
-  };
+
   const a = data.address || {};
-  const city =
-    a.city ||
-    a.town ||
-    a.village ||
-    a.municipality ||
-    a.suburb ||
-    a.neighbourhood ||
-    a.county ||
-    '';
-  const country = a.country || '';
+  let city = cityFromNominatimAddress(a);
+  let country = a.country || '';
+
+  // Fallback: parse "City, …, Country" from display_name
+  if ((!city || !country) && data.display_name) {
+    const parts = data.display_name
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (!city && parts[0]) city = parts[0];
+    if (!country && parts.length > 1) country = parts[parts.length - 1];
+  }
+
   const label =
     [city, a.state, country].filter(Boolean).join(', ') ||
     data.display_name ||

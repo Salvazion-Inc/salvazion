@@ -29,7 +29,9 @@ export default function PageHeader({
   const back = backLabel || t('common.back');
 
   return (
-    <header className={`page-header sticky top-0 z-40 px-4 sm:px-5 pt-4 pb-3 ${className}`}>
+    <header
+      className={`page-header sticky top-0 z-40 px-4 sm:px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-3 ${className}`}
+    >
       <div className="max-w-lg mx-auto flex items-center justify-between gap-3">
         <div className="flex items-center gap-2.5 min-w-0 flex-1">
           <Link
@@ -40,11 +42,11 @@ export default function PageHeader({
             ←
           </Link>
           <div className="min-w-0">
-            <h1 className="text-base sm:text-lg font-semibold text-[var(--accent)] tracking-tight truncate leading-tight">
+            <h1 className="font-display text-base sm:text-lg font-semibold text-[var(--accent)] tracking-tight truncate leading-tight">
               {title}
             </h1>
             {subtitle ? (
-              <p className="text-[11px] sm:text-xs text-[var(--sage)] mt-0.5 line-clamp-2 leading-snug">
+              <p className="text-[11px] sm:text-xs text-[var(--sage)]/85 mt-0.5 line-clamp-2 leading-snug text-pretty">
                 {subtitle}
               </p>
             ) : null}

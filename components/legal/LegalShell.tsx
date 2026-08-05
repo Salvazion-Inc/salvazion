@@ -50,11 +50,11 @@ export default function LegalShell({
   };
 
   return (
-    <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)]">
-      <header className="border-b border-[var(--border-soft)] px-5 py-4">
+    <div className="marketing-shell text-[var(--off-white)]">
+      <header className="glass-strong border-b border-[var(--border-soft)]/80 sticky top-0 z-40 px-5 py-3.5">
         <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
-          <Link href="/" className="flex items-center gap-2.5 min-w-0">
-            <div className="w-9 h-9 rounded-full border border-[var(--border-soft)] overflow-hidden lion-glow bg-[var(--true-black)] shrink-0">
+          <Link href="/" className="flex items-center gap-2.5 min-w-0 rounded-full">
+            <div className="w-9 h-9 rounded-full border border-[var(--border-strong)] overflow-hidden lion-glow bg-[var(--true-black)] shrink-0">
               <Image
                 src="/logo-icon.png"
                 alt="Salvazion"
@@ -63,8 +63,8 @@ export default function LegalShell({
                 className="object-cover"
               />
             </div>
-            <span className="text-sm font-semibold text-[var(--accent)] truncate">
-              Salvazion
+            <span className="font-brand text-sm text-[var(--accent)] truncate">
+              SALVAZION
             </span>
           </Link>
           <nav className="flex items-center gap-2 sm:gap-3 text-xs text-[var(--sage)] shrink-0">
@@ -74,10 +74,10 @@ export default function LegalShell({
               ariaLabel={ui.language}
               size="md"
             />
-            <Link href="/terms" className="hover:text-[var(--accent)]">
+            <Link href="/terms" className="hover:text-[var(--accent)] transition-colors">
               {ui.terms}
             </Link>
-            <Link href="/privacy" className="hover:text-[var(--accent)]">
+            <Link href="/privacy" className="hover:text-[var(--accent)] transition-colors">
               {ui.privacy}
             </Link>
             <Link href="/auth/login" className="hover:text-[var(--accent)]">

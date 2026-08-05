@@ -59,16 +59,61 @@ function requestGps(): Promise<{ lat: number; lon: number } | null> {
   });
 }
 
-/** Persist city/country from GPS reverse geocode into the user profile. */
-async function syncProfileLocation(city: string, country: string): Promise<void> {
-  const c = (city || '').trim();
-  const co = (country || '').trim();
-  if (!c && !co) return;
+/**
+ * Persist city/country from reverse geocode into the user profile
+ * (localStorage + Supabase when logged in). Always emits profile update.
+ */
+async function syncProfileLocation(
+  city: string,
+  country: string
+): Promise<{ city: string; country: string; saved: boolean }> {
+  let c = (city || '').trim();
+  let co = (country || '').trim();
+  // Sometimes only "City, Country" arrives as a single field
+  if (c && !co && c.includes(',')) {
+    const parts = c.split(',').map((s) => s.trim()).filter(Boolean);
+    if (parts.length >= 2) {
+      c = parts[0];
+      co = parts.slice(1).join(', ');
+    }
+  }
+  if (!c && !co) return { city: '', country: '', saved: false };
   const current = loadProfile();
   const same =
     (current.city || '').trim() === c && (current.country || '').trim() === co;
-  if (same) return;
-  await saveProfile({ city: c, country: co });
+  if (!same) {
+    await saveProfile({ city: c, country: co });
+  }
+  return { city: c, country: co, saved: !same };
+}
+
+/** Dedicated reverse-geocode call so profile updates even if Overpass is slow/fails. */
+async function reverseGeocodeClient(
+  lat: number,
+  lon: number
+): Promise<{ city: string; country: string; label: string } | null> {
+  try {
+    const res = await fetch('/api/geo/geocode', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ lat, lon }),
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as {
+      city?: string;
+      country?: string;
+      label?: string;
+    };
+    const city = (data.city || '').trim();
+    const country = (data.country || '').trim();
+    const label =
+      (data.label || '').trim() ||
+      [city, country].filter(Boolean).join(', ');
+    if (!city && !country && !label) return null;
+    return { city, country, label };
+  } catch {
+    return null;
+  }
 }
 
 /** Compact Salvazion mini-map: user + church pins in Freedom green. */
@@ -255,6 +300,33 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
     });
   }, [readProfilePlace]);
 
+  const applyLocationToProfile = useCallback(
+    async (city: string, country: string, label?: string) => {
+      let c = (city || '').trim();
+      let co = (country || '').trim();
+      if ((!c || !co) && label) {
+        const parts = label
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean);
+        if (!c && parts[0]) c = parts[0];
+        if (!co && parts.length > 1) co = parts[parts.length - 1];
+      }
+      const result = await syncProfileLocation(c, co);
+      if (result.city || result.country) {
+        const place = formatLocation(result.city, result.country);
+        if (place) {
+          setProfilePlace(place);
+          setQueryCity(place);
+          setProfileSynced(true);
+        }
+        return true;
+      }
+      return false;
+    },
+    []
+  );
+
   const fetchChurchesNear = useCallback(
     async (
       lat: number,
@@ -277,6 +349,16 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
         source: opts.source,
       });
 
+      // GPS path: reverse-geocode immediately so profile updates even if Overpass is slow/fails.
+      let profilePromise: Promise<boolean> = Promise.resolve(false);
+      if (opts.updateProfile) {
+        profilePromise = (async () => {
+          const rev = await reverseGeocodeClient(lat, lon);
+          if (!rev) return false;
+          return applyLocationToProfile(rev.city, rev.country, rev.label);
+        })();
+      }
+
       try {
         const res = await fetch('/api/geo/nearby-churches', {
           method: 'POST',
@@ -296,6 +378,18 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
           country?: string | null;
           error?: string;
         };
+
+        // Even on partial failure, apply reverse fields if present
+        if (opts.updateProfile && (data.city || data.country || data.label)) {
+          await applyLocationToProfile(
+            data.city || '',
+            data.country || '',
+            data.label || undefined
+          );
+        } else if (opts.updateProfile) {
+          await profilePromise;
+        }
+
         if (!res.ok) throw new Error(data.error || 'geo_failed');
 
         const list = data.churches || [];
@@ -307,16 +401,6 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
         setGeo({ lat, lon, label, source: opts.source });
         setChurches(list);
 
-        if (opts.updateProfile && (data.city || data.country)) {
-          await syncProfileLocation(data.city || '', data.country || '');
-          const place = formatLocation(data.city, data.country);
-          if (place) {
-            setProfilePlace(place);
-            setQueryCity(place);
-            setProfileSynced(true);
-          }
-        }
-
         if (list.length === 0) {
           setError(
             es
@@ -325,6 +409,8 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
           );
         }
       } catch {
+        // Profile may already be updated via reverseGeocodeClient
+        if (opts.updateProfile) await profilePromise;
         setError(
           es
             ? 'No se pudo cargar el mapa. Revisa tu conexión e intenta de nuevo.'
@@ -334,7 +420,7 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
         setLoading(false);
       }
     },
-    [es]
+    [applyLocationToProfile, es]
   );
 
   const searchByCity = useCallback(
@@ -375,13 +461,12 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
           city: string;
           country: string;
         };
-        if (updateProfile && (hit.city || hit.country)) {
-          await syncProfileLocation(hit.city || '', hit.country || '');
-          const loc = formatLocation(hit.city, hit.country);
-          if (loc) {
-            setProfilePlace(loc);
-            setQueryCity(loc);
-          }
+        if (updateProfile && (hit.city || hit.country || hit.label)) {
+          await applyLocationToProfile(
+            hit.city || '',
+            hit.country || '',
+            hit.label
+          );
         }
         await fetchChurchesNear(hit.lat, hit.lon, {
           source: 'city',
@@ -397,7 +482,7 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
         setLoading(false);
       }
     },
-    [es, fetchChurchesNear]
+    [applyLocationToProfile, es, fetchChurchesNear]
   );
 
   const locateWithGps = useCallback(async () => {

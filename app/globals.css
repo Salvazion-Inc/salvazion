@@ -722,6 +722,11 @@ html[data-text-scale="xxl"] nav.fixed span {
   border-color: var(--border-strong);
   box-shadow: 0 0 0 3px rgba(143, 217, 154, 0.1);
 }
+/* Leading search icon — room so placeholder never sits under the lens */
+.input-soft.input-search {
+  padding-left: 2.75rem;
+  padding-right: 2.5rem;
+}
 
 .card-soft {
   background: linear-gradient(

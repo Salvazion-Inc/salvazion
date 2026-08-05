@@ -239,9 +239,9 @@ export default function LandingBlog({ lang, copy }: Props) {
           <label className="sr-only" htmlFor="blog-article-search">
             {copy.searchAria}
           </label>
-          <div className="relative flex items-center">
+          <div className="relative">
             <span
-              className="absolute left-3 pointer-events-none text-[var(--sage)]"
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 z-[1] pointer-events-none text-[var(--sage)] flex items-center justify-center w-4 h-4"
               aria-hidden
             >
               <svg
@@ -268,13 +268,13 @@ export default function LandingBlog({ lang, copy }: Props) {
               placeholder={copy.searchPlaceholder}
               autoComplete="off"
               spellCheck={false}
-              className="input-soft w-full text-sm py-2.5 pl-10 pr-10 min-h-[44px]"
+              className="input-soft input-search w-full text-sm py-2.5 min-h-[44px]"
             />
             {query.trim() ? (
               <button
                 type="button"
                 onClick={() => setQuery('')}
-                className="absolute right-2 text-[11px] font-medium text-[var(--sage)] hover:text-white px-2 py-1 rounded-md"
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-[1] text-[11px] font-medium text-[var(--sage)] hover:text-white px-2 py-1 rounded-md"
                 aria-label={copy.clearSearch}
               >
                 ✕

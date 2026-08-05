@@ -259,12 +259,12 @@ export default function XArticlesFeed({
       </div>
 
       {/* Keyword search */}
-      <div className="relative flex items-center">
+      <div className="relative">
         <label className="sr-only" htmlFor="app-article-search">
           {t('articles.searchAria')}
         </label>
         <span
-          className="absolute left-2.5 pointer-events-none text-[var(--sage)]"
+          className="absolute left-3 top-1/2 -translate-y-1/2 z-[1] pointer-events-none text-[var(--sage)] flex items-center justify-center w-4 h-4"
           aria-hidden
         >
           <svg
@@ -291,13 +291,13 @@ export default function XArticlesFeed({
           placeholder={t('articles.searchPlaceholder')}
           autoComplete="off"
           spellCheck={false}
-          className="input-soft w-full text-sm py-2 pl-9 pr-9 min-h-[40px]"
+          className="input-soft input-search w-full text-sm py-2 min-h-[40px]"
         />
         {query.trim() ? (
           <button
             type="button"
             onClick={() => setQuery('')}
-            className="absolute right-1.5 text-[10px] font-medium text-[var(--sage)] hover:text-white px-2 py-1 rounded-md"
+            className="absolute right-1.5 top-1/2 -translate-y-1/2 z-[1] text-[10px] font-medium text-[var(--sage)] hover:text-white px-2 py-1 rounded-md"
             aria-label={t('articles.clearSearch')}
           >
             ✕

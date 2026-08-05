@@ -62,6 +62,7 @@ const nextConfig: NextConfig = {
                 "https://fonts.reown.com",
                 "https://nominatim.openstreetmap.org",
                 "https://overpass-api.de",
+                "https://overpass.kumi.systems",
                 "https://*.tile.openstreetmap.org",
                 "https://unavatar.io",
                 // Wearable OAuth + APIs

@@ -15,8 +15,8 @@ import {
   todayStr,
   eventTitleKey,
   endTimeOf,
-  formatDurationHours,
   agendaBlockHeightPx,
+  agendaBlockLayout,
   DEFAULT_BLOCK_MIN,
   type CalendarEvent,
   type CalendarPillar,
@@ -34,6 +34,7 @@ import {
 } from '@/lib/calendar/colors';
 import { logAction } from '@/lib/scoring/engine';
 import { useI18n } from '@/components/I18nProvider';
+import AgendaActivityFace from '@/components/calendar/AgendaActivityFace';
 
 type Props = {
   onScored?: () => void;
@@ -209,7 +210,7 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
             const pal = pillarPalette(pillar);
             const end = endTimeOf(ev);
             const durMin = ev.durationMin || DEFAULT_BLOCK_MIN;
-            const dur = formatDurationHours(durMin);
+            const layout = agendaBlockLayout(durMin);
             const blockH = agendaBlockHeightPx(durMin);
             const phase = agendaEventPhase(ev.time, end, now);
             const isNow = phase === 'now';
@@ -217,13 +218,20 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
             // Salvation keeps a light plate + dark ink; others tint + light text
             const bg = mixTowardBlack(pal.soft, darken);
             const border = mixTowardBlack(pal.border, darken * 0.75);
-            const text = pal.lightPlate
-              ? mixTowardBlack(pal.text, Math.min(darken * 0.25, 0.12))
-              : mixTowardBlack(pal.text, darken * 0.35);
-            const muted = pal.lightPlate
-              ? mixTowardBlack(pal.muted, Math.min(darken * 0.2, 0.1))
-              : mixTowardBlack(pal.muted, darken * 0.4);
             const solid = mixTowardBlack(pal.solid, darken * 0.25);
+            // Palette for face: keep plate identity; soften muted via mix on non-plate
+            const facePal = {
+              ...pal,
+              solid,
+              soft: bg,
+              border,
+              text: pal.lightPlate
+                ? mixTowardBlack(pal.text, Math.min(darken * 0.25, 0.12))
+                : mixTowardBlack(pal.text, darken * 0.35),
+              muted: pal.lightPlate
+                ? mixTowardBlack(pal.muted, Math.min(darken * 0.2, 0.1))
+                : mixTowardBlack(pal.muted, darken * 0.4),
+            };
             const progress = isNow
               ? agendaEventProgress(ev.time, end, now)
               : 0;
@@ -245,7 +253,13 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
             return (
               <li
                 key={ev.id}
-                className={`rounded-lg px-2.5 py-1.5 border flex items-stretch gap-2 transition-[background,border-color,opacity,height,min-height] duration-700 relative ${
+                className={`rounded-lg border transition-[background,border-color,opacity,height,min-height] duration-700 relative ${
+                  layout === 'compact'
+                    ? 'px-2 py-1'
+                    : layout === 'cozy'
+                      ? 'px-2.5 py-1.5'
+                      : 'px-2.5 py-2'
+                } ${
                   ev.completed
                     ? 'opacity-70'
                     : phase === 'past'
@@ -262,117 +276,101 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
                     borderWidth: isNow ? 1.5 : 1,
                     height: blockH,
                     minHeight: blockH,
-                    paddingBottom: isNow ? 10 : undefined,
+                    paddingBottom: isNow && layout !== 'compact' ? 10 : undefined,
                   } as CSSProperties
                 }
                 data-phase={phase}
+                data-layout={layout}
                 data-duration-min={durMin}
                 data-pillar={pillar}
                 aria-current={isNow ? 'true' : undefined}
               >
-                <span
-                  className={`self-stretch rounded-full shrink-0 ${
-                    isNow ? 'w-1.5 now-block-stripe' : 'w-1'
-                  }`}
-                  style={{
-                    background: pal.lightPlate
-                      ? 'color-mix(in srgb, #121412 55%, #F5F7F5)'
-                      : solid,
-                  }}
-                  aria-hidden
-                />
-                <div className="min-w-0 flex-1 flex flex-col justify-center py-0.5">
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <p
-                      className="text-[10px] tabular-nums font-semibold shrink-0"
-                      style={{ color: muted }}
-                    >
-                      {isNow ? clockLabel : ev.time || '00:00'}
-                    </p>
-                    {isNow && (
+                <AgendaActivityFace
+                  layout={layout}
+                  title={labelFor(ev)}
+                  timeLabel={isNow ? clockLabel : ev.time || '00:00'}
+                  rangeLabel={
+                    layout === 'compact'
+                      ? undefined
+                      : isNow
+                        ? `${ev.time || '00:00'}–${end}`
+                        : `→ ${end}`
+                  }
+                  durationMin={durMin}
+                  pillar={pillar}
+                  pal={facePal}
+                  done={!!ev.completed}
+                  isNow={isNow}
+                  nowBadge={
+                    isNow ? (
                       <span
                         className="now-block-badge"
                         style={{ '--now-glow': pal.solid } as CSSProperties}
                       >
                         <i className="now-block-badge-dot" aria-hidden />
                         {t('agenda.now')}
-                        {remainingMin > 0 && (
+                        {remainingMin > 0 && layout !== 'compact' && (
                           <span className="font-semibold normal-case tracking-normal opacity-80">
                             · {remainingLabel}
                           </span>
                         )}
                       </span>
-                    )}
-                  </div>
-                  <p
-                    className={`text-[12px] font-semibold leading-snug truncate transition-colors duration-500 ${
-                      ev.completed ? 'line-through opacity-70' : ''
-                    } ${isNow ? 'text-[13px]' : ''}`}
-                    style={{ color: text }}
-                  >
-                    {labelFor(ev)}
-                  </p>
-                  <p
-                    className="text-[9px] tabular-nums transition-colors duration-500 opacity-80"
-                    style={{ color: muted }}
-                  >
-                    {isNow
-                      ? `${ev.time || '00:00'}–${end} · ${remainingLabel}`
-                      : `${end} · ${dur}`}
-                  </p>
-                </div>
-                <div
-                  className="btn-pair"
-                  style={{
-                    borderColor: isNow ? solid : border,
-                    boxShadow: isNow
-                      ? `0 0 10px color-mix(in srgb, ${pal.solid} 25%, transparent)`
-                      : undefined,
-                  }}
-                  role="group"
-                  aria-label={t('calendar.fulfilled')}
-                >
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!ev.completed) toggle(ev.id);
-                    }}
-                    style={{
-                      background: ev.completed ? pal.solid : 'transparent',
-                      color: ev.completed
-                        ? '#111'
-                        : pal.lightPlate
-                          ? pal.muted
-                          : muted,
-                    }}
-                    aria-pressed={!!ev.completed}
-                  >
-                    {t('calendar.yes')}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (ev.completed) toggle(ev.id);
-                    }}
-                    style={{
-                      borderColor: border,
-                      background: !ev.completed
-                        ? pal.lightPlate
-                          ? 'rgba(18, 20, 18, 0.12)'
-                          : 'rgba(0,0,0,0.3)'
-                        : 'transparent',
-                      // Dark control faces need light ink (pal.control)
-                      color: !ev.completed
-                        ? pal.lightPlate
-                          ? pal.text
-                          : pal.control
-                        : muted,
-                    }}
-                    aria-pressed={!ev.completed}
-                  >
-                    {t('calendar.no')}
-                  </button>
-                </div>
+                    ) : null
+                  }
+                  actions={
+                    <div
+                      className="btn-pair"
+                      style={{
+                        borderColor: isNow ? solid : border,
+                        boxShadow: isNow
+                          ? `0 0 10px color-mix(in srgb, ${pal.solid} 25%, transparent)`
+                          : undefined,
+                      }}
+                      role="group"
+                      aria-label={t('calendar.fulfilled')}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!ev.completed) toggle(ev.id);
+                        }}
+                        style={{
+                          background: ev.completed ? pal.solid : 'transparent',
+                          color: ev.completed
+                            ? '#111'
+                            : pal.lightPlate
+                              ? pal.muted
+                              : facePal.muted,
+                        }}
+                        aria-pressed={!!ev.completed}
+                      >
+                        {t('calendar.yes')}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (ev.completed) toggle(ev.id);
+                        }}
+                        style={{
+                          borderColor: border,
+                          background: !ev.completed
+                            ? pal.lightPlate
+                              ? 'rgba(18, 20, 18, 0.12)'
+                              : 'rgba(0,0,0,0.3)'
+                            : 'transparent',
+                          color: !ev.completed
+                            ? pal.lightPlate
+                              ? pal.text
+                              : pal.control
+                            : facePal.muted,
+                        }}
+                        aria-pressed={!ev.completed}
+                      >
+                        {t('calendar.no')}
+                      </button>
+                    </div>
+                  }
+                />
                 {isNow && (
                   <div className="now-block-progress" aria-hidden>
                     <i

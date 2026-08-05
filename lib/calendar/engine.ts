@@ -344,11 +344,13 @@ export function endTimeOf(ev: CalendarEvent): string {
 }
 
 /**
- * Format duration for UI in hours (not minutes).
- * 30 → "0.5 h", 60 → "1 h", 90 → "1.5 h", 420 → "7 h"
+ * Format duration for UI.
+ * Short slots stay in minutes so 15/30 min blocks stay readable:
+ *   15 → "15 min", 30 → "30 min", 60 → "1 h", 90 → "1.5 h", 420 → "7 h"
  */
 export function formatDurationHours(durationMin: number): string {
   const min = Math.max(0, durationMin || 0);
+  if (min > 0 && min < 60) return `${min} min`;
   const hours = min / 60;
   if (Number.isInteger(hours)) return `${hours} h`;
   const one = Math.round(hours * 10) / 10;
@@ -357,22 +359,42 @@ export function formatDurationHours(durationMin: number): string {
 }
 
 /**
+ * Layout density for agenda/calendar rows.
+ * compact ≤20m · cozy ≤45m · roomy longer (sleep, work…).
+ */
+export type AgendaBlockLayout = 'compact' | 'cozy' | 'roomy';
+
+export function agendaBlockLayout(durationMin: number): AgendaBlockLayout {
+  const m = Math.max(1, durationMin || DEFAULT_BLOCK_MIN);
+  if (m <= 20) return 'compact';
+  if (m <= 45) return 'cozy';
+  return 'roomy';
+}
+
+/**
  * Vertical size (px) of an agenda/calendar block proportional to duration.
- * Linear scale so longer blocks read as larger slices of the day:
- *   15–30 min → floor (~42 px), 60 → 72, 120 → 144, 210 → 252, 420 (7 h) → 504.
+ * Compact slots use a fixed single-line height so type/title never clips.
+ *   15 min → 40 px (compact), 30 → 52 (cozy), 60 → 72, 120 → 144, 420 → 504.
  */
 export const AGENDA_PX_PER_MIN = 1.2;
-/** Enough room for time + title + Sí/No without clipping short Salvation blocks. */
-export const AGENDA_BLOCK_MIN_H = 48;
+/** Single-line compact row (15–20 min activities). */
+export const AGENDA_BLOCK_COMPACT_H = 40;
+/** Cozy two-line short block (≈30–45 min). */
+export const AGENDA_BLOCK_COZY_H = 52;
+/** Floor for roomy proportional blocks. */
+export const AGENDA_BLOCK_MIN_H = 64;
 /** Soft ceiling for bad/out-of-range data only (≈ 9 h). */
 export const AGENDA_BLOCK_MAX_H = 540;
 
 export function agendaBlockHeightPx(durationMin: number): number {
   const m = Math.max(1, durationMin || DEFAULT_BLOCK_MIN);
+  const layout = agendaBlockLayout(m);
+  if (layout === 'compact') return AGENDA_BLOCK_COMPACT_H;
+  if (layout === 'cozy') {
+    return Math.max(AGENDA_BLOCK_COZY_H, Math.round(m * 1.1));
+  }
   const raw = m * AGENDA_PX_PER_MIN;
-  return Math.round(
-    Math.min(AGENDA_BLOCK_MAX_H, Math.max(AGENDA_BLOCK_MIN_H, raw))
-  );
+  return Math.round(Math.min(AGENDA_BLOCK_MAX_H, Math.max(AGENDA_BLOCK_MIN_H, raw)));
 }
 
 export function clearDay(date: string): void {

@@ -2,7 +2,12 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useI18n } from '@/components/I18nProvider';
-import { loadProfile } from '@/lib/store/profile';
+import {
+  formatLocation,
+  loadProfile,
+  saveProfile,
+  subscribeProfileUpdated,
+} from '@/lib/store/profile';
 import { logAction } from '@/lib/scoring/engine';
 import { getFreedomPoints } from '@/lib/freedom/engine';
 import { PILLAR_COLORS } from '@/lib/theme/pillars';
@@ -10,16 +15,10 @@ import {
   type ChurchDenomFamily,
   type ChurchPlace,
   DENOM_FAMILIES,
-  MAX_RESULTS,
   SEARCH_RADIUS_M,
-  buildOverpassQuery,
-  classifyDenomFamily,
   denomFamilyLabel,
   directionsUrl,
   formatDistance,
-  haversineMeters,
-  humanizeDenomination,
-  isChristianAssemblyOrEvangelical,
   placeUrl,
 } from '@/lib/freedom/churches';
 
@@ -53,49 +52,23 @@ function requestGps(): Promise<{ lat: number; lon: number } | null> {
       () => resolve(null),
       {
         enableHighAccuracy: true,
-        timeout: 15_000,
-        maximumAge: 60_000,
+        timeout: 18_000,
+        maximumAge: 30_000,
       }
     );
   });
 }
 
-async function reverseGeocodeLabel(
-  lat: number,
-  lon: number,
-  fallback: string
-): Promise<string> {
-  try {
-    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=14`;
-    const res = await fetch(url, { headers: { Accept: 'application/json' } });
-    if (!res.ok) return fallback;
-    const data = (await res.json()) as {
-      address?: {
-        suburb?: string;
-        neighbourhood?: string;
-        city?: string;
-        town?: string;
-        village?: string;
-        municipality?: string;
-        state?: string;
-        country?: string;
-      };
-      display_name?: string;
-    };
-    const a = data.address || {};
-    const locality =
-      a.suburb ||
-      a.neighbourhood ||
-      a.city ||
-      a.town ||
-      a.village ||
-      a.municipality;
-    const parts = [locality, a.state, a.country].filter(Boolean);
-    if (parts.length) return parts.join(', ');
-    return data.display_name || fallback;
-  } catch {
-    return fallback;
-  }
+/** Persist city/country from GPS reverse geocode into the user profile. */
+async function syncProfileLocation(city: string, country: string): Promise<void> {
+  const c = (city || '').trim();
+  const co = (country || '').trim();
+  if (!c && !co) return;
+  const current = loadProfile();
+  const same =
+    (current.city || '').trim() === c && (current.country || '').trim() === co;
+  if (same) return;
+  await saveProfile({ city: c, country: co });
 }
 
 /** Compact Salvazion mini-map: user + church pins in Freedom green. */
@@ -119,7 +92,6 @@ function PinMap({
     let maxLat = Math.max(...lats);
     let minLon = Math.min(...lons);
     let maxLon = Math.max(...lons);
-    // Minimum span so a single pin isn't stretched edge-to-edge
     const latPad = Math.max((maxLat - minLat) * 0.15, 0.008);
     const lonPad = Math.max((maxLon - minLon) * 0.15, 0.01);
     minLat -= latPad;
@@ -158,7 +130,6 @@ function PinMap({
           : `Map with ${churches.length} churches nearby`
       }
     >
-      {/* Soft grid */}
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className="absolute inset-0 w-full h-full"
@@ -179,8 +150,6 @@ function PinMap({
           </radialGradient>
         </defs>
         <rect width={W} height={H} fill="url(#salv-grid)" />
-
-        {/* Radius ring around user */}
         <circle cx={you.x} cy={you.y} r={36} fill="url(#you-glow)" />
         <circle
           cx={you.x}
@@ -192,7 +161,6 @@ function PinMap({
           strokeWidth="1"
           strokeDasharray="3 4"
         />
-
         {churches.map((c) => {
           const p = project(c.lat, c.lon);
           return (
@@ -218,8 +186,6 @@ function PinMap({
             </g>
           );
         })}
-
-        {/* You */}
         <circle
           cx={you.x}
           cy={you.y}
@@ -230,7 +196,6 @@ function PinMap({
         />
         <circle cx={you.x} cy={you.y} r={2.2} fill={FREEDOM.solid} />
       </svg>
-
       <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between gap-2 pointer-events-none">
         <span
           className="text-[9px] font-medium px-2 py-0.5 rounded-full border"
@@ -256,7 +221,8 @@ function PinMap({
 
 /**
  * Christian Assemblies & Evangelical churches (Freedom · Connect).
- * Salvazion design · GPS · denomination filters · directions.
+ * Uses /api/geo/* (server User-Agent for Overpass/Nominatim).
+ * GPS updates profile city + country.
  */
 export default function ChurchesMapPanel({ className = '', onScored }: Props) {
   const { lang } = useI18n();
@@ -266,94 +232,96 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [queryCity, setQueryCity] = useState('');
+  const [profilePlace, setProfilePlace] = useState('');
+  const [profileSynced, setProfileSynced] = useState(false);
   const [gpsStatus, setGpsStatus] = useState<'idle' | 'locating' | 'ok' | 'denied'>(
     'idle'
   );
   const [familyFilter, setFamilyFilter] = useState<ChurchDenomFamily | 'all'>('all');
   const [connected, setConnected] = useState<Set<string>>(() => new Set());
 
-  const profilePlace = useMemo(() => {
+  const readProfilePlace = useCallback(() => {
     const p = loadProfile();
-    const parts = [p?.city, p?.country].filter(Boolean);
-    return parts.join(', ');
+    return formatLocation(p?.city, p?.country);
   }, []);
 
+  useEffect(() => {
+    setProfilePlace(readProfilePlace());
+    setQueryCity(readProfilePlace());
+    return subscribeProfileUpdated(() => {
+      const place = readProfilePlace();
+      setProfilePlace(place);
+      setQueryCity((q) => (q.trim() ? q : place));
+    });
+  }, [readProfilePlace]);
+
   const fetchChurchesNear = useCallback(
-    async (lat: number, lon: number, label: string, source: Geo['source']) => {
+    async (
+      lat: number,
+      lon: number,
+      opts: {
+        source: Geo['source'];
+        labelFallback: string;
+        /** When true, write reverse-geocoded city/country into profile */
+        updateProfile: boolean;
+      }
+    ) => {
       setLoading(true);
       setError(null);
       setChurches([]);
-      setGeo({ lat, lon, label, source });
       setFamilyFilter('all');
+      setGeo({
+        lat,
+        lon,
+        label: opts.labelFallback,
+        source: opts.source,
+      });
 
       try {
-        const overpass = buildOverpassQuery(lat, lon, SEARCH_RADIUS_M);
-        const opRes = await fetch('https://overpass-api.de/api/interpreter', {
+        const res = await fetch('/api/geo/nearby-churches', {
           method: 'POST',
-          body: overpass,
-          headers: { 'Content-Type': 'text/plain' },
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            lat,
+            lon,
+            radiusM: SEARCH_RADIUS_M,
+            lang: es ? 'es' : 'en',
+            reverse: true,
+          }),
         });
-        if (!opRes.ok) throw new Error('overpass');
-        const op = (await opRes.json()) as {
-          elements?: Array<{
-            id: number;
-            type: string;
-            lat?: number;
-            lon?: number;
-            center?: { lat: number; lon: number };
-            tags?: Record<string, string>;
-          }>;
+        const data = (await res.json()) as {
+          churches?: ChurchPlace[];
+          label?: string | null;
+          city?: string | null;
+          country?: string | null;
+          error?: string;
         };
+        if (!res.ok) throw new Error(data.error || 'geo_failed');
 
-        const list: ChurchPlace[] = [];
-        for (const el of op.elements || []) {
-          const clat = el.lat ?? el.center?.lat;
-          const clon = el.lon ?? el.center?.lon;
-          if (clat == null || clon == null) continue;
-          const tags = el.tags || {};
-          const name =
-            tags.name ||
-            tags['name:es'] ||
-            tags['name:en'] ||
-            (es ? 'Asamblea / Iglesia cristiana' : 'Christian assembly / church');
+        const list = data.churches || [];
+        const label =
+          data.label ||
+          opts.labelFallback ||
+          (es ? 'Tu ubicación' : 'Your location');
 
-          if (!isChristianAssemblyOrEvangelical(tags, name)) continue;
+        setGeo({ lat, lon, label, source: opts.source });
+        setChurches(list);
 
-          const family = classifyDenomFamily(tags.denomination, name);
-          list.push({
-            id: `${el.type}-${el.id}`,
-            name,
-            lat: clat,
-            lon: clon,
-            denomination: humanizeDenomination(tags.denomination, es),
-            family,
-            address:
-              [tags['addr:street'], tags['addr:housenumber'], tags['addr:city']]
-                .filter(Boolean)
-                .join(' ')
-                .trim() || undefined,
-            distanceM: haversineMeters(lat, lon, clat, clon),
-            website: tags.website || tags['contact:website'] || undefined,
-            phone: tags.phone || tags['contact:phone'] || undefined,
-          });
+        if (opts.updateProfile && (data.city || data.country)) {
+          await syncProfileLocation(data.city || '', data.country || '');
+          const place = formatLocation(data.city, data.country);
+          if (place) {
+            setProfilePlace(place);
+            setQueryCity(place);
+            setProfileSynced(true);
+          }
         }
 
-        const seen = new Set<string>();
-        const unique = list
-          .filter((c) => {
-            const k = `${c.name.toLowerCase()}|${c.lat.toFixed(4)}|${c.lon.toFixed(4)}`;
-            if (seen.has(k)) return false;
-            seen.add(k);
-            return true;
-          })
-          .sort((a, b) => (a.distanceM ?? 0) - (b.distanceM ?? 0));
-
-        setChurches(unique.slice(0, MAX_RESULTS));
-        if (unique.length === 0) {
+        if (list.length === 0) {
           setError(
             es
-              ? 'No hay asambleas ni iglesias evangélicas indexadas cerca. Prueba otra ciudad o abre cómo llegar en Maps.'
-              : 'No assemblies or evangelical churches indexed nearby. Try another city or open directions in Maps.'
+              ? 'No hay asambleas ni iglesias evangélicas indexadas cerca. Prueba otra ciudad o amplía la búsqueda.'
+              : 'No assemblies or evangelical churches indexed nearby. Try another city.'
           );
         }
       } catch {
@@ -370,7 +338,7 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
   );
 
   const searchByCity = useCallback(
-    async (place: string) => {
+    async (place: string, updateProfile = false) => {
       const q = place.trim();
       if (!q) {
         setError(
@@ -385,19 +353,12 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
       setError(null);
       setChurches([]);
       try {
-        const nomUrl = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(
-          q
-        )}`;
-        const nomRes = await fetch(nomUrl, {
-          headers: { Accept: 'application/json' },
+        const geoRes = await fetch('/api/geo/geocode', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ q }),
         });
-        if (!nomRes.ok) throw new Error('geocode');
-        const nom = (await nomRes.json()) as Array<{
-          lat: string;
-          lon: string;
-          display_name?: string;
-        }>;
-        if (!nom[0]) {
+        if (geoRes.status === 404) {
           setError(
             es
               ? 'No encontramos esa ciudad. Prueba “Ciudad, País”.'
@@ -406,12 +367,27 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
           setLoading(false);
           return;
         }
-        await fetchChurchesNear(
-          parseFloat(nom[0].lat),
-          parseFloat(nom[0].lon),
-          nom[0].display_name || q,
-          'city'
-        );
+        if (!geoRes.ok) throw new Error('geocode');
+        const hit = (await geoRes.json()) as {
+          lat: number;
+          lon: number;
+          label: string;
+          city: string;
+          country: string;
+        };
+        if (updateProfile && (hit.city || hit.country)) {
+          await syncProfileLocation(hit.city || '', hit.country || '');
+          const loc = formatLocation(hit.city, hit.country);
+          if (loc) {
+            setProfilePlace(loc);
+            setQueryCity(loc);
+          }
+        }
+        await fetchChurchesNear(hit.lat, hit.lon, {
+          source: 'city',
+          labelFallback: hit.label || q,
+          updateProfile: false,
+        });
       } catch {
         setError(
           es
@@ -428,13 +404,14 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
     setGpsStatus('locating');
     setLoading(true);
     setError(null);
+    setProfileSynced(false);
     const coords = await requestGps();
     if (!coords) {
       setGpsStatus('denied');
       setLoading(false);
       const place = queryCity.trim() || profilePlace;
       if (place) {
-        await searchByCity(place);
+        await searchByCity(place, false);
       } else {
         setError(
           es
@@ -445,33 +422,32 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
       return;
     }
     setGpsStatus('ok');
-    const label = await reverseGeocodeLabel(
-      coords.lat,
-      coords.lon,
-      es ? 'Tu ubicación' : 'Your location'
-    );
-    await fetchChurchesNear(coords.lat, coords.lon, label, 'gps');
+    await fetchChurchesNear(coords.lat, coords.lon, {
+      source: 'gps',
+      labelFallback: es ? 'Tu ubicación GPS' : 'Your GPS location',
+      updateProfile: true,
+    });
   }, [es, fetchChurchesNear, profilePlace, queryCity, searchByCity]);
 
+  // Auto: GPS first (updates profile), then profile city
   useEffect(() => {
-    setQueryCity(profilePlace);
     void (async () => {
       setGpsStatus('locating');
       setLoading(true);
       const coords = await requestGps();
       if (coords) {
         setGpsStatus('ok');
-        const label = await reverseGeocodeLabel(
-          coords.lat,
-          coords.lon,
-          es ? 'Tu ubicación' : 'Your location'
-        );
-        await fetchChurchesNear(coords.lat, coords.lon, label, 'gps');
+        await fetchChurchesNear(coords.lat, coords.lon, {
+          source: 'gps',
+          labelFallback: es ? 'Tu ubicación GPS' : 'Your GPS location',
+          updateProfile: true,
+        });
         return;
       }
       setGpsStatus('denied');
-      if (profilePlace) {
-        await searchByCity(profilePlace);
+      const place = readProfilePlace();
+      if (place) {
+        await searchByCity(place, false);
       } else {
         setLoading(false);
         setError(
@@ -481,8 +457,9 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
         );
       }
     })();
+    // only on mount / language
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profilePlace, es]);
+  }, [es]);
 
   const familyCounts = useMemo(() => {
     const counts = new Map<ChurchDenomFamily, number>();
@@ -528,8 +505,8 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
         </h2>
         <p className="text-[10px] text-[var(--sage)]/70 mt-0.5 leading-relaxed">
           {es
-            ? 'Conecta en persona · Asambleas de Dios, evangélicas y denominaciones cristianas'
-            : 'Connect in person · Assemblies of God, evangelical and Christian denominations'}
+            ? 'Conecta en persona · GPS actualiza tu ubicación del perfil'
+            : 'Connect in person · GPS updates your profile location'}
         </p>
       </div>
 
@@ -537,7 +514,6 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
         className="card-soft overflow-hidden border"
         style={{ borderColor: `${FREEDOM.solid}44` }}
       >
-        {/* Header band */}
         <div
           className="px-3.5 pt-3.5 pb-3 space-y-3"
           style={{
@@ -571,7 +547,7 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
               value={queryCity}
               onChange={(e) => setQueryCity(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') void searchByCity(queryCity);
+                if (e.key === 'Enter') void searchByCity(queryCity, true);
               }}
               placeholder={
                 es ? 'Ciudad, País (si no hay GPS)' : 'City, Country (if no GPS)'
@@ -582,7 +558,7 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
             <button
               type="button"
               className="btn-secondary px-3 text-xs min-h-[40px] shrink-0"
-              onClick={() => void searchByCity(queryCity)}
+              onClick={() => void searchByCity(queryCity, true)}
               disabled={loading}
             >
               {loading && gpsStatus !== 'locating' ? '…' : es ? 'Buscar' : 'Search'}
@@ -603,6 +579,12 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
                     ? 'Por ciudad'
                     : 'By city'}
               </span>
+              {profileSynced && geo.source === 'gps' ? (
+                <span className="opacity-90" style={{ color: FREEDOM.text }}>
+                  {' '}
+                  · {es ? 'Perfil actualizado' : 'Profile updated'}
+                </span>
+              ) : null}
             </p>
           )}
         </div>
@@ -612,7 +594,6 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
             <PinMap geo={geo} churches={filtered.slice(0, 40)} es={es} />
           )}
 
-          {/* Denomination chips — only families present nearby */}
           {!loading && activeFamilies.length > 0 && (
             <div
               className="flex gap-1.5 overflow-x-auto pb-0.5 -mx-0.5 px-0.5"
@@ -707,9 +688,14 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
                           <p className="text-[12px] font-semibold text-white leading-snug">
                             {c.name}
                           </p>
-                          <p className="text-[10px] mt-0.5 leading-relaxed" style={{ color: FREEDOM.muted }}>
+                          <p
+                            className="text-[10px] mt-0.5 leading-relaxed"
+                            style={{ color: FREEDOM.muted }}
+                          >
                             {[
-                              c.distanceM != null ? formatDistance(c.distanceM) : null,
+                              c.distanceM != null
+                                ? formatDistance(c.distanceM)
+                                : null,
                               c.denomination || denomFamilyLabel(c.family, es),
                               c.address,
                             ]

@@ -77,7 +77,7 @@ const CATHOLIC_DENOM =
   /^(roman_?)?catholic$|greek_catholic|ukrainian_catholic|maronite|melkite|chaldean|syro.?malabar|syro.?malankara|coptic_catholic|armenian_catholic|byzantine_catholic/i;
 
 const CATHOLIC_NAME =
-  /\b(cat[oó]lic[ao]s?|catholic|catedral|cathedral|bas[ií]lica|basilica|sagrado\s+coraz[oó]n|inmaculada\s+concepci[oó]n|nuestra\s+se[nñ]ora\b|parroquia\s+(san|santa|nuestra)|iglesia\s+parroquial|arciprestazgo|obispado)\b/i;
+  /\b(cat[oó]lic[ao]s?|catholic|catedral|cathedral|bas[ií]lica|basilica|sagrado\s+coraz[oó]n|inmaculada\s+concepci[oó]n|nuestra\s+se[nñ]ora\b|parroquia|iglesia\s+parroquial|arciprestazgo|obispado|capilla\s+(san|santa|nuestra)|san\s+francisco\s+javier|colegio\s+san)\b/i;
 
 const NON_CHRISTIAN_RELIGION =
   /^(muslim|islam|islamic|jewish|judaism|buddhist|buddhism|hindu|hinduism|sikh|shinto|taoist|bahai|bahá.?í|pagan|jain|zoroastrian|scientology)$/i;
@@ -96,30 +96,242 @@ export const OVERPASS_DENOM_REGEX =
 export const OVERPASS_NAME_REGEX =
   'asamblea|asambleas de dios|asambleas cristianas|asamblea cristiana|evangelic|evang[eé]lic|iglesia cristiana|iglesia evang|assembly of god|assemblies of god|christian assembly|christian assemblies|pentecost|bautista|baptist|adventist|metodista|methodist|presbiterian|presbyterian|luteran|lutheran|anglican|episcopal|nazareno|nazarene|foursquare|calvary|vi[nñ]a|vineyard|bethel|ebenezer|peniel|shalom|centro cristiano|templo cristiano|iglesia del dios|iglesia de dios|church of god|full gospel|casa de oraci[oó]n|tabern[aá]culo|ministerio cristiano|iglesia reformada|alianza cristiana|christian and missionary|iglesia apost[oó]lica|iglesia pentecostal|iglesia bautista|iglesia metodista|iglesia presbiteriana|iglesia luterana|iglesia adventista|iglesia anglicana|iglesia wesleyana|iglesia carism[aá]tica|iglesia libre|iglesia independiente|iglesia no denominacional|community church|bible church|gospel church|faith church|grace church|hope church|life church|new life|nueva vida|palabra de vida|fuente de vida|r[ií]o de vida|monte sinai|monte sions|getseman[ií]|emaus|emmaus|maranatha|maranata|agape|[aá]gape|philadelphia|filadelfia|elim|hebron|hebr[oó]n|cana[aá]n|silo[eé]|siloam|bethany|betania|redeemer|redentor|saviour|salvador';
 
+/** Official Overpass interpreters (server-side fetch with User-Agent). */
+export const OVERPASS_ENDPOINTS = [
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.kumi.systems/api/interpreter',
+] as const;
+
+export const GEO_USER_AGENT =
+  'SalvazionApp/1.0 (https://salvazion.org; Freedom churches map)';
+
+/**
+ * Primary query: Christian places of worship near the point.
+ * Keep it lean — heavy name regexes often time out or 406 on public mirrors.
+ */
 export function buildOverpassQuery(lat: number, lon: number, radiusM = SEARCH_RADIUS_M): string {
-  const r = radiusM;
-  const d = OVERPASS_DENOM_REGEX;
-  const n = OVERPASS_NAME_REGEX;
+  const r = Math.max(1000, Math.min(radiusM, 25_000));
   return `
-[out:json][timeout:30];
+[out:json][timeout:28];
 (
   node["amenity"="place_of_worship"]["religion"="christian"](around:${r},${lat},${lon});
   way["amenity"="place_of_worship"]["religion"="christian"](around:${r},${lat},${lon});
   relation["amenity"="place_of_worship"]["religion"="christian"](around:${r},${lat},${lon});
-  node["amenity"="place_of_worship"]["denomination"~"${d}",i](around:${r},${lat},${lon});
-  way["amenity"="place_of_worship"]["denomination"~"${d}",i](around:${r},${lat},${lon});
-  relation["amenity"="place_of_worship"]["denomination"~"${d}",i](around:${r},${lat},${lon});
-  node["building"="church"]["denomination"~"${d}",i](around:${r},${lat},${lon});
-  way["building"="church"]["denomination"~"${d}",i](around:${r},${lat},${lon});
-  node["amenity"="place_of_worship"]["name"~"${n}",i](around:${r},${lat},${lon});
-  way["amenity"="place_of_worship"]["name"~"${n}",i](around:${r},${lat},${lon});
-  node["building"="church"]["name"~"${n}",i](around:${r},${lat},${lon});
-  way["building"="church"]["name"~"${n}",i](around:${r},${lat},${lon});
+  node["building"="church"]["religion"="christian"](around:${r},${lat},${lon});
+  way["building"="church"]["religion"="christian"](around:${r},${lat},${lon});
+  node["amenity"="place_of_worship"]["denomination"~"${OVERPASS_DENOM_REGEX}",i](around:${r},${lat},${lon});
+  way["amenity"="place_of_worship"]["denomination"~"${OVERPASS_DENOM_REGEX}",i](around:${r},${lat},${lon});
   node["amenity"="community_centre"]["religion"="christian"](around:${r},${lat},${lon});
   way["amenity"="community_centre"]["religion"="christian"](around:${r},${lat},${lon});
 );
-out center tags ${MAX_RESULTS + 40};
+out tags center;
 `.trim();
+}
+
+export type ReverseGeoResult = {
+  label: string;
+  city: string;
+  country: string;
+  lat: number;
+  lon: number;
+};
+
+export type OverpassElement = {
+  id: number;
+  type: string;
+  lat?: number;
+  lon?: number;
+  center?: { lat: number; lon: number };
+  tags?: Record<string, string>;
+};
+
+/** Parse Overpass elements → filtered church list sorted by distance. */
+export function churchesFromOverpassElements(
+  elements: OverpassElement[] | undefined,
+  lat: number,
+  lon: number,
+  es: boolean
+): ChurchPlace[] {
+  const list: ChurchPlace[] = [];
+  for (const el of elements || []) {
+    const clat = el.lat ?? el.center?.lat;
+    const clon = el.lon ?? el.center?.lon;
+    if (clat == null || clon == null) continue;
+    const tags = el.tags || {};
+    const name =
+      tags.name ||
+      tags['name:es'] ||
+      tags['name:en'] ||
+      (es ? 'Asamblea / Iglesia cristiana' : 'Christian assembly / church');
+
+    if (!isChristianAssemblyOrEvangelical(tags, name)) continue;
+
+    const family = classifyDenomFamily(tags.denomination, name);
+    list.push({
+      id: `${el.type}-${el.id}`,
+      name,
+      lat: clat,
+      lon: clon,
+      denomination: humanizeDenomination(tags.denomination, es),
+      family,
+      address:
+        [tags['addr:street'], tags['addr:housenumber'], tags['addr:city']]
+          .filter(Boolean)
+          .join(' ')
+          .trim() || undefined,
+      distanceM: haversineMeters(lat, lon, clat, clon),
+      website: tags.website || tags['contact:website'] || undefined,
+      phone: tags.phone || tags['contact:phone'] || undefined,
+    });
+  }
+
+  const seen = new Set<string>();
+  return list
+    .filter((c) => {
+      const k = `${c.name.toLowerCase()}|${c.lat.toFixed(4)}|${c.lon.toFixed(4)}`;
+      if (seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    })
+    .sort((a, b) => (a.distanceM ?? 0) - (b.distanceM ?? 0))
+    .slice(0, MAX_RESULTS);
+}
+
+/** Server-side Overpass fetch with mirrors + User-Agent. */
+export async function fetchOverpassChurches(
+  lat: number,
+  lon: number,
+  radiusM = SEARCH_RADIUS_M
+): Promise<OverpassElement[]> {
+  const query = buildOverpassQuery(lat, lon, radiusM);
+  let lastErr: Error | null = null;
+
+  for (const endpoint of OVERPASS_ENDPOINTS) {
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 32_000);
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        body: query,
+        headers: {
+          'Content-Type': 'text/plain;charset=UTF-8',
+          Accept: 'application/json',
+          'User-Agent': GEO_USER_AGENT,
+        },
+        signal: ctrl.signal,
+        cache: 'no-store',
+      });
+      clearTimeout(timer);
+      if (!res.ok) {
+        lastErr = new Error(`overpass ${res.status}`);
+        continue;
+      }
+      const data = (await res.json()) as { elements?: OverpassElement[] };
+      return data.elements || [];
+    } catch (e) {
+      lastErr = e instanceof Error ? e : new Error(String(e));
+    }
+  }
+  throw lastErr || new Error('overpass failed');
+}
+
+/** Nominatim reverse geocode → city + country (server-side). */
+export async function reverseGeocode(
+  lat: number,
+  lon: number
+): Promise<ReverseGeoResult> {
+  const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=12&addressdetails=1`;
+  const res = await fetch(url, {
+    headers: {
+      Accept: 'application/json',
+      'User-Agent': GEO_USER_AGENT,
+    },
+    cache: 'no-store',
+  });
+  if (!res.ok) {
+    return {
+      label: `${lat.toFixed(4)}, ${lon.toFixed(4)}`,
+      city: '',
+      country: '',
+      lat,
+      lon,
+    };
+  }
+  const data = (await res.json()) as {
+    display_name?: string;
+    address?: {
+      suburb?: string;
+      neighbourhood?: string;
+      city?: string;
+      town?: string;
+      village?: string;
+      municipality?: string;
+      county?: string;
+      state?: string;
+      country?: string;
+    };
+  };
+  const a = data.address || {};
+  const city =
+    a.city ||
+    a.town ||
+    a.village ||
+    a.municipality ||
+    a.suburb ||
+    a.neighbourhood ||
+    a.county ||
+    '';
+  const country = a.country || '';
+  const label =
+    [city, a.state, country].filter(Boolean).join(', ') ||
+    data.display_name ||
+    `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
+  return { label, city, country, lat, lon };
+}
+
+/** Nominatim forward geocode for "City, Country". */
+export async function geocodePlace(q: string): Promise<ReverseGeoResult | null> {
+  const query = q.trim();
+  if (!query) return null;
+  const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&addressdetails=1&q=${encodeURIComponent(
+    query
+  )}`;
+  const res = await fetch(url, {
+    headers: {
+      Accept: 'application/json',
+      'User-Agent': GEO_USER_AGENT,
+    },
+    cache: 'no-store',
+  });
+  if (!res.ok) return null;
+  const rows = (await res.json()) as Array<{
+    lat: string;
+    lon: string;
+    display_name?: string;
+    address?: {
+      city?: string;
+      town?: string;
+      village?: string;
+      municipality?: string;
+      country?: string;
+      state?: string;
+    };
+  }>;
+  if (!rows[0]) return null;
+  const row = rows[0];
+  const lat = parseFloat(row.lat);
+  const lon = parseFloat(row.lon);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+  const a = row.address || {};
+  const city = a.city || a.town || a.village || a.municipality || query.split(',')[0]?.trim() || '';
+  const country = a.country || '';
+  return {
+    lat,
+    lon,
+    city,
+    country,
+    label: row.display_name || [city, country].filter(Boolean).join(', ') || query,
+  };
 }
 
 export function classifyDenomFamily(

@@ -15,14 +15,18 @@ import {
 } from '@/lib/coach/fab-nudges';
 import { PILLAR_COLORS } from '@/lib/theme/pillars';
 
-/** Visible cloud duration */
-const SHOW_MS = 7000;
-/** Gap between clouds */
-const HIDE_MS = 4500;
+/** How often a new cloud appears (from start of one message to the next) */
+const INTERVAL_MS = 60_000;
+/** How long the cloud stays visible */
+const SHOW_MS = 8_000;
+/** Hidden gap until the next message */
+const HIDE_MS = INTERVAL_MS - SHOW_MS;
 /** First appearance delay so the page settles */
-const FIRST_DELAY_MS = 1800;
+const FIRST_DELAY_MS = 4_000;
 /** Refresh profile/scores for new nudges */
-const REFRESH_MS = 45_000;
+const REFRESH_MS = 120_000;
+/** Session flag: user closed clouds for this browser tab session */
+const SESSION_MUTE_KEY = 'salvazion_coach_clouds_muted';
 
 function toneAccent(tone: FabNudgeTone, pillar?: FabNudge['pillar']): string {
   if (pillar === 'salvation') return PILLAR_COLORS.salvation.solid;
@@ -34,9 +38,27 @@ function toneAccent(tone: FabNudgeTone, pillar?: FabNudge['pillar']): string {
   return 'var(--accent)';
 }
 
+function readSessionMuted(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    return sessionStorage.getItem(SESSION_MUTE_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function writeSessionMuted(): void {
+  try {
+    sessionStorage.setItem(SESSION_MUTE_KEY, '1');
+  } catch {
+    // private mode / blocked storage — in-memory only
+  }
+}
+
 /**
  * Floating Salvazion logo → Premium (free) or Coach (Premium).
  * Personalized cloud nudges with actionable deep-links + CTA.
+ * Close (X) mutes clouds for the rest of the browser session.
  */
 export default function CoachFab() {
   const pathname = usePathname();
@@ -48,12 +70,15 @@ export default function CoachFab() {
   const [index, setIndex] = useState(0);
   const [visible, setVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [muted, setMuted] = useState(false);
 
   const hidden =
     !pathname?.startsWith('/hub') ||
     pathname.startsWith('/hub/coach') ||
     pathname.startsWith('/hub/onboarding') ||
     (pathname.startsWith('/hub/premium') && !isPremium);
+
+  const cloudsEnabled = mounted && !hidden && !muted;
 
   const refreshNudges = useCallback(() => {
     try {
@@ -65,20 +90,27 @@ export default function CoachFab() {
     }
   }, [locale, isPremium]);
 
-  useEffect(() => {
-    setMounted(true);
+  const dismissClouds = useCallback(() => {
+    setVisible(false);
+    setMuted(true);
+    writeSessionMuted();
   }, []);
 
   useEffect(() => {
-    if (hidden || !mounted) return;
+    setMounted(true);
+    setMuted(readSessionMuted());
+  }, []);
+
+  useEffect(() => {
+    if (!cloudsEnabled) return;
     refreshNudges();
     const id = window.setInterval(refreshNudges, REFRESH_MS);
     return () => window.clearInterval(id);
-  }, [hidden, mounted, refreshNudges, pathname]);
+  }, [cloudsEnabled, refreshNudges, pathname]);
 
-  // Cycle clouds: show → hide → next
+  // Cycle clouds: show → hide → next (stopped when muted)
   useEffect(() => {
-    if (hidden || !mounted || nudges.length === 0) {
+    if (!cloudsEnabled || nudges.length === 0) {
       setVisible(false);
       return;
     }
@@ -112,7 +144,7 @@ export default function CoachFab() {
       if (hideTimer) window.clearTimeout(hideTimer);
       if (gapTimer) window.clearTimeout(gapTimer);
     };
-  }, [hidden, mounted, nudges]);
+  }, [cloudsEnabled, nudges]);
 
   const current = nudges[index % Math.max(nudges.length, 1)] || null;
   const accent = useMemo(
@@ -127,11 +159,15 @@ export default function CoachFab() {
     !loading && !isPremium ? t('coach.fabPremium') : t('coach.fabLabel');
 
   const cloudHref = current?.href || fabHref;
+  const closeLabel =
+    locale === 'es'
+      ? 'Cerrar mensajes del León (esta sesión)'
+      : 'Close Lion messages (this session)';
 
   return (
     <div className="fixed z-[45] right-4 bottom-[4.75rem] sm:bottom-24 flex flex-col items-end gap-2 pointer-events-none">
       {/* Motivational cloud + actionable CTA */}
-      {current && (
+      {!muted && current && (
         <div
           role="status"
           aria-live="polite"
@@ -145,13 +181,24 @@ export default function CoachFab() {
             boxShadow: `0 0 20px color-mix(in srgb, ${accent} 18%, transparent)`,
           }}
         >
-          <p
-            className="text-[10px] uppercase tracking-[0.12em] font-semibold mb-1"
-            style={{ color: accent }}
-          >
-            Salvazion
-          </p>
-          <p className="text-[12px] sm:text-[13px] text-white leading-snug font-medium text-pretty">
+          <div className="flex items-start justify-between gap-2 mb-1">
+            <p
+              className="text-[10px] uppercase tracking-[0.12em] font-semibold pt-0.5"
+              style={{ color: accent }}
+            >
+              Salvazion
+            </p>
+            <button
+              type="button"
+              onClick={dismissClouds}
+              className="coach-fab-cloud-close shrink-0 -mr-0.5 -mt-0.5"
+              aria-label={closeLabel}
+              title={closeLabel}
+            >
+              <span aria-hidden>×</span>
+            </button>
+          </div>
+          <p className="text-[12px] sm:text-[13px] text-white leading-snug font-medium text-pretty pr-1">
             {current.text}
           </p>
           <Link

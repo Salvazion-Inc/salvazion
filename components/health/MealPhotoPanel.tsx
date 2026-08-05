@@ -208,24 +208,32 @@ export default function MealPhotoPanel({ lang = 'es', onApplied }: Props) {
         <PhotoSourcePicker
           lang={es ? 'es' : 'en'}
           facing="environment"
+          hasPhoto={!!photo}
+          disabled={busy}
           onFile={(file) => void onPick(file)}
+          onClear={() => {
+            setPhoto(null);
+            setResult(null);
+          }}
+          title={photo ? undefined : es ? 'Foto del plato' : 'Meal photo'}
+          subtitle={
+            es
+              ? 'Misma experiencia que tu foto de perfil: cámara o carpetas'
+              : 'Same as profile photo: camera or folders'
+          }
         >
-          <div className="relative w-full aspect-[16/10] rounded-xl border border-[var(--border-soft)] bg-[#040404] overflow-hidden flex items-center justify-center">
-            {photo ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={photo}
-                alt={es ? 'Comida' : 'Meal'}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            ) : (
-              <span className="text-[12px] text-[var(--sage)]/70 px-4 text-center">
-                {es
-                  ? 'Usa Cámara o Galería para tu plato'
-                  : 'Use Camera or Gallery for your plate'}
-              </span>
-            )}
-          </div>
+          {photo ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={photo}
+              alt={es ? 'Comida' : 'Meal'}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          ) : (
+            <span className="text-[12px] text-[var(--sage)]/70 px-4 text-center leading-relaxed">
+              {es ? 'Toca para añadir foto del plato' : 'Tap to add a meal photo'}
+            </span>
+          )}
         </PhotoSourcePicker>
 
         <button

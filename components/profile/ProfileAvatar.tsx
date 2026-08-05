@@ -6,6 +6,11 @@ import { saveAvatarImage } from '@/lib/store/avatar';
 import { saveProfile } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
 import { useFlashToast } from '@/components/ui/FlashToast';
+import {
+  SALVAZION_CAMERA_ICON,
+  SALVAZION_FOLDER_ICON,
+  SalvazionMediaIcon,
+} from '@/components/ui/MediaIcons';
 
 type Size = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -267,9 +272,7 @@ export default function ProfileAvatar({
                 disabled={busy}
                 className="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl border border-[var(--border-soft)] hover:border-[var(--border-strong)] hover:bg-[var(--surface-active)] transition text-left"
               >
-                <span className="w-10 h-10 rounded-full bg-[var(--surface-active)] border border-[var(--border-strong)] flex items-center justify-center text-lg shrink-0">
-                  📷
-                </span>
+                <SalvazionMediaIcon src={SALVAZION_CAMERA_ICON} size={40} />
                 <span className="min-w-0">
                   <span className="block text-sm font-medium text-white">
                     {t('profile.takePhoto')}
@@ -286,9 +289,7 @@ export default function ProfileAvatar({
                 disabled={busy}
                 className="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl border border-[var(--border-soft)] hover:border-[var(--border-strong)] hover:bg-[var(--surface-active)] transition text-left"
               >
-                <span className="w-10 h-10 rounded-full bg-[var(--surface-active)] border border-[var(--border-strong)] flex items-center justify-center text-lg shrink-0">
-                  📁
-                </span>
+                <SalvazionMediaIcon src={SALVAZION_FOLDER_ICON} size={40} />
                 <span className="min-w-0">
                   <span className="block text-sm font-medium text-white">
                     {t('profile.chooseGallery')}

@@ -181,7 +181,7 @@ export default function BodyCompositionPanel({
 
         <div className="grid grid-cols-3 gap-2">
           {VIEWS.map((v) => (
-            <div key={v.id} className="space-y-1.5">
+            <div key={v.id} className="space-y-1">
               <p className="text-[10px] text-center text-[var(--sage)]">
                 {es ? v.es : v.en}
               </p>
@@ -189,22 +189,43 @@ export default function BodyCompositionPanel({
                 lang={es ? 'es' : 'en'}
                 facing="environment"
                 compact
+                hasPhoto={!!photos[v.id]}
+                disabled={busy}
                 onFile={(file) => void onPick(v.id, file)}
+                onClear={() =>
+                  setPhotos((p) => {
+                    const next = { ...p };
+                    delete next[v.id];
+                    return next;
+                  })
+                }
+                title={
+                  photos[v.id]
+                    ? es
+                      ? `Cambiar foto · ${v.es}`
+                      : `Change photo · ${v.en}`
+                    : es
+                      ? `Añadir foto · ${v.es}`
+                      : `Add photo · ${v.en}`
+                }
+                subtitle={
+                  es
+                    ? 'Cámara o galería / carpetas (como en perfil)'
+                    : 'Camera or gallery / folders (like profile)'
+                }
               >
-                <div className="relative w-full aspect-[3/4] rounded-xl border border-[var(--border-soft)] bg-[#040404] overflow-hidden flex items-center justify-center">
-                  {photos[v.id] ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={photos[v.id]}
-                      alt={es ? v.es : v.en}
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                  ) : (
-                    <span className="text-[11px] text-[var(--sage)]/55 px-1 text-center leading-tight">
-                      {es ? 'Cámara / Galería' : 'Camera / Gallery'}
-                    </span>
-                  )}
-                </div>
+                {photos[v.id] ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={photos[v.id]}
+                    alt={es ? v.es : v.en}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-[10px] text-[var(--sage)]/55 px-1.5 text-center leading-tight">
+                    {es ? 'Toca para foto' : 'Tap for photo'}
+                  </span>
+                )}
               </PhotoSourcePicker>
             </div>
           ))}

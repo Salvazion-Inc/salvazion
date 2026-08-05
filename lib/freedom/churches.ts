@@ -1,8 +1,9 @@
 /**
  * Christian Assemblies & Evangelical churches near the user (Freedom · Connect).
  * OpenStreetMap / Overpass — free, no API key.
- * Focus: Asambleas cristianas, iglesias evangélicas y denominaciones afines.
- * Excludes Catholic parishes and non-Christian religions.
+ * Focus: Asambleas cristianas, iglesias evangélicas y denominaciones protestantes afines.
+ * Excludes: Catholic, Mormon/LDS, Jehovah’s Witnesses, other sects, and non-Christian religions.
+ * Allowlist only — bare `religion=christian` is not enough (most Catholic parishes use that).
  */
 
 export type ChurchDenomFamily =
@@ -72,25 +73,34 @@ export function denomFamilyLabel(family: ChurchDenomFamily, es: boolean): string
   return es ? map[family].es : map[family].en;
 }
 
-/** Catholic (excluded). */
+/** Catholic rites / OSM denomination keys (excluded). */
 const CATHOLIC_DENOM =
-  /^(roman_?)?catholic$|greek_catholic|ukrainian_catholic|maronite|melkite|chaldean|syro.?malabar|syro.?malankara|coptic_catholic|armenian_catholic|byzantine_catholic/i;
+  /catholic|roman.?catholic|greek.?catholic|ukrainian.?catholic|maronite|melkite|chaldean|syro.?malabar|syro.?malankara|coptic.?catholic|armenian.?catholic|byzantine.?catholic|old.?catholic|latin.?rite|eastern.?catholic/i;
 
+/** Names / operators typical of Catholic parishes (excluded). */
 const CATHOLIC_NAME =
-  /\b(cat[oó]lic[ao]s?|catholic|catedral|cathedral|bas[ií]lica|basilica|sagrado\s+coraz[oó]n|inmaculada\s+concepci[oó]n|nuestra\s+se[nñ]ora\b|parroquia|iglesia\s+parroquial|arciprestazgo|obispado|capilla\s+(san|santa|nuestra)|san\s+francisco\s+javier|colegio\s+san)\b/i;
+  /\b(cat[oó]lic[ao]s?|catholic|catedral|cathedral|bas[ií]lica|basilica|sagrado\s+coraz[oó]n|sacred\s+heart|inmaculada\s+concepci[oó]n|immaculate\s+conception|nuestra\s+se[nñ]ora\b|our\s+lady\b|parroquia|parish\b|iglesia\s+parroquial|arciprestazgo|obispado|di[oó]cesis|archidi[oó]cesis|diocese|archdiocese|vaticano|vatican|santa\s+sede|sacerdote|curia|seminario\s+(mayor|menor)|colegio\s+san\b|capilla\s+(san|santa|nuestra|del\s+sagrado)|san\s+francisco\s+javier|virgen\s+de\b|mar[ií]a\s+auxiliadora|cristo\s+rey\s+cat[oó]lic)\b/i;
 
 const NON_CHRISTIAN_RELIGION =
   /^(muslim|islam|islamic|jewish|judaism|buddhist|buddhism|hindu|hinduism|sikh|shinto|taoist|bahai|bahá.?í|pagan|jain|zoroastrian|scientology)$/i;
 
+/**
+ * Denominations / movements we do not surface (sects, restorationist groups outside
+ * classical evangelical/protestant assembly map, Catholic, etc.).
+ */
 const EXCLUDED_DENOM =
-  /mormon|latter.?day|lds|jehovah|testigo|unitarian|scientology|catholic/i;
+  /catholic|mormon|latter.?day|lds|jehovah|watch.?tower|watchtower|testigo|unitarian|universalist|scientology|christian.?science|unification|moon|moonies|raoelian|raelian|new.?apostolic|iglesia\s+ni\s+cristo|church\s+of\s+jesus\s+christ\s+of\s+latter|suda\b|santos\s+de\s+los\s+[uú]ltimos|kingdom.?hall|sal[oó]n\s+del\s+reino|branch.?davidian|world.?mission.?society|wmsco[gp]|shincheonji|god.?the.?mother|la\s+luz\s+del\s+mundo|luz\s+del\s+mundo|iglesia\s+universal\s+del\s+reino|universal\s+church\s+of\s+the\s+kingdom|iurd|orthodox|ortodox/i;
+
+/** Name patterns for excluded groups (Spanish + English). */
+const EXCLUDED_NAME =
+  /\b(morm[oó]n(?:es)?|santos\s+de\s+los\s+[uú]ltimos\s+d[ií]as|latter[\s-]?day\s+saints|\blds\b|jehov[aá]|testigos?\s+de\s+jehov[aá]|kingdom\s+hall|sal[oó]n\s+del\s+reino|watch\s*tower|atalaya|cienci[ao]\s+cristiana|christian\s+science|unitari[ao]|unificaci[oó]n|moonies|scientolog|iglesia\s+ni\s+cristo|la\s+luz\s+del\s+mundo|luz\s+del\s+mundo|iurd|reino\s+de\s+dios\s+universal|nueva\s+apost[oó]lica|new\s+apostolic|madre\s+dios|world\s+mission\s+society|ortodox[ao]|orthodox)\b/i;
 
 /**
- * Overpass denomination regex — Assemblies, Evangelical & Protestant families.
- * Kept in sync with classifyDenomFamily below.
+ * Overpass denomination regex — Assemblies, Evangelical & Protestant families only.
+ * Kept in sync with classifyDenomFamily. No Catholic / LDS / JW / sect keys.
  */
 export const OVERPASS_DENOM_REGEX =
-  'protestant|evangelical|evangelic|baptist|pentecostal|methodist|presbyterian|lutheran|anglican|adventist|assemblies_of_god|assembly_of_god|assemblies|asamblea|nondenominational|non-denominational|non_denominational|reformed|charismatic|holiness|brethren|mennonite|anabaptist|wesleyan|episcopal|congregational|full_gospel|foursquare|calvary|vineyard|independent|free_church|new_apostolic|moravian|quaker|salvation_army|church_of_god|church_of_christ|disciples_of_christ|restorationist|messianic|christian_and_missionary_alliance|cma|nazarene|apostolic|pentecost|evangelisch|reformed_church|united_methodist|southern_baptist|free_methodist';
+  'protestant|evangelical|evangelic|baptist|pentecostal|methodist|presbyterian|lutheran|anglican|adventist|assemblies_of_god|assembly_of_god|assemblies|asamblea|nondenominational|non-denominational|non_denominational|reformed|charismatic|holiness|brethren|mennonite|anabaptist|wesleyan|episcopal|congregational|full_gospel|foursquare|calvary|vineyard|independent|free_church|moravian|quaker|salvation_army|church_of_god|church_of_christ|disciples_of_christ|messianic|christian_and_missionary_alliance|cma|nazarene|apostolic|pentecost|evangelisch|reformed_church|united_methodist|southern_baptist|free_methodist';
 
 /** Name patterns for LATAM / global evangelical & assemblies. */
 export const OVERPASS_NAME_REGEX =
@@ -375,24 +385,64 @@ export function classifyDenomFamily(
   return 'otras';
 }
 
+function haystack(tags: Record<string, string>, name: string): string {
+  return [
+    name,
+    tags.denomination,
+    tags.religion,
+    tags.operator,
+    tags.brand,
+    tags['name:es'],
+    tags['name:en'],
+    tags['official_name'],
+    tags['alt_name'],
+  ]
+    .filter(Boolean)
+    .join(' ');
+}
+
 function isCatholic(tags: Record<string, string>, name: string): boolean {
   const denom = (tags.denomination || '').trim();
   const religion = (tags.religion || '').trim();
+  const operator = (tags.operator || '').trim();
+  const hay = haystack(tags, name);
+
   if (denom && CATHOLIC_DENOM.test(denom)) return true;
   if (religion && /catholic/i.test(religion)) return true;
-  if (CATHOLIC_NAME.test(name)) return true;
+  if (CATHOLIC_NAME.test(name) || CATHOLIC_NAME.test(hay)) return true;
   if (
-    /cathol|di[oó]cesis|archidi[oó]cesis|obispado|vaticano/i.test(tags.operator || '')
+    /cathol|di[oó]cesis|archidi[oó]cesis|obispado|vaticano|vatican|parroquia|parish/i.test(
+      operator
+    )
   ) {
+    return true;
+  }
+  // OSM sometimes tags only network/brand for dioceses
+  if (/di[oó]cesis|archidi[oó]cesis|archdiocese|diocese/i.test(tags.network || '')) {
     return true;
   }
   return false;
 }
 
-function isExcludedDenom(tags: Record<string, string>, name: string): boolean {
+function isExcludedSectOrDenom(tags: Record<string, string>, name: string): boolean {
   const denom = (tags.denomination || '').trim();
+  const hay = haystack(tags, name);
   if (denom && EXCLUDED_DENOM.test(denom)) return true;
-  if (/\b(mormon|testigos?\s+de\s+jehov[aá]|jehovah|latter.?day|lds)\b/i.test(name)) {
+  if (EXCLUDED_DENOM.test(hay)) return true;
+  if (EXCLUDED_NAME.test(name) || EXCLUDED_NAME.test(hay)) return true;
+  // Kingdom Hall / Watchtower often lack denomination tags
+  if (
+    /kingdom\s*hall|sal[oó]n\s+del\s+reino|watch\s*tower|atalaya/i.test(name) ||
+    /kingdom\s*hall|sal[oó]n\s+del\s+reino/i.test(tags.building || '')
+  ) {
+    return true;
+  }
+  // LDS meetinghouses: full formal name or “Latter-day Saints”
+  if (
+    /santos\s+de\s+los\s+[uú]ltimos|latter[\s-]?day\s+saints|iglesia\s+de\s+jesucristo\s+de\s+los/i.test(
+      name
+    )
+  ) {
     return true;
   }
   return false;
@@ -405,16 +455,29 @@ function isNonChristianReligion(tags: Record<string, string>): boolean {
   return NON_CHRISTIAN_RELIGION.test(religion) || !/christian/i.test(religion);
 }
 
+function hasAllowedDenom(denom: string): boolean {
+  if (!denom.trim()) return false;
+  if (CATHOLIC_DENOM.test(denom) || EXCLUDED_DENOM.test(denom)) return false;
+  return new RegExp(OVERPASS_DENOM_REGEX, 'i').test(denom);
+}
+
+function hasAllowedEvangelicalName(name: string): boolean {
+  if (!name.trim()) return false;
+  if (CATHOLIC_NAME.test(name) || EXCLUDED_NAME.test(name)) return false;
+  return new RegExp(OVERPASS_NAME_REGEX, 'i').test(name);
+}
+
 /**
- * Keep Christian Assemblies / Evangelical / Protestant churches.
- * Exclude Catholic and non-Christian places of worship.
+ * Keep Christian Assemblies / Evangelical / Protestant churches only.
+ * Allowlist: denomination or name must match evangelical/assembly patterns.
+ * Bare `religion=christian` alone is NOT enough (would include Catholic parishes).
  */
 export function isChristianAssemblyOrEvangelical(
   tags: Record<string, string>,
   name: string
 ): boolean {
   if (isCatholic(tags, name)) return false;
-  if (isExcludedDenom(tags, name)) return false;
+  if (isExcludedSectOrDenom(tags, name)) return false;
   if (isNonChristianReligion(tags)) return false;
 
   const religion = (tags.religion || '').trim().toLowerCase();
@@ -422,21 +485,20 @@ export function isChristianAssemblyOrEvangelical(
   const amenity = (tags.amenity || '').trim();
   const building = (tags.building || '').trim();
 
-  if (religion === 'christian') return true;
+  // Positive allowlist — denomination tag from evangelical / protestant set
+  if (hasAllowedDenom(denom)) return true;
 
-  if (denom && new RegExp(OVERPASS_DENOM_REGEX, 'i').test(denom) && !CATHOLIC_DENOM.test(denom)) {
+  // Positive allowlist — name signals assemblies / evangelical church
+  if (hasAllowedEvangelicalName(name)) {
+    if (/^\s*templo\s*$/i.test(name) && religion && religion !== 'christian') {
+      return false;
+    }
     return true;
   }
 
-  if (new RegExp(OVERPASS_NAME_REGEX, 'i').test(name) && !CATHOLIC_NAME.test(name)) {
-    if (/^\s*templo\s*$/i.test(name) && religion && religion !== 'christian') return false;
-    return true;
-  }
-
-  if (amenity === 'place_of_worship' && !religion && !denom) return false;
-  if (building === 'church' && !religion) {
-    return new RegExp(OVERPASS_NAME_REGEX, 'i').test(name) && !CATHOLIC_NAME.test(name);
-  }
+  // No free pass for religion=christian without denom/name match
+  if (amenity === 'place_of_worship' && !denom) return false;
+  if (building === 'church' && !denom) return false;
 
   return false;
 }

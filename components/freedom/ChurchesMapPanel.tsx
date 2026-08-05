@@ -520,30 +520,34 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
             background: `linear-gradient(135deg, ${FREEDOM.soft} 0%, transparent 60%)`,
           }}
         >
-          <div className="flex gap-2">
-            <button
-              type="button"
-              className="btn-primary px-3 text-xs min-h-[40px] flex-1 sm:flex-none"
-              onClick={() => void locateWithGps()}
-              disabled={loading && gpsStatus === 'locating'}
-            >
-              {gpsStatus === 'locating'
+          {/* Fixed-height row: GPS full-width (primary action) */}
+          <button
+            type="button"
+            className="btn-primary w-full text-xs sm:text-sm"
+            onClick={() => void locateWithGps()}
+            disabled={loading && gpsStatus === 'locating'}
+          >
+            {gpsStatus === 'locating'
+              ? es
+                ? 'Obteniendo GPS…'
+                : 'Getting GPS…'
+              : gpsStatus === 'ok'
                 ? es
-                  ? 'Obteniendo GPS…'
-                  : 'Getting GPS…'
-                : gpsStatus === 'ok'
-                  ? es
-                    ? 'Actualizar GPS'
-                    : 'Refresh GPS'
-                  : es
-                    ? 'Usar mi ubicación'
-                    : 'Use my location'}
-            </button>
-          </div>
+                  ? 'Actualizar GPS'
+                  : 'Refresh GPS'
+                : es
+                  ? 'Usar mi ubicación'
+                  : 'Use my location'}
+          </button>
 
-          <div className="flex gap-2">
+          {/* City search — input-inline + btn-inline (same height, no vertical desfase) */}
+          <div className="flex items-center gap-2 w-full min-w-0">
+            <label className="sr-only" htmlFor="churches-city-search">
+              {es ? 'Ciudad' : 'City'}
+            </label>
             <input
-              type="text"
+              id="churches-city-search"
+              type="search"
               value={queryCity}
               onChange={(e) => setQueryCity(e.target.value)}
               onKeyDown={(e) => {
@@ -552,16 +556,21 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
               placeholder={
                 es ? 'Ciudad, País (si no hay GPS)' : 'City, Country (if no GPS)'
               }
-              className="input-soft flex-1 text-sm py-2 min-h-[40px]"
+              className="input-soft input-inline text-sm min-w-0"
+              autoComplete="address-level2"
               aria-label={es ? 'Ciudad' : 'City'}
             />
             <button
               type="button"
-              className="btn-secondary px-3 text-xs min-h-[40px] shrink-0"
+              className="btn-secondary btn-inline text-xs sm:text-sm shrink-0"
               onClick={() => void searchByCity(queryCity, true)}
               disabled={loading}
             >
-              {loading && gpsStatus !== 'locating' ? '…' : es ? 'Buscar' : 'Search'}
+              {loading && gpsStatus !== 'locating'
+                ? '…'
+                : es
+                  ? 'Buscar'
+                  : 'Search'}
             </button>
           </div>
 

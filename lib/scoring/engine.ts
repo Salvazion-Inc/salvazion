@@ -37,6 +37,10 @@ export const ACTION_CATALOG: Record<string, { pillar: Pillar; points: number; la
   fasting: { pillar: 'health', points: 12, label: 'Ayuno registrado' },
   sleep_ideal: { pillar: 'health', points: 18, label: 'Sueño dentro de ventana circadiana' },
   cycle_log: { pillar: 'health', points: 10, label: 'Registro de ciclo / salud femenina' },
+  /** Primera comida del día (manual o foto → log). 1×/día. */
+  meal_logged: { pillar: 'health', points: 10, label: 'Comida registrada (log / foto)' },
+  /** Cineantropometría por fotos (Grok Vision). 1×/día. */
+  body_composition: { pillar: 'health', points: 12, label: 'Composición corporal registrada' },
 
   // Freedom
   learn_article_video: { pillar: 'freedom', points: 8, label: 'Artículo o video corto completado' },
@@ -44,6 +48,8 @@ export const ACTION_CATALOG: Record<string, { pillar: Pillar; points: number; la
   debate_participate: { pillar: 'freedom', points: 12, label: 'Participar en debate estructurado' },
   connect_real: { pillar: 'freedom', points: 10, label: 'Conexión real (familia/iglesia)' },
   contribute_project: { pillar: 'freedom', points: 20, label: 'Aportar a proyecto o startup' },
+  /** Invitar o aceptar vínculo en la Phalanx. 1×/día. */
+  phalanx_connect: { pillar: 'freedom', points: 15, label: 'Conexión Phalanx (invitar / aceptar)' },
 };
 
 /**
@@ -91,6 +97,18 @@ export function getPointsForAction(actionType: string, stage: LifeStage = 'adult
     if (actionType === 'sleep_ideal') points = 20;
     if (actionType === 'connect_real') points = 12;
     if (actionType === 'contribute_project') points = 22;
+    if (actionType === 'meal_logged') points = 12;
+  }
+
+  if (stage === 'senior') {
+    if (actionType === 'meal_logged') points = 12;
+    if (actionType === 'body_composition') points = 14;
+  }
+
+  if (stage === 'infancia') {
+    if (actionType === 'meal_logged') points = 12;
+    if (actionType === 'body_composition') points = 0;
+    if (actionType === 'phalanx_connect') points = 12;
   }
 
   return Math.max(0, points);
@@ -505,6 +523,46 @@ export function getActionMixTotals(): {
     out.total += a.points;
   }
   return out;
+}
+
+/** Lifetime points from all logged actions (local cache; includes synced server history). */
+export function getLifetimePoints(): {
+  salvation: number;
+  health: number;
+  freedom: number;
+  total: number;
+  actionCount: number;
+} {
+  const mix = getActionMixTotals();
+  return {
+    ...mix,
+    actionCount: loadActions().length,
+  };
+}
+
+/** Points earned today (raw sum before pillar cap / streak multipliers). */
+export function getTodayPointsRaw(): {
+  salvation: number;
+  health: number;
+  freedom: number;
+  total: number;
+  actionCount: number;
+} {
+  const date = today();
+  const actions = loadActions().filter((a) => a.date === date);
+  const out = { salvation: 0, health: 0, freedom: 0, total: 0, actionCount: actions.length };
+  for (const a of actions) {
+    out[a.pillar] += a.points;
+    out.total += a.points;
+  }
+  return out;
+}
+
+/** Catalog entry for UI previews (label + base points + pillar). */
+export function getActionCatalogEntry(
+  actionType: string
+): { pillar: Pillar; points: number; label: string } | null {
+  return ACTION_CATALOG[actionType] ?? null;
 }
 
 /**

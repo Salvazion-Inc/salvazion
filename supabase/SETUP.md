@@ -133,8 +133,12 @@ npm run dev
 - `resetScores` limpia local y las acciones de hoy + rachas en el servidor.
 - Offline: la app sigue con localStorage; al reconectar sincroniza.
 
+## Badges (sincronizados)
+- `evaluateBadges` otorga local + push a `user_badges` (upsert).
+- Dashboard / página Insignias llaman `syncBadgesFromServer()` para multi-device.
+- Offline: localStorage; al reconectar se fusiona con el servidor.
+
 ## Próximos pasos opcionales
-- Migrar badges al mismo patrón.
-- Historial multi-día desde `score_actions`.
+- Historial multi-día extendido desde `score_actions` (más de 7–30 días).
 - Leaderboard de la Phalanx (query agregada respetando RLS).
 - OAuth (Google / Apple) con el mismo `/auth/callback`.

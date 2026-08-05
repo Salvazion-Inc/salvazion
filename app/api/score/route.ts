@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET() {
   return NextResponse.json({
     message: 'Salvazion Score Engine',
-    note: 'Cálculo actual es client-side. Esta API se activará con Supabase + auth.',
+    note: 'Cálculo client-side + sync Supabase (score_actions, user_streaks, user_badges).',
     weights: { salvation: 0.40, health: 0.35, freedom: 0.25 },
     streakMultipliers: {
       '3d': 1.15,
@@ -16,6 +16,32 @@ export async function GET() {
       '14d': 1.50,
       '30d': 1.80,
       '60d+': 2.00,
+    },
+    actions: {
+      salvation: [
+        'bible_chapter',
+        'devotional_complete',
+        'pray_5min',
+        'bible_study_15min',
+      ],
+      health: [
+        'hit_15min',
+        'outdoor_sun_20min',
+        'hydration_daily',
+        'fasting',
+        'sleep_ideal',
+        'cycle_log',
+        'meal_logged',
+        'body_composition',
+      ],
+      freedom: [
+        'learn_article_video',
+        'learn_lesson',
+        'debate_participate',
+        'connect_real',
+        'contribute_project',
+        'phalanx_connect',
+      ],
     },
   });
 }

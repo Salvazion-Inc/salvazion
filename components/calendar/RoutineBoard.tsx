@@ -45,7 +45,7 @@ import {
   agendaEventProgress,
   agendaEventRemainingMin,
 } from '@/lib/calendar/colors';
-import { logAction } from '@/lib/scoring/engine';
+import { getPointsForAction, logAction } from '@/lib/scoring/engine';
 import { useI18n } from '@/components/I18nProvider';
 import { useFlashToast } from '@/components/ui/FlashToast';
 import AgendaActivityFace from '@/components/calendar/AgendaActivityFace';
@@ -260,16 +260,27 @@ export default function RoutineBoard({ date, onChange }: Props) {
     const updated = toggleEventComplete(id);
     if (updated?.completed && before && !before.completed) {
       const action = scoreActionForEventType(updated.type);
+      const pts = action ? getPointsForAction(action) : 0;
       if (action) logAction(action);
       const stats = getDayCompletionStats(date);
       const title = labelFor(updated);
       if (wasDoneBefore === 0) {
         flash(
-          t('agenda.softFirstDone', {
-            title,
-            percent: stats.percent,
-          }),
+          pts > 0
+            ? `+${pts} · ${t('agenda.softFirstDone', {
+                title,
+                percent: stats.percent,
+              })}`
+            : t('agenda.softFirstDone', {
+                title,
+                percent: stats.percent,
+              }),
           { tone: 'soft', durationMs: 3200 }
+        );
+      } else if (pts > 0) {
+        flash(
+          `+${pts} · ${title} · ${stats.percent}%`,
+          { tone: 'soft', durationMs: 2800 }
         );
       } else {
         flash(

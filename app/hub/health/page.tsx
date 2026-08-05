@@ -385,8 +385,13 @@ export default function HealthPage() {
         <MealPhotoPanel
           lang={en ? 'en' : 'es'}
           onApplied={() => {
-            refresh();
-            bumpHealthData();
+            if (!loggedToday.has('meal_logged')) {
+              handleLog('meal_logged', en ? 'Meal from photo' : 'Comida por foto');
+            } else {
+              refresh();
+              bumpHealthData();
+              showToast(en ? 'Meal added to log' : 'Comida añadida al log');
+            }
           }}
         />
 
@@ -737,8 +742,15 @@ export default function HealthPage() {
                     const entry = addMeal(meal);
                     setNutrition(entry);
                     setMealKcal('');
-                    showToast(en ? 'Meal logged' : 'Comida registrada');
                     bumpHealthData();
+                    if (!loggedToday.has('meal_logged')) {
+                      handleLog(
+                        'meal_logged',
+                        en ? 'Meal logged' : 'Comida registrada'
+                      );
+                    } else {
+                      showToast(en ? 'Meal logged' : 'Comida registrada');
+                    }
                   }}
                   className="btn-sm px-4 py-2.5 text-sm"
                 >
@@ -763,7 +775,19 @@ export default function HealthPage() {
         <BodyCompositionPanel
           profile={profile}
           lang={en ? 'en' : 'es'}
-          onAnalyzed={() => bumpHealthData()}
+          onAnalyzed={() => {
+            if (!loggedToday.has('body_composition')) {
+              handleLog(
+                'body_composition',
+                en ? 'Body composition' : 'Composición corporal'
+              );
+            } else {
+              bumpHealthData();
+              showToast(
+                en ? 'Body composition updated' : 'Composición corporal actualizada'
+              );
+            }
+          }}
         />
 
         {/* DEPORTES */}

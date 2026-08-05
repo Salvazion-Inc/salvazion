@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   addMeal,
   type MealSlot,
@@ -16,6 +16,7 @@ import {
   type MealPhotoEntry,
   type MealVisionAnalysis,
 } from '@/lib/health/meal-vision';
+import PhotoSourcePicker from '@/components/health/PhotoSourcePicker';
 
 type Props = {
   lang?: 'es' | 'en';
@@ -87,7 +88,6 @@ export default function MealPhotoPanel({ lang = 'es', onApplied }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<MealPhotoEntry | null>(null);
-  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const reload = useCallback(() => {
     setEntries(loadMealPhotos());
@@ -97,8 +97,7 @@ export default function MealPhotoPanel({ lang = 'es', onApplied }: Props) {
     reload();
   }, [reload]);
 
-  const onPick = async (file: File | null) => {
-    if (!file) return;
+  const onPick = async (file: File) => {
     setError(null);
     try {
       const dataUrl = await fileToCompressedDataUrl(file, {
@@ -206,34 +205,28 @@ export default function MealPhotoPanel({ lang = 'es', onApplied }: Props) {
           ))}
         </div>
 
-        <button
-          type="button"
-          onClick={() => inputRef.current?.click()}
-          className="relative w-full aspect-[16/10] rounded-xl border border-[var(--border-soft)] bg-[#040404] overflow-hidden flex items-center justify-center"
+        <PhotoSourcePicker
+          lang={es ? 'es' : 'en'}
+          facing="environment"
+          onFile={(file) => void onPick(file)}
         >
-          {photo ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={photo}
-              alt={es ? 'Comida' : 'Meal'}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          ) : (
-            <span className="text-[12px] text-[var(--sage)]/70 px-4 text-center">
-              {es
-                ? 'Toca para foto o galería'
-                : 'Tap for camera or gallery'}
-            </span>
-          )}
-        </button>
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/*"
-          capture="environment"
-          className="hidden"
-          onChange={(e) => void onPick(e.target.files?.[0] || null)}
-        />
+          <div className="relative w-full aspect-[16/10] rounded-xl border border-[var(--border-soft)] bg-[#040404] overflow-hidden flex items-center justify-center">
+            {photo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={photo}
+                alt={es ? 'Comida' : 'Meal'}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-[12px] text-[var(--sage)]/70 px-4 text-center">
+                {es
+                  ? 'Usa Cámara o Galería para tu plato'
+                  : 'Use Camera or Gallery for your plate'}
+              </span>
+            )}
+          </div>
+        </PhotoSourcePicker>
 
         <button
           type="button"

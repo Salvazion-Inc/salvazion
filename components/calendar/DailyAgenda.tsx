@@ -34,7 +34,7 @@ import {
   mixTowardBlack,
   localDayProgress,
 } from '@/lib/calendar/colors';
-import { logAction } from '@/lib/scoring/engine';
+import { getPointsForAction, logAction } from '@/lib/scoring/engine';
 import { useI18n } from '@/components/I18nProvider';
 import AgendaActivityFace from '@/components/calendar/AgendaActivityFace';
 import { useFlashToast } from '@/components/ui/FlashToast';
@@ -131,24 +131,35 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
 
     if (updated.completed && before && !before.completed) {
       const action = scoreActionForEventType(updated.type);
+      const pts = action ? getPointsForAction(action) : 0;
       if (action) logAction(action);
 
       const stats = getDayCompletionStats(date);
       const title = labelFor(updated);
       if (wasDoneBefore === 0) {
         flash(
-          t('agenda.softFirstDone', {
-            title,
-            percent: stats.percent,
-          }),
+          pts > 0
+            ? `+${pts} · ${t('agenda.softFirstDone', {
+                title,
+                percent: stats.percent,
+              })}`
+            : t('agenda.softFirstDone', {
+                title,
+                percent: stats.percent,
+              }),
           { tone: 'soft', durationMs: 3200 }
         );
       } else if (action) {
         flash(
-          t('agenda.softScored', {
-            title,
-            percent: stats.percent,
-          }),
+          pts > 0
+            ? `+${pts} · ${t('agenda.softScored', {
+                title,
+                percent: stats.percent,
+              })}`
+            : t('agenda.softScored', {
+                title,
+                percent: stats.percent,
+              }),
           { tone: 'soft', durationMs: 2800 }
         );
       } else {

@@ -21,6 +21,7 @@ import {
   tryAcceptPendingInbound,
 } from '@/lib/invite/supabase';
 import { loadProfileAsync } from '@/lib/store/profile';
+import { logAction } from '@/lib/scoring/engine';
 import { useI18n } from '@/components/I18nProvider';
 import BrandMarkIcon from '@/components/BrandMarkIcon';
 
@@ -133,6 +134,8 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
       );
       setName('');
       setEmail('');
+      // First invite of the day scores Freedom (1×/day)
+      logAction('phalanx_connect');
       await refresh();
     } finally {
       setBusy(false);
@@ -172,6 +175,9 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
       );
       setPendingBanner(null);
       setAcceptCode('');
+      if (!result.already) {
+        logAction('phalanx_connect');
+      }
       await refresh();
     } finally {
       setAcceptBusy(false);

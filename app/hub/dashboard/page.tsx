@@ -13,6 +13,7 @@ import {
 import { UserProfile } from '@/lib/types';
 import {
   computeScores,
+  getTodayPointsRaw,
   syncScoresFromServer,
 } from '@/lib/scoring/engine';
 import { ComputedScores } from '@/lib/scoring/types';
@@ -20,6 +21,7 @@ import {
   evaluateBadges,
   getBadgeProgress,
   getEarnedBadgesDetailed,
+  syncBadgesFromServer,
   BadgeDef,
 } from '@/lib/badges/engine';
 import BottomNav from '@/components/BottomNav';
@@ -43,6 +45,7 @@ export default function DashboardPage() {
   const [mounted, setMounted] = useState(false);
   const [newBadges, setNewBadges] = useState<BadgeDef[]>([]);
   const [badgeProgress, setBadgeProgress] = useState({ earned: 0, total: 0 });
+  const [todayPts, setTodayPts] = useState({ total: 0, actionCount: 0 });
   const [editingPurpose, setEditingPurpose] = useState(false);
   const [purposeDraft, setPurposeDraft] = useState('');
   const [purposeSaving, setPurposeSaving] = useState(false);
@@ -51,6 +54,7 @@ export default function DashboardPage() {
   const refresh = useCallback((p?: Partial<UserProfile>, s?: ComputedScores) => {
     const scoresToUse = s || computeScores();
     setScores(scoresToUse);
+    setTodayPts(getTodayPointsRaw());
     const profileToUse = p || loadProfile();
     if (profileToUse) {
       const newly = evaluateBadges({
@@ -72,6 +76,7 @@ export default function DashboardPage() {
       setProfile(p);
       // Pull last 7 days so weekly charts work across devices
       const synced = await syncScoresFromServer({ days: 7 });
+      await syncBadgesFromServer();
       refresh(p, synced);
 
       // Wearables → score without opening Settings
@@ -463,6 +468,14 @@ export default function DashboardPage() {
                 <div className="text-[10px] text-[var(--accent)] font-medium mt-0.5">
                   {t('dashboard.global')}
                 </div>
+                {todayPts.total > 0 && (
+                  <p className="text-[10px] text-[#8FD99A]/90 mt-1.5 tabular-nums">
+                    +{todayPts.total} {t('dashboard.pointsToday')}
+                    {todayPts.actionCount > 0
+                      ? ` · ${todayPts.actionCount} ${t('dashboard.actionsToday')}`
+                      : ''}
+                  </p>
+                )}
               </div>
             </div>
 

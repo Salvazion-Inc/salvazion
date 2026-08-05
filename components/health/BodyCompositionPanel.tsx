@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { UserProfile } from '@/lib/types';
 import { calculateAge } from '@/lib/store/profile';
 import { fileToCompressedDataUrl } from '@/lib/health/image-compress';
@@ -14,6 +14,7 @@ import {
   type BodyMassBreakdown,
   type BodyPhotoView,
 } from '@/lib/health/body-composition';
+import PhotoSourcePicker from '@/components/health/PhotoSourcePicker';
 
 type Props = {
   profile: Partial<UserProfile> | null;
@@ -42,9 +43,6 @@ export default function BodyCompositionPanel({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [latest, setLatest] = useState<BodyCompositionSession | null>(null);
-  const inputRefs = useRef<Partial<Record<BodyPhotoView, HTMLInputElement | null>>>(
-    {}
-  );
 
   const reload = useCallback(() => {
     const list = loadBodySessions();
@@ -57,8 +55,7 @@ export default function BodyCompositionPanel({
 
   const progress = useMemo(() => bodyProgressSeries(), [sessions]);
 
-  const onPick = async (view: BodyPhotoView, file: File | null) => {
-    if (!file) return;
+  const onPick = async (view: BodyPhotoView, file: File) => {
     setError(null);
     try {
       const dataUrl = await fileToCompressedDataUrl(file, {
@@ -188,34 +185,27 @@ export default function BodyCompositionPanel({
               <p className="text-[10px] text-center text-[var(--sage)]">
                 {es ? v.es : v.en}
               </p>
-              <button
-                type="button"
-                onClick={() => inputRefs.current[v.id]?.click()}
-                className="relative w-full aspect-[3/4] rounded-xl border border-[var(--border-soft)] bg-[#040404] overflow-hidden flex items-center justify-center"
+              <PhotoSourcePicker
+                lang={es ? 'es' : 'en'}
+                facing="environment"
+                compact
+                onFile={(file) => void onPick(v.id, file)}
               >
-                {photos[v.id] ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={photos[v.id]}
-                    alt={es ? v.es : v.en}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                ) : (
-                  <span className="text-[20px] text-[var(--sage)]/50">+</span>
-                )}
-              </button>
-              <input
-                ref={(el) => {
-                  inputRefs.current[v.id] = el;
-                }}
-                type="file"
-                accept="image/*"
-                capture="environment"
-                className="hidden"
-                onChange={(e) =>
-                  void onPick(v.id, e.target.files?.[0] || null)
-                }
-              />
+                <div className="relative w-full aspect-[3/4] rounded-xl border border-[var(--border-soft)] bg-[#040404] overflow-hidden flex items-center justify-center">
+                  {photos[v.id] ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={photos[v.id]}
+                      alt={es ? v.es : v.en}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-[11px] text-[var(--sage)]/55 px-1 text-center leading-tight">
+                      {es ? 'Cámara / Galería' : 'Camera / Gallery'}
+                    </span>
+                  )}
+                </div>
+              </PhotoSourcePicker>
             </div>
           ))}
         </div>

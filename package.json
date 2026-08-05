@@ -10,6 +10,7 @@
     "bible:build": "node scripts/build-bible.mjs",
     "salvators:video": "node scripts/build-salvators-video.mjs",
     "db:phalanx": "node scripts/run-phalanx-sql.mjs",
+    "business:probe": "node scripts/probe-business-kpis.mjs",
     "cap:init": "node scripts/capacitor-init.mjs",
     "cap:doctor": "node scripts/capacitor-doctor.mjs",
     "cap:sync": "npx cap sync",

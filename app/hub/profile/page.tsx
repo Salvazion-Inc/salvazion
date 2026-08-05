@@ -46,6 +46,7 @@ import {
 import { formatSalvazion } from '@/lib/solana/balances';
 import { shortenAddress } from '@/lib/solana/config';
 import { logAction, computeScores } from '@/lib/scoring/engine';
+import { isBusinessAdminEmail } from '@/lib/business/access';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -424,6 +425,33 @@ export default function ProfilePage() {
         <div className="mb-6">
           <BillingCard />
         </div>
+
+        {/* Salvazion Inc. business console — only info@salvazion.org */}
+        {isBusinessAdminEmail(email) && (
+          <div className="mb-6">
+            <Link
+              href="/hub/business"
+              className="card-soft block p-4 border border-[var(--border-strong)] hover:border-[#8FD99A]/50 transition group"
+            >
+              <p className="text-[10px] uppercase tracking-wider text-[var(--accent)]">
+                Salvazion Inc.
+              </p>
+              <p className="text-sm font-semibold text-white group-hover:text-[#8FD99A] transition mt-0.5">
+                {lang === 'en'
+                  ? 'Business KPIs & funnel'
+                  : 'KPI de negocio y funnel'}
+              </p>
+              <p className="text-[11px] text-[var(--sage)] mt-1 leading-relaxed">
+                {lang === 'en'
+                  ? 'MRR, ARR, paid conversion, churn — operator only.'
+                  : 'MRR, ARR, conversión a pago, churn — solo operador.'}
+              </p>
+              <p className="text-[11px] text-[#8FD99A] mt-2 font-medium">
+                {lang === 'en' ? 'Open console →' : 'Abrir consola →'}
+              </p>
+            </Link>
+          </div>
+        )}
 
         {/* Solana wallet + $SALVAZION amount on profile */}
         <div className="mb-6">

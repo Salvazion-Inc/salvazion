@@ -30,7 +30,7 @@ const PILLAR_NAV: NavItemConfig[] = [
     labelKey: 'nav.home',
     key: 'home',
     Icon: HomeIcon,
-    match: ['/hub/dashboard', '/hub/profile'],
+    match: ['/hub/dashboard', '/hub/profile', '/hub/business', '/hub/premium', '/hub/badges'],
   },
   {
     href: '/hub/bible',

@@ -50,6 +50,8 @@ import {
 import WomenHealthPanel from '@/components/health/WomenHealthPanel';
 import BiomarkersPanel from '@/components/health/BiomarkersPanel';
 import TodayFromDevices from '@/components/health/TodayFromDevices';
+import BodyCompositionPanel from '@/components/health/BodyCompositionPanel';
+import MealPhotoPanel from '@/components/health/MealPhotoPanel';
 import PillarHubHeader from '@/components/hub/PillarHubHeader';
 import { useI18n } from '@/components/I18nProvider';
 
@@ -380,6 +382,14 @@ export default function HealthPage() {
 
         {activeTab === 'nutrition' && (
           <>
+        <MealPhotoPanel
+          lang={en ? 'en' : 'es'}
+          onApplied={() => {
+            refresh();
+            bumpHealthData();
+          }}
+        />
+
         {/* HIDRATACIÓN */}
         <section className="mb-6">
           <h2 className="text-sm font-semibold text-[var(--sage)] mb-3 flex items-center gap-2">
@@ -750,6 +760,12 @@ export default function HealthPage() {
 
         {activeTab === 'exercise' && (
           <>
+        <BodyCompositionPanel
+          profile={profile}
+          lang={en ? 'en' : 'es'}
+          onAnalyzed={() => bumpHealthData()}
+        />
+
         {/* DEPORTES */}
         <section className="mb-6">
           <div className="flex items-center justify-between mb-3">

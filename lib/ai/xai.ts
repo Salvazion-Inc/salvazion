@@ -17,6 +17,11 @@ export function getXaiModel(): string {
   return process.env.XAI_MODEL || 'grok-4.5';
 }
 
+/** Multimodal model for image understanding (body / meal photos). */
+export function getXaiVisionModel(): string {
+  return process.env.XAI_VISION_MODEL || process.env.XAI_MODEL || 'grok-4.5';
+}
+
 export function isXaiConfigured(): boolean {
   return Boolean(process.env.XAI_API_KEY);
 }

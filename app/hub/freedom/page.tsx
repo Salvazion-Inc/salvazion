@@ -80,7 +80,12 @@ function FreedomPageInner() {
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
       <PillarHubHeader pillar="freedom" score={freedomScore}>
-        <div className="segment-soft mb-2 mt-3">
+        <div
+          className="tabs-x mb-1 mt-2"
+          style={{ ['--tab-accent' as string]: 'var(--pillar-freedom)' }}
+          role="tablist"
+          aria-label="Freedom"
+        >
           {(
             [
               { id: 'learn' as const, label: 'Aprender' },
@@ -91,7 +96,9 @@ function FreedomPageInner() {
             <button
               key={tab.id}
               type="button"
+              role="tab"
               data-active={activeTab === tab.id}
+              aria-selected={activeTab === tab.id}
               onClick={() => setActiveTab(tab.id)}
             >
               {tab.label}
@@ -100,7 +107,7 @@ function FreedomPageInner() {
         </div>
       </PillarHubHeader>
 
-      <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto">
+      <main className="flex-1 px-4 sm:px-5 pt-4 pb-32 overflow-y-auto max-w-lg mx-auto w-full">
         {activeTab === 'learn' && (
           <div className="space-y-5">
             <XArticlesFeed onScored={() => refresh()} />

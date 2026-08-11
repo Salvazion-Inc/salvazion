@@ -50,22 +50,22 @@ export default function PillarHubHeader({
 
   return (
     <Root
-      className={`page-header px-5 pt-[max(1.25rem,env(safe-area-inset-top))] pb-3 ${
+      className={`page-header px-4 sm:px-5 pt-[max(0.85rem,env(safe-area-inset-top))] pb-2 ${
         sticky ? 'sticky top-0 z-40' : ''
       } ${className}`}
     >
-      <div className="flex items-start justify-between gap-3 mb-3 max-w-lg mx-auto">
-        <div className="flex items-start gap-2.5 min-w-0">
+      <div className="flex items-center justify-between gap-3 mb-2.5 max-w-lg mx-auto">
+        <div className="flex items-center gap-2.5 min-w-0">
           <Link
             href="/hub/dashboard"
-            className="back-btn shrink-0 mt-0.5"
+            className="back-btn shrink-0"
             aria-label={t('common.back')}
           >
             ←
           </Link>
           <div className="min-w-0">
             <h1
-              className="font-display text-xl font-bold leading-tight tracking-tight truncate whitespace-nowrap"
+              className="font-display text-lg sm:text-xl font-bold leading-tight tracking-tight truncate whitespace-nowrap"
               style={{ color: pal.text }}
             >
               {title}
@@ -77,55 +77,47 @@ export default function PillarHubHeader({
             ) : null}
           </div>
         </div>
-        {actions ? <div className="shrink-0 flex items-center gap-1.5">{actions}</div> : null}
-      </div>
-
-      <div className="flex justify-center mb-1 max-w-lg mx-auto">
-        <div
-          className="relative w-[7.25rem] h-[7.25rem] flex items-center justify-center"
-          role="img"
-          aria-label={`${title}: ${Math.round(capped)}`}
-        >
-          <svg
-            className="absolute inset-0 w-full h-full -rotate-90"
-            viewBox="0 0 100 100"
-            aria-hidden
+        <div className="shrink-0 flex items-center gap-2">
+          {/* Compact score chip — X chrome prefers less vertical bulk */}
+          <div
+            className="relative w-11 h-11 flex items-center justify-center"
+            role="img"
+            aria-label={`${title}: ${Math.round(capped)}`}
           >
-            <circle
-              cx="50"
-              cy="50"
-              r="42"
-              fill="none"
-              stroke={pal.solid}
-              strokeWidth="6"
-              opacity="0.18"
-            />
-            <circle
-              cx="50"
-              cy="50"
-              r="42"
-              fill="none"
-              stroke={pal.solid}
-              strokeWidth="6"
-              strokeDasharray={`${dash} 264`}
-              strokeLinecap="round"
-              className="transition-all duration-700"
-              style={{
-                filter: `drop-shadow(0 0 8px color-mix(in srgb, ${pal.solid} 45%, transparent))`,
-              }}
-            />
-          </svg>
-          <div className="text-center z-10">
-            <div className="font-display text-3xl font-bold text-white tabular-nums tracking-tighter leading-none">
-              {Math.round(capped)}
-            </div>
-            <div
-              className="text-[9px] uppercase tracking-widest mt-1 font-medium"
-              style={{ color: pal.muted }}
+            <svg
+              className="absolute inset-0 w-full h-full -rotate-90"
+              viewBox="0 0 100 100"
+              aria-hidden
             >
-              Score
-            </div>
+              <circle
+                cx="50"
+                cy="50"
+                r="42"
+                fill="none"
+                stroke={pal.solid}
+                strokeWidth="7"
+                opacity="0.2"
+              />
+              <circle
+                cx="50"
+                cy="50"
+                r="42"
+                fill="none"
+                stroke={pal.solid}
+                strokeWidth="7"
+                strokeDasharray={`${dash} 264`}
+                strokeLinecap="round"
+                className="transition-all duration-700"
+                style={{
+                  filter: `drop-shadow(0 0 6px color-mix(in srgb, ${pal.solid} 40%, transparent))`,
+                }}
+              />
+            </svg>
+            <span className="relative z-10 font-display text-[11px] font-bold text-white tabular-nums leading-none">
+              {Math.round(capped)}
+            </span>
           </div>
+          {actions ? <div className="flex items-center gap-1.5">{actions}</div> : null}
         </div>
       </div>
 

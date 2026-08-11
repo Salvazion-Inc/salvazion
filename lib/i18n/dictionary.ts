@@ -104,6 +104,8 @@ export const dictionary = {
     profile: {
       title: 'Perfil',
       editProfile: 'Editar perfil',
+      tabProfile: 'Perfil',
+      tabAccount: 'Cuenta',
       purpose: 'Propósito',
       city: 'Ciudad',
       country: 'País',
@@ -152,6 +154,8 @@ export const dictionary = {
       chooseGallery: 'Elegir de galería / carpetas',
       takePhotoHint: 'Abrir la cámara del dispositivo',
       chooseGalleryHint: 'Fotos, descargas u otras carpetas',
+      joinDate: 'En Salvazion',
+      holdings: 'Holdings',
     },
     textScale: {
       accessibility: 'Accesibilidad',
@@ -645,6 +649,10 @@ export const dictionary = {
       title: 'Ajustes de la app',
       subtitle: 'Colores, idioma y tamaño de letra',
       open: 'Configuración',
+      appearance: 'Apariencia',
+      preferences: 'Preferencias',
+      devices: 'Dispositivos y sensores',
+      devicesHint: 'Wearables, sensores y sync cloud',
     },
     agenda: {
       section: 'Hoy',
@@ -1056,6 +1064,8 @@ export const dictionary = {
     profile: {
       title: 'Profile',
       editProfile: 'Edit profile',
+      tabProfile: 'Profile',
+      tabAccount: 'Account',
       purpose: 'Purpose',
       city: 'City',
       country: 'Country',
@@ -1104,6 +1114,8 @@ export const dictionary = {
       chooseGallery: 'Choose from gallery / files',
       takePhotoHint: 'Open the device camera',
       chooseGalleryHint: 'Photos, downloads, or other folders',
+      joinDate: 'On Salvazion',
+      holdings: 'Holdings',
     },
     textScale: {
       accessibility: 'Accessibility',
@@ -1594,6 +1606,10 @@ export const dictionary = {
       title: 'App settings',
       subtitle: 'Colors, language, and text size',
       open: 'Settings',
+      appearance: 'Appearance',
+      preferences: 'Preferences',
+      devices: 'Devices & sensors',
+      devicesHint: 'Wearables, sensors, and cloud sync',
     },
     agenda: {
       section: 'Today',

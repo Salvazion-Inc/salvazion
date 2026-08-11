@@ -290,7 +290,12 @@ export default function BiblePage() {
     : selectedBook;
 
   const mainTabs = (
-    <div className="segment-soft mb-2 mt-3">
+    <div
+      className="tabs-x mb-1 mt-2"
+      style={{ ['--tab-accent' as string]: 'var(--pillar-salvation)' }}
+      role="tablist"
+      aria-label={t('nav.salvation')}
+    >
       {(
         [
           { id: 'bible' as MainTab, key: 'bible.title' },
@@ -302,7 +307,9 @@ export default function BiblePage() {
           <Link
             key={tab.id}
             href="/hub/devotional"
-            data-active={mainTab === 'devotional' ? 'true' : undefined}
+            role="tab"
+            data-active={mainTab === 'devotional' ? 'true' : 'false'}
+            aria-selected={mainTab === 'devotional'}
           >
             {t(tab.key)}
           </Link>
@@ -310,7 +317,9 @@ export default function BiblePage() {
           <button
             key={tab.id}
             type="button"
+            role="tab"
             data-active={mainTab === tab.id}
+            aria-selected={mainTab === tab.id}
             onClick={() => {
               setMainTab(tab.id);
               if (tab.id !== 'bible') setChromeCollapsed(false);

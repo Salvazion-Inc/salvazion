@@ -77,23 +77,23 @@ function ArticleCard({
         onClick={() => onSelect(article)}
         className="flex flex-col flex-1 min-h-0 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
       >
-        <div className="relative aspect-[16/10] bg-[#0a0a0a] overflow-hidden shrink-0 flex items-center justify-center">
+        {/* Full media frame — cover centered, no aggressive crop (X header language) */}
+        <div className="media-frame media-frame-contain aspect-[16/10] shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={article.image}
             alt=""
-            className="absolute inset-0 m-auto max-w-full max-h-full w-full h-full object-contain object-center transition duration-300 group-hover:scale-[1.02]"
+            className="transition duration-300 group-hover:scale-[1.02]"
             loading="lazy"
             decoding="async"
             referrerPolicy="no-referrer"
             onError={(e) => {
               e.currentTarget.src = '/logo-icon.png';
-              e.currentTarget.className =
-                'absolute inset-0 m-auto max-w-[40%] max-h-[40%] w-auto h-auto object-contain object-center opacity-80';
+              e.currentTarget.className = 'max-w-[40%] max-h-[40%] opacity-80';
             }}
           />
           <span
-            className="absolute top-2 left-2 text-[9px] uppercase tracking-[0.14em] font-semibold px-2 py-0.5 rounded-full border backdrop-blur-sm"
+            className="absolute top-2 left-2 text-[9px] uppercase tracking-[0.14em] font-semibold px-2 py-0.5 rounded-full border backdrop-blur-sm z-[1]"
             style={{
               color: accent,
               borderColor: `${accent}66`,
@@ -103,7 +103,7 @@ function ArticleCard({
             {article.pillar}
           </span>
           {isRead ? (
-            <span className="absolute top-2 right-2 text-[9px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded-full border border-[var(--accent)]/50 bg-[rgba(4,4,4,0.72)] text-[var(--accent)] backdrop-blur-sm">
+            <span className="absolute top-2 right-2 z-[1] text-[9px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded-full border border-[var(--accent)]/50 bg-[rgba(4,4,4,0.72)] text-[var(--accent)] backdrop-blur-sm">
               {readLabel}
             </span>
           ) : null}
@@ -310,9 +310,9 @@ export default function XArticlesFeed({
         ) : null}
       </div>
 
-      {/* Pillar filters — same UX as landing blog */}
+      {/* Pillar filters — X underline tabs + count badges */}
       <div
-        className="flex flex-wrap gap-1.5"
+        className="tabs-x rounded-none"
         role="tablist"
         aria-label={t('articles.filterAria')}
       >
@@ -327,26 +327,18 @@ export default function XArticlesFeed({
               type="button"
               role="tab"
               aria-selected={active}
+              data-active={active ? 'true' : 'false'}
               onClick={() => onFilter(key)}
-              className={`px-2.5 py-1.5 rounded-full text-[10px] font-semibold uppercase tracking-wider border transition ${
-                active
-                  ? 'text-[#0a120c]'
-                  : 'text-[var(--sage)] hover:text-white border-[var(--border-soft)] bg-transparent hover:border-[var(--border-strong)]'
-              }`}
               style={
                 active
-                  ? {
-                      background: accent,
-                      borderColor: accent,
-                      color: key === 'salvation' ? '#0a120c' : undefined,
-                    }
+                  ? { ['--tab-accent' as string]: accent }
                   : undefined
               }
             >
               {filterLabel(key)}
               <span
-                className={`ml-1 tabular-nums ${
-                  active ? 'opacity-80' : 'opacity-60'
+                className={`ml-1 tabular-nums text-[10px] ${
+                  active ? 'opacity-80' : 'opacity-55'
                 }`}
               >
                 {count}
@@ -444,8 +436,8 @@ export default function XArticlesFeed({
       </div>
 
       {selected && selectedLoc && (
-        <div className="fixed inset-0 z-50 bg-[#040404]/95 flex flex-col">
-          <div className="px-5 pt-6 pb-3 border-b border-[var(--border-soft)] flex items-center gap-2">
+        <div className="fixed inset-0 z-50 bg-[var(--true-black)] flex flex-col">
+          <div className="sheet-topbar">
             <button
               type="button"
               onClick={() => setSelected(null)}
@@ -454,15 +446,21 @@ export default function XArticlesFeed({
             >
               ←
             </button>
-            <span className="text-[10px] text-[var(--sage)]/80 truncate">
-              {selected.source}
-            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-[11px] text-[var(--sage)] truncate">
+                {selected.source}
+              </p>
+              <p className="text-[13px] font-semibold text-white truncate">
+                {selectedLoc.title}
+              </p>
+            </div>
           </div>
-          <div className="flex-1 overflow-y-auto px-5 py-5 max-w-lg mx-auto w-full">
+          <div className="flex-1 overflow-y-auto premium-scroll pb-10">
+            {/* Full-bleed article media — fully visible header */}
             <div
-              className="relative w-full aspect-[16/10] rounded-xl overflow-hidden border border-[var(--border-soft)] mb-4 bg-[var(--true-black)] flex items-center justify-center"
+              className="media-frame media-frame-contain w-full aspect-[16/9] sm:aspect-[2/1] border-b border-[var(--border-soft)]"
               style={{
-                borderTopWidth: 2,
+                borderTopWidth: 3,
                 borderTopColor: PILLAR_ACCENT[selected.pillar],
               }}
             >
@@ -470,16 +468,14 @@ export default function XArticlesFeed({
               <img
                 src={selected.image}
                 alt=""
-                className="absolute inset-0 m-auto max-w-full max-h-full w-full h-full object-contain object-center"
                 referrerPolicy="no-referrer"
                 onError={(e) => {
                   e.currentTarget.src = '/logo-icon.png';
-                  e.currentTarget.className =
-                    'absolute inset-0 m-auto max-w-[40%] max-h-[40%] w-auto h-auto object-contain object-center opacity-80';
+                  e.currentTarget.className = 'max-w-[40%] max-h-[40%] opacity-80';
                 }}
               />
               <span
-                className="absolute top-2 left-2 text-[9px] uppercase tracking-[0.14em] font-semibold px-2 py-0.5 rounded-full border backdrop-blur-sm"
+                className="absolute top-3 left-3 z-[1] text-[9px] uppercase tracking-[0.14em] font-semibold px-2 py-0.5 rounded-full border backdrop-blur-sm"
                 style={{
                   color: PILLAR_ACCENT[selected.pillar],
                   borderColor: `${PILLAR_ACCENT[selected.pillar]}66`,
@@ -489,37 +485,39 @@ export default function XArticlesFeed({
                 {selected.pillar}
               </span>
             </div>
-            <h2 className="font-display text-xl font-bold text-white mb-2 leading-snug">
-              {selectedLoc.title}
-            </h2>
-            <p className="text-xs text-[var(--sage)] mb-3">
-              {formatArticleDate(selected.createdAt, locale)}
-            </p>
-            <p className="text-sm text-[var(--off-white)]/85 leading-relaxed mb-2">
-              {selectedLoc.preview}
-            </p>
-            <p className="text-[11px] text-[var(--sage)]/70 mb-6">
-              {textWithXLogo(t('articles.openHint'))}
-            </p>
-            <div className="grid grid-cols-1 gap-2">
-              <button
-                type="button"
-                onClick={() => handleOpenX(selected)}
-                className="btn-primary inline-flex items-center justify-center gap-1.5"
-              >
-                {textWithXLogo(t('articles.readOnX'), 'w-3.5 h-3.5 shrink-0')}
-                <span aria-hidden>↗</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => handleMarkRead(selected)}
-                disabled={readIds.has(selected.id)}
-                className="btn-secondary"
-              >
-                {readIds.has(selected.id)
-                  ? `✓ ${t('articles.read')}`
-                  : t('articles.markRead')}
-              </button>
+            <div className="px-5 py-5 max-w-lg mx-auto w-full">
+              <h2 className="font-display text-xl sm:text-2xl font-bold text-white mb-2 leading-snug text-balance">
+                {selectedLoc.title}
+              </h2>
+              <p className="text-xs text-[var(--sage)] mb-4">
+                {formatArticleDate(selected.createdAt, locale)}
+              </p>
+              <p className="text-[15px] text-[var(--off-white)]/90 leading-relaxed mb-2 text-pretty">
+                {selectedLoc.preview}
+              </p>
+              <p className="text-[11px] text-[var(--sage)]/70 mb-6">
+                {textWithXLogo(t('articles.openHint'))}
+              </p>
+              <div className="grid grid-cols-1 gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleOpenX(selected)}
+                  className="btn-primary inline-flex items-center justify-center gap-1.5"
+                >
+                  {textWithXLogo(t('articles.readOnX'), 'w-3.5 h-3.5 shrink-0')}
+                  <span aria-hidden>↗</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleMarkRead(selected)}
+                  disabled={readIds.has(selected.id)}
+                  className="btn-secondary"
+                >
+                  {readIds.has(selected.id)
+                    ? `✓ ${t('articles.read')}`
+                    : t('articles.markRead')}
+                </button>
+              </div>
             </div>
           </div>
         </div>

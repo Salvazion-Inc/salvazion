@@ -6,7 +6,6 @@ import {
   useRef,
   useState,
   Suspense,
-  type ReactNode,
 } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -207,307 +206,435 @@ export default function ProfilePage() {
 
   const age = profile.birthDate ? calculateAge(profile.birthDate) : null;
   const stage = getLifeStage(age);
+  const displayName = profile.name || (lang === 'en' ? 'Brother' : 'Hermano');
+  const xHandle = profile.xUsername?.replace(/^@+/, '') || '';
+  const locationLine = [profile.city, profile.country].filter(Boolean).join(', ');
 
   return (
-    <div className="min-h-screen bg-[var(--true-black)] text-[var(--off-white)] flex flex-col">
+    <div className="min-h-[100dvh] bg-[var(--true-black)] text-[var(--off-white)] flex flex-col">
       {saveToast}
-      {/* Header */}
-      <header className="flex items-center justify-between px-5 pt-6 pb-2">
-        <div className="flex items-center gap-2.5">
-          <div className="w-10 h-10 rounded-full border border-[var(--border-strong)] flex items-center justify-center lion-glow overflow-hidden bg-[var(--true-black)]">
-            <Image src="/logo-icon.png" alt="Salvazion" width={40} height={40} className="object-cover" />
-          </div>
-          <div>
-            <p className="text-xs text-[var(--sage)]">Salvazion</p>
-            <p className="text-sm font-medium">{t('profile.title')}</p>
-          </div>
-        </div>
-        <Link href="/hub/dashboard" className="text-sm text-[var(--accent)]">
-          ← {t('nav.dashboard')}
+
+      {/* Sticky chrome — back + title (X profile top bar) */}
+      <header className="sheet-topbar sticky top-0 z-40 px-4 sm:px-5">
+        <Link
+          href="/hub/dashboard"
+          className="back-btn shrink-0"
+          aria-label={t('common.back')}
+        >
+          ←
         </Link>
+        <div className="min-w-0 flex-1">
+          <h1 className="text-[15px] font-bold text-white leading-tight truncate">
+            {displayName}
+          </h1>
+          <p className="text-[11px] text-[var(--sage)] truncate">
+            {t('profile.title')}
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowSettings(true)}
+          className="profile-action-btn shrink-0 !min-h-[2.1rem] !px-3 text-[12px]"
+          aria-label={t('settings.open')}
+        >
+          {t('settings.open')}
+        </button>
       </header>
 
-      <main className="flex-1 px-5 pt-6 pb-28 max-w-md mx-auto w-full">
-        {/* Avatar + name */}
-        <div className="text-center mb-8">
-          <ProfileAvatar
-            avatarUrl={profile.avatarUrl}
-            name={profile.name || 'Hermano'}
-            editable
-            size="xl"
-            className="mb-1"
-            onChange={(url) => {
-              setProfile((p) => (p ? { ...p, avatarUrl: url } : p));
-              setDraft((d) => ({ ...d, avatarUrl: url }));
-            }}
-          />
-          <h1 className="text-2xl font-bold text-white mt-2">{profile.name || 'Hermano'}</h1>
-          {profile.xUsername && (
-            <a
-              href={`https://x.com/${profile.xUsername.replace(/^@+/, '')}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 mt-1.5 text-sm font-medium text-[#8FD99A] hover:underline"
-            >
-              <XLogo className="w-3.5 h-3.5 shrink-0 opacity-90" />
-              @{profile.xUsername.replace(/^@+/, '')}
-            </a>
-          )}
-          {email && (
-            <p className="text-xs text-[var(--sage)]/80 mt-1 break-all">{email}</p>
-          )}
-          {age !== null && (
-            <p className="text-sm text-[var(--sage)] mt-1">
-              {age} {t('profile.years')} · {getLifeStageLabel(stage, lang)}
-            </p>
-          )}
-          {typeof linkedWallet?.salvazionBalance === 'number' && (
-            <div className="mt-3 inline-flex flex-col items-center gap-1">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#8FD99A]/40 bg-[#8FD99A]/10">
-                <span className="text-[10px] uppercase tracking-wider text-[var(--sage)]">
-                  {t('wallet.holdings')}
+      <main className="flex-1 pb-28 w-full max-w-lg mx-auto">
+        {/* X-style profile hero: full banner (no crop) + overlapping avatar */}
+        <section className="profile-hero mb-1">
+          <div className="profile-banner" aria-hidden>
+            {/* Decorative full-bleed brand header — aspect 3:1, fully visible */}
+            <div className="absolute inset-0 flex items-center justify-center opacity-[0.14]">
+              <Image
+                src="/logo-icon.png"
+                alt=""
+                width={120}
+                height={120}
+                className="object-contain"
+                priority
+              />
+            </div>
+            <div className="profile-banner-fade" />
+          </div>
+
+          <div className="profile-hero-body">
+            <div className="flex items-end justify-between gap-3">
+              <div className="profile-hero-avatar">
+                <ProfileAvatar
+                  avatarUrl={profile.avatarUrl}
+                  name={displayName}
+                  editable
+                  size="xl"
+                  onChange={(url) => {
+                    setProfile((p) => (p ? { ...p, avatarUrl: url } : p));
+                    setDraft((d) => ({ ...d, avatarUrl: url }));
+                  }}
+                />
+              </div>
+              <div className="profile-hero-actions pb-1">
+                {!editing ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setEditing(true)}
+                      className="profile-action-btn profile-action-btn-primary"
+                    >
+                      {t('profile.editProfile')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowSettings(true)}
+                      className="profile-action-btn"
+                    >
+                      {t('settings.open')}
+                    </button>
+                  </>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="mt-3">
+              <h2 className="text-xl sm:text-2xl font-bold text-white leading-tight tracking-tight">
+                {displayName}
+              </h2>
+              {xHandle ? (
+                <a
+                  href={`https://x.com/${xHandle}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 mt-0.5 text-[14px] text-[var(--sage)] hover:text-[var(--accent)] transition-colors"
+                >
+                  <XLogo className="w-3.5 h-3.5 shrink-0 opacity-80" />
+                  @{xHandle}
+                </a>
+              ) : email ? (
+                <p className="text-[13px] text-[var(--sage)] mt-0.5 break-all">
+                  {email}
+                </p>
+              ) : null}
+            </div>
+
+            {profile.purpose ? (
+              <p className="profile-bio">{profile.purpose}</p>
+            ) : null}
+
+            <div className="profile-meta-row">
+              {locationLine ? (
+                <span className="inline-flex items-center gap-1">
+                  <span aria-hidden>📍</span>
+                  {locationLine}
                 </span>
-                <span className="text-sm font-semibold text-[#8FD99A] font-mono">
+              ) : null}
+              {age !== null ? (
+                <span>
+                  {age} {t('profile.years')} · {getLifeStageLabel(stage, lang)}
+                </span>
+              ) : null}
+              {typeof linkedWallet?.salvazionBalance === 'number' ? (
+                <span className="inline-flex items-center gap-1.5 font-mono text-[var(--accent)]">
+                  <span className="text-[10px] uppercase tracking-wider text-[var(--sage)] font-sans">
+                    {t('wallet.holdings')}
+                  </span>
                   {formatSalvazion(linkedWallet.salvazionBalance)}
                 </span>
-              </div>
-              {linkedWallet.address && (
-                <p className="text-[10px] font-mono text-[var(--sage)]/70">
-                  {shortenAddress(linkedWallet.address, 4)}
-                  {linkedWallet.salvazionSource
-                    ? ` · ${
-                        linkedWallet.salvazionSource === 'onchain'
-                          ? t('wallet.sourceOnchain')
-                          : t('wallet.sourceManual')
-                      }`
-                    : ''}
-                </p>
-              )}
+              ) : null}
             </div>
-          )}
-          {profile._integrityWarning && (
-            <p className="text-xs text-amber-400 mt-2">
-              ⚠ Datos de perfil podrían haber sido modificados externamente
-            </p>
-          )}
+
+            {linkedWallet?.address ? (
+              <p className="mt-1.5 text-[11px] font-mono text-[var(--sage)]/70">
+                {shortenAddress(linkedWallet.address, 4)}
+                {linkedWallet.salvazionSource
+                  ? ` · ${
+                      linkedWallet.salvazionSource === 'onchain'
+                        ? t('wallet.sourceOnchain')
+                        : t('wallet.sourceManual')
+                    }`
+                  : ''}
+              </p>
+            ) : null}
+
+            {profile._integrityWarning ? (
+              <p className="text-xs text-amber-400 mt-2">
+                ⚠ Datos de perfil podrían haber sido modificados externamente
+              </p>
+            ) : null}
+          </div>
+        </section>
+
+        {/* Underline tabs — Profile | Account (X profile tab language) */}
+        <div
+          className="tabs-x sticky z-30 bg-[var(--true-black)]/95 backdrop-blur-md px-0"
+          style={{ top: 'calc(3.25rem + env(safe-area-inset-top, 0px))' }}
+          role="tablist"
+          aria-label={t('profile.title')}
+        >
+          <button
+            type="button"
+            role="tab"
+            data-active={!editing ? 'true' : 'false'}
+            aria-selected={!editing}
+            onClick={() => setEditing(false)}
+          >
+            {t('profile.tabProfile')}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            data-active={editing ? 'true' : 'false'}
+            aria-selected={editing}
+            onClick={() => {
+              setDraft(profile);
+              setEditing(true);
+            }}
+          >
+            {t('common.edit')}
+          </button>
         </div>
 
-        {/* Info card */}
-        <div className="glass rounded-2xl p-5 space-y-4 mb-6">
-          {!editing ? (
-            <>
-              {email && <Row label={t('profile.email')} value={email} />}
-              {profile.xUsername && (
-                <Row
-                  label={textWithXLogo(t('profile.xUsername'))}
-                  value={`@${profile.xUsername.replace(/^@+/, '')}`}
-                />
-              )}
-              <Row label={t('profile.purpose')} value={profile.purpose || '—'} />
-              <Row
-                label={t('profile.location')}
-                value={
-                  [profile.city, profile.country].filter(Boolean).join(', ') || '—'
-                }
-              />
-              <Row
-                label={t('profile.spiritualMaturity')}
-                value={
-                  t(`profile.maturity.${profile.spiritualMaturity || 'growing'}`)
-                }
-              />
-              <Row
-                label={t('profile.family')}
-                value={t(`profile.familyStatus.${profile.familyStatus || 'family'}`)}
-              />
-              <Row
-                label={t('profile.focus')}
-                value={(profile.currentFocus || []).join(', ') || '—'}
-              />
-              <div className="grid grid-cols-2 gap-2 mt-3">
-                <button
-                  type="button"
-                  onClick={() => setEditing(true)}
-                  className="btn-secondary"
-                >
-                  {t('profile.editProfile')}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowSettings(true)}
-                  className="btn-secondary"
-                >
-                  {t('settings.open')}
-                </button>
+        <div className="px-4 sm:px-5 pt-4 space-y-5">
+          {/* Info / edit card */}
+          <div className="settings-list">
+            {!editing ? (
+              <>
+                {email ? (
+                  <div className="settings-row">
+                    <div className="settings-row-label">
+                      {t('profile.email')}
+                      <span className="settings-row-hint break-all">{email}</span>
+                    </div>
+                  </div>
+                ) : null}
+                {xHandle ? (
+                  <div className="settings-row">
+                    <div className="settings-row-label">
+                      {textWithXLogo(t('profile.xUsername'))}
+                      <span className="settings-row-hint">@{xHandle}</span>
+                    </div>
+                  </div>
+                ) : null}
+                <div className="settings-row">
+                  <div className="settings-row-label">
+                    {t('profile.purpose')}
+                    <span className="settings-row-hint line-clamp-3">
+                      {profile.purpose || '—'}
+                    </span>
+                  </div>
+                </div>
+                <div className="settings-row">
+                  <span className="settings-row-label">{t('profile.location')}</span>
+                  <span className="settings-row-value">{locationLine || '—'}</span>
+                </div>
+                <div className="settings-row">
+                  <span className="settings-row-label">
+                    {t('profile.spiritualMaturity')}
+                  </span>
+                  <span className="settings-row-value">
+                    {t(`profile.maturity.${profile.spiritualMaturity || 'growing'}`)}
+                  </span>
+                </div>
+                <div className="settings-row">
+                  <span className="settings-row-label">{t('profile.family')}</span>
+                  <span className="settings-row-value">
+                    {t(`profile.familyStatus.${profile.familyStatus || 'family'}`)}
+                  </span>
+                </div>
+                <div className="settings-row">
+                  <div className="settings-row-label">
+                    {t('profile.focus')}
+                    <span className="settings-row-hint">
+                      {(profile.currentFocus || []).join(', ') || '—'}
+                    </span>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="p-4 space-y-3">
+                <div>
+                  <label className="block text-xs text-[var(--sage)] mb-1">
+                    {lang === 'en' ? 'Name' : 'Nombre'}
+                  </label>
+                  <input
+                    type="text"
+                    value={draft.name || ''}
+                    onChange={(e) => setDraft({ ...draft, name: e.target.value })}
+                    className="input-soft w-full text-sm py-2.5"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-[var(--sage)] mb-1">
+                    {t('profile.purpose')}
+                  </label>
+                  <textarea
+                    value={draft.purpose || ''}
+                    onChange={(e) => setDraft({ ...draft, purpose: e.target.value })}
+                    rows={3}
+                    className="input-soft w-full text-sm py-2.5 resize-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-[var(--sage)] mb-1">
+                    {t('profile.location')}
+                  </label>
+                  <input
+                    type="text"
+                    value={[draft.city, draft.country].filter(Boolean).join(', ')}
+                    onChange={(e) => {
+                      const parts = e.target.value
+                        .split(',')
+                        .map((s) => s.trim())
+                        .filter(Boolean);
+                      const city = parts[0] || '';
+                      const country = parts.slice(1).join(', ');
+                      setDraft({ ...draft, city, country });
+                    }}
+                    placeholder={t('profile.locationPlaceholder')}
+                    className="input-soft w-full text-sm py-2.5"
+                  />
+                </div>
+                {profileDirty && (
+                  <p className="text-[11px] text-[var(--accent)]">
+                    {t('common.unsavedChanges')}
+                  </p>
+                )}
+                <div className="flex gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDraft(profile);
+                      setEditing(false);
+                    }}
+                    className="profile-action-btn flex-1"
+                    disabled={saving}
+                  >
+                    {t('common.cancel')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => void handleSave()}
+                    className="profile-action-btn profile-action-btn-primary flex-1"
+                    disabled={saving || !draft.name?.trim()}
+                  >
+                    {saving
+                      ? t('common.loading')
+                      : profileDirty
+                        ? t('common.saveChanges')
+                        : t('common.save')}
+                  </button>
+                </div>
               </div>
-            </>
-          ) : (
-            <div className="space-y-3">
-              <div>
-                <label className="block text-xs text-[var(--sage)] mb-1">Nombre</label>
-                <input
-                  type="text"
-                  value={draft.name || ''}
-                  onChange={(e) => setDraft({ ...draft, name: e.target.value })}
-                  className="w-full bg-[#040404] border border-[var(--border-soft)] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#8FD99A]"
-                />
-              </div>
-              <div>
-                <label className="block text-xs text-[var(--sage)] mb-1">Propósito</label>
-                <textarea
-                  value={draft.purpose || ''}
-                  onChange={(e) => setDraft({ ...draft, purpose: e.target.value })}
-                  rows={3}
-                  className="w-full bg-[#040404] border border-[var(--border-soft)] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#8FD99A] resize-none"
-                />
-              </div>
-              <div>
-                <label className="block text-xs text-[var(--sage)] mb-1">
-                  {t('profile.location')}
-                </label>
-                <input
-                  type="text"
-                  value={[draft.city, draft.country].filter(Boolean).join(', ')}
-                  onChange={(e) => {
-                    const parts = e.target.value
-                      .split(',')
-                      .map((s) => s.trim())
-                      .filter(Boolean);
-                    const city = parts[0] || '';
-                    const country = parts.slice(1).join(', ');
-                    setDraft({ ...draft, city, country });
-                  }}
-                  placeholder={t('profile.locationPlaceholder')}
-                  className="w-full bg-[#040404] border border-[var(--border-soft)] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-[#8FD99A]"
-                />
-              </div>
-              {profileDirty && (
-                <p className="text-[11px] text-[var(--accent)]">
-                  {t('common.unsavedChanges')}
-                </p>
-              )}
-              <div className="flex gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setDraft(profile);
-                    setEditing(false);
-                  }}
-                  className="flex-1 py-2.5 rounded-xl border border-[var(--border-strong)] text-sm"
-                  disabled={saving}
-                >
-                  {t('common.cancel')}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => void handleSave()}
-                  className="btn-primary flex-1 py-2.5 text-sm"
-                  disabled={saving || !draft.name?.trim()}
-                >
-                  {saving
-                    ? t('common.loading')
-                    : profileDirty
-                      ? t('common.saveChanges')
-                      : t('common.save')}
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
-        {/* Clinical FHIR export lives on Profile (identity + data portability), not Health tabs */}
-        <ClinicalRecordPanel
-          profile={profile}
-          lang={lang === 'en' ? 'en' : 'es'}
-        />
+          {/* Quick settings entry — X list language */}
+          <div className="settings-list">
+            <button
+              type="button"
+              className="settings-row"
+              onClick={() => setShowSettings(true)}
+            >
+              <div className="settings-row-label">
+                {t('settings.open')}
+                <span className="settings-row-hint">{t('settings.subtitle')}</span>
+              </div>
+              <span className="settings-row-chevron" aria-hidden>
+                ›
+              </span>
+            </button>
+          </div>
 
-        {/* Premium subscription */}
-        <div className="mb-6">
+          {/* Clinical FHIR export lives on Profile (identity + data portability) */}
+          <ClinicalRecordPanel
+            profile={profile}
+            lang={lang === 'en' ? 'en' : 'es'}
+          />
+
           <BillingCard />
-        </div>
 
-        {/* Solana wallet + $SALVAZION amount on profile */}
-        <div className="mb-6">
           <WalletConnectCard
             onSalvazionChange={() => setLinkedWallet(loadLinkedWallet())}
           />
-        </div>
 
-        {/* Privacy note + legal links */}
-        <div className="glass rounded-2xl p-4 mb-6 text-xs text-[var(--sage)] leading-relaxed">
-          <p className="font-medium text-[var(--accent)] mb-1">{t('profile.privacyTitle')}</p>
-          <p>{t('profile.privacyBody')}</p>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mt-3 pt-3 border-t border-[var(--border-soft)]">
-            <Link
-              href="/terms"
-              className="text-[11px] font-medium text-[#8FD99A] hover:underline"
-            >
-              {lang === 'en' ? 'Terms of Service' : 'Términos de servicio'}
-            </Link>
-            <span className="text-[var(--sage)]/40" aria-hidden>
-              ·
-            </span>
-            <Link
-              href="/privacy"
-              className="text-[11px] font-medium text-[#8FD99A] hover:underline"
-            >
-              {lang === 'en' ? 'Privacy Policy' : 'Política de privacidad'}
-            </Link>
-          </div>
-        </div>
-
-        <button
-          onClick={async () => {
-            await signOut();
-            router.replace('/');
-          }}
-          className="w-full mb-4 py-3 rounded-xl border border-[var(--border-soft)] text-[var(--sage)] text-sm hover:border-[var(--border-strong)]"
-        >
-          {t('profile.signOut')}
-        </button>
-
-        {/* Danger zone */}
-        <div className="border border-red-500/30 rounded-2xl p-4 mb-6">
-          <p className="text-sm text-red-400/90 mb-3">{t('profile.dangerZone')}</p>
-          {!confirmClear ? (
-            <button
-              onClick={() => setConfirmClear(true)}
-              className="w-full py-2.5 rounded-xl border border-red-500/40 text-red-400 text-sm hover:bg-red-500/10"
-            >
-              {t('profile.clearLocal')}
-            </button>
-          ) : (
-            <div className="space-y-2">
-              <p className="text-xs text-[#D8E1D9]/70">{t('profile.clearConfirm')}</p>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setConfirmClear(false)}
-                  className="flex-1 py-2 rounded-xl border border-[var(--border-soft)] text-sm"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={handleClear}
-                  className="flex-1 py-2 rounded-xl bg-red-600 text-white text-sm font-medium"
-                >
-                  Confirmar borrado
-                </button>
-              </div>
+          {/* Privacy note + legal */}
+          <div className="card-soft p-4 text-xs text-[var(--sage)] leading-relaxed">
+            <p className="font-medium text-[var(--accent)] mb-1">
+              {t('profile.privacyTitle')}
+            </p>
+            <p>{t('profile.privacyBody')}</p>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mt-3 pt-3 border-t border-[var(--border-soft)]">
+              <Link
+                href="/terms"
+                className="text-[11px] font-medium text-[var(--accent)] hover:underline"
+              >
+                {lang === 'en' ? 'Terms of Service' : 'Términos de servicio'}
+              </Link>
+              <span className="text-[var(--sage)]/40" aria-hidden>
+                ·
+              </span>
+              <Link
+                href="/privacy"
+                className="text-[11px] font-medium text-[var(--accent)] hover:underline"
+              >
+                {lang === 'en' ? 'Privacy Policy' : 'Política de privacidad'}
+              </Link>
             </div>
-          )}
-        </div>
+          </div>
 
-        {/* Salvazion Inc. business console — only info@salvazion.org (end of profile) */}
-        {isBusinessAdminEmail(email) && (
-          <div className="mb-2">
+          <button
+            type="button"
+            onClick={async () => {
+              await signOut();
+              router.replace('/');
+            }}
+            className="w-full py-3 rounded-full border border-[var(--border-soft)] text-[var(--sage)] text-sm font-medium hover:border-[var(--border-strong)] hover:text-white transition"
+          >
+            {t('profile.signOut')}
+          </button>
+
+          {/* Danger zone */}
+          <div className="rounded-2xl border border-red-500/30 p-4 mb-2">
+            <p className="text-sm text-red-400/90 mb-3">{t('profile.dangerZone')}</p>
+            {!confirmClear ? (
+              <button
+                type="button"
+                onClick={() => setConfirmClear(true)}
+                className="w-full py-2.5 rounded-full border border-red-500/40 text-red-400 text-sm hover:bg-red-500/10 transition"
+              >
+                {t('profile.clearLocal')}
+              </button>
+            ) : (
+              <div className="space-y-2">
+                <p className="text-xs text-[#D8E1D9]/70">{t('profile.clearConfirm')}</p>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setConfirmClear(false)}
+                    className="flex-1 py-2 rounded-full border border-[var(--border-soft)] text-sm"
+                  >
+                    {t('common.cancel')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleClear}
+                    className="flex-1 py-2 rounded-full bg-red-600 text-white text-sm font-medium"
+                  >
+                    {lang === 'en' ? 'Confirm delete' : 'Confirmar borrado'}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {isBusinessAdminEmail(email) && (
             <Link
               href="/hub/business"
-              className="card-soft block p-4 border border-[var(--border-strong)] hover:border-[#8FD99A]/50 transition group"
+              className="card-soft block p-4 border border-[var(--border-strong)] hover:border-[var(--accent)]/50 transition group mb-2"
             >
               <p className="text-[10px] uppercase tracking-wider text-[var(--accent)]">
                 Salvazion Inc.
               </p>
-              <p className="text-sm font-semibold text-white group-hover:text-[#8FD99A] transition mt-0.5">
+              <p className="text-sm font-semibold text-white group-hover:text-[var(--accent)] transition mt-0.5">
                 {lang === 'en'
                   ? 'Business KPIs & funnel'
                   : 'KPI de negocio y funnel'}
@@ -517,15 +644,15 @@ export default function ProfilePage() {
                   ? 'MRR, ARR, paid conversion, churn — operator only.'
                   : 'MRR, ARR, conversión a pago, churn — solo operador.'}
               </p>
-              <p className="text-[11px] text-[#8FD99A] mt-2 font-medium">
+              <p className="text-[11px] text-[var(--accent)] mt-2 font-medium">
                 {lang === 'en' ? 'Open console →' : 'Abrir consola →'}
               </p>
             </Link>
-          </div>
-        )}
+          )}
+        </div>
       </main>
 
-      {/* Settings panel (separate from profile body) */}
+      {/* Settings sheet — cleaner X 2026 list chrome */}
       {showSettings && (
         <div
           className="fixed inset-0 z-[60] bg-[var(--true-black)] flex flex-col"
@@ -533,7 +660,7 @@ export default function ProfilePage() {
           aria-modal="true"
           aria-labelledby="settings-dialog-title"
         >
-          <header className="page-header flex items-center gap-3 px-5 pt-6 pb-3">
+          <header className="sheet-topbar">
             <button
               type="button"
               onClick={() => setShowSettings(false)}
@@ -542,33 +669,39 @@ export default function ProfilePage() {
             >
               ←
             </button>
-            <div>
+            <div className="min-w-0">
               <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70">
                 {t('settings.section')}
               </p>
               <h2
                 id="settings-dialog-title"
-                className="text-lg font-semibold text-[var(--accent)]"
+                className="text-[15px] font-bold text-white leading-tight"
               >
                 {t('settings.title')}
               </h2>
             </div>
           </header>
-          <div className="flex-1 overflow-y-auto px-5 py-4 pb-10 space-y-4 max-w-md mx-auto w-full">
+          <div className="flex-1 overflow-y-auto premium-scroll px-4 sm:px-5 py-4 pb-12 space-y-5 max-w-lg mx-auto w-full">
             <p className="text-xs text-[var(--sage)]/80">{t('settings.subtitle')}</p>
-            <ThemeControl />
-            <LanguageControl />
-            <TextScaleControl />
 
-            <section className="pt-4 mt-2 border-t border-[var(--border-soft)] space-y-3">
-              <div>
-                <h3 className="text-sm font-semibold text-[var(--accent)]">
-                  {lang === 'en' ? 'Wearables & sensors' : 'Wearables y sensores'}
+            <section className="space-y-2">
+              <h3 className="text-[11px] uppercase tracking-[0.14em] font-semibold text-[var(--sage)] px-1">
+                {t('settings.appearance')}
+              </h3>
+              <div className="space-y-3">
+                <ThemeControl />
+                <LanguageControl />
+                <TextScaleControl />
+              </div>
+            </section>
+
+            <section className="space-y-3">
+              <div className="px-1">
+                <h3 className="text-[11px] uppercase tracking-[0.14em] font-semibold text-[var(--sage)]">
+                  {t('settings.devices')}
                 </h3>
                 <p className="text-[11px] text-[var(--sage)]/80 mt-1 leading-relaxed">
-                  {lang === 'en'
-                    ? 'Phone sensors, BLE devices, and cloud health sync. Connect once; Health Hub uses the data for scores.'
-                    : 'Sensores del teléfono, dispositivos BLE y sincronización cloud. Conéctalos aquí; Health Hub usa los datos para el score.'}
+                  {t('settings.devicesHint')}
                 </p>
               </div>
               <PhoneSensorsPanel
@@ -578,7 +711,7 @@ export default function ProfilePage() {
               <WearablesPanel onAutoLog={handleWearableAutoLog} />
               <Suspense
                 fallback={
-                  <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] text-sm text-[var(--sage)] animate-pulse">
+                  <div className="card-soft p-4 text-sm text-[var(--sage)] animate-pulse">
                     {lang === 'en'
                       ? 'Loading cloud sync…'
                       : 'Cargando sincronización cloud…'}
@@ -592,7 +725,7 @@ export default function ProfilePage() {
             <button
               type="button"
               onClick={() => setShowSettings(false)}
-              className="btn-primary mt-2"
+              className="btn-primary mt-1"
             >
               {t('common.close')}
             </button>
@@ -605,19 +738,4 @@ export default function ProfilePage() {
   );
 }
 
-function Row({
-  label,
-  value,
-}: {
-  label: ReactNode;
-  value: string;
-}) {
-  return (
-    <div className="flex justify-between gap-4 text-sm">
-      <span className="text-[var(--sage)] shrink-0 inline-flex items-center gap-1">
-        {label}
-      </span>
-      <span className="text-right text-[#D8E1D9] line-clamp-2">{value}</span>
-    </div>
-  );
-}
+

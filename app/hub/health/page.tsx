@@ -260,7 +260,12 @@ export default function HealthPage() {
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
       <PillarHubHeader pillar="health" score={healthScore}>
-        <div className="segment-soft mb-2 mt-3">
+        <div
+          className="tabs-x mb-1 mt-2"
+          style={{ ['--tab-accent' as string]: 'var(--pillar-health)' }}
+          role="tablist"
+          aria-label={en ? 'Health' : 'Salud'}
+        >
           {(
             [
               {
@@ -280,7 +285,9 @@ export default function HealthPage() {
             <button
               key={tab.id}
               type="button"
+              role="tab"
               data-active={activeTab === tab.id}
+              aria-selected={activeTab === tab.id}
               onClick={() => setActiveTab(tab.id)}
             >
               {tab.label}
@@ -289,7 +296,7 @@ export default function HealthPage() {
         </div>
       </PillarHubHeader>
 
-      <main className="flex-1 px-5 pt-4 pb-32 overflow-y-auto">
+      <main className="flex-1 px-4 sm:px-5 pt-4 pb-32 overflow-y-auto max-w-lg mx-auto w-full">
         {/* Always visible: auto metrics first — no form required */}
         <div className="mb-5">
           <TodayFromDevices

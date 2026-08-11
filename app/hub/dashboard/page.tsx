@@ -237,7 +237,7 @@ export default function DashboardPage() {
             aria-hidden
           />
 
-          {/* Identity row — entry to Perfil (photo + name; no separate nav tab) */}
+          {/* Identity row — X-style compact profile entry (avatar + name + handle) */}
           <Link
             href="/hub/profile"
             className="relative z-[1] flex items-center gap-3.5 px-4 pt-4 pb-3 group"
@@ -262,18 +262,20 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-lg font-semibold text-white leading-snug break-words group-hover:text-[var(--accent)] transition-colors">
+              <p className="text-[17px] font-bold text-white leading-snug break-words tracking-tight group-hover:text-[var(--accent)] transition-colors">
                 {profile.name || 'Brother'}
               </p>
-              <p className="text-[11px] text-[var(--sage)]/75 group-hover:text-[var(--accent)]/80 transition-colors mt-0.5">
-                {t('nav.profile')}
+              <p className="text-[12px] text-[var(--sage)] group-hover:text-[var(--accent)]/85 transition-colors mt-0.5">
+                {profile.xUsername
+                  ? `@${profile.xUsername.replace(/^@+/, '')}`
+                  : t('nav.profile')}
               </p>
             </div>
             <span
-              className="shrink-0 text-[var(--sage)]/50 group-hover:text-[var(--accent)] transition-colors text-sm"
+              className="shrink-0 w-8 h-8 rounded-full border border-[var(--border-soft)] flex items-center justify-center text-[var(--sage)]/60 group-hover:text-[var(--accent)] group-hover:border-[var(--border-strong)] transition-colors text-sm"
               aria-hidden
             >
-              →
+              ›
             </span>
           </Link>
 

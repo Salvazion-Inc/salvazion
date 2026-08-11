@@ -98,11 +98,11 @@ export default function BottomNav({ variant: _variant = 'default' }: BottomNavPr
                 active
                   ? {
                       background: color
-                        ? `${color}18`
-                        : 'var(--surface-active)',
+                        ? `linear-gradient(180deg, ${color}22 0%, ${color}10 100%)`
+                        : undefined,
                       boxShadow: color
-                        ? `0 0 0 1px ${color}33 inset`
-                        : '0 0 0 1px rgba(143,217,154,0.2) inset',
+                        ? `0 0 0 1px ${color}28 inset`
+                        : undefined,
                     }
                   : undefined
               }

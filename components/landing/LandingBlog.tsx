@@ -283,9 +283,9 @@ export default function LandingBlog({ lang, copy }: Props) {
           </div>
         </div>
 
-        {/* Pillar filters — Salvation · Health · Freedom */}
+        {/* Pillar filters — X underline tab language */}
         <div
-          className="flex flex-wrap justify-center gap-2 mb-6"
+          className="tabs-x max-w-xl mx-auto mb-6 border-[var(--border-soft)]"
           role="tablist"
           aria-label={lang === 'es' ? 'Filtrar por pilar' : 'Filter by pillar'}
         >
@@ -301,26 +301,18 @@ export default function LandingBlog({ lang, copy }: Props) {
                 type="button"
                 role="tab"
                 aria-selected={active}
+                data-active={active ? 'true' : 'false'}
                 onClick={() => onFilter(key)}
-                className={`px-3.5 py-2 rounded-full text-xs font-semibold uppercase tracking-wider border transition ${
-                  active
-                    ? 'text-[#0a120c]'
-                    : 'text-[var(--sage)] hover:text-white border-[var(--border-soft)] bg-transparent hover:border-[var(--border-strong)]'
-                }`}
                 style={
                   active
-                    ? {
-                        background: accent,
-                        borderColor: accent,
-                        color: key === 'salvation' ? '#0a120c' : undefined,
-                      }
+                    ? { ['--tab-accent' as string]: accent }
                     : undefined
                 }
               >
                 {label}
                 <span
-                  className={`ml-1.5 tabular-nums ${
-                    active ? 'opacity-80' : 'opacity-60'
+                  className={`ml-1.5 tabular-nums text-[11px] ${
+                    active ? 'opacity-80' : 'opacity-55'
                   }`}
                 >
                   {count}

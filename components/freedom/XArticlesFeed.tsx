@@ -77,8 +77,8 @@ function ArticleCard({
         onClick={() => onSelect(article)}
         className="flex flex-col flex-1 min-h-0 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
       >
-        {/* Full media frame — cover centered, no aggressive crop (X header language) */}
-        <div className="media-frame media-frame-contain aspect-[16/10] shrink-0">
+        {/* X Articles cover is 5:2 */}
+        <div className="media-frame aspect-[5/2] shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={article.image}
@@ -536,9 +536,9 @@ export default function XArticlesFeed({
             </div>
           </div>
           <div className="flex-1 overflow-y-auto premium-scroll pb-10">
-            {/* Full-bleed article media — fully visible header */}
+            {/* Full-bleed X Articles header — 5:2 */}
             <div
-              className="media-frame media-frame-contain w-full aspect-[16/9] sm:aspect-[2/1] border-b border-[var(--border-soft)]"
+              className="media-frame w-full aspect-[5/2] border-b border-[var(--border-soft)]"
               style={{
                 borderTopWidth: 3,
                 borderTopColor: PILLAR_ACCENT[selected.pillar],

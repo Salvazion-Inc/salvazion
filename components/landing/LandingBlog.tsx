@@ -104,13 +104,13 @@ function ArticleCard({
         className="flex flex-col flex-1 min-h-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
         itemProp="url"
       >
-        <div className="relative aspect-[16/10] bg-[#0a0a0a] overflow-hidden shrink-0 flex items-center justify-center">
+        <div className="relative aspect-[5/2] bg-[#0a0a0a] overflow-hidden shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={article.image}
             alt=""
             itemProp="image"
-            className="absolute inset-0 m-auto max-w-full max-h-full w-full h-full object-contain object-center transition duration-300 group-hover:scale-[1.02]"
+            className="absolute inset-0 w-full h-full object-cover object-center transition duration-300 group-hover:scale-[1.02]"
             loading="lazy"
             decoding="async"
             referrerPolicy="no-referrer"

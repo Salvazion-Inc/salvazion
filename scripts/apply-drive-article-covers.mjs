@@ -75,6 +75,9 @@ const aliases = [
   ['Solana: The Exponential Infrastructure', 'Solana_Salvazion.jpg'],
   ['Solana: The High-Performance Blockchain', 'Solana and Salvazion King.jpg'],
   ['Why We Need More Virtuous People', 'Virtuous Woman in the World.jpg'],
+  ['All About Graphene', 'All About Graphene The Material of the Future.jpg'],
+  ['Delinquency and Organized Crime', 'Delinquency and Organized Crime An In-Depth Analysis.jpg'],
+  ['What is a Purpose-Driven DAO', 'What is a Purpose-Driven DAO.jpg'],
 ];
 
 const usedArt = new Set();
@@ -142,10 +145,16 @@ for (const p of plan) {
   try {
     const input = fs.readFileSync(p.file.path);
     bytesIn += input.length;
+    // X Articles covers are 5:2 (e.g. 1600×640). Crop to fill; attention keeps the subject.
     const out = await sharp(input)
       .rotate()
-      .resize({ width: 1280, height: 800, fit: 'inside', withoutEnlargement: true })
-      .jpeg({ quality: 82, mozjpeg: true })
+      .resize({
+        width: 1600,
+        height: 640,
+        fit: 'cover',
+        position: 'attention',
+      })
+      .jpeg({ quality: 84, mozjpeg: true })
       .toBuffer();
     fs.writeFileSync(dest, out);
     bytesOut += out.length;

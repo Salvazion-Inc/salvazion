@@ -50,8 +50,12 @@ export interface XArticle {
 type EsEntry = { titleEs?: string; previewEs?: string };
 const ES_MAP = esMapJson as Record<string, EsEntry>;
 
-/** Status posts that are not X Articles — never surface in web/app catalog */
-const EXCLUDED_IDS = new Set(['2080090098029523147']);
+/** Deleted on X or not an article — never surface in web/app catalog */
+const EXCLUDED_IDS = new Set([
+  '2080090098029523147',
+  '1802085193563398144', // Qolitica
+  '1801640234548965376', // Gepardo
+]);
 
 const STORAGE_READ = 'salvazion_x_articles_read';
 const STORAGE_VALUE_JOURNEY = 'salvazion_value_journey';

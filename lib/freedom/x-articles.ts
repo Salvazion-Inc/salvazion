@@ -2,7 +2,10 @@
  * X Articles library — @salvazion_
  * Long-form pieces with cover image + title; open on X to read.
  * Ranked by user interests (profile.currentFocus) and unread state.
- * Pillars (Salvation · Health · Freedom) power marketing blog filters + SEO.
+ * Pillars power blog filters + SEO:
+ * Salvation (faith, Christianity, family, conservatism),
+ * Health (food, healthtech, exercise, sleep),
+ * Freedom (speech, entrepreneurship, political ideas, technology).
  */
 
 import catalogJson from '@/data/freedom/x-articles-catalog.json';
@@ -47,106 +50,124 @@ export interface XArticle {
 type EsEntry = { titleEs?: string; previewEs?: string };
 const ES_MAP = esMapJson as Record<string, EsEntry>;
 
+/** Status posts that are not X Articles — never surface in web/app catalog */
+const EXCLUDED_IDS = new Set(['2080090098029523147']);
+
 const STORAGE_READ = 'salvazion_x_articles_read';
 const STORAGE_VALUE_JOURNEY = 'salvazion_value_journey';
 
 /** Keyword → interest mapping for auto-tagging */
 const INTEREST_RULES: { interest: InterestFocus; keys: string[] }[] = [
-  { interest: 'fe', keys: ['faith', 'christ', 'christian', 'bible', 'lion', 'judah', 'prayer', 'god', 'islamic', 'west', 'spirit', 'salvazion', 'fe', 'oración'] },
-  { interest: 'familia', keys: ['family', 'marriage', 'children', 'parent', 'familia', 'matrimonio'] },
-  { interest: 'salud', keys: ['health', 'bio', 'body', 'food', 'sleep', 'salud', 'medical'] },
-  { interest: 'libertad', keys: ['freedom', 'liberty', 'communism', 'immigration', 'deep state', 'nato', 'europe', 'milei', 'sovereignty', 'border', 'libertad', 'patriot', 'mega'] },
-  { interest: 'liderazgo', keys: ['leader', 'musk', 'milei', 'orbán', 'orban', 'huang', 'nvidia', 'elon', 'project', 'elite', 'mkultra', 'epstein'] },
-  { interest: 'proposito', keys: ['solana', 'bitcoin', 'salvazion', 'technology', 'ai', 'machine learning', 'exponencial', 'infrastructure', 'purpose'] },
+  { interest: 'fe', keys: ['faith', 'christ', 'christian', 'bible', 'lion', 'judah', 'prayer', 'god', 'islamic', 'west', 'spirit', 'salvazion', 'fe', 'oración', 'homeschool', 'gospel'] },
+  { interest: 'familia', keys: ['family', 'marriage', 'children', 'parent', 'familia', 'matrimonio', 'homeschool', 'parental', 'formación integral'] },
+  { interest: 'salud', keys: ['health', 'bio', 'body', 'food', 'sleep', 'salud', 'medical', 'fasting', 'nutrition'] },
+  { interest: 'libertad', keys: ['freedom', 'liberty', 'communism', 'immigration', 'deep state', 'nato', 'europe', 'milei', 'sovereignty', 'border', 'libertad', 'patriot', 'mega', 'mining', 'rare earth', 'chicago boys', 'chile', 'socialist'] },
+  { interest: 'liderazgo', keys: ['leader', 'musk', 'milei', 'orbán', 'orban', 'huang', 'nvidia', 'elon', 'project', 'elite', 'mkultra', 'epstein', 'chicago boys', 'grok'] },
+  { interest: 'proposito', keys: ['solana', 'bitcoin', 'salvazion', 'technology', 'ai', 'machine learning', 'exponencial', 'infrastructure', 'purpose', 'jupiter', 'web3', 'autonomous', 'grok', 'mining'] },
   { interest: 'oracion', keys: ['prayer', 'spirit', 'christ', 'devotion'] },
-  { interest: 'perseverancia', keys: ['virtue', 'discipline', 'constancy', 'persever'] },
+  { interest: 'perseverancia', keys: ['virtue', 'discipline', 'constancy', 'persever', 'formation'] },
 ];
 
 /**
- * Pillar rules for blog filters (Salvation · Health · Freedom).
- * Title matches dominate body matches to avoid false positives from long previews.
+ * Pillar taxonomy (blog filters + SEO):
+ * - Salvation: faith, Christianity, family, conservatism
+ * - Health: food/nutrition, healthtech, exercise, sleep
+ * - Freedom: free speech, entrepreneurship, political ideas, technology
+ * Title matches dominate; short keys use word boundaries.
  */
 const PILLAR_RULES: { pillar: ArticlePillar; keys: string[] }[] = [
   {
     pillar: 'salvation',
     keys: [
-      // strong faith / scripture
-      'christian', 'christianity', 'bible', 'gospel', 'jesus', 'christ ',
+      'christian', 'christianity', 'bible', 'gospel', 'jesus', 'christ',
       'prayer', 'praises', 'spiritual gift', 'spiritual warfare', 'kingdom of god',
       'one true god', 'christian habits', 'billy graham', 'martin luther',
       'vatican', 'revelation', 'crusades', 'monaster', 'templar', 'occult',
-      'satanism', 'cabal', 'stoicism', 'christmas', 'heaven', 'eternal life',
-      'western christian', 'salvazion', 'the lion: christ', 'alerci',
-      'islamic world', 'virtuous people', 'virtue', 'faith', 'religion',
-      'theology', 'scripture', 'church', 'worship', 'devotion', 'salvation',
-      'prophet', 'soul', 'biblia', 'iglesia', 'cristianismo', 'salvación',
-      'oración', 'dios', 'creating value in society by promoting christian',
-      'importance of family and marriage',
+      'satanism', 'paganism', 'christmas', 'heaven', 'eternal life',
+      'western christian', 'alerci', 'islamic world', 'virtuous people',
+      'virtue', 'faith', 'religion', 'theology', 'scripture', 'church',
+      'worship', 'devotion', 'salvation', 'prophet', 'biblia', 'iglesia',
+      'cristianismo', 'salvación', 'oración', 'homeschool', 'homeschooling',
+      'family and marriage', 'marriage as a', 'tradwife', 'traditional wife',
+      'christian values and family', 'importance of family',
+      'teach our children', 'parental', 'familia', 'matrimonio',
+      'conservatism', 'conservative', 'conservadurismo',
+      'woke', 'progressivism', 'feminism', 'lgbtq', 'gender ideology',
+      'trans women', 'morphological freedom', 'homotrans',
+      'procreative freedom', 'eugenics', 'abortion', 'euthanasia',
+      'birth rate', 'population collapse', 'bioconserv',
+      'anthropological war', 'dei principles', 'traditions, institutions',
+      'roger scruton', 'thomas aquinas', 'postmodernism', 'relativism',
+      'hedonism', 'deconstructionist', 'adolescentism',
+      'christian masculinity', 'spiritual',
     ],
   },
   {
     pillar: 'health',
     keys: [
-      // clinical / body / biotech
-      'health', 'healthtech', 'healthcare', 'medicine', 'medical', 'telehealth',
-      'telemedicine', 'ehealth', 'mhealth', 'digital health', 'nanomedicine',
-      'biomarker', 'longevity', 'transhuman', 'transhumanism', 'biotech',
-      'biotechnology', 'synthetic biology', 'bioethics', 'vaccine', 'covid',
-      'plandemia', 'monkeypox', 'bird flu', 'pandemic', 'disease', 'cancer',
-      'diabetes', 'stroke', 'hypertension', 'insomnia', 'sleep disorder',
+      'healthtech', 'healthcare', 'telehealth', 'telemedicine', 'ehealth',
+      'mhealth', 'digital health', 'nanomedicine', 'biomarker',
+      'medicine', 'medical', 'longevity and technology',
+      'ludopathy', 'insomnia', 'sleep disorder', 'restless',
       'mental health', 'depression and anxiety', 'depression ​and anxiety',
-      'ludopathy', 'addiction',
-      'drugs', 'eating bugs', 'insects', 'synthetic meat', 'sugar, fat, and alcohol',
-      'superfoods', 'nutrition', 'diet', 'exercise', 'workout', 'fitness',
+      'eating bugs', 'synthetic meat', 'sugar, fat, and alcohol',
+      'superfoods', 'nutrition', 'healthy eating', 'intermittent fasting',
+      'fasting', 'diet', 'exercise', 'workout', 'fitness',
       'lose weight', 'fat burner', 'lower back pain', 'exoskeleton',
       'internet of bodies', 'fatphobia', 'laughter and happiness in medicine',
-      'women\'s sports', 'trans women', 'gender ideology', 'morphological freedom',
-      'procreative freedom', 'eugenics', 'abortion', 'euthanasia',
-      'big pharma', 'adrenochrome', 'chemtrails', 'biological weapons',
-      'population collapse', 'birth rate', 'depopulation', 'robotic prosthes',
       'digital twin in health', 'digital therapeutics', 'wearables in health',
-      'genetics in human', 'clinical trial', '3d printing in health',
-      'robotics and robots in health', 'ai in healthcare', 'machine learning and artificial intelligence in healthcare',
-      'metaverse in health', 'virtual, augmented', 'blockchain, crypto and web3 in health',
-      'standards and interoperability in digital health', 'create value in healthtech',
-      'converging technologies', 'anthropological war', 'homotrans',
-      'neurochemistry', 'beta-endorphins', 'dopamine', 'serotonin',
-      'salud', 'medicina', 'longevidad', 'vacuna', 'deporte',
+      'wearables in healthtech', 'genetics in human', 'clinical trial',
+      '3d printing in health', 'robotics and robots in health',
+      'ai in healthcare', 'machine learning and artificial intelligence in healthcare',
+      'metaverse in health', 'blockchain, crypto and web3 in health',
+      'standards and interoperability in digital health',
+      'create value in healthtech', 'neurochemistry', 'beta-endorphins',
+      'dopamine', 'serotonin', 'salud', 'medicina', 'deporte',
+      'cancer', 'diabetes', 'stroke', 'hypertension',
+      'robotic prosthes', 'synthetic biology', 'biotechnology',
+      'in healthtech', 'in healthcare', 'in health', 'in medicine',
+      'medical devices', 'mobile health', 'on health', 'about drugs',
     ],
   },
   {
     pillar: 'freedom',
     keys: [
-      // sovereignty, politics, tech, markets
-      'freedom', 'liberty', 'libertarian', 'solana', 'bitcoin', 'crypto', 'web3',
+      'freedom of speech', 'freedom of expression', 'libertad de expresión',
+      'libertarian', 'solana', 'bitcoin', 'crypto', 'web3',
       'blockchain', 'dao', 'defi', 'token', 'dogecoin', 'ethereum', 'satoshi',
       'trump', 'desantis', 'milei', 'meloni', 'bukele', 'musk', 'elon',
       'orban', 'orbán', 'thatcher', 'reagan', 'maga', 'politic', 'politician',
       'geopolitic', 'nato', 'immigration', 'communism', 'socialism', 'capitalism',
       'free market', 'sovereignty', 'sovereignist', 'patriot', 'deep state',
-      'censorship', 'propaganda', 'media', 'journalism', 'monopoly', 'elite',
-      'epstein', 'globalism', 'globalist', 'woke', 'progressivism', 'feminism',
-      'lgbtq', 'collectivism', 'nationalism', 'populism', 'zionism',
-      'federal reserve', 'cbdc', 'bilderberg', 'world economic forum',
-      'united nations', 'terrorism', 'war', 'military', 'weapons', 'gun',
-      'democracy', 'monarchy', 'fascism', 'anarchism', 'conservatism',
+      'censorship', 'propaganda', 'journalism', 'monopoly',
+      'epstein', 'globalism', 'globalist', 'collectivism', 'nationalism',
+      'populism', 'zionism', 'federal reserve', 'cbdc', 'bilderberg',
+      'world economic forum', 'united nations', 'terrorism', 'military',
+      'weapons of mass', 'democracy', 'monarchy', 'fascism', 'anarchism',
       'founding fathers', 'american dream', 'silicon valley', 'nvidia',
       'machine learning', 'artificial intelligence', 'agi', 'quantum',
       'cybersecurity', 'hacker', 'snowden', 'assange', 'startup', 'venture',
-      'business', 'economy', 'inflation', 'investor', 'growth hacking',
+      'entrepreneur', 'economy', 'inflation', 'investor', 'growth hacking',
       'network effects', 'no-code', 'exponential technolog', 'gepard',
       'homeless', 'prison', 'crime', 'delinquency', 'gangs', 'trafficking',
       'corruption', 'voter fraud', 'racism', 'indigenism', 'colonialism',
-      'rothschild', 'rockefeller', 'powerful families', 'meta capitalist',
+      'rothschild', 'rockefeller', 'powerful families', 'metacapital',
       'blackrock', 'vanguard', 'area 51', 'qanon', 'project blue beam',
       'mkultra', 'bunker', 'chernobyl', 'twin towers', 'abraham accords',
-      'hamas', 'iran', 'russian revolution', 'orwell', 'arendt', 'scruton',
+      'hamas', 'iran', 'russian revolution', 'orwell', 'arendt',
       'shakespeare', 'da vinci', 'tesla', 'edison', 'henry ford', 'steve jobs',
       'jack ma', 'bezos', 'zuckerberg', 'bill gates', 'harari', 'buterin',
-      'tucker carlson', 'weinsten', 'charlemagne', 'benjamin franklin',
+      'tucker carlson', 'charlemagne', 'benjamin franklin',
       'spanishness', 'hispanidad', 'qolitica', 'renaissance', 'graphene',
       '5g technology', 'dark web', 'project 2025', 'mandate for leadership',
       'libertad', 'soberanía', 'frontera', 'censura', 'politica',
+      'grok', 'jupiter', 'mining', 'rare earth', 'chicago boys',
+      'autonomous agent', 'spacex', 'plandemia', 'chemtrails',
+      'adrenochrome', 'big pharma', 'depopulation', 'geoengineering',
+      'environmentalism', 'transhuman', 'cyborg', 'android',
+      'biological weapon', 'remote, asynchronous', 'decentralized work',
+      'stoicism', 'chinese communist', 'human rights', 'fundamental rights',
+      'liberty',
     ],
   },
 ];
@@ -163,14 +184,29 @@ function inferInterests(title: string, preview: string, tags: string[] = []): In
   return [...found];
 }
 
+function escapeRegExp(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/** Phrase / long-token includes; short tokens need a word boundary. */
+function hayHasKey(hay: string, key: string): boolean {
+  const k = key.toLowerCase();
+  if (k.length <= 4) {
+    return new RegExp(`(?:^|[^a-z0-9])${escapeRegExp(k)}(?:[^a-z0-9]|$)`, 'i').test(
+      hay
+    );
+  }
+  return hay.includes(k);
+}
+
 function scorePillarKeys(titleHay: string, bodyHay: string, keys: string[]): number {
   let score = 0;
   for (const key of keys) {
     const k = key.toLowerCase();
-    if (titleHay.includes(k)) {
-      // Longer / more specific title phrases win harder
+    if (hayHasKey(titleHay, k)) {
       score += k.length >= 12 ? 12 : k.length >= 6 ? 8 : 5;
-    } else if (bodyHay.includes(k)) {
+    } else if (k.length >= 10 && hayHasKey(bodyHay, k)) {
+      // Body only counts distinctive phrases — avoid "religion" / "family" noise
       score += k.length >= 12 ? 2 : 1;
     }
   }
@@ -190,19 +226,27 @@ export function inferPillar(
   const titleHay = title.toLowerCase();
   const bodyHay = `${preview} ${tags.join(' ')}`.toLowerCase();
 
-  // Explicit title overrides for known multi-theme pieces
+  // Salvation: faith · Christianity · family · conservatism
   if (
-    /lion.*christ|christ.*salvazion|gospel|bible better|kingdom of god|christian habits|one true god|spiritual gifts?|prayers? and\s+praises|billy graham|martin luther|vatican|crusades|monaster|how can i get to heaven|spiritual warfare|western christian|alerci|stoicism|christmas/i.test(
+    /homeschool|family and marriage|christian|bible|gospel|kingdom of god|spiritual gifts?|prayers? and\s+praises|billy graham|martin luther|vatican|crusades|monaster|how can i get to heaven|spiritual warfare|western christian|alerci|christmas|salvazion app|salvation, health and freedom|thomas aquinas|tradwife|traditional wife|teach our children|gender ideology|trans women|morphological freedom|procreative freedom|eugenics|abortion|euthanasia|population collapse|birth rate|anthropological war|bioconserv|bioethics|dei principles|roger scruton|traditions, institutions, and conservatism|all about conservatism|\bconservatism\b|progressivism \(woke\)|woke virus|lgbtq|feminism|postmodernism|relativism|adolescentism|hedonism|deconstructionist|christian masculinity|virtuous people|paganism/i.test(
       title
     )
   ) {
     return 'salvation';
   }
-  // Avoid false positives: "Great Depression" ≠ mental-health depression
-  if (/\bgreat depression\b/i.test(title)) {
-    // fall through to keyword scoring / freedom default
-  } else if (
-    /healthtech|healthcare|telehealth|telemedicine|ehealth|mhealth|biomarker|longevity|transhuman|biotech|vaccine|covid|plandemia|monkeypox|mental health|diabetes|cancer|stroke|hypertension|insomnia|sleep disorder|exercise and|workout|nutrition|superfood|synthetic meat|eating bugs|ludopathy|big pharma|digital health|nanomedicine|wearables in health|robotic prosthes|genetics in human|clinical trial|3d printing in health|digital therapeutics|women.?s sports|trans women|gender ideology|morphological freedom|procreative freedom|eugenics|abortion|euthanasia|internet of bodies|exoskeleton|fatphobia|laughter.*medicine|neurochemistry|beta-endorphin|dopamine.*serotonin|create value in healthtech|anthropological war|homotrans|synthetic biology|bioethics|population collapse|birth rate|depopulation|adrenochrome|chemtrails|biological weapon|drugs:.*health|socio-health|lose weight|fat burner|lower back pain|machine learning.*healthcare|ai in healthcare|robotics.*health|metaverse in health|blockchain.*web3 in health|virtual, augmented|medical devices|standards and interoperability in digital health|depression\s+and\s+anxiety|health problems|in medicine|in health\b|in healthcare/i.test(
+
+  // Freedom: speech · entrepreneurship · political ideas · technology
+  if (
+    /\bhuman rights\b|fundamental rights|freedom of speech|great depression/i.test(
+      title
+    )
+  ) {
+    return 'freedom';
+  }
+
+  // Health: food · healthtech · exercise · sleep
+  if (
+    /healthtech|healthcare|telehealth|telemedicine|ehealth|mhealth|biomarker|longevity and technology|mental health|diabetes|cancer|stroke|hypertension|insomnia|sleep disorder|exercise and|workout|nutrition|superfood|synthetic meat|eating bugs|ludopathy|digital health|nanomedicine|wearables in health|robotic prosthes|genetics in human|clinical trial|3d printing in health|digital therapeutics|internet of bodies|exoskeleton|fatphobia|laughter.*medicine|neurochemistry|beta-endorphin|create value in healthtech|synthetic biology|socio-health|lose weight|fat burner|lower back pain|machine learning.*healthcare|ai in healthcare|robotics.*health|metaverse in health|blockchain.*web3 in health|virtual, augmented|medical devices|standards and interoperability in digital health|depression\s+and\s+anxiety|health problems|intermittent fasting|healthy eating|about drugs|effects on health|on health|in medicine|in health\b|in healthcare|in healthtech/i.test(
       title
     )
   ) {
@@ -218,7 +262,6 @@ export function inferPillar(
     scores[rule.pillar] = scorePillarKeys(titleHay, bodyHay, rule.keys);
   }
 
-  // Title-only decisive pass: if one pillar clearly leads on title tokens, use it
   const titleOnly: Record<ArticlePillar, number> = {
     salvation: 0,
     health: 0,
@@ -226,8 +269,8 @@ export function inferPillar(
   };
   for (const rule of PILLAR_RULES) {
     for (const key of rule.keys) {
-      const k = key.toLowerCase();
-      if (titleHay.includes(k)) {
+      if (hayHasKey(titleHay, key.toLowerCase())) {
+        const k = key.toLowerCase();
         titleOnly[rule.pillar] += k.length >= 12 ? 12 : k.length >= 6 ? 8 : 5;
       }
     }
@@ -243,7 +286,6 @@ export function inferPillar(
     (a, b) => b[1] - a[1]
   );
   if (ordered[0][1] <= 0) return 'freedom';
-  // Prefer Freedom on near-ties (politics/tech default corpus)
   if (ordered[0][1] === ordered[1][1]) {
     if (ordered.some(([p, s]) => p === 'freedom' && s === ordered[0][1])) {
       return 'freedom';
@@ -319,6 +361,7 @@ function dedupeCatalog(
   const byTitle = new Map<string, Parameters<typeof normalizeEntry>[0]>();
   for (const a of raw) {
     if (!a?.id || String(a.id) === 'undefined') continue;
+    if (EXCLUDED_IDS.has(String(a.id))) continue;
     const key = norm(a.title || '');
     const prev = byTitle.get(key);
     if (!prev || quality(a) > quality(prev)) byTitle.set(key, a);
@@ -390,13 +433,23 @@ export function articleMatchesQuery(article: XArticle, query: string): boolean {
   return tokens.every((t) => hay.includes(t));
 }
 
+export interface BlogArticleRank {
+  /** profile.currentFocus — unread + interest + recency */
+  focus?: string[];
+  /** Prefer unread first (app feed). Default false. */
+  unreadFirst?: boolean;
+}
+
 /**
- * Articles sorted newest-first (landing blog + Freedom feed).
- * Optional pillar filter + free-text keyword search (title, preview, tags).
+ * Articles for landing blog + Freedom feed.
+ * Optional pillar filter + keyword search.
+ * When `rank.focus` is set, order is unread (optional) → interest match → recency.
+ * Otherwise newest-first.
  */
 export function getBlogArticles(
   pillar?: ArticlePillar | 'all',
-  query?: string
+  query?: string,
+  rank?: BlogArticleRank
 ): XArticle[] {
   let list = [...X_ARTICLES];
   if (pillar && pillar !== 'all') {
@@ -405,7 +458,22 @@ export function getBlogArticles(
   if (query?.trim()) {
     list = list.filter((a) => articleMatchesQuery(a, query));
   }
+
+  const focus = (rank?.focus || []).filter(Boolean);
+  const unreadFirst = !!rank?.unreadFirst;
+  const readSet = unreadFirst ? new Set(loadReadArticleIds()) : null;
+
   list.sort((a, b) => {
+    if (readSet) {
+      const ar = readSet.has(a.id) ? 1 : 0;
+      const br = readSet.has(b.id) ? 1 : 0;
+      if (ar !== br) return ar - br;
+    }
+    if (focus.length) {
+      const sa = interestScore(a, focus);
+      const sb = interestScore(b, focus);
+      if (sa !== sb) return sb - sa;
+    }
     const ta = Date.parse(a.createdAt || '') || 0;
     const tb = Date.parse(b.createdAt || '') || 0;
     return tb - ta;

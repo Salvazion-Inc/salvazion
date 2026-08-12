@@ -110,7 +110,10 @@ function FreedomPageInner() {
       <main className="flex-1 px-4 sm:px-5 pt-4 pb-32 overflow-y-auto max-w-lg mx-auto w-full">
         {activeTab === 'learn' && (
           <div className="space-y-5">
-            <XArticlesFeed onScored={() => refresh()} />
+            <XArticlesFeed
+              focus={profile?.currentFocus}
+              onScored={() => refresh()}
+            />
 
             {/* 1) Books */}
             <BookStoreCarousel />

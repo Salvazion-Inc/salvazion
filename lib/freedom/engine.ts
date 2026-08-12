@@ -121,18 +121,6 @@ export const FREEDOM_LIBRARY: FreedomContent[] = [
     source: '@salvazion_',
   },
   {
-    id: 'x-green-lion',
-    category: 'article',
-    title: 'El León: Cristo y el espíritu de Salvazion',
-    summary:
-      'El León de Judá, el logo del León Verde y la convocatoria a Green Lion Kings en fe, familia y libertad.',
-    readMin: 5,
-    tags: ['fe', 'leon', 'salvazion'],
-    actionType: 'learn_article_video',
-    url: 'https://x.com/salvazion_/status/2080090098029523147',
-    source: '@salvazion_',
-  },
-  {
     id: 'debate-family',
     category: 'debate',
     title: 'Debate: La familia es la primera política',

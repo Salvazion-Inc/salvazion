@@ -56,6 +56,30 @@ const TITLE_PHRASES = [
     'Salvación, Salud y Libertad: el trípode que sostiene a la persona en pie',
   ],
   [
+    /Mining and Rare Earths: Sovereignty and Future/gi,
+    'Minería y tierras raras: soberanía y futuro',
+  ],
+  [
+    /Homeschooling: Family, Faith, and Integral Formation/gi,
+    'Educación en casa: familia, fe y formación integral',
+  ],
+  [
+    /Autonomous Agents and the Victory of Grok/gi,
+    'Agentes autónomos y la victoria de Grok',
+  ],
+  [
+    /The Chicago Boys Forged Chile.?s Prosperity/gi,
+    'Los Chicago Boys forjaron la prosperidad de Chile',
+  ],
+  [
+    /Salvazion App: The platform that restores the human person/gi,
+    'Salvazion App: la plataforma que restaura a la persona',
+  ],
+  [
+    /Jupiter: The Catalyst of Web3 on Solana/gi,
+    'Jupiter: el catalizador de Web3 en Solana',
+  ],
+  [
     /The Lion: Christ and the Spirit of Salvazion/gi,
     'El León: Cristo y el Espíritu de Salvazion',
   ],
@@ -435,6 +459,30 @@ const PREVIEW_OPENERS = [
   [
     /^Without Salvation man becomes flesh without direction\. Without Health the temple of the Spirit weakens and stops serving\. Without Freedom both faith and body end under systems that hate them/i,
     'Sin Salvación el hombre se vuelve carne sin dirección. Sin Salud el templo del Espíritu se debilita y deja de servir. Sin Libertad, fe y cuerpo quedan bajo sistemas que los odian',
+  ],
+  [
+    /^Responsible mining of critical minerals and rare earths forms the material foundation of technological sovereignty, national security and genuine economic development for any nation determined to/i,
+    'La minería responsable de minerales críticos y tierras raras es la base material de la soberanía tecnológica, la seguridad nacional y el desarrollo económico genuino de cualquier nación decidida a',
+  ],
+  [
+    /^The education of children belongs first to parents, not to the State or ideological bureaucracies\. Homeschooling is not a marginal trend\. It is the deliberate recovery of parental authority to form/i,
+    'La educación de los hijos pertenece primero a los padres, no al Estado ni a las burocracias ideológicas. La educación en casa no es una tendencia marginal. Es la recuperación deliberada de la autoridad parental para formar',
+  ],
+  [
+    /^Autonomous digital agents based on artificial intelligence already run in production inside a third of enterprises and are redefining productivity, value creation and the possibilities open to the/i,
+    'Los agentes digitales autónomos basados en inteligencia artificial ya operan en producción en un tercio de las empresas y están redefiniendo la productividad, la creación de valor y las posibilidades abiertas a la',
+  ],
+  [
+    /^The Chicago Boys transformed Chile from a country trapped in socialist collapse into the most prosperous nation in Latin America through market reforms that liberated human initiative and respected/i,
+    'Los Chicago Boys transformaron a Chile de un país atrapado en el colapso socialista en la nación más próspera de América Latina mediante reformas de mercado que liberaron la iniciativa humana y respetaron',
+  ],
+  [
+    /^The Salvazion App is now live\. It is the single platform that returns spirit, mind, body and soul to those the secular world has emptied\. This is not another wellness application or another social/i,
+    'La App de Salvazion ya está en vivo. Es la única plataforma que devuelve espíritu, mente, cuerpo y alma a quienes el mundo secular ha vaciado. No es otra aplicación de bienestar ni otra red social',
+  ],
+  [
+    /^Jupiter has become the most important distribution and execution layer on Solana, turning fragmented liquidity into onchain financial infrastructure that routinely moves more than half of the/i,
+    'Jupiter se ha convertido en la capa de distribución y ejecución más importante de Solana, transformando la liquidez fragmentada en infraestructura financiera onchain que mueve de forma rutinaria más de la mitad del',
   ],
   [
     /^In the spiritual warfare we wage for the sovereignty of free men, families and nations, technology is never neutral\./i,

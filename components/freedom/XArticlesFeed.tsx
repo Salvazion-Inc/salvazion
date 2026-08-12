@@ -134,11 +134,23 @@ function ArticleCard({
   );
 }
 
+const FOCUS_I18N: Record<string, string> = {
+  fe: 'onboarding.focusFe',
+  familia: 'onboarding.focusFamilia',
+  proposito: 'onboarding.focusProposito',
+  salud: 'onboarding.focusSalud',
+  libertad: 'onboarding.focusLibertad',
+  oracion: 'onboarding.focusOracion',
+  liderazgo: 'onboarding.focusLiderazgo',
+  perseverancia: 'onboarding.focusPerseverancia',
+};
+
 /**
  * @salvazion_ X Articles — same card + carousel format as the landing blog,
- * with pillar filters and Freedom mark-as-read scoring.
+ * ranked by user focus, with pillar filters and Freedom mark-as-read scoring.
  */
 export default function XArticlesFeed({
+  focus = [],
   className = '',
   onScored,
 }: Props) {
@@ -146,6 +158,7 @@ export default function XArticlesFeed({
   const locale = lang === 'en' ? 'en' : 'es';
   const [filter, setFilter] = useState<BlogFilter>('all');
   const [query, setQuery] = useState('');
+  const [sortMode, setSortMode] = useState<'forYou' | 'recent'>('forYou');
   const [readIds, setReadIds] = useState<Set<string>>(new Set());
   const [selected, setSelected] = useState<XArticle | null>(null);
   const [progress, setProgress] = useState({ read: 0, total: 0 });
@@ -155,6 +168,11 @@ export default function XArticlesFeed({
   const scrollerRef = useRef<HTMLDivElement>(null);
 
   const counts = useMemo(() => getBlogPillarCounts(), []);
+  const focusKey = (focus || []).filter(Boolean).join(',');
+  const focusList = useMemo(
+    () => focusKey.split(',').filter(Boolean),
+    [focusKey]
+  );
 
   const refresh = useCallback(() => {
     try {
@@ -170,7 +188,25 @@ export default function XArticlesFeed({
     refresh();
   }, [refresh]);
 
-  const filtered = useMemo(() => getBlogArticles(filter, query), [filter, query]);
+  const filtered = useMemo(
+    () =>
+      getBlogArticles(
+        filter,
+        query,
+        sortMode === 'forYou'
+          ? { focus: focusList, unreadFirst: true }
+          : undefined
+      ),
+    [filter, query, sortMode, focusList, readIds]
+  );
+
+  const focusLabels = useMemo(
+    () =>
+      focusList
+        .map((id) => (FOCUS_I18N[id] ? t(FOCUS_I18N[id]) : id))
+        .filter(Boolean),
+    [focusList, t]
+  );
 
   const updateScrollState = useCallback(() => {
     const el = scrollerRef.current;
@@ -196,7 +232,7 @@ export default function XArticlesFeed({
     const el = scrollerRef.current;
     if (el) el.scrollTo({ left: 0 });
     updateScrollState();
-  }, [query, filter, updateScrollState]);
+  }, [query, filter, sortMode, updateScrollState]);
 
   const onFilter = (next: BlogFilter) => {
     setFilter(next);
@@ -347,22 +383,66 @@ export default function XArticlesFeed({
           );
         })}
       </div>
-
-      <p className="text-[10px] text-[var(--sage)]/75 px-0.5">
-        {t('articles.showing')}{' '}
-        <strong className="text-white font-medium">{filtered.length}</strong>{' '}
-        {t('articles.of')} {X_ARTICLES_COUNT}
-        {query.trim() ? (
-          <span className="text-[var(--accent)]/90">
-            {' '}
-            · “{query.trim()}”
-          </span>
-        ) : null}
-        <span className="text-[var(--sage)]/55">
-          {' '}
-          · {t('articles.swipeHint')}
-        </span>
+      <p className="text-[10px] text-[var(--sage)]/70 px-0.5 leading-relaxed">
+        {filter === 'all'
+          ? t('articles.filterHintAll')
+          : filter === 'salvation'
+            ? t('articles.filterHintSalvation')
+            : filter === 'health'
+              ? t('articles.filterHintHealth')
+              : t('articles.filterHintFreedom')}
       </p>
+
+      <div className="flex items-center justify-between gap-2 px-0.5">
+        <p className="text-[10px] text-[var(--sage)]/75 min-w-0">
+          {t('articles.showing')}{' '}
+          <strong className="text-white font-medium">{filtered.length}</strong>{' '}
+          {t('articles.of')} {X_ARTICLES_COUNT}
+          {query.trim() ? (
+            <span className="text-[var(--accent)]/90">
+              {' '}
+              · “{query.trim()}”
+            </span>
+          ) : null}
+          <span className="text-[var(--sage)]/55">
+            {' '}
+            · {t('articles.swipeHint')}
+          </span>
+        </p>
+        <div
+          className="flex shrink-0 rounded-full border border-[var(--border-soft)] p-0.5"
+          role="group"
+          aria-label={t('articles.sortAria')}
+        >
+          {(
+            [
+              { id: 'forYou' as const, label: t('articles.forYou') },
+              { id: 'recent' as const, label: t('articles.recent') },
+            ] as const
+          ).map((opt) => (
+            <button
+              key={opt.id}
+              type="button"
+              onClick={() => setSortMode(opt.id)}
+              aria-pressed={sortMode === opt.id}
+              className={`text-[10px] font-medium px-2 py-1 rounded-full transition ${
+                sortMode === opt.id
+                  ? 'bg-[var(--accent)]/18 text-[var(--accent)]'
+                  : 'text-[var(--sage)]/70 hover:text-white'
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      </div>
+      {sortMode === 'forYou' && focusLabels.length > 0 ? (
+        <p className="text-[10px] text-[var(--accent)]/85 px-0.5">
+          {t('articles.basedOnInterests')}
+          {': '}
+          {focusLabels.join(' · ')}
+        </p>
+      ) : null}
 
       {filtered.length === 0 ? (
         <p className="text-xs text-[var(--sage)]/60 py-6 text-center">

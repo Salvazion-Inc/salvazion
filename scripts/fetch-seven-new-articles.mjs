@@ -9,15 +9,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
 const catalogPath = path.join(root, 'data/freedom/x-articles-catalog.json');
 
-/** Status tweet IDs that publish each article */
+/** Status tweet IDs that publish each article (newest first) */
 const STATUS_IDS = [
-  '2084129313595564217',
-  '2083979184616202401',
-  '2083411411355447491',
-  '2083237703915561450',
-  '2082694110649934231',
-  '2082511758175117396',
-  '2082311759612834082',
+  '2087297366239908189',
+  '2086925233592610867',
+  '2085419229927346505',
+  '2085182920726122905',
+  '2085107419374305371',
+  '2085070895421509890',
 ];
 
 function truncatePreview(s, max = 220) {

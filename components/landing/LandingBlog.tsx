@@ -11,6 +11,7 @@ import {
   type ArticlePillar,
   type XArticle,
 } from '@/lib/freedom/x-articles';
+import { loadProfile } from '@/lib/store/profile';
 import { PILLAR_COLORS, type PillarId } from '@/lib/theme/pillars';
 import { textWithXLogo } from '@/components/ui/XLogo';
 
@@ -26,6 +27,12 @@ export interface LandingBlogCopy {
     health: string;
     freedom: string;
   };
+  filterHints: {
+    all: string;
+    salvation: string;
+    health: string;
+    freedom: string;
+  };
   searchPlaceholder: string;
   searchAria: string;
   clearSearch: string;
@@ -35,6 +42,10 @@ export interface LandingBlogCopy {
   empty: string;
   emptySearch: string;
   viewAllOnX: string;
+  sortForYou: string;
+  sortRecent: string;
+  sortAria: string;
+  basedOnInterests: string;
 }
 
 interface Props {
@@ -152,19 +163,78 @@ function ArticleCard({
   );
 }
 
+const FOCUS_LABELS: Record<'en' | 'es', Record<string, string>> = {
+  es: {
+    fe: 'Fe',
+    familia: 'Familia',
+    proposito: 'Propósito',
+    salud: 'Salud',
+    libertad: 'Libertad',
+    oracion: 'Oración',
+    liderazgo: 'Liderazgo',
+    perseverancia: 'Perseverancia',
+  },
+  en: {
+    fe: 'Faith',
+    familia: 'Family',
+    proposito: 'Purpose',
+    salud: 'Health',
+    libertad: 'Freedom',
+    oracion: 'Prayer',
+    liderazgo: 'Leadership',
+    perseverancia: 'Perseverance',
+  },
+};
+
 /**
  * Public marketing blog: all @salvazion_ X Articles, filterable by pillar.
- * Horizontal carousel (left / right) instead of vertical list.
+ * Ranked by the visitor's saved focus when available.
  */
 export default function LandingBlog({ lang, copy }: Props) {
   const [filter, setFilter] = useState<BlogFilter>('all');
   const [query, setQuery] = useState('');
+  const [sortMode, setSortMode] = useState<'forYou' | 'recent'>('forYou');
+  const [focus, setFocus] = useState<string[]>([]);
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(false);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const counts = useMemo(() => getBlogPillarCounts(), []);
 
-  const filtered = useMemo(() => getBlogArticles(filter, query), [filter, query]);
+  useEffect(() => {
+    try {
+      const p = loadProfile();
+      setFocus(
+        Array.isArray(p.currentFocus) ? p.currentFocus.filter(Boolean) : []
+      );
+    } catch {
+      setFocus([]);
+    }
+  }, []);
+
+  const focusKey = focus.join(',');
+  const focusList = useMemo(
+    () => focusKey.split(',').filter(Boolean),
+    [focusKey]
+  );
+  const filtered = useMemo(
+    () =>
+      getBlogArticles(
+        filter,
+        query,
+        sortMode === 'forYou' && focusList.length
+          ? { focus: focusList }
+          : undefined
+      ),
+    [filter, query, sortMode, focusList]
+  );
+
+  const focusLabels = useMemo(
+    () =>
+      focusList
+        .map((id) => FOCUS_LABELS[lang]?.[id] || id)
+        .filter(Boolean),
+    [focusList, lang]
+  );
 
   const updateScrollState = useCallback(() => {
     const el = scrollerRef.current;
@@ -190,7 +260,7 @@ export default function LandingBlog({ lang, copy }: Props) {
     const el = scrollerRef.current;
     if (el) el.scrollTo({ left: 0 });
     updateScrollState();
-  }, [query, filter, updateScrollState]);
+  }, [query, filter, sortMode, updateScrollState]);
 
   const onFilter = (next: BlogFilter) => {
     setFilter(next);
@@ -285,7 +355,7 @@ export default function LandingBlog({ lang, copy }: Props) {
 
         {/* Pillar filters — X underline tab language */}
         <div
-          className="tabs-x max-w-xl mx-auto mb-6 border-[var(--border-soft)]"
+          className="tabs-x max-w-xl mx-auto mb-2 border-[var(--border-soft)]"
           role="tablist"
           aria-label={lang === 'es' ? 'Filtrar por pilar' : 'Filter by pillar'}
         >
@@ -321,22 +391,60 @@ export default function LandingBlog({ lang, copy }: Props) {
             );
           })}
         </div>
-
-        <p className="text-center text-[11px] text-[var(--sage)]/80 mb-4">
-          {copy.showing}{' '}
-          <strong className="text-white font-medium">{filtered.length}</strong>{' '}
-          {copy.of} {X_ARTICLES_COUNT}
-          {query.trim() ? (
-            <span className="text-[var(--accent)]/90">
-              {' '}
-              · “{query.trim()}”
-            </span>
-          ) : null}
-          <span className="text-[var(--sage)]/60">
-            {' '}
-            · {lang === 'es' ? 'Desliza a los lados' : 'Swipe sideways'}
-          </span>
+        <p className="text-center text-[11px] text-[var(--sage)]/75 mb-5 max-w-xl mx-auto leading-relaxed">
+          {copy.filterHints[filter]}
         </p>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mb-4">
+          <p className="text-center text-[11px] text-[var(--sage)]/80">
+            {copy.showing}{' '}
+            <strong className="text-white font-medium">{filtered.length}</strong>{' '}
+            {copy.of} {X_ARTICLES_COUNT}
+            {query.trim() ? (
+              <span className="text-[var(--accent)]/90">
+                {' '}
+                · “{query.trim()}”
+              </span>
+            ) : null}
+            <span className="text-[var(--sage)]/60">
+              {' '}
+              · {lang === 'es' ? 'Desliza a los lados' : 'Swipe sideways'}
+            </span>
+          </p>
+          <div
+            className="flex shrink-0 rounded-full border border-[var(--border-soft)] p-0.5"
+            role="group"
+            aria-label={copy.sortAria}
+          >
+            {(
+              [
+                { id: 'forYou' as const, label: copy.sortForYou },
+                { id: 'recent' as const, label: copy.sortRecent },
+              ] as const
+            ).map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => setSortMode(opt.id)}
+                aria-pressed={sortMode === opt.id}
+                className={`text-[11px] font-medium px-2.5 py-1 rounded-full transition ${
+                  sortMode === opt.id
+                    ? 'bg-[var(--accent)]/18 text-[var(--accent)]'
+                    : 'text-[var(--sage)]/70 hover:text-white'
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        {sortMode === 'forYou' && focusLabels.length > 0 ? (
+          <p className="text-center text-[11px] text-[var(--accent)]/85 mb-4 -mt-1">
+            {copy.basedOnInterests}
+            {': '}
+            {focusLabels.join(' · ')}
+          </p>
+        ) : null}
 
         {filtered.length === 0 ? (
           <p className="text-center text-sm text-[var(--sage)] py-12">

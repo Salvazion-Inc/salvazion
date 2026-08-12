@@ -70,7 +70,7 @@ export default function CoachPage() {
             <VoiceAgent
               profile={profile}
               scores={scores}
-              lang={lang === 'en' ? 'en' : 'es'}
+              lang={lang}
             />
           )}
         </div>

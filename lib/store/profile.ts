@@ -133,7 +133,10 @@ function fromDb(row: ProfileDbRow | null | undefined): Partial<UserProfile> {
   if (!row) return {};
   return {
     name: row.name ?? '',
-    language: row.language === 'es' || row.language === 'en' ? row.language : 'en',
+    language:
+      row.language === 'es' || row.language === 'en' || row.language === 'pt'
+        ? row.language
+        : 'en',
     spiritualMaturity: row.spiritual_maturity ?? 'growing',
     familyStatus: row.family_status ?? 'family',
     currentFocus: row.current_focus ?? [],
@@ -576,7 +579,10 @@ export function getLifeStage(age: number | null): LifeStage {
   return 'senior';
 }
 
-export function getLifeStageLabel(stage: LifeStage, lang: 'es' | 'en' = 'en'): string {
+export function getLifeStageLabel(
+  stage: LifeStage,
+  lang: 'es' | 'en' | 'pt' = 'en'
+): string {
   const labels = {
     es: {
       infancia: 'Infancia',
@@ -596,6 +602,15 @@ export function getLifeStageLabel(stage: LifeStage, lang: 'es' | 'en' = 'en'): s
       senior: 'Senior',
       unknown: '—',
     },
+    pt: {
+      infancia: 'Infância',
+      juventud: 'Juventude',
+      young_adult: 'Adulto jovem',
+      adult: 'Vida adulta',
+      mature: 'Madureza',
+      senior: 'Sênior',
+      unknown: '—',
+    },
   };
-  return labels[lang][stage];
+  return (labels[lang] ?? labels.en)[stage];
 }

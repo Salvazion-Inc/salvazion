@@ -144,11 +144,14 @@ export function buildLLMUserPrompt(profile: UserProfile, date: string): string {
   const age = profile.birthDate ? calculateAge(profile.birthDate) : null;
   const stage = getLifeStage(age);
   const stageLabel = getLifeStageLabel(stage, profile.language);
-  const lang = profile.language === 'es' ? 'es' : 'en';
+  const lang =
+    profile.language === 'es' ? 'es' : profile.language === 'pt' ? 'pt' : 'en';
   const bible =
-    profile.preferredBibleVersion === 'kjv' || lang === 'en'
-      ? 'King James Version (KJV)'
-      : 'Reina Valera (clásica / estilo RV1909-RV1960)';
+    profile.preferredBibleVersion === 'arc' || lang === 'pt'
+      ? 'Almeida Revista e Corrigida (ARC)'
+      : profile.preferredBibleVersion === 'kjv' || lang === 'en'
+        ? 'King James Version (KJV)'
+        : 'Reina Valera (clásica / estilo RV1909-RV1960)';
 
   if (lang === 'en') {
     return `Generate TODAY's personalized Salvazion devotional.
@@ -185,6 +188,50 @@ JSON SCHEMA ONLY:
   "virtue": "",
   "scripture": { "reference": "", "text": "", "version": "KJV" },
   "secondaryScripture": { "reference": "", "text": "", "version": "KJV" },
+  "reflection": "",
+  "prayer": "",
+  "action": "",
+  "closing": "",
+  "tags": [],
+  "points": 24
+}`;
+  }
+
+  if (lang === 'pt') {
+    return `Gere o devocional personalizado de HOJE para a Salvazion.
+
+DATA: ${date}
+
+PERFIL DO USUÁRIO:
+- Nome: ${profile.name || 'Irmão'}
+- Idioma: Português (Brasil)
+- Idade / etapa: ${age ?? 'desconhecida'} / ${stageLabel}
+- Maturidade espiritual: ${profile.spiritualMaturity}
+- Situação familiar: ${profile.familyStatus}
+- Propósito de vida: ${profile.purpose || 'não especificado'}
+- Cidade / país: ${profile.city || '—'} / ${profile.country || '—'}
+- Foco atual: ${(profile.currentFocus || []).join(', ') || 'fé, família'}
+- Lutas: ${(profile.struggles || []).join(', ') || 'nenhuma especificada'}
+- Bíblia preferida: ${bible}
+
+ESTRUTURA OBRIGATÓRIA (mais longa e formativa):
+1. title — potente e curto (máx. ~10 palavras)
+2. virtue — uma virtude cristã clássica do dia
+3. scripture — versículo principal { reference, text, version: "ARC" } referência exata
+4. secondaryScripture — versículo de apoio { reference, text, version: "ARC" }
+5. reflection — 280–420 palavras; fale de você/nome; una fé + virtude + Cultura Cristã Ocidental + BioConservadorismo segundo a vida dele; nunca contradiga a Escritura
+6. prayer — 90–140 palavras
+7. action — uma ação concreta HOJE (espiritual + de preferência um ato corporal/familiar)
+8. closing — 2–3 frases de consignação/bênção
+9. tags — 4–8 tags em minúsculas de: fe, familia, proposito, salud, libertad, oracion, liderazgo, perseverancia, virtud, bioconservadurismo, cultura
+10. points — inteiro 20–28
+
+SOMENTE JSON:
+{
+  "title": "",
+  "virtue": "",
+  "scripture": { "reference": "", "text": "", "version": "ARC" },
+  "secondaryScripture": { "reference": "", "text": "", "version": "ARC" },
   "reflection": "",
   "prayer": "",
   "action": "",

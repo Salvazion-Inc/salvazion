@@ -47,13 +47,14 @@ export const metadata: Metadata = {
     languages: {
       en: "/",
       es: "/",
+      pt: "/",
       "x-default": "/",
     },
   },
   openGraph: {
     type: "website",
     locale: SEO.locale,
-    alternateLocale: [SEO.alternateLocale],
+    alternateLocale: [SEO.alternateLocale, SEO.alternateLocalePt],
     url: "/",
     siteName: SEO.siteName,
     title: SEO.title,
@@ -139,7 +140,7 @@ export default function RootLayout({
           id="salvazion-boot-prefs"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var k='salvazion_text_scale';var s=localStorage.getItem(k);if(s==='md'||s==='lg'||s==='xl'||s==='xxl'){document.documentElement.dataset.textScale=s;var m={md:16,lg:18,xl:20,xxl:22};var px=m[s]||16;document.documentElement.style.fontSize=px+'px';document.documentElement.style.setProperty('--app-text-scale',String(px/16));}var L=localStorage.getItem('salvazion_locale');if(L==='es'||L==='en'){document.documentElement.lang=L;document.documentElement.dataset.locale=L;}}catch(e){}})();${getThemeBootScript()}`,
+            __html: `(function(){try{var k='salvazion_text_scale';var s=localStorage.getItem(k);if(s==='md'||s==='lg'||s==='xl'||s==='xxl'){document.documentElement.dataset.textScale=s;var m={md:16,lg:18,xl:20,xxl:22};var px=m[s]||16;document.documentElement.style.fontSize=px+'px';document.documentElement.style.setProperty('--app-text-scale',String(px/16));}var L=localStorage.getItem('salvazion_locale');if(L==='es'||L==='en'||L==='pt'){document.documentElement.lang=L==='pt'?'pt-BR':L;document.documentElement.dataset.locale=L;}}catch(e){}})();${getThemeBootScript()}`,
           }}
         />
         <Providers>

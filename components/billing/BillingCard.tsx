@@ -82,7 +82,7 @@ export default function BillingCard({ className = '' }: { className?: string }) 
               :{' '}
               <span className="text-[#D8E1D9]">
                 {new Date(entitlement.currentPeriodEnd).toLocaleDateString(
-                  lang === 'es' ? 'es' : 'en'
+                  lang === 'pt' ? 'pt-BR' : lang === 'es' ? 'es' : 'en'
                 )}
               </span>
             </p>

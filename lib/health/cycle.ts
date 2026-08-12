@@ -180,7 +180,7 @@ function computePhase(
   return 'luteal';
 }
 
-function phaseTips(phase: CyclePhase, lang: 'es' | 'en' = 'en'): string[] {
+function phaseTips(phase: CyclePhase, lang: 'es' | 'en' | 'pt' = 'en'): string[] {
   const es: Record<CyclePhase, string[]> = {
     menstrual: [
       'Prioriza descanso y calor local si hay cólicos.',
@@ -233,10 +233,10 @@ function phaseTips(phase: CyclePhase, lang: 'es' | 'en' = 'en'): string[] {
       'Combine phone sensors (steps, sleep) with your cycle.',
     ],
   };
-  return (lang === 'en' ? en : es)[phase];
+  return (lang === 'en' ? en : es)[phase]; // pt falls back to Spanish (close Romance phrasing)
 }
 
-export function getCycleSnapshot(lang: 'es' | 'en' = 'en'): CycleSnapshot {
+export function getCycleSnapshot(lang: 'es' | 'en' | 'pt' = 'en'): CycleSnapshot {
   const settings = loadCycleSettings();
   const cycleLength = Math.min(45, Math.max(21, settings.avgCycleLength || 28));
   const periodLength = Math.min(10, Math.max(2, settings.avgPeriodLength || 5));

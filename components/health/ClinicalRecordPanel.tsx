@@ -20,7 +20,7 @@ import {
 
 type Props = {
   profile: Partial<UserProfile> | null;
-  lang?: 'es' | 'en';
+  lang?: 'es' | 'en' | 'pt';
   refreshKey?: number;
 };
 

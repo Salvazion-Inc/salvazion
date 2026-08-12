@@ -173,7 +173,7 @@ export default function OutdoorClimatePanel({ className = '' }: Props) {
                   label={t('outdoorClimate.daylight')}
                   value={daylightLabel(
                     snapshot.daily.daylightSeconds,
-                    lang === 'es' ? 'es' : 'en'
+                    lang === 'pt' ? 'pt' : lang === 'es' ? 'es' : 'en'
                   )}
                 />
                 <Metric label={t('outdoorClimate.remaining')} value={remainingLabel} />

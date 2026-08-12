@@ -33,7 +33,7 @@ export default function BookStoreCarousel({ className = '' }: Props) {
           <BookCard
             key={book.id}
             book={book}
-            lang={lang === 'en' ? 'en' : 'es'}
+            lang={lang}
             t={t}
           />
         ))}
@@ -52,7 +52,7 @@ function BookCard({
   t,
 }: {
   book: RecommendedBook;
-  lang: 'en' | 'es';
+  lang: 'en' | 'es' | 'pt';
   t: (key: string) => string;
 }) {
   const title = lang === 'es' ? book.titleEs : book.title;

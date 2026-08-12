@@ -202,7 +202,7 @@ export function formatHmFromIso(iso: string): string {
   return parseIsoLocalParts(iso).hm;
 }
 
-export function daylightLabel(seconds: number, lang: 'es' | 'en' = 'es'): string {
+export function daylightLabel(seconds: number, lang: 'es' | 'en' | 'pt' = 'es'): string {
   const h = Math.floor(seconds / 3600);
   const m = Math.round((seconds % 3600) / 60);
   if (lang === 'en') return `${h}h ${m}m`;

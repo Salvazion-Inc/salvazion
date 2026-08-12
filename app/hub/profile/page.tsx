@@ -206,7 +206,9 @@ export default function ProfilePage() {
 
   const age = profile.birthDate ? calculateAge(profile.birthDate) : null;
   const stage = getLifeStage(age);
-  const displayName = profile.name || (lang === 'en' ? 'Brother' : 'Hermano');
+  const displayName =
+    profile.name ||
+    (lang === 'en' ? 'Brother' : lang === 'pt' ? 'Irmão' : 'Hermano');
   const xHandle = profile.xUsername?.replace(/^@+/, '') || '';
   const locationLine = [profile.city, profile.country].filter(Boolean).join(', ');
 
@@ -547,7 +549,7 @@ export default function ProfilePage() {
           {/* Clinical FHIR export lives on Profile (identity + data portability) */}
           <ClinicalRecordPanel
             profile={profile}
-            lang={lang === 'en' ? 'en' : 'es'}
+            lang={lang}
           />
 
           <BillingCard />

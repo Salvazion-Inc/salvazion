@@ -1,5 +1,5 @@
 {
-  "builtAt": "2026-07-25T01:53:41.128Z",
+  "builtAt": "2026-08-12T19:27:15.391Z",
   "books": 66,
   "languages": {
     "es": {
@@ -11,6 +11,11 @@
       "label": "King James Version",
       "note": "Public domain (1769 Cambridge edition text via getbible).",
       "path": "en/books/{bookId}.json"
+    },
+    "pt": {
+      "label": "Almeida Revista e Corrigida (ARC)",
+      "note": "Historic public-domain Almeida (getbible almeida, 1911 reprint of 1900). Modern 1995/2009 ARC® requires SBB license.",
+      "path": "pt/books/{bookId}.json"
     },
     "original": {
       "label": "Hebrew OT + Greek NT",

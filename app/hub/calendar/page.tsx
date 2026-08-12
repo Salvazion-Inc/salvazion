@@ -70,7 +70,7 @@ export default function CalendarPage() {
   }
 
   const dayLabel = new Date(selectedDate + 'T12:00:00').toLocaleDateString(
-    lang === 'es' ? 'es' : 'en',
+    lang === 'pt' ? 'pt-BR' : lang === 'es' ? 'es' : 'en',
     { weekday: 'long', day: 'numeric', month: 'short' }
   );
 
@@ -134,7 +134,7 @@ export default function CalendarPage() {
               >
                 <p className="text-[10px] text-[var(--sage)]/80">
                   {new Date(d + 'T12:00:00').toLocaleDateString(
-                    lang === 'es' ? 'es' : 'en',
+                    lang === 'pt' ? 'pt-BR' : lang === 'es' ? 'es' : 'en',
                     { weekday: 'narrow' }
                   )}
                 </p>

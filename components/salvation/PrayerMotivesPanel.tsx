@@ -13,7 +13,7 @@ import {
 } from '@/lib/salvation/prayer-motives';
 
 type Props = {
-  lang?: 'es' | 'en';
+  lang?: 'es' | 'en' | 'pt';
   onPrayed?: () => void;
 };
 

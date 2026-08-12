@@ -31,7 +31,7 @@ const SYMPTOMS: CycleSymptom[] = [
 ];
 
 type Props = {
-  lang?: 'es' | 'en';
+  lang?: 'es' | 'en' | 'pt';
   onLogged?: () => void;
 };
 

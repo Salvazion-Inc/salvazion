@@ -15,6 +15,7 @@ import LanguageFlagSwitch from '@/components/ui/LanguageFlagSwitch';
 import XLogo, { textWithXLogo } from '@/components/ui/XLogo';
 import LandingBlog from '@/components/landing/LandingBlog';
 import { SALVAZION_MINT } from '@/lib/solana/config';
+import { pickLang } from '@/lib/i18n/locale';
 
 const MINT = SALVAZION_MINT;
 
@@ -99,12 +100,12 @@ export default function SalvazionLanding() {
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:px-4 focus:py-2.5 focus:rounded-full focus:bg-[var(--accent)] focus:text-[#0a120c] focus:text-sm focus:font-semibold focus:shadow-[var(--shadow-glow)]"
       >
-        {lang === 'es' ? 'Saltar al contenido' : 'Skip to content'}
+        {pickLang(lang, { es: 'Saltar al contenido', en: 'Skip to content', pt: 'Pular para o conteúdo' })}
       </a>
       {/* Nav — floating glass bar */}
       <nav
         className="fixed top-0 left-0 right-0 z-50 glass-strong border-b border-[var(--border-soft)]/80"
-        aria-label={lang === 'es' ? 'Principal' : 'Primary'}
+        aria-label={pickLang(lang, { es: 'Principal', en: 'Primary', pt: 'Principal' })}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-5 py-3 sm:py-3.5 flex items-center justify-between gap-3">
           <Link
@@ -407,13 +408,15 @@ export default function SalvazionLanding() {
             <div className="card-soft card-lift p-6 sm:p-8 flex flex-col h-full">
               <div className="flex items-center justify-between gap-2 min-h-[1.75rem]">
                 <p className="text-[10px] uppercase tracking-wider font-semibold text-[var(--sage)]">
-                  {lang === 'es' ? PLAN_COPY.free.nameEs : PLAN_COPY.free.name}
+                  {pickLang(lang, {
+                    es: PLAN_COPY.free.nameEs,
+                    en: PLAN_COPY.free.name,
+                    pt: PLAN_COPY.free.namePt,
+                  })}
                 </p>
                 {/* Keeps header height aligned with Premium badge row */}
                 <span className="invisible text-[10px] px-2.5 py-1 rounded-full font-semibold">
-                  {lang === 'es'
-                    ? PRICING_TABLE.bestValue.es
-                    : PRICING_TABLE.bestValue.en}
+                  {pickLang(lang, PRICING_TABLE.bestValue)}
                 </span>
               </div>
 
@@ -421,7 +424,11 @@ export default function SalvazionLanding() {
                 $0
               </p>
               <p className="mt-2 text-sm text-[var(--sage)] leading-snug">
-                {lang === 'es' ? '/ mes · siempre gratis' : '/ month · always free'}
+                {pickLang(lang, {
+                  es: '/ mes · siempre gratis',
+                  en: '/ month · always free',
+                  pt: '/ mês · sempre grátis',
+                })}
               </p>
               {/* Spacer matches Premium annual price line */}
               <p className="mt-1 text-sm leading-snug min-h-[1.25rem] text-transparent select-none" aria-hidden>
@@ -429,14 +436,12 @@ export default function SalvazionLanding() {
               </p>
 
               <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.5rem]">
-                {lang === 'es'
-                  ? PRICING_TABLE.freeNote.es
-                  : PRICING_TABLE.freeNote.en}
+                {pickLang(lang, PRICING_TABLE.freeNote)}
               </p>
 
               <ul className="mt-5 space-y-2 text-sm text-[#D8E1D9]/90 flex-1">
                 {PRICING_TABLE.freeItems.map((item) => {
-                  const label = lang === 'es' ? item.es : item.en;
+                  const label = pickLang(lang, item);
                   return (
                     <li key={item.en} className="flex gap-2">
                       <span className="text-[var(--accent)] shrink-0 w-4 text-center">·</span>
@@ -461,9 +466,7 @@ export default function SalvazionLanding() {
                   Premium
                 </p>
                 <span className="text-[10px] px-2.5 py-1 rounded-full bg-[#8FD99A]/18 text-[#8FD99A] font-semibold border border-[#8FD99A]/25">
-                  {lang === 'es'
-                    ? PRICING_TABLE.bestValue.es
-                    : PRICING_TABLE.bestValue.en}
+                  {pickLang(lang, PRICING_TABLE.bestValue)}
                 </span>
               </div>
 
@@ -471,23 +474,23 @@ export default function SalvazionLanding() {
                 ${PLAN_COPY.premium_month.priceUsd}
               </p>
               <p className="mt-2 text-sm text-[var(--sage)] leading-snug">
-                {lang === 'es' ? '/ mes' : '/ month'}
+                {pickLang(lang, { es: '/ mes', en: '/ month', pt: '/ mês' })}
               </p>
               <p className="mt-1 text-sm text-[#8FD99A] leading-snug min-h-[1.25rem]">
-                {lang === 'es'
-                  ? PLAN_COPY.premium_year.priceLabelEs
-                  : PLAN_COPY.premium_year.priceLabel}
+                {pickLang(lang, {
+                  es: PLAN_COPY.premium_year.priceLabelEs,
+                  en: PLAN_COPY.premium_year.priceLabel,
+                  pt: PLAN_COPY.premium_year.priceLabelPt,
+                })}
               </p>
 
               <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.5rem]">
-                {lang === 'es'
-                  ? PRICING_TABLE.premiumNote.es
-                  : PRICING_TABLE.premiumNote.en}
+                {pickLang(lang, PRICING_TABLE.premiumNote)}
               </p>
 
               <ul className="mt-5 space-y-2 text-sm text-[#D8E1D9]/90 flex-1">
                 {PREMIUM_FEATURE_LIST.map((item) => {
-                  const label = lang === 'es' ? item.es : item.en;
+                  const label = pickLang(lang, item);
                   return (
                     <li key={item.id} className="flex gap-2">
                       <span className="text-[var(--accent)] shrink-0 w-4 text-center">·</span>
@@ -507,9 +510,7 @@ export default function SalvazionLanding() {
           </div>
 
           <p className="mt-6 text-center text-[11px] text-[var(--sage)]/80 leading-relaxed max-w-xl mx-auto">
-            {lang === 'es'
-              ? PRICING_TABLE.stripeNote.es
-              : PRICING_TABLE.stripeNote.en}
+            {pickLang(lang, PRICING_TABLE.stripeNote)}
           </p>
         </div>
       </section>
@@ -806,6 +807,118 @@ const copy = {
       copy: '© 2026 Salvazion Inc. All rights reserved.',
       terms: 'Terms',
       privacy: 'Privacy',
+    },
+  },
+  pt: {
+    nav: {
+      app: 'O App',
+      blog: 'Blog',
+      pricing: 'Preços',
+      token: 'Token',
+      team: 'Equipe',
+      enter: 'Entrar na Salvazion',
+      language: 'Idioma',
+    },
+    hero: {
+      titleLines: [
+        'MAKE SALVATION,',
+        'HEALTH AND FREEDOM',
+        'GREAT AGAIN',
+      ] as const,
+      tagline: 'O mundo secular tira espírito, mente, corpo e alma.',
+      tagline2: 'A Salvazion os devolve — em um só App.',
+      ctaPrimary: 'Criar conta grátis',
+      ctaLogin: 'Já tenho conta',
+    },
+    app: {
+      eyebrow: 'Nosso propósito · Um só App',
+      title: 'Tudo fundido em um só App',
+      body:
+        'Nosso Propósito é tornar Salvação, Saúde e Liberdade grandiosas de novo, com uma Comunidade Global que defende a Cultura Cristã Ocidental e o BioConservadorismo em uma Guerra Espiritual.',
+      cta: 'Abrir o App',
+      areas: [
+        {
+          name: 'Salvation',
+          icon: '/icons/agenda/salvation.jpg',
+          accent: '#F5F7F5',
+          body: 'A fé no centro. Bíblia completa offline, devocional diário, motivos de oração, calendário de disciplina e scores espirituais mensuráveis.',
+          inApp: 'Bíblia · Devocional · Oração · Salvazion',
+        },
+        {
+          name: 'Health',
+          icon: '/icons/agenda/health.jpg',
+          accent: '#4A9EFF',
+          body: 'O corpo é templo. Sono, hidratação, refeições, esportes, sensores do celular, FC Bluetooth e wearables na nuvem (Premium).',
+          inApp: 'Health · sensores · wearables · biomarcadores',
+        },
+        {
+          name: 'Freedom',
+          icon: '/icons/agenda/freedom.jpg',
+          accent: '#8FD99A',
+          body: 'Liberdade com responsabilidade: livros curados, artigos no X, canais do YouTube, comunidade Phalanx e soberania econômica na Solana.',
+          inApp: 'Freedom · Comunidade · Swap $SALVAZION',
+        },
+      ],
+    },
+    pricing: {
+      eyebrow: 'Freemium',
+      title: 'Comece grátis. Passe para Premium quando quiser.',
+      ctaFree: 'Criar conta grátis',
+      ctaPremium: 'Entrar e passar para Premium',
+    },
+    token: {
+      subtitle: 'Compre $SALVAZION Patriot Bitcoin na Solana',
+      buy: 'Comprar $SALVAZION',
+      copyCa: 'Copiar',
+      copiedCa: 'Copiado',
+    },
+    blog: {
+      eyebrow: 'Blog · @salvazion_',
+      title: 'Artigos da Salvazion no X',
+      subtitle:
+        'Long-form em profundidade no X para crescer no espírito, fortalecer sua saúde e expandir sua liberdade. Cada peça abre no X.',
+      filters: {
+        all: 'Todos',
+        salvation: 'Salvation',
+        health: 'Health',
+        freedom: 'Freedom',
+      },
+      filterHints: {
+        all: 'Salvation: fé, família, conservadorismo · Health: alimentação, healthtech, exercício, sono · Freedom: expressão, empresa, política, tecnologia',
+        salvation: 'Fé · Cristianismo · Família · Conservadorismo',
+        health: 'Alimentação · Healthtech · Exercício · Sono',
+        freedom: 'Liberdade de expressão · Empreendedorismo · Ideias políticas · Tecnologia',
+      },
+      searchPlaceholder: 'Buscar por palavras-chave…',
+      searchAria: 'Buscar artigos por palavras-chave',
+      clearSearch: 'Limpar busca',
+      readOnX: 'Ler no X',
+      showing: 'Mostrando',
+      of: 'de',
+      empty: 'Ainda não há artigos neste pilar.',
+      emptySearch: 'Não há artigos com essas palavras. Tente outras chaves.',
+      viewAllOnX: 'Abrir biblioteca completa no X',
+      sortForYou: 'Para você',
+      sortRecent: 'Recentes',
+      sortAria: 'Ordenar artigos',
+      basedOnInterests: 'Segundo os seus focos',
+    },
+    team: {
+      eyebrow: 'Fundadores',
+      title: 'Uma família comum, mas com “bons genes”',
+      intro:
+        'Cristian Cortés e Beatriz Isler são um casal que trabalha junto há mais de 20 anos em diferentes startups de saúde, educação, tecnologia e inovação, que se complementam e compartilham valores (excelência, integridade e respeito profundo ao serviço das pessoas), adaptando-se constantemente para cumprir seu propósito: tornar Salvação, Saúde e Liberdade grandiosas de novo!',
+      cristianRole: 'CEO da Salvazion Inc.',
+      cristian:
+        'Fisioterapeuta, Bacharel em Cinesiologia. Mestre em Terapia Física, Minor em Psicologia e Diplomados em Reabilitação, Exercício, Saúde e Inovação Universitária. Sherpa e Instrutor em “Evidence Based Entrepreneurship & Lean Innovation (EBELI)”. Ex-Embaixador do Capítulo de Santiago da Singularity University. “ExO Entrepreneur LATAM” pelo ExO Community Award. “Fifty of the Most Influential Voices in Healthcare” pela Medika Life, “Top 50 Global HealthTech Thought Leader and Influencers on Ecosystems” pela Thinker 360 e “Top 200 Exponentialists in Digital Health”.',
+      beatrizRole: 'COO da Salvazion Inc.',
+      beatriz:
+        'Fisioterapeuta, Bacharel em Cinesiologia. Mestre em Terapia Física com Diplomados em Reabilitação, Exercício e Saúde, com experiência como Docente e Pesquisadora Universitária em Funcionalidade Humana, Saúde Digital e Terapia Aquática. Fez um Estágio Clínico Internacional em Hidroterapia. Coordenou o programa “Elige Vivir Sano” do Ministério da Saúde; no entanto, sua maior conquista é formar uma bela família (marido e quatro filhos), equilibrando a vida como empreendedora. Em 2022, foi reconhecida como “Campeã em Saúde Digital” pelo BID (Banco Interamericano de Desenvolvimento).',
+    },
+    footer: {
+      copy: '© 2026 Salvazion Inc. All rights reserved.',
+      terms: 'Termos',
+      privacy: 'Privacidade',
     },
   },
 } as const;

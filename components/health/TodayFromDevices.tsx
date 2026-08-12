@@ -42,7 +42,7 @@ export default function TodayFromDevices({
       setSyncing(true);
       try {
         const result = await runPassiveHealthSync({
-          lang: lang === 'en' ? 'en' : 'es',
+          lang: lang === 'en' || lang === 'pt' ? lang : 'es',
           force,
           onLog: (type) => {
             logAction(type);

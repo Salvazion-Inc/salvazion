@@ -1,5 +1,6 @@
 /**
- * Flat (non-wrinkled) national flags as SVG — USA = English, Chile = Spanish.
+ * Flat (non-wrinkled) national flags as SVG —
+ * USA = English, Chile = Spanish, Brazil = Portuguese.
  * Used on landing and in-app language controls.
  */
 import type { Language } from '@/lib/types';
@@ -17,6 +18,11 @@ const FLAGS: Record<
     src: '/flags/chile.svg',
     alt: 'Chile',
     label: 'Español',
+  },
+  pt: {
+    src: '/flags/brazil.svg',
+    alt: 'Brasil',
+    label: 'Português',
   },
 };
 

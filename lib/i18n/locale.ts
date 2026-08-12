@@ -1,9 +1,34 @@
-import type { Language } from '@/lib/types';
+import type { BibleVersion, Language } from '@/lib/types';
 
 export const LOCALE_STORAGE_KEY = 'salvazion_locale';
 
+export const SUPPORTED_LANGUAGES: Language[] = ['en', 'es', 'pt'];
+
 export function isLanguage(v: unknown): v is Language {
-  return v === 'es' || v === 'en';
+  return v === 'es' || v === 'en' || v === 'pt';
+}
+
+/** BCP 47 tag for dates, SEO, and `document.documentElement.lang`. */
+export function localeTag(lang: Language | string | undefined): string {
+  if (lang === 'es') return 'es';
+  if (lang === 'pt') return 'pt-BR';
+  return 'en';
+}
+
+/** Pick a localized value. English is the fallback. */
+export function pickLang<T>(
+  lang: Language | string | undefined,
+  map: { en: T; es: T; pt: T }
+): T {
+  if (lang === 'es') return map.es;
+  if (lang === 'pt') return map.pt;
+  return map.en;
+}
+
+export function defaultBibleVersion(lang: Language | string | undefined): BibleVersion {
+  if (lang === 'es') return 'rv1960';
+  if (lang === 'pt') return 'arc';
+  return 'kjv';
 }
 
 /**
@@ -14,9 +39,9 @@ export function loadLocale(): Language {
   try {
     const raw = localStorage.getItem(LOCALE_STORAGE_KEY);
     if (isLanguage(raw)) return raw;
-    // browser preference (es browsers get Spanish; everyone else EN)
     const nav = navigator.language?.toLowerCase() || '';
     if (nav.startsWith('es')) return 'es';
+    if (nav.startsWith('pt')) return 'pt';
   } catch {
     // ignore
   }
@@ -35,6 +60,6 @@ export function saveLocale(lang: Language): void {
 
 export function applyDocumentLang(lang: Language): void {
   if (typeof document === 'undefined') return;
-  document.documentElement.lang = lang;
+  document.documentElement.lang = localeTag(lang);
   document.documentElement.dataset.locale = lang;
 }

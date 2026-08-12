@@ -50,7 +50,7 @@ function ArticleCard({
   onSelect,
 }: {
   article: XArticle;
-  lang: 'en' | 'es';
+  lang: 'en' | 'es' | 'pt';
   readOnX: string;
   isRead: boolean;
   readLabel: string;
@@ -155,7 +155,7 @@ export default function XArticlesFeed({
   onScored,
 }: Props) {
   const { t, lang } = useI18n();
-  const locale = lang === 'en' ? 'en' : 'es';
+  const locale = lang === 'en' || lang === 'pt' ? lang : 'es';
   const [filter, setFilter] = useState<BlogFilter>('all');
   const [query, setQuery] = useState('');
   const [sortMode, setSortMode] = useState<'forYou' | 'recent'>('forYou');

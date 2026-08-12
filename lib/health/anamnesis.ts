@@ -175,7 +175,7 @@ function joinNonEmpty(parts: (string | null | undefined)[], sep = '\n'): string 
  */
 export function autofillAnamnesis(
   profile: Partial<UserProfile>,
-  opts?: { overwrite?: boolean; lang?: 'es' | 'en' }
+  opts?: { overwrite?: boolean; lang?: 'es' | 'en' | 'pt' }
 ): AnamnesisRecord {
   const es = opts?.lang !== 'en';
   const overwrite = !!opts?.overwrite;
@@ -461,7 +461,7 @@ export function autofillAnamnesis(
 export type ReadableAnamnesisOptions = {
   profile: Partial<UserProfile>;
   record?: AnamnesisRecord;
-  lang?: 'es' | 'en';
+  lang?: 'es' | 'en' | 'pt';
 };
 
 /** Documento clínico legible (texto plano / markdown suave). */

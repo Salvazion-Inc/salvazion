@@ -20,7 +20,7 @@ export type FabNudge = {
   cta: string;
 };
 
-type Lang = 'en' | 'es';
+type Lang = 'en' | 'es' | 'pt';
 
 const HREF = {
   dashboard: '/hub/dashboard',
@@ -52,7 +52,7 @@ const FOCUS_LABEL: Record<string, { es: string; en: string }> = {
 function firstName(profile: Partial<UserProfile> | null | undefined, lang: Lang): string {
   const raw = profile?.name?.trim().split(/\s+/)[0];
   if (raw) return raw;
-  return lang === 'es' ? 'hermano' : 'friend';
+  return lang === 'es' ? 'hermano' : lang === 'pt' ? 'irmão' : 'friend';
 }
 
 function pillarWord(p: Pillar): string {

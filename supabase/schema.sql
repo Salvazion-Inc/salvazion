@@ -7,7 +7,7 @@
 create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   name text not null default '',
-  language text not null default 'es' check (language in ('es', 'en')),
+  language text not null default 'es' check (language in ('es', 'en', 'pt')),
   spiritual_maturity text not null default 'growing'
     check (spiritual_maturity in ('new', 'growing', 'mature', 'leader')),
   family_status text not null default 'family'
@@ -15,7 +15,7 @@ create table if not exists public.profiles (
   current_focus text[] not null default '{}',
   struggles text[] default '{}',
   preferred_bible_version text not null default 'rv1960'
-    check (preferred_bible_version in ('rv1960', 'kjv', 'original')),
+    check (preferred_bible_version in ('rv1960', 'kjv', 'original', 'arc')),
   purpose text default '',
   city text default '',
   country text default '',

@@ -42,7 +42,7 @@ function extractJsonObject(text: string): unknown {
   throw new Error('invalid_json');
 }
 
-function bodySystemPrompt(lang: 'es' | 'en'): string {
+function bodySystemPrompt(lang: 'es' | 'en' | 'pt'): string {
   if (lang === 'en') {
     return `You are a careful sports-science assistant for Salvazion Health.
 Analyze swimsuit/fitness photos (front, side, and/or back) for educational cineanthropometry ESTIMATES only.
@@ -87,7 +87,7 @@ Si hay talla/peso declarados, sé coherente; si faltan, estima con confidence lo
 observations/recommendations en español, breves, mayordomía del cuerpo (no cultura de vanidad).`;
 }
 
-function mealSystemPrompt(lang: 'es' | 'en'): string {
+function mealSystemPrompt(lang: 'es' | 'en' | 'pt'): string {
   if (lang === 'en') {
     return `You are a nutrition vision assistant for Salvazion Health.
 Analyze a meal photo for educational estimates of foods, calories, macros, and a classic food pyramid distribution (USDA/Kennedy-style guide: base grains/plant foods, mid protein/dairy, tip fats/sugars).
@@ -234,7 +234,8 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const mode: VisionMode = body.mode === 'meal' ? 'meal' : 'body';
-    const lang: 'es' | 'en' = body.lang === 'en' ? 'en' : 'es';
+    const lang: 'es' | 'en' | 'pt' =
+      body.lang === 'en' ? 'en' : body.lang === 'pt' ? 'pt' : 'es';
 
     // Optional auth — allow logged-out local demo; soft premium not hard-gated for health tools
     try {

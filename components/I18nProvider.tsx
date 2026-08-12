@@ -31,7 +31,7 @@ export function useI18n() {
 }
 
 /**
- * Global language (EN principal / ES).
+ * Global language (EN principal / ES / PT-BR).
  * Preference: localStorage → profile.language → browser → en.
  */
 export default function I18nProvider({ children }: { children: ReactNode }) {
@@ -42,7 +42,7 @@ export default function I18nProvider({ children }: { children: ReactNode }) {
     // Prefer profile language if set
     const profile = loadProfile();
     const initial =
-      profile.language === 'en' || profile.language === 'es'
+      profile.language === 'en' || profile.language === 'es' || profile.language === 'pt'
         ? profile.language
         : fromStore;
     setLangState(initial);

@@ -44,7 +44,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'text required' }, { status: 400 });
     }
 
-    const lang: 'es' | 'en' = body.lang === 'en' ? 'en' : 'es';
+    const lang: 'es' | 'en' | 'pt' =
+      body.lang === 'en' ? 'en' : body.lang === 'pt' ? 'pt' : 'es';
     // Deep, noble voice defaults — override with XAI_TTS_VOICE
     const voiceId =
       (typeof body.voiceId === 'string' && body.voiceId) ||

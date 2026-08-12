@@ -19,7 +19,7 @@ import {
 import PhotoSourcePicker from '@/components/health/PhotoSourcePicker';
 
 type Props = {
-  lang?: 'es' | 'en';
+  lang?: 'es' | 'en' | 'pt';
   onApplied?: () => void;
 };
 

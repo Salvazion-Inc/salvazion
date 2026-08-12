@@ -14,6 +14,7 @@ import {
 } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
 import { saveValueJourneyDone } from '@/lib/freedom/x-articles';
+import { defaultBibleVersion, isLanguage } from '@/lib/i18n/locale';
 
 /** Slim onboarding: identity → focus → start (was 5 steps). */
 type Step = 1 | 2 | 3;
@@ -84,13 +85,9 @@ export default function OnboardingPage() {
           setProfile((prev) => ({
             ...prev,
             ...existing,
-            language:
-              existing.language === 'es' || existing.language === 'en'
-                ? existing.language
-                : lang,
+            language: isLanguage(existing.language) ? existing.language : lang,
             preferredBibleVersion:
-              existing.preferredBibleVersion ||
-              (lang === 'es' ? 'rv1960' : 'kjv'),
+              existing.preferredBibleVersion || defaultBibleVersion(lang),
             onboardingCompleted: false,
             hasAcceptedLionCoach: existing.hasAcceptedLionCoach ?? false,
           }));
@@ -98,7 +95,7 @@ export default function OnboardingPage() {
           setProfile((prev) => ({
             ...prev,
             language: lang,
-            preferredBibleVersion: lang === 'es' ? 'rv1960' : 'kjv',
+            preferredBibleVersion: defaultBibleVersion(lang),
           }));
         }
       } finally {
@@ -139,13 +136,15 @@ export default function OnboardingPage() {
         profile.purpose?.trim() ||
         (lang === 'es'
           ? 'Creciendo en Salvation, Health y Freedom cada día.'
-          : 'Growing in Salvation, Health, and Freedom every day.');
+          : lang === 'pt'
+            ? 'Crescendo em Salvation, Health e Freedom todos os dias.'
+            : 'Growing in Salvation, Health, and Freedom every day.');
       await saveProfile({
         ...profile,
         purpose,
         language: lang,
         preferredBibleVersion:
-          profile.preferredBibleVersion || (lang === 'es' ? 'rv1960' : 'kjv'),
+          profile.preferredBibleVersion || defaultBibleVersion(lang),
         spiritualMaturity: profile.spiritualMaturity || 'growing',
         familyStatus: profile.familyStatus || 'family',
         hasAcceptedLionCoach: true,
@@ -178,7 +177,7 @@ export default function OnboardingPage() {
   const age = profile.birthDate ? calculateAge(profile.birthDate) : null;
   const stageLabel =
     age != null
-      ? getLifeStageLabel(getLifeStage(age), lang === 'es' ? 'es' : 'en')
+      ? getLifeStageLabel(getLifeStage(age), lang)
       : null;
 
   return (

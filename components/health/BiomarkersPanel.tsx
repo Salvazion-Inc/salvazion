@@ -16,7 +16,7 @@ import {
 
 type Props = {
   isFemale?: boolean;
-  lang?: 'es' | 'en';
+  lang?: 'es' | 'en' | 'pt';
   /** Bump to force recompute after sensors / logs change */
   refreshKey?: number;
   /**

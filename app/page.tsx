@@ -14,13 +14,14 @@ export const metadata: Metadata = {
     languages: {
       en: absoluteUrl('/'),
       es: absoluteUrl('/'),
+      pt: absoluteUrl('/'),
       'x-default': absoluteUrl('/'),
     },
   },
   openGraph: {
     type: 'website',
     locale: SEO.locale,
-    alternateLocale: [SEO.alternateLocale],
+    alternateLocale: [SEO.alternateLocale, SEO.alternateLocalePt],
     url: absoluteUrl('/'),
     siteName: SEO.siteName,
     title: SEO.title,

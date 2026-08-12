@@ -59,7 +59,7 @@ export default function JsonLd() {
       name: SEO.siteName,
       description: SEO.description,
       publisher: { '@id': `${absoluteUrl()}/#organization` },
-      inLanguage: ['en', 'es'],
+      inLanguage: ['en', 'es', 'pt'],
     },
     {
       '@type': 'WebPage',
@@ -73,7 +73,7 @@ export default function JsonLd() {
         '@type': 'ImageObject',
         url: absoluteUrl('/logo.png'),
       },
-      inLanguage: ['en', 'es'],
+      inLanguage: ['en', 'es', 'pt'],
     },
     {
       '@type': 'SoftwareApplication',
@@ -142,7 +142,7 @@ export default function JsonLd() {
       description:
         'Long-form articles from @salvazion_ on Salvation, Health and Freedom — faith, family, body, sovereignty and Western Christian Culture. Read on X.',
       url: `${absoluteUrl()}/#blog`,
-      inLanguage: ['en', 'es'],
+      inLanguage: ['en', 'es', 'pt'],
       publisher: { '@id': `${absoluteUrl()}/#organization` },
       author: {
         '@type': 'Organization',

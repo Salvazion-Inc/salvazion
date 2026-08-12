@@ -24,6 +24,14 @@ const UI = {
     updated: 'Última actualización',
     language: 'Idioma',
   },
+  pt: {
+    legal: 'Legal',
+    terms: 'Termos',
+    privacy: 'Privacidade',
+    enter: 'Entrar',
+    updated: 'Última atualização',
+    language: 'Idioma',
+  },
 } as const;
 
 export default function LegalShell({

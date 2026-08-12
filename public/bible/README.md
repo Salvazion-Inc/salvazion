@@ -9,6 +9,7 @@ public/bible/
 ├── meta.json
 ├── es/books/{bookId}.json      # Reina Valera 1909 (dominio público)
 ├── en/books/{bookId}.json      # King James Version (public domain)
+├── pt/books/{bookId}.json      # Almeida Revista e Corrigida (ARC) · Almeida histórico PD
 └── original/books/{bookId}.json # Hebreo WLC (AT) + Griego Textus Receptus (NT)
 ```
 
@@ -44,6 +45,7 @@ Fuente de datos: [getbible.net API v2](https://api.getbible.net/v2/)
 |------|-----------------|----------|
 | es | `valera` | Reina Valera **1909** |
 | en | `kjv` | King James Version |
+| pt | `almeida` | Almeida Revista e Corrigida (**ARC**) · Almeida histórico |
 | original OT | `codex` | Westminster Leningrad Codex (hebreo) |
 | original NT | `textusreceptus` | Textus Receptus (griego) |
 
@@ -54,6 +56,13 @@ No se puede redistribuir el texto completo de la RV1960 en una app sin licencia.
 
 Esta app incluye **Reina Valera 1909** (dominio público), la edición clásica libremente redistribuible.  
 Si obtienes licencia de RV1960, genera JSON con el mismo esquema y reemplaza `public/bible/es/books/`.
+
+## Nota legal — Almeida Revista e Corrigida (ARC)
+
+A edição moderna **ARC 1995/2009** é marca e texto da **Sociedade Bíblica do Brasil**.  
+Não se pode redistribuir o texto completo sem licença.
+
+Esta app inclui o **Almeida histórico** via getbible `almeida` (reimpressão de 1911 da edição de 1900), domínio público / GPL, rotulado na UI como Almeida Revista e Corrigida (ARC) — o linaje clássico da tradução de João Ferreira de Almeida.
 
 ## King James & Originales
 

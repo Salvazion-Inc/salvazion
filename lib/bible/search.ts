@@ -8,6 +8,7 @@ export interface IndexedVerse {
   bookId: string;
   bookName: string;
   bookNameEs: string;
+  bookNamePt: string;
   testament: 'OT' | 'NT';
   chapter: number;
   verse: number;
@@ -169,6 +170,7 @@ export async function ensureCorpus(
               bookId: meta.id,
               bookName: meta.name,
               bookNameEs: meta.nameEs,
+              bookNamePt: meta.namePt,
               testament: meta.testament,
               chapter: ch.chapter,
               verse: v.number,
@@ -207,7 +209,8 @@ export async function ensureCorpus(
 }
 
 export function formatRef(v: IndexedVerse, language: BibleLanguage): string {
-  const name = language === 'en' ? v.bookName : v.bookNameEs;
+  const name =
+    language === 'en' ? v.bookName : language === 'pt' ? v.bookNamePt : v.bookNameEs;
   return `${name} ${v.chapter}:${v.verse}`;
 }
 
@@ -463,6 +466,52 @@ const ALIASES: Record<string, string> = {
   '3 juan': '3jn', '3juan': '3jn', '3jn': '3jn',
   judas: 'jud', jude: 'jud', jud: 'jud',
   apocalipsis: 'rev', revelation: 'rev', rev: 'rev', ap: 'rev',
+  // PT (Almeida) — unique keys only
+  gênesis: 'gen',
+  êxodo: 'exo',
+  deuteronômio: 'deu',
+  juizes: 'jdg',
+  juízes: 'jdg',
+  rute: 'rut',
+  reis: '1ki',
+  '1 reis': '1ki',
+  '2 reis': '2ki',
+  crônicas: '1ch',
+  '1 crônicas': '1ch',
+  '2 crônicas': '2ch',
+  neemias: 'neh',
+  jó: 'job',
+  provérbios: 'pro',
+  cânticos: 'sng',
+  lamentações: 'lam',
+  oséias: 'hos',
+  obadias: 'oba',
+  miqueias: 'mic',
+  naum: 'nam',
+  habacuque: 'hab',
+  ageu: 'hag',
+  mateus: 'mat',
+  joao: 'jhn',
+  joão: 'jhn',
+  atos: 'act',
+  '1 coríntios': '1co',
+  '2 coríntios': '2co',
+  efésios: 'eph',
+  colossenses: 'col',
+  '1 tessalonicenses': '1th',
+  '2 tessalonicenses': '2th',
+  '1 timóteo': '1ti',
+  '2 timóteo': '2ti',
+  filemom: 'phm',
+  hebreus: 'heb',
+  tiago: 'jas',
+  '1 joao': '1jn',
+  '1 joão': '1jn',
+  '2 joao': '2jn',
+  '2 joão': '2jn',
+  '3 joao': '3jn',
+  '3 joão': '3jn',
+  apocalipse: 'rev',
   // EN common (only keys not already listed above)
   exodus: 'exo',
   leviticus: 'lev',
@@ -498,7 +547,15 @@ function resolveBookId(part: string): string | null {
   const found = books.find((b) => {
     const en = b.name.toLowerCase();
     const es = b.nameEs.toLowerCase();
-    return en === key || es === key || en.startsWith(key) || es.startsWith(key);
+    const pt = b.namePt.toLowerCase();
+    return (
+      en === key ||
+      es === key ||
+      pt === key ||
+      en.startsWith(key) ||
+      es.startsWith(key) ||
+      pt.startsWith(key)
+    );
   });
   return found?.id ?? null;
 }
@@ -532,11 +589,13 @@ export function clearRecentSearches(): void {
 export const SUGGESTED_SEARCHES: Record<BibleLanguage, string[]> = {
   es: ['amor', 'fe', 'perdón', 'león', 'salvación', 'Juan 3:16', 'Salmos 23'],
   en: ['love', 'faith', 'grace', 'lion', 'salvation', 'John 3:16', 'Psalm 23'],
+  pt: ['amor', 'fé', 'perdão', 'leão', 'salvação', 'João 3:16', 'Salmos 23'],
   original: ['αγαπη', 'πιστις', 'λογος', 'θεος', 'יהוה', 'בראשית'],
 };
 
 export const SUGGESTED_CONCORDANCE: Record<BibleLanguage, string[]> = {
   es: ['Dios', 'amor', 'fe', 'Jesús', 'espíritu', 'corazón', 'vida'],
   en: ['God', 'love', 'faith', 'Jesus', 'spirit', 'heart', 'life'],
+  pt: ['Deus', 'amor', 'fé', 'Jesus', 'espírito', 'coração', 'vida'],
   original: ['θεος', 'αγαπη', 'κυριος', 'χριστος', 'πνευμα'],
 };

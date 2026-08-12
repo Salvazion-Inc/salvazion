@@ -18,6 +18,8 @@ export const SEO = {
     'Salvazion: Make Salvation, Health and Freedom Great Again. Freemium app — offline Bible, devotionals, health & wearables, Freedom library, Phalanx community, Green Lion coach and $SALVAZION on Solana. Western Christian Culture & BioConservatism.',
   descriptionEs:
     'Salvazion: Hacer Salvación, Salud y Libertad geniales otra vez. App freemium — Biblia offline, devocional, salud y wearables, biblioteca Freedom, comunidad Phalanx, coach León Verde y $SALVAZION en Solana. Cultura Cristiana Occidental y BioConservadurismo.',
+  descriptionPt:
+    'Salvazion: Tornar Salvação, Saúde e Liberdade grandiosas de novo. App freemium — Bíblia offline, devocional, saúde e wearables, biblioteca Freedom, comunidade Phalanx, coach Leão Verde e $SALVAZION na Solana. Cultura Cristã Ocidental e BioConservadorismo.',
   keywords: [
     'Salvazion',
     'Salvation Health Freedom',
@@ -47,9 +49,18 @@ export const SEO = {
     'cultura cristiana occidental',
     'artículos Salvazion',
     'blog Salvazion',
+    'app cristã',
+    'Bíblia offline',
+    'devocional',
+    'BioConservadorismo',
+    'cultura cristã ocidental',
+    'artigos Salvazion',
+    'Almeida Revista e Corrigida',
+    'ARC',
   ],
   locale: 'en_US',
   alternateLocale: 'es_ES',
+  alternateLocalePt: 'pt_BR',
   /** Absolute URLs for crawlers / social */
   url: APP_URL,
   marketingUrl: MARKETING_URL,

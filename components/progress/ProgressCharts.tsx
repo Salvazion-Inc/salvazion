@@ -29,7 +29,7 @@ type ChartMode = 'discipline' | 'score' | 'pillars' | 'body';
 function weekdayLabel(date: string, lang: string): string {
   try {
     return new Date(date + 'T12:00:00').toLocaleDateString(
-      lang === 'es' ? 'es' : 'en',
+      lang === 'pt' ? 'pt-BR' : lang === 'es' ? 'es' : 'en',
       { weekday: 'short' }
     );
   } catch {

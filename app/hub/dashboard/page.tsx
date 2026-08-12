@@ -94,7 +94,7 @@ export default function DashboardPage() {
       // Wearables → score without opening Settings
       try {
         const passive = await runPassiveHealthSync({
-          lang: p.language === 'en' ? 'en' : 'es',
+          lang: p.language === 'en' || p.language === 'pt' ? p.language : 'es',
           onLog: (type) => {
             logAction(type);
           },

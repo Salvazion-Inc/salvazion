@@ -205,4 +205,97 @@ export const TERMS: Record<Language, LegalDoc> = {
       },
     ],
   },
+  pt: {
+    title: 'Termos de Serviço',
+    updated: '25 de julho de 2026',
+    metaDescription:
+      'Termos de uso do aplicativo Salvazion (Salvation, Health e Freedom).',
+    sections: [
+      {
+        heading: '',
+        paragraphs: [
+          `Bem-vindo à Salvazion (“o App”, “nós”), disponível em ${APP_URL}. Ao criar uma conta, entrar ou usar o App, você aceita estes Termos de Serviço. Se não concordar, não use o App.`,
+        ],
+      },
+      {
+        heading: '1. Descrição do serviço',
+        paragraphs: [
+          'A Salvazion é um aplicativo digital orientado aos pilares Salvation, Health e Freedom: leitura bíblica, devocionais, hábitos de saúde, comunidade (Phalanx) e ferramentas opcionais de carteira Web3 na Solana. O App é formativo, motivacional e comunitário; não substitui aconselhamento médico, jurídico, financeiro nem pastoral profissional.',
+        ],
+      },
+      {
+        heading: '2. Elegibilidade e conta',
+        bullets: [
+          'Você deve ter capacidade legal para aceitar estes termos (em geral, maioridade na sua jurisdição, ou consentimento de um tutor quando aplicável).',
+          'Você pode se registrar com email/senha, link mágico, Google (Gmail) ou X (Twitter), conforme os provedores habilitados.',
+          'Você é responsável pela confidencialidade da sua conta e pela atividade feita com ela.',
+          'Deve fornecer informações verdadeiras na medida em que o App as peça para personalizar a experiência.',
+        ],
+      },
+      {
+        heading: '3. Uso aceitável',
+        intro: 'Você se compromete a não:',
+        bullets: [
+          'Usar o App de forma ilegal, fraudulenta ou que viole direitos de terceiros.',
+          'Tentar violar a segurança, obter acesso não autorizado, fazer scraping abusivo ou interferir no serviço.',
+          'Publicar ou transmitir conteúdo ofensivo, difamatório, ou que promova violência ou ilegalidade em espaços da comunidade.',
+          'Falsificar identidade ou abusar de convites Phalanx.',
+        ],
+      },
+      {
+        heading: '4. Conteúdo espiritual e devocional',
+        paragraphs: [
+          'Textos bíblicos, devocionais (incluindo os gerados com assistência de IA quando configurado) e mensagens de coaching são oferecidos como recursos de crescimento pessoal e espiritual. Não constituem aconselhamento médico, psicológico nem jurídico. Você permanece livre para discernir e aplicar o que considerar útil, sob sua própria responsabilidade.',
+        ],
+      },
+      {
+        heading: '5. Saúde, sensores e wearables',
+        paragraphs: [
+          'As funções de Health (sono, hidratação, exercício, sensores do telefone, wearables, HealthKit / Health Connect etc.) são estimativas e ferramentas de acompanhamento. Não são dispositivos médicos nem diagnósticos. Consulte um profissional de saúde antes de mudar hábitos, exercício ou alimentação. O uso de sensores e permissões do dispositivo é voluntário.',
+        ],
+      },
+      {
+        heading: '6. Web3, Solana e $SALVAZION',
+        paragraphs: [
+          'Se você conectar uma carteira ou usar swaps (p. ex. Jupiter), age sob sua própria responsabilidade. A Salvazion não custodia fundos, não é uma exchange nem uma assessora financeira. Transações em blockchain são irreversíveis e envolvem risco de perda. Cumpra a legislação da sua jurisdição sobre criptoativos.',
+        ],
+      },
+      {
+        heading: '7. Propriedade intelectual',
+        paragraphs: [
+          'A marca Salvazion, o design do App, logotipos e software próprio nos pertencem ou são usados sob licença. As traduções bíblicas são usadas conforme os respectivos direitos (p. ex. textos de domínio público ou licenças aplicáveis). Você não pode copiar, revender ou explorar o App sem autorização, salvo o permitido por lei.',
+        ],
+      },
+      {
+        heading: '8. Disponibilidade e mudanças',
+        paragraphs: [
+          'Podemos modificar, suspender ou descontinuar funções do App, ou estes termos, com efeito ao publicá-los nesta página. O uso continuado após mudanças relevantes implica aceitação. Não garantimos disponibilidade ininterrupta nem ausência de erros.',
+        ],
+      },
+      {
+        heading: '9. Limitação de responsabilidade',
+        paragraphs: [
+          'Na medida permitida pela lei, a Salvazion e seus colaboradores não serão responsáveis por danos indiretos, lucros cessantes, perda de dados ou danos decorrentes do uso ou da impossibilidade de uso do App, incluindo IA, saúde ou Web3. O App é oferecido “no estado em que se encontra” (“as is”).',
+        ],
+      },
+      {
+        heading: '10. Encerramento',
+        paragraphs: [
+          'Você pode deixar de usar o App a qualquer momento. Podemos suspender ou encerrar contas que violem estes termos ou coloquem o serviço ou outros usuários em risco.',
+        ],
+      },
+      {
+        heading: '11. Lei aplicável',
+        paragraphs: [
+          `Estes termos se interpretam de boa-fé. Se alguma cláusula não for exigível, o restante permanece em vigor. Para disputas, buscar-se-á primeiro uma solução amigável pelo contato ${SUPPORT_EMAIL}.`,
+        ],
+      },
+      {
+        heading: '12. Contato',
+        paragraphs: [
+          `Dúvidas sobre estes termos: ${SUPPORT_EMAIL}. Privacidade: veja a Política de Privacidade em /privacy.`,
+        ],
+      },
+    ],
+  },
 };

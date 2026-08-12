@@ -6,9 +6,10 @@ import LanguageFlagSwitch from '@/components/ui/LanguageFlagSwitch';
 import FlatFlag from '@/components/ui/FlatFlag';
 import type { Language } from '@/lib/types';
 import { useFlashToast } from '@/components/ui/FlashToast';
+import { pickLang } from '@/lib/i18n/locale';
 
 /**
- * Global language switcher (Spanish / English) for auth + app settings.
+ * Global language switcher (English / Spanish / Portuguese) for auth + app settings.
  * Compact (login/signup): applies immediately (auth needs instant switch).
  * Full (settings): draft + Guardar so the user confirms the change was saved.
  */
@@ -26,6 +27,7 @@ export default function LanguageControl({ compact = false }: { compact?: boolean
   const options: { id: Language; label: string }[] = [
     { id: 'en', label: t('common.english') },
     { id: 'es', label: t('common.spanish') },
+    { id: 'pt', label: t('common.portuguese') },
   ];
 
   if (compact) {
@@ -45,7 +47,11 @@ export default function LanguageControl({ compact = false }: { compact?: boolean
     // Flash after lang switch — dictionary updates to new language
     window.setTimeout(() => {
       flash(
-        draft === 'es' ? 'Cambios guardados' : 'Changes saved'
+        pickLang(draft, {
+          es: 'Cambios guardados',
+          en: 'Changes saved',
+          pt: 'Alterações salvas',
+        })
       );
     }, 0);
   };
@@ -65,7 +71,7 @@ export default function LanguageControl({ compact = false }: { compact?: boolean
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label={t('common.language')}>
+      <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label={t('common.language')}>
         {options.map((opt) => {
           const active = draft === opt.id;
           return (

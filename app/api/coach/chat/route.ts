@@ -37,7 +37,8 @@ export async function POST(req: NextRequest) {
     const messages = sanitizeMessages(body.messages);
     const profile = (body.profile || null) as Partial<UserProfile> | null;
     const scores = (body.scores || null) as Partial<ComputedScores> | null;
-    const lang: 'es' | 'en' = body.lang === 'en' ? 'en' : 'es';
+    const lang: 'es' | 'en' | 'pt' =
+      body.lang === 'en' ? 'en' : body.lang === 'pt' ? 'pt' : 'es';
     const mode: CoachMode = body.mode === 'debate' ? 'debate' : 'coach';
 
     if (!messages.length) {
@@ -64,7 +65,9 @@ export async function POST(req: NextRequest) {
               reply:
                 lang === 'en'
                   ? 'Green Lion AI coach is a Premium feature. Upgrade for full AI coaching — Salvation · Health · Freedom.'
-                  : 'El coach León Verde con IA es Premium. Mejora tu plan para coaching con IA completo — Salvación · Salud · Libertad.',
+                  : lang === 'pt'
+                    ? 'O coach Leão Verde com IA é Premium. Passe para o plano Premium para coaching com IA completo — Salvação · Saúde · Liberdade.'
+                    : 'El coach León Verde con IA es Premium. Mejora tu plan para coaching con IA completo — Salvación · Salud · Libertad.',
               source: 'premium_gate',
               model: null,
             },
@@ -77,15 +80,21 @@ export async function POST(req: NextRequest) {
     }
 
     if (!isXaiConfigured()) {
-      const name = profile?.name?.split(' ')[0] || (lang === 'en' ? 'Friend' : 'Hermano');
+      const name =
+        profile?.name?.split(' ')[0] ||
+        (lang === 'en' ? 'Friend' : lang === 'pt' ? 'Irmão' : 'Hermano');
       const fallback =
         mode === 'debate'
           ? lang === 'en'
             ? `${name}, I stand for Western Christian culture and bio-conservatism. State your thesis — globalism, woke ideology, LGBTQ activism, Deep State power, leftism, or transhumanism — and I will answer with reason and faith.`
-            : `${name}, defiendo la cultura cristiano-occidental y el bio-conservadurismo. Plantea tu tesis — globalismo, agenda woke, LGBTQ, Deep State, izquierda o transhumanismo — y responderé con razón y fe.`
+            : lang === 'pt'
+              ? `${name}, defendo a cultura cristã ocidental e o bio-conservadorismo. Apresente sua tese — globalismo, agenda woke, LGBTQ, Deep State, esquerda ou transumanismo — e responderei com razão e fé.`
+              : `${name}, defiendo la cultura cristiano-occidental y el bio-conservadurismo. Plantea tu tesis — globalismo, agenda woke, LGBTQ, Deep State, izquierda o transhumanismo — y responderé con razón y fe.`
           : lang === 'en'
             ? `${name}, the Green Lion walks with you. Today: read one Bible chapter, move 15 minutes, and pray 5 minutes. Salvation · Health · Freedom.`
-            : `${name}, el León Verde camina contigo. Hoy: lee un capítulo de la Biblia, muévete 15 minutos y ora 5 minutos. Salvación · Salud · Libertad.`;
+            : lang === 'pt'
+              ? `${name}, o Leão Verde caminha com você. Hoje: leia um capítulo da Bíblia, mova-se 15 minutos e ore 5 minutos. Salvação · Saúde · Liberdade.`
+              : `${name}, el León Verde camina contigo. Hoy: lee un capítulo de la Biblia, muévete 15 minutos y ora 5 minutos. Salvación · Salud · Libertad.`;
       return NextResponse.json({
         reply: fallback,
         source: 'fallback',
@@ -119,7 +128,9 @@ export async function POST(req: NextRequest) {
       completion.choices[0]?.message?.content?.trim() ||
       (lang === 'en'
         ? 'I am here. Speak again, and we walk forward.'
-        : 'Estoy aquí. Habla de nuevo y avanzamos.');
+        : lang === 'pt'
+          ? 'Estou aqui. Fale de novo e avançamos.'
+          : 'Estoy aquí. Habla de nuevo y avanzamos.');
 
     return NextResponse.json({
       reply,

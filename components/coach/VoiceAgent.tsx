@@ -17,7 +17,7 @@ import { logAction } from '@/lib/scoring/engine';
 type Props = {
   profile: Partial<UserProfile> | null;
   scores?: Partial<ComputedScores> | null;
-  lang?: 'es' | 'en';
+  lang?: 'es' | 'en' | 'pt';
   compact?: boolean;
   /** coach = daily mentor; debate = Freedom Hub structured debate */
   mode?: CoachMode;

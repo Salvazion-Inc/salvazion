@@ -354,7 +354,7 @@ export default function RoutineBoard({ date, onChange }: Props) {
 
   const clockLabel = useMemo(() => {
     try {
-      return now.toLocaleTimeString(lang === 'es' ? 'es' : 'en', {
+      return now.toLocaleTimeString(lang === 'pt' ? 'pt-BR' : lang === 'es' ? 'es' : 'en', {
         hour: '2-digit',
         minute: '2-digit',
       });

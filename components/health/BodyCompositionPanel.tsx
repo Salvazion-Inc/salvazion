@@ -18,7 +18,7 @@ import PhotoSourcePicker from '@/components/health/PhotoSourcePicker';
 
 type Props = {
   profile: Partial<UserProfile> | null;
-  lang?: 'es' | 'en';
+  lang?: 'es' | 'en' | 'pt';
   onAnalyzed?: () => void;
 };
 

@@ -63,7 +63,7 @@ function writeSessionMuted(): void {
 export default function CoachFab() {
   const pathname = usePathname();
   const { t, lang } = useI18n();
-  const locale = lang === 'en' ? 'en' : 'es';
+  const locale = lang === 'en' || lang === 'pt' ? lang : 'es';
   const { isPremium, loading } = useEntitlement();
 
   const [nudges, setNudges] = useState<FabNudge[]>([]);

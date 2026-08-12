@@ -388,7 +388,7 @@ export const X_ARTICLES: XArticle[] = dedupeCatalog(
 /** Localized title + preview for marketing blog (EN default / ES on language switch) */
 export function localizeArticle(
   article: XArticle,
-  lang: 'en' | 'es'
+  lang: 'en' | 'es' | 'pt'
 ): { title: string; preview: string } {
   if (lang === 'es') {
     return {
@@ -498,20 +498,24 @@ export function getBlogPillarCounts(): Record<ArticlePillar | 'all', number> {
   return counts;
 }
 
-export function formatArticleDate(createdAt?: string | null, lang: 'es' | 'en' = 'en'): string {
+export function formatArticleDate(
+  createdAt?: string | null,
+  lang: 'es' | 'en' | 'pt' = 'en'
+): string {
+  const locale = lang === 'pt' ? 'pt-BR' : lang === 'es' ? 'es-ES' : 'en-US';
   if (!createdAt) return '';
   const d = new Date(createdAt);
   if (Number.isNaN(d.getTime())) {
     // Twitter format: Wed Jul 24 22:54:55 +0000 2024
     const t = Date.parse(createdAt);
     if (Number.isNaN(t)) return '';
-    return new Date(t).toLocaleDateString(lang === 'en' ? 'en-US' : 'es-ES', {
+    return new Date(t).toLocaleDateString(locale, {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
     });
   }
-  return d.toLocaleDateString(lang === 'en' ? 'en-US' : 'es-ES', {
+  return d.toLocaleDateString(locale, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',

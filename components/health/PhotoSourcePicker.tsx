@@ -19,7 +19,7 @@ type Props = {
   onFile: (file: File) => void;
   /** Optional clear/remove current photo */
   onClear?: () => void;
-  lang?: 'es' | 'en';
+  lang?: 'es' | 'en' | 'pt';
   className?: string;
   /** Prefer rear camera when using capture (meal/body = environment) */
   facing?: 'environment' | 'user';

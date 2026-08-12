@@ -88,7 +88,7 @@ export default function ValueJourney({
   if (!mounted) return null;
 
   const step = VALUE_JOURNEY_STEPS[stepIdx];
-  const copy = getValueStepCopy(step, lang === 'en' ? 'en' : 'es');
+  const copy = getValueStepCopy(step, lang);
   const progress = ((stepIdx + 1) / VALUE_JOURNEY_STEPS.length) * 100;
   const isLast = stepIdx === VALUE_JOURNEY_STEPS.length - 1;
 

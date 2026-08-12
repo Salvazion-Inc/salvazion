@@ -4,13 +4,14 @@ import { TERMS } from '@/lib/legal/terms';
 import { absoluteUrl } from '@/lib/seo/config';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service | Términos de Servicio',
+  title: 'Terms of Service | Términos de Servicio | Termos de Serviço',
   description: TERMS.en.metaDescription,
   alternates: {
     canonical: absoluteUrl('/terms'),
     languages: {
       en: absoluteUrl('/terms'),
       es: absoluteUrl('/terms'),
+      pt: absoluteUrl('/terms'),
       'x-default': absoluteUrl('/terms'),
     },
   },
@@ -33,6 +34,7 @@ export default function TermsPage() {
       relatedHref="/privacy"
       relatedLabelEn="Privacy Policy"
       relatedLabelEs="Política de Privacidad"
+      relatedLabelPt="Política de Privacidade"
     />
   );
 }

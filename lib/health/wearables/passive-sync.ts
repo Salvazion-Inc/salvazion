@@ -75,7 +75,7 @@ function applyOAuthMetrics(
  * Always re-evaluates local phone/wearable samples even when OAuth is skipped.
  */
 export async function runPassiveHealthSync(opts?: {
-  lang?: 'es' | 'en';
+  lang?: 'es' | 'en' | 'pt';
   force?: boolean;
   onLog?: (actionType: string, label: string) => void;
 }): Promise<PassiveSyncResult> {

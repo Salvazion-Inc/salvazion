@@ -38,8 +38,11 @@ export async function POST(req: NextRequest) {
     }
 
     const profile: UserProfile = {
-      name: sanitize(body.name, 80) || (body.language === 'en' ? 'Brother' : 'Hermano'),
-      language: body.language === 'en' ? 'en' : 'es',
+      name:
+        sanitize(body.name, 80) ||
+        (body.language === 'en' ? 'Brother' : body.language === 'pt' ? 'Irmão' : 'Hermano'),
+      language:
+        body.language === 'en' ? 'en' : body.language === 'pt' ? 'pt' : 'es',
       spiritualMaturity: ['new', 'growing', 'mature', 'leader'].includes(body.spiritualMaturity)
         ? body.spiritualMaturity
         : 'growing',
@@ -52,11 +55,15 @@ export async function POST(req: NextRequest) {
       struggles: Array.isArray(body.struggles)
         ? body.struggles.filter((t: unknown) => typeof t === 'string').slice(0, 6)
         : [],
-      preferredBibleVersion: ['rv1960', 'kjv', 'original'].includes(body.preferredBibleVersion)
+      preferredBibleVersion: ['rv1960', 'kjv', 'original', 'arc'].includes(
+        body.preferredBibleVersion
+      )
         ? body.preferredBibleVersion
         : body.language === 'en'
           ? 'kjv'
-          : 'rv1960',
+          : body.language === 'pt'
+            ? 'arc'
+            : 'rv1960',
       purpose: sanitize(body.purpose, 400),
       city: sanitize(body.city, 80),
       country: sanitize(body.country, 80),
@@ -80,7 +87,9 @@ export async function POST(req: NextRequest) {
         note:
           profile.language === 'en'
             ? 'Free plan: rules-based daily devotional. Upgrade to Premium for AI devotionals.'
-            : 'Plan Free: devocional diario por reglas. Mejora a Premium para devocionales con IA.',
+            : profile.language === 'pt'
+              ? 'Plano Free: devocional diário por regras. Passe para Premium para devocionais com IA.'
+              : 'Plan Free: devocional diario por reglas. Mejora a Premium para devocionales con IA.',
         aiConfigured: isXaiConfigured(),
         premium: false,
       });

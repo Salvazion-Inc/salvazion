@@ -18,7 +18,7 @@ import {
   getTotalChapters,
   getBook,
 } from '@/lib/bible/engine';
-import { BibleLanguage, BibleChapter } from '@/lib/bible/types';
+import { BibleLanguage, BibleChapter, bookDisplayName } from '@/lib/bible/types';
 import {
   logAction,
   getPointsForAction,
@@ -42,7 +42,9 @@ export default function BiblePage() {
   const { flash, toast: softToast } = useFlashToast(3200);
   const [mainTab, setMainTab] = useState<MainTab>('bible');
   const [bibleMode, setBibleMode] = useState<BibleMode>('read');
-  const [language, setLanguage] = useState<BibleLanguage>('es');
+  const [language, setLanguage] = useState<BibleLanguage>(
+    uiLang === 'en' || uiLang === 'pt' ? uiLang : 'es'
+  );
   const [selectedBook, setSelectedBook] = useState('gen');
   const [selectedChapter, setSelectedChapter] = useState(1);
   const [focusVerse, setFocusVerse] = useState<number | null>(null);
@@ -93,6 +95,12 @@ export default function BiblePage() {
   useEffect(() => {
     setSalvationScore(computeScores().salvation);
   }, []);
+
+  useEffect(() => {
+    if (uiLang === 'en' || uiLang === 'es' || uiLang === 'pt') {
+      setLanguage(uiLang);
+    }
+  }, [uiLang]);
 
   // Deep-link from agenda: /hub/bible?tab=bible|prayer (devotional is its own route)
   useEffect(() => {
@@ -283,10 +291,8 @@ export default function BiblePage() {
   const pts = getPointsForAction('bible_chapter', stage);
 
   const bookMeta = getBook(selectedBook);
-  const bookDisplayName = bookMeta
-    ? uiLang === 'en'
-      ? bookMeta.name
-      : bookMeta.nameEs
+  const currentBookName = bookMeta
+    ? bookDisplayName(bookMeta, uiLang)
     : selectedBook;
 
   const mainTabs = (
@@ -351,7 +357,7 @@ export default function BiblePage() {
                 {t('bible.title')} · {salvationScore}
               </p>
               <p className="text-sm font-semibold text-white truncate">
-                {chapter?.book || bookDisplayName} {selectedChapter}
+                {chapter?.book || currentBookName} {selectedChapter}
               </p>
             </button>
             <div className="flex gap-1 shrink-0">
@@ -437,6 +443,7 @@ export default function BiblePage() {
                 [
                   { id: 'es' as BibleLanguage, label: 'ES · Reina Valera' },
                   { id: 'en' as BibleLanguage, label: 'EN · King James' },
+                  { id: 'pt' as BibleLanguage, label: 'PT · Almeida ARC' },
                   { id: 'original' as BibleLanguage, label: 'Original · Heb/Gr' },
                 ] as const
               ).map((lang) => (
@@ -460,7 +467,7 @@ export default function BiblePage() {
                       {t('bible.library')}
                     </p>
                     <p className="text-xs text-[var(--off-white)]/90 truncate">
-                      {bookDisplayName}
+                      {currentBookName}
                       {selectedBookIdx >= 0 ? (
                         <span className="text-[var(--sage)]/70">
                           {' '}
@@ -484,7 +491,7 @@ export default function BiblePage() {
                 <BookCarousel
                   books={books}
                   selectedBookId={selectedBook}
-                  uiLang={uiLang === 'en' ? 'en' : 'es'}
+                  uiLang={uiLang}
                   onSelect={(id) => selectBook(id)}
                   size="md"
                 />
@@ -500,7 +507,7 @@ export default function BiblePage() {
                         .filter((b) => b.testament === 'OT')
                         .map((b) => (
                           <option key={b.id} value={b.id}>
-                            {uiLang === 'en' ? b.name : b.nameEs}
+                            {bookDisplayName(b, uiLang)}
                           </option>
                         ))}
                     </optgroup>
@@ -509,7 +516,7 @@ export default function BiblePage() {
                         .filter((b) => b.testament === 'NT')
                         .map((b) => (
                           <option key={b.id} value={b.id}>
-                            {uiLang === 'en' ? b.name : b.nameEs}
+                            {bookDisplayName(b, uiLang)}
                           </option>
                         ))}
                     </optgroup>
@@ -538,7 +545,7 @@ export default function BiblePage() {
 
         {mainTab === 'prayer' ? (
           <PrayerMotivesPanel
-            lang={uiLang === 'en' ? 'en' : 'es'}
+            lang={uiLang}
             onPrayed={() => {
               logAction('pray_5min');
               setSalvationScore(computeScores().salvation);
@@ -549,7 +556,7 @@ export default function BiblePage() {
             <BookLibrary
               books={books}
               selectedBookId={selectedBook}
-              uiLang={uiLang === 'en' ? 'en' : 'es'}
+              uiLang={uiLang}
               otLabel={t('bible.ot')}
               ntLabel={t('bible.nt')}
               onSelect={openBookFromLibrary}
@@ -574,7 +581,7 @@ export default function BiblePage() {
               <div className={`mb-4 bible-hero-stage ${heroAnimClass}`}>
                 <BookCover
                   bookId={selectedBook}
-                  name={bookDisplayName}
+                  name={currentBookName}
                   testament={bookMeta.testament}
                   testamentLabel={
                     bookMeta.testament === 'OT' ? t('bible.ot') : t('bible.nt')
@@ -592,7 +599,7 @@ export default function BiblePage() {
                   <span className={heroAnimClass}>
                     <BookCover
                       bookId={selectedBook}
-                      name={bookDisplayName}
+                      name={currentBookName}
                       testament={bookMeta.testament}
                       variant="chip"
                       selected
@@ -723,6 +730,16 @@ export default function BiblePage() {
             {language === 'es' && (
               <p className="text-[11px] text-[var(--sage)]/70 text-center leading-relaxed mb-4">
                 {t('bible.rvNote')}
+              </p>
+            )}
+            {language === 'pt' && (
+              <p className="text-[11px] text-[var(--sage)]/70 text-center leading-relaxed mb-4">
+                {t('bible.arcNote')}
+              </p>
+            )}
+            {language === 'en' && (
+              <p className="text-[11px] text-[var(--sage)]/70 text-center leading-relaxed mb-4">
+                {t('bible.kjvNote')}
               </p>
             )}
           </div>

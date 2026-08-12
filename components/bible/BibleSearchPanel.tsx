@@ -25,6 +25,12 @@ interface Props {
   onOpenVerse: (bookId: string, chapter: number, verse?: number) => void;
 }
 
+function ui(language: BibleLanguage, en: string, es: string, pt: string): string {
+  if (language === 'en') return en;
+  if (language === 'pt') return pt;
+  return es;
+}
+
 export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
   const [mode, setMode] = useState<Mode>('search');
   const [query, setQuery] = useState('');
@@ -124,12 +130,18 @@ export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
 
   const placeholder =
     mode === 'search'
-      ? language === 'en'
-        ? 'Search words or refs (John 3:16)…'
-        : 'Busca palabras o refs (Juan 3:16)…'
-      : language === 'en'
-        ? 'Concordance word…'
-        : 'Palabra para concordancia…';
+      ? ui(
+          language,
+          'Search words or refs (John 3:16)…',
+          'Busca palabras o refs (Juan 3:16)…',
+          'Busque palavras ou refs (João 3:16)…'
+        )
+      : ui(
+          language,
+          'Concordance word…',
+          'Palabra para concordancia…',
+          'Palavra para concordância…'
+        );
 
   const suggestions = mode === 'search' ? SUGGESTED_SEARCHES[language] : SUGGESTED_CONCORDANCE[language];
   const showEmpty = debounced.length < 2 && !loading;
@@ -140,10 +152,10 @@ export default function BibleSearchPanel({ language, onOpenVerse }: Props) {
       <div className="flex p-1 rounded-2xl bg-[#0a0a0a] border border-[var(--border-soft)] mb-3">
         {(
           [
-            { id: 'search' as Mode, label: language === 'en' ? 'Search' : 'Búsqueda', icon: '⌕' },
+            { id: 'search' as Mode, label: ui(language, 'Search', 'Búsqueda', 'Busca'), icon: '⌕' },
             {
               id: 'concordance' as Mode,
-              label: language === 'en' ? 'Concordance' : 'Concordancia',
+              label: ui(language, 'Concordance', 'Concordancia', 'Concordância'),
               icon: '☰',
             },
           ] as const

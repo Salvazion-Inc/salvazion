@@ -1,12 +1,13 @@
 'use client';
 
-import { BibleBook } from '@/lib/bible/types';
+import { BibleBook, bookDisplayName } from '@/lib/bible/types';
+import type { Language } from '@/lib/types';
 import BookCover from './BookCover';
 
 type Props = {
   books: BibleBook[];
   selectedBookId: string;
-  uiLang: 'es' | 'en';
+  uiLang: Language;
   otLabel: string;
   ntLabel: string;
   onSelect: (bookId: string) => void;
@@ -40,7 +41,7 @@ export default function BookLibrary({
       </div>
       <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-4">
         {list.map((b) => {
-          const name = uiLang === 'en' ? b.name : b.nameEs;
+          const name = bookDisplayName(b, uiLang);
           return (
             <button
               key={b.id}

@@ -1,7 +1,7 @@
 export type SpiritualMaturity = 'new' | 'growing' | 'mature' | 'leader';
 export type FamilyStatus = 'single' | 'married' | 'parent' | 'widow' | 'family';
-export type Language = 'es' | 'en';
-export type BibleVersion = 'rv1960' | 'kjv' | 'original';
+export type Language = 'es' | 'en' | 'pt';
+export type BibleVersion = 'rv1960' | 'kjv' | 'original' | 'arc';
 /** Sexo (Health: biomarcadores / ciclo). Se define en onboarding; no se re-pregunta en la app. */
 export type BiologicalSex = 'female' | 'male' | 'unspecified';
 

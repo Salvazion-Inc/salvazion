@@ -2,13 +2,14 @@
 
 import { useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import { BibleBook } from '@/lib/bible/types';
+import { BibleBook, bookDisplayName } from '@/lib/bible/types';
+import type { Language } from '@/lib/types';
 import { getBookCoverSrc } from '@/lib/bible/covers';
 
 type Props = {
   books: BibleBook[];
   selectedBookId: string;
-  uiLang: 'es' | 'en';
+  uiLang: Language;
   onSelect: (bookId: string) => void;
   /** Compact strip for sticky header vs larger reader carousel */
   size?: 'sm' | 'md';
@@ -91,7 +92,7 @@ export default function BookCarousel({
         }}
       >
         {books.map((b, i) => {
-          const name = uiLang === 'en' ? b.name : b.nameEs;
+          const name = bookDisplayName(b, uiLang);
           const selected = b.id === selectedBookId;
           const src = getBookCoverSrc(b.id);
 

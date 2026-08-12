@@ -242,4 +242,122 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       },
     ],
   },
+  pt: {
+    title: 'Política de Privacidade',
+    updated: '25 de julho de 2026',
+    metaDescription:
+      'Como a Salvazion coleta, usa e protege seus dados pessoais e de saúde.',
+    sections: [
+      {
+        heading: '',
+        paragraphs: [
+          `Na Salvazion (“nós”) respeitamos a sua privacidade. Esta política descreve quais dados tratamos no App (${APP_URL}), para quais fins e quais direitos você tem. Ao usar o App, você aceita esta política.`,
+        ],
+      },
+      {
+        heading: '1. Controlador',
+        paragraphs: [
+          `Controlador dos dados: Salvazion / equipe do produto associada a salvazion.org. Contato: ${SUPPORT_EMAIL}.`,
+        ],
+      },
+      {
+        heading: '2. Dados que podemos coletar',
+        bullets: [
+          'Conta: email, nome, idioma, foto de perfil, preferências de onboarding (propósito, cidade, país, data de nascimento, maturidade espiritual, família, focos).',
+          'Login social: se você usa Google ou X, recebemos identificadores e dados de perfil que o provedor compartilhe (p. ex. email, nome, foto, @ do X), segundo a configuração dele e o seu consentimento.',
+          'Uso do App: ações de pontuação (Salvation / Health / Freedom), sequências, insígnias, progresso de leitura bíblica, devocionais concluídos.',
+          'Health: sono, hidratação, refeições, esportes, métricas de sensores do telefone ou wearables que você ative ou registre manualmente.',
+          'Phalanx: convites e conexões com outros usuários que você aceite.',
+          'Web3 (opcional): endereço de carteira Solana se você conectar uma; não custodiamos chaves privadas.',
+          'Técnicos: cookies de sessão (Supabase Auth), dados de dispositivo/navegador necessários para segurança e funcionamento do PWA.',
+        ],
+      },
+      {
+        heading: '3. Finalidades',
+        bullets: [
+          'Criar e manter sua conta e sessão.',
+          'Personalizar devocionais, coach e recomendações por etapa de vida.',
+          'Calcular scores, sequências e insígnias dos três pilares.',
+          'Oferecer funções de Health e sincronização com sensores/wearables só se você as usar.',
+          'Gerenciar convites e vínculos Phalanx.',
+          'Melhorar a segurança, prevenir abuso e operar o serviço (infraestrutura Supabase, Vercel etc.).',
+          'Cumprir obrigações legais quando corresponder.',
+        ],
+      },
+      {
+        heading: '4. Bases legais',
+        paragraphs: [
+          'Tratamos dados para executar o contrato de uso do App (estes termos e o serviço que você solicita), com o seu consentimento (p. ex. sensores, login social, permissões do sistema) e, quando aplicável, por interesse legítimo em segurança e melhoria do produto, ou por obrigação legal.',
+        ],
+      },
+      {
+        heading: '5. Processadores e provedores',
+        intro: 'Podemos usar provedores que tratam dados em nosso nome, entre outros:',
+        bullets: [
+          'Supabase — autenticação, banco de dados e armazenamento (com Row Level Security: em geral só você acessa suas linhas).',
+          'Vercel — hospedagem do App.',
+          'Google / X — só se você escolher “Continuar com Gmail” ou “Continuar com X”; o uso também se rege pelas políticas deles.',
+          'Provedor de IA — se você gerar devocionais com IA; enviam-se dados de perfil necessários para personalizar o texto.',
+          'Jupiter / rede Solana — se você usar swap ou carteira; as transações são públicas na blockchain.',
+        ],
+        paragraphs: [
+          'Não vendemos suas informações pessoais a terceiros para publicidade de terceiros.',
+        ],
+      },
+      {
+        heading: '6. Dados de saúde e sensíveis',
+        paragraphs: [
+          'Os dados de Health (sono, atividade etc.) são sensíveis. Só são coletados quando você usa essas funções. Não os usamos para diagnosticar doenças. Você pode deixar de usar sensores ou apagar dados locais segundo as opções do App e do dispositivo. No shell nativo, HealthKit / Health Connect exigem sua permissão explícita do sistema.',
+        ],
+      },
+      {
+        heading: '7. Conservação',
+        paragraphs: [
+          `Conservamos os dados enquanto você mantiver a conta ou for necessário para o serviço e obrigações legais. Você pode pedir a exclusão da conta escrevendo para ${SUPPORT_EMAIL}. Parte do cache pode viver no seu dispositivo (localStorage) até você apagá-lo ou desinstalar o App.`,
+        ],
+      },
+      {
+        heading: '8. Segurança',
+        paragraphs: [
+          `Aplicamos medidas razoáveis (HTTPS, RLS no banco de dados, cookies de sessão seguros). Nenhum sistema é 100% invulnerável; comunique incidentes relevantes a ${SUPPORT_EMAIL}.`,
+        ],
+      },
+      {
+        heading: '9. Seus direitos',
+        paragraphs: [
+          `Segundo a sua jurisdição (p. ex. acesso, retificação, exclusão, oposição, portabilidade ou limitação), você pode exercê-los escrevendo para ${SUPPORT_EMAIL}. Também pode revogar permissões de sensores/redes sociais no dispositivo ou no provedor (Google, X).`,
+        ],
+      },
+      {
+        heading: '10. Menores',
+        paragraphs: [
+          'O App não é dirigido a menores sem supervisão. Se um responsável acreditar que um menor nos forneceu dados, entre em contato para revisarmos.',
+        ],
+      },
+      {
+        heading: '11. Transferências internacionais',
+        paragraphs: [
+          'Provedores como Supabase ou Vercel podem processar dados em servidores fora do seu país. Usamos provedores reconhecidos e medidas contratuais habituais do setor quando aplicável.',
+        ],
+      },
+      {
+        heading: '12. Cookies',
+        paragraphs: [
+          'Usamos cookies ou armazenamento semelhante essenciais para autenticação e preferências (idioma, tamanho do texto). Não dependemos de redes publicitárias de terceiros para o núcleo do App.',
+        ],
+      },
+      {
+        heading: '13. Mudanças',
+        paragraphs: [
+          'Podemos atualizar esta política publicando a nova versão nesta URL com data atualizada. O uso continuado implica aceitação das mudanças materiais na medida permitida pela lei.',
+        ],
+      },
+      {
+        heading: '14. Contato',
+        paragraphs: [
+          `Privacidade e dados pessoais: ${SUPPORT_EMAIL}. Termos: veja os Termos de Serviço em /terms.`,
+        ],
+      },
+    ],
+  },
 };

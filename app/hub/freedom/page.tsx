@@ -128,7 +128,7 @@ function FreedomPageInner() {
               <VoiceAgent
                 profile={profile}
                 scores={scores}
-                lang={profile?.language === 'en' ? 'en' : 'es'}
+                lang={profile?.language === 'pt' || profile?.language === 'en' ? profile.language : 'es'}
                 mode="debate"
                 compact
                 onDebateScored={() => refresh()}

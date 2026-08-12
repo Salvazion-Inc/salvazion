@@ -4,13 +4,14 @@ import { PRIVACY } from '@/lib/legal/privacy';
 import { absoluteUrl } from '@/lib/seo/config';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | Política de Privacidad',
+  title: 'Privacy Policy | Política de Privacidad | Política de Privacidade',
   description: PRIVACY.en.metaDescription,
   alternates: {
     canonical: absoluteUrl('/privacy'),
     languages: {
       en: absoluteUrl('/privacy'),
       es: absoluteUrl('/privacy'),
+      pt: absoluteUrl('/privacy'),
       'x-default': absoluteUrl('/privacy'),
     },
   },
@@ -33,6 +34,7 @@ export default function PrivacyPage() {
       relatedHref="/terms"
       relatedLabelEn="Terms of Service"
       relatedLabelEs="Términos de Servicio"
+      relatedLabelPt="Termos de Serviço"
     />
   );
 }

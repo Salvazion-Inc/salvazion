@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Equal-size EN / ES language control (USA · Chile flags).
+ * Equal-size EN / ES / PT language control (USA · Chile · Brazil flags).
  * Rectangular chips (not circles) so stars/cantons stay fully visible.
  */
 import FlatFlag from '@/components/ui/FlatFlag';
@@ -10,6 +10,7 @@ import type { Language } from '@/lib/types';
 const OPTIONS: { id: Language; label: string }[] = [
   { id: 'en', label: 'English' },
   { id: 'es', label: 'Español' },
+  { id: 'pt', label: 'Português' },
 ];
 
 type Size = 'sm' | 'md';

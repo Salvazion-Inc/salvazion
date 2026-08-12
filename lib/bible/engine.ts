@@ -1,4 +1,10 @@
-import { BibleChapter, BibleLanguage, BibleBook, ReadingProgress } from './types';
+import {
+  BibleChapter,
+  BibleLanguage,
+  BibleBook,
+  ReadingProgress,
+  bookDisplayName,
+} from './types';
 import { BIBLE_BOOKS, SAMPLE_CHAPTERS } from '@/data/bible/sample';
 
 const STORAGE_PROGRESS = 'salvazion_bible_progress';
@@ -17,6 +23,7 @@ interface BookFilePayload {
 const VERSION_LABEL: Record<BibleLanguage, string> = {
   es: 'Reina Valera 1909',
   en: 'King James Version',
+  pt: 'Almeida Revista e Corrigida (ARC)',
   original: 'Original (Hebreo / Griego)',
 };
 
@@ -98,7 +105,7 @@ export async function getChapter(
     const ch = bookFile.chapters.find((c) => c.chapter === chapter);
     if (ch && ch.verses?.length) {
       const chapterData: BibleChapter = {
-        book: bookFile.book || (language === 'en' ? book.name : book.nameEs),
+        book: bookFile.book || bookDisplayName(book, language),
         bookId,
         chapter,
         language,
@@ -119,7 +126,7 @@ export async function getChapter(
       if (res.ok) {
         const data = await res.json();
         const chapterData: BibleChapter = {
-          book: data.book || (language === 'en' ? book.name : book.nameEs),
+          book: data.book || bookDisplayName(book, language),
           bookId,
           chapter,
           language,
@@ -153,8 +160,13 @@ export async function getChapter(
   }
 
   // 4. Placeholder
-  const isEnglish = language === 'en';
-  const bookName = isEnglish ? book.name : book.nameEs;
+  const bookName = bookDisplayName(book, language);
+  const placeholderText =
+    language === 'en'
+      ? `Chapter ${chapter} of ${bookName} is not in the offline pack yet. Run: node scripts/build-bible.mjs`
+      : language === 'pt'
+        ? `O capítulo ${chapter} de ${bookName} ainda não está no pacote offline. Execute: node scripts/build-bible.mjs`
+        : `El capítulo ${chapter} de ${bookName} aún no está en el paquete offline. Ejecuta: node scripts/build-bible.mjs`;
   const placeholder: BibleChapter = {
     book: bookName,
     bookId,
@@ -164,9 +176,7 @@ export async function getChapter(
     verses: [
       {
         number: 1,
-        text: isEnglish
-          ? `Chapter ${chapter} of ${bookName} is not in the offline pack yet. Run: node scripts/build-bible.mjs`
-          : `El capítulo ${chapter} de ${bookName} aún no está en el paquete offline. Ejecuta: node scripts/build-bible.mjs`,
+        text: placeholderText,
       },
     ],
   };

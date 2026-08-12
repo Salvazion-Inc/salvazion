@@ -14,6 +14,7 @@ import {
 import { loadProfile } from '@/lib/store/profile';
 import { PILLAR_COLORS, type PillarId } from '@/lib/theme/pillars';
 import { textWithXLogo } from '@/components/ui/XLogo';
+import { pickLang } from '@/lib/i18n/locale';
 
 export type BlogFilter = 'all' | ArticlePillar;
 
@@ -49,7 +50,7 @@ export interface LandingBlogCopy {
 }
 
 interface Props {
-  lang: 'en' | 'es';
+  lang: 'en' | 'es' | 'pt';
   copy: LandingBlogCopy;
 }
 
@@ -70,7 +71,7 @@ function ArticleCard({
   readOnX,
 }: {
   article: XArticle;
-  lang: 'en' | 'es';
+  lang: 'en' | 'es' | 'pt';
   readOnX: string;
 }) {
   const accent = PILLAR_ACCENT[article.pillar];
@@ -92,7 +93,7 @@ function ArticleCard({
     >
       <meta itemProp="author" content="@salvazion_" />
       <meta itemProp="isPartOf" content="Salvazion Blog" />
-      <meta itemProp="inLanguage" content={lang === 'es' ? 'es' : 'en'} />
+      <meta itemProp="inLanguage" content={lang === 'pt' ? 'pt-BR' : lang === 'es' ? 'es' : 'en'} />
       {article.createdAt ? (
         <meta itemProp="datePublished" content={article.createdAt} />
       ) : null}
@@ -163,7 +164,7 @@ function ArticleCard({
   );
 }
 
-const FOCUS_LABELS: Record<'en' | 'es', Record<string, string>> = {
+const FOCUS_LABELS: Record<'en' | 'es' | 'pt', Record<string, string>> = {
   es: {
     fe: 'Fe',
     familia: 'Familia',
@@ -183,6 +184,16 @@ const FOCUS_LABELS: Record<'en' | 'es', Record<string, string>> = {
     oracion: 'Prayer',
     liderazgo: 'Leadership',
     perseverancia: 'Perseverance',
+  },
+  pt: {
+    fe: 'Fé',
+    familia: 'Família',
+    proposito: 'Propósito',
+    salud: 'Saúde',
+    libertad: 'Liberdade',
+    oracion: 'Oração',
+    liderazgo: 'Liderança',
+    perseverancia: 'Perseverança',
   },
 };
 
@@ -357,7 +368,11 @@ export default function LandingBlog({ lang, copy }: Props) {
         <div
           className="tabs-x max-w-xl mx-auto mb-2 border-[var(--border-soft)]"
           role="tablist"
-          aria-label={lang === 'es' ? 'Filtrar por pilar' : 'Filter by pillar'}
+          aria-label={pickLang(lang, {
+            es: 'Filtrar por pilar',
+            en: 'Filter by pillar',
+            pt: 'Filtrar por pilar',
+          })}
         >
           {FILTERS.map((key) => {
             const active = filter === key;
@@ -408,7 +423,7 @@ export default function LandingBlog({ lang, copy }: Props) {
             ) : null}
             <span className="text-[var(--sage)]/60">
               {' '}
-              · {lang === 'es' ? 'Desliza a los lados' : 'Swipe sideways'}
+              · {pickLang(lang, { es: 'Desliza a los lados', en: 'Swipe sideways', pt: 'Deslize para os lados' })}
             </span>
           </p>
           <div
@@ -456,7 +471,7 @@ export default function LandingBlog({ lang, copy }: Props) {
               type="button"
               onClick={() => scrollByDir(-1)}
               disabled={!canPrev}
-              aria-label={lang === 'es' ? 'Anterior' : 'Previous'}
+              aria-label={pickLang(lang, { es: 'Anterior', en: 'Previous', pt: 'Anterior' })}
               className="carousel-btn left-0 sm:left-1"
               style={{ top: '50%', transform: 'translateY(-50%)' }}
             >
@@ -466,7 +481,7 @@ export default function LandingBlog({ lang, copy }: Props) {
               type="button"
               onClick={() => scrollByDir(1)}
               disabled={!canNext}
-              aria-label={lang === 'es' ? 'Siguiente' : 'Next'}
+              aria-label={pickLang(lang, { es: 'Siguiente', en: 'Next', pt: 'Próximo' })}
               className="carousel-btn right-0 sm:right-1"
               style={{ top: '50%', transform: 'translateY(-50%)' }}
             >
@@ -478,11 +493,11 @@ export default function LandingBlog({ lang, copy }: Props) {
               className="carousel-track px-1"
               role="region"
               aria-roledescription="carousel"
-              aria-label={
-                lang === 'es'
-                  ? 'Carrusel de artículos Salvazion'
-                  : 'Salvazion articles carousel'
-              }
+              aria-label={pickLang(lang, {
+                es: 'Carrusel de artículos Salvazion',
+                en: 'Salvazion articles carousel',
+                pt: 'Carrossel de artigos Salvazion',
+              })}
               tabIndex={0}
               onKeyDown={(e) => {
                 if (e.key === 'ArrowLeft') {
@@ -512,11 +527,11 @@ export default function LandingBlog({ lang, copy }: Props) {
         */}
         <nav
           className="sr-only"
-          aria-label={
-            lang === 'es'
-              ? 'Índice completo de artículos Salvazion en X'
-              : 'Full index of Salvazion articles on X'
-          }
+          aria-label={pickLang(lang, {
+            es: 'Índice completo de artículos Salvazion en X',
+            en: 'Full index of Salvazion articles on X',
+            pt: 'Índice completo de artigos Salvazion no X',
+          })}
         >
           <ul>
             {X_ARTICLES.map((a) => {

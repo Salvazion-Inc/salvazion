@@ -21,12 +21,16 @@ export interface ValueJourneyStep {
   icon: string;
   titleEs: string;
   titleEn: string;
+  titlePt: string;
   bodyEs: string;
   bodyEn: string;
+  bodyPt: string;
   benefitEs: string;
   benefitEn: string;
+  benefitPt: string;
   ctaEs: string;
   ctaEn: string;
+  ctaPt: string;
 }
 
 export const VALUE_JOURNEY_STEPS: ValueJourneyStep[] = [
@@ -35,14 +39,19 @@ export const VALUE_JOURNEY_STEPS: ValueJourneyStep[] = [
     icon: '🦁',
     titleEs: 'Bienvenido a la Phalanx',
     titleEn: 'Welcome to the Phalanx',
+    titlePt: 'Bem-vindo à Phalanx',
     bodyEs:
       'Salvazion no es entretenimiento vacío. Es una app de virtud digital: fe, salud y libertad con disciplina real, al servicio de familias y de la Cultura Occidental Cristiana.',
     bodyEn:
       'Salvazion is not empty entertainment. It is a digital virtue app: faith, health and freedom with real discipline — for families and Western Christian Culture.',
+    bodyPt:
+      'A Salvazion não é entretenimento vazio. É um app de virtude digital: fé, saúde e liberdade com disciplina real, a serviço de famílias e da Cultura Ocidental Cristã.',
     benefitEs: 'Un sistema integral · tres pilares · un León que te empuja a la excelencia',
     benefitEn: 'One integral system · three pillars · a Lion that pushes you toward excellence',
+    benefitPt: 'Um sistema integral · três pilares · um Leão que te empurra à excelência',
     ctaEs: 'Ver propuestas de valor',
     ctaEn: 'See value propositions',
+    ctaPt: 'Ver propostas de valor',
   },
   {
     id: 'salvation',
@@ -50,14 +59,19 @@ export const VALUE_JOURNEY_STEPS: ValueJourneyStep[] = [
     icon: '✝',
     titleEs: 'Salvation — Alma despierta',
     titleEn: 'Salvation — Awakened soul',
+    titlePt: 'Salvation — Alma acordada',
     bodyEs:
       'Devocional diario personalizado, Biblia integrada (lectura, búsqueda y concordancia) y motivos de oración. La Palabra primero: no es un “mindfulness” sin cruz.',
     bodyEn:
       'Daily personalized devotional, integrated Bible (read, search, concordance) and prayer motives. The Word first — not cross-less mindfulness.',
+    bodyPt:
+      'Devocional diário personalizado, Bíblia integrada (leitura, busca e concordância) e motivos de oração. A Palavra primeiro: não é um “mindfulness” sem cruz.',
     benefitEs: 'Constancia espiritual medible · rachas · score Salvation',
     benefitEn: 'Measurable spiritual consistency · streaks · Salvation score',
+    benefitPt: 'Constância espiritual mensurável · sequências · score Salvation',
     ctaEs: 'Siguiente: Health',
     ctaEn: 'Next: Health',
+    ctaPt: 'Próximo: Health',
   },
   {
     id: 'health',
@@ -65,14 +79,19 @@ export const VALUE_JOURNEY_STEPS: ValueJourneyStep[] = [
     icon: '🌿',
     titleEs: 'Health — Templo en movimiento',
     titleEn: 'Health — Temple in motion',
+    titlePt: 'Health — Templo em movimento',
     bodyEs:
       'Sol, sueño, hidratación, deporte, sensores y wearables. El cuerpo es templo: BioConservadurismo práctico, no cultos de moda.',
     bodyEn:
       'Sun, sleep, hydration, sport, sensors and wearables. The body is a temple: practical BioConservatism, not fad cults.',
+    bodyPt:
+      'Sol, sono, hidratação, esporte, sensores e wearables. O corpo é templo: BioConservadorismo prático, não cultos da moda.',
     benefitEs: 'Hábitos de salud con score · biomarcadores · disciplina física',
     benefitEn: 'Health habits with score · biomarkers · physical discipline',
+    benefitPt: 'Hábitos de saúde com score · biomarcadores · disciplina física',
     ctaEs: 'Siguiente: Freedom',
     ctaEn: 'Next: Freedom',
+    ctaPt: 'Próximo: Freedom',
   },
   {
     id: 'freedom',
@@ -80,14 +99,19 @@ export const VALUE_JOURNEY_STEPS: ValueJourneyStep[] = [
     icon: '🦅',
     titleEs: 'Freedom — Mente y legado',
     titleEn: 'Freedom — Mind and legacy',
+    titlePt: 'Freedom — Mente e legado',
     bodyEs:
       'Aprende con artículos de @salvazion_ en X, conecta en la vida real y aporta a proyectos. Libertad = carácter + oficio + comunidad, no consumo pasivo.',
     bodyEn:
       'Learn with @salvazion_ X Articles, connect in real life and contribute to projects. Freedom = character + craft + community — not passive consumption.',
+    bodyPt:
+      'Aprenda com artigos de @salvazion_ no X, conecte na vida real e contribua em projetos. Liberdade = caráter + ofício + comunidade, não consumo passivo.',
     benefitEs: 'Biblioteca long-form · Phalanx · Freedom Score',
     benefitEn: 'Long-form library · Phalanx · Freedom Score',
+    benefitPt: 'Biblioteca long-form · Phalanx · Freedom Score',
     ctaEs: 'Siguiente: Phalanx',
     ctaEn: 'Next: Phalanx',
+    ctaPt: 'Próximo: Phalanx',
   },
   {
     id: 'phalanx',
@@ -95,14 +119,19 @@ export const VALUE_JOURNEY_STEPS: ValueJourneyStep[] = [
     icon: '🛡️',
     titleEs: 'Phalanx — Nadie pelea solo',
     titleEn: 'Phalanx — No one fights alone',
+    titlePt: 'Phalanx — Ninguém luta sozinho',
     bodyEs:
       'Invita familia, hermanos en la fe, amigos y colegas. La civilización se defiende en casa y en red: tu círculo es tu primera línea.',
     bodyEn:
       'Invite family, faith siblings, friends and colleagues. Civilization is defended at home and in network: your circle is your front line.',
+    bodyPt:
+      'Convide família, irmãos na fé, amigos e colegas. A civilização se defende em casa e em rede: seu círculo é a primeira linha.',
     benefitEs: 'Invitaciones · vínculos · crecimiento juntos',
     benefitEn: 'Invites · bonds · grow together',
+    benefitPt: 'Convites · vínculos · crescimento juntos',
     ctaEs: 'Siguiente: León Verde',
     ctaEn: 'Next: Green Lion',
+    ctaPt: 'Próximo: Leão Verde',
   },
   {
     id: 'lion',
@@ -110,14 +139,19 @@ export const VALUE_JOURNEY_STEPS: ValueJourneyStep[] = [
     icon: '🦁',
     titleEs: 'El León Verde — Coach de virtud',
     titleEn: 'The Green Lion — Virtue coach',
+    titlePt: 'O Leão Verde — Coach de virtude',
     bodyEs:
       'Tu coach de virtud y desarrollo integral. Te disciplina con firmeza y esperanza: no es un chatbot blando; es un llamado a ser Green Lion King.',
     bodyEn:
       'Your coach for virtue and integral growth. Firm and hopeful discipline — not a soft chatbot; a call to become a Green Lion King.',
+    bodyPt:
+      'Seu coach de virtude e desenvolvimento integral. Disciplina com firmeza e esperança: não é um chatbot mole; é um chamado a ser Green Lion King.',
     benefitEs: 'Guía diaria · voz · retos alineados a tus pilares',
     benefitEn: 'Daily guidance · voice · challenges aligned to your pillars',
+    benefitPt: 'Guia diário · voz · desafios alinhados aos seus pilares',
     ctaEs: 'Siguiente: Artículos',
     ctaEn: 'Next: Articles',
+    ctaPt: 'Próximo: Artigos',
   },
   {
     id: 'articles',
@@ -125,14 +159,19 @@ export const VALUE_JOURNEY_STEPS: ValueJourneyStep[] = [
     icon: '📰',
     titleEs: 'Artículos @salvazion_ en X',
     titleEn: '@salvazion_ Articles on X',
+    titlePt: 'Artigos @salvazion_ no X',
     bodyEs:
       'Long-form sobre fe, familia, libertad, tecnología y Cultura Occidental Cristiana. La app te muestra lo que aún no leíste, priorizado por tus intereses.',
     bodyEn:
       'Long-form on faith, family, freedom, technology and Western Christian Culture. The app shows what you have not read yet, ranked by your interests.',
+    bodyPt:
+      'Long-form sobre fé, família, liberdade, tecnologia e Cultura Ocidental Cristã. O app mostra o que você ainda não leu, priorizado pelos seus interesses.',
     benefitEs: 'Imagen + título · leer en X · Freedom al completar',
     benefitEn: 'Image + title · read on X · Freedom when completed',
+    benefitPt: 'Imagem + título · ler no X · Freedom ao completar',
     ctaEs: 'Siguiente: Insignias',
     ctaEn: 'Next: Badges',
+    ctaPt: 'Próximo: Insígnias',
   },
   {
     id: 'badges',
@@ -140,14 +179,19 @@ export const VALUE_JOURNEY_STEPS: ValueJourneyStep[] = [
     icon: '⭐',
     titleEs: 'Insignias de virtud',
     titleEn: 'Virtue badges',
+    titlePt: 'Insígnias de virtude',
     bodyEs:
       'No son trofeos vacíos de dopamina. Cada insignia marca constancia real: devocional, movimiento, conexiones, rachas y excelencia de la Phalanx.',
     bodyEn:
       'Not empty dopamine trophies. Each badge marks real consistency: devotionals, movement, connections, streaks and Phalanx excellence.',
+    bodyPt:
+      'Não são troféus vazios de dopamina. Cada insígnia marca constância real: devocional, movimento, conexões, sequências e excelência da Phalanx.',
     benefitEs: 'Memoria de decisiones fieles · progreso visible',
     benefitEn: 'Memory of faithful decisions · visible progress',
+    benefitPt: 'Memória de decisões fiéis · progresso visível',
     ctaEs: 'Siguiente: Empezar',
     ctaEn: 'Next: Begin',
+    ctaPt: 'Próximo: Começar',
   },
   {
     id: 'ready',
@@ -155,22 +199,28 @@ export const VALUE_JOURNEY_STEPS: ValueJourneyStep[] = [
     icon: '✓',
     titleEs: 'Make Salvation, Health and Freedom Great Again',
     titleEn: 'Make Salvation, Health and Freedom Great Again',
+    titlePt: 'Make Salvation, Health and Freedom Great Again',
     bodyEs:
       'Ya conoces la propuesta. Ahora toca vivirla: un pilar a la vez, un día a la vez, con tu Phalanx y el León a tu lado.',
     bodyEn:
       'You know the value. Now live it: one pillar at a time, one day at a time — with your Phalanx and the Lion beside you.',
+    bodyPt:
+      'Você já conhece a proposta. Agora é viver: um pilar de cada vez, um dia de cada vez, com a sua Phalanx e o Leão ao lado.',
     benefitEs: 'Dashboard · scores · agenda · swap $SALVAZION',
     benefitEn: 'Dashboard · scores · calendar · $SALVAZION swap',
+    benefitPt: 'Dashboard · scores · agenda · swap $SALVAZION',
     ctaEs: 'Entrar al Hub',
     ctaEn: 'Enter the Hub',
+    ctaPt: 'Entrar no Hub',
   },
 ];
 
-export function getValueStepCopy(step: ValueJourneyStep, lang: 'es' | 'en') {
-  return {
-    title: lang === 'en' ? step.titleEn : step.titleEs,
-    body: lang === 'en' ? step.bodyEn : step.bodyEs,
-    benefit: lang === 'en' ? step.benefitEn : step.benefitEs,
-    cta: lang === 'en' ? step.ctaEn : step.ctaEs,
-  };
+export function getValueStepCopy(step: ValueJourneyStep, lang: 'es' | 'en' | 'pt') {
+  if (lang === 'en') {
+    return { title: step.titleEn, body: step.bodyEn, benefit: step.benefitEn, cta: step.ctaEn };
+  }
+  if (lang === 'pt') {
+    return { title: step.titlePt, body: step.bodyPt, benefit: step.benefitPt, cta: step.ctaPt };
+  }
+  return { title: step.titleEs, body: step.bodyEs, benefit: step.benefitEs, cta: step.ctaEs };
 }

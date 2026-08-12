@@ -1,4 +1,5 @@
 import type { Language } from '@/lib/types';
+import { dictionaryPt } from '@/lib/i18n/dictionary-pt';
 
 /**
  * UI dictionary — Spanish (default) and English.
@@ -32,6 +33,7 @@ export const dictionary = {
       language: 'Idioma',
       spanish: 'Español',
       english: 'English',
+      portuguese: 'Português',
       chooseLanguage: 'Elige el idioma de la app',
       languageHint: 'Cambia el idioma en toda la aplicación.',
     },
@@ -343,6 +345,8 @@ export const dictionary = {
       searchPlaceholder: 'Busca palabras o refs (Juan 3:16)…',
       concordancePlaceholder: 'Palabra para concordancia…',
       rvNote: 'Reina Valera 1909 (dominio público).',
+      arcNote: 'Almeida Revista e Corrigida (ARC) · domínio público histórico.',
+      kjvNote: 'King James Version (public domain).',
       originalNote: 'AT hebreo (WLC) · NT griego (Textus Receptus). RTL en Antiguo Testamento.',
     },
     swap: {
@@ -1000,6 +1004,7 @@ export const dictionary = {
       language: 'Language',
       spanish: 'Español',
       english: 'English',
+      portuguese: 'Português',
       chooseLanguage: 'Choose app language',
       languageHint: 'Changes the language across the entire application.',
     },
@@ -1309,6 +1314,8 @@ export const dictionary = {
       searchPlaceholder: 'Search words or refs (John 3:16)…',
       concordancePlaceholder: 'Concordance word…',
       rvNote: 'Reina Valera 1909 (public domain).',
+      arcNote: 'Almeida Revista e Corrigida (ARC) — historic public-domain Almeida.',
+      kjvNote: 'King James Version (public domain).',
       originalNote: 'OT Hebrew (WLC) · NT Greek (Textus Receptus). RTL in Old Testament.',
     },
     swap: {
@@ -1938,6 +1945,7 @@ export const dictionary = {
       title: 'Devotional',
     },
   },
+  pt: dictionaryPt,
 } as const;
 
 export type Dictionary = (typeof dictionary)['es'];
@@ -1961,7 +1969,12 @@ export function translate(
     }
   }
   if (typeof node !== 'string') {
-    const fallbacks = lang === 'en' ? [dictionary.es] : [dictionary.en, dictionary.es];
+    const fallbacks =
+      lang === 'en'
+        ? [dictionary.es, dictionary.pt]
+        : lang === 'pt'
+          ? [dictionary.es, dictionary.en]
+          : [dictionary.en, dictionary.pt];
     for (const dict of fallbacks) {
       node = dict;
       let ok = true;

@@ -92,7 +92,7 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
 
   const clockLabel = useMemo(() => {
     try {
-      return now.toLocaleTimeString(lang === 'es' ? 'es' : 'en', {
+      return now.toLocaleTimeString(lang === 'pt' ? 'pt-BR' : lang === 'es' ? 'es' : 'en', {
         hour: '2-digit',
         minute: '2-digit',
       });
@@ -103,7 +103,7 @@ export default function DailyAgenda({ onScored, className = '' }: Props) {
 
   const dateLabel = useMemo(() => {
     try {
-      return now.toLocaleDateString(lang === 'es' ? 'es' : 'en', {
+      return now.toLocaleDateString(lang === 'pt' ? 'pt-BR' : lang === 'es' ? 'es' : 'en', {
         weekday: 'long',
         day: 'numeric',
         month: 'long',

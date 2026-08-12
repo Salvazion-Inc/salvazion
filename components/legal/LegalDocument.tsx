@@ -9,28 +9,35 @@ import { SUPPORT_EMAIL, SUPPORT_MAILTO } from '@/lib/config/site';
 import XLogo from '@/components/ui/XLogo';
 
 /**
- * Renders a bilingual legal document. English is principal; user can switch EN/ES.
+ * Renders a legal document. English is principal; user can switch EN/ES/PT.
  */
 export default function LegalDocument({
   docs,
   relatedHref,
   relatedLabelEn,
   relatedLabelEs,
+  relatedLabelPt,
 }: {
   docs: Record<Language, LegalDoc>;
   relatedHref: string;
   relatedLabelEn: string;
   relatedLabelEs: string;
+  relatedLabelPt?: string;
 }) {
   const { lang } = useI18n();
   const [docLang, setDocLang] = useState<Language>('en');
 
   useEffect(() => {
-    if (lang === 'en' || lang === 'es') setDocLang(lang);
+    if (lang === 'en' || lang === 'es' || lang === 'pt') setDocLang(lang);
   }, [lang]);
 
   const doc = docs[docLang] || docs.en;
-  const relatedLabel = docLang === 'es' ? relatedLabelEs : relatedLabelEn;
+  const relatedLabel =
+    docLang === 'es'
+      ? relatedLabelEs
+      : docLang === 'pt'
+        ? relatedLabelPt || relatedLabelEn
+        : relatedLabelEn;
 
   return (
     <LegalShell

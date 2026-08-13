@@ -554,17 +554,29 @@ html[data-text-scale="xxl"] nav.fixed span {
 }
 
 /**
- * Landing nav "Enter Salvazion" — web / tablet+ only (≥ sm).
- * Match English single-line height: never wrap (ES was 2 lines → taller).
- * Same outer box for EN/ES; mobile (< 640px) keeps component classes only.
+ * Landing nav "Enter Salvazion" — always one line (EN / ES / PT).
+ * PT (“Entrar na Salvazion”) is the longest label; box must fit it.
  */
+a.btn-primary.nav-enter-cta {
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: clip;
+  line-height: 1 !important;
+  height: 2.5rem;
+  min-height: 2.5rem;
+  max-height: 2.5rem;
+  padding-top: 0;
+  padding-bottom: 0;
+  box-sizing: border-box;
+}
+
 @media (min-width: 640px) {
   a.btn-primary.nav-enter-cta {
-    /* Wide enough for “Entrar a Salvazion” on one line at text-sm */
-    width: 14rem !important;
-    min-width: 14rem !important;
-    max-width: 14rem !important;
-    flex: 0 0 14rem !important;
+    /* Wide enough for “Entrar na Salvazion” on one line at text-sm */
+    width: 15.5rem !important;
+    min-width: 15.5rem !important;
+    max-width: 15.5rem !important;
+    flex: 0 0 15.5rem !important;
     height: 2.5rem !important;
     min-height: 2.5rem !important;
     max-height: 2.5rem !important;

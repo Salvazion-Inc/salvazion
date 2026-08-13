@@ -39,6 +39,7 @@ export interface WearableCatalogItem {
   brandId: WearableBrandId;
   name: string;
   nameEs: string;
+  namePt: string;
   category: WearableCategory;
   connectModes: WearableConnectMode[];
   /** Metrics this brand typically provides */
@@ -46,6 +47,7 @@ export interface WearableCatalogItem {
   icon: string;
   note?: string;
   noteEs?: string;
+  notePt?: string;
 }
 
 export type WearableMetricKey =

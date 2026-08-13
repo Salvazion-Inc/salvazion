@@ -15,6 +15,7 @@ import {
   type BodyPhotoView,
 } from '@/lib/health/body-composition';
 import PhotoSourcePicker from '@/components/health/PhotoSourcePicker';
+import { tx3 } from '@/lib/i18n/locale';
 
 type Props = {
   profile: Partial<UserProfile> | null;
@@ -22,18 +23,19 @@ type Props = {
   onAnalyzed?: () => void;
 };
 
-const VIEWS: { id: BodyPhotoView; es: string; en: string }[] = [
-  { id: 'front', es: 'Frontal', en: 'Front' },
-  { id: 'side', es: 'Lateral', en: 'Side' },
-  { id: 'back', es: 'Posterior', en: 'Back' },
+const VIEWS: { id: BodyPhotoView; es: string; en: string; pt: string }[] = [
+  { id: 'front', es: 'Frente', en: 'Front', pt: 'Frente' },
+  { id: 'back', es: 'Espalda', en: 'Back', pt: 'Costas' },
+  { id: 'right', es: 'Derecha', en: 'Right', pt: 'Direita' },
+  { id: 'left', es: 'Izquierda', en: 'Left', pt: 'Esquerda' },
 ];
 
 export default function BodyCompositionPanel({
   profile,
-  lang = 'es',
+  lang = 'en',
   onAnalyzed,
 }: Props) {
-  const es = lang !== 'en';
+  const tx = (en: string, es: string, pt: string) => tx3(lang, en, es, pt);
   const [sessions, setSessions] = useState<BodyCompositionSession[]>([]);
   const [photos, setPhotos] = useState<
     Partial<Record<BodyPhotoView, string>>
@@ -64,16 +66,18 @@ export default function BodyCompositionPanel({
       });
       setPhotos((p) => ({ ...p, [view]: dataUrl }));
     } catch {
-      setError(es ? 'No se pudo leer la imagen' : 'Could not read image');
+      setError(tx('Could not read image', 'No se pudo leer la imagen', 'Não foi possível ler a imagem'));
     }
   };
 
   const analyze = async () => {
-    if (!photos.front && !photos.side && !photos.back) {
+    if (!photos.front && !photos.back && !photos.right && !photos.left) {
       setError(
-        es
-          ? 'Sube al menos una foto (ideal: frontal, lateral y posterior).'
-          : 'Upload at least one photo (ideal: front, side, back).'
+        tx(
+          'Upload at least one photo (ideal: front, back, right and left).',
+          'Sube al menos una foto (ideal: frente, espalda, derecha e izquierda).',
+          'Envie pelo menos uma foto (ideal: frente, costas, direita e esquerda).'
+        )
       );
       return;
     }
@@ -91,7 +95,7 @@ export default function BodyCompositionPanel({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           mode: 'body',
-          lang: es ? 'es' : 'en',
+          lang,
           photos,
           heightCm: Number.isFinite(h) ? h : undefined,
           weightKg: Number.isFinite(w) ? w : undefined,
@@ -104,7 +108,7 @@ export default function BodyCompositionPanel({
         throw new Error(
           json.message ||
             json.error ||
-            (es ? 'Análisis fallido' : 'Analysis failed')
+            tx('Analysis failed', 'Análisis fallido', 'Análise falhou')
         );
       }
       const analysis = json.analysis as BodyMassBreakdown;
@@ -122,9 +126,7 @@ export default function BodyCompositionPanel({
       setError(
         e instanceof Error
           ? e.message
-          : es
-            ? 'Error al analizar'
-            : 'Analysis error'
+          : tx('Analysis error', 'Error al analizar', 'Erro ao analisar')
       );
     } finally {
       setBusy(false);
@@ -134,27 +136,27 @@ export default function BodyCompositionPanel({
   const massRows = (a: BodyMassBreakdown) =>
     [
       {
-        label: es ? 'Peso' : 'Weight',
+        label: tx('Weight', 'Peso', 'Peso'),
         value: a.weightKg != null ? `${a.weightKg} kg` : '—',
       },
       {
-        label: es ? 'Masa muscular' : 'Muscle mass',
+        label: tx('Muscle mass', 'Masa muscular', 'Massa muscular'),
         value: a.muscleMassKg != null ? `${a.muscleMassKg} kg` : '—',
       },
       {
-        label: es ? 'Masa ósea' : 'Bone mass',
+        label: tx('Bone mass', 'Masa ósea', 'Massa óssea'),
         value: a.boneMassKg != null ? `${a.boneMassKg} kg` : '—',
       },
       {
-        label: es ? 'Masa residual' : 'Residual mass',
+        label: tx('Residual mass', 'Masa residual', 'Massa residual'),
         value: a.residualMassKg != null ? `${a.residualMassKg} kg` : '—',
       },
       {
-        label: es ? 'Grasa / piel' : 'Fat / skin',
+        label: tx('Fat / skin', 'Grasa / piel', 'Gordura / pele'),
         value: a.skinFatMassKg != null ? `${a.skinFatMassKg} kg` : '—',
       },
       {
-        label: es ? '% grasa' : 'Body fat %',
+        label: tx('Body fat %', '% grasa', '% gordura'),
         value: a.bodyFatPercent != null ? `${a.bodyFatPercent}%` : '—',
       },
       {
@@ -167,26 +169,26 @@ export default function BodyCompositionPanel({
     <section className="mb-6">
       <h2 className="text-sm font-semibold text-[var(--sage)] mb-3 flex items-center gap-2">
         <span>◈</span>
-        {es
-          ? 'Cineantropometría por foto'
-          : 'Photo cineanthropometry'}
+        {tx('Photo cineanthropometry', 'Cineantropometría por foto', 'Cineantropometria por foto')}
       </h2>
 
       <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] space-y-3.5">
         <p className="text-[11px] text-[var(--sage)]/80 leading-relaxed">
-          {es
-            ? 'Sube fotos en traje de baño: frontal, lateral y posterior. Grok estima peso y fraccionamiento (muscular, ósea, residual, grasa/piel) y guarda el progreso en el tiempo. Estimación educativa — no es DEXA.'
-            : 'Upload swimsuit photos: front, side, and back. Grok estimates weight and mass fractionation (muscle, bone, residual, fat/skin) and tracks changes over time. Educational estimate — not DEXA.'}
+          {tx(
+            'Upload four swimsuit photos: front, back, right side and left side. Grok estimates weight and mass fractionation (muscle, bone, residual, fat/skin) and tracks changes over time. Educational estimate — not DEXA.',
+            'Sube cuatro fotos en traje de baño: frente, espalda, lado derecho e izquierdo. Grok estima peso y fraccionamiento (muscular, ósea, residual, grasa/piel) y guarda el progreso en el tiempo. Estimación educativa — no es DEXA.',
+            'Envie quatro fotos de maiô: frente, costas, lado direito e esquerdo. O Grok estima peso e fracionamento (muscular, óssea, residual, gordura/pele) e guarda o progresso no tempo. Estimativa educativa — não é DEXA.'
+          )}
         </p>
 
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2">
           {VIEWS.map((v) => (
             <div key={v.id} className="space-y-1">
               <p className="text-[10px] text-center text-[var(--sage)]">
-                {es ? v.es : v.en}
+                {tx(v.en, v.es, v.pt)}
               </p>
               <PhotoSourcePicker
-                lang={es ? 'es' : 'en'}
+                lang={lang}
                 facing="environment"
                 compact
                 hasPhoto={!!photos[v.id]}
@@ -201,29 +203,25 @@ export default function BodyCompositionPanel({
                 }
                 title={
                   photos[v.id]
-                    ? es
-                      ? `Cambiar foto · ${v.es}`
-                      : `Change photo · ${v.en}`
-                    : es
-                      ? `Añadir foto · ${v.es}`
-                      : `Add photo · ${v.en}`
+                    ? tx(`Change photo · ${v.en}`, `Cambiar foto · ${v.es}`, `Trocar foto · ${v.pt}`)
+                    : tx(`Add photo · ${v.en}`, `Añadir foto · ${v.es}`, `Adicionar foto · ${v.pt}`)
                 }
-                subtitle={
-                  es
-                    ? 'Cámara o galería / carpetas (como en perfil)'
-                    : 'Camera or gallery / folders (like profile)'
-                }
+                subtitle={tx(
+                  'Camera or gallery / folders (like profile)',
+                  'Cámara o galería / carpetas (como en perfil)',
+                  'Câmera ou galeria / pastas (como no perfil)'
+                )}
               >
                 {photos[v.id] ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={photos[v.id]}
-                    alt={es ? v.es : v.en}
+                    alt={tx(v.en, v.es, v.pt)}
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                 ) : (
                   <span className="text-[10px] text-[var(--sage)]/55 px-1.5 text-center leading-tight">
-                    {es ? 'Toca para foto' : 'Tap for photo'}
+                    {tx('Tap for photo', 'Toca para foto', 'Toque para foto')}
                   </span>
                 )}
               </PhotoSourcePicker>
@@ -233,7 +231,7 @@ export default function BodyCompositionPanel({
 
         <div className="grid grid-cols-2 gap-2">
           <label className="text-[10px] text-[var(--sage)] space-y-1">
-            {es ? 'Talla (cm)' : 'Height (cm)'}
+            {tx('Height (cm)', 'Talla (cm)', 'Altura (cm)')}
             <input
               type="number"
               inputMode="decimal"
@@ -244,7 +242,7 @@ export default function BodyCompositionPanel({
             />
           </label>
           <label className="text-[10px] text-[var(--sage)] space-y-1">
-            {es ? 'Peso (kg)' : 'Weight (kg)'}
+            {tx('Weight (kg)', 'Peso (kg)', 'Peso (kg)')}
             <input
               type="number"
               inputMode="decimal"
@@ -263,12 +261,12 @@ export default function BodyCompositionPanel({
           className="btn-primary w-full py-2.5 text-sm disabled:opacity-50"
         >
           {busy
-            ? es
-              ? 'Analizando con Grok…'
-              : 'Analyzing with Grok…'
-            : es
-              ? 'Analizar composición corporal'
-              : 'Analyze body composition'}
+            ? tx('Analyzing with Grok…', 'Analizando con Grok…', 'Analisando com Grok…')
+            : tx(
+                'Analyze body composition',
+                'Analizar composición corporal',
+                'Analisar composição corporal'
+              )}
         </button>
 
         {error && (
@@ -280,7 +278,7 @@ export default function BodyCompositionPanel({
         {(latest?.analysis || sessions[0]?.analysis) && (
           <div className="rounded-xl border border-[var(--border-soft)] bg-[#040404]/55 p-3 space-y-2.5">
             <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70">
-              {es ? 'Último análisis' : 'Latest analysis'}
+              {tx('Latest analysis', 'Último análisis', 'Última análise')}
               {(latest || sessions[0])?.model
                 ? ` · ${(latest || sessions[0])?.model}`
                 : ''}
@@ -307,7 +305,7 @@ export default function BodyCompositionPanel({
                   {a.somatotypeHint && (
                     <p className="text-[11px] text-[var(--off-white)]/85">
                       <span className="text-[var(--sage)]">
-                        {es ? 'Somatotipo: ' : 'Somatotype: '}
+                        {tx('Somatotype: ', 'Somatotipo: ', 'Somatotipo: ')}
                       </span>
                       {a.somatotypeHint}
                     </p>
@@ -323,7 +321,7 @@ export default function BodyCompositionPanel({
                     </p>
                   )}
                   <p className="text-[10px] text-[var(--sage)]/60">
-                    {es ? 'Confianza' : 'Confidence'}: {a.confidence}
+                    {tx('Confidence', 'Confianza', 'Confiança')}: {a.confidence}
                   </p>
                 </>
               );
@@ -334,7 +332,7 @@ export default function BodyCompositionPanel({
         {progress.length > 1 && (
           <div className="space-y-2">
             <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70">
-              {es ? 'Progreso en el tiempo' : 'Progress over time'}
+              {tx('Progress over time', 'Progreso en el tiempo', 'Progresso no tempo')}
             </p>
             <div className="flex items-end gap-1 h-20 px-0.5">
               {progress.slice(-12).map((p, i) => {
@@ -364,9 +362,11 @@ export default function BodyCompositionPanel({
               })}
             </div>
             <p className="text-[10px] text-[var(--sage)]/65">
-              {es
-                ? 'Barras = peso estimado por sesión de fotos.'
-                : 'Bars = estimated weight per photo session.'}
+              {tx(
+                'Bars = estimated weight per photo session.',
+                'Barras = peso estimado por sesión de fotos.',
+                'Barras = peso estimado por sessão de fotos.'
+              )}
             </p>
           </div>
         )}
@@ -374,7 +374,7 @@ export default function BodyCompositionPanel({
         {sessions.length > 0 && (
           <div className="space-y-1.5 pt-1 border-t border-[var(--border-soft)]">
             <p className="text-[10px] text-[var(--sage)]/70">
-              {es ? 'Historial' : 'History'} ({sessions.length})
+              {tx('History', 'Historial', 'Histórico')} ({sessions.length})
             </p>
             <ul className="space-y-1 max-h-36 overflow-y-auto">
               {sessions.slice(0, 8).map((s) => (

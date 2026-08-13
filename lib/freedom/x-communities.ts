@@ -10,6 +10,7 @@ export type XCommunity = {
   /** Short bilingual blurbs */
   blurbEn: string;
   blurbEs: string;
+  blurbPt: string;
   /** Display handle / brand line */
   brand: string;
   accent: string;
@@ -26,6 +27,8 @@ export const X_COMMUNITIES: XCommunity[] = [
       'Join the Green Lion Kings on X: faith, family, Western Christian culture, BioConservatism and Freedom. Connect with the Salvazion tribe.',
     blurbEs:
       'Únete a Green Lion Kings en X: fe, familia, cultura cristiano-occidental, BioConservadurismo y Freedom. Conecta con la tribu Salvazion.',
+    blurbPt:
+      'Entre nos Green Lion Kings no X: fé, família, cultura cristã ocidental, BioConservadorismo e Freedom. Conecte-se com a tribo Salvazion.',
   },
 ];
 

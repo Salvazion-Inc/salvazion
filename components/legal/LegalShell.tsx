@@ -12,25 +12,28 @@ const UI = {
     legal: 'Legal',
     terms: 'Terms',
     privacy: 'Privacy',
-    enter: 'Sign in',
+    enter: 'Enter Salvazion',
     updated: 'Last updated',
     language: 'Language',
+    rights: '© 2026 Salvazion, Inc. All rights reserved.',
   },
   es: {
     legal: 'Legal',
     terms: 'Términos',
     privacy: 'Privacidad',
-    enter: 'Entrar',
+    enter: 'Entrar a Salvazion',
     updated: 'Última actualización',
     language: 'Idioma',
+    rights: '© 2026 Salvazion, Inc. Todos los derechos reservados.',
   },
   pt: {
     legal: 'Legal',
     terms: 'Termos',
     privacy: 'Privacidade',
-    enter: 'Entrar',
+    enter: 'Entrar na Salvazion',
     updated: 'Última atualização',
     language: 'Idioma',
+    rights: '© 2026 Salvazion, Inc. Todos os direitos reservados.',
   },
 } as const;
 
@@ -59,10 +62,13 @@ export default function LegalShell({
 
   return (
     <div className="marketing-shell text-[var(--off-white)]">
-      <header className="glass-strong border-b border-[var(--border-soft)]/80 sticky top-0 z-40 px-5 py-3.5">
-        <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
-          <Link href="/" className="flex items-center gap-2.5 min-w-0 rounded-full">
-            <div className="w-9 h-9 rounded-full border border-[var(--border-strong)] overflow-hidden lion-glow bg-[var(--true-black)] shrink-0">
+      <header className="glass-strong border-b border-[var(--border-soft)]/80 sticky top-0 z-40">
+        <div className="max-w-6xl mx-auto px-4 sm:px-5 py-3 sm:py-3.5 flex items-center justify-between gap-3">
+          <Link
+            href="/"
+            className="flex items-center gap-2.5 min-w-0 rounded-full focus-visible:outline-none"
+          >
+            <div className="w-9 h-9 rounded-full border border-[var(--border-strong)] flex items-center justify-center lion-glow overflow-hidden bg-[#040404] shrink-0">
               <Image
                 src="/logo-icon.png"
                 alt="Salvazion"
@@ -71,24 +77,21 @@ export default function LegalShell({
                 className="object-cover"
               />
             </div>
-            <span className="font-brand text-sm text-[var(--accent)] truncate">
+            <span className="font-brand text-lg text-[var(--accent)] neon-text hidden sm:inline">
               SALVAZION
             </span>
           </Link>
-          <nav className="flex items-center gap-2 sm:gap-3 text-xs text-[var(--sage)] shrink-0">
+          <nav className="flex items-center gap-2 sm:gap-3 shrink-0" aria-label={ui.legal}>
             <LanguageFlagSwitch
               value={docLang}
               onChange={switchLang}
               ariaLabel={ui.language}
               size="md"
             />
-            <Link href="/terms" className="hover:text-[var(--accent)] transition-colors">
-              {ui.terms}
-            </Link>
-            <Link href="/privacy" className="hover:text-[var(--accent)] transition-colors">
-              {ui.privacy}
-            </Link>
-            <Link href="/auth/login" className="hover:text-[var(--accent)]">
+            <Link
+              href="/auth/login"
+              className="btn-primary nav-enter-cta !w-[11.75rem] shrink-0 !px-2 sm:!px-4 !min-h-10 !text-[11px] sm:!text-sm !whitespace-nowrap text-center leading-none"
+            >
               {ui.enter}
             </Link>
           </nav>
@@ -111,7 +114,7 @@ export default function LegalShell({
       </main>
 
       <footer className="border-t border-[var(--border-soft)] px-5 py-6 text-center text-[11px] text-[var(--sage)]/80">
-        <p>© 2026 Salvazion Inc. All rights reserved.</p>
+        <p>{ui.rights}</p>
         <p className="mt-2 flex items-center justify-center gap-4">
           <Link href="/terms" className="hover:text-[var(--accent)]">
             {ui.terms}

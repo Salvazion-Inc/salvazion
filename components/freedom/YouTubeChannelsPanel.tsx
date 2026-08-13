@@ -79,7 +79,8 @@ export default function YouTubeChannelsPanel({
   onScored,
 }: Props) {
   const { lang } = useI18n();
-  const es = lang !== 'en';
+  const tx = (en: string, es: string, pt: string) =>
+    lang === 'pt' ? pt : lang === 'es' ? es : en;
   const [opened, setOpened] = useState<Set<string>>(() => new Set());
   const pts = getFreedomPoints('learn_article_video');
 
@@ -95,14 +96,16 @@ export default function YouTubeChannelsPanel({
   return (
     <section
       className={`space-y-2 ${className}`}
-      aria-label={es ? 'Canales de YouTube' : 'YouTube channels'}
+      aria-label={tx('YouTube channels', 'Canales de YouTube', 'Canais do YouTube')}
     >
       <div className="px-0.5">
         <h2 className="text-sm font-semibold text-[var(--sage)]">YouTube</h2>
         <p className="text-[10px] text-[var(--sage)]/70 mt-0.5">
-          {es
-            ? `Canales oficiales · +${pts} Freedom la 1ª vez al día`
-            : `Official channels · +${pts} Freedom once per day`}
+          {tx(
+            `Official channels · +${pts} Freedom once per day`,
+            `Canales oficiales · +${pts} Freedom la 1ª vez al día`,
+            `Canais oficiais · +${pts} Freedom na 1ª vez do dia`
+          )}
         </p>
       </div>
 
@@ -143,12 +146,8 @@ export default function YouTubeChannelsPanel({
                   }}
                 >
                   {done
-                    ? es
-                      ? '✓ Abierto'
-                      : '✓ Opened'
-                    : es
-                      ? `Abrir · +${pts}`
-                      : `Open · +${pts}`}
+                    ? tx('✓ Opened', '✓ Abierto', '✓ Aberto')
+                    : tx(`Open · +${pts}`, `Abrir · +${pts}`, `Abrir · +${pts}`)}
                 </a>
               </div>
             </article>

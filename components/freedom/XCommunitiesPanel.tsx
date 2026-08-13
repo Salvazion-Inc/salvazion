@@ -9,6 +9,7 @@ import { logAction } from '@/lib/scoring/engine';
 import { getFreedomPoints } from '@/lib/freedom/engine';
 import { useI18n } from '@/components/I18nProvider';
 import XLogo, { textWithXLogo } from '@/components/ui/XLogo';
+import { tx3 } from '@/lib/i18n/locale';
 
 type Props = {
   className?: string;
@@ -23,7 +24,7 @@ export default function XCommunitiesPanel({
   onScored,
 }: Props) {
   const { lang } = useI18n();
-  const es = lang !== 'en';
+  const tx = (en: string, es: string, pt: string) => tx3(lang, en, es, pt);
   const [joined, setJoined] = useState<Set<string>>(() => new Set());
 
   const markConnect = (c: XCommunity) => {
@@ -38,25 +39,31 @@ export default function XCommunitiesPanel({
   return (
     <section
       className={`space-y-2.5 ${className}`}
-      aria-label={es ? 'Comunidades en X' : 'X Communities'}
+      aria-label={tx('X Communities', 'Comunidades en X', 'Comunidades no X')}
     >
       <div className="px-0.5">
         <h2 className="text-sm font-semibold text-[var(--sage)] inline-flex items-center gap-1.5">
-          {es ? (
+          {lang === 'en' ? (
             <>
-              Comunidad en <XLogo className="w-3.5 h-3.5" />
+              <XLogo className="w-3.5 h-3.5" /> Community
+            </>
+          ) : lang === 'pt' ? (
+            <>
+              Comunidade no <XLogo className="w-3.5 h-3.5" />
             </>
           ) : (
             <>
-              <XLogo className="w-3.5 h-3.5" /> Community
+              Comunidad en <XLogo className="w-3.5 h-3.5" />
             </>
           )}
         </h2>
         <p className="text-[10px] text-[var(--sage)]/70 mt-0.5 leading-relaxed">
           {textWithXLogo(
-            es
-              ? 'Conecta con la tribu Salvazion en X · Green Lion Kings'
-              : 'Connect with the Salvazion tribe on X · Green Lion Kings'
+            tx(
+              'Connect with the Salvazion tribe on X · Green Lion Kings',
+              'Conecta con la tribu Salvazion en X · Green Lion Kings',
+              'Conecte-se com a tribo Salvazion no X · Green Lion Kings'
+            )
           )}
         </p>
       </div>
@@ -64,7 +71,7 @@ export default function XCommunitiesPanel({
       <div className="space-y-3">
         {X_COMMUNITIES.map((c) => {
           const done = joined.has(c.id);
-          const blurb = es ? c.blurbEs : c.blurbEn;
+          const blurb = tx(c.blurbEn, c.blurbEs, c.blurbPt);
           return (
             <article
               key={c.id}
@@ -115,13 +122,11 @@ export default function XCommunitiesPanel({
                 >
                   {done ? (
                     <>
-                      {es ? 'Abrir en' : 'Open on'}{' '}
+                      {tx('Open on', 'Abrir en', 'Abrir no')}{' '}
                       <XLogo className="w-3.5 h-3.5 shrink-0" />
                     </>
-                  ) : es ? (
-                    `Unirme · +${pts}`
                   ) : (
-                    `Join · +${pts}`
+                    tx(`Join · +${pts}`, `Unirme · +${pts}`, `Entrar · +${pts}`)
                   )}
                 </a>
               </div>

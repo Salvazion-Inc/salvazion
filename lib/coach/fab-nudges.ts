@@ -6,6 +6,7 @@
 
 import type { UserProfile } from '@/lib/types';
 import type { ComputedScores, Pillar } from '@/lib/scoring/types';
+import { tx3 } from '@/lib/i18n/locale';
 
 export type FabNudgeTone = 'motivate' | 'nudge' | 'celebrate' | 'focus' | 'premium';
 
@@ -38,15 +39,15 @@ const HREF = {
   coach: '/hub/coach',
 } as const;
 
-const FOCUS_LABEL: Record<string, { es: string; en: string }> = {
-  fe: { es: 'fe', en: 'faith' },
-  familia: { es: 'familia', en: 'family' },
-  proposito: { es: 'propósito', en: 'purpose' },
-  salud: { es: 'salud', en: 'health' },
-  libertad: { es: 'libertad', en: 'freedom' },
-  oracion: { es: 'oración', en: 'prayer' },
-  liderazgo: { es: 'liderazgo', en: 'leadership' },
-  perseverancia: { es: 'perseverancia', en: 'perseverance' },
+const FOCUS_LABEL: Record<string, { es: string; en: string; pt: string }> = {
+  fe: { es: 'fe', en: 'faith', pt: 'fé' },
+  familia: { es: 'familia', en: 'family', pt: 'família' },
+  proposito: { es: 'propósito', en: 'purpose', pt: 'propósito' },
+  salud: { es: 'salud', en: 'health', pt: 'saúde' },
+  libertad: { es: 'libertad', en: 'freedom', pt: 'liberdade' },
+  oracion: { es: 'oración', en: 'prayer', pt: 'oração' },
+  liderazgo: { es: 'liderazgo', en: 'leadership', pt: 'liderança' },
+  perseverancia: { es: 'perseverancia', en: 'perseverance', pt: 'perseverança' },
 };
 
 function firstName(profile: Partial<UserProfile> | null | undefined, lang: Lang): string {
@@ -67,10 +68,10 @@ function pillarHref(p: Pillar): string {
   return HREF.freedomLearn;
 }
 
-function pillarCta(p: Pillar, es: boolean): string {
-  if (p === 'salvation') return es ? 'Abrir Devocional' : 'Open Devotional';
-  if (p === 'health') return es ? 'Ir a Health' : 'Go to Health';
-  return es ? 'Abrir Freedom' : 'Open Freedom';
+function pillarCta(p: Pillar, lang: Lang): string {
+  if (p === 'salvation') return tx3(lang, 'Open Devotional', 'Abrir Devocional', 'Abrir Devocional');
+  if (p === 'health') return tx3(lang, 'Go to Health', 'Ir a Health', 'Ir a Health');
+  return tx3(lang, 'Open Freedom', 'Abrir Freedom', 'Abrir Freedom');
 }
 
 function hourBucket(d = new Date()): 'morning' | 'afternoon' | 'evening' | 'night' {
@@ -94,7 +95,7 @@ export function buildFabNudges(
   lang: Lang,
   isPremium: boolean
 ): FabNudge[] {
-  const es = lang === 'es';
+  const tx = (en: string, es: string, pt: string) => tx3(lang, en, es, pt);
   const name = firstName(profile, lang);
   const out: FabNudge[] = [];
   const push = (n: FabNudge) => {
@@ -138,9 +139,7 @@ export function buildFabNudges(
   const focusKey = focus[0];
   const focusLabel =
     focusKey && FOCUS_LABEL[focusKey]
-      ? es
-        ? FOCUS_LABEL[focusKey].es
-        : FOCUS_LABEL[focusKey].en
+      ? tx(FOCUS_LABEL[focusKey].en, FOCUS_LABEL[focusKey].es, FOCUS_LABEL[focusKey].pt)
       : null;
 
   const bucket = hourBucket();
@@ -156,44 +155,52 @@ export function buildFabNudges(
     push({
       id: 'tod-morning',
       tone: 'motivate',
-      text: es
-        ? `${name}, un día firme empieza con Dios. ¿Devocional?`
-        : `${name}, a strong day starts with God. Devotional?`,
+      text: tx(
+        `${name}, a strong day starts with God. Devotional?`,
+        `${name}, un día firme empieza con Dios. ¿Devocional?`,
+        `${name}, um dia firme começa com Deus. Devocional?`
+      ),
       pillar: 'salvation',
       href: HREF.devotional,
-      cta: es ? 'Hacer Devocional' : 'Do Devotional',
+      cta: tx('Do Devotional', 'Hacer Devocional', 'Fazer Devocional'),
     });
   } else if (bucket === 'afternoon') {
     push({
       id: 'tod-afternoon',
       tone: 'nudge',
-      text: es
-        ? `${name}, mediodía: mueve el cuerpo o rehidrátate.`
-        : `${name}, midday: move your body or rehydrate.`,
+      text: tx(
+        `${name}, midday: move your body or rehydrate.`,
+        `${name}, mediodía: mueve el cuerpo o rehidrátate.`,
+        `${name}, meio-dia: mova o corpo ou rehydrate.`
+      ),
       pillar: 'health',
       href: HREF.health,
-      cta: es ? 'Abrir Health' : 'Open Health',
+      cta: tx('Open Health', 'Abrir Health', 'Abrir Health'),
     });
   } else if (bucket === 'evening') {
     push({
       id: 'tod-evening',
       tone: 'motivate',
-      text: es
-        ? `${name}, cierra el día con constancia, no con prisa.`
-        : `${name}, close the day with consistency, not rush.`,
+      text: tx(
+        `${name}, close the day with consistency, not rush.`,
+        `${name}, cierra el día con constancia, no con prisa.`,
+        `${name}, feche o dia com constância, não com pressa.`
+      ),
       href: HREF.calendar,
-      cta: es ? 'Ver agenda' : 'Open agenda',
+      cta: tx('Open agenda', 'Ver agenda', 'Ver agenda'),
     });
   } else {
     push({
       id: 'tod-night',
       tone: 'motivate',
-      text: es
-        ? `${name}, el descanso también es disciplina. Duerme bien.`
-        : `${name}, rest is discipline too. Sleep well.`,
+      text: tx(
+        `${name}, rest is discipline too. Sleep well.`,
+        `${name}, el descanso también es disciplina. Duerme bien.`,
+        `${name}, o descanso também é disciplina. Durma bem.`
+      ),
       pillar: 'health',
       href: HREF.calendar,
-      cta: es ? 'Planificar sueño' : 'Plan sleep',
+      cta: tx('Plan sleep', 'Planificar sueño', 'Planejar sono'),
     });
   }
 
@@ -203,34 +210,40 @@ export function buildFabNudges(
       push({
         id: 'score-high',
         tone: 'celebrate',
-        text: es
-          ? `¡${name}! Score ${global}. El León te ve firme hoy.`
-          : `${name}! Score ${global}. The Lion sees you steady today.`,
+        text: tx(
+          `${name}! Score ${global}. The Lion sees you steady today.`,
+          `¡${name}! Score ${global}. El León te ve firme hoy.`,
+          `${name}! Score ${global}. O Leão te vê firme hoje.`
+        ),
         pillar: 'global',
         href: HREF.badges,
-        cta: es ? 'Ver insignias' : 'See badges',
+        cta: tx('See badges', 'Ver insignias', 'Ver insígnias'),
       });
     } else if (global < 35) {
       push({
         id: 'score-low',
         tone: 'nudge',
-        text: es
-          ? `${name}, score ${global}. Un paso pequeño hoy basta.`
-          : `${name}, score ${global}. One small step today is enough.`,
+        text: tx(
+          `${name}, score ${global}. One small step today is enough.`,
+          `${name}, score ${global}. Un paso pequeño hoy basta.`,
+          `${name}, score ${global}. Um passo pequeno hoje basta.`
+        ),
         pillar: 'global',
         href: HREF.dashboard,
-        cta: es ? 'Ir al Hub' : 'Go to Hub',
+        cta: tx('Go to Hub', 'Ir al Hub', 'Ir ao Hub'),
       });
     } else {
       push({
         id: 'score-mid',
         tone: 'motivate',
-        text: es
-          ? `Score ${global}. Vas en camino, ${name}. No aflojes.`
-          : `Score ${global}. You're on the way, ${name}. Keep going.`,
+        text: tx(
+          `Score ${global}. You're on the way, ${name}. Keep going.`,
+          `Score ${global}. Vas en camino, ${name}. No aflojes.`,
+          `Score ${global}. Você está no caminho, ${name}. Não afrouxe.`
+        ),
         pillar: 'global',
         href: HREF.dashboard,
-        cta: es ? 'Ver scores' : 'See scores',
+        cta: tx('See scores', 'Ver scores', 'Ver scores'),
       });
     }
   }
@@ -240,12 +253,14 @@ export function buildFabNudges(
     push({
       id: 'weak-pillar',
       tone: 'nudge',
-      text: es
-        ? `${p} en ${Math.round(weakest.value)}. Es tu oportunidad de crecer.`
-        : `${p} at ${Math.round(weakest.value)}. Your chance to grow.`,
+      text: tx(
+        `${p} at ${Math.round(weakest.value)}. Your chance to grow.`,
+        `${p} en ${Math.round(weakest.value)}. Es tu oportunidad de crecer.`,
+        `${p} em ${Math.round(weakest.value)}. É a sua chance de crescer.`
+      ),
       pillar: weakest.key,
       href: pillarHref(weakest.key),
-      cta: pillarCta(weakest.key, es),
+      cta: pillarCta(weakest.key, lang),
     });
   }
 
@@ -254,12 +269,14 @@ export function buildFabNudges(
     push({
       id: 'streak-strong',
       tone: 'celebrate',
-      text: es
-        ? `Racha ${p}: ${strongest.streak} días. ¡Protégela, ${name}!`
-        : `${p} streak: ${strongest.streak} days. Guard it, ${name}!`,
+      text: tx(
+        `${p} streak: ${strongest.streak} days. Guard it, ${name}!`,
+        `Racha ${p}: ${strongest.streak} días. ¡Protégela, ${name}!`,
+        `Sequência ${p}: ${strongest.streak} dias. Proteja-a, ${name}!`
+      ),
       pillar: strongest.key,
       href: pillarHref(strongest.key),
-      cta: es ? 'Seguir la racha' : 'Keep the streak',
+      cta: tx('Keep the streak', 'Seguir la racha', 'Seguir a sequência'),
     });
   }
 
@@ -268,113 +285,129 @@ export function buildFabNudges(
     push({
       id: 'act-devo',
       tone: 'nudge',
-      text: es
-        ? `${name}, el León te espera en el Devocional de hoy.`
-        : `${name}, the Lion waits in today's Devotional.`,
+      text: tx(
+        `${name}, the Lion waits in today's Devotional.`,
+        `${name}, el León te espera en el Devocional de hoy.`,
+        `${name}, o Leão te espera no Devocional de hoje.`
+      ),
       pillar: 'salvation',
       href: HREF.devotional,
-      cta: es ? 'Hacer Devocional' : 'Do Devotional',
+      cta: tx('Do Devotional', 'Hacer Devocional', 'Fazer Devocional'),
     });
   }
   if (!didBible && !didDevotional) {
     push({
       id: 'act-bible',
       tone: 'focus',
-      text: es
-        ? `Un capítulo de la Biblia alinea el día. ¿Leemos?`
-        : `One Bible chapter aligns the day. Shall we read?`,
+      text: tx(
+        `One Bible chapter aligns the day. Shall we read?`,
+        `Un capítulo de la Biblia alinea el día. ¿Leemos?`,
+        `Um capítulo da Bíblia alinha o dia. Vamos ler?`
+      ),
       pillar: 'salvation',
       href: HREF.bible,
-      cta: es ? 'Abrir Biblia' : 'Open Bible',
+      cta: tx('Open Bible', 'Abrir Biblia', 'Abrir Bíblia'),
     });
   }
   if (!didPray) {
     push({
       id: 'act-pray',
       tone: 'focus',
-      text: es
-        ? `5 minutos de oración. Fe primero, ${name}.`
-        : `5 minutes of prayer. Faith first, ${name}.`,
+      text: tx(
+        `5 minutes of prayer. Faith first, ${name}.`,
+        `5 minutos de oración. Fe primero, ${name}.`,
+        `5 minutos de oração. Fé primeiro, ${name}.`
+      ),
       pillar: 'salvation',
       href: HREF.devotional,
-      cta: es ? 'Orar ahora' : 'Pray now',
+      cta: tx('Pray now', 'Orar ahora', 'Orar agora'),
     });
   }
   if (!didMovement) {
     push({
       id: 'act-move',
       tone: 'nudge',
-      text: es
-        ? `Tu cuerpo es templo. 15 min de movimiento hoy.`
-        : `Your body is a temple. 15 min of movement today.`,
+      text: tx(
+        `Your body is a temple. 15 min of movement today.`,
+        `Tu cuerpo es templo. 15 min de movimiento hoy.`,
+        `O seu corpo é templo. 15 min de movimento hoje.`
+      ),
       pillar: 'health',
       href: HREF.health,
-      cta: es ? 'Registrar movimiento' : 'Log movement',
+      cta: tx('Log movement', 'Registrar movimiento', 'Registrar movimento'),
     });
   }
   if (!didHydration) {
     push({
       id: 'act-hydro',
       tone: 'nudge',
-      text: es
-        ? `Hidratación: un vaso ahora cuenta para Health.`
-        : `Hydration: one glass now counts for Health.`,
+      text: tx(
+        `Hydration: one glass now counts for Health.`,
+        `Hidratación: un vaso ahora cuenta para Health.`,
+        `Hidratação: um copo agora conta para Health.`
+      ),
       pillar: 'health',
       href: HREF.health,
-      cta: es ? 'Ir a hidratación' : 'Log hydration',
+      cta: tx('Log hydration', 'Ir a hidratación', 'Ir à hidratação'),
     });
   }
   if (!didLearn) {
     push({
       id: 'act-learn',
       tone: 'nudge',
-      text: es
-        ? `Freedom crece con un artículo o video corto.`
-        : `Freedom grows with one short article or video.`,
+      text: tx(
+        `Freedom grows with one short article or video.`,
+        `Freedom crece con un artículo o video corto.`,
+        `Freedom cresce com um artigo ou vídeo curto.`
+      ),
       pillar: 'freedom',
       href: HREF.freedomLearn,
-      cta: es ? 'Leer artículos' : 'Read articles',
+      cta: tx('Read articles', 'Leer artículos', 'Ler artigos'),
     });
   }
   if (!didConnect && family) {
     push({
       id: 'act-family',
       tone: 'focus',
-      text: es
-        ? `${name}, conecta con tu familia o Phalanx hoy.`
-        : `${name}, connect with family or Phalanx today.`,
+      text: tx(
+        `${name}, connect with family or Phalanx today.`,
+        `${name}, conecta con tu familia o Phalanx hoy.`,
+        `${name}, conecte-se com a família ou a Phalanx hoje.`
+      ),
       pillar: 'freedom',
       href: HREF.freedomConnect,
-      cta: es ? 'Conectar' : 'Connect',
+      cta: tx('Connect', 'Conectar', 'Conectar'),
     });
   }
 
   // —— Focus / goals ——
   if (focusLabel) {
     let href: string = HREF.dashboard;
-    let cta = es ? 'Actuar ahora' : 'Act now';
+    let cta = tx('Act now', 'Actuar ahora', 'Agir agora');
     if (focusKey === 'fe' || focusKey === 'oracion') {
       href = HREF.devotional;
-      cta = es ? 'Devocional' : 'Devotional';
+      cta = tx('Devotional', 'Devocional', 'Devocional');
     } else if (focusKey === 'salud') {
       href = HREF.health;
-      cta = es ? 'Abrir Health' : 'Open Health';
+      cta = tx('Open Health', 'Abrir Health', 'Abrir Health');
     } else if (focusKey === 'libertad' || focusKey === 'proposito' || focusKey === 'liderazgo') {
       href = HREF.freedomLearn;
-      cta = es ? 'Abrir Freedom' : 'Open Freedom';
+      cta = tx('Open Freedom', 'Abrir Freedom', 'Abrir Freedom');
     } else if (focusKey === 'familia') {
       href = HREF.freedomConnect;
-      cta = es ? 'Conectar' : 'Connect';
+      cta = tx('Connect', 'Conectar', 'Conectar');
     } else if (focusKey === 'perseverancia') {
       href = HREF.calendar;
-      cta = es ? 'Ver agenda' : 'Open agenda';
+      cta = tx('Open agenda', 'Ver agenda', 'Ver agenda');
     }
     push({
       id: 'focus-main',
       tone: 'focus',
-      text: es
-        ? `Tu foco es ${focusLabel}. Un acto concreto hoy.`
-        : `Your focus is ${focusLabel}. One concrete act today.`,
+      text: tx(
+        `Your focus is ${focusLabel}. One concrete act today.`,
+        `Tu foco es ${focusLabel}. Un acto concreto hoy.`,
+        `O seu foco é ${focusLabel}. Um ato concreto hoje.`
+      ),
       href,
       cta,
     });
@@ -383,36 +416,42 @@ export function buildFabNudges(
     push({
       id: 'focus-freedom',
       tone: 'motivate',
-      text: es
-        ? `Libertad con virtud: aprende y aporta, no solo consumas.`
-        : `Freedom with virtue: learn and contribute, don't only consume.`,
+      text: tx(
+        `Freedom with virtue: learn and contribute, don't only consume.`,
+        `Libertad con virtud: aprende y aporta, no solo consumas.`,
+        `Liberdade com virtude: aprenda e contribua, não só consuma.`
+      ),
       pillar: 'freedom',
       href: HREF.freedomContribute,
-      cta: es ? 'Aportar' : 'Contribute',
+      cta: tx('Contribute', 'Aportar', 'Contribuir'),
     });
   }
   if (focus.includes('salud')) {
     push({
       id: 'focus-health',
       tone: 'motivate',
-      text: es
-        ? `Salud es disciplina diaria. Sueño, agua, movimiento.`
-        : `Health is daily discipline. Sleep, water, movement.`,
+      text: tx(
+        `Health is daily discipline. Sleep, water, movement.`,
+        `Salud es disciplina diaria. Sueño, agua, movimiento.`,
+        `Saúde é disciplina diária. Sono, água, movimento.`
+      ),
       pillar: 'health',
       href: HREF.health,
-      cta: es ? 'Abrir Health' : 'Open Health',
+      cta: tx('Open Health', 'Abrir Health', 'Abrir Health'),
     });
   }
   if (focus.includes('fe') || focus.includes('oracion')) {
     push({
       id: 'focus-faith',
       tone: 'motivate',
-      text: es
-        ? `Fe y oración no se delegan. El León camina contigo.`
-        : `Faith and prayer can't be outsourced. The Lion walks with you.`,
+      text: tx(
+        `Faith and prayer can't be outsourced. The Lion walks with you.`,
+        `Fe y oración no se delegan. El León camina contigo.`,
+        `Fé e oração não se delegam. O Leão caminha com você.`
+      ),
       pillar: 'salvation',
       href: HREF.devotional,
-      cta: es ? 'Orar / Devocional' : 'Pray / Devotional',
+      cta: tx('Pray / Devotional', 'Orar / Devocional', 'Orar / Devocional'),
     });
   }
 
@@ -421,36 +460,42 @@ export function buildFabNudges(
     push({
       id: 'sal-good',
       tone: 'celebrate',
-      text: es
-        ? `Salvation ${salvation}. Espíritu firme hoy, ${name}.`
-        : `Salvation ${salvation}. Spirit steady today, ${name}.`,
+      text: tx(
+        `Salvation ${salvation}. Spirit steady today, ${name}.`,
+        `Salvation ${salvation}. Espíritu firme hoy, ${name}.`,
+        `Salvation ${salvation}. Espírito firme hoje, ${name}.`
+      ),
       pillar: 'salvation',
       href: HREF.bible,
-      cta: es ? 'Seguir en Biblia' : 'Keep reading Bible',
+      cta: tx('Keep reading Bible', 'Seguir en Biblia', 'Continuar na Bíblia'),
     });
   }
   if (health != null && health < 30) {
     push({
       id: 'hea-low',
       tone: 'nudge',
-      text: es
-        ? `Health ${health}. El cuerpo pide atención real.`
-        : `Health ${health}. The body needs real attention.`,
+      text: tx(
+        `Health ${health}. The body needs real attention.`,
+        `Health ${health}. El cuerpo pide atención real.`,
+        `Health ${health}. O corpo pede atenção real.`
+      ),
       pillar: 'health',
       href: HREF.health,
-      cta: es ? 'Cuidar el cuerpo' : 'Care for body',
+      cta: tx('Care for body', 'Cuidar el cuerpo', 'Cuidar do corpo'),
     });
   }
   if (freedom != null && freedom < 30) {
     push({
       id: 'fre-low',
       tone: 'nudge',
-      text: es
-        ? `Freedom ${freedom}. Lee, conecta o aporta algo útil.`
-        : `Freedom ${freedom}. Read, connect, or contribute something useful.`,
+      text: tx(
+        `Freedom ${freedom}. Read, connect, or contribute something useful.`,
+        `Freedom ${freedom}. Lee, conecta o aporta algo útil.`,
+        `Freedom ${freedom}. Leia, conecte ou contribua com algo útil.`
+      ),
       pillar: 'freedom',
       href: HREF.freedomLearn,
-      cta: es ? 'Abrir Freedom' : 'Open Freedom',
+      cta: tx('Open Freedom', 'Abrir Freedom', 'Abrir Freedom'),
     });
   }
 
@@ -460,11 +505,13 @@ export function buildFabNudges(
     push({
       id: 'purpose',
       tone: 'focus',
-      text: es
-        ? `Tu propósito: “${purposeShort}${profile.purpose.length > 36 ? '…' : ''}”. Un paso hoy.`
-        : `Your purpose: “${purposeShort}${profile.purpose.length > 36 ? '…' : ''}”. One step today.`,
+      text: tx(
+        `Your purpose: “${purposeShort}${profile.purpose.length > 36 ? '…' : ''}”. One step today.`,
+        `Tu propósito: “${purposeShort}${profile.purpose.length > 36 ? '…' : ''}”. Un paso hoy.`,
+        `O seu propósito: “${purposeShort}${profile.purpose.length > 36 ? '…' : ''}”. Um passo hoje.`
+      ),
       href: HREF.dashboard,
-      cta: es ? 'Un paso hoy' : 'One step today',
+      cta: tx('One step today', 'Un paso hoy', 'Um passo hoje'),
     });
   }
 
@@ -473,30 +520,36 @@ export function buildFabNudges(
     push({
       id: 'prem-ai',
       tone: 'premium',
-      text: es
-        ? `Habla con Salvazion AI en Premium. El León te guía.`
-        : `Talk with Salvazion AI on Premium. The Lion guides you.`,
+      text: tx(
+        `Talk with Salvazion AI on Premium. The Lion guides you.`,
+        `Habla con Salvazion AI en Premium. El León te guía.`,
+        `Fale com a Salvazion AI no Premium. O Leão te guia.`
+      ),
       href: HREF.premium,
-      cta: es ? 'Ver Premium' : 'See Premium',
+      cta: tx('See Premium', 'Ver Premium', 'Ver Premium'),
     });
     push({
       id: 'prem-voice',
       tone: 'premium',
-      text: es
-        ? `Voz del León y herramientas avanzadas → Premium.`
-        : `Lion voice and advanced tools → Premium.`,
+      text: tx(
+        `Lion voice and advanced tools → Premium.`,
+        `Voz del León y herramientas avanzadas → Premium.`,
+        `Voz do Leão e ferramentas avançadas → Premium.`
+      ),
       href: HREF.premium,
-      cta: es ? 'Mejorar plan' : 'Upgrade plan',
+      cta: tx('Upgrade plan', 'Mejorar plan', 'Melhorar plano'),
     });
   } else {
     push({
       id: 'prem-active',
       tone: 'motivate',
-      text: es
-        ? `${name}, Premium activo. Usa al León: habla y actúa.`
-        : `${name}, Premium active. Use the Lion: talk and act.`,
+      text: tx(
+        `${name}, Premium active. Use the Lion: talk and act.`,
+        `${name}, Premium activo. Usa al León: habla y actúa.`,
+        `${name}, Premium ativo. Use o Leão: fale e aja.`
+      ),
       href: HREF.coach,
-      cta: es ? 'Hablar con el León' : 'Talk to the Lion',
+      cta: tx('Talk to the Lion', 'Hablar con el León', 'Falar com o Leão'),
     });
   }
 
@@ -504,35 +557,37 @@ export function buildFabNudges(
   push({
     id: 'always-1',
     tone: 'motivate',
-    text: es
-      ? `Virtud + constancia. Salvation · Health · Freedom.`
-      : `Virtue + consistency. Salvation · Health · Freedom.`,
+    text: tx(
+      `Virtue + consistency. Salvation · Health · Freedom.`,
+      `Virtud + constancia. Salvation · Health · Freedom.`,
+      `Virtude + constância. Salvation · Health · Freedom.`
+    ),
     href: HREF.dashboard,
-    cta: es ? 'Ver Hub' : 'Open Hub',
+    cta: tx('Open Hub', 'Ver Hub', 'Ver Hub'),
   });
   push({
     id: 'always-2',
     tone: 'motivate',
-    text: es
-      ? `${name}, no eres espectador. Eres León Verde.`
-      : `${name}, you're not a spectator. You're a Green Lion.`,
+    text: tx(
+      `${name}, you're not a spectator. You're a Green Lion.`,
+      `${name}, no eres espectador. Eres León Verde.`,
+      `${name}, você não é espectador. Você é Leão Verde.`
+    ),
     href: coachHref,
     cta: isPremium
-      ? es
-        ? 'Hablar ahora'
-        : 'Talk now'
-      : es
-        ? 'Activar León'
-        : 'Unlock Lion',
+      ? tx('Talk now', 'Hablar ahora', 'Falar agora')
+      : tx('Unlock Lion', 'Activar León', 'Ativar Leão'),
   });
   push({
     id: 'always-3',
     tone: 'motivate',
-    text: es
-      ? `La phalanx se construye un día a la vez.`
-      : `The phalanx is built one day at a time.`,
+    text: tx(
+      `The phalanx is built one day at a time.`,
+      `La phalanx se construye un día a la vez.`,
+      `A phalanx se constrói um dia de cada vez.`
+    ),
     href: HREF.freedomConnect,
-    cta: es ? 'Invitar / conectar' : 'Invite / connect',
+    cta: tx('Invite / connect', 'Invitar / conectar', 'Convidar / conectar'),
   });
 
   const seen = new Set<string>();

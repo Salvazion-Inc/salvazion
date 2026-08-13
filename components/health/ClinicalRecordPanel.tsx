@@ -17,6 +17,7 @@ import {
   type ProximateAnamnesis,
   type RemoteAnamnesis,
 } from '@/lib/health/anamnesis';
+import { tx3 } from '@/lib/i18n/locale';
 
 type Props = {
   profile: Partial<UserProfile> | null;
@@ -63,7 +64,7 @@ export default function ClinicalRecordPanel({
   lang = 'es',
   refreshKey = 0,
 }: Props) {
-  const es = lang !== 'en';
+  const tx = (en: string, es: string, pt: string) => tx3(lang, en, es, pt);
   const [tab, setTab] = useState<PanelTab>('readable');
   const [editSection, setEditSection] = useState<EditSection>('proximate');
   const [record, setRecord] = useState<AnamnesisRecord | null>(null);
@@ -91,9 +92,9 @@ export default function ClinicalRecordPanel({
     return formatAnamnesisReadable({
       profile: profile || {},
       record,
-      lang: es ? 'es' : 'en',
+      lang,
     });
-  }, [record, profile, es]);
+  }, [record, profile, lang]);
 
   const entryCount = bundle?.entry?.length ?? 0;
 
@@ -105,17 +106,21 @@ export default function ClinicalRecordPanel({
   const handleAutofill = (overwrite: boolean) => {
     const next = autofillAnamnesis(profile || {}, {
       overwrite,
-      lang: es ? 'es' : 'en',
+      lang,
     });
     setRecord(next);
     flashStatus(
       overwrite
-        ? es
-          ? 'Anamnesis actualizada con datos de salud'
-          : 'Anamnesis refreshed from health data'
-        : es
-          ? 'Campos vacíos rellenados con datos de la app'
-          : 'Empty fields filled from app data'
+        ? tx(
+            'Anamnesis refreshed from health data',
+            'Anamnesis actualizada con datos de salud',
+            'Anamnese atualizada com dados de saúde'
+          )
+        : tx(
+            'Empty fields filled from app data',
+            'Campos vacíos rellenados con datos de la app',
+            'Campos vazios preenchidos com dados do app'
+          )
     );
     setTab('readable');
   };
@@ -126,7 +131,7 @@ export default function ClinicalRecordPanel({
     setRecord(next);
     setSavedFlash(true);
     window.setTimeout(() => setSavedFlash(false), 2000);
-    flashStatus(es ? 'Ficha guardada' : 'Record saved');
+    flashStatus(tx('Record saved', 'Ficha guardada', 'Ficha salva'));
   };
 
   const patchRemote = (key: keyof RemoteAnamnesis, value: string) => {
@@ -146,12 +151,12 @@ export default function ClinicalRecordPanel({
     setBusy(true);
     try {
       const result = await shareOrCopyAnamnesisText(readable);
-      if (result === 'shared') flashStatus(es ? 'Compartido' : 'Shared');
+      if (result === 'shared') flashStatus(tx('Shared', 'Compartido', 'Compartilhado'));
       else if (result === 'downloaded')
-        flashStatus(es ? 'Descargado (.txt)' : 'Downloaded (.txt)');
+        flashStatus(tx('Downloaded (.txt)', 'Descargado (.txt)', 'Baixado (.txt)'));
       else if (result === 'copied')
-        flashStatus(es ? 'Copiado' : 'Copied');
-      else flashStatus(es ? 'No se pudo exportar' : 'Export failed');
+        flashStatus(tx('Copied', 'Copiado', 'Copiado'));
+      else flashStatus(tx('Export failed', 'No se pudo exportar', 'Não foi possível exportar'));
     } finally {
       setBusy(false);
     }
@@ -162,12 +167,12 @@ export default function ClinicalRecordPanel({
     setBusy(true);
     try {
       const result = await shareOrDownloadFhir(bundle);
-      if (result === 'shared') flashStatus(es ? 'FHIR compartido' : 'FHIR shared');
+      if (result === 'shared') flashStatus(tx('FHIR shared', 'FHIR compartido', 'FHIR compartilhado'));
       else if (result === 'downloaded')
-        flashStatus(es ? 'FHIR descargado' : 'FHIR downloaded');
+        flashStatus(tx('FHIR downloaded', 'FHIR descargado', 'FHIR baixado'));
       else if (result === 'copied')
-        flashStatus(es ? 'JSON copiado' : 'JSON copied');
-      else flashStatus(es ? 'No se pudo exportar' : 'Export failed');
+        flashStatus(tx('JSON copied', 'JSON copiado', 'JSON copiado'));
+      else flashStatus(tx('Export failed', 'No se pudo exportar', 'Não foi possível exportar'));
     } finally {
       setBusy(false);
     }
@@ -177,9 +182,9 @@ export default function ClinicalRecordPanel({
     if (!bundle) return;
     try {
       await navigator.clipboard.writeText(fhirBundleToJson(bundle));
-      flashStatus(es ? 'JSON FHIR copiado' : 'FHIR JSON copied');
+      flashStatus(tx('FHIR JSON copied', 'JSON FHIR copiado', 'JSON FHIR copiado'));
     } catch {
-      flashStatus(es ? 'Copia no disponible' : 'Copy unavailable');
+      flashStatus(tx('Copy unavailable', 'Copia no disponible', 'Cópia indisponível'));
     }
   };
 
@@ -198,23 +203,25 @@ export default function ClinicalRecordPanel({
     <section className="mb-6">
       <h2 className="text-sm font-semibold text-[var(--sage)] mb-3 flex items-center gap-2">
         <span>⎘</span>
-        {es ? 'Ficha clínica · Anamnesis' : 'Clinical record · Anamnesis'}
+        {tx('Clinical record · Anamnesis', 'Ficha clínica · Anamnesis', 'Ficha clínica · Anamnese')}
       </h2>
 
       <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] space-y-3.5">
         <p className="text-[11px] text-[var(--sage)]/80 leading-relaxed">
-          {es
-            ? 'Anamnesis próxima y remota con datos de tu perfil y Health. Rellena con un toque, edita y léela en formato clínico. Exporta texto o FHIR.'
-            : 'Proximate and remote anamnesis from your profile and Health. Autofill, edit, and read in clinical format. Export text or FHIR.'}
+          {tx(
+            'Proximate and remote anamnesis from your profile and Health. Autofill, edit, and read in clinical format. Export text or FHIR.',
+            'Anamnesis próxima y remota con datos de tu perfil y Health. Rellena con un toque, edita y léela en formato clínico. Exporta texto o FHIR.',
+            'Anamnese próxima e remota com dados do seu perfil e Health. Preencha com um toque, edite e leia em formato clínico. Exporte texto ou FHIR.'
+          )}
         </p>
 
         {/* Mode tabs */}
         <div className="segment-soft">
           {(
             [
-              { id: 'readable' as const, es: 'Vista legible', en: 'Readable' },
-              { id: 'edit' as const, es: 'Editar', en: 'Edit' },
-              { id: 'fhir' as const, es: 'FHIR', en: 'FHIR' },
+              { id: 'readable' as const, es: 'Vista legible', en: 'Readable', pt: 'Vista legível' },
+              { id: 'edit' as const, es: 'Editar', en: 'Edit', pt: 'Editar' },
+              { id: 'fhir' as const, es: 'FHIR', en: 'FHIR', pt: 'FHIR' },
             ] as const
           ).map((item) => (
             <button
@@ -223,7 +230,7 @@ export default function ClinicalRecordPanel({
               data-active={tab === item.id}
               onClick={() => setTab(item.id)}
             >
-              {es ? item.es : item.en}
+              {tx(item.en, item.es, item.pt)}
             </button>
           ))}
         </div>
@@ -235,16 +242,18 @@ export default function ClinicalRecordPanel({
             onClick={() => handleAutofill(false)}
             className="btn-sm text-[11px]"
           >
-            {es ? 'Rellenar vacíos con Health' : 'Fill empty from Health'}
+            {tx('Fill empty from Health', 'Rellenar vacíos con Health', 'Preencher vazios com Health')}
           </button>
           <button
             type="button"
             onClick={() => {
               if (
                 window.confirm(
-                  es
-                    ? '¿Sobrescribir campos de anamnesis con datos actuales de la app?'
-                    : 'Overwrite anamnesis fields with current app data?'
+                  tx(
+                    'Overwrite anamnesis fields with current app data?',
+                    '¿Sobrescribir campos de anamnesis con datos actuales de la app?',
+                    'Sobrescrever campos da anamnese com dados atuais do app?'
+                  )
                 )
               ) {
                 handleAutofill(true);
@@ -252,7 +261,7 @@ export default function ClinicalRecordPanel({
             }}
             className="btn-outline-sm text-[11px]"
           >
-            {es ? 'Actualizar todo' : 'Refresh all'}
+            {tx('Refresh all', 'Actualizar todo', 'Atualizar tudo')}
           </button>
         </div>
 
@@ -261,7 +270,7 @@ export default function ClinicalRecordPanel({
           <div className="space-y-3">
             <article
               className="rounded-xl border border-[var(--border-soft)] bg-[#070907] px-3.5 py-3.5 max-h-[28rem] overflow-y-auto"
-              aria-label={es ? 'Anamnesis legible' : 'Readable anamnesis'}
+              aria-label={tx('Readable anamnesis', 'Anamnesis legible', 'Anamnese legível')}
             >
               <pre className="whitespace-pre-wrap break-words font-sans text-[12px] leading-relaxed text-[var(--off-white)]/90 tracking-normal">
                 {readable}
@@ -271,7 +280,7 @@ export default function ClinicalRecordPanel({
             {record.vitalsSnapshot ? (
               <div className="rounded-xl border border-[var(--border-soft)] bg-[#040404]/55 px-3 py-2.5">
                 <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70 mb-1">
-                  {es ? 'Snapshot de métricas' : 'Metrics snapshot'}
+                  {tx('Metrics snapshot', 'Snapshot de métricas', 'Snapshot de métricas')}
                 </p>
                 <p className="text-[11px] text-[#D8E1D9]/85 leading-relaxed whitespace-pre-wrap">
                   {record.vitalsSnapshot}
@@ -287,26 +296,26 @@ export default function ClinicalRecordPanel({
                 className="btn-primary py-2.5 text-sm disabled:opacity-50"
               >
                 {busy
-                  ? es
-                    ? 'Preparando…'
-                    : 'Preparing…'
-                  : es
-                    ? 'Compartir / descargar ficha'
-                    : 'Share / download record'}
+                  ? tx('Preparing…', 'Preparando…', 'Preparando…')
+                  : tx(
+                      'Share / download record',
+                      'Compartir / descargar ficha',
+                      'Compartilhar / baixar ficha'
+                    )}
               </button>
               <button
                 type="button"
                 onClick={async () => {
                   try {
                     await navigator.clipboard.writeText(readable);
-                    flashStatus(es ? 'Texto copiado' : 'Text copied');
+                    flashStatus(tx('Text copied', 'Texto copiado', 'Texto copiado'));
                   } catch {
-                    flashStatus(es ? 'Copia no disponible' : 'Copy unavailable');
+                    flashStatus(tx('Copy unavailable', 'Copia no disponible', 'Cópia indisponível'));
                   }
                 }}
                 className="btn-secondary py-2.5 text-xs"
               >
-                {es ? 'Copiar texto legible' : 'Copy readable text'}
+                {tx('Copy readable text', 'Copiar texto legible', 'Copiar texto legível')}
               </button>
             </div>
           </div>
@@ -329,7 +338,7 @@ export default function ClinicalRecordPanel({
                     : { color: 'var(--sage)' }
                 }
               >
-                {es ? 'Próxima (actual)' : 'Proximate (present)'}
+                {tx('Proximate (present)', 'Próxima (actual)', 'Próxima (atual)')}
               </button>
               <button
                 type="button"
@@ -344,65 +353,65 @@ export default function ClinicalRecordPanel({
                     : { color: 'var(--sage)' }
                 }
               >
-                {es ? 'Remota (antecedentes)' : 'Remote (history)'}
+                {tx('Remote (history)', 'Remota (antecedentes)', 'Remota (antecedentes)')}
               </button>
             </div>
 
             {editSection === 'proximate' ? (
               <div className="space-y-3">
                 <Field
-                  label={es ? 'Motivo de consulta' : 'Chief complaint'}
+                  label={tx('Chief complaint', 'Motivo de consulta', 'Motivo da consulta')}
                   value={p.chiefComplaint}
                   onChange={(v) => patchProx('chiefComplaint', v)}
                   rows={2}
                 />
                 <Field
-                  label={es ? 'Enfermedad actual' : 'History of present illness'}
+                  label={tx('History of present illness', 'Enfermedad actual', 'Doença atual')}
                   value={p.presentIllness}
                   onChange={(v) => patchProx('presentIllness', v)}
                   rows={4}
-                  hint={
-                    es
-                      ? 'Inicio, evolución, factores que mejoran/empeoran.'
-                      : 'Onset, course, relieving/worsening factors.'
-                  }
+                  hint={tx(
+                    'Onset, course, relieving/worsening factors.',
+                    'Inicio, evolución, factores que mejoran/empeoran.',
+                    'Início, evolução, fatores que melhoram/pioram.'
+                  )}
                 />
                 <Field
-                  label={es ? 'Síntomas actuales' : 'Current symptoms'}
+                  label={tx('Current symptoms', 'Síntomas actuales', 'Sintomas atuais')}
                   value={p.currentSymptoms}
                   onChange={(v) => patchProx('currentSymptoms', v)}
                   rows={3}
                 />
                 <Field
-                  label={es ? 'Sueño actual' : 'Current sleep'}
+                  label={tx('Current sleep', 'Sueño actual', 'Sono atual')}
                   value={p.currentSleep}
                   onChange={(v) => patchProx('currentSleep', v)}
                   rows={3}
                 />
                 <Field
-                  label={es ? 'Actividad reciente' : 'Recent activity'}
+                  label={tx('Recent activity', 'Actividad reciente', 'Atividade recente')}
                   value={p.currentActivity}
                   onChange={(v) => patchProx('currentActivity', v)}
                   rows={3}
                 />
                 <Field
-                  label={
-                    es
-                      ? 'Alimentación e hidratación'
-                      : 'Nutrition & hydration'
-                  }
+                  label={tx(
+                    'Nutrition & hydration',
+                    'Alimentación e hidratación',
+                    'Alimentação e hidratação'
+                  )}
                   value={p.currentNutrition}
                   onChange={(v) => patchProx('currentNutrition', v)}
                   rows={3}
                 />
                 <Field
-                  label={es ? 'Ánimo / estrés' : 'Mood / stress'}
+                  label={tx('Mood / stress', 'Ánimo / estrés', 'Ânimo / estresse')}
                   value={p.moodStress}
                   onChange={(v) => patchProx('moodStress', v)}
                   rows={2}
                 />
                 <Field
-                  label={es ? 'Notas' : 'Notes'}
+                  label={tx('Notes', 'Notas', 'Notas')}
                   value={p.notes}
                   onChange={(v) => patchProx('notes', v)}
                   rows={2}
@@ -411,83 +420,79 @@ export default function ClinicalRecordPanel({
             ) : (
               <div className="space-y-3">
                 <Field
-                  label={
-                    es
-                      ? 'Antecedentes personales patológicos'
-                      : 'Past medical history'
-                  }
+                  label={tx(
+                    'Past medical history',
+                    'Antecedentes personales patológicos',
+                    'Antecedentes pessoais patológicos'
+                  )}
                   value={r.personalHistory}
                   onChange={(v) => patchRemote('personalHistory', v)}
                   rows={3}
                 />
                 <Field
-                  label={
-                    es
-                      ? 'Antecedentes quirúrgicos'
-                      : 'Surgical history'
-                  }
+                  label={tx('Surgical history', 'Antecedentes quirúrgicos', 'Antecedentes cirúrgicos')}
                   value={r.surgicalHistory}
                   onChange={(v) => patchRemote('surgicalHistory', v)}
                   rows={2}
                 />
                 <Field
                   label={
-                    es ? 'Antecedentes familiares' : 'Family history'
+                    tx('Family history', 'Antecedentes familiares', 'Antecedentes familiares')
                   }
                   value={r.familyHistory}
                   onChange={(v) => patchRemote('familyHistory', v)}
                   rows={3}
                 />
                 <Field
-                  label={es ? 'Alergias' : 'Allergies'}
+                  label={tx('Allergies', 'Alergias', 'Alergias')}
                   value={r.allergies}
                   onChange={(v) => patchRemote('allergies', v)}
                   rows={2}
                 />
                 <Field
                   label={
-                    es ? 'Medicación habitual' : 'Current medications'
+                    tx('Current medications', 'Medicación habitual', 'Medicação habitual')
                   }
                   value={r.medications}
                   onChange={(v) => patchRemote('medications', v)}
                   rows={2}
                 />
                 <Field
-                  label={es ? 'Hábitos tóxicos' : 'Toxic habits'}
+                  label={tx('Toxic habits', 'Hábitos tóxicos', 'Hábitos tóxicos')}
                   value={r.toxicHabits}
                   onChange={(v) => patchRemote('toxicHabits', v)}
                   rows={2}
                 />
                 <Field
-                  label={es ? 'Ocupación' : 'Occupation'}
+                  label={tx('Occupation', 'Ocupación', 'Ocupação')}
                   value={r.occupation}
                   onChange={(v) => patchRemote('occupation', v)}
                   rows={2}
                 />
                 <Field
-                  label={
-                    es
-                      ? 'Actividad física habitual'
-                      : 'Usual physical activity'
-                  }
+                  label={tx(
+                    'Usual physical activity',
+                    'Actividad física habitual',
+                    'Atividade física habitual'
+                  )}
                   value={r.physicalActivity}
                   onChange={(v) => patchRemote('physicalActivity', v)}
                   rows={3}
                 />
                 {profile?.sex === 'female' && (
                   <Field
-                    label={
-                      es
-                        ? 'Antecedentes gineco-obstétricos'
-                        : 'Gynecologic / obstetric history'
-                    }
+                    label={tx(
+                      'Gynecologic / obstetric history',
+                      'Antecedentes gineco-obstétricos',
+                      'Antecedentes gineco-obstétricos'
+                    )}
                     value={r.gynObstetric}
                     onChange={(v) => patchRemote('gynObstetric', v)}
                     rows={3}
                   />
                 )}
                 <Field
-                  label={es ? 'Otros' : 'Other'}
+                  label={tx('Other', 'Otros', 'Outros')}
                   value={r.otherRemote}
                   onChange={(v) => patchRemote('otherRemote', v)}
                   rows={2}
@@ -501,12 +506,8 @@ export default function ClinicalRecordPanel({
               className="btn-primary py-2.5 text-sm w-full"
             >
               {savedFlash
-                ? es
-                  ? '✓ Guardado'
-                  : '✓ Saved'
-                : es
-                  ? 'Guardar anamnesis'
-                  : 'Save anamnesis'}
+                ? tx('✓ Saved', '✓ Guardado', '✓ Salvo')
+                : tx('Save anamnesis', 'Guardar anamnesis', 'Salvar anamnese')}
             </button>
           </div>
         )}
@@ -515,15 +516,17 @@ export default function ClinicalRecordPanel({
         {tab === 'fhir' && (
           <div className="space-y-3">
             <p className="text-[11px] text-[var(--sage)]/80 leading-relaxed">
-              {es
-                ? 'Bundle HL7 FHIR R4 con Patient, Composition y Observations (sensores, sueño, hidratación, ciclo, deportes).'
-                : 'HL7 FHIR R4 Bundle with Patient, Composition, and Observations (sensors, sleep, hydration, cycle, sports).'}
+              {tx(
+                'HL7 FHIR R4 Bundle with Patient, Composition, and Observations (sensors, sleep, hydration, cycle, sports).',
+                'Bundle HL7 FHIR R4 con Patient, Composition y Observations (sensores, sueño, hidratación, ciclo, deportes).',
+                'Bundle HL7 FHIR R4 com Patient, Composition e Observations (sensores, sono, hidratação, ciclo, esportes).'
+              )}
             </p>
 
             <div className="rounded-xl border border-[var(--border-soft)] bg-[#040404]/55 px-3 py-2.5 flex items-center justify-between gap-2">
               <div>
                 <p className="text-xs text-white font-medium">
-                  {es ? 'Estándar' : 'Standard'}
+                  {tx('Standard', 'Estándar', 'Padrão')}
                 </p>
                 <p className="text-[10px] text-[var(--sage)]">
                   HL7 FHIR R4 · application/fhir+json
@@ -532,7 +535,7 @@ export default function ClinicalRecordPanel({
               <p className="text-sm font-bold text-[var(--accent)] tabular-nums">
                 {entryCount}{' '}
                 <span className="text-[10px] font-normal text-[var(--sage)]">
-                  {es ? 'recursos' : 'resources'}
+                  {tx('resources', 'recursos', 'recursos')}
                 </span>
               </p>
             </div>
@@ -541,15 +544,19 @@ export default function ClinicalRecordPanel({
               <li>Patient {profile?.name ? `(${profile.name})` : ''}</li>
               <li>Observations · biomarcadores / sensores</li>
               <li>
-                {es
-                  ? 'Sueño, hidratación, deportes'
-                  : 'Sleep, hydration, sports'}
+                {tx(
+                  'Sleep, hydration, sports',
+                  'Sueño, hidratación, deportes',
+                  'Sono, hidratação, esportes'
+                )}
               </li>
               {profile?.sex === 'female' && (
                 <li>
-                  {es
-                    ? 'Ciclo menstrual (si hay datos)'
-                    : 'Menstrual cycle (if logged)'}
+                  {tx(
+                    'Menstrual cycle (if logged)',
+                    'Ciclo menstrual (si hay datos)',
+                    'Ciclo menstrual (se houver dados)'
+                  )}
                 </li>
               )}
             </ul>
@@ -562,12 +569,12 @@ export default function ClinicalRecordPanel({
                 className="btn-primary py-2.5 text-sm disabled:opacity-50"
               >
                 {busy
-                  ? es
-                    ? 'Preparando…'
-                    : 'Preparing…'
-                  : es
-                    ? 'Compartir / descargar FHIR'
-                    : 'Share / download FHIR'}
+                  ? tx('Preparing…', 'Preparando…', 'Preparando…')
+                  : tx(
+                      'Share / download FHIR',
+                      'Compartir / descargar FHIR',
+                      'Compartilhar / baixar FHIR'
+                    )}
               </button>
               <div className="flex gap-2">
                 <button
@@ -575,7 +582,7 @@ export default function ClinicalRecordPanel({
                   onClick={() => void handleCopyFhir()}
                   className="btn-secondary flex-1 py-2.5 text-xs"
                 >
-                  {es ? 'Copiar JSON' : 'Copy JSON'}
+                  {tx('Copy JSON', 'Copiar JSON', 'Copiar JSON')}
                 </button>
                 <button
                   type="button"
@@ -583,12 +590,8 @@ export default function ClinicalRecordPanel({
                   className="btn-secondary flex-1 py-2.5 text-xs"
                 >
                   {fhirPreview
-                    ? es
-                      ? 'Ocultar preview'
-                      : 'Hide preview'
-                    : es
-                      ? 'Vista previa'
-                      : 'Preview'}
+                    ? tx('Hide preview', 'Ocultar preview', 'Ocultar preview')
+                    : tx('Preview', 'Vista previa', 'Prévia')}
                 </button>
               </div>
             </div>
@@ -609,9 +612,11 @@ export default function ClinicalRecordPanel({
         )}
 
         <p className="text-[10px] text-[var(--sage)]/60 leading-relaxed">
-          {es
-            ? 'Comparte solo con profesionales de confianza. Los datos salen de tu dispositivo al exportar. No sustituye evaluación médica profesional.'
-            : 'Share only with trusted clinicians. Data leaves your device when you export. Does not replace professional medical evaluation.'}
+          {tx(
+            'Share only with trusted clinicians. Data leaves your device when you export. Does not replace professional medical evaluation.',
+            'Comparte solo con profesionales de confianza. Los datos salen de tu dispositivo al exportar. No sustituye evaluación médica profesional.',
+            'Compartilhe só com profissionais de confiança. Os dados saem do dispositivo ao exportar. Não substitui avaliação médica profissional.'
+          )}
         </p>
       </div>
     </section>

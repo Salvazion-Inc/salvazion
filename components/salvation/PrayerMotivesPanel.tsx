@@ -11,21 +11,22 @@ import {
   removePrayerMotive,
   reopenMotive,
 } from '@/lib/salvation/prayer-motives';
+import { tx3 } from '@/lib/i18n/locale';
 
 type Props = {
   lang?: 'es' | 'en' | 'pt';
   onPrayed?: () => void;
 };
 
-const FILTERS: { id: 'all' | PrayerMotiveStatus; es: string; en: string }[] = [
-  { id: 'all', es: 'Todos', en: 'All' },
-  { id: 'open', es: 'Abiertos', en: 'Open' },
-  { id: 'prayed', es: 'Orados', en: 'Prayed' },
-  { id: 'answered', es: 'Respondidos', en: 'Answered' },
+const FILTERS: { id: 'all' | PrayerMotiveStatus; es: string; en: string; pt: string }[] = [
+  { id: 'all', es: 'Todos', en: 'All', pt: 'Todos' },
+  { id: 'open', es: 'Abiertos', en: 'Open', pt: 'Abertos' },
+  { id: 'prayed', es: 'Orados', en: 'Prayed', pt: 'Orados' },
+  { id: 'answered', es: 'Respondidos', en: 'Answered', pt: 'Respondidos' },
 ];
 
-export default function PrayerMotivesPanel({ lang = 'es', onPrayed }: Props) {
-  const es = lang !== 'en';
+export default function PrayerMotivesPanel({ lang = 'en', onPrayed }: Props) {
+  const tx = (en: string, es: string, pt: string) => tx3(lang, en, es, pt);
   const [list, setList] = useState<PrayerMotive[]>([]);
   const [text, setText] = useState('');
   const [forWhom, setForWhom] = useState('');
@@ -52,14 +53,14 @@ export default function PrayerMotivesPanel({ lang = 'es', onPrayed }: Props) {
     setText('');
     setForWhom('');
     refresh();
-    toast(es ? 'Motivo guardado' : 'Request saved');
+    toast(tx('Request saved', 'Motivo guardado', 'Motivo salvo'));
   };
 
   const handlePrayed = (id: string) => {
     markPrayed(id);
     refresh();
     onPrayed?.();
-    toast(es ? 'Marcado como orado · Salvation' : 'Marked as prayed · Salvation');
+    toast(tx('Marked as prayed · Salvation', 'Marcado como orado · Salvation', 'Marcado como orado · Salvation'));
   };
 
   const filtered =
@@ -67,10 +68,10 @@ export default function PrayerMotivesPanel({ lang = 'es', onPrayed }: Props) {
 
   const statusLabel = (s: PrayerMotiveStatus) => {
     const map = {
-      open: es ? 'Abierto' : 'Open',
-      prayed: es ? 'Orado' : 'Prayed',
-      answered: es ? 'Respondido' : 'Answered',
-      archived: es ? 'Archivado' : 'Archived',
+      open: tx('Open', 'Abierto', 'Aberto'),
+      prayed: tx('Prayed', 'Orado', 'Orado'),
+      answered: tx('Answered', 'Respondido', 'Respondido'),
+      archived: tx('Archived', 'Archivado', 'Arquivado'),
     };
     return map[s];
   };
@@ -80,42 +81,44 @@ export default function PrayerMotivesPanel({ lang = 'es', onPrayed }: Props) {
       <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] mb-4 shrink-0 space-y-3">
         <div>
           <h2 className="text-sm font-semibold text-white">
-            {es ? 'Motivos de oración' : 'Prayer requests'}
+            {tx('Prayer requests', 'Motivos de oración', 'Motivos de oração')}
           </h2>
           <p className="text-[11px] text-[var(--sage)]/85 mt-1 leading-relaxed">
-            {es
-              ? 'Escribe por quién o por qué orar. Forma parte del pilar Salvation.'
-              : 'Write who or what you pray for. Part of the Salvation pillar.'}
+            {tx(
+              'Write who or what you pray for. Part of the Salvation pillar.',
+              'Escribe por quién o por qué orar. Forma parte del pilar Salvation.',
+              'Escreva por quem ou por que orar. Faz parte do pilar Salvation.'
+            )}
           </p>
         </div>
 
         <div>
           <label className="block text-[11px] text-[var(--sage)] mb-1">
-            {es ? 'Motivo' : 'Request'}
+            {tx('Request', 'Motivo', 'Motivo')}
           </label>
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
             rows={3}
             maxLength={500}
-            placeholder={
-              es
-                ? 'Ej: Sanidad para mi madre, sabiduría en el trabajo…'
-                : 'E.g. Healing for my mother, wisdom at work…'
-            }
+            placeholder={tx(
+              'E.g. Healing for my mother, wisdom at work…',
+              'Ej: Sanidad para mi madre, sabiduría en el trabajo…',
+              'Ex.: Cura para minha mãe, sabedoria no trabalho…'
+            )}
             className="input-soft py-2.5 text-sm resize-none"
           />
         </div>
         <div>
           <label className="block text-[11px] text-[var(--sage)] mb-1">
-            {es ? 'Para (opcional)' : 'For (optional)'}
+            {tx('For (optional)', 'Para (opcional)', 'Para (opcional)')}
           </label>
           <input
             type="text"
             value={forWhom}
             onChange={(e) => setForWhom(e.target.value)}
             maxLength={120}
-            placeholder={es ? 'Persona, familia, nación…' : 'Person, family, nation…'}
+            placeholder={tx('Person, family, nation…', 'Persona, familia, nación…', 'Pessoa, família, nação…')}
             className="input-soft py-2.5 text-sm"
           />
         </div>
@@ -125,7 +128,7 @@ export default function PrayerMotivesPanel({ lang = 'es', onPrayed }: Props) {
           disabled={!text.trim()}
           className="btn-primary py-2.5 text-sm disabled:opacity-40"
         >
-          {es ? 'Añadir motivo' : 'Add request'}
+          {tx('Add request', 'Añadir motivo', 'Adicionar motivo')}
         </button>
         {msg && (
           <p className="text-center text-xs text-[var(--accent)]">{msg}</p>
@@ -140,7 +143,7 @@ export default function PrayerMotivesPanel({ lang = 'es', onPrayed }: Props) {
             onClick={() => setFilter(f.id)}
             className={`pill-soft text-[10px] ${filter === f.id ? 'pill-soft-active' : ''}`}
           >
-            {es ? f.es : f.en}
+            {tx(f.en, f.es, f.pt)}
             {f.id !== 'all' && (
               <span className="ml-1 opacity-70">
                 {list.filter((m) => m.status === f.id).length}
@@ -153,9 +156,11 @@ export default function PrayerMotivesPanel({ lang = 'es', onPrayed }: Props) {
       <div className="flex-1 min-h-0 overflow-y-auto space-y-2 pb-4">
         {filtered.length === 0 ? (
           <div className="text-center py-12 text-[var(--sage)]/70 text-sm">
-            {es
-              ? 'Aún no hay motivos en este filtro. Escribe el primero arriba.'
-              : 'No requests in this filter yet. Add one above.'}
+            {tx(
+              'No requests in this filter yet. Add one above.',
+              'Aún no hay motivos en este filtro. Escribe el primero arriba.',
+              'Ainda não há motivos neste filtro. Escreva o primeiro acima.'
+            )}
           </div>
         ) : (
           filtered.map((m) => (
@@ -185,7 +190,7 @@ export default function PrayerMotivesPanel({ lang = 'es', onPrayed }: Props) {
                     onClick={() => handlePrayed(m.id)}
                     className="pill-soft pill-soft-active text-[10px]"
                   >
-                    {es ? '✓ Oré por esto' : '✓ I prayed'}
+                    {tx('✓ I prayed', '✓ Oré por esto', '✓ Orei por isto')}
                   </button>
                 )}
                 {(m.status === 'open' || m.status === 'prayed') && (
@@ -194,11 +199,11 @@ export default function PrayerMotivesPanel({ lang = 'es', onPrayed }: Props) {
                     onClick={() => {
                       markAnswered(m.id);
                       refresh();
-                      toast(es ? '¡Gloria a Dios!' : 'Glory to God!');
+                      toast(tx('Glory to God!', '¡Gloria a Dios!', 'Glória a Deus!'));
                     }}
                     className="pill-soft text-[10px]"
                   >
-                    {es ? 'Respondido' : 'Answered'}
+                    {tx('Answered', 'Respondido', 'Respondido')}
                   </button>
                 )}
                 {m.status !== 'open' && (
@@ -210,7 +215,7 @@ export default function PrayerMotivesPanel({ lang = 'es', onPrayed }: Props) {
                     }}
                     className="pill-soft text-[10px]"
                   >
-                    {es ? 'Reabrir' : 'Reopen'}
+                    {tx('Reopen', 'Reabrir', 'Reabrir')}
                   </button>
                 )}
                 <button
@@ -221,7 +226,7 @@ export default function PrayerMotivesPanel({ lang = 'es', onPrayed }: Props) {
                   }}
                   className="pill-soft text-[10px] text-red-300/80 border-red-500/20"
                 >
-                  {es ? 'Eliminar' : 'Delete'}
+                  {tx('Delete', 'Eliminar', 'Excluir')}
                 </button>
               </div>
             </article>

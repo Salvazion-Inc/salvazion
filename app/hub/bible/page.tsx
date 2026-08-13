@@ -441,7 +441,7 @@ export default function BiblePage() {
             <div className="flex flex-wrap gap-2">
               {(
                 [
-                  { id: 'es' as BibleLanguage, label: 'ES · Reina Valera' },
+                  { id: 'es' as BibleLanguage, label: 'ES · Reina Valera 1909' },
                   { id: 'en' as BibleLanguage, label: 'EN · King James' },
                   { id: 'pt' as BibleLanguage, label: 'PT · Almeida ARC' },
                   { id: 'original' as BibleLanguage, label: 'Original · Heb/Gr' },

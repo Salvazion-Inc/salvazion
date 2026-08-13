@@ -44,7 +44,8 @@ export default function ProfileAvatar({
   onChange,
 }: Props) {
   const { t, lang } = useI18n();
-  const es = lang !== 'en';
+  const tx = (en: string, es: string, pt: string) =>
+    lang === 'pt' ? pt : lang === 'es' ? es : en;
   const { flash, toast: saveToast } = useFlashToast();
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
@@ -107,9 +108,11 @@ export default function ProfileAvatar({
       onChange?.(result.avatarUrl);
       if (!result.remote) {
         setError(
-          es
-            ? 'No se pudo subir a la nube. La foto solo está en este dispositivo y no aparecerá en mobile. Revisa SUPABASE_SERVICE_ROLE_KEY y el bucket avatars, luego vuelve a subirla.'
-            : 'Cloud upload failed. Photo is only on this device and will not show on mobile. Check SUPABASE_SERVICE_ROLE_KEY and the avatars bucket, then upload again.'
+          tx(
+            'Cloud upload failed. Photo is only on this device and will not show on mobile. Check SUPABASE_SERVICE_ROLE_KEY and the avatars bucket, then upload again.',
+            'No se pudo subir a la nube. La foto solo está en este dispositivo y no aparecerá en mobile. Revisa SUPABASE_SERVICE_ROLE_KEY y el bucket avatars, luego vuelve a subirla.',
+            'Não foi possível enviar para a nuvem. A foto só está neste dispositivo e não aparecerá no mobile. Revise SUPABASE_SERVICE_ROLE_KEY e o bucket avatars e envie de novo.'
+          )
         );
       } else {
         flash(t('common.changesSaved'));
@@ -245,12 +248,12 @@ export default function ProfileAvatar({
           className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center"
           role="dialog"
           aria-modal="true"
-          aria-label={es ? 'Elegir foto de perfil' : 'Choose profile photo'}
+          aria-label={tx('Choose profile photo', 'Elegir foto de perfil', 'Escolher foto de perfil')}
         >
           <button
             type="button"
             className="absolute inset-0 bg-black/70 backdrop-blur-[2px]"
-            aria-label={es ? 'Cerrar' : 'Close'}
+            aria-label={tx('Close', 'Cerrar', 'Fechar')}
             onClick={closeSheet}
           />
           <div className="relative z-10 w-full max-w-sm mx-4 mb-6 sm:mb-0 glass rounded-2xl border border-[var(--border-soft)] overflow-hidden shadow-[0_12px_48px_rgba(0,0,0,0.55)]">
@@ -259,9 +262,11 @@ export default function ProfileAvatar({
                 {displayUrl ? t('profile.changePhoto') : t('profile.addPhoto')}
               </p>
               <p className="text-[11px] text-[var(--sage)] mt-1">
-                {es
-                  ? 'Usa la cámara o elige una imagen de tus carpetas'
-                  : 'Use the camera or pick an image from your files'}
+                {tx(
+                  'Use the camera or pick an image from your files',
+                  'Usa la cámara o elige una imagen de tus carpetas',
+                  'Use a câmera ou escolha uma imagem das suas pastas'
+                )}
               </p>
             </div>
 
@@ -319,7 +324,7 @@ export default function ProfileAvatar({
                 onClick={closeSheet}
                 className="btn-secondary w-full py-3 text-sm mt-1"
               >
-                {es ? 'Cancelar' : 'Cancel'}
+                {tx('Cancel', 'Cancelar', 'Cancelar')}
               </button>
             </div>
           </div>

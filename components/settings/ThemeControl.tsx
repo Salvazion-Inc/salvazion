@@ -53,7 +53,7 @@ export default function ThemeControl() {
             background: `linear-gradient(135deg, ${active.swatch} 0%, ${active.swatchSecondary} 55%, #040404 100%)`,
           }}
           aria-hidden
-          title={lang === 'en' ? active.labelEn : active.label}
+          title={lang === 'en' ? active.labelEn : lang === 'pt' ? active.labelPt : active.label}
         />
       </div>
 
@@ -93,11 +93,11 @@ export default function ThemeControl() {
                     isActive ? 'text-[var(--accent)]' : 'text-white'
                   }`}
                 >
-                  {lang === 'en' ? opt.labelEn : opt.label}
+                  {lang === 'en' ? opt.labelEn : lang === 'pt' ? opt.labelPt : opt.label}
                 </span>
               </div>
               <p className="text-[10px] text-[var(--sage)]/75 leading-snug pl-0.5">
-                {lang === 'en' ? opt.hintEn : opt.hint}
+                {lang === 'en' ? opt.hintEn : lang === 'pt' ? opt.hintPt : opt.hint}
               </p>
             </button>
           );

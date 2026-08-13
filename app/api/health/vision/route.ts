@@ -45,7 +45,7 @@ function extractJsonObject(text: string): unknown {
 function bodySystemPrompt(lang: 'es' | 'en' | 'pt'): string {
   if (lang === 'en') {
     return `You are a careful sports-science assistant for Salvazion Health.
-Analyze swimsuit/fitness photos (front, side, and/or back) for educational cineanthropometry ESTIMATES only.
+Analyze swimsuit/fitness photos (front, back, right side and/or left side) for educational cineanthropometry ESTIMATES only.
 Never claim medical diagnosis or DEXA accuracy.
 Return ONLY valid JSON (no markdown) with this shape:
 {
@@ -66,7 +66,7 @@ If height/weight provided, prefer consistency with physics; if missing, estimate
 observations/recommendations in English, concise, bio-conservative stewardship of the body (not vanity culture).`;
   }
   return `Eres un asistente de ciencias del deporte para Salvazion Health.
-Analiza fotos en traje de baño / fitness (frontal, lateral y/o posterior) para ESTIMACIONES educativas de cineantropometría.
+Analiza fotos en traje de baño / fitness (frente, espalda, lado derecho y/o izquierdo) para ESTIMACIONES educativas de cineantropometría.
 Nunca digas que es diagnóstico médico ni precisión DEXA/plicometría clínica.
 Devuelve SOLO JSON válido (sin markdown) con esta forma:
 {
@@ -252,7 +252,9 @@ export async function POST(req: NextRequest) {
           message:
             lang === 'en'
               ? 'XAI_API_KEY is not configured on the server.'
-              : 'XAI_API_KEY no está configurada en el servidor.',
+              : lang === 'pt'
+                ? 'XAI_API_KEY não está configurada no servidor.'
+                : 'XAI_API_KEY no está configurada en el servidor.',
         },
         { status: 503 }
       );
@@ -267,11 +269,37 @@ export async function POST(req: NextRequest) {
     const contentParts: ChatCompletionContentPart[] = [];
 
     if (mode === 'body') {
-      const photos = body.photos || {};
+      const photos = { ...(body.photos || {}) };
+      if (!photos.right && photos.side) photos.right = photos.side;
       const views: { key: string; label: string }[] = [
-        { key: 'front', label: lang === 'en' ? 'FRONT view' : 'vista FRONTAL' },
-        { key: 'side', label: lang === 'en' ? 'SIDE view' : 'vista LATERAL' },
-        { key: 'back', label: lang === 'en' ? 'BACK view' : 'vista POSTERIOR' },
+        {
+          key: 'front',
+          label:
+            lang === 'en' ? 'FRONT view' : lang === 'pt' ? 'vista FRONTAL' : 'vista FRONTAL',
+        },
+        {
+          key: 'back',
+          label:
+            lang === 'en' ? 'BACK view' : lang === 'pt' ? 'vista POSTERIOR' : 'vista POSTERIOR',
+        },
+        {
+          key: 'right',
+          label:
+            lang === 'en'
+              ? 'RIGHT side view'
+              : lang === 'pt'
+                ? 'vista LATERAL DIREITA'
+                : 'vista LATERAL DERECHA',
+        },
+        {
+          key: 'left',
+          label:
+            lang === 'en'
+              ? 'LEFT side view'
+              : lang === 'pt'
+                ? 'vista LATERAL ESQUERDA'
+                : 'vista LATERAL IZQUIERDA',
+        },
       ];
       let count = 0;
       for (const v of views) {

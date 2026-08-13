@@ -177,14 +177,15 @@ export function autofillAnamnesis(
   profile: Partial<UserProfile>,
   opts?: { overwrite?: boolean; lang?: 'es' | 'en' | 'pt' }
 ): AnamnesisRecord {
-  const es = opts?.lang !== 'en';
+  const lang = opts?.lang ?? 'en';
+  const es = lang === 'es';
   const overwrite = !!opts?.overwrite;
   const cur = loadAnamnesis();
   const stage = getCurrentHealthStage();
   const age = profile.birthDate ? calculateAge(profile.birthDate) : null;
   const lifeStage =
     age != null
-      ? getLifeStageLabel(getLifeStage(age), es ? 'es' : 'en')
+      ? getLifeStageLabel(getLifeStage(age), lang)
       : null;
 
   const sleep = getTodaySleep();
@@ -225,7 +226,7 @@ export function autofillAnamnesis(
 
   let gyn = cur.remote.gynObstetric;
   if (profile.sex === 'female') {
-    const cycle = getCycleSnapshot(es ? 'es' : 'en');
+    const cycle = getCycleSnapshot(lang);
     const settings = loadCycleSettings();
     gyn = es
       ? joinNonEmpty([
@@ -387,7 +388,10 @@ export function autofillAnamnesis(
   const bmLine = biomarkers.biomarkers
     .filter((b) => b.score != null)
     .slice(0, 6)
-    .map((b) => `${es ? b.labelEs : b.labelEn}: ${b.score}${b.unit || ''}`)
+    .map(
+      (b) =>
+        `${lang === 'pt' ? b.labelPt : es ? b.labelEs : b.labelEn}: ${b.score}${b.unit || ''}`
+    )
     .join(' · ');
 
   const vitalsSnapshot = es
@@ -466,18 +470,19 @@ export type ReadableAnamnesisOptions = {
 
 /** Documento clínico legible (texto plano / markdown suave). */
 export function formatAnamnesisReadable(opts: ReadableAnamnesisOptions): string {
-  const es = opts.lang !== 'en';
+  const lang = opts.lang ?? 'en';
+  const es = lang === 'es';
   const profile = opts.profile || {};
   const rec = opts.record || loadAnamnesis();
   const age = profile.birthDate ? calculateAge(profile.birthDate) : null;
   const stage =
     age != null
-      ? getLifeStageLabel(getLifeStage(age), es ? 'es' : 'en')
+      ? getLifeStageLabel(getLifeStage(age), lang)
       : '—';
   const r = rec.remote;
   const p = rec.proximate;
   const updated = rec.updatedAt
-    ? new Date(rec.updatedAt).toLocaleString(es ? 'es' : 'en')
+    ? new Date(rec.updatedAt).toLocaleString(lang === 'pt' ? 'pt-BR' : es ? 'es' : 'en')
     : '—';
 
   const L = es

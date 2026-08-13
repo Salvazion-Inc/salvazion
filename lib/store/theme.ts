@@ -11,8 +11,10 @@ export interface ThemePreset {
   id: ThemeId;
   label: string;
   labelEn: string;
+  labelPt: string;
   hint: string;
   hintEn: string;
+  hintPt: string;
   /** Swatch for the picker UI */
   swatch: string;
   swatchSecondary: string;
@@ -65,8 +67,10 @@ export const THEME_PRESETS: ThemePreset[] = [
     id: 'classic',
     label: 'Clásico',
     labelEn: 'Classic',
+    labelPt: 'Clássico',
     hint: 'Menta Salvazion — la firma original',
     hintEn: 'Salvazion mint — the original signature',
+    hintPt: 'Menta Salvazion — a assinatura original',
     swatch: '#8FD99A',
     swatchSecondary: '#6BCF78',
     vars: classicVars,
@@ -75,8 +79,10 @@ export const THEME_PRESETS: ThemePreset[] = [
     id: 'emerald',
     label: 'Esmeralda',
     labelEn: 'Emerald',
+    labelPt: 'Esmeralda',
     hint: 'Verde más profundo, solemne y firme',
     hintEn: 'Deeper green — solemn and firm',
+    hintPt: 'Verde mais profundo, solene e firme',
     swatch: '#4ECF7A',
     swatchSecondary: '#2A9B52',
     vars: {
@@ -104,8 +110,10 @@ export const THEME_PRESETS: ThemePreset[] = [
     id: 'aurora',
     label: 'Aurora',
     labelEn: 'Aurora',
+    labelPt: 'Aurora',
     hint: 'Teal luminoso — tech y esperanza',
     hintEn: 'Luminous teal — tech and hope',
+    hintPt: 'Teal luminoso — tech e esperança',
     swatch: '#5ED4B8',
     swatchSecondary: '#3AB89A',
     vars: {
@@ -133,8 +141,10 @@ export const THEME_PRESETS: ThemePreset[] = [
     id: 'kingdom',
     label: 'Reino',
     labelEn: 'Kingdom',
+    labelPt: 'Reino',
     hint: 'Oro real con acento verde León',
     hintEn: 'Royal gold with Lion green accent',
+    hintPt: 'Ouro real com acento verde Leão',
     swatch: '#D4B86A',
     swatchSecondary: '#8FD99A',
     vars: {
@@ -162,8 +172,10 @@ export const THEME_PRESETS: ThemePreset[] = [
     id: 'frost',
     label: 'Escarcha',
     labelEn: 'Frost',
+    labelPt: 'Geada',
     hint: 'Salvia plateada — calma y claridad',
     hintEn: 'Silver sage — calm and clarity',
+    hintPt: 'Sálvia prateada — calma e clareza',
     swatch: '#A8C4B0',
     swatchSecondary: '#7A9E88',
     vars: {
@@ -191,8 +203,10 @@ export const THEME_PRESETS: ThemePreset[] = [
     id: 'midnight',
     label: 'Medianoche',
     labelEn: 'Midnight',
+    labelPt: 'Meia-noite',
     hint: 'Violeta profundo con menta suave',
     hintEn: 'Deep violet with soft mint',
+    hintPt: 'Violeta profundo com menta suave',
     swatch: '#9B8FD9',
     swatchSecondary: '#8FD99A',
     vars: {

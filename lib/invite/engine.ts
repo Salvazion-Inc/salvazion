@@ -79,7 +79,16 @@ export function relationLabel(relation: LinkRelation, lang: Language = 'en'): st
     colleague: 'Colleague',
     faith_community: 'Faith community',
   };
-  return (lang === 'en' ? en : es)[relation] || relation;
+  const pt: Record<LinkRelation, string> = {
+    spouse: 'Cônjuge',
+    child: 'Filho/a',
+    sibling: 'Irmão/ã',
+    family: 'Família',
+    friend: 'Amigo/a',
+    colleague: 'Colega',
+    faith_community: 'Comunidade de fé',
+  };
+  return (lang === 'pt' ? pt : lang === 'es' ? es : en)[relation] || relation;
 }
 
 export function categoryLabel(id: InviteCategory, lang: Language = 'en'): string {
@@ -95,7 +104,13 @@ export function categoryLabel(id: InviteCategory, lang: Language = 'en'): string
     friend: 'Friends',
     colleague: 'Colleagues',
   };
-  return (lang === 'en' ? en : es)[id];
+  const pt: Record<InviteCategory, string> = {
+    family: 'Família',
+    sibling: 'Irmãos na fé',
+    friend: 'Amigos',
+    colleague: 'Colegas',
+  };
+  return (lang === 'pt' ? pt : lang === 'es' ? es : en)[id];
 }
 
 export function categoryHint(id: InviteCategory, lang: Language = 'en'): string {
@@ -111,7 +126,13 @@ export function categoryHint(id: InviteCategory, lang: Language = 'en'): string 
     friend: 'Friends for the journey of life',
     colleague: 'Coworkers, ministry partners and project teammates',
   };
-  return (lang === 'en' ? en : es)[id];
+  const pt: Record<InviteCategory, string> = {
+    family: 'Pais, cônjuge, filhos e família estendida',
+    sibling: 'Irmãos e irmãs de sangue ou da fé',
+    friend: 'Amigos do caminho e da vida',
+    colleague: 'Companheiros de trabalho, ministério ou projetos',
+  };
+  return (lang === 'pt' ? pt : lang === 'es' ? es : en)[id];
 }
 
 function randomCode(len = 8): string {
@@ -208,7 +229,14 @@ export async function createInvite(
 ): Promise<CreateInviteResult | { error: string }> {
   const name = input.name.trim();
   if (!name) {
-    return { error: lang === 'en' ? 'Name is required.' : 'El nombre es obligatorio.' };
+    return {
+      error:
+        lang === 'en'
+          ? 'Name is required.'
+          : lang === 'pt'
+            ? 'O nome é obrigatório.'
+            : 'El nombre es obligatorio.',
+    };
   }
 
   // Dynamic import to avoid circular deps in edge cases
@@ -271,7 +299,13 @@ export async function createInvite(
       inviterName,
       inviteeName: name,
       relation: input.relation,
-      inviteUrl: `${inviteUrl}\n\n${lang === 'en' ? 'Already have an account?' : '¿Ya tienes cuenta?'} ${inviteUrlLogin}`,
+      inviteUrl: `${inviteUrl}\n\n${
+        lang === 'en'
+          ? 'Already have an account?'
+          : lang === 'pt'
+            ? 'Já tem conta?'
+            : '¿Ya tienes cuenta?'
+      } ${inviteUrlLogin}`,
     },
     lang
   );

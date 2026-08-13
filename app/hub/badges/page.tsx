@@ -42,6 +42,15 @@ const CATEGORY_LABELS_EN: Record<BadgeCategory, string> = {
   special: 'Special',
 };
 
+const CATEGORY_LABELS_PT: Record<BadgeCategory, string> = {
+  salvation: 'Salvation',
+  health: 'Health',
+  freedom: 'Freedom',
+  streak: 'Sequências',
+  discipline: 'Disciplina',
+  special: 'Especiais',
+};
+
 export default function BadgesPage() {
   const { t, lang } = useI18n();
   const [earned, setEarned] = useState<(BadgeDef & { earnedAt: string })[]>([]);
@@ -96,13 +105,18 @@ export default function BadgesPage() {
     return (
       <div className="min-h-screen bg-[#040404] flex items-center justify-center">
         <div className="text-[#8FD99A] animate-pulse">
-          {lang === 'en' ? 'Loading badges...' : 'Cargando insignias...'}
+          {lang === 'en'
+            ? 'Loading badges...'
+            : lang === 'pt'
+              ? 'Carregando insígnias...'
+              : 'Cargando insignias...'}
         </div>
       </div>
     );
   }
 
-  const categoryLabels = lang === 'en' ? CATEGORY_LABELS_EN : CATEGORY_LABELS_ES;
+  const categoryLabels =
+    lang === 'en' ? CATEGORY_LABELS_EN : lang === 'pt' ? CATEGORY_LABELS_PT : CATEGORY_LABELS_ES;
   const categories = Object.keys(categoryLabels) as BadgeCategory[];
 
   return (
@@ -133,7 +147,7 @@ export default function BadgesPage() {
         <div className="flex items-center justify-between gap-3">
           <p className="text-sm text-white">
             {progress.earned} / {progress.total}{' '}
-            {lang === 'en' ? 'unlocked' : 'desbloqueadas'}
+            {lang === 'en' ? 'unlocked' : lang === 'pt' ? 'desbloqueadas' : 'desbloqueadas'}
           </p>
           <div className="h-2 w-32 rounded-full bg-[var(--surface-muted)] overflow-hidden">
             <div
@@ -180,7 +194,7 @@ export default function BadgesPage() {
             </p>
             <p className="text-[10px] text-[var(--sage)]/75 mt-1 tabular-nums">
               {lifetime.actionCount}{' '}
-              {lang === 'en' ? 'actions total' : 'acciones total'}
+              {lang === 'en' ? 'actions total' : lang === 'pt' ? 'ações no total' : 'acciones total'}
             </p>
             <div className="flex gap-2 mt-2 text-[10px] tabular-nums">
               <span style={{ color: PILLAR_COLORS.salvation.solid }}>
@@ -285,7 +299,11 @@ export default function BadgesPage() {
         {earned.length > 0 && (
           <section className="mb-6">
             <h2 className="text-sm font-semibold text-[var(--sage)] mb-3">
-              {lang === 'en' ? 'Recently unlocked' : 'Recién desbloqueadas'}
+              {lang === 'en'
+                ? 'Recently unlocked'
+                : lang === 'pt'
+                  ? 'Recém desbloqueadas'
+                  : 'Recién desbloqueadas'}
             </h2>
             <div className="flex gap-2 overflow-x-auto pb-1 -mx-0.5 px-0.5">
               {[...earned]
@@ -351,7 +369,7 @@ export default function BadgesPage() {
                       </p>
                       {unlocked && (
                         <p className="text-[10px] text-[#8FD99A] mt-1.5">
-                          ✓ {lang === 'en' ? 'Unlocked' : 'Desbloqueada'}
+                          ✓ {lang === 'en' ? 'Unlocked' : lang === 'pt' ? 'Desbloqueada' : 'Desbloqueada'}
                         </p>
                       )}
                     </div>

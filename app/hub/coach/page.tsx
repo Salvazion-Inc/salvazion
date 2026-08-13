@@ -59,7 +59,13 @@ export default function CoachPage() {
         <div className="max-w-lg mx-auto w-full flex-1 min-h-0 flex flex-col">
           {!loading && !isPremium ? (
             <PremiumGate
-              title={lang === 'en' ? 'AI Coach is Premium' : 'Coach con IA es Premium'}
+              title={
+                lang === 'en'
+                  ? 'AI Coach is Premium'
+                  : lang === 'pt'
+                    ? 'Coach com IA é Premium'
+                    : 'Coach con IA es Premium'
+              }
               description={
                 lang === 'en'
                   ? 'Unlock full AI coaching, voice TTS and advanced guidance for Salvation, Health and Freedom.'

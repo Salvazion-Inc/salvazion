@@ -455,7 +455,7 @@ export default function ProfilePage() {
               <div className="p-4 space-y-3">
                 <div>
                   <label className="block text-xs text-[var(--sage)] mb-1">
-                    {lang === 'en' ? 'Name' : 'Nombre'}
+                    {lang === 'en' ? 'Name' : lang === 'pt' ? 'Nome' : 'Nombre'}
                   </label>
                   <input
                     type="text"
@@ -569,7 +569,11 @@ export default function ProfilePage() {
                 href="/terms"
                 className="text-[11px] font-medium text-[var(--accent)] hover:underline"
               >
-                {lang === 'en' ? 'Terms of Service' : 'Términos de servicio'}
+                {lang === 'en'
+                  ? 'Terms of Service'
+                  : lang === 'pt'
+                    ? 'Termos de Serviço'
+                    : 'Términos de servicio'}
               </Link>
               <span className="text-[var(--sage)]/40" aria-hidden>
                 ·
@@ -578,7 +582,11 @@ export default function ProfilePage() {
                 href="/privacy"
                 className="text-[11px] font-medium text-[var(--accent)] hover:underline"
               >
-                {lang === 'en' ? 'Privacy Policy' : 'Política de privacidad'}
+                {lang === 'en'
+                  ? 'Privacy Policy'
+                  : lang === 'pt'
+                    ? 'Política de Privacidade'
+                    : 'Política de privacidad'}
               </Link>
             </div>
           </div>
@@ -621,7 +629,11 @@ export default function ProfilePage() {
                     onClick={handleClear}
                     className="flex-1 py-2 rounded-full bg-red-600 text-white text-sm font-medium"
                   >
-                    {lang === 'en' ? 'Confirm delete' : 'Confirmar borrado'}
+                    {lang === 'en'
+                      ? 'Confirm delete'
+                      : lang === 'pt'
+                        ? 'Confirmar exclusão'
+                        : 'Confirmar borrado'}
                   </button>
                 </div>
               </div>
@@ -634,20 +646,28 @@ export default function ProfilePage() {
               className="card-soft block p-4 border border-[var(--border-strong)] hover:border-[var(--accent)]/50 transition group mb-2"
             >
               <p className="text-[10px] uppercase tracking-wider text-[var(--accent)]">
-                Salvazion Inc.
+                Salvazion, Inc.
               </p>
               <p className="text-sm font-semibold text-white group-hover:text-[var(--accent)] transition mt-0.5">
                 {lang === 'en'
                   ? 'Business KPIs & funnel'
-                  : 'KPI de negocio y funnel'}
+                  : lang === 'pt'
+                    ? 'KPIs de negócio e funil'
+                    : 'KPI de negocio y funnel'}
               </p>
               <p className="text-[11px] text-[var(--sage)] mt-1 leading-relaxed">
                 {lang === 'en'
                   ? 'MRR, ARR, paid conversion, churn — operator only.'
-                  : 'MRR, ARR, conversión a pago, churn — solo operador.'}
+                  : lang === 'pt'
+                    ? 'MRR, ARR, conversão paga, churn — só operador.'
+                    : 'MRR, ARR, conversión a pago, churn — solo operador.'}
               </p>
               <p className="text-[11px] text-[var(--accent)] mt-2 font-medium">
-                {lang === 'en' ? 'Open console →' : 'Abrir consola →'}
+                {lang === 'en'
+                  ? 'Open console →'
+                  : lang === 'pt'
+                    ? 'Abrir consola →'
+                    : 'Abrir consola →'}
               </p>
             </Link>
           )}

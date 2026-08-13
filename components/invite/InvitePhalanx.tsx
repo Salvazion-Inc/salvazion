@@ -68,7 +68,11 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
         setSuccess(
           auto.already
             ? t('invite.alreadyConnected')
-            : t('invite.acceptedWith', { name: auto.inviterName || (lang === 'en' ? 'Community' : 'Comunidad') })
+            : t('invite.acceptedWith', {
+                name:
+                  auto.inviterName ||
+                  (lang === 'en' ? 'Community' : lang === 'pt' ? 'Comunidade' : 'Comunidad'),
+              })
         );
       }
       const inbound = loadInboundInvite();
@@ -123,7 +127,11 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
       setLastUrl(result.inviteUrl);
       const shareResult = await shareInviteText(
         result.shareText,
-        lang === 'en' ? 'Join my Community — Salvazion' : 'Únete a mi Comunidad — Salvazion'
+        lang === 'en'
+          ? 'Join my Community — Salvazion'
+          : lang === 'pt'
+            ? 'Entre na minha Comunidade — Salvazion'
+            : 'Únete a mi Comunidad — Salvazion'
       );
       setSuccess(
         shareResult === 'shared'
@@ -171,7 +179,11 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
       setSuccess(
         result.already
           ? t('invite.alreadyConnected')
-          : t('invite.acceptedWith', { name: result.inviterName || (lang === 'en' ? 'Community' : 'Comunidad') })
+          : t('invite.acceptedWith', {
+              name:
+                result.inviterName ||
+                (lang === 'en' ? 'Community' : lang === 'pt' ? 'Comunidade' : 'Comunidad'),
+            })
       );
       setPendingBanner(null);
       setAcceptCode('');
@@ -199,7 +211,7 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-wider text-[var(--sage)]">
-            {lang === 'en' ? 'Community' : 'Comunidad'}
+            {lang === 'en' ? 'Community' : lang === 'pt' ? 'Comunidade' : 'Comunidad'}
           </p>
           <h3 className="text-base font-semibold text-[#8FD99A] mt-0.5">{t('invite.title')}</h3>
           <p className="text-xs text-[var(--sage)]/55 mt-1 leading-relaxed">{t('invite.subtitle')}</p>

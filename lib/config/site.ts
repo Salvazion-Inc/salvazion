@@ -40,6 +40,8 @@ export const MARKETING_URL = APP_URL;
 export const SUPPORT_EMAIL = 'info@salvazion.org';
 /** Display name for outbound product email */
 export const SUPPORT_EMAIL_NAME = 'Salvazion';
+/** Legal entity as on the Delaware certificate */
+export const LEGAL_NAME = 'Salvazion, Inc.';
 /** mailto: link for legal / footer UI */
 export const SUPPORT_MAILTO = `mailto:${SUPPORT_EMAIL}`;
 

@@ -25,7 +25,18 @@ export function pickLang<T>(
   return map.en;
 }
 
+/** EN / ES / PT string helper — English is principal. */
+export function tx3(
+  lang: Language | string | undefined,
+  en: string,
+  es: string,
+  pt: string
+): string {
+  return pickLang(lang, { en, es, pt });
+}
+
 export function defaultBibleVersion(lang: Language | string | undefined): BibleVersion {
+  // Stored id remains rv1960 for existing profiles; the text is Reina Valera 1909.
   if (lang === 'es') return 'rv1960';
   if (lang === 'pt') return 'arc';
   return 'kjv';

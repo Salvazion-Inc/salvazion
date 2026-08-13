@@ -34,7 +34,9 @@ export default function VoiceAgent({
   mode = 'coach',
   onDebateScored,
 }: Props) {
-  const es = lang !== 'en';
+  const tx = (en: string, es: string, pt: string) =>
+    lang === 'pt' ? pt : lang === 'es' ? es : en;
+  const es = lang === 'es';
   const isDebate = mode === 'debate';
   const [messages, setMessages] = useState<CoachChatMessage[]>([]);
   const [input, setInput] = useState('');
@@ -56,7 +58,7 @@ export default function VoiceAgent({
     : es
       ? COACH_SUGGESTED_PROMPTS_ES
       : COACH_SUGGESTED_PROMPTS_EN;
-  const name = profile?.name?.split(' ')[0] || (es ? 'Hermano' : 'Friend');
+  const name = profile?.name?.split(' ')[0] || tx('Friend', 'Hermano', 'Irmão');
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' });
@@ -184,7 +186,7 @@ export default function VoiceAgent({
 
     const rec = new SR();
     recognitionRef.current = rec;
-    rec.lang = es ? 'es-ES' : 'en-US';
+    rec.lang = lang === 'pt' ? 'pt-BR' : lang === 'es' ? 'es-ES' : 'en-US';
     rec.interimResults = false;
     rec.maxAlternatives = 1;
     rec.onresult = (ev: SpeechRecognitionEvent) => {
@@ -196,7 +198,7 @@ export default function VoiceAgent({
     };
     rec.onerror = () => {
       setListening(false);
-      setError(es ? 'No se captó audio. Reintenta.' : 'No audio captured. Retry.');
+      setError(tx('No audio captured. Retry.', 'No se captó audio. Reintenta.', 'Não captamos áudio. Tente de novo.'));
     };
     rec.onend = () => setListening(false);
     setListening(true);
@@ -257,9 +259,11 @@ export default function VoiceAgent({
             stopSpeech();
           }}
           className={`pill-soft shrink-0 text-[10px] ${voiceOn ? 'pill-soft-active' : ''}`}
-          title={es ? 'Voz' : 'Voice'}
+          title={tx('Voice', 'Voz', 'Voz')}
         >
-          {voiceOn ? (es ? 'Voz on' : 'Voice on') : es ? 'Voz off' : 'Voice off'}
+          {voiceOn
+            ? tx('Voice on', 'Voz on', 'Voz on')
+            : tx('Voice off', 'Voz off', 'Voz off')}
         </button>
       </div>
 
@@ -318,7 +322,7 @@ export default function VoiceAgent({
                   onClick={() => void playTts(m.content)}
                   className="mt-2 text-[10px] text-[var(--accent)] hover:underline"
                 >
-                  {es ? '▶ Escuchar' : '▶ Listen'}
+                  {tx('▶ Listen', '▶ Escuchar', '▶ Ouvir')}
                 </button>
               )}
             </div>
@@ -328,7 +332,7 @@ export default function VoiceAgent({
         {busy && (
           <div className="flex items-center gap-2 text-xs text-[var(--sage)]">
             <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
-            {es ? 'El León medita…' : 'The Lion considers…'}
+            {tx('The Lion considers…', 'El León medita…', 'O Leão medita…')}
           </div>
         )}
       </div>
@@ -348,7 +352,11 @@ export default function VoiceAgent({
                 ? 'border-[#8FD99A] bg-[#7BC98A]/25 text-[#8FD99A] animate-pulse'
                 : 'border-[var(--border-soft)] text-[var(--sage)] hover:border-[var(--border-strong)]'
             }`}
-            aria-label={listening ? (es ? 'Detener mic' : 'Stop mic') : es ? 'Hablar' : 'Speak'}
+            aria-label={
+              listening
+                ? tx('Stop mic', 'Detener mic', 'Parar mic')
+                : tx('Speak', 'Hablar', 'Falar')
+            }
           >
             {listening ? '■' : '🎙'}
           </button>
@@ -362,7 +370,7 @@ export default function VoiceAgent({
               }
             }}
             placeholder={
-              es ? 'Escribe o usa el mic…' : 'Type or use the mic…'
+              tx('Type or use the mic…', 'Escribe o usa el mic…', 'Escreva ou use o mic…')
             }
             className="input-soft input-inline px-3 text-sm"
             disabled={busy}
@@ -373,7 +381,7 @@ export default function VoiceAgent({
             onClick={() => void send(input)}
             className="btn-primary btn-inline text-xs sm:text-sm disabled:opacity-40"
           >
-            {es ? 'Enviar' : 'Send'}
+            {tx('Send', 'Enviar', 'Enviar')}
           </button>
         </div>
         {speakState !== 'idle' && (

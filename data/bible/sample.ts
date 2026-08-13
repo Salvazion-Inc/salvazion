@@ -9,7 +9,7 @@ import { BibleChapter, BibleBook } from '@/lib/bible/types';
  * muestra un placeholder respetuoso hasta integrar el JSON completo.
  *
  * Fuentes de referencia (producción):
- * - Español: Reina Valera 1960 (verificar licencia regional)
+ * - Español: Reina Valera 1909 (dominio público)
  * - Inglés: King James Version (public domain)
  * - Original: Westminster Leningrad Codex (Hebreo) + SBLGNT (Griego) — open data
  *
@@ -90,9 +90,9 @@ export const BIBLE_BOOKS: BibleBook[] = [
 ];
 
 export const SAMPLE_CHAPTERS: BibleChapter[] = [
-  // ===== GÉNESIS 1 — RV1960 =====
+  // ===== GÉNESIS 1 — RV1909 =====
   {
-    book: 'Génesis', bookId: 'gen', chapter: 1, language: 'es', version: 'Reina Valera 1960',
+    book: 'Génesis', bookId: 'gen', chapter: 1, language: 'es', version: 'Reina Valera 1909',
     verses: [
       { number: 1, text: 'En el principio creó Dios los cielos y la tierra.' },
       { number: 2, text: 'Y la tierra estaba desordenada y vacía, y las tinieblas estaban sobre la faz del abismo, y el Espíritu de Dios se movía sobre la faz de las aguas.' },
@@ -120,9 +120,9 @@ export const SAMPLE_CHAPTERS: BibleChapter[] = [
       { number: 31, text: 'And God saw every thing that he had made, and, behold, it was very good. And the evening and the morning were the sixth day.' },
     ]
   },
-  // ===== SALMOS 23 — RV1960 =====
+  // ===== SALMOS 23 — RV1909 =====
   {
-    book: 'Salmos', bookId: 'psa', chapter: 23, language: 'es', version: 'Reina Valera 1960',
+    book: 'Salmos', bookId: 'psa', chapter: 23, language: 'es', version: 'Reina Valera 1909',
     verses: [
       { number: 1, text: 'Jehová es mi pastor; nada me faltará.' },
       { number: 2, text: 'En lugares de delicados pastos me hará descansar; Junto a aguas de reposo me pastoreará.' },
@@ -144,9 +144,9 @@ export const SAMPLE_CHAPTERS: BibleChapter[] = [
       { number: 6, text: 'Surely goodness and mercy shall follow me all the days of my life: and I will dwell in the house of the Lord for ever.' },
     ]
   },
-  // ===== JUAN 1 — RV1960 =====
+  // ===== JUAN 1 — RV1909 =====
   {
-    book: 'Juan', bookId: 'jhn', chapter: 1, language: 'es', version: 'Reina Valera 1960',
+    book: 'Juan', bookId: 'jhn', chapter: 1, language: 'es', version: 'Reina Valera 1909',
     verses: [
       { number: 1, text: 'En el principio era el Verbo, y el Verbo era con Dios, y el Verbo era Dios.' },
       { number: 2, text: 'Este era en el principio con Dios.' },
@@ -170,9 +170,9 @@ export const SAMPLE_CHAPTERS: BibleChapter[] = [
       { number: 14, text: 'And the Word was made flesh, and dwelt among us, (and we beheld his glory, the glory as of the only begotten of the Father,) full of grace and truth.' },
     ]
   },
-  // ===== ROMANOS 12 — RV1960 (extracto) =====
+  // ===== ROMANOS 12 — RV1909 (extracto) =====
   {
-    book: 'Romanos', bookId: 'rom', chapter: 12, language: 'es', version: 'Reina Valera 1960',
+    book: 'Romanos', bookId: 'rom', chapter: 12, language: 'es', version: 'Reina Valera 1909',
     verses: [
       { number: 1, text: 'Así que, hermanos, os ruego por las misericordias de Dios, que presentéis vuestros cuerpos en sacrificio vivo, santo, agradable a Dios, que es vuestro culto racional.' },
       { number: 2, text: 'No os conforméis a este siglo, sino transformaos por medio de la renovación de vuestro entendimiento, para que comprobéis cuál sea la buena voluntad de Dios, agradable y perfecta.' },
@@ -181,9 +181,9 @@ export const SAMPLE_CHAPTERS: BibleChapter[] = [
       { number: 21, text: 'No seas vencido de lo malo, sino vence con el bien el mal.' },
     ]
   },
-  // ===== APOCALIPSIS 5 — RV1960 (León de Judá) =====
+  // ===== APOCALIPSIS 5 — RV1909 (León de Judá) =====
   {
-    book: 'Apocalipsis', bookId: 'rev', chapter: 5, language: 'es', version: 'Reina Valera 1960',
+    book: 'Apocalipsis', bookId: 'rev', chapter: 5, language: 'es', version: 'Reina Valera 1909',
     verses: [
       { number: 5, text: 'Y uno de los ancianos me dijo: No llores. He aquí que el León de la tribu de Judá, la raíz de David, ha vencido para abrir el libro y desatar sus siete sellos.' },
       { number: 6, text: 'Y miré, y vi que en medio del trono y de los cuatro seres vivientes, y en medio de los ancianos, estaba en pie un Cordero como inmolado...' },

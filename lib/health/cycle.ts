@@ -233,7 +233,33 @@ function phaseTips(phase: CyclePhase, lang: 'es' | 'en' | 'pt' = 'en'): string[]
       'Combine phone sensors (steps, sleep) with your cycle.',
     ],
   };
-  return (lang === 'en' ? en : es)[phase]; // pt falls back to Spanish (close Romance phrasing)
+  const pt: Record<CyclePhase, string[]> = {
+    menstrual: [
+      'Priorize descanso e calor local se houver cólicas.',
+      'Ferro e proteínas de qualidade ajudam a repor energia.',
+      'Hidratação e sono regular apoiam a recuperação.',
+    ],
+    follicular: [
+      'Boa janela para treino de força e projetos novos.',
+      'Aproveite a energia crescente com sol e movimento.',
+      'Mantenha proteína e micronutrientes estáveis.',
+    ],
+    ovulatory: [
+      'Energia e comunicação costumam estar altas: cuide do corpo e da alma.',
+      'Não descuide a hidratação se treinar com intensidade.',
+      'Observe sinais de fertilidade com respeito e prudência.',
+    ],
+    luteal: [
+      'A energia pode cair: priorize sono e refeições estáveis.',
+      'Reduza cafeína extra e açúcares se houver inchaço ou ânimo baixo.',
+      'Caminhadas suaves e oração ajudam o equilíbrio.',
+    ],
+    unknown: [
+      'Registre o início do período para personalizar recomendações.',
+      'Combine sensores do celular (passos, sono) com o seu ciclo.',
+    ],
+  };
+  return (lang === 'pt' ? pt : lang === 'es' ? es : en)[phase];
 }
 
 export function getCycleSnapshot(lang: 'es' | 'en' | 'pt' = 'en'): CycleSnapshot {
@@ -293,31 +319,31 @@ export function getCycleSnapshot(lang: 'es' | 'en' | 'pt' = 'en'): CycleSnapshot
   };
 }
 
-export const FLOW_LABELS: Record<FlowLevel, { es: string; en: string }> = {
-  none: { es: 'Sin flujo', en: 'None' },
-  spotting: { es: 'Manchado', en: 'Spotting' },
-  light: { es: 'Ligero', en: 'Light' },
-  medium: { es: 'Medio', en: 'Medium' },
-  heavy: { es: 'Abundante', en: 'Heavy' },
+export const FLOW_LABELS: Record<FlowLevel, { es: string; en: string; pt: string }> = {
+  none: { es: 'Sin flujo', en: 'None', pt: 'Sem fluxo' },
+  spotting: { es: 'Manchado', en: 'Spotting', pt: 'Manchas' },
+  light: { es: 'Ligero', en: 'Light', pt: 'Leve' },
+  medium: { es: 'Medio', en: 'Medium', pt: 'Médio' },
+  heavy: { es: 'Abundante', en: 'Heavy', pt: 'Intenso' },
 };
 
-export const SYMPTOM_LABELS: Record<CycleSymptom, { es: string; en: string }> = {
-  cramps: { es: 'Cólicos', en: 'Cramps' },
-  headache: { es: 'Dolor de cabeza', en: 'Headache' },
-  fatigue: { es: 'Fatiga', en: 'Fatigue' },
-  bloating: { es: 'Hinchazón', en: 'Bloating' },
-  mood: { es: 'Ánimo', en: 'Mood' },
-  breast_tenderness: { es: 'Senos sensibles', en: 'Breast tenderness' },
-  back_pain: { es: 'Dolor lumbar', en: 'Back pain' },
-  acne: { es: 'Acné', en: 'Acne' },
-  nausea: { es: 'Náuseas', en: 'Nausea' },
-  cravings: { es: 'Antojos', en: 'Cravings' },
+export const SYMPTOM_LABELS: Record<CycleSymptom, { es: string; en: string; pt: string }> = {
+  cramps: { es: 'Cólicos', en: 'Cramps', pt: 'Cólicas' },
+  headache: { es: 'Dolor de cabeza', en: 'Headache', pt: 'Dor de cabeça' },
+  fatigue: { es: 'Fatiga', en: 'Fatigue', pt: 'Fadiga' },
+  bloating: { es: 'Hinchazón', en: 'Bloating', pt: 'Inchaço' },
+  mood: { es: 'Ánimo', en: 'Mood', pt: 'Ânimo' },
+  breast_tenderness: { es: 'Senos sensibles', en: 'Breast tenderness', pt: 'Seios sensíveis' },
+  back_pain: { es: 'Dolor lumbar', en: 'Back pain', pt: 'Dor lombar' },
+  acne: { es: 'Acné', en: 'Acne', pt: 'Acne' },
+  nausea: { es: 'Náuseas', en: 'Nausea', pt: 'Náusea' },
+  cravings: { es: 'Antojos', en: 'Cravings', pt: 'Desejos' },
 };
 
-export const PHASE_LABELS: Record<CyclePhase, { es: string; en: string }> = {
-  menstrual: { es: 'Menstrual', en: 'Menstrual' },
-  follicular: { es: 'Folicular', en: 'Follicular' },
-  ovulatory: { es: 'Ovulatoria', en: 'Ovulatory' },
-  luteal: { es: 'Lútea', en: 'Luteal' },
-  unknown: { es: 'Sin datos', en: 'Unknown' },
+export const PHASE_LABELS: Record<CyclePhase, { es: string; en: string; pt: string }> = {
+  menstrual: { es: 'Menstrual', en: 'Menstrual', pt: 'Menstrual' },
+  follicular: { es: 'Folicular', en: 'Follicular', pt: 'Folicular' },
+  ovulatory: { es: 'Ovulatoria', en: 'Ovulatory', pt: 'Ovulatória' },
+  luteal: { es: 'Lútea', en: 'Luteal', pt: 'Lútea' },
+  unknown: { es: 'Sin datos', en: 'Unknown', pt: 'Sem dados' },
 };

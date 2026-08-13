@@ -28,37 +28,59 @@ type Props = {
 
 const CATEGORY_META: Record<
   BiomarkerCategory,
-  { titleEs: string; titleEn: string; blurbEs: string; blurbEn: string; indexEs: string; indexEn: string }
+  {
+    titleEs: string;
+    titleEn: string;
+    titlePt: string;
+    blurbEs: string;
+    blurbEn: string;
+    blurbPt: string;
+    indexEs: string;
+    indexEn: string;
+    indexPt: string;
+  }
 > = {
   exercise: {
     titleEs: 'Biomarcadores · Ejercicio',
     titleEn: 'Biomarkers · Exercise',
+    titlePt: 'Biomarcadores · Exercício',
     blurbEs:
       'Actividad, sol y movimiento desde wearables + teléfono y hábitos. No sustituyen analítica clínica.',
     blurbEn:
       'Activity, outdoor light and movement from wearables + phone and habits. Not lab results.',
+    blurbPt:
+      'Atividade, sol e movimento de wearables + telefone e hábitos. Não substituem analítica clínica.',
     indexEs: 'Índice ejercicio',
     indexEn: 'Exercise index',
+    indexPt: 'Índice exercício',
   },
   nutrition: {
     titleEs: 'Biomarcadores · Alimentación',
     titleEn: 'Biomarkers · Nutrition',
+    titlePt: 'Biomarcadores · Alimentação',
     blurbEs:
       'Hidratación y calidad de comidas según tus registros. Orientan hábitos; no reemplazan nutrición clínica.',
     blurbEn:
       'Hydration and meal quality from your logs. Habit guidance — not clinical nutrition advice.',
+    blurbPt:
+      'Hidratação e qualidade das refeições segundo os seus registros. Orientam hábitos; não substituem nutrição clínica.',
     indexEs: 'Índice alimentación',
     indexEn: 'Nutrition index',
+    indexPt: 'Índice alimentação',
   },
   sleep: {
     titleEs: 'Biomarcadores · Sueño',
     titleEn: 'Biomarkers · Sleep',
+    titlePt: 'Biomarcadores · Sono',
     blurbEs:
       'Recuperación y ritmo circadiano desde sueño del wearable, reposo del teléfono y registros.',
     blurbEn:
       'Recovery and circadian rhythm from wearable sleep, phone rest, and your logs.',
+    blurbPt:
+      'Recuperação e ritmo circadiano a partir do sono do wearable, repouso do telefone e registros.',
     indexEs: 'Índice sueño',
     indexEn: 'Sleep index',
+    indexPt: 'Índice sono',
   },
 };
 
@@ -68,7 +90,9 @@ export default function BiomarkersPanel({
   refreshKey = 0,
   category,
 }: Props) {
-  const es = lang !== 'en';
+  const loc = <T extends { en: string; es: string; pt: string }>(m: T) =>
+    lang === 'pt' ? m.pt : lang === 'es' ? m.es : m.en;
+  const tx = (en: string, es: string, pt: string) => loc({ en, es, pt });
   const meta = CATEGORY_META[category];
   const [report, setReport] = useState<BiomarkerReport | null>(null);
   const [sources, setSources] = useState<CombinedHealthIndicators['sources'] | null>(
@@ -97,51 +121,43 @@ export default function BiomarkersPanel({
 
   const sourceLabel =
     sources?.wearable && sources?.phone
-      ? es
-        ? 'Teléfono + wearable'
-        : 'Phone + wearable'
+      ? tx('Phone + wearable', 'Teléfono + wearable', 'Telefone + wearable')
       : sources?.wearable
-        ? es
-          ? 'Wearable'
-          : 'Wearable'
+        ? 'Wearable'
         : sources?.phone
-          ? es
-            ? 'Teléfono'
-            : 'Phone'
-          : es
-            ? 'Hábitos / sin dispositivo'
-            : 'Habits / no device';
+          ? tx('Phone', 'Teléfono', 'Telefone')
+          : tx('Habits / no device', 'Hábitos / sin dispositivo', 'Hábitos / sem dispositivo');
 
   return (
     <section className="mb-6">
       <div className="flex items-center justify-between mb-3 gap-2">
         <h2 className="text-sm font-semibold text-[var(--sage)] flex items-center gap-2">
           <span>◈</span>
-          {es ? meta.titleEs : meta.titleEn}
+          {tx(meta.titleEn, meta.titleEs, meta.titlePt)}
         </h2>
         <button
           type="button"
           onClick={recompute}
           className="text-[10px] pill-soft py-1 px-2.5"
         >
-          {es ? 'Actualizar' : 'Refresh'}
+          {tx('Refresh', 'Actualizar', 'Atualizar')}
         </button>
       </div>
 
       <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] space-y-4">
         <p className="text-[11px] text-[var(--sage)]/80 leading-relaxed">
-          {es ? meta.blurbEs : meta.blurbEn}
+          {tx(meta.blurbEn, meta.blurbEs, meta.blurbPt)}
         </p>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-[var(--sage)]/70">
           <span>
-            {es ? 'Fuente' : 'Source'}: {sourceLabel}
+            {tx('Source', 'Fuente', 'Fonte')}: {sourceLabel}
           </span>
           {!sources?.wearable && !sources?.phone && (
             <Link
               href="/hub/profile?settings=1&tab=wearables"
               className="text-[var(--accent)] hover:underline"
             >
-              {es ? 'Conectar dispositivo →' : 'Connect device →'}
+              {tx('Connect device →', 'Conectar dispositivo →', 'Conectar dispositivo →')}
             </Link>
           )}
         </div>
@@ -169,10 +185,10 @@ export default function BiomarkersPanel({
           </div>
           <div className="min-w-0">
             <p className="text-[10px] uppercase tracking-wider text-[var(--accent)]">
-              {es ? meta.indexEs : meta.indexEn}
+              {tx(meta.indexEn, meta.indexEs, meta.indexPt)}
             </p>
             <p className="text-xs text-[#D8E1D9]/85 mt-1 leading-relaxed">
-              {report.highlights.map((h) => (es ? h.es : h.en)).join(' ')}
+              {report.highlights.map((h) => loc(h)).join(' ')}
             </p>
           </div>
         </div>
@@ -186,20 +202,14 @@ export default function BiomarkersPanel({
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
                   <p className="text-xs font-medium text-white">
-                    {es ? bm.labelEs : bm.labelEn}
+                    {tx(bm.labelEn, bm.labelEs, bm.labelPt)}
                   </p>
                   <p className="text-[10px] text-[var(--sage)] mt-0.5">
                     {bm.source === 'phone_sensor'
-                      ? es
-                        ? 'Sensor'
-                        : 'Sensor'
+                      ? tx('Sensor', 'Sensor', 'Sensor')
                       : bm.source === 'derived'
-                        ? es
-                          ? 'Derivado'
-                          : 'Derived'
-                        : es
-                          ? 'Registro'
-                          : 'Self-report'}
+                        ? tx('Derived', 'Derivado', 'Derivado')
+                        : tx('Self-report', 'Registro', 'Registro')}
                     {bm.loinc ? ` · LOINC ${bm.loinc}` : ''}
                   </p>
                 </div>
@@ -224,7 +234,7 @@ export default function BiomarkersPanel({
                 </div>
               )}
               <p className="text-[10px] text-[#D8E1D9]/70 mt-1.5 leading-relaxed">
-                {es ? bm.tipEs : bm.tipEn}
+                {tx(bm.tipEn, bm.tipEs, bm.tipPt)}
               </p>
             </div>
           ))}

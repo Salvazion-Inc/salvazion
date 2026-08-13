@@ -1,9 +1,23 @@
 /**
- * Cineantropometría por fotos (frontal / lateral / posterior).
+ * Cineantropometría por fotos (frente / espalda / lado derecho / lado izquierdo).
  * Estimaciones con Grok Vision — no es DEXA ni plicometría clínica.
  */
 
-export type BodyPhotoView = 'front' | 'side' | 'back';
+export type BodyPhotoView = 'front' | 'back' | 'right' | 'left';
+
+/** Legacy sessions stored a single `side` photo — keep it as the right view. */
+function migratePhotos(
+  photos: Partial<Record<string, string>> | undefined
+): Partial<Record<BodyPhotoView, string>> {
+  if (!photos) return {};
+  const next: Partial<Record<BodyPhotoView, string>> = {};
+  if (photos.front) next.front = photos.front;
+  if (photos.back) next.back = photos.back;
+  if (photos.right) next.right = photos.right;
+  if (photos.left) next.left = photos.left;
+  if (!next.right && photos.side) next.right = photos.side;
+  return next;
+}
 
 export type BodyMassBreakdown = {
   /** kg estimados */
@@ -50,7 +64,9 @@ export function loadBodySessions(): BodyCompositionSession[] {
   if (typeof window === 'undefined') return [];
   try {
     const raw = localStorage.getItem(STORAGE);
-    return raw ? (JSON.parse(raw) as BodyCompositionSession[]) : [];
+    if (!raw) return [];
+    const list = JSON.parse(raw) as BodyCompositionSession[];
+    return list.map((s) => ({ ...s, photos: migratePhotos(s.photos) }));
   } catch {
     return [];
   }

@@ -92,9 +92,24 @@ export default function WearablesPanel({ onAutoLog, onSleepSynced }: Props) {
 
   const runAutoLog = () => {
     const logged = tryWearableAutoLogs(onAutoLog, {
-      hit: lang === 'en' ? 'Wearable activity ≥ 15 min' : 'Actividad wearable ≥ 15 min',
-      outdoor: lang === 'en' ? 'Wearable distance / outdoor' : 'Distancia / exterior wearable',
-      sleep: lang === 'en' ? 'Wearable sleep' : 'Sueño del wearable',
+      hit:
+        lang === 'en'
+          ? 'Wearable activity ≥ 15 min'
+          : lang === 'pt'
+            ? 'Atividade do wearable ≥ 15 min'
+            : 'Actividad wearable ≥ 15 min',
+      outdoor:
+        lang === 'en'
+          ? 'Wearable distance / outdoor'
+          : lang === 'pt'
+            ? 'Distância / exterior do wearable'
+            : 'Distancia / exterior wearable',
+      sleep:
+        lang === 'en'
+          ? 'Wearable sleep'
+          : lang === 'pt'
+            ? 'Sono do wearable'
+            : 'Sueño del wearable',
     });
     const c = getCombinedHealthIndicators();
     if (c.wearable.sleepBed && c.wearable.sleepWake) {
@@ -425,7 +440,7 @@ export default function WearablesPanel({ onAutoLog, onSleepSynced }: Props) {
                   }`}
                 >
                   <span className="mr-1.5">{item.icon}</span>
-                  {lang === 'en' ? item.name : item.nameEs}
+                  {lang === 'en' ? item.name : lang === 'pt' ? item.namePt : item.nameEs}
                   <span className="text-[10px] opacity-70 ml-1">
                     · {categoryLabel(item.category)}
                   </span>
@@ -456,7 +471,11 @@ export default function WearablesPanel({ onAutoLog, onSleepSynced }: Props) {
 
             {catalogItem && (
               <p className="text-[10px] text-[var(--sage)]/70 leading-relaxed">
-                {lang === 'en' ? catalogItem.note : catalogItem.noteEs || catalogItem.note}
+                {lang === 'en'
+                  ? catalogItem.note
+                  : lang === 'pt'
+                    ? catalogItem.notePt || catalogItem.note
+                    : catalogItem.noteEs || catalogItem.note}
               </p>
             )}
 

@@ -11,15 +11,16 @@ export const TEXT_SCALE_OPTIONS: {
   id: TextScale;
   label: string;
   labelEn: string;
+  labelPt: string;
   /** Root font-size in px */
   px: number;
   /** Preview letter size class hint */
   sample: string;
 }[] = [
-  { id: 'md', label: 'Normal', labelEn: 'Normal', px: 16, sample: 'Aa' },
-  { id: 'lg', label: 'Grande', labelEn: 'Large', px: 18, sample: 'Aa' },
-  { id: 'xl', label: 'Muy grande', labelEn: 'Extra large', px: 20, sample: 'Aa' },
-  { id: 'xxl', label: 'Máxima', labelEn: 'Maximum', px: 22, sample: 'Aa' },
+  { id: 'md', label: 'Normal', labelEn: 'Normal', labelPt: 'Normal', px: 16, sample: 'Aa' },
+  { id: 'lg', label: 'Grande', labelEn: 'Large', labelPt: 'Grande', px: 18, sample: 'Aa' },
+  { id: 'xl', label: 'Muy grande', labelEn: 'Extra large', labelPt: 'Muito grande', px: 20, sample: 'Aa' },
+  { id: 'xxl', label: 'Máxima', labelEn: 'Maximum', labelPt: 'Máxima', px: 22, sample: 'Aa' },
 ];
 
 export function isTextScale(v: unknown): v is TextScale {

@@ -89,7 +89,12 @@ export async function runPassiveHealthSync(opts?: {
       lang === 'en'
         ? 'Device outdoor / distance'
         : 'Exterior / distancia del dispositivo',
-    sleep: lang === 'en' ? 'Device sleep' : 'Sueño del dispositivo',
+    sleep:
+      lang === 'en'
+        ? 'Device sleep'
+        : lang === 'pt'
+          ? 'Sono do dispositivo'
+          : 'Sueño del dispositivo',
   };
 
   const now = Date.now();

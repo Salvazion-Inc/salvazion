@@ -569,19 +569,23 @@ export default function DashboardPage() {
               className="card-soft block p-3.5 border border-[var(--border-strong)] group"
             >
               <p className="text-[10px] uppercase tracking-wider text-[var(--accent)]">
-                Salvazion Inc.
+                Salvazion, Inc.
               </p>
               <div className="flex items-center justify-between gap-2 mt-0.5">
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-white group-hover:text-[#8FD99A] transition">
                     {lang === 'en'
                       ? 'Business KPIs & funnel'
-                      : 'KPI de negocio y funnel'}
+                      : lang === 'pt'
+                        ? 'KPIs de negócio e funil'
+                        : 'KPI de negocio y funnel'}
                   </p>
                   <p className="text-[10px] text-[var(--sage)] mt-0.5">
                     {lang === 'en'
                       ? 'MRR · ARR · conversion · churn'
-                      : 'MRR · ARR · conversión · churn'}
+                      : lang === 'pt'
+                        ? 'MRR · ARR · conversão · churn'
+                        : 'MRR · ARR · conversión · churn'}
                   </p>
                 </div>
                 <span className="text-[var(--accent)] text-sm shrink-0">→</span>

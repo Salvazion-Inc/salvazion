@@ -92,7 +92,11 @@ export default function PhoneSensorsPanel({
         if (
           tryAutoLog(
             'hit_15min',
-            lang === 'en' ? 'Phone activity ≥ 15 min' : 'Actividad del celular ≥ 15 min'
+            lang === 'en'
+              ? 'Phone activity ≥ 15 min'
+              : lang === 'pt'
+                ? 'Atividade do celular ≥ 15 min'
+                : 'Actividad del celular ≥ 15 min'
           )
         ) {
           setNote(
@@ -107,7 +111,11 @@ export default function PhoneSensorsPanel({
         if (
           tryAutoLog(
             'outdoor_sun_20min',
-            lang === 'en' ? 'Outdoor walk (GPS)' : 'Caminata exterior (GPS)'
+            lang === 'en'
+              ? 'Outdoor walk (GPS)'
+              : lang === 'pt'
+                ? 'Caminhada ao ar livre (GPS)'
+                : 'Caminata exterior (GPS)'
           )
         ) {
           setNote(
@@ -125,7 +133,11 @@ export default function PhoneSensorsPanel({
           if (
             tryAutoLog(
               'sleep_ideal',
-              lang === 'en' ? 'Sleep from rest mode' : 'Sueño desde modo reposo'
+              lang === 'en'
+                ? 'Sleep from rest mode'
+                : lang === 'pt'
+                  ? 'Sono a partir do modo repouso'
+                  : 'Sueño desde modo reposo'
             )
           ) {
             setNote(

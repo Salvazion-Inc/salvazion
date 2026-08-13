@@ -120,12 +120,14 @@ async function reverseGeocodeClient(
 function PinMap({
   geo,
   churches,
-  es,
+  lang,
 }: {
   geo: Geo;
   churches: ChurchPlace[];
-  es: boolean;
+  lang: 'es' | 'en' | 'pt';
 }) {
+  const tx = (en: string, es: string, pt: string) =>
+    lang === 'pt' ? pt : lang === 'es' ? es : en;
   const W = 320;
   const H = 180;
   const pad = 18;
@@ -169,11 +171,11 @@ function PinMap({
           'radial-gradient(ellipse at 50% 40%, rgba(123,201,138,0.12) 0%, #0a0f0b 55%, #040404 100%)',
       }}
       role="img"
-      aria-label={
-        es
-          ? `Mapa con ${churches.length} iglesias cerca`
-          : `Map with ${churches.length} churches nearby`
-      }
+      aria-label={tx(
+        `Map with ${churches.length} churches nearby`,
+        `Mapa con ${churches.length} iglesias cerca`,
+        `Mapa com ${churches.length} igrejas perto`
+      )}
     >
       <svg
         viewBox={`0 0 ${W} ${H}`}
@@ -250,8 +252,8 @@ function PinMap({
             background: 'rgba(4,4,4,0.72)',
           }}
         >
-          {es ? 'Tú' : 'You'} · {churches.length}{' '}
-          {es ? 'iglesias' : 'churches'}
+          {tx('You', 'Tú', 'Você')} · {churches.length}{' '}
+          {tx('churches', 'iglesias', 'igrejas')}
         </span>
         <span
           className="text-[9px] px-2 py-0.5 rounded-full"
@@ -271,7 +273,9 @@ function PinMap({
  */
 export default function ChurchesMapPanel({ className = '', onScored }: Props) {
   const { lang } = useI18n();
-  const es = lang !== 'en';
+  const tx = (en: string, es: string, pt: string) =>
+    lang === 'pt' ? pt : lang === 'es' ? es : en;
+  const es = lang === 'es';
   const [geo, setGeo] = useState<Geo | null>(null);
   const [churches, setChurches] = useState<ChurchPlace[]>([]);
   const [loading, setLoading] = useState(true);
@@ -367,7 +371,7 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
             lat,
             lon,
             radiusM: SEARCH_RADIUS_M,
-            lang: es ? 'es' : 'en',
+            lang,
             reverse: true,
           }),
         });
@@ -396,7 +400,7 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
         const label =
           data.label ||
           opts.labelFallback ||
-          (es ? 'Tu ubicación' : 'Your location');
+          tx('Your location', 'Tu ubicación', 'Sua localização');
 
         setGeo({ lat, lon, label, source: opts.source });
         setChurches(list);
@@ -509,7 +513,7 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
     setGpsStatus('ok');
     await fetchChurchesNear(coords.lat, coords.lon, {
       source: 'gps',
-      labelFallback: es ? 'Tu ubicación GPS' : 'Your GPS location',
+      labelFallback: tx('Your GPS location', 'Tu ubicación GPS', 'Sua localização GPS'),
       updateProfile: true,
     });
   }, [es, fetchChurchesNear, profilePlace, queryCity, searchByCity]);
@@ -524,7 +528,7 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
         setGpsStatus('ok');
         await fetchChurchesNear(coords.lat, coords.lon, {
           source: 'gps',
-          labelFallback: es ? 'Tu ubicación GPS' : 'Your GPS location',
+          labelFallback: tx('Your GPS location', 'Tu ubicación GPS', 'Sua localização GPS'),
           updateProfile: true,
         });
         return;
@@ -628,7 +632,7 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
           {/* City search — input-inline + btn-inline (same height, no vertical desfase) */}
           <div className="flex items-center gap-2 w-full min-w-0">
             <label className="sr-only" htmlFor="churches-city-search">
-              {es ? 'Ciudad' : 'City'}
+              {tx('City', 'Ciudad', 'Cidade')}
             </label>
             <input
               id="churches-city-search"
@@ -639,11 +643,11 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
                 if (e.key === 'Enter') void searchByCity(queryCity, true);
               }}
               placeholder={
-                es ? 'Ciudad, País (si no hay GPS)' : 'City, Country (if no GPS)'
+                tx('City, Country (if no GPS)', 'Ciudad, País (si no hay GPS)', 'Cidade, País (se não houver GPS)')
               }
               className="input-soft input-inline text-sm min-w-0"
               autoComplete="address-level2"
-              aria-label={es ? 'Ciudad' : 'City'}
+              aria-label={tx('City', 'Ciudad', 'Cidade')}
             />
             <button
               type="button"
@@ -676,7 +680,7 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
               {profileSynced && geo.source === 'gps' ? (
                 <span className="opacity-90" style={{ color: FREEDOM.text }}>
                   {' '}
-                  · {es ? 'Perfil actualizado' : 'Profile updated'}
+                  · {tx('Profile updated', 'Perfil actualizado', 'Perfil atualizado')}
                 </span>
               ) : null}
             </p>
@@ -685,14 +689,14 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
 
         <div className="px-3.5 pb-3.5 space-y-3">
           {geo && !loading && churches.length > 0 && (
-            <PinMap geo={geo} churches={filtered.slice(0, 40)} es={es} />
+            <PinMap geo={geo} churches={filtered.slice(0, 40)} lang={lang} />
           )}
 
           {!loading && activeFamilies.length > 0 && (
             <div
               className="flex gap-1.5 overflow-x-auto pb-0.5 -mx-0.5 px-0.5"
               role="tablist"
-              aria-label={es ? 'Denominaciones' : 'Denominations'}
+              aria-label={tx('Denominations', 'Denominaciones', 'Denominações')}
             >
               <button
                 type="button"
@@ -708,7 +712,7 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
                     familyFilter === 'all' ? FREEDOM.soft : 'transparent',
                 }}
               >
-                {es ? 'Todas' : 'All'} · {churches.length}
+                {tx('All', 'Todas', 'Todas')} · {churches.length}
               </button>
               {activeFamilies.map((f) => {
                 const active = familyFilter === f;
@@ -808,7 +812,7 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
                                 color: '#041008',
                               }}
                             >
-                              {es ? 'Cómo llegar' : 'Directions'}
+                              {tx('Directions', 'Cómo llegar', 'Como chegar')}
                             </a>
                             <a
                               href={placeUrl(c.lat, c.lon, c.name)}
@@ -820,7 +824,7 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
                                 color: FREEDOM.text,
                               }}
                             >
-                              {es ? 'Ver en mapa' : 'View map'}
+                              {tx('View map', 'Ver en mapa', 'Ver no mapa')}
                             </a>
                             {c.website ? (
                               <a

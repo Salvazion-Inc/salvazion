@@ -132,9 +132,24 @@ export default function CloudNativeSyncPanel({ onAutoLog, onSleepSynced }: Props
       source,
     });
     tryWearableAutoLogs(onAutoLog, {
-      hit: lang === 'en' ? 'Cloud/native activity' : 'Actividad cloud/nativa',
-      outdoor: lang === 'en' ? 'Cloud/native distance' : 'Distancia cloud/nativa',
-      sleep: lang === 'en' ? 'Cloud/native sleep' : 'Sueño cloud/nativo',
+      hit:
+        lang === 'en'
+          ? 'Cloud/native activity'
+          : lang === 'pt'
+            ? 'Atividade cloud/nativa'
+            : 'Actividad cloud/nativa',
+      outdoor:
+        lang === 'en'
+          ? 'Cloud/native distance'
+          : lang === 'pt'
+            ? 'Distância cloud/nativa'
+            : 'Distancia cloud/nativa',
+      sleep:
+        lang === 'en'
+          ? 'Cloud/native sleep'
+          : lang === 'pt'
+            ? 'Sono cloud/nativo'
+            : 'Sueño cloud/nativo',
     });
     if (typeof metrics.sleep_bed === 'string' && typeof metrics.sleep_wake === 'string') {
       onSleepSynced?.(metrics.sleep_bed, metrics.sleep_wake);

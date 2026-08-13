@@ -683,15 +683,15 @@ const copy = {
       title: 'An ordinary family, but with “good genes”',
       intro:
         'Cristian Cortés and Beatriz Isler are a married couple, who have worked together for 20+ years in different health, education, technology and innovation startups, who complement each other and share values (excellence, integrity and deep respect for the service of people), adapting constantly to achieve its purpose: Make Salvation, Health and Freedom great again!',
-      cristianRole: 'CEO at Salvazion Inc.',
+      cristianRole: 'CEO at Salvazion, Inc.',
       cristian:
         'Physical Therapist, Bachelor of Kinesiology. Master in Physical Therapy, Minor in Psychology and Diplomas in Rehabilitation, Exercise, Health and University Innovation. Sherpa and Instructor in “Evidence Based Entrepreneurship & Lean Innovation (EBELI)”. Former Singularity University Ambassador Santiago Chapter. “ExO Entrepreneur LATAM” for the ExO Community Award. “Fifty of the Most Influential Voices in Healthcare” for Medika Life, “Top 50 Global HealthTech Thought Leader and Influencers on Ecosystems” for Thinker 360 and “Top 200 Exponentialists in Digital Health”.',
-      beatrizRole: 'COO at Salvazion Inc.',
+      beatrizRole: 'COO at Salvazion, Inc.',
       beatriz:
         'Physical Therapist, Bachelor of Kinesiology. Master in Physical Therapy with Diplomas in Rehabilitation, Exercise and Health, with experience as a University Professor and Researcher in Human Functionality, Digital Health and Aquatic Therapy. She did an International Clinical Internship in Hydrotherapy. She coordinated the “Choose Living Healthy” program of the Ministry of Health; however, her greatest achievement is to form a beautiful family (husband and four children), balancing her life as an entrepreneur. In 2022, she was recognized as a “Digital Health Champion” by the IDB (Inter-American Development Bank).',
     },
     footer: {
-      copy: '© 2026 Salvazion Inc. All rights reserved.',
+      copy: '© 2026 Salvazion, Inc. All rights reserved.',
       terms: 'Terms',
       privacy: 'Privacy',
     },
@@ -796,17 +796,17 @@ const copy = {
       title: 'Una familia común, pero con “buenos genes”',
       intro:
         'Cristian Cortés y Beatriz Isler son un matrimonio, quienes han trabajado juntos por +20 años en diferentes startups de salud, educación, tecnología e innovación, quienes se complementan y comparten valores (excelencia, integridad y respeto profundo al servicio de las personas), adaptándose constantemente para lograr su propósito: hacer Salvación, Salud y Libertad geniales otra vez!',
-      cristianRole: 'CEO de Salvazion Inc.',
+      cristianRole: 'CEO de Salvazion, Inc.',
       cristian:
         'Kinesiólogo, Licenciado en Kinesiología. Magíster en Terapia Física, Minor en Psicología y Diplomados en Rehabilitación, Ejercicio, Salud e Innovación Universitaria. Sherpa e Instructor en “Evidence Based Entrepreneurship & Lean Innovation (EBELI)”. Ex Embajador del Capítulo de Santiago en Singularity University. “ExO Entrepreneur LATAM” por la ExO Community Award. “Fifty of the Most Influential Voices in Healthcare” por Medika Life, “Top 50 Global HealthTech Thought Leader and Influencers on Ecosystems” por Thinker 360 y “Top 200 Exponencialistas en Salud Digital”.',
-      beatrizRole: 'COO de Salvazion Inc.',
+      beatrizRole: 'COO de Salvazion, Inc.',
       beatriz:
         'Kinesióloga, Licenciada en Kinesiología. Magíster en Terapia Física con Diplomados en Rehabilitación, Ejercicio y Salud, con experiencia como Docente e Investigadora Universitaria en Funcionalidad Humana, Salud Digital y Terapia Acuática. Realizó una Pasantía Clínica Internacional en Hidroterapia. Coordinó el programa “Elige Vivir Sano” del Ministerio de Salud; sin embargo, su mayor logro es conformar una hermosa familia (esposo y cuatro hijos), balanceando su vida como emprendedora. En 2022, fue reconocida como “Campeona en Salud Digital” por el BID (Banco Interamericano de Desarrollo).',
     },
     footer: {
-      copy: '© 2026 Salvazion Inc. All rights reserved.',
-      terms: 'Terms',
-      privacy: 'Privacy',
+      copy: '© 2026 Salvazion, Inc. Todos los derechos reservados.',
+      terms: 'Términos',
+      privacy: 'Privacidad',
     },
   },
   pt: {
@@ -908,15 +908,15 @@ const copy = {
       title: 'Uma família comum, mas com “bons genes”',
       intro:
         'Cristian Cortés e Beatriz Isler são um casal que trabalha junto há mais de 20 anos em diferentes startups de saúde, educação, tecnologia e inovação, que se complementam e compartilham valores (excelência, integridade e respeito profundo ao serviço das pessoas), adaptando-se constantemente para cumprir seu propósito: tornar Salvação, Saúde e Liberdade grandiosas de novo!',
-      cristianRole: 'CEO da Salvazion Inc.',
+      cristianRole: 'CEO da Salvazion, Inc.',
       cristian:
         'Fisioterapeuta, Bacharel em Cinesiologia. Mestre em Terapia Física, Minor em Psicologia e Diplomados em Reabilitação, Exercício, Saúde e Inovação Universitária. Sherpa e Instrutor em “Evidence Based Entrepreneurship & Lean Innovation (EBELI)”. Ex-Embaixador do Capítulo de Santiago da Singularity University. “ExO Entrepreneur LATAM” pelo ExO Community Award. “Fifty of the Most Influential Voices in Healthcare” pela Medika Life, “Top 50 Global HealthTech Thought Leader and Influencers on Ecosystems” pela Thinker 360 e “Top 200 Exponentialists in Digital Health”.',
-      beatrizRole: 'COO da Salvazion Inc.',
+      beatrizRole: 'COO da Salvazion, Inc.',
       beatriz:
         'Fisioterapeuta, Bacharel em Cinesiologia. Mestre em Terapia Física com Diplomados em Reabilitação, Exercício e Saúde, com experiência como Docente e Pesquisadora Universitária em Funcionalidade Humana, Saúde Digital e Terapia Aquática. Fez um Estágio Clínico Internacional em Hidroterapia. Coordenou o programa “Elige Vivir Sano” do Ministério da Saúde; no entanto, sua maior conquista é formar uma bela família (marido e quatro filhos), equilibrando a vida como empreendedora. Em 2022, foi reconhecida como “Campeã em Saúde Digital” pelo BID (Banco Interamericano de Desenvolvimento).',
     },
     footer: {
-      copy: '© 2026 Salvazion Inc. All rights reserved.',
+      copy: '© 2026 Salvazion, Inc. Todos os direitos reservados.',
       terms: 'Termos',
       privacy: 'Privacidade',
     },

@@ -259,8 +259,8 @@ export default function BusinessDashboardPage() {
         </p>
         <p className="text-sm text-[var(--sage)] max-w-sm">
           {es
-            ? 'Este panel es solo para el operador de Salvazion Inc. (info@salvazion.org).'
-            : 'This console is only for the Salvazion Inc. operator (info@salvazion.org).'}
+            ? 'Este panel es solo para el operador de Salvazion, Inc. (info@salvazion.org).'
+            : 'This console is only for the Salvazion, Inc. operator (info@salvazion.org).'}
         </p>
         <Link href="/hub/dashboard" className="text-[var(--accent)] text-sm mt-2">
           ← {es ? 'Volver al hub' : 'Back to hub'}
@@ -313,7 +313,7 @@ export default function BusinessDashboardPage() {
                 ← Hub
               </Link>
               <h1 className="text-lg font-bold text-[#8FD99A] mt-1">
-                {es ? 'Salvazion Inc. · Negocio' : 'Salvazion Inc. · Business'}
+                {es ? 'Salvazion, Inc. · Negocio' : 'Salvazion, Inc. · Business'}
               </h1>
               <p className="text-[10px] text-[var(--sage)]/80 mt-0.5">
                 {es

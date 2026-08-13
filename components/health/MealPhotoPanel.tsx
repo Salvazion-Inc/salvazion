@@ -17,40 +17,42 @@ import {
   type MealVisionAnalysis,
 } from '@/lib/health/meal-vision';
 import PhotoSourcePicker from '@/components/health/PhotoSourcePicker';
+import { pickLang } from '@/lib/i18n/locale';
 
 type Props = {
   lang?: 'es' | 'en' | 'pt';
   onApplied?: () => void;
 };
 
-const SLOTS: { id: MealSlot; es: string; en: string }[] = [
-  { id: 'breakfast', es: 'Desayuno', en: 'Breakfast' },
-  { id: 'lunch', es: 'Almuerzo', en: 'Lunch' },
-  { id: 'dinner', es: 'Cena', en: 'Dinner' },
-  { id: 'snack', es: 'Snack', en: 'Snack' },
+const SLOTS: { id: MealSlot; es: string; en: string; pt: string }[] = [
+  { id: 'breakfast', es: 'Desayuno', en: 'Breakfast', pt: 'Café da manhã' },
+  { id: 'lunch', es: 'Almuerzo', en: 'Lunch', pt: 'Almoço' },
+  { id: 'dinner', es: 'Cena', en: 'Dinner', pt: 'Jantar' },
+  { id: 'snack', es: 'Snack', en: 'Snack', pt: 'Lanche' },
 ];
 
 const PYRAMID_LABELS: {
   key: keyof FoodPyramidShare;
   es: string;
   en: string;
+  pt: string;
   color: string;
 }[] = [
-  { key: 'grains', es: 'Cereales', en: 'Grains', color: '#C4A35A' },
-  { key: 'vegetables', es: 'Verduras', en: 'Vegetables', color: '#7BC98A' },
-  { key: 'fruits', es: 'Frutas', en: 'Fruits', color: '#E07A5F' },
-  { key: 'protein', es: 'Proteínas', en: 'Protein', color: '#4A9EFF' },
-  { key: 'dairy', es: 'Lácteos', en: 'Dairy', color: '#A8DADC' },
-  { key: 'fats', es: 'Grasas', en: 'Fats', color: '#F2CC8F' },
-  { key: 'sugars', es: 'Azúcares', en: 'Sugars', color: '#E63946' },
+  { key: 'grains', es: 'Cereales', en: 'Grains', pt: 'Cereais', color: '#C4A35A' },
+  { key: 'vegetables', es: 'Verduras', en: 'Vegetables', pt: 'Vegetais', color: '#7BC98A' },
+  { key: 'fruits', es: 'Frutas', en: 'Fruits', pt: 'Frutas', color: '#E07A5F' },
+  { key: 'protein', es: 'Proteínas', en: 'Protein', pt: 'Proteínas', color: '#4A9EFF' },
+  { key: 'dairy', es: 'Lácteos', en: 'Dairy', pt: 'Laticínios', color: '#A8DADC' },
+  { key: 'fats', es: 'Grasas', en: 'Fats', pt: 'Gorduras', color: '#F2CC8F' },
+  { key: 'sugars', es: 'Azúcares', en: 'Sugars', pt: 'Açúcares', color: '#E63946' },
 ];
 
 function PyramidBars({
   pyramid,
-  es,
+  lang,
 }: {
   pyramid: FoodPyramidShare;
-  es: boolean;
+  lang?: 'es' | 'en' | 'pt';
 }) {
   return (
     <div className="space-y-1.5">
@@ -59,7 +61,7 @@ function PyramidBars({
         return (
           <div key={row.key} className="flex items-center gap-2">
             <span className="w-16 shrink-0 text-[9px] text-[var(--sage)] truncate">
-              {es ? row.es : row.en}
+              {pickLang(lang, { en: row.en, es: row.es, pt: row.pt })}
             </span>
             <div className="flex-1 h-2 rounded-full bg-[var(--surface-muted)] overflow-hidden">
               <div
@@ -80,8 +82,8 @@ function PyramidBars({
   );
 }
 
-export default function MealPhotoPanel({ lang = 'es', onApplied }: Props) {
-  const es = lang !== 'en';
+export default function MealPhotoPanel({ lang = 'en', onApplied }: Props) {
+  const tx = (en: string, es: string, pt: string) => pickLang(lang, { en, es, pt });
   const [entries, setEntries] = useState<MealPhotoEntry[]>([]);
   const [photo, setPhoto] = useState<string | null>(null);
   const [slot, setSlot] = useState<MealSlot>('lunch');
@@ -107,13 +109,13 @@ export default function MealPhotoPanel({ lang = 'es', onApplied }: Props) {
       setPhoto(dataUrl);
       setResult(null);
     } catch {
-      setError(es ? 'No se pudo leer la imagen' : 'Could not read image');
+      setError(tx('Could not read image', 'No se pudo leer la imagen', 'Não foi possível ler a imagem'));
     }
   };
 
   const analyze = async () => {
     if (!photo) {
-      setError(es ? 'Toma o sube una foto del plato' : 'Take or upload a meal photo');
+      setError(tx('Take or upload a meal photo', 'Toma o sube una foto del plato', 'Tire ou envie uma foto do prato'));
       return;
     }
     setBusy(true);
@@ -124,7 +126,7 @@ export default function MealPhotoPanel({ lang = 'es', onApplied }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           mode: 'meal',
-          lang: es ? 'es' : 'en',
+          lang,
           photo,
         }),
       });
@@ -133,7 +135,7 @@ export default function MealPhotoPanel({ lang = 'es', onApplied }: Props) {
         throw new Error(
           json.message ||
             json.error ||
-            (es ? 'Análisis fallido' : 'Analysis failed')
+            tx('Analysis failed', 'Análisis fallido', 'Análise falhou')
         );
       }
       const analysis = json.analysis as MealVisionAnalysis;
@@ -148,9 +150,7 @@ export default function MealPhotoPanel({ lang = 'es', onApplied }: Props) {
       setError(
         e instanceof Error
           ? e.message
-          : es
-            ? 'Error al analizar'
-            : 'Analysis error'
+          : tx('Analysis error', 'Error al analizar', 'Erro ao analisar')
       );
     } finally {
       setBusy(false);
@@ -180,14 +180,16 @@ export default function MealPhotoPanel({ lang = 'es', onApplied }: Props) {
     <section className="mb-6">
       <h2 className="text-sm font-semibold text-[var(--sage)] mb-3 flex items-center gap-2">
         <span>◈</span>
-        {es ? 'Foto de comida · Grok' : 'Meal photo · Grok'}
+        {tx('Meal photo · Grok', 'Foto de comida · Grok', 'Foto da refeição · Grok')}
       </h2>
 
       <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] space-y-3.5">
         <p className="text-[11px] text-[var(--sage)]/80 leading-relaxed">
-          {es
-            ? 'Fotografía tu plato. Grok estima alimentos, calorías, macros y cómo se ubica en la pirámide alimenticia clásica (estilo USDA/Kennedy). Estimación educativa.'
-            : 'Photograph your plate. Grok estimates foods, calories, macros, and classic food-pyramid placement (USDA/Kennedy-style). Educational estimate.'}
+          {tx(
+            'Photograph your plate. Grok estimates foods, calories, macros, and classic food-pyramid placement (USDA/Kennedy-style). Educational estimate.',
+            'Fotografía tu plato. Grok estima alimentos, calorías, macros y cómo se ubica en la pirámide alimenticia clásica (estilo USDA/Kennedy). Estimación educativa.',
+            'Fotografe o prato. O Grok estima alimentos, calorias, macros e a posição na pirâmide alimentar clássica (estilo USDA/Kennedy). Estimativa educativa.'
+          )}
         </p>
 
         <div className="flex flex-wrap gap-1.5">
@@ -200,13 +202,13 @@ export default function MealPhotoPanel({ lang = 'es', onApplied }: Props) {
                 slot === s.id ? 'pill-soft-active' : ''
               }`}
             >
-              {es ? s.es : s.en}
+              {pickLang(lang, { en: s.en, es: s.es, pt: s.pt })}
             </button>
           ))}
         </div>
 
         <PhotoSourcePicker
-          lang={es ? 'es' : 'en'}
+          lang={lang}
           facing="environment"
           hasPhoto={!!photo}
           disabled={busy}
@@ -215,23 +217,23 @@ export default function MealPhotoPanel({ lang = 'es', onApplied }: Props) {
             setPhoto(null);
             setResult(null);
           }}
-          title={photo ? undefined : es ? 'Foto del plato' : 'Meal photo'}
-          subtitle={
-            es
-              ? 'Misma experiencia que tu foto de perfil: cámara o carpetas'
-              : 'Same as profile photo: camera or folders'
-          }
+          title={photo ? undefined : tx('Meal photo', 'Foto del plato', 'Foto do prato')}
+          subtitle={tx(
+            'Same as profile photo: camera or folders',
+            'Misma experiencia que tu foto de perfil: cámara o carpetas',
+            'A mesma experiência da foto de perfil: câmera ou pastas'
+          )}
         >
           {photo ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={photo}
-              alt={es ? 'Comida' : 'Meal'}
+              alt={tx('Meal', 'Comida', 'Refeição')}
               className="absolute inset-0 w-full h-full object-cover"
             />
           ) : (
             <span className="text-[12px] text-[var(--sage)]/70 px-4 text-center leading-relaxed">
-              {es ? 'Toca para añadir foto del plato' : 'Tap to add a meal photo'}
+              {tx('Tap to add a meal photo', 'Toca para añadir foto del plato', 'Toque para adicionar foto do prato')}
             </span>
           )}
         </PhotoSourcePicker>
@@ -243,12 +245,12 @@ export default function MealPhotoPanel({ lang = 'es', onApplied }: Props) {
           className="btn-primary w-full py-2.5 text-sm disabled:opacity-50"
         >
           {busy
-            ? es
-              ? 'Analizando con Grok…'
-              : 'Analyzing with Grok…'
-            : es
-              ? 'Analizar nutrientes y pirámide'
-              : 'Analyze nutrients & pyramid'}
+            ? tx('Analyzing with Grok…', 'Analizando con Grok…', 'Analisando com Grok…')
+            : tx(
+                'Analyze nutrients & pyramid',
+                'Analizar nutrientes y pirámide',
+                'Analisar nutrientes e pirâmide'
+              )}
         </button>
 
         {error && (
@@ -262,7 +264,7 @@ export default function MealPhotoPanel({ lang = 'es', onApplied }: Props) {
             <div className="flex items-start justify-between gap-2">
               <div>
                 <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70">
-                  {es ? 'Resultado' : 'Result'}
+                  {tx('Result', 'Resultado', 'Resultado')}
                   {result.model ? ` · ${result.model}` : ''}
                 </p>
                 <p className="text-2xl font-bold tabular-nums text-white mt-0.5">
@@ -313,11 +315,13 @@ export default function MealPhotoPanel({ lang = 'es', onApplied }: Props) {
 
             <div>
               <p className="text-[10px] uppercase tracking-wider text-[var(--sage)]/70 mb-1.5">
-                {es
-                  ? 'Pirámide alimenticia (estilo Kennedy/USDA)'
-                  : 'Food pyramid (Kennedy/USDA-style)'}
+                {tx(
+                  'Food pyramid (Kennedy/USDA-style)',
+                  'Pirámide alimenticia (estilo Kennedy/USDA)',
+                  'Pirâmide alimentar (estilo Kennedy/USDA)'
+                )}
               </p>
-              <PyramidBars pyramid={a.pyramid || emptyPyramid()} es={es} />
+              <PyramidBars pyramid={a.pyramid || emptyPyramid()} lang={lang} />
               {a.kennedyNote && (
                 <p className="text-[11px] text-[var(--sage)] mt-2 leading-relaxed">
                   {a.kennedyNote}
@@ -343,12 +347,12 @@ export default function MealPhotoPanel({ lang = 'es', onApplied }: Props) {
               className="btn-secondary w-full py-2 text-xs disabled:opacity-50"
             >
               {result.appliedToLog
-                ? es
-                  ? '✓ Añadido al registro de hoy'
-                  : '✓ Added to today’s log'
-                : es
-                  ? 'Añadir a alimentación de hoy'
-                  : 'Add to today’s nutrition log'}
+                ? tx('✓ Added to today’s log', '✓ Añadido al registro de hoy', '✓ Adicionado ao registro de hoje')
+                : tx(
+                    'Add to today’s nutrition log',
+                    'Añadir a alimentación de hoy',
+                    'Adicionar à alimentação de hoje'
+                  )}
             </button>
           </div>
         )}
@@ -356,7 +360,7 @@ export default function MealPhotoPanel({ lang = 'es', onApplied }: Props) {
         {entries.length > 0 && (
           <div className="space-y-1.5 pt-1 border-t border-[var(--border-soft)]">
             <p className="text-[10px] text-[var(--sage)]/70">
-              {es ? 'Historial de fotos' : 'Photo history'} ({entries.length})
+              {tx('Photo history', 'Historial de fotos', 'Histórico de fotos')} ({entries.length})
             </p>
             <ul className="space-y-1 max-h-32 overflow-y-auto">
               {entries.slice(0, 10).map((e) => (

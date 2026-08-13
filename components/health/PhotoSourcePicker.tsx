@@ -2,6 +2,7 @@
 
 import { useRef, useState, type ReactNode } from 'react';
 import { useI18n } from '@/components/I18nProvider';
+import { tx3 } from '@/lib/i18n/locale';
 import {
   SALVAZION_CAMERA_ICON,
   SALVAZION_FOLDER_ICON,
@@ -58,7 +59,8 @@ export default function PhotoSourcePicker({
   disabled = false,
 }: Props) {
   const { t, lang: i18nLang } = useI18n();
-  const es = (lang ?? i18nLang) !== 'en';
+  const locale = lang ?? i18nLang;
+  const tx = (en: string, es: string, pt: string) => tx3(locale, en, es, pt);
   const cameraRef = useRef<HTMLInputElement | null>(null);
   const galleryRef = useRef<HTMLInputElement | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -105,9 +107,11 @@ export default function PhotoSourcePicker({
     title || (hasPhoto ? t('profile.changePhoto') : t('profile.addPhoto'));
   const sheetSub =
     subtitle ||
-    (es
-      ? 'Usa la cámara o elige una imagen de tus carpetas'
-      : 'Use the camera or pick an image from your files');
+    tx(
+      'Use the camera or pick an image from your files',
+      'Usa la cámara o elige una imagen de tus carpetas',
+      'Use a câmera ou escolha uma imagem das suas pastas'
+    );
 
   const badgeSize = compact ? 'w-5 h-5 text-[9px]' : 'w-7 h-7 text-xs';
 
@@ -191,7 +195,7 @@ export default function PhotoSourcePicker({
           <button
             type="button"
             className="absolute inset-0 bg-black/70 backdrop-blur-[2px]"
-            aria-label={es ? 'Cerrar' : 'Close'}
+            aria-label={tx('Close', 'Cerrar', 'Fechar')}
             onClick={closeSheet}
           />
           <div className="relative z-10 w-full max-w-sm mx-4 mb-6 sm:mb-0 glass rounded-2xl border border-[var(--border-soft)] overflow-hidden shadow-[0_12px_48px_rgba(0,0,0,0.55)]">
@@ -254,7 +258,7 @@ export default function PhotoSourcePicker({
                 onClick={closeSheet}
                 className="btn-secondary w-full py-3 text-sm mt-1"
               >
-                {es ? 'Cancelar' : 'Cancel'}
+                {tx('Cancel', 'Cancelar', 'Cancelar')}
               </button>
             </div>
           </div>

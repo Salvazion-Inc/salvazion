@@ -96,7 +96,7 @@ export default function TextScaleControl() {
                 {opt.sample}
               </span>
               <span className="text-[10px] text-center leading-tight px-0.5">
-                {lang === 'en' ? opt.labelEn : opt.label}
+                {lang === 'en' ? opt.labelEn : lang === 'pt' ? opt.labelPt : opt.label}
               </span>
             </button>
           );

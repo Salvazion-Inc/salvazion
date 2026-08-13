@@ -9,11 +9,13 @@ import { loadProfileAsync, calculateAge, getLifeStage } from '@/lib/store/profil
 import { logAction, getPointsForAction } from '@/lib/scoring/engine';
 import { getLionShortNudge } from '@/lib/coach/engine';
 import { useI18n } from '@/components/I18nProvider';
+import { pickLang } from '@/lib/i18n/locale';
 
 const CACHE_PREFIX = 'salvazion_devotional_';
 
 export default function DevotionalPage() {
   const { t, lang } = useI18n();
+  const tx = (en: string, es: string, pt: string) => pickLang(lang, { en, es, pt });
   const [profile, setProfile] = useState<Partial<UserProfile>>({});
   const [devotional, setDevotional] = useState<Devotional | null>(null);
   const [loading, setLoading] = useState(false);
@@ -117,7 +119,7 @@ export default function DevotionalPage() {
         setError(json.error || 'Error desconocido');
       }
     } catch {
-      setError(lang === 'en' ? 'Could not reach the engine' : 'No se pudo conectar con el motor');
+      setError(tx('Could not reach the engine', 'No se pudo conectar con el motor', 'Não foi possível conectar ao motor'));
     } finally {
       setLoading(false);
     }
@@ -162,7 +164,7 @@ export default function DevotionalPage() {
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
       <header className="page-header flex items-center justify-between px-4 pt-5 pb-3">
         <div className="flex items-center gap-2.5 min-w-0">
-          <Link href="/hub/bible" className="back-btn" aria-label={lang === 'en' ? 'Back' : 'Volver'}>
+          <Link href="/hub/bible" className="back-btn" aria-label={tx('Back', 'Volver', 'Voltar')}>
             ←
           </Link>
           <div className="min-w-0">
@@ -170,7 +172,7 @@ export default function DevotionalPage() {
               Salvation Hub
             </p>
             <h1 className="text-base font-bold text-[var(--accent)] leading-tight truncate">
-              {lang === 'en' ? 'Devotional' : 'Devocional'}
+              {tx('Devotional', 'Devocional', 'Devocional')}
             </h1>
           </div>
         </div>
@@ -194,7 +196,7 @@ export default function DevotionalPage() {
         <div className="max-w-2xl mx-auto">
           <div className="mb-6 mt-4">
             <h2 className="text-2xl font-bold tracking-tight text-[var(--accent)]">
-              {lang === 'en' ? 'Personalized Devotional' : 'Devocional Personalizado'}
+              {tx('Personalized Devotional', 'Devocional Personalizado', 'Devocional Personalizado')}
             </h2>
             <p className="text-sm text-[var(--sage)] mt-1">
               {lang === 'en'
@@ -215,23 +217,23 @@ export default function DevotionalPage() {
           {/* Profile summary used for personalization */}
           <div className="glass rounded-2xl p-5 mb-6 space-y-3">
             <p className="text-xs uppercase tracking-wider text-[var(--sage)]/80">
-              {lang === 'en' ? 'Profile used for personalization' : 'Perfil para personalizar'}
+              {tx('Profile used for personalization', 'Perfil para personalizar', 'Perfil para personalizar')}
             </p>
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div>
-                <p className="text-[11px] text-[var(--sage)]/80">{lang === 'en' ? 'Name' : 'Nombre'}</p>
+                <p className="text-[11px] text-[var(--sage)]/80">{tx('Name', 'Nombre', 'Nome')}</p>
                 <p className="text-white">{profile.name || '—'}</p>
               </div>
               <div>
-                <p className="text-[11px] text-[var(--sage)]/80">{lang === 'en' ? 'Purpose' : 'Propósito'}</p>
+                <p className="text-[11px] text-[var(--sage)]/80">{tx('Purpose', 'Propósito', 'Propósito')}</p>
                 <p className="text-white line-clamp-2">{profile.purpose || '—'}</p>
               </div>
               <div>
-                <p className="text-[11px] text-[var(--sage)]/80">{lang === 'en' ? 'Maturity' : 'Madurez'}</p>
+                <p className="text-[11px] text-[var(--sage)]/80">{tx('Maturity', 'Madurez', 'Maturidade')}</p>
                 <p className="text-white">{profile.spiritualMaturity || '—'}</p>
               </div>
               <div>
-                <p className="text-[11px] text-[var(--sage)]/80">{lang === 'en' ? 'Family' : 'Familia'}</p>
+                <p className="text-[11px] text-[var(--sage)]/80">{tx('Family', 'Familia', 'Família')}</p>
                 <p className="text-white">{profile.familyStatus || '—'}</p>
               </div>
             </div>
@@ -306,7 +308,7 @@ export default function DevotionalPage() {
                 </h2>
                 {devotional.personalizedFor && (
                   <p className="text-sm text-[var(--sage)] mt-1">
-                    {lang === 'en' ? 'For' : 'Para'} {devotional.personalizedFor}
+                    {tx('For', 'Para', 'Para')} {devotional.personalizedFor}
                   </p>
                 )}
                 {engineNote && !/grok|xai/i.test(engineNote) && (
@@ -337,7 +339,7 @@ export default function DevotionalPage() {
 
               <div>
                 <h3 className="text-sm uppercase tracking-wider text-[var(--sage)] mb-2">
-                  {lang === 'en' ? 'Reflection' : 'Reflexión'}
+                  {tx('Reflection', 'Reflexión', 'Reflexão')}
                 </h3>
                 <div className="leading-relaxed text-[#D8E1D9]/90 space-y-3 whitespace-pre-wrap">
                   {devotional.reflection}
@@ -346,7 +348,7 @@ export default function DevotionalPage() {
 
               <div>
                 <h3 className="text-sm uppercase tracking-wider text-[var(--sage)] mb-2">
-                  {lang === 'en' ? 'Prayer' : 'Oración'}
+                  {tx('Prayer', 'Oración', 'Oração')}
                 </h3>
                 <p className="leading-relaxed text-[#D8E1D9]/90 italic whitespace-pre-wrap">
                   {devotional.prayer}
@@ -355,7 +357,7 @@ export default function DevotionalPage() {
 
               <div className="bg-[var(--surface-active)] border border-[var(--border-strong)] rounded-xl p-4">
                 <h3 className="text-sm uppercase tracking-wider text-[#8FD99A] mb-2">
-                  {lang === 'en' ? "Today's action" : 'Acción de hoy'}
+                  {tx("Today's action", 'Acción de hoy', 'Ação de hoje')}
                 </h3>
                 <p className="text-[#D8E1D9]">{devotional.action}</p>
               </div>
@@ -363,7 +365,7 @@ export default function DevotionalPage() {
               {devotional.closing && (
                 <div className="border-l-2 border-[var(--border-strong)] pl-4">
                   <h3 className="text-sm uppercase tracking-wider text-[var(--sage)] mb-1">
-                    {lang === 'en' ? 'Charge' : 'Consigna'}
+                    {tx('Charge', 'Consigna', 'Consigna')}
                   </h3>
                   <p className="text-sm text-[#D8E1D9]/90 leading-relaxed">{devotional.closing}</p>
                 </div>
@@ -386,8 +388,8 @@ export default function DevotionalPage() {
                 className={completed ? 'btn-secondary opacity-80' : 'btn-primary'}
               >
                 {completed
-                  ? `✓ ${lang === 'en' ? 'Completed' : 'Completado'} · +${pts} Salvation`
-                  : `${lang === 'en' ? 'Mark as completed' : 'Marcar como completado'} · +${pts} Salvation`}
+                  ? `✓ ${tx('Completed', 'Completado', 'Concluído')} · +${pts} Salvation`
+                  : `${tx('Mark as completed', 'Marcar como completado', 'Marcar como concluído')} · +${pts} Salvation`}
               </button>
             </div>
           )}

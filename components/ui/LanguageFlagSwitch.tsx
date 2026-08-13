@@ -16,12 +16,12 @@ const OPTIONS: { id: Language; label: string }[] = [
 type Size = 'sm' | 'md';
 
 /**
- * Fixed flag frame — same box for both nations (≈ 3:2).
- * object-contain keeps USA stars + Chile star fully inside the frame.
+ * Fixed 3:2 flag frame — identical box for USA / Chile / Brazil.
+ * object-cover fills the chip so no flag looks smaller than the others.
  */
 const FRAME: Record<Size, string> = {
-  sm: 'h-6 w-9', // 24×36 — easier touch target on auth
-  md: 'h-7 w-11 sm:h-8 sm:w-12', // 28×44 / 32×48
+  sm: 'h-6 w-9', // 24×36
+  md: 'h-7 w-[2.625rem] sm:h-8 sm:w-12', // 28×42 / 32×48
 };
 
 interface Props {
@@ -76,7 +76,7 @@ export default function LanguageFlagSwitch({
               <FlatFlag
                 lang={opt.id}
                 size="sm"
-                className="!h-full !w-full !max-w-none object-contain object-center rounded-md"
+                className="!h-full !w-full !max-w-none object-cover object-center rounded-md"
               />
             </span>
           </button>

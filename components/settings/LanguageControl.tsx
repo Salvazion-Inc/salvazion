@@ -89,10 +89,10 @@ export default function LanguageControl({ compact = false }: { compact?: boolean
                   : 'border-[var(--border-soft)] text-[var(--sage)] hover:border-[var(--border-strong)] hover:text-[var(--off-white)]',
               ].join(' ')}
             >
-              {/* Match landing LanguageFlagSwitch frame (≈ 3:2, object-contain) */}
+              {/* Same 3:2 chip as landing LanguageFlagSwitch */}
               <span
                 className={[
-                  'relative inline-flex h-10 w-16 shrink-0 items-center justify-center',
+                  'relative inline-flex h-10 w-[3.75rem] shrink-0 items-center justify-center',
                   'overflow-hidden rounded-lg bg-[#0a0a0a] p-[3px]',
                   active
                     ? 'ring-2 ring-[var(--accent)] ring-offset-1 ring-offset-[#040404]'
@@ -102,7 +102,7 @@ export default function LanguageControl({ compact = false }: { compact?: boolean
                 <FlatFlag
                   lang={opt.id}
                   size="lg"
-                  className="!h-full !w-full !max-w-none object-contain object-center rounded-md"
+                  className="!h-full !w-full !max-w-none object-cover object-center rounded-md"
                 />
               </span>
               <span className="text-sm font-semibold">{opt.label}</span>

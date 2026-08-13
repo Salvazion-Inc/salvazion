@@ -105,20 +105,19 @@ function ArticleCard({
         className="flex flex-col flex-1 min-h-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
         itemProp="url"
       >
-        <div className="relative aspect-[5/2] bg-[#0a0a0a] overflow-hidden shrink-0">
+        <div className="article-cover shrink-0 border-b border-white/5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={article.image}
             alt=""
             itemProp="image"
-            className="absolute inset-0 w-full h-full object-cover object-center transition duration-300 group-hover:scale-[1.02]"
             loading="lazy"
             decoding="async"
             referrerPolicy="no-referrer"
             onError={(e) => {
               e.currentTarget.src = '/logo-icon.png';
               e.currentTarget.className =
-                'absolute inset-0 m-auto max-w-[40%] max-h-[40%] w-auto h-auto object-contain object-center opacity-80';
+                'max-w-[36%] max-h-[56%] w-auto h-auto object-contain object-center opacity-80';
             }}
           />
           <span

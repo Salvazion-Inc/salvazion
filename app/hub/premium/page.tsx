@@ -187,7 +187,7 @@ export default function PremiumPage() {
                 Premium
               </p>
               <span className="text-[10px] px-2.5 py-1 rounded-full bg-[#8FD99A]/18 text-[#8FD99A] font-semibold border border-[#8FD99A]/25">
-                {es ? PRICING_TABLE.bestValue.es : PRICING_TABLE.bestValue.en}
+                {pickLang(lang, PRICING_TABLE.bestValue)}
               </span>
             </div>
 
@@ -198,9 +198,11 @@ export default function PremiumPage() {
               {t('premium.perMonth')}
             </p>
             <p className="mt-1 text-sm text-[#8FD99A] leading-snug min-h-[1.25rem]">
-              {es
-                ? PLAN_COPY.premium_year.priceLabelEs
-                : PLAN_COPY.premium_year.priceLabel}
+              {pickLang(lang, {
+                es: PLAN_COPY.premium_year.priceLabelEs,
+                en: PLAN_COPY.premium_year.priceLabel,
+                pt: PLAN_COPY.premium_year.priceLabelPt,
+              })}
             </p>
 
             <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.5rem]">

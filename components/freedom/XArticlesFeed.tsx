@@ -77,19 +77,18 @@ function ArticleCard({
         onClick={() => onSelect(article)}
         className="flex flex-col flex-1 min-h-0 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
       >
-        {/* X Articles cover is 5:2 */}
-        <div className="media-frame aspect-[5/2] shrink-0">
+        {/* Full 5:2 cover — contain so titles/faces are never cropped */}
+        <div className="article-cover shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={article.image}
             alt=""
-            className="transition duration-300 group-hover:scale-[1.02]"
             loading="lazy"
             decoding="async"
             referrerPolicy="no-referrer"
             onError={(e) => {
               e.currentTarget.src = '/logo-icon.png';
-              e.currentTarget.className = 'max-w-[40%] max-h-[40%] opacity-80';
+              e.currentTarget.className = 'max-w-[36%] max-h-[56%] opacity-80';
             }}
           />
           <span
@@ -536,9 +535,9 @@ export default function XArticlesFeed({
             </div>
           </div>
           <div className="flex-1 overflow-y-auto premium-scroll pb-10">
-            {/* Full-bleed X Articles header — 5:2 */}
+            {/* Full 5:2 cover — contain so the image is never cropped */}
             <div
-              className="media-frame w-full aspect-[5/2] border-b border-[var(--border-soft)]"
+              className="article-cover w-full border-b border-[var(--border-soft)]"
               style={{
                 borderTopWidth: 3,
                 borderTopColor: PILLAR_ACCENT[selected.pillar],

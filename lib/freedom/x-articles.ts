@@ -10,6 +10,7 @@
 
 import catalogJson from '@/data/freedom/x-articles-catalog.json';
 import esMapJson from '@/data/freedom/x-articles-es.json';
+import ptMapJson from '@/data/freedom/x-articles-pt.json';
 import type { PillarId } from '@/lib/theme/pillars';
 
 export type InterestFocus =
@@ -31,9 +32,13 @@ export interface XArticle {
   title: string;
   /** Spanish title for marketing blog / i18n */
   titleEs: string;
+  /** Brazilian Portuguese title for marketing blog / i18n */
+  titlePt: string;
   preview: string;
   /** Spanish preview for marketing blog / i18n */
   previewEs: string;
+  /** Brazilian Portuguese preview for marketing blog / i18n */
+  previewPt: string;
   image: string;
   url: string;
   createdAt?: string | null;
@@ -47,13 +52,15 @@ export interface XArticle {
   readMin: number;
 }
 
-type EsEntry = { titleEs?: string; previewEs?: string };
-const ES_MAP = esMapJson as Record<string, EsEntry>;
+type LocEntry = { titleEs?: string; previewEs?: string; titlePt?: string; previewPt?: string };
+const ES_MAP = esMapJson as Record<string, LocEntry>;
+const PT_MAP = ptMapJson as Record<string, LocEntry>;
 
 /** Deleted on X or not an article — never surface in web/app catalog */
 const EXCLUDED_IDS = new Set([
   '2080090098029523147',
   '1802085193563398144', // Qolitica
+  '1819370416118394880', // STEAM / children skills — deleted on X
   '1801640234548965376', // Gepardo
 ]);
 
@@ -329,6 +336,7 @@ function normalizeEntry(raw: {
       ? raw.pillar
       : inferPillar(raw.title, raw.preview, interests, tags);
   const es = ES_MAP[raw.id] || {};
+  const pt = PT_MAP[raw.id] || {};
   const preview =
     raw.preview || 'Long-form de @salvazion_ en X. Ábrelo para leer el contenido completo.';
   return {
@@ -336,8 +344,10 @@ function normalizeEntry(raw: {
     statusId: raw.statusId,
     title,
     titleEs: es.titleEs || title,
+    titlePt: pt.titlePt || title,
     preview,
     previewEs: es.previewEs || preview,
+    previewPt: pt.previewPt || preview,
     image: raw.image || '/logo-icon.png',
     url: raw.url || `https://x.com/i/article/${raw.id}`,
     createdAt: raw.createdAt,
@@ -385,7 +395,7 @@ export const X_ARTICLES: XArticle[] = dedupeCatalog(
   catalogJson as Array<Parameters<typeof normalizeEntry>[0]>
 ).map(normalizeEntry);
 
-/** Localized title + preview for marketing blog (EN default / ES on language switch) */
+/** Localized title + preview for marketing blog and in-app feed. */
 export function localizeArticle(
   article: XArticle,
   lang: 'en' | 'es' | 'pt'
@@ -394,6 +404,12 @@ export function localizeArticle(
     return {
       title: article.titleEs || article.title,
       preview: article.previewEs || article.preview,
+    };
+  }
+  if (lang === 'pt') {
+    return {
+      title: article.titlePt || article.title,
+      preview: article.previewPt || article.preview,
     };
   }
   return { title: article.title, preview: article.preview };
@@ -417,8 +433,10 @@ function articleSearchHaystack(article: XArticle): string {
   return [
     article.title,
     article.titleEs,
+    article.titlePt,
     article.preview,
     article.previewEs,
+    article.previewPt,
     article.pillar,
     ...(article.tags || []),
     ...(article.interests || []),

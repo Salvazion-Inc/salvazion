@@ -145,16 +145,17 @@ for (const p of plan) {
   try {
     const input = fs.readFileSync(p.file.path);
     bytesIn += input.length;
-    // X Articles covers are 5:2 (e.g. 1600×640). Crop to fill; attention keeps the subject.
+    // User-updated Drive covers are already 5:2. Never crop — contain + letterbox.
     const out = await sharp(input)
       .rotate()
       .resize({
         width: 1600,
         height: 640,
-        fit: 'cover',
-        position: 'attention',
+        fit: 'contain',
+        background: { r: 10, g: 10, b: 10, alpha: 1 },
+        withoutEnlargement: false,
       })
-      .jpeg({ quality: 84, mozjpeg: true })
+      .jpeg({ quality: 86, mozjpeg: true })
       .toBuffer();
     fs.writeFileSync(dest, out);
     bytesOut += out.length;

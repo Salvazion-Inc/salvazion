@@ -1721,6 +1721,25 @@ select:-webkit-autofill {
   object-position: center center;
 }
 
+/* Article covers: show the full 5:2 image, never crop faces/titles */
+.article-cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 2;
+  overflow: hidden;
+  background: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.article-cover > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+}
+
 /* Desktop / large web: X-like center column breathing room */
 @media (min-width: 768px) {
   :root {

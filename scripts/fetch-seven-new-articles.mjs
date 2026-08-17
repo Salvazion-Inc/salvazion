@@ -11,12 +11,9 @@ const catalogPath = path.join(root, 'data/freedom/x-articles-catalog.json');
 
 /** Status tweet IDs that publish each article (newest first) */
 const STATUS_IDS = [
-  '2087297366239908189',
-  '2086925233592610867',
-  '2085419229927346505',
-  '2085182920726122905',
-  '2085107419374305371',
-  '2085070895421509890',
+  '2089149601341231241',
+  '2088311384689811463',
+  '2088079840238768316',
 ];
 
 function truncatePreview(s, max = 220) {

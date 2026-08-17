@@ -60,7 +60,6 @@ const PT_MAP = ptMapJson as Record<string, LocEntry>;
 const EXCLUDED_IDS = new Set([
   '2080090098029523147',
   '1802085193563398144', // Qolitica
-  '1819370416118394880', // STEAM / children skills — deleted on X
   '1801640234548965376', // Gepardo
 ]);
 

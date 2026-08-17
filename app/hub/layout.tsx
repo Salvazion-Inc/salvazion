@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import CoachFab from '@/components/coach/CoachFab';
+import BiometricLock from '@/components/auth/BiometricLock';
+import BiometricEnrollPrompt from '@/components/auth/BiometricEnrollPrompt';
 
 /** Private app shell — never index hub routes. */
 export const metadata: Metadata = {
@@ -17,9 +19,12 @@ export const metadata: Metadata = {
 
 export default function HubLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="hub-shell pb-[calc(4.5rem+env(safe-area-inset-bottom))]">
-      {children}
-      <CoachFab />
-    </div>
+    <BiometricLock>
+      <div className="hub-shell pb-[calc(4.5rem+env(safe-area-inset-bottom))]">
+        {children}
+        <CoachFab />
+      </div>
+      <BiometricEnrollPrompt />
+    </BiometricLock>
   );
 }

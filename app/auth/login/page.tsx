@@ -16,6 +16,7 @@ import {
 import { tryAcceptPendingInbound } from '@/lib/invite/supabase';
 import SocialAuthButtons from '@/components/auth/SocialAuthButtons';
 import TermsAccept from '@/components/auth/TermsAccept';
+import BiometricLoginButton from '@/components/auth/BiometricLoginButton';
 
 type Mode = 'password' | 'magic' | 'forgot';
 
@@ -119,7 +120,7 @@ function LoginForm() {
       return;
     }
 
-    const { error: err } = await supabase.auth.signInWithPassword({
+    const { data, error: err } = await supabase.auth.signInWithPassword({
       email: email.trim(),
       password,
     });
@@ -128,6 +129,11 @@ function LoginForm() {
       setError(mapAuthError(err.message));
       setLoading(false);
       return;
+    }
+
+    if (data.session) {
+      const { refreshVaultFromSession } = await import('@/lib/auth/biometric');
+      refreshVaultFromSession(data.session, data.session.user.email);
     }
 
     // Accept Phalanx invite if present (real Supabase connection)
@@ -229,6 +235,7 @@ function LoginForm() {
         <div className="card-soft p-6 space-y-4 shadow-[var(--shadow-premium)]">
           {mode === 'password' && (
             <>
+              <BiometricLoginButton next={next} onError={(msg) => setError(msg)} />
               <TermsAccept
                 checked={acceptedTerms}
                 onChange={setAcceptedTerms}

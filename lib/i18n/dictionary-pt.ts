@@ -96,6 +96,14 @@ export const dictionaryPt = {
     privacyPolicy: 'Política de Privacidade',
     acceptTermsRequired:
       'Você deve aceitar os Termos de Serviço e a Política de Privacidade para continuar.',
+    biometricEnter: 'Entrar com o polegar',
+    biometricEnterHint: 'Use sua digital para entrar no Salvazion',
+    biometricProcessing: 'Aguardando sua digital…',
+    biometricFailed: 'Não foi possível verificar a digital. Tente de novo.',
+    biometricUnavailable:
+      'Este dispositivo não tem digital, Face ID ou Windows Hello disponível.',
+    biometricCancelled: 'Verificação cancelada.',
+    biometricExpired: 'A sessão com digital expirou. Entre com email ou Google.',
   },
   profile: {
     title: 'Perfil',
@@ -653,12 +661,31 @@ export const dictionaryPt = {
   settings: {
     section: 'Configuração',
     title: 'Ajustes do app',
-    subtitle: 'Cores, idioma e tamanho da letra',
+    subtitle: 'Cores, idioma, tamanho da letra e digital',
     open: 'Configuração',
     appearance: 'Aparência',
     preferences: 'Preferências',
+    security: 'Segurança',
     devices: 'Dispositivos e sensores',
     devicesHint: 'Wearables, sensores e sync cloud',
+    biometricTitle: 'Entrar com o polegar',
+    biometricHint:
+      'Desbloqueie o Salvazion com sua digital, Face ID ou Windows Hello neste dispositivo.',
+    biometricOn: 'Ativado',
+    biometricOff: 'Desativado',
+    biometricEnableHint: 'Ative o interruptor e confirme com sua digital.',
+    biometricEnabled: 'Já pode entrar no app com sua digital.',
+    biometricDisabled: 'Entrada com digital desativada.',
+    biometricNeedLogin: 'Entre primeiro com email ou Google para ativar a digital.',
+    biometricPromptTitle: 'Entrar com o polegar?',
+    biometricPromptBody:
+      'Da próxima vez abra o Salvazion com sua digital, sem digitar a senha.',
+    biometricPromptLater: 'Agora não',
+    biometricPromptEnable: 'Ativar digital',
+    biometricLockTitle: 'Salvazion',
+    biometricLockSubtitle: 'Toque para entrar com sua digital',
+    biometricLockCta: 'Desbloquear',
+    biometricUsePassword: 'Usar senha',
   },
   agenda: {
     section: 'Hoje',

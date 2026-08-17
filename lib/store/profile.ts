@@ -542,6 +542,10 @@ export function clearProfile() {
 export async function signOut() {
   clearProfile();
   try {
+    const { disableBiometric } = await import('@/lib/auth/biometric');
+    disableBiometric();
+  } catch {}
+  try {
     const supabase = createClient();
     await supabase.auth.signOut();
   } catch {}

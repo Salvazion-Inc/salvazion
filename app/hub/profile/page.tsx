@@ -33,6 +33,7 @@ import CloudNativeSyncPanel from '@/components/health/CloudNativeSyncPanel';
 import TextScaleControl from '@/components/settings/TextScaleControl';
 import ThemeControl from '@/components/settings/ThemeControl';
 import LanguageControl from '@/components/settings/LanguageControl';
+import BiometricControl from '@/components/settings/BiometricControl';
 import { useI18n } from '@/components/I18nProvider';
 import XLogo, { textWithXLogo } from '@/components/ui/XLogo';
 import { useFlashToast } from '@/components/ui/FlashToast';
@@ -698,6 +699,13 @@ export default function ProfilePage() {
                 <LanguageControl />
                 <TextScaleControl />
               </div>
+            </section>
+
+            <section className="space-y-2">
+              <h3 className="text-[11px] uppercase tracking-[0.14em] font-semibold text-[var(--sage)] px-1">
+                {t('settings.security')}
+              </h3>
+              <BiometricControl />
             </section>
 
             <section className="space-y-3">

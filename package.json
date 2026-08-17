@@ -21,6 +21,7 @@
     "cap:plugin:build": "tsc -p native/capacitor/plugins/SalvazionHealth/tsconfig.json"
   },
   "dependencies": {
+    "@aparajita/capacitor-biometric-auth": "^9.1.2",
     "@capacitor/app": "^7.1.0",
     "@capacitor/core": "^7.4.2",
     "@capacitor/splash-screen": "^7.0.3",

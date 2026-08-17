@@ -1,6 +1,6 @@
 /**
- * Portadas de libros bíblicos — assets en /public/bible/covers/{bookId}.webp|png|jpg
- * Estética Salvazion: negro #040404 + acento #8FD99A, arte sagrado-tech.
+ * Portadas de libros bíblicos — assets en /public/bible/covers/{bookId}.jpg
+ * Cinematográficas 3:4, tema de cada libro, acento #8FD99A.
  */
 
 export const BIBLE_COVER_BASE = '/bible/covers';

@@ -1,11 +1,7 @@
 # Portadas de libros bíblicos (Imagine)
 
-66 portadas simbólicas generadas con Imagine, estética Salvazion:
+66 portadas cinematográficas a todo color. Cada una evoca el tema principal del libro, con acento verde neón / sage `#8FD99A` y sin texto en la imagen.
 
-- Fondo negro `#040404`
-- Acentos verde neón / sage `#8FD99A`
-- Geometría sagrada-tech (sin texto en la imagen)
-
-Archivos: `{bookId}.jpg` (640×640, optimizados).
+Archivos: `{bookId}.jpg` (768×1024, 3:4).
 
 Usados en `/hub/bible` — biblioteca (Explorar → Libros) y hero al leer un capítulo.

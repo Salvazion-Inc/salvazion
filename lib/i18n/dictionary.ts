@@ -964,6 +964,8 @@ export const dictionary = {
         'Marca Sí en la agenda de hoy. Lee un capítulo. Eso basta para empezar.',
       acceptCall: 'Empezar mi día',
       starting: 'Entrando…',
+      saveError:
+        'No se pudo sincronizar. Tus datos quedaron guardados en este dispositivo; entra de nuevo si el dashboard no abre.',
       shareTitle: 'Únete a mi Comunidad — Salvazion',
       shareBody:
         '¡Únete a mi Comunidad en Salvazion!\n\nEstoy construyendo Salvation, Health y Freedom con el León Verde. Quiero que formes parte de mi círculo ({relation}).\n\nEntra a la app y crecemos juntos en fe, familia y virtud.\n\nhttps://salvazion.org\n\n#Salvazion #Comunidad',
@@ -1958,6 +1960,8 @@ export const dictionary = {
         'Mark Yes on today’s agenda. Read a chapter. That’s enough to start.',
       acceptCall: 'Start my day',
       starting: 'Entering…',
+      saveError:
+        'Could not sync. Your answers are saved on this device — try again if the dashboard does not open.',
       shareTitle: 'Join my Community — Salvazion',
       shareBody:
         'Join my Community on Salvazion!\n\nI am building Salvation, Health, and Freedom with the Green Lion. I want you in my circle ({relation}).\n\nOpen the app and grow with me in faith, family, and virtue.\n\nhttps://salvazion.org\n\n#Salvazion #Community',

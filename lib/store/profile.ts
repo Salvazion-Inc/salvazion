@@ -190,6 +190,80 @@ function toDb(profile: Partial<UserProfile>) {
   };
 }
 
+function isBlankValue(v: unknown): boolean {
+  if (v == null) return true;
+  if (typeof v === 'string') return v.trim() === '';
+  if (Array.isArray(v)) return v.length === 0;
+  return false;
+}
+
+const MERGE_KEYS: (keyof UserProfile)[] = [
+  'name',
+  'language',
+  'spiritualMaturity',
+  'familyStatus',
+  'currentFocus',
+  'struggles',
+  'preferredBibleVersion',
+  'purpose',
+  'city',
+  'country',
+  'birthDate',
+  'sex',
+  'avatarUrl',
+  'xUsername',
+  'xUserId',
+  'familyLinks',
+  'friendsLinks',
+];
+
+/**
+ * Merge server + device profile without dropping onboarding fields.
+ * Empty server columns (common when upsert failed or schema lagged)
+ * must never wipe a richer local cache — that was wiping "Empezar mi día".
+ */
+export function mergeProfileSources(
+  server: Partial<UserProfile>,
+  local: Partial<UserProfile>,
+  opts?: { localNewer?: boolean }
+): { merged: Partial<UserProfile>; recoveredFromLocal: boolean } {
+  const merged: Partial<UserProfile> = { ...server };
+  let recoveredFromLocal = false;
+  const localWinsTies = !!opts?.localNewer;
+
+  for (const key of MERGE_KEYS) {
+    const s = server[key];
+    const l = local[key];
+    const sBlank = isBlankValue(s);
+    const lBlank = isBlankValue(l);
+    if (sBlank && !lBlank) {
+      (merged as Record<string, unknown>)[key] = l;
+      recoveredFromLocal = true;
+    } else if (!sBlank && !lBlank && localWinsTies && key !== 'avatarUrl') {
+      // Fresh local write (just finished onboarding) beats a stale server row
+      if (JSON.stringify(s) !== JSON.stringify(l)) {
+        (merged as Record<string, unknown>)[key] = l;
+        recoveredFromLocal = true;
+      }
+    }
+  }
+
+  merged.onboardingCompleted = !!(
+    server.onboardingCompleted || local.onboardingCompleted
+  );
+  merged.hasAcceptedLionCoach = !!(
+    server.hasAcceptedLionCoach || local.hasAcceptedLionCoach
+  );
+  if (local.onboardingCompleted && !server.onboardingCompleted) {
+    recoveredFromLocal = true;
+  }
+  if (local.hasAcceptedLionCoach && !server.hasAcceptedLionCoach) {
+    recoveredFromLocal = true;
+  }
+
+  return { merged, recoveredFromLocal };
+}
+
 function saveLocal(profile: Partial<UserProfile>, opts?: { emit?: boolean }) {
   if (typeof window === 'undefined') return;
   const current = loadLocal();
@@ -204,23 +278,34 @@ function saveLocal(profile: Partial<UserProfile>, opts?: { emit?: boolean }) {
   if (opts?.emit !== false) emitProfileUpdated();
 }
 
-function loadLocal(): Partial<UserProfile> {
-  if (typeof window === 'undefined') return {};
+function loadLocalMeta(): { data: Partial<UserProfile>; ts: number } {
+  if (typeof window === 'undefined') return { data: {}, ts: 0 };
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return {};
+    if (!raw) return { data: {}, ts: 0 };
     const parsed = JSON.parse(raw);
-    if (!parsed.v && !parsed.data) return parsed as Partial<UserProfile>;
+    if (!parsed.v && !parsed.data) {
+      return { data: parsed as Partial<UserProfile>, ts: 0 };
+    }
     const payload = parsed as StoredPayload;
     if (payload.checksum !== simpleChecksum(payload.data)) {
       console.warn('[Salvazion] Profile integrity check failed.');
-      return { ...payload.data, _integrityWarning: true };
+      return {
+        data: { ...payload.data, _integrityWarning: true },
+        ts: payload.ts || 0,
+      };
     }
-    return payload.data;
+    return { data: payload.data, ts: payload.ts || 0 };
   } catch {
-    return {};
+    return { data: {}, ts: 0 };
   }
 }
+
+function loadLocal(): Partial<UserProfile> {
+  return loadLocalMeta().data;
+}
+
+let lastOnboardingRepushAt = 0;
 
 /**
  * Ensure a profiles (+ streaks) row exists for the current user.
@@ -462,9 +547,34 @@ export async function loadProfileAsync(): Promise<Partial<UserProfile>> {
           void applyXIdentityToProfile();
         }
 
+        const serverTs = Date.parse(String(data.updated_at || '')) || 0;
+        const localMeta = loadLocalMeta();
+        const localNewer =
+          localMeta.ts > 0 && serverTs > 0
+            ? localMeta.ts > serverTs + 1500
+            : local.onboardingCompleted === true &&
+              profile.onboardingCompleted !== true;
+
+        const { merged, recoveredFromLocal } = mergeProfileSources(
+          profile,
+          local,
+          { localNewer }
+        );
+
+        // Keep the avatar rules already applied on `profile`
+        if (profile.avatarUrl) merged.avatarUrl = profile.avatarUrl;
+        else if (isDataAvatar(local.avatarUrl)) merged.avatarUrl = local.avatarUrl;
+
         // Always rewrite local cache so mobile drops stale avatars from other sessions
-        saveLocal(profile);
-        return profile;
+        // — but never drop richer onboarding fields the server is still missing.
+        saveLocal(merged);
+
+        if (recoveredFromLocal && Date.now() - lastOnboardingRepushAt > 8_000) {
+          lastOnboardingRepushAt = Date.now();
+          void persistProfileToServer(merged);
+        }
+
+        return merged;
       }
     }
   } catch (e) {
@@ -486,48 +596,113 @@ export function loadProfile(): Partial<UserProfile> {
   return loadLocal();
 }
 
-/**
- * Save profile.
- * Optimistic local write + upsert to Supabase when session exists.
- */
-export async function saveProfile(profile: Partial<UserProfile>) {
-  // Merge with current local so partial updates (e.g. only avatar) keep the rest
-  const merged = { ...loadLocal(), ...profile };
-  saveLocal(merged);
+const DROP_ON_ERROR = [
+  'sex',
+  'avatar_url',
+  'x_username',
+  'x_user_id',
+  'preferred_bible_version',
+  'current_focus',
+  'struggles',
+  'city',
+  'country',
+  'birth_date',
+  'purpose',
+] as const;
 
+function buildProfilePayload(
+  userId: string,
+  merged: Partial<UserProfile>
+): Record<string, unknown> {
+  const row = toDb(merged);
+  const payload: Record<string, unknown> = {
+    id: userId,
+    updated_at: new Date().toISOString(),
+  };
+  for (const [k, v] of Object.entries(row)) {
+    if (v !== undefined) payload[k] = v;
+  }
+  return payload;
+}
+
+function applyUpsertFallbacks(
+  payload: Record<string, unknown>,
+  message: string
+): boolean {
+  const msg = message || '';
+  let changed = false;
+
+  if (/preferred_bible_version/i.test(msg)) {
+    if (payload.preferred_bible_version === 'arc') {
+      payload.preferred_bible_version = 'kjv';
+      changed = true;
+    } else if ('preferred_bible_version' in payload) {
+      delete payload.preferred_bible_version;
+      changed = true;
+    }
+  }
+
+  if (/language/i.test(msg) && payload.language === 'pt') {
+    payload.language = 'es';
+    changed = true;
+  }
+
+  for (const col of DROP_ON_ERROR) {
+    if (msg.includes(col) && col in payload) {
+      delete payload[col];
+      changed = true;
+    }
+  }
+
+  return changed;
+}
+
+/** Best-effort server upsert. Local cache is already the source of truth. */
+async function persistProfileToServer(
+  merged: Partial<UserProfile>
+): Promise<{ ok: boolean; error?: string }> {
   try {
     const supabase = createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user) return;
+    if (!user) return { ok: true };
 
-    const row = toDb(merged);
-    // Drop undefined keys so we don't wipe columns unintentionally
-    const payload: Record<string, unknown> = {
-      id: user.id,
-      updated_at: new Date().toISOString(),
-    };
-    for (const [k, v] of Object.entries(row)) {
-      if (v !== undefined) payload[k] = v;
-    }
+    const payload = buildProfilePayload(user.id, merged);
 
-    const { error } = await supabase.from('profiles').upsert(payload);
+    for (let attempt = 0; attempt < 6; attempt++) {
+      const { error } = await supabase
+        .from('profiles')
+        .upsert(payload, { onConflict: 'id' });
 
-    if (error) {
-      // avatar_url column may not exist yet — retry without it
-      if (String(error.message || '').includes('avatar_url')) {
-        delete payload.avatar_url;
-        const { error: e2 } = await supabase.from('profiles').upsert(payload);
-        if (e2) console.error('[Salvazion] Profile upsert failed', e2);
-      } else {
+      if (!error) return { ok: true };
+
+      const message = String(error.message || error.code || 'upsert_failed');
+      if (!applyUpsertFallbacks(payload, message)) {
         console.error('[Salvazion] Profile upsert failed', error);
+        return { ok: false, error: message };
       }
     }
+
+    return { ok: false, error: 'upsert_retries_exhausted' };
   } catch (e) {
     console.warn('[Salvazion] Supabase save failed', e);
+    return { ok: false, error: e instanceof Error ? e.message : 'save_failed' };
   }
+}
+
+/**
+ * Save profile.
+ * Optimistic local write first (so "Empezar mi día" never loses the 3 steps),
+ * then upsert to Supabase when a session exists.
+ */
+export async function saveProfile(profile: Partial<UserProfile>) {
+  // Merge with current local so partial updates (e.g. only avatar) keep the rest
+  const merged = { ...loadLocal(), ...profile };
+  saveLocal(merged);
+  await persistProfileToServer(merged);
+  return merged;
 }
 
 export function clearProfile() {

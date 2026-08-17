@@ -69,29 +69,39 @@ export default function DashboardPage() {
     setMounted(true);
     (async () => {
       const p = await loadProfileAsync();
-      if (!p?.onboardingCompleted) {
+      const local = loadProfile();
+      const resolved =
+        p?.onboardingCompleted
+          ? p
+          : local.onboardingCompleted
+            ? { ...p, ...local, onboardingCompleted: true }
+            : p;
+      if (!resolved?.onboardingCompleted) {
         router.replace('/hub/onboarding');
         return;
       }
-      setProfile(p);
+      setProfile(resolved);
       // Pull last 7 days so weekly charts work across devices
       const synced = await syncScoresFromServer({ days: 7 });
       await syncBadgesFromServer();
-      refresh(p, synced);
+      refresh(resolved, synced);
 
       // Wearables → score without opening Settings
       try {
         const passive = await runPassiveHealthSync({
-          lang: p.language === 'en' || p.language === 'pt' ? p.language : 'es',
+          lang:
+            resolved.language === 'en' || resolved.language === 'pt'
+              ? resolved.language
+              : 'es',
           onLog: (type) => {
             logAction(type);
           },
         });
         if (passive.autoLogged.length) {
-          refresh(p);
+          refresh(resolved);
           flash(t('health.devices.autoLogged'));
         } else {
-          refresh(p);
+          refresh(resolved);
         }
       } catch {
         /* offline / no wearables */

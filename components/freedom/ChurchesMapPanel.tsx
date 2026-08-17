@@ -21,6 +21,7 @@ import {
   formatDistance,
   placeUrl,
 } from '@/lib/freedom/churches';
+import DroneChurchesMap from '@/components/freedom/DroneChurchesMap';
 
 type Geo = {
   lat: number;
@@ -288,6 +289,8 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
   );
   const [familyFilter, setFamilyFilter] = useState<ChurchDenomFamily | 'all'>('all');
   const [connected, setConnected] = useState<Set<string>>(() => new Set());
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [flatMap, setFlatMap] = useState(false);
 
   const readProfilePlace = useCallback(() => {
     const p = loadProfile();
@@ -345,6 +348,7 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
       setLoading(true);
       setError(null);
       setChurches([]);
+      setSelectedId(null);
       setFamilyFilter('all');
       setGeo({
         lat,
@@ -594,8 +598,8 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
         </h2>
         <p className="text-[10px] text-[var(--sage)]/70 mt-0.5 leading-relaxed">
           {es
-            ? 'Conecta en persona · GPS actualiza tu ubicación del perfil'
-            : 'Connect in person · GPS updates your profile location'}
+            ? 'Vista dron 360° · GPS actualiza tu ubicación del perfil'
+            : '360° drone view · GPS updates your profile location'}
         </p>
       </div>
 
@@ -688,7 +692,17 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
         </div>
 
         <div className="px-3.5 pb-3.5 space-y-3">
-          {geo && !loading && churches.length > 0 && (
+          {geo && !loading && !flatMap && (
+            <DroneChurchesMap
+              geo={geo}
+              churches={filtered.slice(0, 40)}
+              lang={lang}
+              selectedId={selectedId}
+              onSelect={(c) => setSelectedId(c?.id ?? null)}
+              onWebGLUnavailable={() => setFlatMap(true)}
+            />
+          )}
+          {geo && !loading && flatMap && churches.length > 0 && (
             <PinMap geo={geo} churches={filtered.slice(0, 40)} lang={lang} />
           )}
 
@@ -766,8 +780,16 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
                     <div
                       className="rounded-xl border px-2.5 py-2.5 transition"
                       style={{
-                        borderColor: done ? FREEDOM.border : 'var(--border-soft)',
-                        background: done ? FREEDOM.soft : 'rgba(0,0,0,0.2)',
+                        borderColor:
+                          selectedId === c.id || done
+                            ? FREEDOM.border
+                            : 'var(--border-soft)',
+                        background:
+                          selectedId === c.id
+                            ? FREEDOM.soft
+                            : done
+                              ? FREEDOM.soft
+                              : 'rgba(0,0,0,0.2)',
                       }}
                     >
                       <div className="flex items-start gap-2.5">
@@ -801,6 +823,21 @@ export default function ChurchesMapPanel({ className = '', onScored }: Props) {
                               .join(' · ')}
                           </p>
                           <div className="flex flex-wrap gap-1.5 mt-2">
+                            <button
+                              type="button"
+                              onClick={() => setSelectedId(c.id)}
+                              className="text-[10px] font-semibold px-2.5 py-1 rounded-lg min-h-[28px] inline-flex items-center border"
+                              style={{
+                                borderColor: FREEDOM.border,
+                                color: FREEDOM.text,
+                                background:
+                                  selectedId === c.id
+                                    ? FREEDOM.soft
+                                    : 'transparent',
+                              }}
+                            >
+                              {tx('Drone view', 'Ver en dron', 'Ver no drone')}
+                            </button>
                             <a
                               href={directionsUrl(c.lat, c.lon, c.name)}
                               target="_blank"

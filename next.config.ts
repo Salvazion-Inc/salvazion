@@ -20,6 +20,7 @@ const nextConfig: NextConfig = {
     "@capacitor/app",
     "@capacitor/splash-screen",
     "@capacitor/status-bar",
+    "maplibre-gl",
   ],
   // Security headers — baseline for a production-facing app
   async headers() {
@@ -42,8 +43,8 @@ const nextConfig: NextConfig = {
             value: [
               "default-src 'self'",
               // Jupiter Plugin (Ultra) — plugin.jup.ag; legacy terminal.jup.ag still allowed
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plugin.jup.ag https://terminal.jup.ag https://*.jup.ag",
-              "style-src 'self' 'unsafe-inline' https://plugin.jup.ag https://terminal.jup.ag https://*.jup.ag https://fonts.googleapis.com https://fonts.reown.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plugin.jup.ag https://terminal.jup.ag https://*.jup.ag https://cdn.jsdelivr.net",
+              "style-src 'self' 'unsafe-inline' https://plugin.jup.ag https://terminal.jup.ag https://*.jup.ag https://fonts.googleapis.com https://fonts.reown.com https://cdn.jsdelivr.net",
               "img-src 'self' data: blob: https: https://images-na.ssl-images-amazon.com https://m.media-amazon.com https://covers.openlibrary.org https://books.google.com https://ipfs.io https://*.ipfs.io",
               "font-src 'self' data: https://plugin.jup.ag https://terminal.jup.ag https://*.jup.ag https://fonts.gstatic.com https://fonts.reown.com",
               // Supabase + Solana RPC + wallets + Jupiter APIs
@@ -64,6 +65,11 @@ const nextConfig: NextConfig = {
                 "https://overpass-api.de",
                 "https://overpass.kumi.systems",
                 "https://*.tile.openstreetmap.org",
+                "https://server.arcgisonline.com",
+                "https://services.arcgisonline.com",
+                "https://*.arcgisonline.com",
+                "https://s3.amazonaws.com",
+                "https://cdn.jsdelivr.net",
                 "https://unavatar.io",
                 // Wearable OAuth + APIs
                 "https://www.fitbit.com",

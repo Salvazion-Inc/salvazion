@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { UserProfile } from '@/lib/types';
 import {
   saveProfile,
+  loadProfile,
   loadProfileAsync,
   ensureProfileForUser,
   calculateAge,
@@ -38,6 +39,9 @@ export default function OnboardingPage() {
   const [step, setStep] = useState<Step>(1);
   const [booting, setBooting] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const bootedRef = useRef(false);
+  const profileRef = useRef<Partial<UserProfile>>({});
   const [profile, setProfile] = useState<Partial<UserProfile>>({
     name: '',
     language: 'en',
@@ -71,6 +75,12 @@ export default function OnboardingPage() {
   };
 
   useEffect(() => {
+    profileRef.current = profile;
+  }, [profile]);
+
+  useEffect(() => {
+    if (bootedRef.current) return;
+    bootedRef.current = true;
     let cancelled = false;
     (async () => {
       try {
@@ -85,6 +95,14 @@ export default function OnboardingPage() {
           setProfile((prev) => ({
             ...prev,
             ...existing,
+            name: prev.name?.trim() || existing.name || '',
+            birthDate: prev.birthDate || existing.birthDate || '',
+            sex: prev.sex || existing.sex,
+            purpose: prev.purpose || existing.purpose || '',
+            currentFocus:
+              (prev.currentFocus && prev.currentFocus.length > 0
+                ? prev.currentFocus
+                : existing.currentFocus) || [],
             language: isLanguage(existing.language) ? existing.language : lang,
             preferredBibleVersion:
               existing.preferredBibleVersion || defaultBibleVersion(lang),
@@ -111,6 +129,17 @@ export default function OnboardingPage() {
     setProfile((prev) => ({ ...prev, ...fields }));
   };
 
+  const persistDraft = async (extra?: Partial<UserProfile>) => {
+    if (loadProfile().onboardingCompleted) return;
+    const next = { ...profileRef.current, ...extra };
+    delete next.onboardingCompleted;
+    try {
+      await saveProfile(next);
+    } catch {
+      /* local write already happened inside saveProfile */
+    }
+  };
+
   const toggleFocus = (id: string) => {
     const current = profile.currentFocus || [];
     if (current.includes(id)) {
@@ -120,7 +149,10 @@ export default function OnboardingPage() {
     }
   };
 
-  const next = () => setStep((s) => Math.min(TOTAL_STEPS, s + 1) as Step);
+  const next = () => {
+    void persistDraft();
+    setStep((s) => Math.min(TOTAL_STEPS, s + 1) as Step);
+  };
   const back = () => setStep((s) => Math.max(1, s - 1) as Step);
 
   const canContinueStep1 =
@@ -131,6 +163,7 @@ export default function OnboardingPage() {
   const finish = async () => {
     if (saving) return;
     setSaving(true);
+    setSaveError(null);
     try {
       const purpose =
         profile.purpose?.trim() ||
@@ -139,7 +172,8 @@ export default function OnboardingPage() {
           : lang === 'pt'
             ? 'Crescendo em Salvation, Health e Freedom todos os dias.'
             : 'Growing in Salvation, Health, and Freedom every day.');
-      await saveProfile({
+      const payload: Partial<UserProfile> = {
+        ...profileRef.current,
         ...profile,
         purpose,
         language: lang,
@@ -149,10 +183,16 @@ export default function OnboardingPage() {
         familyStatus: profile.familyStatus || 'family',
         hasAcceptedLionCoach: true,
         onboardingCompleted: true,
-      });
+      };
+      await saveProfile(payload);
+      const confirmed = loadProfile();
+      if (!confirmed.onboardingCompleted) {
+        await saveProfile({ ...payload, onboardingCompleted: true });
+      }
       saveValueJourneyDone();
       router.push('/hub/dashboard');
     } catch {
+      setSaveError(t('onboarding.saveError'));
       setSaving(false);
     }
   };
@@ -498,6 +538,12 @@ export default function OnboardingPage() {
             <p className="text-[11px] text-[var(--sage)]/75 leading-relaxed">
               {t('onboarding.afterStartHint')}
             </p>
+
+            {saveError ? (
+              <p className="text-[12px] text-red-400 leading-relaxed" role="alert">
+                {saveError}
+              </p>
+            ) : null}
 
             <button
               type="button"

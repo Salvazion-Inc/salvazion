@@ -955,6 +955,8 @@ export const dictionaryPt = {
     afterStartHint: 'Marque Sim na agenda de hoje. Leia um capítulo. Isso basta para começar.',
     acceptCall: 'Começar o meu dia',
     starting: 'Entrando…',
+    saveError:
+      'Não foi possível sincronizar. Suas respostas ficaram neste dispositivo; tente de novo se o dashboard não abrir.',
     shareTitle: 'Junte-se à minha Comunidade — Salvazion',
     shareBody:
       'Junte-se à minha Comunidade na Salvazion!\n\nEstou construindo Salvation, Health e Freedom com o Leão Verde. Quero você no meu círculo ({relation}).\n\nEntre no app e cresçamos juntos em fé, família e virtude.\n\nhttps://salvazion.org\n\n#Salvazion #Comunidade',

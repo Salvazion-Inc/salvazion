@@ -1500,48 +1500,13 @@ select:-webkit-autofill {
   box-shadow: 0 0 12px color-mix(in srgb, var(--tab-accent, var(--accent)) 45%, transparent);
 }
 
-/* Profile hero — full banner visible (3:1), avatar overlaps edge */
-.profile-banner {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 3 / 1;
-  min-height: 7.5rem;
-  max-height: 12.5rem;
-  overflow: hidden;
-  background:
-    radial-gradient(80% 120% at 12% 80%, rgba(143, 217, 154, 0.35), transparent 55%),
-    radial-gradient(70% 100% at 88% 20%, rgba(74, 158, 255, 0.28), transparent 50%),
-    radial-gradient(60% 80% at 50% 0%, rgba(245, 247, 245, 0.12), transparent 60%),
-    linear-gradient(135deg, #0c1410 0%, #050806 48%, #040404 100%);
-}
-.profile-banner-media {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-  /* Full header visible — no aggressive bottom crop */
-}
-.profile-banner-fade {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    transparent 40%,
-    rgba(4, 4, 4, 0.35) 78%,
-    rgba(4, 4, 4, 0.72) 100%
-  );
-}
 .profile-hero {
   position: relative;
   width: 100%;
 }
 .profile-hero-body {
   position: relative;
-  padding: 0 1.15rem 0.25rem;
-  margin-top: -2.65rem;
+  padding: 1rem 1.15rem 0.25rem;
 }
 .profile-hero-avatar {
   width: fit-content;
@@ -1757,14 +1722,6 @@ select:-webkit-autofill {
   :root {
     --content-max: 36rem;
     --content-pad-x: 1.5rem;
-  }
-  .profile-banner {
-    min-height: 9rem;
-    max-height: 14rem;
-    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
-  }
-  .profile-hero-body {
-    margin-top: -3rem;
   }
   .bottom-nav-dock-inner {
     max-width: 30rem;

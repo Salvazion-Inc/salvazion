@@ -35,8 +35,6 @@ import { PILLAR_COLORS } from '@/lib/theme/pillars';
 import { useFlashToast } from '@/components/ui/FlashToast';
 import { runPassiveHealthSync } from '@/lib/health/wearables';
 import { logAction } from '@/lib/scoring/engine';
-import { createClient } from '@/lib/supabase/client';
-import { isBusinessAdminEmail } from '@/lib/business/access';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -48,7 +46,6 @@ export default function DashboardPage() {
   const [newBadges, setNewBadges] = useState<BadgeDef[]>([]);
   const [badgeProgress, setBadgeProgress] = useState({ earned: 0, total: 0 });
   const [todayPts, setTodayPts] = useState({ total: 0, actionCount: 0 });
-  const [isBizAdmin, setIsBizAdmin] = useState(false);
   const [editingPurpose, setEditingPurpose] = useState(false);
   const [purposeDraft, setPurposeDraft] = useState('');
   const [purposeSaving, setPurposeSaving] = useState(false);
@@ -77,15 +74,6 @@ export default function DashboardPage() {
         return;
       }
       setProfile(p);
-      try {
-        const supabase = createClient();
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        setIsBizAdmin(isBusinessAdminEmail(user?.email));
-      } catch {
-        setIsBizAdmin(false);
-      }
       // Pull last 7 days so weekly charts work across devices
       const synced = await syncScoresFromServer({ days: 7 });
       await syncBadgesFromServer();
@@ -560,39 +548,6 @@ export default function DashboardPage() {
         <div className="w-full max-w-sm mb-5">
           <ProgressCharts scores={scores} />
         </div>
-
-        {/* Business console — Salvazion Inc. operator only */}
-        {isBizAdmin && (
-          <div className="w-full max-w-sm mb-4">
-            <Link
-              href="/hub/business"
-              className="card-soft block p-3.5 border border-[var(--border-strong)] group"
-            >
-              <p className="text-[10px] uppercase tracking-wider text-[var(--accent)]">
-                Salvazion, Inc.
-              </p>
-              <div className="flex items-center justify-between gap-2 mt-0.5">
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-white group-hover:text-[#8FD99A] transition">
-                    {lang === 'en'
-                      ? 'Business KPIs & funnel'
-                      : lang === 'pt'
-                        ? 'KPIs de negócio e funil'
-                        : 'KPI de negocio y funnel'}
-                  </p>
-                  <p className="text-[10px] text-[var(--sage)] mt-0.5">
-                    {lang === 'en'
-                      ? 'MRR · ARR · conversion · churn'
-                      : lang === 'pt'
-                        ? 'MRR · ARR · conversão · churn'
-                        : 'MRR · ARR · conversión · churn'}
-                  </p>
-                </div>
-                <span className="text-[var(--accent)] text-sm shrink-0">→</span>
-              </div>
-            </Link>
-          </div>
-        )}
 
         {/* Badges — compact */}
         <div className="w-full max-w-sm mb-2">

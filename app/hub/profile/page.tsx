@@ -9,7 +9,6 @@ import {
 } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import BottomNav from '@/components/BottomNav';
 import {
   loadProfile,
@@ -244,23 +243,7 @@ export default function ProfilePage() {
       </header>
 
       <main className="flex-1 pb-28 w-full max-w-lg mx-auto">
-        {/* X-style profile hero: full banner (no crop) + overlapping avatar */}
         <section className="profile-hero mb-1">
-          <div className="profile-banner" aria-hidden>
-            {/* Decorative full-bleed brand header — aspect 3:1, fully visible */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-[0.14]">
-              <Image
-                src="/logo-icon.png"
-                alt=""
-                width={120}
-                height={120}
-                className="object-contain"
-                priority
-              />
-            </div>
-            <div className="profile-banner-fade" />
-          </div>
-
           <div className="profile-hero-body">
             <div className="flex items-end justify-between gap-3">
               <div className="profile-hero-avatar">

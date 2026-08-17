@@ -28,9 +28,9 @@ You are not alone. Here you join those who have awakened to the call:
 * To defend the family as the cradle of civilization against the siege of gender ideology and demographic suicide.
 * To reclaim the West from the jaws of cultural Marxism and technocratic dominion.
 
-Your mission begins now. Pledge your soul to the cause of Christ the King. Fortify your body as a vessel of resistance—pure, disciplined, alive. Stand in the gap: online, in the streets, and in the secret places of prayer.
+Your mission begins now. Pledge your soul to the cause of Christ the King. Fortify your body as a vessel of resistance—pure, disciplined, alive. Stand in the gap: Online, in the streets, and in the secret places of prayer.
 
-Salvation is not a slogan. It is a battle cry. This is not a meme: it is a Spiritual and Cultural Revival and a Change of Era.
+Salvation is not a slogan. It is a battle cry. This is not a meme: It is a Spiritual and Cultural Revival and a Change of Era.
 
 Health is not a privilege. It is a divine mandate. Freedom is not granted. It is conquered by the cross and the sword of the Spirit.
 

@@ -1,6 +1,6 @@
 /**
- * Official Salvazion logo loop — used on page loads instead of copy.
- * Silent by design: no “the Lion is working” line.
+ * Official Salvazion mark on a transparent field — no black square.
+ * CSS HUD ring supplies motion; the lion stays still.
  */
 export default function BrandLoader({
   size = 140,
@@ -20,32 +20,19 @@ export default function BrandLoader({
       role="status"
       aria-label={label}
     >
-      <span
-        className="relative inline-flex items-center justify-center"
-        style={{ width: size, height: size }}
-      >
+      <span className="brand-loader-mark" style={{ width: size, height: size }}>
+        <span className="brand-loader-halo" aria-hidden />
+        <span className="brand-loader-orbit brand-loader-orbit-a" aria-hidden />
+        <span className="brand-loader-orbit brand-loader-orbit-b" aria-hidden />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/logo-icon.png"
+          src="/videos/logo-loader-poster.png"
           alt=""
           width={size}
           height={size}
-          className="brand-loader-static pointer-events-none select-none lion-glow absolute inset-0 h-full w-full object-contain"
+          className="brand-loader-static"
           aria-hidden
         />
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster="/logo-icon.png"
-          width={size}
-          height={size}
-          className="brand-loader-video pointer-events-none select-none lion-glow h-full w-full object-contain"
-          aria-hidden
-        >
-          <source src="/videos/logo-loader.mp4" type="video/mp4" />
-        </video>
       </span>
       <span className="sr-only">{label}</span>
     </div>

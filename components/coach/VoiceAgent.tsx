@@ -13,6 +13,8 @@ import {
 import type { UserProfile } from '@/lib/types';
 import type { ComputedScores } from '@/lib/scoring/types';
 import { logAction } from '@/lib/scoring/engine';
+import AiUsageMeter from '@/components/billing/AiUsageMeter';
+import { useAiUsage } from '@/lib/billing/ai-usage-client';
 
 type Props = {
   profile: Partial<UserProfile> | null;
@@ -47,6 +49,7 @@ export default function VoiceAgent({
   /** Off by default — freemium browser TTS is poor; Premium uses xAI voice only */
   const [voiceOn, setVoiceOn] = useState(false);
   const [scoredDebate, setScoredDebate] = useState(false);
+  const { refresh: refreshUsage } = useAiUsage();
   const listRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
@@ -82,15 +85,19 @@ export default function VoiceAgent({
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ text, lang }),
         });
-        // No browser/robotic fallback for freemium — only Premium xAI voice
         if (!res.ok) {
           setSpeakState('idle');
-          if (res.status === 402) {
+          const errJson = await res.json().catch(() => null);
+          if (res.status === 429 || res.status === 401) {
             setError(
-              es
-                ? 'Voz del León Verde disponible en Premium (sin voz robótica).'
-                : 'Green Lion voice is Premium (no robotic free TTS).'
+              (errJson && typeof errJson.message === 'string' && errJson.message) ||
+                tx(
+                  'Free voice limit reached. Premium is unlimited.',
+                  'Cupo Free de voz agotado. Premium es ilimitado.',
+                  'Limite Free de voz atingido. Premium é ilimitado.'
+                )
             );
+            void refreshUsage();
           }
           return;
         }
@@ -115,7 +122,7 @@ export default function VoiceAgent({
         setSpeakState('idle');
       }
     },
-    [lang, voiceOn, es]
+    [lang, voiceOn, es, tx, refreshUsage]
   );
 
   const send = useCallback(
@@ -143,12 +150,27 @@ export default function VoiceAgent({
           }),
         });
         const data = await res.json();
+        if (res.status === 401 || res.status === 429) {
+          const reply =
+            (typeof data.reply === 'string' && data.reply) ||
+            (typeof data.message === 'string' && data.message) ||
+            tx(
+              'Free AI limit reached. Upgrade to Premium for unlimited.',
+              'Cupo Free de IA agotado. Pasa a Premium para ilimitado.',
+              'Limite Free de IA atingido. Passe para Premium para ilimitado.'
+            );
+          setError(reply);
+          setMessages((m) => [...m, { role: 'assistant', content: reply }]);
+          void refreshUsage();
+          return;
+        }
         const reply =
           (typeof data.reply === 'string' && data.reply) ||
           (es
             ? 'El León te escucha. Intenta de nuevo.'
             : 'The Lion hears you. Try again.');
         setMessages((m) => [...m, { role: 'assistant', content: reply }]);
+        void refreshUsage();
         if (isDebate && !scoredDebate && nextMessages.filter((x) => x.role === 'user').length >= 1) {
           logAction('debate_participate');
           setScoredDebate(true);
@@ -161,7 +183,7 @@ export default function VoiceAgent({
         setBusy(false);
       }
     },
-    [busy, messages, profile, scores, lang, es, playTts, mode, isDebate, scoredDebate, onDebateScored]
+    [busy, messages, profile, scores, lang, es, playTts, mode, isDebate, scoredDebate, onDebateScored, tx, refreshUsage]
   );
 
   const toggleListen = () => {
@@ -265,6 +287,9 @@ export default function VoiceAgent({
             ? tx('Voice on', 'Voz on', 'Voz on')
             : tx('Voice off', 'Voz off', 'Voz off')}
         </button>
+      </div>
+      <div className="mb-3">
+        <AiUsageMeter feature="coach_chat" compact={compact} />
       </div>
 
       {/* Messages */}

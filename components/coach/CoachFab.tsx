@@ -64,7 +64,7 @@ export default function CoachFab() {
   const pathname = usePathname();
   const { t, lang } = useI18n();
   const locale = lang === 'en' || lang === 'pt' ? lang : 'es';
-  const { isPremium, loading } = useEntitlement();
+  const { isPremium } = useEntitlement();
 
   const [nudges, setNudges] = useState<FabNudge[]>([]);
   const [index, setIndex] = useState(0);
@@ -154,9 +154,8 @@ export default function CoachFab() {
 
   if (!mounted || hidden) return null;
 
-  const fabHref = !loading && !isPremium ? '/hub/premium' : '/hub/coach';
-  const label =
-    !loading && !isPremium ? t('coach.fabPremium') : t('coach.fabLabel');
+  const fabHref = '/hub/coach';
+  const label = t('coach.fabLabel');
 
   const cloudHref = current?.href || fabHref;
   const closeLabel =

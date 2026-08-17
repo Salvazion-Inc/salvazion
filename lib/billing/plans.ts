@@ -90,14 +90,14 @@ export const FREE_FEATURE_LIST = [
  */
 export const PRICING_TABLE = {
   freeNote: {
-    en: 'Forever free to start the journey',
-    es: 'Gratis para siempre para empezar el camino',
-    pt: 'Grátis para sempre para começar o caminho',
+    en: 'Forever free — limited AI (Grok) + $SALVAZION holder bonus',
+    es: 'Gratis para siempre — IA limitada (Grok) + bonus si tienes $SALVAZION',
+    pt: 'Grátis para sempre — IA limitada (Grok) + bônus se você tem $SALVAZION',
   },
   premiumNote: {
-    en: 'Everything in Free, plus full access and advanced tools',
-    es: 'Todo lo de Gratis, más acceso completo y herramientas avanzadas',
-    pt: 'Tudo do Grátis, mais acesso completo e ferramentas avançadas',
+    en: 'Everything in Free, plus unlimited AI and advanced tools',
+    es: 'Todo lo de Gratis, más IA ilimitada y herramientas avanzadas',
+    pt: 'Tudo do Grátis, mais IA ilimitada e ferramentas avançadas',
   },
   bestValue: {
     en: 'Best value yearly',
@@ -122,9 +122,19 @@ export const PRICING_TABLE = {
       pt: 'Bíblia completa offline (ES · EN · PT · originais) — leitura, busca e concordância',
     },
     {
-      en: 'Daily rules-based devotional',
-      es: 'Devocional diario por reglas',
-      pt: 'Devocional diário por regras',
+      en: 'AI coach: 5 messages / day · AI devotionals: 1 / day',
+      es: 'Coach IA: 5 mensajes / día · Devocionales IA: 1 / día',
+      pt: 'Coach IA: 5 mensagens / dia · Devocionais IA: 1 / dia',
+    },
+    {
+      en: 'Cineanthropometry: 2 / week · meal photo AI: 3 / day',
+      es: 'Cineantropometría: 2 / semana · foto de comida IA: 3 / día',
+      pt: 'Cineantropometria: 2 / semana · foto de refeição IA: 3 / dia',
+    },
+    {
+      en: 'Hold $SALVAZION on-chain → 2× Free AI limits',
+      es: 'Mantén $SALVAZION on-chain → 2× cupos Free de IA',
+      pt: 'Mantenha $SALVAZION on-chain → 2× limites Free de IA',
     },
     {
       en: 'Manual health logs, phone sensors and BLE heart rate',
@@ -168,15 +178,15 @@ export const PREMIUM_FEATURE_LIST: {
 }[] = [
   {
     id: 'coach_ai',
-    en: 'Salvazion AI (chat coach)',
-    es: 'Salvazion con IA (chat coach)',
-    pt: 'Salvazion com IA (chat coach)',
+    en: 'Unlimited Salvazion AI coach (Grok)',
+    es: 'Coach Salvazion IA ilimitado (Grok)',
+    pt: 'Coach Salvazion IA ilimitado (Grok)',
   },
   {
     id: 'coach_tts',
-    en: 'Salvazion voice / TTS',
-    es: 'Voz de Salvazion / TTS',
-    pt: 'Voz da Salvazion / TTS',
+    en: 'Unlimited Salvazion voice / TTS',
+    es: 'Voz de Salvazion / TTS ilimitada',
+    pt: 'Voz da Salvazion / TTS ilimitada',
   },
   {
     id: 'devotional_ai',
@@ -192,9 +202,9 @@ export const PREMIUM_FEATURE_LIST: {
   },
   {
     id: 'health_advanced',
-    en: "Advanced health: biomarkers, clinical record, women's health",
-    es: 'Salud avanzada: biomarcadores, registro clínico, salud femenina',
-    pt: 'Saúde avançada: biomarcadores, registro clínico, saúde feminina',
+    en: "Unlimited cineanthropometry + meal vision, biomarkers, clinical, women's health",
+    es: 'Cineantropometría y visión de comida ilimitadas, biomarcadores, clínico, salud femenina',
+    pt: 'Cineantropometria e visão de refeição ilimitadas, biomarcadores, clínico, saúde feminina',
   },
   {
     id: 'calendar_advanced',

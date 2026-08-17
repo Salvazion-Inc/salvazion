@@ -15,6 +15,8 @@ import {
   type BodyPhotoView,
 } from '@/lib/health/body-composition';
 import PhotoSourcePicker from '@/components/health/PhotoSourcePicker';
+import AiUsageMeter from '@/components/billing/AiUsageMeter';
+import { useAiUsage } from '@/lib/billing/ai-usage-client';
 import { tx3 } from '@/lib/i18n/locale';
 
 type Props = {
@@ -45,6 +47,7 @@ export default function BodyCompositionPanel({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [latest, setLatest] = useState<BodyCompositionSession | null>(null);
+  const { refresh: refreshUsage } = useAiUsage();
 
   const reload = useCallback(() => {
     const list = loadBodySessions();
@@ -104,6 +107,7 @@ export default function BodyCompositionPanel({
         }),
       });
       const json = await res.json();
+      void refreshUsage();
       if (!res.ok || !json.ok) {
         throw new Error(
           json.message ||
@@ -171,6 +175,9 @@ export default function BodyCompositionPanel({
         <span>◈</span>
         {tx('Photo cineanthropometry', 'Cineantropometría por foto', 'Cineantropometria por foto')}
       </h2>
+      <div className="mb-3">
+        <AiUsageMeter feature="vision_body" />
+      </div>
 
       <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] space-y-3.5">
         <p className="text-[11px] text-[var(--sage)]/80 leading-relaxed">

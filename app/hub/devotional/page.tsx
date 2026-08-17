@@ -10,6 +10,7 @@ import { logAction, getPointsForAction } from '@/lib/scoring/engine';
 import { getLionShortNudge } from '@/lib/coach/engine';
 import { useI18n } from '@/components/I18nProvider';
 import { pickLang } from '@/lib/i18n/locale';
+import AiUsageMeter from '@/components/billing/AiUsageMeter';
 
 const CACHE_PREFIX = 'salvazion_devotional_';
 
@@ -195,6 +196,9 @@ export default function DevotionalPage() {
       <div className="flex-1 px-4 md:px-8 pb-28 overflow-y-auto">
         <div className="max-w-2xl mx-auto">
           <div className="mb-6 mt-4">
+            <div className="mb-3">
+              <AiUsageMeter feature="devotional_ai" />
+            </div>
             <h2 className="text-2xl font-bold tracking-tight text-[var(--accent)]">
               {tx('Personalized Devotional', 'Devocional Personalizado', 'Devocional Personalizado')}
             </h2>

@@ -505,7 +505,7 @@ export const dictionary = {
     premium: {
       billing: 'Suscripción',
       freeTitle: 'Plan Free',
-      freeBody: 'Acceso base a Salvación, Salud y Libertad. Mejora para herramientas avanzadas.',
+      freeBody: 'Acceso base + IA limitada (coach, devocionales, cineantropometría). Premium es ilimitado.',
       activeTitle: 'Premium activo',
       activeBody: 'Acceso completo + herramientas avanzadas en toda la App.',
       status: 'Estado',
@@ -527,7 +527,7 @@ export const dictionary = {
       pageTitle: 'Planes',
       pageHeadline: 'Empieza gratis. Pasa a Premium cuando quieras.',
       pageSubtitle:
-        'Mismos planes que en salvazion.org · Free para el camino · Premium con Salvazion AI, wearables y herramientas avanzadas.',
+        'Mismos planes que en salvazion.org · Free con IA limitada (Grok) · Premium ilimitado, wearables y herramientas avanzadas.',
       youArePremium: 'Tu plan: Premium',
       youAreFree: 'Tu plan: Free',
       currentPlan: 'Tu plan',
@@ -537,6 +537,27 @@ export const dictionary = {
       bestValue: 'Mejor valor anual',
       stripeNote:
         'Pagos seguros con Stripe (Salvazion, Inc.). Cancela o cambia de plan cuando quieras en el portal de cliente.',
+    },
+    quota: {
+      checking: 'Comprobando cupo de IA…',
+      signIn: 'Inicia sesión para usar la IA en Free.',
+      unlimited: 'Ilimitado · Premium',
+      usedDay: '{used} / {limit} hoy',
+      usedWeek: '{used} / {limit} esta semana',
+      exhausted: 'Cupo Free de IA agotado',
+      exhaustedBody:
+        'Vuelve en el siguiente período o pasa a Premium para IA ilimitada.',
+      holderActive: 'Bonus $SALVAZION activo · 2× cupo Free',
+      holderHint: 'Conecta tu wallet y mantén $SALVAZION para duplicar el cupo Free.',
+      holderHintShort: '2× con $SALVAZION',
+      holderShort: '2× $SALVAZION',
+      connectToken: 'Wallet $SALVAZION',
+      coach: 'Coach IA',
+      tts: 'Voz',
+      devotional: 'Devocional IA',
+      visionBody: 'Cineantropometría',
+      visionMeal: 'Foto de comida',
+      coachEyebrow: 'IA · Free limitado',
     },
     wallet: {
       title: 'Billetera Web3',
@@ -557,7 +578,7 @@ export const dictionary = {
       modalFooter:
         'No custodiamos tus llaves. Jupiter Mobile, Phantom, Solflare y otras wallets de Solana aparecen aquí — misma lista en home y en la App.',
       amountLabel: 'Cantidad de $SALVAZION',
-      amountHint: 'Indica tu saldo en el perfil (on-chain o manual)',
+      amountHint: 'Saldo on-chain duplica tus cupos Free de IA',
       saveAmount: 'Guardar',
       sourceOnchain: 'On-chain',
       sourceManual: 'Manual',
@@ -1502,7 +1523,7 @@ export const dictionary = {
     premium: {
       billing: 'Subscription',
       freeTitle: 'Free plan',
-      freeBody: 'Base access to Salvation, Health and Freedom. Upgrade for advanced tools.',
+      freeBody: 'Base access + limited AI (coach, devotionals, cineanthropometry). Premium is unlimited.',
       activeTitle: 'Premium active',
       activeBody: 'Full access + advanced tools across the App.',
       status: 'Status',
@@ -1524,7 +1545,7 @@ export const dictionary = {
       pageTitle: 'Plans',
       pageHeadline: 'Start free. Go Premium when ready.',
       pageSubtitle:
-        'Same plans as salvazion.org · Free to start the journey · Premium with Salvazion AI, wearables and advanced tools.',
+        'Same plans as salvazion.org · Free with limited AI (Grok) · Premium unlimited, wearables and advanced tools.',
       youArePremium: 'Your plan: Premium',
       youAreFree: 'Your plan: Free',
       currentPlan: 'Your plan',
@@ -1534,6 +1555,27 @@ export const dictionary = {
       bestValue: 'Best value yearly',
       stripeNote:
         'Secure payments with Stripe (Salvazion, Inc.). Cancel or change plans anytime in the customer portal.',
+    },
+    quota: {
+      checking: 'Checking AI allowance…',
+      signIn: 'Sign in to use AI on the Free plan.',
+      unlimited: 'Unlimited · Premium',
+      usedDay: '{used} / {limit} today',
+      usedWeek: '{used} / {limit} this week',
+      exhausted: 'Free AI limit reached',
+      exhaustedBody:
+        'Come back next period or go Premium for unlimited AI.',
+      holderActive: '$SALVAZION bonus active · 2× Free limits',
+      holderHint: 'Connect your wallet and hold $SALVAZION to double Free AI limits.',
+      holderHintShort: '2× with $SALVAZION',
+      holderShort: '2× $SALVAZION',
+      connectToken: '$SALVAZION wallet',
+      coach: 'AI coach',
+      tts: 'Voice',
+      devotional: 'AI devotional',
+      visionBody: 'Cineanthropometry',
+      visionMeal: 'Meal photo',
+      coachEyebrow: 'AI · Free limited',
     },
     wallet: {
       title: 'Web3 Wallet',
@@ -1554,7 +1596,7 @@ export const dictionary = {
       modalFooter:
         'We never custody your keys. Jupiter Mobile, Phantom, Solflare and other Solana wallets appear here — same list on home and in the App.',
       amountLabel: '$SALVAZION amount',
-      amountHint: 'Set your holdings on the profile (on-chain or manual)',
+      amountHint: 'On-chain balance doubles your Free AI limits',
       saveAmount: 'Save',
       sourceOnchain: 'On-chain',
       sourceManual: 'Manual',

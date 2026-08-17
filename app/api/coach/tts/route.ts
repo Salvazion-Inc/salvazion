@@ -1,51 +1,59 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { getEntitlementForUser } from '@/lib/billing/subscription';
+import {
+  authRequiredMessage,
+  quotaUserMessage,
+  refundAiQuota,
+  requireAiQuota,
+} from '@/lib/billing/ai-usage';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 
 /**
  * Text-to-speech via xAI Voice API (/v1/tts).
- * Returns audio/mpeg binary for client playback.
- * Premium feature.
+ * Free: limited daily quota. Premium: unlimited.
  */
 export async function POST(req: NextRequest) {
+  let reservedUserId: string | null = null;
   try {
-    try {
-      const supabase = await createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        const ent = await getEntitlementForUser(user.id, user.email);
-        if (!ent.isPremium) {
-          return NextResponse.json(
-            { error: 'premium_required', fallback: true },
-            { status: 402 }
-          );
-        }
-      }
-    } catch {
-      // continue if auth missing in dev
+    const body = await req.json().catch(() => ({}));
+    const lang: 'es' | 'en' | 'pt' =
+      body?.lang === 'en' ? 'en' : body?.lang === 'pt' ? 'pt' : 'es';
+
+    const gate = await requireAiQuota('coach_tts', lang);
+    if (!gate.ok) {
+      return NextResponse.json(
+        {
+          error: gate.error,
+          fallback: true,
+          message:
+            gate.error === 'auth_required'
+              ? authRequiredMessage(lang)
+              : gate.quota
+                ? quotaUserMessage(gate.quota, lang)
+                : authRequiredMessage(lang),
+          usage: gate.quota ?? null,
+        },
+        { status: gate.status }
+      );
     }
+    reservedUserId =
+      gate.quota.tracked && gate.user.id !== 'local-dev' ? gate.user.id : null;
 
     const apiKey = process.env.XAI_API_KEY;
     if (!apiKey) {
+      if (reservedUserId) await refundAiQuota(reservedUserId, 'coach_tts');
       return NextResponse.json(
         { error: 'XAI_API_KEY not configured', fallback: true },
         { status: 503 }
       );
     }
 
-    const body = await req.json();
     const text = typeof body.text === 'string' ? body.text.trim().slice(0, 2500) : '';
     if (!text) {
+      if (reservedUserId) await refundAiQuota(reservedUserId, 'coach_tts');
       return NextResponse.json({ error: 'text required' }, { status: 400 });
     }
-
-    const lang: 'es' | 'en' | 'pt' =
-      body.lang === 'en' ? 'en' : body.lang === 'pt' ? 'pt' : 'es';
     // Deep, noble voice defaults — override with XAI_TTS_VOICE
     const voiceId =
       (typeof body.voiceId === 'string' && body.voiceId) ||
@@ -67,6 +75,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!res.ok) {
+      if (reservedUserId) await refundAiQuota(reservedUserId, 'coach_tts');
       const errText = await res.text().catch(() => '');
       console.error('[coach/tts]', res.status, errText.slice(0, 400));
       return NextResponse.json(
@@ -88,6 +97,7 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (e) {
+    if (reservedUserId) await refundAiQuota(reservedUserId, 'coach_tts');
     console.error('[coach/tts]', e);
     return NextResponse.json(
       {

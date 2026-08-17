@@ -499,7 +499,7 @@ export const dictionaryPt = {
   premium: {
     billing: 'Assinatura',
     freeTitle: 'Plano Free',
-    freeBody: 'Acesso base a Salvação, Saúde e Liberdade. Evolua para ferramentas avançadas.',
+    freeBody: 'Acesso base + IA limitada (coach, devocionais, cineantropometria). Premium é ilimitado.',
     activeTitle: 'Premium ativo',
     activeBody: 'Acesso completo + ferramentas avançadas em todo o App.',
     status: 'Status',
@@ -521,7 +521,7 @@ export const dictionaryPt = {
     pageTitle: 'Planos',
     pageHeadline: 'Comece grátis. Passe para Premium quando quiser.',
     pageSubtitle:
-      'Os mesmos planos de salvazion.org · Free para o caminho · Premium com Salvazion AI, wearables e ferramentas avançadas.',
+      'Os mesmos planos de salvazion.org · Free com IA limitada (Grok) · Premium ilimitado, wearables e ferramentas avançadas.',
     youArePremium: 'Seu plano: Premium',
     youAreFree: 'Seu plano: Free',
     currentPlan: 'Seu plano',
@@ -531,6 +531,27 @@ export const dictionaryPt = {
     bestValue: 'Melhor valor anual',
     stripeNote:
       'Pagamentos seguros com Stripe (Salvazion, Inc.). Cancele ou mude de plano quando quiser no portal do cliente.',
+  },
+  quota: {
+    checking: 'Verificando cota de IA…',
+    signIn: 'Entre na conta para usar a IA no plano Free.',
+    unlimited: 'Ilimitado · Premium',
+    usedDay: '{used} / {limit} hoje',
+    usedWeek: '{used} / {limit} esta semana',
+    exhausted: 'Cota Free de IA esgotada',
+    exhaustedBody:
+      'Volte no próximo período ou passe para Premium para IA ilimitada.',
+    holderActive: 'Bônus $SALVAZION ativo · 2× cota Free',
+    holderHint: 'Conecte a wallet e mantenha $SALVAZION para dobrar a cota Free.',
+    holderHintShort: '2× com $SALVAZION',
+    holderShort: '2× $SALVAZION',
+    connectToken: 'Wallet $SALVAZION',
+    coach: 'Coach IA',
+    tts: 'Voz',
+    devotional: 'Devocional IA',
+    visionBody: 'Cineantropometria',
+    visionMeal: 'Foto de refeição',
+    coachEyebrow: 'IA · Free limitado',
   },
   wallet: {
     title: 'Carteira Web3',
@@ -551,7 +572,7 @@ export const dictionaryPt = {
     modalFooter:
       'Não custodiamos suas chaves. Jupiter Mobile, Phantom, Solflare e outras wallets da Solana aparecem aqui — a mesma lista na home e no App.',
     amountLabel: 'Quantidade de $SALVAZION',
-    amountHint: 'Informe seu saldo no perfil (on-chain ou manual)',
+    amountHint: 'Saldo on-chain dobra suas cotas Free de IA',
     saveAmount: 'Salvar',
     sourceOnchain: 'On-chain',
     sourceManual: 'Manual',

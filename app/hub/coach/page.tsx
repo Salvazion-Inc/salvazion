@@ -5,15 +5,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import BottomNav from '@/components/BottomNav';
 import VoiceAgent from '@/components/coach/VoiceAgent';
-import PremiumGate from '@/components/billing/PremiumGate';
 import { loadProfile } from '@/lib/store/profile';
 import { computeScores } from '@/lib/scoring/engine';
 import { useI18n } from '@/components/I18nProvider';
-import { useEntitlement } from '@/lib/billing/client';
 
 export default function CoachPage() {
   const { t, lang } = useI18n();
-  const { isPremium, loading } = useEntitlement();
   // Client-only stores: read once per mount via useMemo (no effect setState)
   const profile = useMemo(() => loadProfile(), []);
   const scores = useMemo(() => computeScores(), []);
@@ -40,7 +37,7 @@ export default function CoachPage() {
             </div>
             <div className="min-w-0">
               <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] font-medium">
-                Premium
+                {t('quota.coachEyebrow')}
               </p>
               <h1 className="text-lg font-bold text-[var(--accent)] leading-tight truncate">
                 {lang === 'en' ? 'Coach' : 'Coach'}
@@ -57,28 +54,11 @@ export default function CoachPage() {
 
       <main className="flex-1 px-5 pt-2 pb-28 min-h-0 flex flex-col">
         <div className="max-w-lg mx-auto w-full flex-1 min-h-0 flex flex-col">
-          {!loading && !isPremium ? (
-            <PremiumGate
-              title={
-                lang === 'en'
-                  ? 'AI Coach is Premium'
-                  : lang === 'pt'
-                    ? 'Coach com IA é Premium'
-                    : 'Coach con IA es Premium'
-              }
-              description={
-                lang === 'en'
-                  ? 'Unlock full AI coaching, voice TTS and advanced guidance for Salvation, Health and Freedom.'
-                  : 'Desbloquea coaching con IA completo, voz TTS y guía avanzada en Salvación, Salud y Libertad.'
-              }
-            />
-          ) : (
-            <VoiceAgent
-              profile={profile}
-              scores={scores}
-              lang={lang}
-            />
-          )}
+          <VoiceAgent
+            profile={profile}
+            scores={scores}
+            lang={lang}
+          />
         </div>
       </main>
 

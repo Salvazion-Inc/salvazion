@@ -14,6 +14,7 @@ import {
   updateLinkedWalletBalances,
 } from '@/lib/solana/wallet-store';
 import { fetchWalletBalances, formatSalvazion } from '@/lib/solana/balances';
+import { persistWalletToProfile } from '@/lib/solana/persist-wallet';
 import JupiterSwap from '@/components/wallet/JupiterSwap';
 import WalletSelectModal from '@/components/wallet/WalletSelectModal';
 import { useI18n } from '@/components/I18nProvider';
@@ -80,7 +81,9 @@ export default function WalletConnectCard({
   // Persist linked address when connected
   useEffect(() => {
     if (connected && publicKey) {
-      saveLinkedWallet(publicKey.toBase58(), wallet?.adapter.name);
+      const address = publicKey.toBase58();
+      saveLinkedWallet(address, wallet?.adapter.name);
+      void persistWalletToProfile(address);
     }
   }, [connected, publicKey, wallet?.adapter.name]);
 
@@ -210,6 +213,7 @@ export default function WalletConnectCard({
       await disconnect();
     } finally {
       clearLinkedWallet();
+      void persistWalletToProfile(null);
       setSolBalance(null);
       setTokenBalance(null);
       setTokenSource(null);

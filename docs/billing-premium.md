@@ -22,17 +22,22 @@ Freemium app with **Premium** subscription on the **Salvazion, Inc.** Stripe acc
 
 - Account, onboarding, dashboard & scores  
 - Bible reader  
-- Daily devotional (**rules engine**, not Grok AI)  
+- **Limited Grok AI** (requires sign-in):  
+  - Coach: **5 messages / day**  
+  - Coach voice / TTS: **3 / day**  
+  - AI devotionals: **1 / day** (then rules-based fallback)  
+  - Cineanthropometry: **2 / week**  
+  - Meal photo AI: **3 / day**  
+- Hold **$SALVAZION on-chain** (linked wallet) → **2× those Free limits**  
 - Manual health logging  
 - Freedom browse (base)  
-- Solana wallet connect + $SALVAZION amount on profile  
+- Solana wallet connect + $SALVAZION swap (Jupiter)  
 - Basic Phalanx invites  
 - Profile / theme / language  
 
 ### Premium
 
-- Green Lion **AI coach** (Grok chat) + **TTS voice**  
-- **AI devotionals** (Grok)  
+- **Unlimited** Grok AI (coach, TTS, devotionals, cineanthropometry, meal vision)  
 - **Cloud wearables** OAuth (Fitbit, Oura, WHOOP, Garmin)  
 - Advanced health tools (biomarkers, clinical, women’s health modules)  
 - Full calendar & advanced prayer tools  
@@ -59,6 +64,8 @@ NEXT_PUBLIC_STRIPE_PRICE_ANNUAL=price_1U0WEXHOw5ZkjRlZOwkxysed
 ## Supabase
 
 Run `supabase/subscriptions.sql` in the SQL editor so entitlements persist.
+
+Run `supabase/ai-usage.sql` so Free AI quotas persist (`ai_usage` table + `profiles.solana_wallet` for the $SALVAZION holder bonus).
 
 ## Customer Portal
 

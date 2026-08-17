@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import type { ChatCompletionContentPart } from 'openai/resources/chat/completions';
 import { getXaiClient, getXaiVisionModel, isXaiConfigured } from '@/lib/ai/xai';
-import { createClient } from '@/lib/supabase/server';
+import {
+  authRequiredMessage,
+  quotaUserMessage,
+  refundAiQuota,
+  requireAiQuota,
+} from '@/lib/billing/ai-usage';
 
 export const runtime = 'nodejs';
 export const maxDuration = 90;
@@ -231,21 +236,36 @@ function normalizeMeal(raw: Record<string, unknown>) {
 }
 
 export async function POST(req: NextRequest) {
+  let reservedUserId: string | null = null;
+  let reservedFeature: 'vision_body' | 'vision_meal' = 'vision_body';
   try {
     const body = await req.json();
     const mode: VisionMode = body.mode === 'meal' ? 'meal' : 'body';
     const lang: 'es' | 'en' | 'pt' =
       body.lang === 'en' ? 'en' : body.lang === 'pt' ? 'pt' : 'es';
+    reservedFeature = mode === 'meal' ? 'vision_meal' : 'vision_body';
 
-    // Optional auth — allow logged-out local demo; soft premium not hard-gated for health tools
-    try {
-      const supabase = await createClient();
-      await supabase.auth.getUser();
-    } catch {
-      /* ignore */
+    const gate = await requireAiQuota(reservedFeature, lang);
+    if (!gate.ok) {
+      return NextResponse.json(
+        {
+          error: gate.error,
+          message:
+            gate.error === 'auth_required'
+              ? authRequiredMessage(lang)
+              : gate.quota
+                ? quotaUserMessage(gate.quota, lang)
+                : authRequiredMessage(lang),
+          usage: gate.quota ?? null,
+        },
+        { status: gate.status }
+      );
     }
+    reservedUserId =
+      gate.quota.tracked && gate.user.id !== 'local-dev' ? gate.user.id : null;
 
     if (!isXaiConfigured()) {
+      if (reservedUserId) await refundAiQuota(reservedUserId, reservedFeature);
       return NextResponse.json(
         {
           error: 'xai_not_configured',
@@ -262,6 +282,7 @@ export async function POST(req: NextRequest) {
 
     const client = getXaiClient();
     if (!client) {
+      if (reservedUserId) await refundAiQuota(reservedUserId, reservedFeature);
       return NextResponse.json({ error: 'xai_unavailable' }, { status: 503 });
     }
 
@@ -316,6 +337,7 @@ export async function POST(req: NextRequest) {
         });
       }
       if (count === 0) {
+        if (reservedUserId) await refundAiQuota(reservedUserId, reservedFeature);
         return NextResponse.json(
           { error: 'photos_required' },
           { status: 400 }
@@ -337,6 +359,7 @@ export async function POST(req: NextRequest) {
     } else {
       const photo = body.photo;
       if (!isDataUrlImage(photo)) {
+        if (reservedUserId) await refundAiQuota(reservedUserId, reservedFeature);
         return NextResponse.json({ error: 'photo_required' }, { status: 400 });
       }
       contentParts.push({
@@ -374,6 +397,7 @@ export async function POST(req: NextRequest) {
     try {
       parsed = extractJsonObject(text);
     } catch {
+      if (reservedUserId) await refundAiQuota(reservedUserId, reservedFeature);
       return NextResponse.json(
         {
           error: 'parse_failed',
@@ -388,6 +412,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (!parsed || typeof parsed !== 'object') {
+      if (reservedUserId) await refundAiQuota(reservedUserId, reservedFeature);
       return NextResponse.json({ error: 'invalid_analysis' }, { status: 502 });
     }
 
@@ -401,8 +426,10 @@ export async function POST(req: NextRequest) {
       mode,
       model,
       analysis,
+      usage: gate.quota,
     });
   } catch (e) {
+    if (reservedUserId) await refundAiQuota(reservedUserId, reservedFeature);
     console.error('[health/vision]', e);
     return NextResponse.json(
       {

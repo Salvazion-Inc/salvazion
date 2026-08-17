@@ -8,8 +8,12 @@ import {
 } from '@/lib/coach/agent';
 import type { UserProfile } from '@/lib/types';
 import type { ComputedScores } from '@/lib/scoring/types';
-import { createClient } from '@/lib/supabase/server';
-import { getEntitlementForUser } from '@/lib/billing/subscription';
+import {
+  authRequiredMessage,
+  quotaUserMessage,
+  refundAiQuota,
+  requireAiQuota,
+} from '@/lib/billing/ai-usage';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -32,6 +36,7 @@ function sanitizeMessages(raw: unknown): CoachChatMessage[] {
 }
 
 export async function POST(req: NextRequest) {
+  let reservedUserId: string | null = null;
   try {
     const body = await req.json();
     const messages = sanitizeMessages(body.messages);
@@ -50,34 +55,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'user message required' }, { status: 400 });
     }
 
-    // Premium: full AI coach
-    try {
-      const supabase = await createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        const ent = await getEntitlementForUser(user.id, user.email);
-        if (!ent.isPremium) {
-          return NextResponse.json(
-            {
-              error: 'premium_required',
-              reply:
-                lang === 'en'
-                  ? 'Green Lion AI coach is a Premium feature. Upgrade for full AI coaching — Salvation · Health · Freedom.'
-                  : lang === 'pt'
-                    ? 'O coach Leão Verde com IA é Premium. Passe para o plano Premium para coaching com IA completo — Salvação · Saúde · Liberdade.'
-                    : 'El coach León Verde con IA es Premium. Mejora tu plan para coaching con IA completo — Salvación · Salud · Libertad.',
-              source: 'premium_gate',
-              model: null,
-            },
-            { status: 402 }
-          );
-        }
-      }
-    } catch {
-      // If auth/billing unavailable, fall through (dev without Supabase)
+    const gate = await requireAiQuota('coach_chat', lang);
+    if (!gate.ok) {
+      const reply =
+        gate.error === 'auth_required'
+          ? authRequiredMessage(lang)
+          : gate.quota
+            ? quotaUserMessage(gate.quota, lang)
+            : authRequiredMessage(lang);
+      return NextResponse.json(
+        {
+          error: gate.error,
+          reply,
+          source: gate.error,
+          model: null,
+          usage: gate.quota ?? null,
+        },
+        { status: gate.status }
+      );
     }
+    reservedUserId =
+      gate.quota.tracked && gate.user.id !== 'local-dev' ? gate.user.id : null;
 
     if (!isXaiConfigured()) {
       const name =
@@ -95,6 +93,7 @@ export async function POST(req: NextRequest) {
             : lang === 'pt'
               ? `${name}, o Leão Verde caminha com você. Hoje: leia um capítulo da Bíblia, mova-se 15 minutos e ore 5 minutos. Salvação · Saúde · Liberdade.`
               : `${name}, el León Verde camina contigo. Hoy: lee un capítulo de la Biblia, muévete 15 minutos y ora 5 minutos. Salvación · Salud · Libertad.`;
+      if (reservedUserId) await refundAiQuota(reservedUserId, 'coach_chat');
       return NextResponse.json({
         reply: fallback,
         source: 'fallback',
@@ -105,6 +104,7 @@ export async function POST(req: NextRequest) {
 
     const client = getXaiClient();
     if (!client) {
+      if (reservedUserId) await refundAiQuota(reservedUserId, 'coach_chat');
       return NextResponse.json({ error: 'xAI client unavailable' }, { status: 503 });
     }
 
@@ -137,8 +137,10 @@ export async function POST(req: NextRequest) {
       source: 'ai',
       model,
       mode,
+      usage: gate.quota,
     });
   } catch (e) {
+    if (reservedUserId) await refundAiQuota(reservedUserId, 'coach_chat');
     console.error('[coach/chat]', e);
     return NextResponse.json(
       {

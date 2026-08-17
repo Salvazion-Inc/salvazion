@@ -5,8 +5,12 @@ import {
   isXaiConfigured,
 } from '@/lib/devotional-engine';
 import { UserProfile } from '@/lib/types';
-import { createClient } from '@/lib/supabase/server';
-import { getEntitlementForUser } from '@/lib/billing/subscription';
+import {
+  consumeAiQuota,
+  getRequestUser,
+  peekAiQuota,
+  refundAiQuota,
+} from '@/lib/billing/ai-usage';
 
 /** Basic sanitization for free-text fields */
 function sanitize(str: unknown, maxLen = 200): string {
@@ -22,19 +26,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Payload too large' }, { status: 413 });
     }
 
-    // Premium unlocks AI devotionals; free uses rules engine
-    let premium = false;
-    try {
-      const supabase = await createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        const ent = await getEntitlementForUser(user.id, user.email);
-        premium = ent.isPremium;
+    // Free: 1 AI devotional / day (2× with $SALVAZION). Premium: unlimited.
+    // Exhausted Free quota still gets the rules-based daily reading.
+    const user = await getRequestUser();
+    let useAi = false;
+    let quotaNote: string | null = null;
+    let usage = null as Awaited<ReturnType<typeof consumeAiQuota>> | null;
+
+    if (user) {
+      const peek = await peekAiQuota(user.id, 'devotional_ai', user.email);
+      if (peek.unlimited || peek.allowed) {
+        useAi = true;
+      } else {
+        const lang =
+          body.language === 'en' ? 'en' : body.language === 'pt' ? 'pt' : 'es';
+        quotaNote =
+          lang === 'en'
+            ? 'Free AI devotional used for today. Rules-based reading below. Premium is unlimited.'
+            : lang === 'pt'
+              ? 'Devocional IA Free de hoje já usado. Leitura por regras abaixo. Premium é ilimitado.'
+              : 'Devocional IA Free de hoy ya usado. Lectura por reglas abajo. Premium es ilimitado.';
       }
-    } catch {
-      // ignore
     }
 
     const profile: UserProfile = {
@@ -79,32 +91,64 @@ export async function POST(req: NextRequest) {
         ? body.date
         : new Date().toISOString().slice(0, 10);
 
-    if (!premium) {
+    if (!useAi) {
+      return NextResponse.json({
+        success: true,
+        data: generateDevotionalRules(profile, date),
+        engine: 'salvazion-rules-v1',
+        note:
+          quotaNote ||
+          (profile.language === 'en'
+            ? 'Rules-based daily devotional. Sign in to use the Free AI daily slot — Premium is unlimited.'
+            : profile.language === 'pt'
+              ? 'Devocional diário por regras. Entre para usar o cupo Free de IA — Premium é ilimitado.'
+              : 'Devocional diario por reglas. Inicia sesión para usar el cupo Free de IA — Premium es ilimitado.'),
+        aiConfigured: isXaiConfigured(),
+        premium: false,
+        usage: user
+          ? await peekAiQuota(user.id, 'devotional_ai', user.email)
+          : null,
+      });
+    }
+
+    usage = await consumeAiQuota(user!.id, 'devotional_ai', user!.email);
+    if (!usage.allowed && !usage.unlimited) {
       return NextResponse.json({
         success: true,
         data: generateDevotionalRules(profile, date),
         engine: 'salvazion-rules-v1',
         note:
           profile.language === 'en'
-            ? 'Free plan: rules-based daily devotional. Upgrade to Premium for AI devotionals.'
+            ? 'Free AI devotional used for today. Rules-based reading below.'
             : profile.language === 'pt'
-              ? 'Plano Free: devocional diário por regras. Passe para Premium para devocionais com IA.'
-              : 'Plan Free: devocional diario por reglas. Mejora a Premium para devocionales con IA.',
+              ? 'Devocional IA Free de hoje já usado. Leitura por regras abaixo.'
+              : 'Devocional IA Free de hoy ya usado. Lectura por reglas abajo.',
         aiConfigured: isXaiConfigured(),
         premium: false,
+        usage,
       });
     }
 
-    const { devotional, engine, note } = await generateDevotionalAsync(profile, date);
-
-    return NextResponse.json({
-      success: true,
-      data: devotional,
-      engine,
-      note,
-      aiConfigured: isXaiConfigured(),
-      premium: true,
-    });
+    try {
+      const { devotional, engine, note } = await generateDevotionalAsync(profile, date);
+      if (engine === 'salvazion-rules-v1' && usage.tracked && user) {
+        await refundAiQuota(user.id, 'devotional_ai');
+      }
+      return NextResponse.json({
+        success: true,
+        data: devotional,
+        engine,
+        note,
+        aiConfigured: isXaiConfigured(),
+        premium: usage.unlimited,
+        usage,
+      });
+    } catch (aiErr) {
+      if (usage.tracked && user) {
+        await refundAiQuota(user.id, 'devotional_ai');
+      }
+      throw aiErr;
+    }
   } catch (error) {
     console.error('Devotional engine error:', error);
     return NextResponse.json(

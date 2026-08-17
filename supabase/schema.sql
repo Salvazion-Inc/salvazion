@@ -192,4 +192,6 @@ create trigger streaks_updated_at
 -- ============================================================
 
 -- See also: phalanx.sql for invites/connections between real accounts
+-- See also: subscriptions.sql (Stripe Premium)
+-- See also: ai-usage.sql (Free AI quotas + profiles.solana_wallet)
 

@@ -17,6 +17,8 @@ import {
   type MealVisionAnalysis,
 } from '@/lib/health/meal-vision';
 import PhotoSourcePicker from '@/components/health/PhotoSourcePicker';
+import AiUsageMeter from '@/components/billing/AiUsageMeter';
+import { useAiUsage } from '@/lib/billing/ai-usage-client';
 import { pickLang } from '@/lib/i18n/locale';
 
 type Props = {
@@ -90,6 +92,7 @@ export default function MealPhotoPanel({ lang = 'en', onApplied }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<MealPhotoEntry | null>(null);
+  const { refresh: refreshUsage } = useAiUsage();
 
   const reload = useCallback(() => {
     setEntries(loadMealPhotos());
@@ -131,6 +134,7 @@ export default function MealPhotoPanel({ lang = 'en', onApplied }: Props) {
         }),
       });
       const json = await res.json();
+      void refreshUsage();
       if (!res.ok || !json.ok) {
         throw new Error(
           json.message ||
@@ -182,6 +186,9 @@ export default function MealPhotoPanel({ lang = 'en', onApplied }: Props) {
         <span>◈</span>
         {tx('Meal photo · Grok', 'Foto de comida · Grok', 'Foto da refeição · Grok')}
       </h2>
+      <div className="mb-3">
+        <AiUsageMeter feature="vision_meal" />
+      </div>
 
       <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] space-y-3.5">
         <p className="text-[11px] text-[var(--sage)]/80 leading-relaxed">

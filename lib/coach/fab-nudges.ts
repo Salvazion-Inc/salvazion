@@ -82,8 +82,8 @@ function hourBucket(d = new Date()): 'morning' | 'afternoon' | 'evening' | 'nigh
   return 'night';
 }
 
-function coachOrPremium(isPremium: boolean): string {
-  return isPremium ? HREF.coach : HREF.premium;
+function coachOrPremium(_isPremium: boolean): string {
+  return HREF.coach;
 }
 
 /**
@@ -521,20 +521,20 @@ export function buildFabNudges(
       id: 'prem-ai',
       tone: 'premium',
       text: tx(
-        `Talk with Salvazion AI on Premium. The Lion guides you.`,
-        `Habla con Salvazion AI en Premium. El León te guía.`,
-        `Fale com a Salvazion AI no Premium. O Leão te guia.`
+        `Free includes limited AI. Talk with the Lion today.`,
+        `Free incluye IA limitada. Habla con el León hoy.`,
+        `O Free inclui IA limitada. Fale com o Leão hoje.`
       ),
-      href: HREF.premium,
-      cta: tx('See Premium', 'Ver Premium', 'Ver Premium'),
+      href: HREF.coach,
+      cta: tx('Talk now', 'Hablar ahora', 'Falar agora'),
     });
     push({
       id: 'prem-voice',
       tone: 'premium',
       text: tx(
-        `Lion voice and advanced tools → Premium.`,
-        `Voz del León y herramientas avanzadas → Premium.`,
-        `Voz do Leão e ferramentas avançadas → Premium.`
+        `Unlimited AI + Lion voice → Premium.`,
+        `IA ilimitada + voz del León → Premium.`,
+        `IA ilimitada + voz do Leão → Premium.`
       ),
       href: HREF.premium,
       cta: tx('Upgrade plan', 'Mejorar plan', 'Melhorar plano'),
@@ -574,9 +574,7 @@ export function buildFabNudges(
       `${name}, você não é espectador. Você é Leão Verde.`
     ),
     href: coachHref,
-    cta: isPremium
-      ? tx('Talk now', 'Hablar ahora', 'Falar agora')
-      : tx('Unlock Lion', 'Activar León', 'Ativar Leão'),
+    cta: tx('Talk now', 'Hablar ahora', 'Falar agora'),
   });
   push({
     id: 'always-3',

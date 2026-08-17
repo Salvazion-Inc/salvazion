@@ -10,6 +10,7 @@
 1. En el dashboard → SQL Editor → New query
 2. Pega y ejecuta todo el contenido de `schema.sql`
 3. Verifica que las 4 tablas aparecen en Table Editor y que RLS está ON
+4. Ejecuta también `subscriptions.sql` (Stripe Premium) y `ai-usage.sql` (cupos Free de IA + `profiles.solana_wallet` para el bonus de $SALVAZION)
 
 ## 3. Configurar Auth
 1. Authentication → Providers → Email → Enable

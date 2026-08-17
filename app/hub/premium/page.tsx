@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import BottomNav from '@/components/BottomNav';
+import BrandLoader from '@/components/ui/BrandLoader';
 import { loadProfileAsync } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
 import { textWithXLogo } from '@/components/ui/XLogo';
@@ -52,13 +53,7 @@ export default function PremiumPage() {
   };
 
   if (!mounted) {
-    return (
-      <div className="min-h-screen bg-[var(--true-black)] flex items-center justify-center">
-        <div className="text-[var(--accent)] text-lg animate-pulse" aria-live="polite">
-          {t('common.lionPreparing')}
-        </div>
-      </div>
-    );
+    return <BrandLoader fullscreen />;
   }
 
   return (

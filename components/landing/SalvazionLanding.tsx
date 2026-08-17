@@ -147,7 +147,7 @@ export default function SalvazionLanding() {
             />
             <Link
               href="/auth/login"
-              className="btn-primary nav-enter-cta !w-[11.75rem] shrink-0 !px-2 sm:!px-4 !min-h-10 !text-[11px] sm:!text-sm !whitespace-nowrap text-center leading-none"
+              className="btn-primary nav-enter-cta shrink-0 !px-3 sm:!px-4 !min-h-10 !text-xs sm:!text-sm text-center leading-snug"
             >
               {t.nav.enter}
             </Link>
@@ -601,15 +601,15 @@ const copy = {
         'GREAT AGAIN',
       ] as const,
       tagline: 'The secular world strips spirit, mind, body and soul.',
-      tagline2: 'Salvazion gives them back — in one App.',
+      tagline2: 'Salvazion gives them back — in one Platform.',
       ctaPrimary: 'Create free account',
       ctaLogin: 'I have an account',
     },
     app: {
-      eyebrow: 'Our Purpose · One App',
-      title: 'Everything fused into a single App',
+      eyebrow: 'Massive Transformative Purpose',
+      title: 'The platform that restores the human person',
       body:
-        'Our Purpose is make Salvation, Health and Freedom great again, through a Global Community that defends Western Christian Culture and BioConservatism in a Spiritual Warfare.',
+        'Our Purpose is Make Salvation, Health and Freedom Great Again — a Global Community that defends Western Christian Culture and BioConservatism in Spiritual Warfare. Exponential technologies and innovation at the service of people. We no longer split the mission: Salvation, Health, and Freedom live together in one App.',
       cta: 'Open the App',
       areas: [
         {
@@ -714,15 +714,15 @@ const copy = {
         'GREAT AGAIN',
       ] as const,
       tagline: 'El mundo secular te quita el espíritu, mente, cuerpo y alma.',
-      tagline2: 'Salvazion te los devuelve — en una sola App.',
+      tagline2: 'Salvazion te los devuelve — en una sola Plataforma.',
       ctaPrimary: 'Crear cuenta gratis',
       ctaLogin: 'Ya tengo cuenta',
     },
     app: {
-      eyebrow: 'Nuestro propósito · Una sola App',
-      title: 'Todo fusionado en una sola App',
+      eyebrow: 'Propósito Transformador Masivo',
+      title: 'La plataforma que restaura a la persona humana',
       body:
-        'Nuestro Propósito es hacer Salvación, Salud y Libertad geniales otra vez, con una Comunidad Global que defiende la Cultura Cristiana Occidental y el BioConservadurismo en una Guerra Espiritual.',
+        'Nuestro Propósito es Make Salvation, Health and Freedom Great Again — una Comunidad Global que defiende la Cultura Cristiana Occidental y el BioConservadurismo en Guerra Espiritual. Tecnologías exponenciales e innovación al servicio de las personas. Ya no separamos la misión: Salvación, Salud y Libertad viven juntas en una sola App.',
       cta: 'Abrir la App',
       areas: [
         {
@@ -826,15 +826,15 @@ const copy = {
         'GREAT AGAIN',
       ] as const,
       tagline: 'O mundo secular tira espírito, mente, corpo e alma.',
-      tagline2: 'A Salvazion os devolve — em um só App.',
+      tagline2: 'A Salvazion os devolve — em uma só Plataforma.',
       ctaPrimary: 'Criar conta grátis',
       ctaLogin: 'Já tenho conta',
     },
     app: {
-      eyebrow: 'Nosso propósito · Um só App',
-      title: 'Tudo fundido em um só App',
+      eyebrow: 'Propósito Transformador Massivo',
+      title: 'A plataforma que restaura a pessoa humana',
       body:
-        'Nosso Propósito é tornar Salvação, Saúde e Liberdade grandiosas de novo, com uma Comunidade Global que defende a Cultura Cristã Ocidental e o BioConservadorismo em uma Guerra Espiritual.',
+        'Nosso Propósito é Make Salvation, Health and Freedom Great Again — uma Comunidade Global que defende a Cultura Cristã Ocidental e o BioConservadorismo em Guerra Espiritual. Tecnologias exponenciais e inovação a serviço das pessoas. Já não separamos a missão: Salvação, Saúde e Liberdade vivem juntas em um só App.',
       cta: 'Abrir o App',
       areas: [
         {

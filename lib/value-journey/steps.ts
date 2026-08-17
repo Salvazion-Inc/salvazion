@@ -37,18 +37,18 @@ export const VALUE_JOURNEY_STEPS: ValueJourneyStep[] = [
   {
     id: 'welcome',
     icon: '🦁',
-    titleEs: 'Bienvenido a la Phalanx',
-    titleEn: 'Welcome to the Phalanx',
-    titlePt: 'Bem-vindo à Phalanx',
+    titleEs: 'La plataforma que restaura a la persona humana',
+    titleEn: 'The platform that restores the human person',
+    titlePt: 'A plataforma que restaura a pessoa humana',
     bodyEs:
-      'Salvazion no es entretenimiento vacío. Es una app de virtud digital: fe, salud y libertad con disciplina real, al servicio de familias y de la Cultura Occidental Cristiana.',
+      'Salvazion es la plataforma que restaura a la persona humana. Salvación, Salud y Libertad viven juntas en una sola App: hábitos, scores, comunidad y soberanía económica en Solana.',
     bodyEn:
-      'Salvazion is not empty entertainment. It is a digital virtue app: faith, health and freedom with real discipline — for families and Western Christian Culture.',
+      'Salvazion is the platform that restores the human person. Salvation, Health and Freedom live together in one App: habits, scores, community and economic sovereignty on Solana.',
     bodyPt:
-      'A Salvazion não é entretenimento vazio. É um app de virtude digital: fé, saúde e liberdade com disciplina real, a serviço de famílias e da Cultura Ocidental Cristã.',
-    benefitEs: 'Un sistema integral · tres pilares · un León que te empuja a la excelencia',
-    benefitEn: 'One integral system · three pillars · a Lion that pushes you toward excellence',
-    benefitPt: 'Um sistema integral · três pilares · um Leão que te empurra à excelência',
+      'A Salvazion é a plataforma que restaura a pessoa humana. Salvação, Saúde e Liberdade vivem juntas em um só App: hábitos, scores, comunidade e soberania econômica na Solana.',
+    benefitEs: 'Una sola plataforma · tres pilares · disciplina real',
+    benefitEn: 'One platform · three pillars · real discipline',
+    benefitPt: 'Uma só plataforma · três pilares · disciplina real',
     ctaEs: 'Ver propuestas de valor',
     ctaEn: 'See value propositions',
     ctaPt: 'Ver propostas de valor',

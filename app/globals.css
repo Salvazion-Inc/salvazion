@@ -172,9 +172,10 @@ summary:focus-visible {
 
 html[data-text-scale="xl"] nav.fixed span,
 html[data-text-scale="xxl"] nav.fixed span {
-  line-height: 1.15;
-  max-width: 4.5rem;
+  line-height: 1.2;
+  max-width: none;
   text-align: center;
+  white-space: normal;
 }
 
 .neon-text {
@@ -195,6 +196,21 @@ html[data-text-scale="xxl"] nav.fixed span {
 
 .lion-glow {
   filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent) 28%, transparent));
+}
+
+.brand-loader-static {
+  display: none;
+}
+.brand-loader-video {
+  display: block;
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand-loader-video {
+    display: none;
+  }
+  .brand-loader-static {
+    display: block;
+  }
 }
 
 /* Coach FAB — Salvazion logo pulse (same language as calendar "Ahora") */
@@ -430,7 +446,7 @@ html[data-text-scale="xxl"] nav.fixed span {
   }
 }
 
-/* —— Soft UI primitives (fixed heights → no layout shift / descuadre) —— */
+/* —— Soft UI primitives (grow with label; Cosmic Octo must not clip) —— */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -438,20 +454,24 @@ html[data-text-scale="xxl"] nav.fixed span {
   gap: 0.35rem;
   width: 100%;
   min-height: 2.85rem;
-  padding: 0.8rem 1.35rem;
+  height: auto;
+  padding: 0.75rem 1.15rem;
   border-radius: 999px;
   background: linear-gradient(180deg, #8fd99a 0%, var(--accent-fill) 100%);
   color: #0a120c;
   font-family: var(--font-cosmic-octo);
   font-weight: 700;
   font-size: 0.9rem;
-  line-height: 1.15;
+  line-height: 1.3;
   letter-spacing: 0.01em;
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.14) inset,
     0 8px 24px -8px rgba(123, 201, 138, 0.45);
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+  text-wrap: balance;
+  overflow: visible;
   box-sizing: border-box;
   cursor: pointer;
   transition:
@@ -482,12 +502,11 @@ html[data-text-scale="xxl"] nav.fixed span {
   width: auto;
   min-width: 4.5rem;
   flex: 0 0 auto;
-  padding-left: 0.9rem;
-  padding-right: 0.9rem;
-  height: 2.75rem;
+  height: auto;
   min-height: 2.75rem;
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 0.45rem 0.9rem;
+  white-space: nowrap;
+  overflow: visible;
 }
 
 /* Input inside flex rows: don't force 100% width (breaks mic | input | send) */
@@ -507,15 +526,19 @@ html[data-text-scale="xxl"] nav.fixed span {
   gap: 0.35rem;
   width: 100%;
   min-height: 2.85rem;
-  padding: 0.8rem 1.35rem;
+  height: auto;
+  padding: 0.75rem 1.15rem;
   border-radius: 999px;
   background: rgba(143, 217, 154, 0.04);
   color: var(--accent);
   font-weight: 600;
   font-size: 0.9rem;
-  line-height: 1.15;
+  line-height: 1.3;
   border: 1px solid var(--border-strong);
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+  text-wrap: balance;
+  overflow: visible;
   box-sizing: border-box;
   cursor: pointer;
   transition:
@@ -554,38 +577,38 @@ html[data-text-scale="xxl"] nav.fixed span {
 }
 
 /**
- * Landing nav "Enter Salvazion" — always one line (EN / ES / PT).
- * PT (“Entrar na Salvazion”) is the longest label; box must fit it.
+ * Landing nav "Enter Salvazion" — wrap on narrow screens; one line from sm.
+ * PT (“Entrar na Salvazion”) is the longest label.
  */
 a.btn-primary.nav-enter-cta {
-  white-space: nowrap !important;
-  overflow: hidden;
-  text-overflow: clip;
-  line-height: 1 !important;
-  height: 2.5rem;
+  width: auto;
+  min-width: 10.5rem;
+  max-width: 16rem;
+  white-space: normal !important;
+  overflow: visible;
+  text-overflow: unset;
+  line-height: 1.2 !important;
+  height: auto;
   min-height: 2.5rem;
-  max-height: 2.5rem;
-  padding-top: 0;
-  padding-bottom: 0;
+  max-height: none;
+  padding: 0.45rem 0.85rem;
   box-sizing: border-box;
 }
 
 @media (min-width: 640px) {
   a.btn-primary.nav-enter-cta {
-    /* Wide enough for “Entrar na Salvazion” on one line at text-sm */
-    width: 15.5rem !important;
-    min-width: 15.5rem !important;
-    max-width: 15.5rem !important;
-    flex: 0 0 15.5rem !important;
-    height: 2.5rem !important;
+    width: auto !important;
+    min-width: 13.5rem !important;
+    max-width: none !important;
+    flex: 0 0 auto !important;
+    height: auto !important;
     min-height: 2.5rem !important;
-    max-height: 2.5rem !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
+    max-height: none !important;
+    padding: 0.5rem 1.1rem !important;
     white-space: nowrap !important;
-    line-height: 1 !important;
+    line-height: 1.2 !important;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: visible;
   }
 }
 
@@ -616,13 +639,14 @@ a.btn-primary.nav-enter-cta {
   min-width: 0 !important;
   max-width: none !important;
   min-height: 2.85rem;
+  height: auto;
   white-space: normal !important;
   text-align: center;
   text-wrap: balance;
+  overflow: visible;
   justify-content: center;
   align-items: center;
-  padding-left: 0.85rem !important;
-  padding-right: 0.85rem !important;
+  padding: 0.7rem 0.85rem !important;
   box-sizing: border-box;
 }
 
@@ -632,13 +656,17 @@ a.btn-primary.nav-enter-cta {
   justify-content: center;
   gap: 0.25rem;
   min-height: 2.25rem;
+  height: auto;
   padding: 0.45rem 0.85rem;
   border-radius: var(--radius-sm);
   color: var(--sage);
   font-size: 0.8rem;
-  line-height: 1.15;
+  line-height: 1.25;
   border: 1px solid transparent;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+  text-wrap: balance;
+  overflow: visible;
   box-sizing: border-box;
   transition: color 0.15s ease, background 0.15s ease;
 }
@@ -655,18 +683,21 @@ a.btn-primary.nav-enter-cta {
   width: auto;
   min-width: 2.5rem;
   min-height: 2.25rem;
-  height: 2.25rem;
-  padding: 0 0.85rem;
+  height: auto;
+  padding: 0.4rem 0.85rem;
   border-radius: 0.7rem;
   font-size: 0.75rem;
   font-weight: 600;
-  line-height: 1;
+  line-height: 1.25;
   background: var(--accent-fill);
   color: #0a120c;
   border: 1px solid transparent;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+  text-wrap: balance;
+  overflow: visible;
   box-sizing: border-box;
-  flex-shrink: 0;
+  flex-shrink: 1;
   transition: background 0.15s ease, opacity 0.15s ease, transform 0.1s ease;
 }
 .btn-sm:hover:not(:disabled) {
@@ -689,18 +720,21 @@ a.btn-primary.nav-enter-cta {
   gap: 0.25rem;
   width: auto;
   min-height: 2.25rem;
-  height: 2.25rem;
-  padding: 0 0.85rem;
+  height: auto;
+  padding: 0.4rem 0.85rem;
   border-radius: 0.7rem;
   font-size: 0.75rem;
   font-weight: 500;
-  line-height: 1;
+  line-height: 1.25;
   color: var(--accent);
   background: transparent;
   border: 1px solid var(--border-strong);
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+  text-wrap: balance;
+  overflow: visible;
   box-sizing: border-box;
-  flex-shrink: 0;
+  flex-shrink: 1;
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 .btn-outline-sm:hover:not(:disabled) {
@@ -749,8 +783,8 @@ a.btn-primary.nav-enter-cta {
 .btn-toolbar > .btn-outline-sm,
 .btn-toolbar > .btn-sm,
 .btn-toolbar > .btn-ghost {
-  flex: 1 1 auto;
-  min-width: max-content;
+  flex: 1 1 7.5rem;
+  min-width: 0;
 }
 
 .input-soft {
@@ -868,19 +902,19 @@ a.btn-primary.nav-enter-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 0.28rem;
+  padding: 0.45rem 0.28rem;
   border-radius: var(--radius-md);
   font-size: 0.68rem;
   font-weight: 600;
-  line-height: 1.15;
+  line-height: 1.2;
   color: var(--sage);
   border: none;
   background: transparent;
   text-align: center;
   text-decoration: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  text-wrap: balance;
+  overflow: visible;
   box-sizing: border-box;
   transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
@@ -1309,11 +1343,10 @@ select:-webkit-autofill {
   font-size: 0.625rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  line-height: 1.1;
+  line-height: 1.15;
   max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow: visible;
+  white-space: normal;
   text-align: center;
   padding-inline: 0.15rem;
 }
@@ -1469,8 +1502,12 @@ select:-webkit-autofill {
   font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: 0.01em;
+  line-height: 1.2;
+  text-align: center;
   text-decoration: none;
-  white-space: nowrap;
+  white-space: normal;
+  text-wrap: balance;
+  overflow: visible;
   transition: color var(--duration-fast) ease, background var(--duration-fast) ease;
 }
 .tabs-x button:hover,
@@ -1530,11 +1567,17 @@ select:-webkit-autofill {
   justify-content: center;
   gap: 0.35rem;
   min-height: 2.25rem;
+  height: auto;
   padding: 0.45rem 1rem;
   border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 700;
   letter-spacing: 0.01em;
+  line-height: 1.25;
+  white-space: normal;
+  text-align: center;
+  text-wrap: balance;
+  overflow: visible;
   border: 1px solid var(--border-strong);
   background: transparent;
   color: var(--off-white);

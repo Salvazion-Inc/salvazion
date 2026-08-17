@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { safeNextPath } from '@/lib/auth/paths';
 import { ensureProfileForUser, applyXIdentityToProfile } from '@/lib/store/profile';
+import BrandLoader from '@/components/ui/BrandLoader';
 
 /**
  * Client-side PKCE recovery when the server callback could not exchange the code
@@ -57,22 +58,12 @@ function RecoverInner() {
     })();
   }, [params, router]);
 
-  return (
-    <div className="min-h-screen bg-[#040404] flex items-center justify-center px-5">
-      <p className="text-[var(--accent)] text-sm animate-pulse">{msg}</p>
-    </div>
-  );
+  return <BrandLoader fullscreen label={msg} />;
 }
 
 export default function AuthCallbackRecoverPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-[#040404] flex items-center justify-center text-[var(--accent)]">
-          Cargando…
-        </div>
-      }
-    >
+    <Suspense fallback={<BrandLoader fullscreen />}>
       <RecoverInner />
     </Suspense>
   );

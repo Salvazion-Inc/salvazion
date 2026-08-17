@@ -11,6 +11,7 @@ import { getLionShortNudge } from '@/lib/coach/engine';
 import { useI18n } from '@/components/I18nProvider';
 import { pickLang } from '@/lib/i18n/locale';
 import AiUsageMeter from '@/components/billing/AiUsageMeter';
+import BrandLoader from '@/components/ui/BrandLoader';
 
 const CACHE_PREFIX = 'salvazion_devotional_';
 
@@ -145,11 +146,7 @@ export default function DevotionalPage() {
   };
 
   if (booting) {
-    return (
-      <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-        <div className="text-[#8FD99A] animate-pulse">{t('common.lionPreparing')}</div>
-      </div>
-    );
+    return <BrandLoader fullscreen />;
   }
 
   const stage = profile.birthDate

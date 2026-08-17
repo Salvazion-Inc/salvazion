@@ -8,6 +8,7 @@ import BookCover from '@/components/bible/BookCover';
 import BookLibrary from '@/components/bible/BookLibrary';
 import BookCarousel from '@/components/bible/BookCarousel';
 import PrayerMotivesPanel from '@/components/salvation/PrayerMotivesPanel';
+import BrandLoader from '@/components/ui/BrandLoader';
 import {
   getBooks,
   getChapter,
@@ -567,9 +568,8 @@ export default function BiblePage() {
             <BibleSearchPanel language={language} onOpenVerse={openVerse} />
           </div>
         ) : loadingChapter ? (
-          <div className="flex flex-col items-center justify-center py-20 text-[var(--sage)]">
-            <div className="w-8 h-8 border-2 border-[var(--border-strong)] border-t-[#8FD99A] rounded-full animate-spin mb-4" />
-            <p className="text-sm">{t('bible.loadingChapter')}</p>
+          <div className="flex flex-col items-center justify-center py-20">
+            <BrandLoader size={96} label={t('bible.loadingChapter')} />
           </div>
         ) : chapter ? (
           <div

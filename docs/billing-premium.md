@@ -22,7 +22,7 @@ Freemium app with **Premium** subscription on the **Salvazion, Inc.** Stripe acc
 
 - Account, onboarding, dashboard & scores  
 - Bible reader  
-- **Limited Grok AI** (requires sign-in):  
+- **Limited Salvazion AI** (requires sign-in):  
   - Coach: **5 messages / day**  
   - Coach voice / TTS: **3 / day**  
   - AI devotionals: **1 / day** (then rules-based fallback)  
@@ -37,7 +37,7 @@ Freemium app with **Premium** subscription on the **Salvazion, Inc.** Stripe acc
 
 ### Premium
 
-- **Unlimited** Grok AI (coach, TTS, devotionals, cineanthropometry, meal vision)  
+- **Unlimited** Salvazion AI (coach, TTS, devotionals, cineanthropometry, meal vision)  
 - **Cloud wearables** OAuth (Fitbit, Oura, WHOOP, Garmin)  
 - Advanced health tools (biomarkers, clinical, women’s health modules)  
 - Full calendar & advanced prayer tools  

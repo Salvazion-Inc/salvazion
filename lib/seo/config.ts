@@ -15,11 +15,11 @@ export const SEO = {
    * slightly longer is OK for rich social previews.
    */
   description:
-    'Salvazion: Make Salvation, Health and Freedom Great Again. Freemium app — offline Bible, devotionals, health & wearables, Freedom library, Phalanx community, Green Lion coach and $SALVAZION on Solana. Western Christian Culture & BioConservatism.',
+    'Salvazion: the platform that restores the human person. Make Salvation, Health and Freedom Great Again. One freemium App — offline Bible, devotionals, health & wearables, Freedom library, Phalanx community, Salvazion AI and $SALVAZION on Solana.',
   descriptionEs:
-    'Salvazion: Hacer Salvación, Salud y Libertad geniales otra vez. App freemium — Biblia offline, devocional, salud y wearables, biblioteca Freedom, comunidad Phalanx, coach León Verde y $SALVAZION en Solana. Cultura Cristiana Occidental y BioConservadurismo.',
+    'Salvazion: la plataforma que restaura a la persona humana. Make Salvation, Health and Freedom Great Again. Una sola App freemium — Biblia offline, devocional, salud y wearables, biblioteca Freedom, comunidad Phalanx, IA Salvazion y $SALVAZION en Solana.',
   descriptionPt:
-    'Salvazion: Tornar Salvação, Saúde e Liberdade grandiosas de novo. App freemium — Bíblia offline, devocional, saúde e wearables, biblioteca Freedom, comunidade Phalanx, coach Leão Verde e $SALVAZION na Solana. Cultura Cristã Ocidental e BioConservadorismo.',
+    'Salvazion: a plataforma que restaura a pessoa humana. Make Salvation, Health and Freedom Great Again. Um só App freemium — Bíblia offline, devocional, saúde e wearables, biblioteca Freedom, comunidade Phalanx, IA Salvazion e $SALVAZION na Solana.',
   keywords: [
     'Salvazion',
     'Salvation Health Freedom',

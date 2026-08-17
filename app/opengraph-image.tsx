@@ -90,8 +90,8 @@ export default function OpenGraphImage() {
               maxWidth: 900,
             }}
           >
-            One freemium App — Bible, devotionals, health, Freedom, community &
-            $SALVAZION on Solana
+            The platform that restores the human person — Bible, health,
+            Freedom & $SALVAZION on Solana
           </div>
         </div>
 

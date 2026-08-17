@@ -16,6 +16,7 @@ import PillarHubHeader from '@/components/hub/PillarHubHeader';
 import InvitePhalanx from '@/components/invite/InvitePhalanx';
 import VoiceAgent from '@/components/coach/VoiceAgent';
 import Link from 'next/link';
+import BrandLoader from '@/components/ui/BrandLoader';
 
 type FreedomTab = 'learn' | 'connect' | 'contribute';
 
@@ -26,13 +27,7 @@ function parseFreedomTab(raw: string | null): FreedomTab | null {
 
 export default function FreedomPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-          <div className="text-[#8FD99A] animate-pulse">Cargando Freedom...</div>
-        </div>
-      }
-    >
+    <Suspense fallback={<BrandLoader fullscreen />}>
       <FreedomPageInner />
     </Suspense>
   );
@@ -68,11 +63,7 @@ function FreedomPageInner() {
   }, [searchParams]);
 
   if (!mounted || !scores) {
-    return (
-      <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-        <div className="text-[#8FD99A] animate-pulse">Cargando Freedom...</div>
-      </div>
-    );
+    return <BrandLoader fullscreen />;
   }
 
   const freedomScore = scores.freedom;

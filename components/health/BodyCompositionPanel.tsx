@@ -182,9 +182,9 @@ export default function BodyCompositionPanel({
       <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] space-y-3.5">
         <p className="text-[11px] text-[var(--sage)]/80 leading-relaxed">
           {tx(
-            'Upload four swimsuit photos: front, back, right side and left side. Grok estimates weight and mass fractionation (muscle, bone, residual, fat/skin) and tracks changes over time. Educational estimate — not DEXA.',
-            'Sube cuatro fotos en traje de baño: frente, espalda, lado derecho e izquierdo. Grok estima peso y fraccionamiento (muscular, ósea, residual, grasa/piel) y guarda el progreso en el tiempo. Estimación educativa — no es DEXA.',
-            'Envie quatro fotos de maiô: frente, costas, lado direito e esquerdo. O Grok estima peso e fracionamento (muscular, óssea, residual, gordura/pele) e guarda o progresso no tempo. Estimativa educativa — não é DEXA.'
+            'Upload four swimsuit photos: front, back, right side and left side. Salvazion AI estimates weight and mass fractionation (muscle, bone, residual, fat/skin) and tracks changes over time. Educational estimate — not DEXA.',
+            'Sube cuatro fotos en traje de baño: frente, espalda, lado derecho e izquierdo. La IA Salvazion estima peso y fraccionamiento (muscular, ósea, residual, grasa/piel) y guarda el progreso en el tiempo. Estimación educativa — no es DEXA.',
+            'Envie quatro fotos de maiô: frente, costas, lado direito e esquerdo. A IA Salvazion estima peso e fracionamento (muscular, óssea, residual, gordura/pele) e guarda o progresso no tempo. Estimativa educativa — não é DEXA.'
           )}
         </p>
 
@@ -268,7 +268,7 @@ export default function BodyCompositionPanel({
           className="btn-primary w-full py-2.5 text-sm disabled:opacity-50"
         >
           {busy
-            ? tx('Analyzing with Grok…', 'Analizando con Grok…', 'Analisando com Grok…')
+            ? tx('Analyzing with Salvazion AI…', 'Analizando con IA Salvazion…', 'Analisando com IA Salvazion…')
             : tx(
                 'Analyze body composition',
                 'Analizar composición corporal',

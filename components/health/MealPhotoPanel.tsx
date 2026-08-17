@@ -184,7 +184,7 @@ export default function MealPhotoPanel({ lang = 'en', onApplied }: Props) {
     <section className="mb-6">
       <h2 className="text-sm font-semibold text-[var(--sage)] mb-3 flex items-center gap-2">
         <span>◈</span>
-        {tx('Meal photo · Grok', 'Foto de comida · Grok', 'Foto da refeição · Grok')}
+        {tx('Meal photo · Salvazion AI', 'Foto de comida · IA Salvazion', 'Foto da refeição · IA Salvazion')}
       </h2>
       <div className="mb-3">
         <AiUsageMeter feature="vision_meal" />
@@ -193,9 +193,9 @@ export default function MealPhotoPanel({ lang = 'en', onApplied }: Props) {
       <div className="glass rounded-2xl p-4 border border-[var(--border-soft)] space-y-3.5">
         <p className="text-[11px] text-[var(--sage)]/80 leading-relaxed">
           {tx(
-            'Photograph your plate. Grok estimates foods, calories, macros, and classic food-pyramid placement (USDA/Kennedy-style). Educational estimate.',
-            'Fotografía tu plato. Grok estima alimentos, calorías, macros y cómo se ubica en la pirámide alimenticia clásica (estilo USDA/Kennedy). Estimación educativa.',
-            'Fotografe o prato. O Grok estima alimentos, calorias, macros e a posição na pirâmide alimentar clássica (estilo USDA/Kennedy). Estimativa educativa.'
+            'Photograph your plate. Salvazion AI estimates foods, calories, macros, and classic food-pyramid placement (USDA/Kennedy-style). Educational estimate.',
+            'Fotografía tu plato. La IA Salvazion estima alimentos, calorías, macros y cómo se ubica en la pirámide alimenticia clásica (estilo USDA/Kennedy). Estimación educativa.',
+            'Fotografe o prato. A IA Salvazion estima alimentos, calorias, macros e a posição na pirâmide alimentar clássica (estilo USDA/Kennedy). Estimativa educativa.'
           )}
         </p>
 
@@ -252,7 +252,7 @@ export default function MealPhotoPanel({ lang = 'en', onApplied }: Props) {
           className="btn-primary w-full py-2.5 text-sm disabled:opacity-50"
         >
           {busy
-            ? tx('Analyzing with Grok…', 'Analizando con Grok…', 'Analisando com Grok…')
+            ? tx('Analyzing with Salvazion AI…', 'Analizando con IA Salvazion…', 'Analisando com IA Salvazion…')
             : tx(
                 'Analyze nutrients & pyramid',
                 'Analizar nutrientes y pirámide',

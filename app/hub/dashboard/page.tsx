@@ -26,6 +26,7 @@ import {
 } from '@/lib/badges/engine';
 import BottomNav from '@/components/BottomNav';
 import ProfileAvatar from '@/components/profile/ProfileAvatar';
+import BrandLoader from '@/components/ui/BrandLoader';
 import { useI18n } from '@/components/I18nProvider';
 import { BadgesIcon } from '@/components/Icons';
 import ProgressCharts from '@/components/progress/ProgressCharts';
@@ -187,17 +188,7 @@ export default function DashboardPage() {
   };
 
   if (!mounted || !profile || !scores) {
-    return (
-      <div className="min-h-[100dvh] flex flex-col items-center justify-center gap-3">
-        <div
-          className="skeleton-pulse w-12 h-12 rounded-full"
-          aria-hidden
-        />
-        <p className="text-[var(--accent)] text-sm font-medium" aria-live="polite">
-          {t('common.lionPreparing')}
-        </p>
-      </div>
-    );
+    return <BrandLoader fullscreen />;
   }
 
   const { salvation, health, freedom, global } = scores;

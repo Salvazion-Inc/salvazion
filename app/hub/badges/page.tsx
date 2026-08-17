@@ -21,6 +21,7 @@ import {
 } from '@/lib/scoring/engine';
 import { loadProfile } from '@/lib/store/profile';
 import BrandMarkIcon from '@/components/BrandMarkIcon';
+import BrandLoader from '@/components/ui/BrandLoader';
 import { useI18n } from '@/components/I18nProvider';
 import { PILLAR_COLORS } from '@/lib/theme/pillars';
 
@@ -102,17 +103,7 @@ export default function BadgesPage() {
   }, []);
 
   if (!mounted) {
-    return (
-      <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-        <div className="text-[#8FD99A] animate-pulse">
-          {lang === 'en'
-            ? 'Loading badges...'
-            : lang === 'pt'
-              ? 'Carregando insígnias...'
-              : 'Cargando insignias...'}
-        </div>
-      </div>
-    );
+    return <BrandLoader fullscreen />;
   }
 
   const categoryLabels =

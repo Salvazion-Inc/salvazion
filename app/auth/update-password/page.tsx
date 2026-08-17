@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 import { mapAuthError } from '@/lib/auth/paths';
 import { useI18n } from '@/components/I18nProvider';
+import BrandLoader from '@/components/ui/BrandLoader';
 
 /**
  * Set a new password after a recovery email link (session already established via callback/confirm).
@@ -75,11 +76,7 @@ export default function UpdatePasswordPage() {
   }
 
   if (!ready) {
-    return (
-      <div className="marketing-shell flex items-center justify-center text-[var(--accent)]">
-        {t('common.loading')}
-      </div>
-    );
+    return <BrandLoader fullscreen />;
   }
 
   if (noSession) {

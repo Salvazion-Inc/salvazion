@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import BottomNav from '@/components/BottomNav';
+import BrandLoader from '@/components/ui/BrandLoader';
 import { loadProfile } from '@/lib/store/profile';
 import { UserProfile } from '@/lib/types';
 import { computeScores, logAction } from '@/lib/scoring/engine';
@@ -223,11 +224,7 @@ export default function HealthPage() {
   };
 
   if (!scores || !hydration || !nutrition) {
-    return (
-      <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-        <div className="text-[#8FD99A] animate-pulse">Cargando Health...</div>
-      </div>
-    );
+    return <BrandLoader fullscreen />;
   }
 
   const healthScore = scores.health;

@@ -10,6 +10,7 @@ import JupiterSwap from '@/components/wallet/JupiterSwap';
 import { loadProfileAsync } from '@/lib/store/profile';
 import { SALVAZION_MINT, shortenAddress } from '@/lib/solana/config';
 import { useI18n } from '@/components/I18nProvider';
+import BrandLoader from '@/components/ui/BrandLoader';
 
 export default function SwapPage() {
   const router = useRouter();
@@ -27,11 +28,7 @@ export default function SwapPage() {
   }, [router]);
 
   if (!mounted) {
-    return (
-      <div className="min-h-screen bg-[#040404] flex items-center justify-center">
-        <div className="text-[#8FD99A] text-lg animate-pulse">{t('common.lionPreparing')}</div>
-      </div>
-    );
+    return <BrandLoader fullscreen />;
   }
 
   return (

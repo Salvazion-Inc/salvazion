@@ -90,14 +90,14 @@ export const FREE_FEATURE_LIST = [
  */
 export const PRICING_TABLE = {
   freeNote: {
-    en: 'Forever free — limited AI (Grok) + $SALVAZION holder bonus',
-    es: 'Gratis para siempre — IA limitada (Grok) + bonus si tienes $SALVAZION',
-    pt: 'Grátis para sempre — IA limitada (Grok) + bônus se você tem $SALVAZION',
+    en: 'Forever free — the full platform to start. Limited Salvazion AI + $SALVAZION holder bonus',
+    es: 'Gratis para siempre — la plataforma completa para empezar. IA Salvazion limitada + bonus si tienes $SALVAZION',
+    pt: 'Grátis para sempre — a plataforma completa para começar. IA Salvazion limitada + bônus se você tem $SALVAZION',
   },
   premiumNote: {
-    en: 'Everything in Free, plus unlimited AI and advanced tools',
-    es: 'Todo lo de Gratis, más IA ilimitada y herramientas avanzadas',
-    pt: 'Tudo do Grátis, mais IA ilimitada e ferramentas avançadas',
+    en: 'Everything in Free, plus unlimited Salvazion AI and advanced tools',
+    es: 'Todo lo de Gratis, más IA Salvazion ilimitada y herramientas avanzadas',
+    pt: 'Tudo do Grátis, mais IA Salvazion ilimitada e ferramentas avançadas',
   },
   bestValue: {
     en: 'Best value yearly',
@@ -115,6 +115,11 @@ export const PRICING_TABLE = {
       en: 'Dashboard, daily scores and onboarding',
       es: 'Dashboard, scores diarios y onboarding',
       pt: 'Dashboard, scores diários e onboarding',
+    },
+    {
+      en: 'Daily agenda — Salvation, Health and Freedom in one day',
+      es: 'Agenda diaria — Salvation, Health y Freedom en un solo día',
+      pt: 'Agenda diária — Salvation, Health e Freedom em um só dia',
     },
     {
       en: 'Full offline Bible (ES · EN · PT · originals) — read, search and concordance',
@@ -142,9 +147,9 @@ export const PRICING_TABLE = {
       pt: 'Saúde manual, sensores do telefone e FC Bluetooth',
     },
     {
-      en: 'Freedom library browse — books, X articles and YouTube',
-      es: 'Biblioteca Freedom — libros, artículos en X y YouTube',
-      pt: 'Biblioteca Freedom — livros, artigos no X e YouTube',
+      en: 'Freedom library — books, X articles, YouTube and churches map',
+      es: 'Biblioteca Freedom — libros, artículos en X, YouTube y mapa de iglesias',
+      pt: 'Biblioteca Freedom — livros, artigos no X, YouTube e mapa de igrejas',
     },
     {
       en: 'Basic Phalanx invites for family and friends',
@@ -178,9 +183,9 @@ export const PREMIUM_FEATURE_LIST: {
 }[] = [
   {
     id: 'coach_ai',
-    en: 'Unlimited Salvazion AI coach (Grok)',
-    es: 'Coach Salvazion IA ilimitado (Grok)',
-    pt: 'Coach Salvazion IA ilimitado (Grok)',
+    en: 'Unlimited Salvazion AI coach',
+    es: 'Coach Salvazion IA ilimitado',
+    pt: 'Coach Salvazion IA ilimitado',
   },
   {
     id: 'coach_tts',
@@ -220,9 +225,9 @@ export const PREMIUM_FEATURE_LIST: {
   },
   {
     id: 'freedom_full',
-    en: 'Full Freedom library + swap terminal',
-    es: 'Biblioteca Freedom completa + terminal de swap',
-    pt: 'Biblioteca Freedom completa + terminal de swap',
+    en: 'Full Freedom library, communities and swap terminal',
+    es: 'Biblioteca Freedom completa, comunidades y terminal de swap',
+    pt: 'Biblioteca Freedom completa, comunidades e terminal de swap',
   },
   {
     id: 'phalanx_unlimited',

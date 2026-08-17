@@ -17,6 +17,7 @@ import { tryAcceptPendingInbound } from '@/lib/invite/supabase';
 import SocialAuthButtons from '@/components/auth/SocialAuthButtons';
 import TermsAccept from '@/components/auth/TermsAccept';
 import BiometricLoginButton from '@/components/auth/BiometricLoginButton';
+import BrandLoader from '@/components/ui/BrandLoader';
 
 type Mode = 'password' | 'magic' | 'forgot';
 
@@ -387,12 +388,7 @@ function LoginForm() {
 }
 
 function LoginFallback() {
-  const { t } = useI18n();
-  return (
-    <div className="marketing-shell flex items-center justify-center text-[var(--accent)]">
-      {t('common.loading')}
-    </div>
-  );
+  return <BrandLoader fullscreen />;
 }
 
 export default function LoginPage() {

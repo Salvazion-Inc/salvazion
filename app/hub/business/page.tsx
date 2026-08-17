@@ -8,6 +8,7 @@ import { createClient } from '@/lib/supabase/client';
 import { isBusinessAdminEmail } from '@/lib/business/access';
 import type { BusinessKpis, FunnelStep } from '@/lib/business/types';
 import { useI18n } from '@/components/I18nProvider';
+import BrandLoader from '@/components/ui/BrandLoader';
 
 const DEFAULT_POLL_SEC = 30;
 
@@ -241,14 +242,7 @@ export default function BusinessDashboardPage() {
   }, [state.status, router]);
 
   if (state.status === 'loading') {
-    return (
-      <div className="min-h-[100dvh] flex flex-col items-center justify-center gap-3">
-        <div className="skeleton-pulse w-12 h-12 rounded-full" aria-hidden />
-        <p className="text-[var(--accent)] text-sm">
-          {es ? 'Cargando KPIs en vivo…' : 'Loading live KPIs…'}
-        </p>
-      </div>
-    );
+    return <BrandLoader fullscreen />;
   }
 
   if (state.status === 'denied') {

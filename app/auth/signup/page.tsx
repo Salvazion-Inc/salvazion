@@ -18,6 +18,7 @@ import {
 import { tryAcceptPendingInbound } from '@/lib/invite/supabase';
 import SocialAuthButtons from '@/components/auth/SocialAuthButtons';
 import TermsAccept from '@/components/auth/TermsAccept';
+import BrandLoader from '@/components/ui/BrandLoader';
 
 function SignupForm() {
   const router = useRouter();
@@ -258,12 +259,7 @@ function SignupForm() {
 }
 
 function SignupFallback() {
-  const { t } = useI18n();
-  return (
-    <div className="marketing-shell flex items-center justify-center text-[var(--accent)]">
-      {t('common.loading')}
-    </div>
-  );
+  return <BrandLoader fullscreen />;
 }
 
 export default function SignupPage() {

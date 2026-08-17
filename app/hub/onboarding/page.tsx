@@ -16,6 +16,7 @@ import {
 import { useI18n } from '@/components/I18nProvider';
 import { saveValueJourneyDone } from '@/lib/freedom/x-articles';
 import { defaultBibleVersion, isLanguage } from '@/lib/i18n/locale';
+import BrandLoader from '@/components/ui/BrandLoader';
 
 /** Slim onboarding: identity → focus → start (was 5 steps). */
 type Step = 1 | 2 | 3;
@@ -198,16 +199,7 @@ export default function OnboardingPage() {
   };
 
   if (booting) {
-    return (
-      <div className="min-h-screen bg-[var(--true-black)] flex items-center justify-center">
-        <div
-          className="text-[var(--accent)] text-lg animate-pulse"
-          aria-live="polite"
-        >
-          {t('onboarding.preparing')}
-        </div>
-      </div>
-    );
+    return <BrandLoader fullscreen />;
   }
 
   const chipActive =

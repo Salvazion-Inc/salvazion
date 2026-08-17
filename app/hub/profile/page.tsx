@@ -37,6 +37,7 @@ import BiometricControl from '@/components/settings/BiometricControl';
 import { useI18n } from '@/components/I18nProvider';
 import XLogo, { textWithXLogo } from '@/components/ui/XLogo';
 import { useFlashToast } from '@/components/ui/FlashToast';
+import BrandLoader from '@/components/ui/BrandLoader';
 import {
   loadLinkedWallet,
   subscribeLinkedWallet,
@@ -195,13 +196,7 @@ export default function ProfilePage() {
   };
 
   if (!profile) {
-    return (
-      <div className="min-h-screen bg-[var(--true-black)] flex items-center justify-center">
-        <div className="text-[var(--accent)] text-lg animate-pulse" aria-live="polite">
-          {t('common.lionPreparing')}
-        </div>
-      </div>
-    );
+    return <BrandLoader fullscreen />;
   }
 
   const age = profile.birthDate ? calculateAge(profile.birthDate) : null;

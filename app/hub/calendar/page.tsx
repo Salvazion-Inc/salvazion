@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import BottomNav from '@/components/BottomNav';
+import BrandLoader from '@/components/ui/BrandLoader';
 import RoutineBoard from '@/components/calendar/RoutineBoard';
 import OutdoorClimatePanel from '@/components/calendar/OutdoorClimatePanel';
 import {
@@ -62,11 +63,7 @@ export default function CalendarPage() {
   }, [selectedDate, mounted, refreshCounts]);
 
   if (!mounted) {
-    return (
-      <div className="min-h-screen bg-[var(--true-black)] flex items-center justify-center">
-        <div className="text-[var(--accent)] animate-pulse">{t('common.loading')}</div>
-      </div>
-    );
+    return <BrandLoader fullscreen />;
   }
 
   const dayLabel = new Date(selectedDate + 'T12:00:00').toLocaleDateString(

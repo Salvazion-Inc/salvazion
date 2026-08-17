@@ -1,7 +1,7 @@
 ---
 icon: chart-network
-cover: .gitbook/assets/Solana Ecosystem.png
-coverY: -127.32589576638725
+cover: .gitbook/assets/Solana and Salvazion King.jpg
+coverY: 0
 ---
 
 # Solana Ecosystem

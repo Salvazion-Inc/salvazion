@@ -1,6 +1,6 @@
 ---
 icon: bitcoin
-cover: .gitbook/assets/Patriotic Bitcoin.jpg
+cover: .gitbook/assets/Solana_Salvazion.jpg
 coverY: 0
 ---
 

@@ -1,7 +1,7 @@
 ---
 icon: flag-usa
-cover: .gitbook/assets/Patriotism Donald Trump.jpg
-coverY: 110.94236084582369
+cover: .gitbook/assets/All about Patriotism.png
+coverY: 0
 ---
 
 # Patriotism vs. Globalism

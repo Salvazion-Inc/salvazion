@@ -1,4 +1,5 @@
 ---
+hidden: true
 icon: microchip-ai
 cover: .gitbook/assets/AI Projects Salvazion.png
 coverY: 0

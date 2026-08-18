@@ -42,6 +42,12 @@ coverY: 0
   * Economic and Social Instability: Without work ethic rooted in Protestant values, productivity declines; welfare states strain under hedonistic individualism.
   * Global Vulnerability: A de-Christianized West loses moral authority, ceding ground to assertive powers like China or Islamist states.
 
-Broader Implications and Path ForwardIf unchecked, these threats could render Western Christian culture a museum piece by mid-century: a hollow shell of cathedrals amid secular sprawl, with fragmented societies prone to authoritarianism or collapse (echoing Rome's fall).&#x20;
+Broader Implications and Path ForwardIf unchecked, these threats could render Western Christian culture a museum piece by mid-century: a hollow shell of cathedrals amid secular sprawl, with fragmented societies prone to authoritarianism or collapse (echoing Rome's fall).
 
 Revival requires intentional counter-measures—family renewal, education reform, cultural re-engagement—but the window narrows as demographic and ideological tides accelerate. This isn't alarmism; it's pattern recognition from history and data. The stakes are the soul of the West itself.
+
+The Salvazion Platform is one of those counter-measures: Scripture, body, formation and a paying remnant in one place.
+
+{% hint style="success" %}
+**Next.** [BioConservatism vs Transhumanism](bioconservatism-vs-transhumanism.md) · [Create your free account](https://salvazion.org/auth/signup)
+{% endhint %}

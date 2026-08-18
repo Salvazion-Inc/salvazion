@@ -24,17 +24,17 @@ This approach aligns with thinkers like Hannah Arendt, who warn that transhumani
 
 Bioconservatism, by rejecting such changes, maintains a framework where human worth isn't contingent on technological upgrades.
 
-2. **Mitigation of Social Inequality and Division**&#x20;
+2. **Mitigation of Social Inequality and Division**
 
-Transhumanism exacerbates divides by making enhancements accessible primarily to the wealthy, creating a stratified society of "enhanced" elites and "ordinary" humans left behind.&#x20;
+Transhumanism exacerbates divides by making enhancements accessible primarily to the wealthy, creating a stratified society of "enhanced" elites and "ordinary" humans left behind.
 
-Bioconservatism avoids this by advocating bans or strict limits on such technologies, ensuring equality based on shared natural biology rather than augmented capabilities.&#x20;
+Bioconservatism avoids this by advocating bans or strict limits on such technologies, ensuring equality based on shared natural biology rather than augmented capabilities.
 
-Historical parallels, like bioleninism, highlight how regimes reliant on the "unfit" or dependent for loyalty lead to decay; transhumanism could similarly empower a technocratic class while marginalizing the unenhanced, fostering resentment and instability.&#x20;
+Historical parallels, like bioleninism, highlight how regimes reliant on the "unfit" or dependent for loyalty lead to decay; transhumanism could similarly empower a technocratic class while marginalizing the unenhanced, fostering resentment and instability.
 
 Bioconservatism promotes unity through biological commonality, preventing a dystopian caste system.
 
-3. **Ethical and Moral Safeguards Against Hubris**&#x20;
+3. **Ethical and Moral Safeguards Against Hubris**
 
 Bioconservatives argue that transhumanism embodies dangerous overreach, expecting too much from "superbiology" without acknowledging ethical limits, such as the immorality of playing God with human resurrection or radical alterations.
 
@@ -44,11 +44,11 @@ In contrast, bioconservatism draws from traditions like those of Jürgen Haberma
 
 This prevents moral relativism where enhancements justify eugenics or anti-human agendas disguised as progress.
 
-4. **Environmental and Sustainability Benefits**&#x20;
+4. **Environmental and Sustainability Benefits**
 
-Transhumanism often justifies exploiting nature's resources for endless development, viewing environmental limits as obstacles to overcome through tech.&#x20;
+Transhumanism often justifies exploiting nature's resources for endless development, viewing environmental limits as obstacles to overcome through tech.
 
-Bioconservatism counters this by promoting harmony with biology and ecology, imposing restrictions to prevent man-made disasters from unchecked enhancements.&#x20;
+Bioconservatism counters this by promoting harmony with biology and ecology, imposing restrictions to prevent man-made disasters from unchecked enhancements.
 
 Long-term, transhumanist "evolutionary drift" could lead to non-human species ill-adapted to Earth's ecosystems, while bioconservatism values natural adaptation and dynamism without artificial acceleration, ensuring humanity's survival in balance with the planet.
 
@@ -62,6 +62,12 @@ Philosophically, bioconservatism offers a "third way" beyond extremes, integrati
 
 This pragmatic moderation ensures progress without self-destruction.
 
-In summary, bioconservatism is superior because it grounds society in biological reality, fostering ethical stability and equality over transhumanism's risky pursuit of godlike power.&#x20;
+In summary, bioconservatism is superior because it grounds society in biological reality, fostering ethical stability and equality over transhumanism's risky pursuit of godlike power.
 
 While transhumanists envision a "better" future through transcendence, history and logic suggest such ambitions often lead to decline, making bioconservatism the wiser path for enduring human flourishing.
+
+In the App this is not an essay. It is how Health is built: sensors and wearables in service of the given body — never as a ladder out of it.
+
+{% hint style="success" %}
+**Practice it.** [The Platform](the-platform.md) · [Create your free account](https://salvazion.org/auth/signup) · [Go Premium](premium.md) for cloud wearables
+{% endhint %}

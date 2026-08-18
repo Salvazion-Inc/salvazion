@@ -1,5 +1,4 @@
 ---
-hidden: true
 icon: microchip-ai
 cover: .gitbook/assets/AI Projects Salvazion.png
 coverY: 0
@@ -11,8 +10,7 @@ To achieve our purpose: Make Salvation, Health and Freedom Great Again, we are i
 
 1. Alerci: Community of Christians around the World!
 
-Empowering Faith Beyond Borders: Access resources, prayer support, and fellowship anytime, anywhere, breaking down barriers and uniting believers in a global community rooted in Christ, love\
-and faith.
+Empowering Faith Beyond Borders: Access resources, prayer support, and fellowship anytime, anywhere, breaking down barriers and uniting believers in a global community rooted in Christ, love and faith.
 
 2. Zallud: Global Health Insurtech with Virtual Doctors!
 
@@ -25,3 +23,9 @@ Empowering Civic Engagement: Be part of a groundbreaking platform that amplifies
 4. Gepardo: Platform and App Development Agency with AI.
 
 Partner for Bold Entrepreneurs: We combine human creativity with the precision of AI to create custom platforms and apps that delight users and achieve unprecedented results.
+
+These four names are the wider horizon. **The Salvazion App is the unification you can use today** — Salvation, Health and Freedom in one login.
+
+{% hint style="success" %}
+Do not wait for the next product. [Create your free account](https://salvazion.org/auth/signup) and [use the Platform](the-platform.md) now.
+{% endhint %}

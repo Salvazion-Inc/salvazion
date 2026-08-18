@@ -42,4 +42,13 @@ We no longer split the mission into separate products. Salvation, Health, and Fr
 
 This purpose invites us to dream big and with multiple perspectives that converge in this greater good for humanity. Is it worth pursuing this purpose in your life? If your mind and heart say yes, then you are welcome on this journey.
 
-Join the phalanx. Create your free account today.
+## Your path from this page
+
+1. **Learn** — [Spiritual Warfare](spiritual-warfare.md), [Western Christian Culture](western-christian-culture.md), [BioConservatism](bioconservatism-vs-transhumanism.md), [Patriotism](patriotism-vs.-globalism.md), [12 Salvators](12-salvators.md).
+2. **Enter** — [The Salvazion Platform](the-platform.md) and [create your free account](create-your-account.md).
+3. **Live** — [How to use the App](how-to-use-the-app.md) every day.
+4. **Commit** — [Subscribe to Premium](premium.md) when you stop wanting a quota on the Lion.
+
+{% hint style="success" %}
+**Join the phalanx now.** [Create your free account](https://salvazion.org/auth/signup) · [Log in](https://salvazion.org/auth/login) · [Go Premium](https://salvazion.org/hub/premium)
+{% endhint %}

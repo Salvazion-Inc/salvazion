@@ -3,75 +3,75 @@ icon: play
 cover: .gitbook/assets/Salvazion App the platform that restores the human person.png
 coverY: 0
 description: >-
-  Cómo vivir Salvación, Salud y Libertad dentro de la App Salvazion — Hub,
-  Biblia, Salud, Freedom, Phalanx, coach León Verde y $SALVAZION.
+  How to live Salvation, Health and Freedom inside the Salvazion App — Hub,
+  Bible, Health, Freedom, Phalanx, Green Lion coach and $SALVAZION.
 ---
 
-# Cómo usar la App
+# How to use the App
 
-Ya tienes cuenta. Ahora vívelo: un pilar a la vez, un día a la vez, con tu Phalanx y el León a tu lado.
+You have an account. Now live it: one pillar at a time, one day at a time, with your Phalanx and the Lion beside you.
 
-Abre el Hub: [https://salvazion.org/hub/dashboard](https://salvazion.org/hub/dashboard)
+Open the Hub: [https://salvazion.org/hub/dashboard](https://salvazion.org/hub/dashboard)
 
-## El Hub
+## The Hub
 
-El Hub es la casa. Scores de Salvation, Health y Freedom. La agenda de hoy. La siguiente acción fiel — no otro feed.
+The Hub is home. Scores for Salvation, Health and Freedom. Today's agenda. The next faithful action — not another feed.
 
-Empieza aquí cada mañana. Cierra aquí cada noche. La disciplina es un calendario, no un estado de ánimo.
+Start here every morning. Close here every night. Discipline is a calendar, not a mood.
 
-## Salvation — alma despierta
+## Salvation — awakened soul
 
-* **Biblia** — biblioteca completa offline (español, inglés, portugués y originales). Lectura, búsqueda, concordancia. Primero la Palabra: no es un “mindfulness” sin cruz.
-* **Devocional** — un texto diario alineado a la Escritura, la virtud y el BioConservadurismo. En Gratis: 1 devocional IA al día; después, un respaldo por reglas.
-* **Motivos de oración** — nombra la guerra que de verdad estás peleando: familia, nación, salud, la Iglesia.
-* **Score** — rachas y constancia espiritual medible. Lo que no se mide se disuelve.
+* **Bible** — full offline library (Spanish, English, Portuguese and originals). Read, search, concordance. The Word first — not cross-less mindfulness.
+* **Devotional** — a daily text aligned to Scripture, virtue and BioConservatism. Free includes 1 AI devotional per day; then a rules-based fallback.
+* **Prayer motives** — name the war you are actually fighting: family, nation, health, the Church.
+* **Score** — streaks and measurable spiritual consistency. What is not measured dissolves.
 
-Abre: [salvazion.org/hub/bible](https://salvazion.org/hub/bible) · [salvazion.org/hub/devotional](https://salvazion.org/hub/devotional)
+Open: [salvazion.org/hub/bible](https://salvazion.org/hub/bible) · [salvazion.org/hub/devotional](https://salvazion.org/hub/devotional)
 
-## Health — templo en movimiento
+## Health — temple in motion
 
-* Registra sueño, hidratación, sol, comidas y deporte.
-* Usa **sensores del teléfono** y **pulso Bluetooth** sin suscripción.
-* Herramientas de foto: cineantropometría y visión de comida (Gratis tiene cupos semanales / diarios).
-* **Premium** abre wearables en la nube (Fitbit, Oura, WHOOP, Garmin), biomarcadores, ficha clínica y salud femenina.
+* Log sleep, hydration, sun, meals and sport.
+* Use **phone sensors** and **Bluetooth heart rate** without a subscription.
+* Photo tools: cineanthropometry and meal vision (Free has weekly / daily limits).
+* **Premium** unlocks cloud wearables (Fitbit, Oura, WHOOP, Garmin), biomarkers, clinical record and women's health.
 
-Esto es BioConservadurismo práctico. El cuerpo no es hardware para “mejorar”. Es un pacto.
+This is practical BioConservatism. The body is not hardware to upgrade. It is a covenant.
 
-Abre: [salvazion.org/hub/health](https://salvazion.org/hub/health)
+Open: [salvazion.org/hub/health](https://salvazion.org/hub/health)
 
-## Freedom — mente y legado
+## Freedom — mind and legacy
 
-* **Artículos en X** de [@salvazion\_](https://x.com/salvazion_) — long-form sobre fe, familia, libertad, tecnología y Cultura Cristiana Occidental. La App te muestra lo que aún no leíste.
-* Libros, canales de YouTube y un mapa de iglesias — formación más lugares reales.
-* **Phalanx** — invita familia, hermanos en la fe, amigos y colegas. Nadie pelea solo.
-* **$SALVAZION** — conecta una billetera Solana (Jupiter Mobile, Phantom, Solflare) y haz swap. Nunca custodiamos tus llaves.
+* **X Articles** by [@salvazion\_](https://x.com/salvazion_) — long-form on faith, family, freedom, technology and Western Christian Culture. The App shows what you have not read yet.
+* Books, YouTube channels and a churches map — formation plus real places.
+* **Phalanx** — invite family, brothers in the faith, friends and colleagues. No one fights alone.
+* **$SALVAZION** — connect a Solana wallet (Jupiter Mobile, Phantom, Solflare) and swap. We never custody your keys.
 
-Abre: [salvazion.org/hub/freedom](https://salvazion.org/hub/freedom)
+Open: [salvazion.org/hub/freedom](https://salvazion.org/hub/freedom)
 
-## El León Verde — coach de virtud
+## The Green Lion — virtue coach
 
-El León disciplina con firmeza y esperanza. Pídele un plan, un ayuno, una conversación difícil, una semana de entrenamiento, una ruta de lectura.
+The Lion disciplines with firmness and hope. Ask for a plan, a fast, a hard conversation, a training week, a reading path.
 
-* Gratis: **5 mensajes de coach / día** · **3 de voz / TTS / día**
-* Mantén $SALVAZION on-chain → esos cupos Free se **duplican**
-* Premium → coach, voz, devocionales y visión **ilimitados**
+* Free: **5 coach messages / day** · **3 voice / TTS / day**
+* Hold $SALVAZION on-chain → those Free limits **double**
+* Premium → **unlimited** coach, voice, devotionals and vision tools
 
-Abre: [salvazion.org/hub/coach](https://salvazion.org/hub/coach)
+Open: [salvazion.org/hub/coach](https://salvazion.org/hub/coach)
 
-## Un ritmo semanal simple
+## A simple weekly rhythm
 
-| Día | Acto principal | En la App |
-| --- | -------------- | --------- |
-| Domingo | Culto, familia, Escritura más larga | Biblia + motivos de oración |
-| Lun–Vie | Agenda + un acto Salvation + un acto Health | Dashboard → Biblia / Salud |
-| A media semana | Lee un artículo de X que no hayas terminado | Freedom |
-| Sábado | Invita a una persona a tu Phalanx | Perfil / Phalanx |
-| El día que el cupo Free de IA se te acaba | Pasa a Premium o mantén $SALVAZION | [Premium](premium.md) |
+| Day | Primary act | In-App |
+| --- | ----------- | ------ |
+| Sunday | Worship, family, longer Scripture | Bible + prayer motives |
+| Mon–Fri | Agenda + one Salvation act + one Health act | Dashboard → Bible / Health |
+| Mid-week | Read one X Article you have not finished | Freedom |
+| Saturday | Invite one person to your Phalanx | Profile / Phalanx |
+| Any day you hit a Free AI wall | Upgrade or hold $SALVAZION | [Premium](premium.md) |
 
-Las insignias no son trofeos de dopamina. Cada una marca constancia real: devocionales, movimiento, vínculos, rachas, excelencia de la Phalanx.
+Badges are not dopamine trophies. Each one marks real consistency: devotionals, movement, connections, streaks, Phalanx excellence.
 
 {% hint style="success" %}
-Cuando los límites Free te enseñan cuánto usas al León, esa es la señal. [Suscríbete a Premium](premium.md) y deja de racionar la virtud.
+When the Free limits start teaching you how much you use the Lion, that is the signal. [Subscribe to Premium](premium.md) and stop rationing virtue.
 {% endhint %}
 
 {% content-ref url="premium.md" %}

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import LegalDocument from '@/components/legal/LegalDocument';
 import { PRIVACY } from '@/lib/legal/privacy';
-import { absoluteUrl } from '@/lib/seo/config';
+import { absoluteUrl, ogImageMetadata } from '@/lib/seo/config';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | Política de Privacidad | Política de Privacidade',
@@ -20,6 +20,7 @@ export const metadata: Metadata = {
     description: PRIVACY.en.metaDescription,
     url: absoluteUrl('/privacy'),
     type: 'website',
+    images: [ogImageMetadata()],
   },
   robots: {
     index: true,

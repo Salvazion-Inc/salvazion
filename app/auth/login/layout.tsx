@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { absoluteUrl } from '@/lib/seo/config';
+import { SEO, absoluteUrl, ogImageMetadata } from '@/lib/seo/config';
 
 export const metadata: Metadata = {
   title: 'Sign in | Entrar al Hub',
@@ -14,6 +14,16 @@ export const metadata: Metadata = {
       'Enter the Hub — Bible, devotionals, health, Freedom, community and $SALVAZION.',
     url: absoluteUrl('/auth/login'),
     type: 'website',
+    images: [ogImageMetadata()],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Sign in to Salvazion',
+    description:
+      'Enter the Hub — Bible, devotionals, health, Freedom, community and $SALVAZION.',
+    images: [ogImageMetadata()],
+    creator: SEO.twitterHandle,
+    site: SEO.twitterHandle,
   },
   robots: {
     index: true,

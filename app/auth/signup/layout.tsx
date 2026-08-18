@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { absoluteUrl } from '@/lib/seo/config';
+import { SEO, absoluteUrl, ogImageMetadata } from '@/lib/seo/config';
 
 export const metadata: Metadata = {
   title: 'Create free account | Crear cuenta gratis',
@@ -14,6 +14,16 @@ export const metadata: Metadata = {
       'Start free: Salvation · Health · Freedom. Premium unlocks AI coach, AI devotionals and cloud wearables.',
     url: absoluteUrl('/auth/signup'),
     type: 'website',
+    images: [ogImageMetadata()],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Create your free Salvazion account',
+    description:
+      'Start free: Salvation · Health · Freedom. Premium unlocks AI coach, AI devotionals and cloud wearables.',
+    images: [ogImageMetadata()],
+    creator: SEO.twitterHandle,
+    site: SEO.twitterHandle,
   },
   robots: {
     index: true,

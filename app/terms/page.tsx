@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import LegalDocument from '@/components/legal/LegalDocument';
 import { TERMS } from '@/lib/legal/terms';
-import { absoluteUrl } from '@/lib/seo/config';
+import { absoluteUrl, ogImageMetadata } from '@/lib/seo/config';
 
 export const metadata: Metadata = {
   title: 'Terms of Service | Términos de Servicio | Termos de Serviço',
@@ -20,6 +20,7 @@ export const metadata: Metadata = {
     description: TERMS.en.metaDescription,
     url: absoluteUrl('/terms'),
     type: 'website',
+    images: [ogImageMetadata()],
   },
   robots: {
     index: true,

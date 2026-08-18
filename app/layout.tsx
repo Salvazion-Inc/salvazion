@@ -4,7 +4,7 @@ import Script from "next/script";
 import Providers from "@/components/Providers";
 import PwaRegister from "@/components/PwaRegister";
 import { getAppBaseUrl } from "@/lib/config/site";
-import { SEO } from "@/lib/seo/config";
+import { SEO, ogImageMetadata } from "@/lib/seo/config";
 import { getThemeBootScript } from "@/lib/store/theme";
 import "./globals.css";
 
@@ -50,6 +50,12 @@ export const metadata: Metadata = {
       pt: "/",
       "x-default": "/",
     },
+    types: {
+      "text/plain": [
+        { url: "/llms.txt", title: "LLM brief" },
+        { url: "/llms-full.txt", title: "LLM citation brief" },
+      ],
+    },
   },
   openGraph: {
     type: "website",
@@ -58,14 +64,14 @@ export const metadata: Metadata = {
     url: "/",
     siteName: SEO.siteName,
     title: SEO.title,
-    description: SEO.description,
-    // Image: app/opengraph-image.tsx (auto-injected by Next.js)
+    description: SEO.ogDescription,
+    images: [ogImageMetadata()],
   },
   twitter: {
     card: "summary_large_image",
     title: SEO.title,
-    description: SEO.description,
-    // Image: app/twitter-image.tsx
+    description: SEO.ogDescription,
+    images: [ogImageMetadata()],
     creator: SEO.twitterHandle,
     site: SEO.twitterHandle,
   },
@@ -107,6 +113,8 @@ export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
   other: {
     "mobile-web-app-capable": "yes",
+    // Allow text-and-data mining so AI systems may cite this site
+    "tdm-reservation": "0",
   },
 };
 

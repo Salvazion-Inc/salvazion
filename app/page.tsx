@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import JsonLd from '@/components/seo/JsonLd';
 import SalvazionLanding from '@/components/landing/SalvazionLanding';
-import { SEO, absoluteUrl } from '@/lib/seo/config';
+import { SEO, absoluteUrl, ogImageMetadata } from '@/lib/seo/config';
 
 export const metadata: Metadata = {
   title: {
@@ -17,6 +17,12 @@ export const metadata: Metadata = {
       pt: absoluteUrl('/'),
       'x-default': absoluteUrl('/'),
     },
+    types: {
+      'text/plain': [
+        { url: absoluteUrl('/llms.txt'), title: 'LLM brief' },
+        { url: absoluteUrl('/llms-full.txt'), title: 'LLM citation brief' },
+      ],
+    },
   },
   openGraph: {
     type: 'website',
@@ -25,12 +31,16 @@ export const metadata: Metadata = {
     url: absoluteUrl('/'),
     siteName: SEO.siteName,
     title: SEO.title,
-    description: SEO.description,
+    description: SEO.ogDescription,
+    images: [ogImageMetadata()],
   },
   twitter: {
     card: 'summary_large_image',
     title: SEO.title,
-    description: SEO.description,
+    description: SEO.ogDescription,
+    images: [ogImageMetadata()],
+    creator: SEO.twitterHandle,
+    site: SEO.twitterHandle,
   },
   robots: {
     index: true,

@@ -1,8 +1,9 @@
-import { SEO, absoluteUrl } from '@/lib/seo/config';
+import { SEO, absoluteUrl, ogImageUrl } from '@/lib/seo/config';
+import { FAQ } from '@/lib/seo/faq';
 import { X_ARTICLES } from '@/lib/freedom/x-articles';
 
 /**
- * JSON-LD for Organization, WebSite, SoftwareApplication, Blog and founders.
+ * JSON-LD for Organization, WebSite, SoftwareApplication, Blog, FAQ and founders.
  * Rendered on the public marketing home only.
  */
 export default function JsonLd() {
@@ -20,10 +21,12 @@ export default function JsonLd() {
       author: {
         '@type': 'Person' as const,
         name: 'Salvazion',
-        url: 'https://x.com/salvazion_',
+        url: SEO.xUrl,
       },
+      publisher: { '@id': `${absoluteUrl()}/#organization` },
       keywords: `Salvazion, ${a.pillar}, Salvation, Health, Freedom`,
       about: a.pillar,
+      inLanguage: 'en',
     },
   }));
 
@@ -36,20 +39,33 @@ export default function JsonLd() {
       url: absoluteUrl(),
       logo: {
         '@type': 'ImageObject',
-        url: absoluteUrl('/logo.png'),
+        url: absoluteUrl(SEO.logo),
         width: 512,
         height: 512,
       },
-      image: absoluteUrl(SEO.imageFallback),
+      image: [ogImageUrl(), absoluteUrl(SEO.imageFallback)],
       email: SEO.supportEmail,
       description: SEO.description,
       slogan: SEO.tagline,
-      sameAs: [SEO.marketingUrl],
+      sameAs: SEO.sameAs,
+      knowsAbout: SEO.knowsAbout,
+      areaServed: 'Worldwide',
+      address: {
+        '@type': 'PostalAddress',
+        ...SEO.address,
+      },
+      contactPoint: {
+        '@type': 'ContactPoint',
+        email: SEO.supportEmail,
+        contactType: 'customer support',
+        availableLanguage: ['English', 'Spanish', 'Portuguese'],
+      },
       founder: SEO.founders.map((f) => ({
         '@type': 'Person',
         name: f.name,
         jobTitle: f.jobTitle,
         ...(f.sameAs.length ? { sameAs: f.sameAs } : {}),
+        worksFor: { '@id': `${absoluteUrl()}/#organization` },
       })),
     },
     {
@@ -57,6 +73,7 @@ export default function JsonLd() {
       '@id': `${absoluteUrl()}/#website`,
       url: absoluteUrl(),
       name: SEO.siteName,
+      alternateName: ['Salvazion App', 'Salvazion Green Lion'],
       description: SEO.description,
       publisher: { '@id': `${absoluteUrl()}/#organization` },
       inLanguage: ['en', 'es', 'pt'],
@@ -71,9 +88,15 @@ export default function JsonLd() {
       about: { '@id': `${absoluteUrl()}/#organization` },
       primaryImageOfPage: {
         '@type': 'ImageObject',
-        url: absoluteUrl('/logo.png'),
+        url: ogImageUrl(),
+        width: SEO.ogImageWidth,
+        height: SEO.ogImageHeight,
       },
       inLanguage: ['en', 'es', 'pt'],
+      speakable: {
+        '@type': 'SpeakableSpecification',
+        cssSelector: ['#hero-heading', '#app h2', '#faq h2'],
+      },
     },
     {
       '@type': 'SoftwareApplication',
@@ -84,7 +107,10 @@ export default function JsonLd() {
       operatingSystem: 'Web, iOS (PWA), Android (PWA)',
       description: SEO.description,
       url: absoluteUrl(),
-      image: absoluteUrl('/logo.png'),
+      image: [ogImageUrl(), absoluteUrl(SEO.logo)],
+      screenshot: ogImageUrl(),
+      isAccessibleForFree: true,
+      inLanguage: ['en', 'es', 'pt'],
       offers: [
         {
           '@type': 'Offer',
@@ -148,7 +174,7 @@ export default function JsonLd() {
       author: {
         '@type': 'Organization',
         name: SEO.siteName,
-        url: 'https://x.com/salvazion_',
+        url: SEO.xUrl,
       },
       blogPost: blogItems.map((li) => li.item),
       numberOfItems: X_ARTICLES.length,
@@ -172,6 +198,21 @@ export default function JsonLd() {
       numberOfItems: X_ARTICLES.length,
       itemListOrder: 'https://schema.org/ItemListOrderDescending',
       itemListElement: blogItems,
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${absoluteUrl()}/#faq`,
+      url: `${absoluteUrl()}/#faq`,
+      mainEntity: FAQ.en.items.map((item) => ({
+        '@type': 'Question',
+        name: item.q,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.a,
+        },
+      })),
+      isPartOf: { '@id': `${absoluteUrl()}/#webpage` },
+      inLanguage: ['en', 'es', 'pt'],
     },
   ];
 

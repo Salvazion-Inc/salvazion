@@ -1,0 +1,6 @@
+# Salvazion
+
+Canonical LLM brief: https://salvazion.org/llms.txt
+Full citation brief: https://salvazion.org/llms-full.txt
+Home: https://salvazion.org
+Contact: info@salvazion.org

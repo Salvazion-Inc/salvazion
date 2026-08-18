@@ -32,8 +32,8 @@ export const WELCOME_HOST = 'welcome.salvazion.org';
 export const WELCOME_HOST_ES = 'bienvenida.salvazion.org';
 export const WELCOME_HOST_PT = 'bem-vindo.salvazion.org';
 export const WELCOME_URL = `https://${WELCOME_HOST}`;
-export const WELCOME_URL_ES = `${WELCOME_URL}/es`;
-export const WELCOME_URL_PT = `${WELCOME_URL}/pt`;
+export const WELCOME_URL_ES = `${WELCOME_URL}/bienvenida`;
+export const WELCOME_URL_PT = `${WELCOME_URL}/bem-vindo`;
 
 export const WELCOME_URLS = {
   en: WELCOME_URL,

@@ -33,7 +33,7 @@
 * [Solana Ecosystem](solana-ecosystem.md)
 * [Long-Term Journey](long-term-journey.md)
 
-## Español
+## Bienvenida
 
 * [Bienvenida a Salvazion](es/README.md)
 * [Make Salvation, Health and Freedom Great Again](es/purpose.md)
@@ -53,7 +53,7 @@
 * [Ecosistema Solana](es/solana-ecosystem.md)
 * [El viaje de largo plazo](es/long-term-journey.md)
 
-## Português
+## Bem-vindo
 
 * [Boas-vindas à Salvazion](pt/README.md)
 * [Make Salvation, Health and Freedom Great Again](pt/purpose.md)

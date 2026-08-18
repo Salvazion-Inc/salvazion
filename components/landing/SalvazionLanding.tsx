@@ -15,6 +15,7 @@ import LanguageFlagSwitch from '@/components/ui/LanguageFlagSwitch';
 import XLogo, { textWithXLogo } from '@/components/ui/XLogo';
 import LandingBlog from '@/components/landing/LandingBlog';
 import { SALVAZION_MINT } from '@/lib/solana/config';
+import { WELCOME_URL } from '@/lib/config/site';
 import { pickLang } from '@/lib/i18n/locale';
 
 const MINT = SALVAZION_MINT;
@@ -136,6 +137,14 @@ export default function SalvazionLanding() {
             <a href="#token" className="nav-link-marketing">
               {t.nav.token}
             </a>
+            <a
+              href={WELCOME_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="nav-link-marketing"
+            >
+              {t.nav.welcome}
+            </a>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
@@ -145,6 +154,14 @@ export default function SalvazionLanding() {
               ariaLabel={t.nav.language}
               size="md"
             />
+            <a
+              href={WELCOME_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary nav-enter-cta shrink-0 !px-3 sm:!px-4 !min-h-10 !text-xs sm:!text-sm text-center leading-snug lg:hidden"
+            >
+              {t.nav.welcome}
+            </a>
             <Link
               href="/auth/login"
               className="btn-primary nav-enter-cta shrink-0 !px-3 sm:!px-4 !min-h-10 !text-xs sm:!text-sm text-center leading-snug"
@@ -232,6 +249,14 @@ export default function SalvazionLanding() {
               {t.hero.ctaLogin}
             </Link>
           </div>
+          <a
+            href={WELCOME_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-secondary mt-3 inline-flex !min-h-10 !px-5 !text-sm"
+          >
+            {t.hero.ctaWelcome}
+          </a>
         </div>
       </section>
 
@@ -559,6 +584,14 @@ export default function SalvazionLanding() {
         <div className="max-w-6xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[var(--sage)]/80">
           <p>{t.footer.copy}</p>
           <div className="flex flex-wrap items-center justify-center gap-4">
+            <a
+              href={WELCOME_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[var(--accent)]"
+            >
+              {t.footer.welcome}
+            </a>
             <Link href="/terms" className="hover:text-[var(--accent)]">
               {t.footer.terms}
             </Link>
@@ -591,6 +624,7 @@ const copy = {
       token: 'Token',
       team: 'Team',
       enter: 'Enter Salvazion',
+      welcome: 'Welcome',
       language: 'Language',
     },
     hero: {
@@ -604,6 +638,7 @@ const copy = {
       tagline2: 'Salvazion gives them back — in one Platform.',
       ctaPrimary: 'Create free account',
       ctaLogin: 'I have an account',
+      ctaWelcome: 'Read the Welcome',
     },
     app: {
       eyebrow: 'Massive Transformative Purpose',
@@ -692,6 +727,7 @@ const copy = {
     },
     footer: {
       copy: '© 2026 Salvazion, Inc. All rights reserved.',
+      welcome: 'Welcome',
       terms: 'Terms',
       privacy: 'Privacy',
     },
@@ -704,6 +740,7 @@ const copy = {
       token: 'Token',
       team: 'Equipo',
       enter: 'Entrar a Salvazion',
+      welcome: 'Welcome',
       language: 'Idioma',
     },
     hero: {
@@ -717,6 +754,7 @@ const copy = {
       tagline2: 'Salvazion te los devuelve — en una sola Plataforma.',
       ctaPrimary: 'Crear cuenta gratis',
       ctaLogin: 'Ya tengo cuenta',
+      ctaWelcome: 'Leer el Welcome',
     },
     app: {
       eyebrow: 'Propósito Transformador Masivo',
@@ -805,6 +843,7 @@ const copy = {
     },
     footer: {
       copy: '© 2026 Salvazion, Inc. Todos los derechos reservados.',
+      welcome: 'Welcome',
       terms: 'Términos',
       privacy: 'Privacidad',
     },
@@ -817,6 +856,7 @@ const copy = {
       token: 'Token',
       team: 'Equipe',
       enter: 'Entrar na Salvazion',
+      welcome: 'Welcome',
       language: 'Idioma',
     },
     hero: {
@@ -829,6 +869,7 @@ const copy = {
       tagline2: 'A Salvazion os devolve — em uma só Plataforma.',
       ctaPrimary: 'Criar conta grátis',
       ctaLogin: 'Já tenho conta',
+      ctaWelcome: 'Ler o Welcome',
     },
     app: {
       eyebrow: 'Propósito Transformador Massivo',
@@ -917,6 +958,7 @@ const copy = {
     },
     footer: {
       copy: '© 2026 Salvazion, Inc. Todos os direitos reservados.',
+      welcome: 'Welcome',
       terms: 'Termos',
       privacy: 'Privacidade',
     },

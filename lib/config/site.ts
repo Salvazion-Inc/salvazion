@@ -26,6 +26,10 @@ export const APP_URL = `https://${APP_HOST}`;
 export const APP_URL_WWW = `https://${APP_HOST_WWW}`;
 export const APP_URL_LEGACY = `https://${APP_HOST_LEGACY}`;
 
+/** GitBook Welcome — formation funnel (EN · ES · PT) */
+export const WELCOME_HOST = 'welcome.salvazion.org';
+export const WELCOME_URL = `https://${WELCOME_HOST}`;
+
 /**
  * @deprecated Marketing was the Canva site; product now lives on the apex.
  * Kept as alias of APP_URL for older imports (SEO, legal).

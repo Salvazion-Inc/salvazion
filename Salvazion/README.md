@@ -9,7 +9,7 @@ description: >-
 
 # Welcome to Salvazion
 
-**Language:** English · [Español](es/welcome.md) · [Português](pt/welcome.md)
+**Language:** English · [Español](es/README.md) · [Português](pt/README.md)
 
 Welcome, Green Lion King, to the eternal struggle.
 

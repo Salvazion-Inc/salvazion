@@ -26,13 +26,14 @@ export const APP_URL = `https://${APP_HOST}`;
 export const APP_URL_WWW = `https://${APP_HOST_WWW}`;
 export const APP_URL_LEGACY = `https://${APP_HOST_LEGACY}`;
 
-/** GitBook Welcome — one site per language */
+/** GitBook Welcome — one published site; ES/PT are full books on this host */
 export const WELCOME_HOST = 'welcome.salvazion.org';
+/** Intended branded hosts. GitBook Free cannot attach extra custom domains. */
 export const WELCOME_HOST_ES = 'bienvenida.salvazion.org';
 export const WELCOME_HOST_PT = 'bem-vindo.salvazion.org';
 export const WELCOME_URL = `https://${WELCOME_HOST}`;
-export const WELCOME_URL_ES = `https://${WELCOME_HOST_ES}`;
-export const WELCOME_URL_PT = `https://${WELCOME_HOST_PT}`;
+export const WELCOME_URL_ES = `${WELCOME_URL}/es`;
+export const WELCOME_URL_PT = `${WELCOME_URL}/pt`;
 
 export const WELCOME_URLS = {
   en: WELCOME_URL,

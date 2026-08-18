@@ -9,7 +9,7 @@ description: >-
 
 # Bienvenida a Salvazion
 
-**Idioma:** [English](../README.md) · Español · [Português](../pt/welcome.md)
+**Idioma:** [English](../README.md) · Español · [Português](../pt/README.md)
 
 Bienvenido, Green Lion King, a la lucha que no termina.
 
@@ -27,31 +27,31 @@ Este Welcome no es un folleto. Es el camino: de la primera convicción a un miem
 
 | Paso | Qué haces | Dónde |
 | ---- | --------- | ----- |
-| **1. Aprende** | Por qué luchamos: Propósito, Guerra espiritual, Cultura Cristiana Occidental, BioConservadurismo, Patriotismo, los 12 Salvators | Este Welcome — sección 1 (en inglés) |
+| **1. Aprende** | Por qué luchamos: Propósito, Guerra espiritual, Cultura Cristiana Occidental, BioConservadurismo, Patriotismo, los 12 Salvators | Este Welcome — sección 1 |
 | **2. Entra** | Crea tu cuenta gratis. Inicia sesión. Instala la PWA | [salvazion.org/auth/signup](https://salvazion.org/auth/signup) |
 | **3. Vive** | Usa la App: Hub, Biblia, Salud, Freedom, Phalanx, León Verde | [salvazion.org/hub/dashboard](https://salvazion.org/hub/dashboard) |
 | **4. Comprométete** | Suscríbete a Premium cuando no quieras racionar al León | [salvazion.org/hub/premium](https://salvazion.org/hub/premium) |
 
 Si solo lees y nunca inicias sesión, estudiaste una guerra a la que te negaste a entrar.
 
-{% content-ref url="../readme.md" %}
-[readme.md](../readme.md)
+{% content-ref url="purpose.md" %}
+[purpose.md](purpose.md)
 {% endcontent-ref %}
 
-{% content-ref url="../the-platform.md" %}
-[the-platform.md](../the-platform.md)
+{% content-ref url="the-platform.md" %}
+[the-platform.md](the-platform.md)
 {% endcontent-ref %}
 
-{% content-ref url="../create-your-account.md" %}
-[create-your-account.md](../create-your-account.md)
+{% content-ref url="create-your-account.md" %}
+[create-your-account.md](create-your-account.md)
 {% endcontent-ref %}
 
-{% content-ref url="../how-to-use-the-app.md" %}
-[how-to-use-the-app.md](../how-to-use-the-app.md)
+{% content-ref url="how-to-use-the-app.md" %}
+[how-to-use-the-app.md](how-to-use-the-app.md)
 {% endcontent-ref %}
 
-{% content-ref url="../premium.md" %}
-[premium.md](../premium.md)
+{% content-ref url="premium.md" %}
+[premium.md](premium.md)
 {% endcontent-ref %}
 
 ## Los tres pilares
@@ -85,6 +85,26 @@ La salvación no es un eslogan. Es un grito de guerra. Esto no es un meme: es un
 La salud no es un privilegio. Es un mandato divino. La libertad no se concede. Se conquista con la cruz y la espada del Espíritu.
 
 Bienvenido, Green Lion King. Las puertas de Salvazion están abiertas. La guerra por el alma de Occidente ya empezó.
+
+## Aprende, y después actúa
+
+Lee los fundamentos en orden. Después crea la cuenta. Después vive el día. Después paga el fuego completo.
+
+{% content-ref url="spiritual-warfare.md" %}
+[spiritual-warfare.md](spiritual-warfare.md)
+{% endcontent-ref %}
+
+{% content-ref url="western-christian-culture.md" %}
+[western-christian-culture.md](western-christian-culture.md)
+{% endcontent-ref %}
+
+{% content-ref url="bioconservatism-vs-transhumanism.md" %}
+[bioconservatism-vs-transhumanism.md](bioconservatism-vs-transhumanism.md)
+{% endcontent-ref %}
+
+{% content-ref url="12-salvators.md" %}
+[12-salvators.md](12-salvators.md)
+{% endcontent-ref %}
 
 {% hint style="success" %}
 **El siguiente clic no es otra página. Es la App.**

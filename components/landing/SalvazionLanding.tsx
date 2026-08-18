@@ -569,14 +569,6 @@ export default function SalvazionLanding() {
         <div className="max-w-6xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[var(--sage)]/80">
           <p>{t.footer.copy}</p>
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <a
-              href={welcomeHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[var(--accent)]"
-            >
-              {t.footer.welcome}
-            </a>
             <Link href="/terms" className="hover:text-[var(--accent)]">
               {t.footer.terms}
             </Link>
@@ -711,7 +703,6 @@ const copy = {
     },
     footer: {
       copy: '© 2026 Salvazion, Inc. All rights reserved.',
-      welcome: 'Welcome',
       terms: 'Terms',
       privacy: 'Privacy',
     },
@@ -826,7 +817,6 @@ const copy = {
     },
     footer: {
       copy: '© 2026 Salvazion, Inc. Todos los derechos reservados.',
-      welcome: 'Welcome',
       terms: 'Términos',
       privacy: 'Privacidad',
     },
@@ -940,7 +930,6 @@ const copy = {
     },
     footer: {
       copy: '© 2026 Salvazion, Inc. Todos os direitos reservados.',
-      welcome: 'Welcome',
       terms: 'Termos',
       privacy: 'Privacidade',
     },

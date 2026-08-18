@@ -630,8 +630,8 @@ html[data-text-scale="xxl"] nav.fixed span {
  * Spanish labels run longer; width must not depend on string length.
  */
 .btn-marketing {
-  width: 100%;
-  max-width: 17.5rem; /* ~280px fits longest Spanish CTAs */
+  width: 17.5rem;
+  max-width: 17.5rem;
   min-height: 2.85rem;
   white-space: normal;
   text-align: center;
@@ -642,34 +642,37 @@ html[data-text-scale="xxl"] nav.fixed span {
 }
 
 /**
- * Landing nav "Enter Salvazion" — wrap on narrow screens; one line from sm.
- * PT (“Entrar na Salvazion”) is the longest label.
+ * Landing nav CTA — same box in EN / ES / PT.
+ * Longest label is PT “Entrar na Salvazion”; EN/ES share that footprint.
  */
 a.btn-primary.nav-enter-cta {
-  width: auto;
-  min-width: 10.5rem;
-  max-width: 16rem;
-  white-space: normal !important;
+  width: 12.25rem;
+  min-width: 12.25rem;
+  max-width: 12.25rem;
+  flex: 0 0 12.25rem;
+  white-space: nowrap !important;
   overflow: visible;
   text-overflow: unset;
   line-height: 1.2 !important;
-  height: auto;
+  height: 2.5rem;
   min-height: 2.5rem;
-  max-height: none;
-  padding: 0.45rem 0.85rem;
+  max-height: 2.5rem;
+  padding: 0.4rem 0.55rem !important;
+  font-size: 0.72rem !important;
   box-sizing: border-box;
 }
 
 @media (min-width: 640px) {
   a.btn-primary.nav-enter-cta {
-    width: auto !important;
-    min-width: 13.5rem !important;
-    max-width: none !important;
-    flex: 0 0 auto !important;
-    height: auto !important;
+    width: 15.75rem !important;
+    min-width: 15.75rem !important;
+    max-width: 15.75rem !important;
+    flex: 0 0 15.75rem !important;
+    height: 2.5rem !important;
     min-height: 2.5rem !important;
-    max-height: none !important;
-    padding: 0.5rem 1.1rem !important;
+    max-height: 2.5rem !important;
+    padding: 0.5rem 0.9rem !important;
+    font-size: 0.875rem !important;
     white-space: nowrap !important;
     line-height: 1.2 !important;
     box-sizing: border-box;

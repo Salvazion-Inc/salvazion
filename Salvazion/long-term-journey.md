@@ -1,55 +1,55 @@
 ---
 icon: rocket-launch
 description: >-
-  The long-term journey of a Green Lion King: daily discipline, family Phalanx,
-  Premium, $SALVAZION, and the civilizational fight.
+  El viaje de largo plazo de un Green Lion King: disciplina diaria, Phalanx
+  familiar, Premium, $SALVAZION y la pelea civilizatoria.
 ---
 
-# Long-Term Journey
+# El viaje de largo plazo
 
-Salvazion is not a 30-day challenge. It is a change of era you enter one day at a time.
+Salvazion no es un reto de 30 días. Es un cambio de era que se entra un día a la vez.
 
-## Year 0 — become a user, not a spectator
+## Año 0 — sé usuario, no espectador
 
-1. Learn why we exist: Purpose, Spiritual Warfare, Culture, BioConservatism, Patriotism, the [12 Salvators](12-salvators.md).
-2. [Create your free account](create-your-account.md) and install the PWA.
-3. Finish onboarding. Open the Hub. Complete the first agenda, the first Salvation act, the first Health act.
-4. Invite your household into the Phalanx.
+1. Aprende por qué existimos: Propósito, Guerra espiritual, Cultura, BioConservadurismo, Patriotismo, los [12 Salvators](12-salvators.md).
+2. [Crea tu cuenta gratis](create-your-account.md) e instala la PWA.
+3. Termina el onboarding. Abre el Hub. Completa la primera agenda, el primer acto Salvation y el primer acto Health.
+4. Invita a tu casa a la Phalanx.
 
-If you only read this GitBook and never log in, you have studied a war you refused to join.
+Si solo lees este Welcome y nunca inicias sesión, estudiaste una guerra a la que te negaste a entrar.
 
-## Year 1 — make the three pillars a calendar
+## Año 1 — convierte los tres pilares en calendario
 
-* Salvation: Scripture and prayer as non-negotiable as sleep.
-* Health: body treated as temple — sun, food, movement, honest numbers.
-* Freedom: finish the X Articles, fund your craft, show up in a real church and a real country.
+* Salvation: Escritura y oración tan innegociables como el sueño.
+* Health: el cuerpo tratado como templo — sol, comida, movimiento, números honestos.
+* Freedom: termina los artículos de X, financia tu oficio, preséntate en una iglesia real y en un país real.
 
-When Free AI limits start interrupting the Lion, [go Premium](premium.md). That is not consumerism. That is refusing to ration counsel.
+Cuando los cupos Free de IA empiecen a interrumpir al León, [pasa a Premium](premium.md). No es consumismo. Es negarte a racionar el consejo.
 
-Hold $SALVAZION if you want skin in the monetary fight. Do not confuse a token with a sacrament.
+Mantén $SALVAZION si quieres piel en la pelea monetaria. No confundas un token con un sacramento.
 
-## The decade — from person to phalanx to people
+## La década — de persona a falange a pueblo
 
-The Platform is the present unification of Salvation, Health and Freedom. The [AI projects](ai-projects-alerci-zallud-qolitica-and-gepardo.md) — Alerci, Zallud, Qolitica, Gepardo — are the wider stack: global Christian community, health access, civic voice, and building tools at the service of persons, not the regime.
+La Plataforma es la unificación presente de Salvation, Health y Freedom. Los [proyectos de IA](ai-projects-alerci-zallud-qolitica-and-gepardo.md) — Alerci, Zallud, Qolitica, Gepardo — son el stack más amplio: comunidad cristiana global, acceso a salud, voz cívica y herramientas de construcción al servicio de las personas, no del régimen.
 
-None of that replaces a father who prays, a mother who keeps the home, a worker who refuses the lie, a parish that still kneels.
+Nada de eso reemplaza a un padre que ora, a una madre que sostiene el hogar, a un trabajador que rechaza la mentira, a una parroquia que todavía se arrodilla.
 
-## How this Welcome is supposed to end
+## Cómo termina este Welcome
 
 ```
-Learn the fundamentals
+Aprende los fundamentos
         ↓
-Create your free account and log in
+Crea tu cuenta gratis e inicia sesión
         ↓
-Use the App every day (PWA + Hub)
+Usa la App todos los días (PWA + Hub)
         ↓
-Subscribe to Premium
+Suscríbete a Premium
         ↓
-Invite your Phalanx · hold $SALVAZION if you will
+Invita a tu Phalanx · mantén $SALVAZION si quieres
 ```
 
 **Make Salvation, Health and Freedom Great Again.**
 
 {% hint style="success" %}
-Start the journey now: [https://salvazion.org/auth/signup](https://salvazion.org/auth/signup)
+Empieza el viaje ahora: [https://salvazion.org/auth/signup](https://salvazion.org/auth/signup)
 {% endhint %}

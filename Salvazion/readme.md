@@ -28,27 +28,27 @@ layout:
 
 # Make Salvation, Health and Freedom Great Again
 
-Our Massive Transformative Purpose is **Make Salvation, Health and Freedom Great Again** with a Global Community that defends Western Christian Culture and BioConservatism in Spiritual Warfare.
+Nuestro Propósito Transformador Masivo es **Make Salvation, Health and Freedom Great Again** con una Comunidad Global que defiende la Cultura Cristiana Occidental y el BioConservadurismo en Guerra Espiritual.
 
-This is a huge and bold statement. It inspires members of our community to look forward, work with passion, and focus on this purpose, creating a different future through the application of exponential technologies, innovation, and projects at the service of people.
+Es una declaración enorme y audaz. Inspira a los miembros de nuestra comunidad a mirar adelante, trabajar con pasión y concentrarse en este propósito: un futuro distinto mediante tecnologías exponenciales, innovación y proyectos al servicio de las personas.
 
-The secular world strips spirit, mind, body, and soul. **Salvazion gives them back** — in one single Platform.
+El mundo secular te quita espíritu, mente, cuerpo y alma. **Salvazion te los devuelve** — en una sola Plataforma.
 
-We no longer split the mission into separate products. Salvation, Health, and Freedom live together in one App: Habits, scores, community, and economic sovereignty on Solana, in your pocket.
+Ya no partimos la misión en productos separados. Salvation, Health y Freedom viven juntas en una App: hábitos, scores, comunidad y soberanía económica en Solana, en tu bolsillo.
 
-* **Salvation**: Faith at the center. Full offline Bible, personalized devotionals, and measurable spiritual discipline.
-* **Health**: The body is a temple. Sleep, hydration, movement, phone sensors, and wearables in service of virtue.
-* **Freedom**: Freedom with responsibility. Formation, real connection, contribution, and real economic sovereignty on Solana.
+* **Salvation**: la fe al centro. Biblia completa offline, devocionales personalizados y disciplina espiritual medible.
+* **Health**: el cuerpo es templo. Sueño, hidratación, movimiento, sensores del teléfono y wearables al servicio de la virtud.
+* **Freedom**: libertad con responsabilidad. Formación, conexión real, aporte y soberanía económica real en Solana.
 
-This purpose invites us to dream big and with multiple perspectives that converge in this greater good for humanity. Is it worth pursuing this purpose in your life? If your mind and heart say yes, then you are welcome on this journey.
+Este propósito invita a soñar en grande, con muchas perspectivas que convergen en un bien mayor para la humanidad. ¿Vale la pena perseguirlo en tu vida? Si la mente y el corazón dicen sí, estás invitado al viaje.
 
-## Your path from this page
+## Tu camino desde esta página
 
-1. **Learn** — [Spiritual Warfare](spiritual-warfare.md), [Western Christian Culture](western-christian-culture.md), [BioConservatism](bioconservatism-vs-transhumanism.md), [Patriotism](patriotism-vs.-globalism.md), [12 Salvators](12-salvators.md).
-2. **Enter** — [The Salvazion Platform](the-platform.md) and [create your free account](create-your-account.md).
-3. **Live** — [How to use the App](how-to-use-the-app.md) every day.
-4. **Commit** — [Subscribe to Premium](premium.md) when you stop wanting a quota on the Lion.
+1. **Aprende** — [Guerra espiritual](spiritual-warfare.md), [Cultura Cristiana Occidental](western-christian-culture.md), [BioConservadurismo](bioconservatism-vs-transhumanism.md), [Patriotismo](patriotism-vs.-globalism.md), [12 Salvators](12-salvators.md).
+2. **Entra** — [La Plataforma](the-platform.md) y [crea tu cuenta gratis](create-your-account.md).
+3. **Vive** — [usa la App](how-to-use-the-app.md) todos los días.
+4. **Comprométete** — [suscríbete a Premium](premium.md) cuando no quieras un cupo sobre el León.
 
 {% hint style="success" %}
-**Join the phalanx now.** [Create your free account](https://salvazion.org/auth/signup) · [Log in](https://salvazion.org/auth/login) · [Go Premium](https://salvazion.org/hub/premium)
+**Únete a la falange ahora.** [Crea tu cuenta gratis](https://salvazion.org/auth/signup) · [Inicia sesión](https://salvazion.org/auth/login) · [Pasa a Premium](https://salvazion.org/hub/premium)
 {% endhint %}

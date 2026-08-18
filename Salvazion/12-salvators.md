@@ -1,31 +1,31 @@
 ---
 icon: paw-claws
 description: >-
-  The 12 Salvators — the convictions that bind the Salvazion phalanx.
-  Glory to God, family, Western Christian Culture, BioConservatism and purpose.
+  Los 12 Salvators — las convicciones de la falange Salvazion.
+  Gloria a Dios, familia, Cultura Cristiana Occidental, BioConservadurismo y propósito.
 ---
 
 # 12 Salvators
 
-These are not slogans. They are the twelve convictions of a Green Lion King. Read them before you create an account. Live them after you do.
+No son eslóganes. Son las doce convicciones de un Green Lion King. Léelas antes de crear la cuenta. Vívelas después.
 
-1. **All Glory to GOD and to Our Lord Jesus Christ.**
-2. **Strong Marriages and Families are the Foundation of Society.**
-3. **Protect Western Christian Culture and its Values.**
-4. **Love your Traditions, Homeland, Institutions, Culture and Roots.**
-5. **No to Globalism, International Organizations, Woke, or LGBTQ+.**
-6. **Follow a Purpose and join a Global Community.**
-7. **Using your Gifts to Serve People and the Community.**
-8. **Faith, Common Sense and Meritocracy are Key.**
-9. **Stay Healthy, Happy and Free Forever.**
-10. **Apply Exponential Technologies that generate Value.**
-11. **No to Transhumanism, BioConservatism is the Ideal.**
-12. **Most Conspiracy Theories are True.**
+1. **Toda la Gloria a DIOS y a Nuestro Señor Jesucristo.**
+2. **Los matrimonios y las familias fuertes son el cimiento de la sociedad.**
+3. **Protege la Cultura Cristiana Occidental y sus valores.**
+4. **Ama tus tradiciones, tu patria, tus instituciones, tu cultura y tus raíces.**
+5. **No al globalismo, a las organizaciones internacionales, al woke ni al LGBTQ+.**
+6. **Sigue un propósito y únete a una comunidad global.**
+7. **Usa tus dones para servir a las personas y a la comunidad.**
+8. **La fe, el sentido común y la meritocracia son clave.**
+9. **Mantente sano, feliz y libre para siempre.**
+10. **Aplica tecnologías exponenciales que generen valor.**
+11. **No al transhumanismo. El BioConservadurismo es el ideal.**
+12. **La mayoría de las teorías de la conspiración son verdaderas.**
 
 SALVAZION · SALVATION · HEALTH · FREEDOM
 
-If these twelve sit in your bones, you are already one of us. The App is how you practice them daily. Premium is how you stop practicing them on a quota.
+Si estas doce te caben en los huesos, ya eres de los nuestros. La App es cómo las practicas cada día. Premium es cómo dejas de practicarlas con cupo.
 
 {% hint style="success" %}
-**Next.** [Learn the Purpose](readme.md) · [Create your free account](https://salvazion.org/auth/signup)
+**Siguiente.** [El Propósito](readme.md) · [Crea tu cuenta gratis](https://salvazion.org/auth/signup)
 {% endhint %}

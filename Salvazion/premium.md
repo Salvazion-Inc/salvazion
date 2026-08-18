@@ -3,63 +3,63 @@ icon: crown
 cover: .gitbook/assets/Banner $Salvazion 2026.png
 coverY: 0
 description: >-
-  Salvazion Premium — unlimited AI coach, cloud wearables and the full
-  discipline stack. $49 / month or $39 / month billed yearly.
+  Salvazion Premium — coach de IA ilimitado, wearables en la nube y la
+  disciplina completa. $49 / mes o $39 / mes si pagas el año.
 ---
 
 # Salvazion Premium
 
-Free is how you enter the phalanx. Premium is how you stop rationing the fight.
+Gratis es cómo entras a la falange. Premium es cómo dejas de racionar la lucha.
 
-Salvazion AI, wearables, advanced health, full calendar, prayer tools and unlimited Phalanx — paid once, used every day. Payments run on Stripe through **Salvazion, Inc.** Cancel or change plans anytime.
+IA Salvazion, wearables, salud avanzada, calendario completo, herramientas de oración y Phalanx ilimitada — se paga una vez y se usa todos los días. Los cobros van por Stripe a nombre de **Salvazion, Inc.** Cancela o cambia de plan cuando quieras.
 
 {% hint style="success" %}
-**Subscribe now:** [https://salvazion.org/hub/premium](https://salvazion.org/hub/premium)
+**Suscríbete ahora:** [https://salvazion.org/hub/premium](https://salvazion.org/hub/premium)
 
-Need an account first? [Create it free](https://salvazion.org/auth/signup), then open Premium from the Hub.
+¿Aún no tienes cuenta? [Créala gratis](https://salvazion.org/auth/signup) y luego abre Premium desde el Hub.
 {% endhint %}
 
-## Plans
+## Planes
 
-| Plan | Price | Best for |
-| ---- | ----- | -------- |
-| **Free** | $0 | Start the platform: Bible, agenda, scores, limited AI, Freedom browse, wallet |
-| **Premium Monthly** | **$49 / month** | Full firepower, month to month |
-| **Premium Annual** | **$39 / month** equivalent (**$468 / year**) | Best value — the year of discipline |
+| Plan | Precio | Para quién |
+| ---- | ------ | ---------- |
+| **Gratis** | $0 | Empezar: Biblia, agenda, scores, IA limitada, Freedom, billetera |
+| **Premium mensual** | **$49 / mes** | Toda la potencia, mes a mes |
+| **Premium anual** | **$39 / mes** equivalente (**$468 / año**) | Mejor valor — el año de disciplina |
 
-Hold **$SALVAZION** on-chain on the Free plan and your Free AI limits **double**. That is not Premium. It is a patriotic bonus. Premium removes the ceiling.
+Si mantienes **$SALVAZION** on-chain en el plan Gratis, tus cupos Free de IA se **duplican**. Eso no es Premium. Es un bono patriótico. Premium quita el techo.
 
-## What Premium unlocks
+## Lo que abre Premium
 
-* **Unlimited Salvazion AI coach** — virtue, formation, plans, hard counsel
-* **Unlimited Salvazion voice / TTS** — hear the Lion
-* **Unlimited AI devotionals** — Scripture, virtue and BioConservatism
-* **Cloud wearables OAuth** — Fitbit, Oura, WHOOP, Garmin
-* **Unlimited cineanthropometry + meal vision**, biomarkers, clinical record, women's health
-* **Full calendar** and discipline planner
-* **Advanced prayer motives**
-* **Full Freedom library**, communities and swap terminal convenience
-* **Unlimited Phalanx invites** and tracking
+* **Coach Salvazion IA ilimitado** — virtud, formación, planes, consejo duro
+* **Voz Salvazion / TTS ilimitada** — escucha al León
+* **Devocionales IA ilimitados** — Escritura, virtud y BioConservadurismo
+* **Wearables en la nube** — Fitbit, Oura, WHOOP, Garmin
+* **Cineantropometría y visión de comida ilimitadas**, biomarcadores, ficha clínica, salud femenina
+* **Calendario completo** y planificador de disciplina
+* **Motivos de oración avanzados**
+* **Biblioteca Freedom completa**, comunidades y terminal de swap
+* **Invitaciones Phalanx ilimitadas** y seguimiento
 
-Everything in Free remains. Premium is not a different religion. It is the same war without a daily quota.
+Todo lo de Gratis se queda. Premium no es otra religión. Es la misma guerra sin cupo diario.
 
-## Why pay
+## Por qué pagar
 
-The secular stack sells you dopamine, body-hacking and news. Salvazion sells you **time under the three pillars**.
+El stack secular te vende dopamina, body-hacking y noticias. Salvazion te vende **tiempo bajo los tres pilares**.
 
-Premium funds the Platform: the Bible you read offline, the coach that will not flatter you, the health tools that refuse transhuman “upgrades,” the Freedom library that still says Christ is King.
+Premium financia la Plataforma: la Biblia que lees offline, el coach que no te adula, las herramientas de salud que rechazan los “upgrades” transhumanos, la biblioteca Freedom que sigue diciendo que Cristo es Rey.
 
-If you already live in the App daily, Premium is the honest next step. If you have not logged in yet, [create the account](create-your-account.md) first — then subscribe when the limits appear.
+Si ya vives en la App cada día, Premium es el siguiente paso honesto. Si todavía no has iniciado sesión, [crea la cuenta](create-your-account.md) primero — y suscríbete cuando aparezcan los límites.
 
-## How to subscribe
+## Cómo suscribirte
 
-1. Log in at [salvazion.org/auth/login](https://salvazion.org/auth/login).
-2. Open [salvazion.org/hub/premium](https://salvazion.org/hub/premium) (or Profile → billing).
-3. Choose **Monthly** or **Annual**.
-4. Pay with Stripe. You return to the Hub with Premium active.
-5. Manage, change or cancel anytime in the Stripe customer portal from your Profile.
+1. Entra en [salvazion.org/auth/login](https://salvazion.org/auth/login).
+2. Abre [salvazion.org/hub/premium](https://salvazion.org/hub/premium) (o Perfil → facturación).
+3. Elige **Mensual** o **Anual**.
+4. Paga con Stripe. Vuelves al Hub con Premium activo.
+5. Administra, cambia o cancela cuando quieras en el portal de Stripe, desde tu Perfil.
 
-Questions: [info@salvazion.org](mailto:info@salvazion.org)
+Preguntas: [info@salvazion.org](mailto:info@salvazion.org)
 
 {% content-ref url="create-your-account.md" %}
 [create-your-account.md](create-your-account.md)

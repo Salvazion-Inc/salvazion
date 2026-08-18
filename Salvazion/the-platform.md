@@ -3,50 +3,50 @@ icon: mobile-screen
 cover: .gitbook/assets/Salvazion App the platform that restores the human person.png
 coverY: 0
 description: >-
-  One App for Salvation, Health and Freedom. Habits, scores, community and
-  economic sovereignty on Solana — in your pocket.
+  Una sola App para Salvación, Salud y Libertad. Hábitos, scores, comunidad y
+  soberanía económica en Solana.
 ---
 
-# The Salvazion Platform
+# La Plataforma Salvazion
 
-The secular world splits the human person into apps, feeds and subscriptions. Faith in one tab. Fitness in another. News in a third. Money in a fourth.
+El mundo secular te parte en pedazos: la fe en una pestaña, el cuerpo en otra, las noticias en una tercera, el dinero en una cuarta.
 
-**Salvazion gives them back — in one Platform.**
+**Salvazion te los devuelve — en una sola Plataforma.**
 
-Salvation, Health and Freedom live together: habits, scores, community and economic sovereignty on Solana. This is not a meme. It is a spiritual and cultural revival you can practice every day.
+Salvation, Health y Freedom viven juntas: hábitos, scores, comunidad y soberanía económica en Solana. No es un meme. Es un avivamiento que se practica todos los días.
 
 {% hint style="success" %}
-**Ready to enter?** Create your free account at [salvazion.org/auth/signup](https://salvazion.org/auth/signup) · Already a member? [Log in](https://salvazion.org/auth/login)
+**Entra ahora.** [Crea tu cuenta gratis](https://salvazion.org/auth/signup) · ¿Ya eres miembro? [Inicia sesión](https://salvazion.org/auth/login)
 {% endhint %}
 
-## One App. Three pillars.
+## Una App. Tres pilares.
 
-| Pillar | What it restores | What you do in the App |
-| ------ | ---------------- | ---------------------- |
-| **Salvation** | The awakened soul | Full offline Bible (ES · EN · PT · originals), daily personalized devotionals, prayer motives, spiritual scores and streaks |
-| **Health** | The body as temple | Sleep, hydration, meals, sport, phone sensors, Bluetooth heart rate, cineanthropometry and wearables (Premium) |
-| **Freedom** | Mind, craft and legacy | X Articles by [@salvazion\_](https://x.com/salvazion_), books, YouTube, churches map, Phalanx invites and $SALVAZION on Solana |
+| Pilar | Qué restaura | Qué haces en la App |
+| ----- | ------------ | ------------------- |
+| **Salvation** | El alma despierta | Biblia completa offline (ES · EN · PT · originales), devocional diario, motivos de oración, scores y rachas espirituales |
+| **Health** | El cuerpo como templo | Sueño, hidratación, comidas, deporte, sensores del teléfono, pulso Bluetooth, cineantropometría y wearables (Premium) |
+| **Freedom** | Mente, oficio y legado | Artículos de [@salvazion\_](https://x.com/salvazion_) en X, libros, YouTube, mapa de iglesias, Phalanx y $SALVAZION en Solana |
 
-The Green Lion is your virtue coach — firm and hopeful. Not a soft chatbot. A call to become a Green Lion King.
+El León Verde es tu coach de virtud: firme y con esperanza. No es un chatbot blando. Es un llamado a ser Green Lion King.
 
-## What you get on day one (Free)
+## Lo que tienes el día uno (Gratis)
 
-* Dashboard, daily scores and a single agenda for Salvation, Health and Freedom
-* Full offline Bible — read, search and concordance
-* Limited Salvazion AI (coach, one daily AI devotional, meal vision, cineanthropometry)
-* Manual health logs, phone sensors and Bluetooth heart rate
-* Freedom library — books, X Articles, YouTube and churches map
-* Basic Phalanx invites for family and friends
-* Solana wallet connect and $SALVAZION swap via Jupiter (we never hold your keys)
-* Hold $SALVAZION on-chain → **2× Free AI limits**
+* Dashboard, scores diarios y una sola agenda para los tres pilares
+* Biblia completa offline — lectura, búsqueda y concordancia
+* IA Salvazion limitada (coach, 1 devocional IA al día, visión de comida, cineantropometría)
+* Salud manual, sensores del teléfono y pulso Bluetooth
+* Biblioteca Freedom — libros, artículos en X, YouTube y mapa de iglesias
+* Invitaciones Phalanx básicas para familia y amigos
+* Billetera Solana y swap de $SALVAZION con Jupiter (nunca custodiamos tus llaves)
+* Si mantienes $SALVAZION on-chain → **el doble de cupos Free de IA**
 
-Start free. [Go Premium](premium.md) when you want unlimited AI, cloud wearables and the full discipline stack.
+Empieza gratis. [Pasa a Premium](premium.md) cuando quieras IA ilimitada, wearables en la nube y la disciplina completa.
 
-## Why a Platform, not another app
+## Por qué una Plataforma y no otra app
 
-We no longer split the mission into separate products. A man who prays but wrecks his body is not free. A woman who trains but starves her soul is not whole. A community that scrolls but never gathers is not a phalanx.
+Ya no separamos la misión en productos distintos. Quien reza y destruye su cuerpo no es libre. Quien entrena y deja morir el alma no está entero. Quien solo hace scroll y nunca se reúne no es una falange.
 
-Salvazion is **the platform that restores the human person**.
+Salvazion es **la plataforma que restaura a la persona humana**.
 
 {% content-ref url="create-your-account.md" %}
 [create-your-account.md](create-your-account.md)

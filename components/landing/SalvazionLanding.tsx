@@ -17,7 +17,6 @@ import LandingBlog from '@/components/landing/LandingBlog';
 import { SALVAZION_MINT } from '@/lib/solana/config';
 import { welcomeUrlForLang } from '@/lib/config/site';
 import { pickLang } from '@/lib/i18n/locale';
-import { FAQ } from '@/lib/seo/faq';
 
 const MINT = SALVAZION_MINT;
 
@@ -561,33 +560,6 @@ export default function SalvazionLanding() {
               />
             </div>
           </div>
-        </div>
-      </section>
-
-      <section
-        id="faq"
-        className="section-pad scroll-mt-24 border-t border-[var(--border-soft)] bg-zinc-950/35"
-        aria-labelledby="faq-heading"
-      >
-        <div className="max-w-3xl mx-auto px-5">
-          <h2 id="faq-heading" className="section-title text-3xl sm:text-4xl text-center mb-10">
-            {FAQ[lang].title}
-          </h2>
-          <dl className="space-y-5">
-            {FAQ[lang].items.map((item) => (
-              <div
-                key={item.q}
-                className="card-soft p-5 sm:p-6 border-l-2 border-[var(--accent)]/40"
-              >
-                <dt className="text-base sm:text-lg font-semibold text-white tracking-tight">
-                  {item.q}
-                </dt>
-                <dd className="mt-2 text-sm sm:text-[15px] leading-relaxed text-[#D8E1D9]/85">
-                  {item.a}
-                </dd>
-              </div>
-            ))}
-          </dl>
         </div>
       </section>
 

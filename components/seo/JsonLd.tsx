@@ -1,9 +1,8 @@
 import { SEO, absoluteUrl, ogImageUrl } from '@/lib/seo/config';
-import { FAQ } from '@/lib/seo/faq';
 import { X_ARTICLES } from '@/lib/freedom/x-articles';
 
 /**
- * JSON-LD for Organization, WebSite, SoftwareApplication, Blog, FAQ and founders.
+ * JSON-LD for Organization, WebSite, SoftwareApplication, Blog and founders.
  * Rendered on the public marketing home only.
  */
 export default function JsonLd() {
@@ -95,7 +94,7 @@ export default function JsonLd() {
       inLanguage: ['en', 'es', 'pt'],
       speakable: {
         '@type': 'SpeakableSpecification',
-        cssSelector: ['#hero-heading', '#app h2', '#faq h2'],
+        cssSelector: ['#hero-heading', '#app h2'],
       },
     },
     {
@@ -198,21 +197,6 @@ export default function JsonLd() {
       numberOfItems: X_ARTICLES.length,
       itemListOrder: 'https://schema.org/ItemListOrderDescending',
       itemListElement: blogItems,
-    },
-    {
-      '@type': 'FAQPage',
-      '@id': `${absoluteUrl()}/#faq`,
-      url: `${absoluteUrl()}/#faq`,
-      mainEntity: FAQ.en.items.map((item) => ({
-        '@type': 'Question',
-        name: item.q,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: item.a,
-        },
-      })),
-      isPartOf: { '@id': `${absoluteUrl()}/#webpage` },
-      inLanguage: ['en', 'es', 'pt'],
     },
   ];
 

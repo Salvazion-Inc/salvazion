@@ -3,34 +3,36 @@ icon: hand-wave
 cover: .gitbook/assets/Banner $Salvazion 2026.png
 coverY: 0
 description: >-
-  Bienvenida a Salvazion. Aprende por qué existimos, crea tu cuenta gratis,
-  usa la App y suscríbete a Premium.
+  Welcome to Salvazion. Learn why we exist, create your free account,
+  live Salvation, Health and Freedom in the App, then subscribe to Premium.
 ---
 
-# Bienvenida a Salvazion
+# Welcome to Salvazion
 
-Bienvenido, Green Lion King, a la lucha que no termina.
+**Language:** English · [Español](es/welcome.md) · [Português](pt/welcome.md)
 
-No llegaste aquí por casualidad. Llegaste para ponerte en la brecha: donde la fe toca la carne, donde el espíritu enfrenta el vendaval de un mundo desamarrado.
+Welcome, Green Lion King, to the eternal struggle.
 
-**Make Salvation, Health and Freedom Great Again.** Ese es nuestro propósito y la razón por la que existimos.
+You have been called. Not by chance, but by divine providence — to stand in the breach where faith meets flesh, where spirit confronts the storm of a world unmoored.
 
-Este Welcome no es un folleto. Es el camino: de la primera convicción a un miembro que ora, entrena, se forma y sostiene la Plataforma.
+**Make Salvation, Health and Freedom Great Again.** This is our purpose and the reason we exist.
+
+This Welcome is not a brochure. It is the path from first conviction to a member who prays, trains, learns and sustains the Platform.
 
 {% hint style="success" %}
-**Empieza ahora.** [Crea tu cuenta gratis](https://salvazion.org/auth/signup) · [Inicia sesión](https://salvazion.org/auth/login) · [Suscríbete a Premium](https://salvazion.org/hub/premium)
+**Start now.** [Create your free account](https://salvazion.org/auth/signup) · [Log in](https://salvazion.org/auth/login) · [Subscribe to Premium](https://salvazion.org/hub/premium)
 {% endhint %}
 
-## Tu camino
+## Your path
 
-| Paso | Qué haces | Dónde |
-| ---- | --------- | ----- |
-| **1. Aprende** | Por qué luchamos: Propósito, Guerra espiritual, Cultura Cristiana Occidental, BioConservadurismo, Patriotismo, los 12 Salvators | Este Welcome — sección 1 |
-| **2. Entra** | Crea tu cuenta gratis. Inicia sesión. Instala la PWA | [salvazion.org/auth/signup](https://salvazion.org/auth/signup) |
-| **3. Vive** | Usa la App: Hub, Biblia, Salud, Freedom, Phalanx, León Verde | [salvazion.org/hub/dashboard](https://salvazion.org/hub/dashboard) |
-| **4. Comprométete** | Suscríbete a Premium cuando no quieras racionar al León | [salvazion.org/hub/premium](https://salvazion.org/hub/premium) |
+| Step | What you do | Where |
+| ---- | ----------- | ----- |
+| **1. Learn** | Why we fight: Purpose, Spiritual Warfare, Western Christian Culture, BioConservatism, Patriotism, the 12 Salvators | This GitBook — section 1 |
+| **2. Enter** | Create your free account. Log in. Install the PWA | [salvazion.org/auth/signup](https://salvazion.org/auth/signup) |
+| **3. Live** | Use the App: Hub, Bible, Health, Freedom, Phalanx, Green Lion | [salvazion.org/hub/dashboard](https://salvazion.org/hub/dashboard) |
+| **4. Commit** | Subscribe to Premium when you refuse to ration the Lion | [salvazion.org/hub/premium](https://salvazion.org/hub/premium) |
 
-Si solo lees y nunca inicias sesión, estudiaste una guerra a la que te negaste a entrar.
+If you only read and never log in, you have studied a war you refused to join.
 
 {% content-ref url="readme.md" %}
 [readme.md](readme.md)
@@ -52,41 +54,41 @@ Si solo lees y nunca inicias sesión, estudiaste una guerra a la que te negaste 
 [premium.md](premium.md)
 {% endcontent-ref %}
 
-## Los tres pilares
+## The three pillars
 
-* **Salvation** no es una reliquia. Es el fuego del presente: la promesa de la eternidad en el alma de quien se niega a inclinarse ante el espíritu de la época.
-* **Health** es el cuerpo sagrado como templo, la vida como pacto, defendida contra los mercaderes del engaño transhumano y los arquitectos de la decadencia fabricada.
-* **Freedom** es la herencia de Occidente, forjada en la cristiandad, hoy sitiada por las cadenas del globalismo y el relativismo moral.
+* **Salvation** is not a relic of the past; it is the fire of the present, the promise of eternity burning in the soul of every man, woman, and child who refuses to bow to the spirit of the age.
+* **Health** is the sacred body as temple, life as covenant, defended against the merchants of transhuman deceit and the architects of engineered decay.
+* **Freedom** is the birthright of the West, forged in the crucible of Christendom, now besieged by the chains of globalist tyranny and moral relativism.
 
-En la App no son metáforas. Son una agenda diaria, scores, una Biblia, sensores, una biblioteca Freedom y un coach que no te adula.
+In the App they are not metaphors. They are a daily agenda, scores, a Bible, sensors, a Freedom library, and a coach that will not flatter you.
 
-## Quiénes somos
+## Who we are
 
-Salvazion es una falange global de los fieles, los feroces, los que no ceden.
+This is Salvazion: a global phalanx of the faithful, the fierce, the unyielding.
 
-Somos la **Comunidad Global** que defiende la **Cultura Cristiana Occidental** no como nostalgia, sino como el último baluarte de la verdad, la belleza y el orden. Somos la vanguardia del **BioConservadurismo**: guardianes de la ley natural escrita en la sangre y en el hueso. Rechazamos la abominación de que el hombre se haga Dios.
+We are the **Global Community** that defends **Western Christian Culture** not as nostalgia, but as the last bulwark of truth, beauty, and order. We are the vanguard of **BioConservatism**: guardians of the natural law written into blood and bone, rejecting the abomination of man playing God.
 
-Esto es **Guerra espiritual**. El enemigo no es solo carne y sangre: son principados y potestades — ideologías de muerte disfrazadas de progreso, culturas de esterilidad vestidas de liberación.
+This is **Spiritual Warfare**. The enemy is not merely flesh and blood, but principalities and powers — ideologies of death masquerading as progress, cultures of sterility cloaked as liberation.
 
-Luchamos con la oración como espada, la verdad como escudo y la comunidad como fortaleza.
+We fight with prayer as our sword, truth as our shield, and community as our fortress.
 
-No estás solo. Aquí te unes a quienes despertaron al llamado:
+You are not alone. Here you join those who have awakened to the call:
 
-* Restaurar el altar en un mundo que cambió la adoración de Dios por la adoración de sí mismo.
-* Defender la familia como cuna de la civilización frente al asedio de la ideología de género y el suicidio demográfico.
-* Recuperar Occidente de las fauces del marxismo cultural y el dominio tecnocrático.
+* To restore the altar in a world that has traded worship of God for worship of self.
+* To defend the family as the cradle of civilization against the siege of gender ideology and demographic suicide.
+* To reclaim the West from the jaws of cultural Marxism and technocratic dominion.
 
-Tu misión empieza ahora. Entrega el alma a Cristo Rey. Fortalece el cuerpo como vaso de resistencia: puro, disciplinado, vivo. Ponte en la brecha: en línea, en la calle y en el secreto de la oración.
+Your mission begins now. Pledge your soul to the cause of Christ the King. Fortify your body as a vessel of resistance — pure, disciplined, alive. Stand in the gap: online, in the streets, and in the secret places of prayer.
 
-La salvación no es un eslogan. Es un grito de guerra. Esto no es un meme: es un Avivamiento Espiritual y Cultural y un Cambio de Era.
+Salvation is not a slogan. It is a battle cry. This is not a meme: it is a Spiritual and Cultural Revival and a Change of Era.
 
-La salud no es un privilegio. Es un mandato divino. La libertad no se concede. Se conquista con la cruz y la espada del Espíritu.
+Health is not a privilege. It is a divine mandate. Freedom is not granted. It is conquered by the cross and the sword of the Spirit.
 
-Bienvenido, Green Lion King. Las puertas de Salvazion están abiertas. La guerra por el alma de Occidente ya empezó.
+Welcome, Green Lion King. The gates of Salvazion are open. The war for the soul of the West has begun.
 
-## Aprende, y después actúa
+## Learn, then act
 
-Lee los fundamentos en orden. Después crea la cuenta. Después vive el día. Después paga el fuego completo.
+Read the fundamentals in order. Then create the account. Then live the day. Then pay for the full fire.
 
 {% content-ref url="spiritual-warfare.md" %}
 [spiritual-warfare.md](spiritual-warfare.md)
@@ -105,7 +107,7 @@ Lee los fundamentos en orden. Después crea la cuenta. Después vive el día. De
 {% endcontent-ref %}
 
 {% hint style="success" %}
-**El siguiente clic no es otra página. Es la App.**
+**The next click is not another page. It is the App.**
 
-[Crea tu cuenta gratis →](https://salvazion.org/auth/signup)
+[Create your free account →](https://salvazion.org/auth/signup)
 {% endhint %}

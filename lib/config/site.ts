@@ -26,9 +26,23 @@ export const APP_URL = `https://${APP_HOST}`;
 export const APP_URL_WWW = `https://${APP_HOST_WWW}`;
 export const APP_URL_LEGACY = `https://${APP_HOST_LEGACY}`;
 
-/** GitBook Welcome — formation funnel (EN · ES · PT) */
+/** GitBook Welcome — one site per language */
 export const WELCOME_HOST = 'welcome.salvazion.org';
+export const WELCOME_HOST_ES = 'bienvenida.salvazion.org';
+export const WELCOME_HOST_PT = 'bem-vindo.salvazion.org';
 export const WELCOME_URL = `https://${WELCOME_HOST}`;
+export const WELCOME_URL_ES = `https://${WELCOME_HOST_ES}`;
+export const WELCOME_URL_PT = `https://${WELCOME_HOST_PT}`;
+
+export const WELCOME_URLS = {
+  en: WELCOME_URL,
+  es: WELCOME_URL_ES,
+  pt: WELCOME_URL_PT,
+} as const;
+
+export function welcomeUrlForLang(lang: 'en' | 'es' | 'pt'): string {
+  return WELCOME_URLS[lang] ?? WELCOME_URL;
+}
 
 /**
  * @deprecated Marketing was the Canva site; product now lives on the apex.

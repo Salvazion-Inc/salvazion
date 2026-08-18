@@ -1,8 +1,6 @@
 # Table of contents
 
 * [Welcome to Salvazion](README.md)
-* [Bienvenida (Español)](es/welcome.md)
-* [Boas-vindas (Português)](pt/welcome.md)
 
 ## 1. Learn the fundamentals
 

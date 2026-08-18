@@ -15,7 +15,7 @@ import LanguageFlagSwitch from '@/components/ui/LanguageFlagSwitch';
 import XLogo, { textWithXLogo } from '@/components/ui/XLogo';
 import LandingBlog from '@/components/landing/LandingBlog';
 import { SALVAZION_MINT } from '@/lib/solana/config';
-import { WELCOME_URL } from '@/lib/config/site';
+import { welcomeUrlForLang } from '@/lib/config/site';
 import { pickLang } from '@/lib/i18n/locale';
 
 const MINT = SALVAZION_MINT;
@@ -93,6 +93,7 @@ function TokenMintCopy({
 export default function SalvazionLanding() {
   const { lang, setLang } = useI18n();
   const t = copy[lang];
+  const welcomeHref = welcomeUrlForLang(lang);
 
   return (
     <div className="marketing-shell text-[var(--off-white)] selection:bg-[rgba(143,217,154,0.28)]">
@@ -138,7 +139,7 @@ export default function SalvazionLanding() {
               {t.nav.token}
             </a>
             <a
-              href={WELCOME_URL}
+              href={welcomeHref}
               target="_blank"
               rel="noopener noreferrer"
               className="nav-link-marketing"
@@ -155,7 +156,7 @@ export default function SalvazionLanding() {
               size="md"
             />
             <a
-              href={WELCOME_URL}
+              href={welcomeHref}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-secondary nav-enter-cta shrink-0 !px-3 sm:!px-4 !min-h-10 !text-xs sm:!text-sm text-center leading-snug lg:hidden"
@@ -250,7 +251,7 @@ export default function SalvazionLanding() {
             </Link>
           </div>
           <a
-            href={WELCOME_URL}
+            href={welcomeHref}
             target="_blank"
             rel="noopener noreferrer"
             className="btn-secondary mt-3 inline-flex !min-h-10 !px-5 !text-sm"
@@ -585,7 +586,7 @@ export default function SalvazionLanding() {
           <p>{t.footer.copy}</p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a
-              href={WELCOME_URL}
+              href={welcomeHref}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-[var(--accent)]"

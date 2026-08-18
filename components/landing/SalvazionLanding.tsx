@@ -155,14 +155,6 @@ export default function SalvazionLanding() {
               ariaLabel={t.nav.language}
               size="md"
             />
-            <a
-              href={welcomeHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-secondary nav-enter-cta shrink-0 !px-3 sm:!px-4 !min-h-10 !text-xs sm:!text-sm text-center leading-snug lg:hidden"
-            >
-              {t.nav.welcome}
-            </a>
             <Link
               href="/auth/login"
               className="btn-primary nav-enter-cta shrink-0 !px-3 sm:!px-4 !min-h-10 !text-xs sm:!text-sm text-center leading-snug"
@@ -250,14 +242,6 @@ export default function SalvazionLanding() {
               {t.hero.ctaLogin}
             </Link>
           </div>
-          <a
-            href={welcomeHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-secondary mt-3 inline-flex !min-h-10 !px-5 !text-sm"
-          >
-            {t.hero.ctaWelcome}
-          </a>
         </div>
       </section>
 
@@ -639,7 +623,6 @@ const copy = {
       tagline2: 'Salvazion gives them back — in one Platform.',
       ctaPrimary: 'Create free account',
       ctaLogin: 'I have an account',
-      ctaWelcome: 'Read the Welcome',
     },
     app: {
       eyebrow: 'Massive Transformative Purpose',
@@ -755,7 +738,6 @@ const copy = {
       tagline2: 'Salvazion te los devuelve — en una sola Plataforma.',
       ctaPrimary: 'Crear cuenta gratis',
       ctaLogin: 'Ya tengo cuenta',
-      ctaWelcome: 'Leer el Welcome',
     },
     app: {
       eyebrow: 'Propósito Transformador Masivo',
@@ -870,7 +852,6 @@ const copy = {
       tagline2: 'A Salvazion os devolve — em uma só Plataforma.',
       ctaPrimary: 'Criar conta grátis',
       ctaLogin: 'Já tenho conta',
-      ctaWelcome: 'Ler o Welcome',
     },
     app: {
       eyebrow: 'Propósito Transformador Massivo',

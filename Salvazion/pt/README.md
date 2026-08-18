@@ -1,6 +1,6 @@
 ---
 icon: hand-wave
-cover: .gitbook/assets/Banner $Salvazion 2026.png
+cover: ../.gitbook/assets/Banner $Salvazion 2026.png
 coverY: 0
 description: >-
   Boas-vindas à Salvazion. Aprenda por que existimos, crie sua conta grátis,

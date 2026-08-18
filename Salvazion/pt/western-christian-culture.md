@@ -1,6 +1,6 @@
 ---
 icon: cross
-cover: .gitbook/assets/Western Christian Culture and Its Impact on Our Current Society.png
+cover: ../.gitbook/assets/Western Christian Culture and Its Impact on Our Current Society.png
 coverY: 0
 ---
 

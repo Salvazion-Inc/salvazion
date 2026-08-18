@@ -1,6 +1,6 @@
 ---
 icon: chart-network
-cover: .gitbook/assets/Solana and Salvazion King.jpg
+cover: ../.gitbook/assets/Solana and Salvazion King.jpg
 coverY: 0
 ---
 

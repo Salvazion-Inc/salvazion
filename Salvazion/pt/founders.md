@@ -1,6 +1,6 @@
 ---
 icon: rings-wedding
-cover: .gitbook/assets/Cortes Isler Family Founders.png
+cover: ../.gitbook/assets/Cortes Isler Family Founders.png
 coverY: 73
 ---
 

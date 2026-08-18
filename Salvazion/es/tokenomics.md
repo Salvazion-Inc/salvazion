@@ -1,6 +1,6 @@
 ---
 icon: chart-mixed-up-circle-dollar
-cover: .gitbook/assets/Logo $SALVAZION Transparent.png
+cover: ../.gitbook/assets/Logo $SALVAZION Transparent.png
 coverY: 0
 ---
 

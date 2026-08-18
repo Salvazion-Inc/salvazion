@@ -1,6 +1,6 @@
 ---
 icon: swords
-cover: .gitbook/assets/All About Today Spiritual Warfare According to the Bible.png
+cover: ../.gitbook/assets/All About Today Spiritual Warfare According to the Bible.png
 coverY: 0
 ---
 

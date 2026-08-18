@@ -1,8 +1,12 @@
 ---
+cover: .gitbook/assets/12-salvators-pt.jpg
+coverY: 0
 icon: paw-claws
 ---
 
 # 12 Salvators
+
+![12 Salvators](.gitbook/assets/12-salvators-pt.jpg)
 
 **Idioma:** [English](https://welcome.salvazion.org/) · [Español](https://bienvenida.salvazion.org/) · Português
 

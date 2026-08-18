@@ -1,6 +1,6 @@
 ---
 icon: republican
-cover: .gitbook/assets/Anthropological War Transhumanists vs BioConservatives.png
+cover: ../.gitbook/assets/Anthropological War Transhumanists vs BioConservatives.png
 coverY: 0
 ---
 

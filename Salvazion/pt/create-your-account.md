@@ -1,6 +1,6 @@
 ---
 icon: user-plus
-cover: .gitbook/assets/Banner $Salvazion 2026.png
+cover: ../.gitbook/assets/Banner $Salvazion 2026.png
 coverY: 0
 description: Crie sua conta grátis na Salvazion, entre e instale o App como PWA.
 ---

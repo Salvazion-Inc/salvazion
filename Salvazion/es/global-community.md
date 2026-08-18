@@ -1,6 +1,6 @@
 ---
 icon: earth-americas
-cover: .gitbook/assets/Importance of Global Communities Today.jpg
+cover: ../.gitbook/assets/Importance of Global Communities Today.jpg
 coverY: 0
 ---
 

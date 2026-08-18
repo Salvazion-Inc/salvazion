@@ -1,6 +1,6 @@
 ---
 icon: crown
-cover: .gitbook/assets/Banner $Salvazion 2026.png
+cover: ../.gitbook/assets/Banner $Salvazion 2026.png
 coverY: 0
 description: Salvazion Premium — coach de IA ilimitado, wearables na nuvem. $49 / mês ou $39 / mês anual.
 ---

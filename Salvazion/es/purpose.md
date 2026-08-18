@@ -1,6 +1,6 @@
 ---
 icon: bullseye-arrow
-cover: .gitbook/assets/Salvazion App the platform that restores the human person.png
+cover: ../.gitbook/assets/Salvazion App the platform that restores the human person.png
 coverY: 0
 ---
 

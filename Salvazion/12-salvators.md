@@ -1,4 +1,6 @@
 ---
+cover: .gitbook/assets/12-salvators.jpg
+coverY: 0
 icon: paw-claws
 description: >-
   The 12 Salvators — the convictions that bind the Salvazion phalanx.
@@ -6,6 +8,8 @@ description: >-
 ---
 
 # 12 Salvators
+
+![12 Salvators](.gitbook/assets/12-salvators.jpg)
 
 These are not slogans. They are the twelve convictions of a Green Lion King. Read them before you create an account. Live them after you do.
 

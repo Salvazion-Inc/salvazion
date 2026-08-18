@@ -1,6 +1,6 @@
 ---
 icon: mobile-screen
-cover: .gitbook/assets/Salvazion App the platform that restores the human person.png
+cover: ../.gitbook/assets/Salvazion App the platform that restores the human person.png
 coverY: 0
 description: Um só App para Salvação, Saúde e Liberdade. Hábitos, scores, comunidade e soberania econômica na Solana.
 ---

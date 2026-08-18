@@ -1,6 +1,6 @@
 ---
 icon: flag-usa
-cover: .gitbook/assets/All about Patriotism.png
+cover: ../.gitbook/assets/All about Patriotism.png
 coverY: 0
 ---
 

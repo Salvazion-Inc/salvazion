@@ -1,6 +1,6 @@
 ---
 icon: play
-cover: .gitbook/assets/Salvazion App the platform that restores the human person.png
+cover: ../.gitbook/assets/Salvazion App the platform that restores the human person.png
 coverY: 0
 description: Cómo vivir Salvación, Salud y Libertad dentro de la App Salvazion.
 ---

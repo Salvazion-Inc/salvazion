@@ -1,35 +1,35 @@
 # Table of contents
 
-* [Welcome to Salvazion](README.md)
+* [Bienvenida a Salvazion](README.md)
 
-## 1. Learn the fundamentals
+## 1. Aprende los fundamentos
 
 * [Make Salvation, Health and Freedom Great Again](readme.md)
-* [Spiritual Warfare](spiritual-warfare.md)
-* [Western Christian Culture](western-christian-culture.md)
-* [BioConservatism vs Transhumanism](bioconservatism-vs-transhumanism.md)
-* [Patriotism vs. Globalism](patriotism-vs.-globalism.md)
+* [Guerra espiritual](spiritual-warfare.md)
+* [Cultura Cristiana Occidental](western-christian-culture.md)
+* [BioConservadurismo vs Transhumanismo](bioconservatism-vs-transhumanism.md)
+* [Patriotismo vs. Globalismo](patriotism-vs.-globalism.md)
 * [12 Salvators](12-salvators.md)
-* [Founders with "Good Genes"](founders-with-good-genes.md)
-* [𝕏 Global Community](global-community.md)
+* [Fundadores con "buenos genes"](founders-with-good-genes.md)
+* [Comunidad global en 𝕏](global-community.md)
 
-## 2. Enter the App
+## 2. Entra a la App
 
-* [The Salvazion Platform](the-platform.md)
-* [Create your account](create-your-account.md)
+* [La Plataforma Salvazion](the-platform.md)
+* [Crea tu cuenta](create-your-account.md)
 
-## 3. Live the three pillars
+## 3. Vive los tres pilares
 
-* [How to use the App](how-to-use-the-app.md)
+* [Cómo usar la App](how-to-use-the-app.md)
 
-## 4. Go Premium
+## 4. Hazte Premium
 
 * [Salvazion Premium](premium.md)
 
-## 5. Economy and future
+## 5. Economía y futuro
 
 * [$SALVAZION: The Patriotic Bitcoin](usdsalvazion-the-patriotic-bitcoin.md)
 * [Tokenomics](tokenomics.md)
-* [Solana Ecosystem](solana-ecosystem.md)
-* [AI Projects (Alerci, Zallud, Qolitica and Gepardo)](ai-projects-alerci-zallud-qolitica-and-gepardo.md)
-* [Long-Term Journey](long-term-journey.md)
+* [Ecosistema Solana](solana-ecosystem.md)
+* [Proyectos de IA (Alerci, Zallud, Qolitica y Gepardo)](ai-projects-alerci-zallud-qolitica-and-gepardo.md)
+* [El viaje de largo plazo](long-term-journey.md)

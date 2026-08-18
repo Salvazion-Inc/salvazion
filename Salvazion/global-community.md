@@ -4,20 +4,20 @@ cover: .gitbook/assets/Importance of Global Communities Today.jpg
 coverY: 0
 ---
 
-# Comunidad global en 𝕏
+# 𝕏 Global Community
 
-Crear comunidades globales con un propósito común importa en un mundo hiperconectado: la acción colectiva, anclada en principios que no caducan, puede avanzar sin entregar la libertad de cada persona ni la identidad de cada nación.
+The creation of global communities that share a common purpose is highly relevant in an increasingly interconnected world, where collective action rooted in timeless principles can drive meaningful progress while preserving individual freedoms and national identities.
 
-Esas comunidades unen a gente de orígenes distintos alrededor de la responsabilidad personal, la libertad económica, la salud que uno mismo gobierna y la defensa de los valores tradicionales. Amplifican lo que nace abajo — hogares, parroquias, oficios — sin depender de instituciones globales que se exceden.
+These communities enable people from diverse backgrounds to unite around goals like promoting personal responsibility, economic liberty, health self-reliance, or defending traditional values, amplifying grassroots efforts into broader impacts without relying on overreaching global institutions.
 
-## Dónde vive de verdad esta comunidad
+## Where this community actually lives
 
-* **X** — [@salvazion\_](https://x.com/salvazion_) y los artículos long-form dentro del pilar Freedom de la App.
-* **La App** — tu Phalanx: familia, hermanos en la fe, amigos, colegas. Invítalos desde tu Perfil después de iniciar sesión.
-* **Este Welcome** — el camino de formación antes (y al lado) de la pantalla de login.
+* **X** — [@salvazion\_](https://x.com/salvazion_) and the long-form Articles inside the Freedom pillar of the App.
+* **The App** — your Phalanx: family, brothers in the faith, friends, colleagues. Invite them from your Profile after you log in.
+* **This Welcome** — the formation path before (and beside) the login screen.
 
-Una comunidad global que no se arrodilla ante el globalismo no es un Slack y un eslogan. Son hogares que oran, entrenan, leen y pagan las herramientas que los mantienen libres.
+A global community that will not kneel to globalism is not a Slack and a slogan. It is households that pray, train, read, and pay for the tools that keep them free.
 
 {% hint style="success" %}
-**Entra a la comunidad usándola.** [Crea tu cuenta gratis](https://salvazion.org/auth/signup) · después invita a una persona a tu Phalanx.
+**Enter the community by using it.** [Create your free account](https://salvazion.org/auth/signup) · then invite one person to your Phalanx.
 {% endhint %}

@@ -103,8 +103,10 @@ export const dictionary = {
       acceptTermsRequired:
         'Debes aceptar los Términos de Servicio y la Política de Privacidad para continuar.',
       biometricEnter: 'Entrar con el pulgar',
-      biometricEnterHint: 'Usa tu huella para entrar a Salvazion',
+      biometricEnterHint: 'Coloca tu pulgar en el sensor',
       biometricProcessing: 'Esperando tu huella…',
+      biometricRetry: 'Vuelve a colocar el pulgar',
+      biometricBackToThumb: 'Volver a la huella',
       biometricFailed: 'No se pudo verificar la huella. Inténtalo de nuevo.',
       biometricUnavailable:
         'Este dispositivo no tiene huella, Face ID o Windows Hello disponible.',
@@ -706,12 +708,12 @@ export const dictionary = {
       biometricNeedLogin: 'Entra primero con email o Google para activar la huella.',
       biometricPromptTitle: '¿Entrar con tu pulgar?',
       biometricPromptBody:
-        'La próxima vez abre Salvazion con tu huella, sin escribir la contraseña.',
+        'La próxima vez abre Salvazion y coloca tu pulgar en el sensor, sin tocar la pantalla.',
       biometricPromptLater: 'Ahora no',
       biometricPromptEnable: 'Activar huella',
       biometricLockTitle: 'Salvazion',
-      biometricLockSubtitle: 'Toca para entrar con tu huella',
-      biometricLockCta: 'Desbloquear',
+      biometricLockSubtitle: 'Coloca tu pulgar en el sensor',
+      biometricLockCta: 'Desbloquear con huella',
       biometricUsePassword: 'Usar contraseña',
     },
     agenda: {
@@ -1124,8 +1126,10 @@ export const dictionary = {
       acceptTermsRequired:
         'You must accept the Terms of Service and Privacy Policy to continue.',
       biometricEnter: 'Sign in with your thumb',
-      biometricEnterHint: 'Use your fingerprint to enter Salvazion',
+      biometricEnterHint: 'Place your finger on the sensor',
       biometricProcessing: 'Waiting for your fingerprint…',
+      biometricRetry: 'Place your finger on the sensor again',
+      biometricBackToThumb: 'Back to fingerprint',
       biometricFailed: 'Fingerprint could not be verified. Try again.',
       biometricUnavailable:
         'This device has no fingerprint, Face ID, or Windows Hello available.',
@@ -1724,12 +1728,12 @@ export const dictionary = {
       biometricNeedLogin: 'Sign in with email or Google first to enable fingerprint.',
       biometricPromptTitle: 'Unlock with your thumb?',
       biometricPromptBody:
-        'Next time, open Salvazion with your fingerprint — no password typing.',
+        'Next time, open Salvazion and place your finger on the sensor — no need to tap the screen.',
       biometricPromptLater: 'Not now',
       biometricPromptEnable: 'Enable fingerprint',
       biometricLockTitle: 'Salvazion',
-      biometricLockSubtitle: 'Tap to enter with your fingerprint',
-      biometricLockCta: 'Unlock',
+      biometricLockSubtitle: 'Place your finger on the sensor',
+      biometricLockCta: 'Unlock with fingerprint',
       biometricUsePassword: 'Use password',
     },
     agenda: {

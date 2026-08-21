@@ -1,11 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useLayoutEffect, useState, type ReactNode } from 'react';
-import Image from 'next/image';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { useI18n } from '@/components/I18nProvider';
 import {
   BiometricCancelledError,
+  getBiometricState,
   isAppUnlocked,
   isBiometricEnabled,
   markAppBackgrounded,
@@ -17,10 +17,12 @@ import {
 } from '@/lib/auth/biometric';
 import { createClient } from '@/lib/supabase/client';
 import { signOut } from '@/lib/store/profile';
-import FingerprintMark from '@/components/auth/FingerprintMark';
+import BiometricUnlockScreen from '@/components/auth/BiometricUnlockScreen';
+import { useAutoBiometricPrompt } from '@/components/auth/useBiometric';
 
 /**
  * Full-screen thumb lock over the Hub once the user enables biometric unlock.
+ * The system fingerprint sheet opens by itself — no tap required (Jupiter-style).
  */
 export default function BiometricLock({ children }: { children: ReactNode }) {
   const { t } = useI18n();
@@ -28,6 +30,12 @@ export default function BiometricLock({ children }: { children: ReactNode }) {
   const [locked, setLocked] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [promptCycle, setPromptCycle] = useState(0);
+  const [attempted, setAttempted] = useState(false);
+  const busyRef = useRef(false);
+  const lockedRef = useRef(false);
+  const pendingPromptRef = useRef(false);
+  const resumePromptAfterRef = useRef(0);
 
   const syncLock = useCallback(() => {
     if (!isBiometricEnabled()) {
@@ -39,8 +47,15 @@ export default function BiometricLock({ children }: { children: ReactNode }) {
   }, []);
 
   useLayoutEffect(() => {
+    // Must lock before paint so Hub UI never flashes unlocked.
+    // LocalStorage is the source of truth; this is a one-shot hydrate, not a render loop.
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrate lock from localStorage
     syncLock();
   }, [syncLock]);
+
+  useEffect(() => {
+    lockedRef.current = locked;
+  }, [locked]);
 
   useEffect(() => {
     const unsub = subscribeBiometricChanged(syncLock);
@@ -48,30 +63,42 @@ export default function BiometricLock({ children }: { children: ReactNode }) {
     const onHide = () => {
       if (isBiometricEnabled()) markAppBackgrounded();
     };
-    const onShow = () => {
+    const onShow = (source: 'resume' | 'focus') => {
       if (!isBiometricEnabled()) {
+        lockedRef.current = false;
         setLocked(false);
         return;
       }
-      if (shouldRelockOnForeground()) {
+      const relock = shouldRelockOnForeground();
+      if (relock) {
         markAppLocked();
+        lockedRef.current = true;
         setLocked(true);
       }
+      // System fingerprint sheet can pause the WebView (focus / appStateChange).
+      // Auto-prompt only on a real document-visible resume, not on sheet close.
+      if (source !== 'resume') return;
+      if (busyRef.current) return;
+      if (Date.now() < resumePromptAfterRef.current) return;
+      if (!lockedRef.current && !relock) return;
+      setAttempted(false);
+      setPromptCycle((n) => n + 1);
     };
     const onVis = () => {
       if (document.visibilityState === 'hidden') onHide();
-      else onShow();
+      else onShow('resume');
     };
+    const onFocus = () => onShow('focus');
 
     document.addEventListener('visibilitychange', onVis);
     window.addEventListener('pagehide', onHide);
-    window.addEventListener('focus', onShow);
+    window.addEventListener('focus', onFocus);
 
     let removeNative: (() => void) | undefined;
     void import('@capacitor/app')
       .then(({ App }) =>
         App.addListener('appStateChange', ({ isActive }) => {
-          if (isActive) onShow();
+          if (isActive) onShow('focus');
           else onHide();
         })
       )
@@ -88,12 +115,20 @@ export default function BiometricLock({ children }: { children: ReactNode }) {
       unsub();
       document.removeEventListener('visibilitychange', onVis);
       window.removeEventListener('pagehide', onHide);
-      window.removeEventListener('focus', onShow);
+      window.removeEventListener('focus', onFocus);
       removeNative?.();
     };
   }, [syncLock]);
 
+  const unlockRef = useRef<() => Promise<void>>(async () => {});
+
   async function handleUnlock() {
+    if (busyRef.current) {
+      pendingPromptRef.current = true;
+      return;
+    }
+    busyRef.current = true;
+    pendingPromptRef.current = false;
     setBusy(true);
     setError(null);
     try {
@@ -113,21 +148,44 @@ export default function BiometricLock({ children }: { children: ReactNode }) {
       } catch {
         /* lock still succeeds — session cookies may already be valid */
       }
+      pendingPromptRef.current = false;
+      lockedRef.current = false;
+      setAttempted(false);
       setLocked(false);
     } catch (err) {
       if (!(err instanceof BiometricCancelledError)) {
         setError(t('auth.biometricFailed'));
       }
     } finally {
+      busyRef.current = false;
       setBusy(false);
+      resumePromptAfterRef.current = Date.now() + 800;
+      if (lockedRef.current) setAttempted(true);
+      if (pendingPromptRef.current && lockedRef.current) {
+        pendingPromptRef.current = false;
+        void unlockRef.current();
+      }
     }
   }
+
+  useEffect(() => {
+    unlockRef.current = handleUnlock;
+  });
+
+  useAutoBiometricPrompt({
+    active: locked,
+    cycle: promptCycle,
+    run: handleUnlock,
+  });
 
   async function handleSignOut() {
     setBusy(true);
     await signOut();
     router.replace('/auth/login');
   }
+
+  const status =
+    busy || !attempted ? t('auth.biometricProcessing') : t('auth.biometricRetry');
 
   return (
     <>
@@ -137,56 +195,28 @@ export default function BiometricLock({ children }: { children: ReactNode }) {
           className="fixed inset-0 z-[80] bg-[var(--true-black)] flex flex-col items-center justify-center px-6"
           role="dialog"
           aria-modal="true"
-          aria-labelledby="biometric-lock-title"
+          aria-labelledby="biometric-unlock-title"
         >
-          <div className="w-full max-w-sm text-center">
-            <div className="w-16 h-16 mx-auto mb-5 rounded-full border border-[var(--border-strong)] flex items-center justify-center overflow-hidden lion-glow">
-              <Image
-                src="/logo.png"
-                alt=""
-                width={64}
-                height={64}
-                className="object-contain"
-              />
-            </div>
-            <h1
-              id="biometric-lock-title"
-              className="font-display text-2xl font-bold text-[var(--accent)] tracking-tight"
-            >
-              {t('settings.biometricLockTitle')}
-            </h1>
-            <p className="text-sm text-[var(--sage)] mt-1.5">
-              {t('settings.biometricLockSubtitle')}
-            </p>
-
-            <button
-              type="button"
-              onClick={() => void handleUnlock()}
-              disabled={busy}
-              className="mt-8 mx-auto w-24 h-24 rounded-full border border-[var(--accent)] bg-[var(--surface-active)] text-[var(--accent)] flex items-center justify-center hover:shadow-[0_0_28px_color-mix(in_srgb,var(--accent)_28%,transparent)] transition disabled:opacity-60"
-              aria-label={t('settings.biometricLockCta')}
-            >
-              <FingerprintMark size={42} />
-            </button>
-            <p className="mt-3 text-sm font-medium text-[var(--accent)]">
-              {busy ? t('auth.biometricProcessing') : t('settings.biometricLockCta')}
-            </p>
-
-            {error ? (
-              <p role="alert" className="mt-4 text-sm text-red-400">
-                {error}
-              </p>
-            ) : null}
-
-            <button
-              type="button"
-              onClick={() => void handleSignOut()}
-              disabled={busy}
-              className="mt-10 text-xs text-[var(--sage)] hover:text-[var(--accent)] transition"
-            >
-              {t('settings.biometricUsePassword')}
-            </button>
-          </div>
+          <BiometricUnlockScreen
+            title={t('settings.biometricLockTitle')}
+            subtitle={t('settings.biometricLockSubtitle')}
+            status={status}
+            email={getBiometricState()?.email}
+            busy={busy}
+            error={error}
+            promptLabel={t('settings.biometricLockCta')}
+            onPrompt={() => void handleUnlock()}
+            footer={
+              <button
+                type="button"
+                onClick={() => void handleSignOut()}
+                disabled={busy}
+                className="text-xs text-[var(--sage)] hover:text-[var(--accent)] transition"
+              >
+                {t('settings.biometricUsePassword')}
+              </button>
+            }
+          />
         </div>
       ) : null}
     </>

@@ -198,6 +198,33 @@ html[data-text-scale="xxl"] nav.fixed span {
   filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent) 28%, transparent));
 }
 
+/* Jupiter-style fingerprint mark — pulse means "sensor is ready", not "tap me". */
+@keyframes fingerprint-unlock-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent),
+      0 0 18px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+  50% {
+    transform: scale(1.045);
+    box-shadow:
+      0 0 0 10px color-mix(in srgb, var(--accent) 10%, transparent),
+      0 0 32px color-mix(in srgb, var(--accent) 32%, transparent);
+  }
+}
+.fingerprint-unlock-btn {
+  animation: fingerprint-unlock-breathe 2.1s ease-in-out infinite;
+  will-change: transform, box-shadow;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.fingerprint-unlock-btn-busy {
+  animation-duration: 1.35s;
+}
+
 .brand-loader-mark {
   position: relative;
   display: inline-flex;
@@ -1974,7 +2001,9 @@ select:-webkit-autofill {
   .bible-hero-enter-fade,
   .bible-content-enter,
   .bible-pulse,
-  .skeleton-pulse {
+  .skeleton-pulse,
+  .fingerprint-unlock-btn,
+  .fingerprint-unlock-btn-busy {
     animation: none !important;
   }
 }

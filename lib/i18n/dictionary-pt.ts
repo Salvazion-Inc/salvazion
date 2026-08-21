@@ -97,8 +97,10 @@ export const dictionaryPt = {
     acceptTermsRequired:
       'Você deve aceitar os Termos de Serviço e a Política de Privacidade para continuar.',
     biometricEnter: 'Entrar com o polegar',
-    biometricEnterHint: 'Use sua digital para entrar no Salvazion',
+    biometricEnterHint: 'Coloque o polegar no sensor',
     biometricProcessing: 'Aguardando sua digital…',
+    biometricRetry: 'Coloque o polegar no sensor de novo',
+    biometricBackToThumb: 'Voltar para a digital',
     biometricFailed: 'Não foi possível verificar a digital. Tente de novo.',
     biometricUnavailable:
       'Este dispositivo não tem digital, Face ID ou Windows Hello disponível.',
@@ -700,12 +702,12 @@ export const dictionaryPt = {
     biometricNeedLogin: 'Entre primeiro com email ou Google para ativar a digital.',
     biometricPromptTitle: 'Entrar com o polegar?',
     biometricPromptBody:
-      'Da próxima vez abra o Salvazion com sua digital, sem digitar a senha.',
+      'Da próxima vez abra o Salvazion e coloque o polegar no sensor, sem tocar a tela.',
     biometricPromptLater: 'Agora não',
     biometricPromptEnable: 'Ativar digital',
     biometricLockTitle: 'Salvazion',
-    biometricLockSubtitle: 'Toque para entrar com sua digital',
-    biometricLockCta: 'Desbloquear',
+    biometricLockSubtitle: 'Coloque o polegar no sensor',
+    biometricLockCta: 'Desbloquear com a digital',
     biometricUsePassword: 'Usar senha',
   },
   agenda: {

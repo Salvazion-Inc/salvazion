@@ -18,6 +18,7 @@ import SocialAuthButtons from '@/components/auth/SocialAuthButtons';
 import TermsAccept from '@/components/auth/TermsAccept';
 import BiometricLoginButton from '@/components/auth/BiometricLoginButton';
 import BrandLoader from '@/components/ui/BrandLoader';
+import { useBiometricGate } from '@/components/auth/useBiometric';
 
 type Mode = 'password' | 'magic' | 'forgot';
 
@@ -34,6 +35,9 @@ function LoginForm() {
   const [info, setInfo] = useState<string | null>(null);
   const [mode, setMode] = useState<Mode>('password');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [passwordFallback, setPasswordFallback] = useState(false);
+  const { ready: biometricReady, enabled: biometricEnabled } = useBiometricGate();
+  const thumbGate = biometricReady && biometricEnabled && !passwordFallback;
 
   useEffect(() => {
     // Supabase often puts OAuth failures in the URL hash as well as query params
@@ -225,6 +229,23 @@ function LoginForm() {
         <div className="flex justify-end mb-4">
           <LanguageControl compact />
         </div>
+
+        {thumbGate ? (
+          <BiometricLoginButton
+            next={next}
+            error={error}
+            onError={(msg) => setError(msg)}
+            onUsePassword={() => {
+              setPasswordFallback(true);
+              setError(null);
+            }}
+          />
+        ) : !biometricReady ? (
+          <div className="flex flex-col items-center justify-center py-16">
+            <BrandLoader size={96} />
+          </div>
+        ) : (
+          <>
         <div className="text-center mb-8">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full border border-[var(--border-strong)] flex items-center justify-center lion-glow overflow-hidden">
             <Image src="/logo.png" alt="Salvazion" width={64} height={64} className="object-contain" />
@@ -236,7 +257,18 @@ function LoginForm() {
         <div className="card-soft p-6 space-y-4 shadow-[var(--shadow-premium)]">
           {mode === 'password' && (
             <>
-              <BiometricLoginButton next={next} onError={(msg) => setError(msg)} />
+              {biometricEnabled ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPasswordFallback(false);
+                    setError(null);
+                  }}
+                  className="w-full text-sm text-[var(--accent)] hover:underline py-1"
+                >
+                  {t('auth.biometricBackToThumb')}
+                </button>
+              ) : null}
               <TermsAccept
                 checked={acceptedTerms}
                 onChange={setAcceptedTerms}
@@ -382,6 +414,8 @@ function LoginForm() {
           <br />
           {t('auth.rlsNote2')}
         </p>
+          </>
+        )}
       </div>
     </div>
   );

@@ -1,68 +1,67 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { useI18n } from '@/components/I18nProvider';
 import { mapAuthError } from '@/lib/auth/paths';
 import {
   BiometricCancelledError,
-  getBiometricState,
-  isBiometricEnabled,
   persistBiometricVault,
-  subscribeBiometricChanged,
   unlockWithBiometric,
 } from '@/lib/auth/biometric';
-import FingerprintMark from '@/components/auth/FingerprintMark';
 import { ensureProfileForUser, loadProfileAsync } from '@/lib/store/profile';
+import BiometricUnlockScreen from '@/components/auth/BiometricUnlockScreen';
+import { useAutoBiometricPrompt, useBiometricGate } from '@/components/auth/useBiometric';
 
 interface Props {
   next?: string;
   onError?: (msg: string) => void;
+  error?: string | null;
+  onUsePassword?: () => void;
 }
 
 /**
- * Primary "enter with thumb" action on the login screen.
- * Only renders when this device already enrolled biometric unlock.
+ * Primary unlock on the login screen when this device already enrolled the thumb.
+ * Opens the system fingerprint sheet by itself — no tap required (Jupiter-style).
  */
 export default function BiometricLoginButton({
   next = '/hub/dashboard',
   onError,
+  error,
+  onUsePassword,
 }: Props) {
   const { t } = useI18n();
   const router = useRouter();
-  const [ready, setReady] = useState(false);
-  const [enabled, setEnabled] = useState(false);
-  const [email, setEmail] = useState<string | null>(null);
+  const { email } = useBiometricGate();
   const [loading, setLoading] = useState(false);
+  const [attempted, setAttempted] = useState(false);
+  const loadingRef = useRef(false);
+  const pendingPromptRef = useRef(false);
 
-  useEffect(() => {
-    const sync = () => {
-      const on = isBiometricEnabled();
-      setEnabled(on);
-      setEmail(getBiometricState()?.email || null);
-      setReady(true);
-    };
-    sync();
-    return subscribeBiometricChanged(sync);
-  }, []);
+  const unlockRef = useRef<() => Promise<void>>(async () => {});
 
-  if (!ready || !enabled) return null;
-
-  async function handleClick() {
+  async function handleUnlock() {
+    if (loadingRef.current) {
+      pendingPromptRef.current = true;
+      return;
+    }
+    loadingRef.current = true;
+    pendingPromptRef.current = false;
     setLoading(true);
     try {
       const vault = await unlockWithBiometric(t('auth.biometricEnterHint'));
       const supabase = createClient();
-      const { data, error } = await supabase.auth.setSession({
+      const { data, error: sessionError } = await supabase.auth.setSession({
         access_token: vault.access_token,
         refresh_token: vault.refresh_token,
       });
-      if (error || !data.session) {
+      if (sessionError || !data.session) {
+        pendingPromptRef.current = false;
         onError?.(t('auth.biometricExpired'));
-        setLoading(false);
         return;
       }
+      pendingPromptRef.current = false;
       persistBiometricVault(
         {
           access_token: data.session.access_token,
@@ -82,34 +81,56 @@ export default function BiometricLoginButton({
       router.push(dest);
       router.refresh();
     } catch (err) {
-      if (err instanceof BiometricCancelledError) {
-        setLoading(false);
-        return;
+      if (!(err instanceof BiometricCancelledError)) {
+        onError?.(
+          err instanceof Error ? mapAuthError(err.message) : t('auth.biometricFailed')
+        );
       }
-      onError?.(
-        err instanceof Error ? mapAuthError(err.message) : t('auth.biometricFailed')
-      );
+    } finally {
+      loadingRef.current = false;
       setLoading(false);
+      setAttempted(true);
+      if (pendingPromptRef.current) {
+        pendingPromptRef.current = false;
+        void unlockRef.current();
+      }
     }
   }
 
+  useEffect(() => {
+    unlockRef.current = handleUnlock;
+  });
+
+  useAutoBiometricPrompt({
+    active: true,
+    run: handleUnlock,
+  });
+
+  const status =
+    loading || !attempted ? t('auth.biometricProcessing') : t('auth.biometricRetry');
+
   return (
-    <div className="space-y-3">
-      <button
-        type="button"
-        onClick={() => void handleClick()}
-        disabled={loading}
-        className="w-full inline-flex items-center justify-center gap-2.5 py-3.5 px-4 rounded-2xl border border-[var(--accent)] bg-[var(--surface-active)] text-[var(--accent)] text-sm font-semibold hover:shadow-[0_0_18px_color-mix(in_srgb,var(--accent)_22%,transparent)] transition disabled:opacity-50"
-        aria-label={t('auth.biometricEnter')}
-      >
-        <FingerprintMark size={24} />
-        <span>{loading ? t('auth.biometricProcessing') : t('auth.biometricEnter')}</span>
-      </button>
-      {email ? (
-        <p className="text-[11px] text-center text-[var(--sage)] leading-relaxed">
-          {email}
-        </p>
-      ) : null}
-    </div>
+    <BiometricUnlockScreen
+      title={t('settings.biometricLockTitle')}
+      subtitle={t('settings.biometricLockSubtitle')}
+      status={status}
+      email={email}
+      busy={loading}
+      error={error}
+      promptLabel={t('auth.biometricEnter')}
+      onPrompt={() => void handleUnlock()}
+      footer={
+        onUsePassword ? (
+          <button
+            type="button"
+            onClick={onUsePassword}
+            disabled={loading}
+            className="text-xs text-[var(--sage)] hover:text-[var(--accent)] transition"
+          >
+            {t('settings.biometricUsePassword')}
+          </button>
+        ) : null
+      }
+    />
   );
 }

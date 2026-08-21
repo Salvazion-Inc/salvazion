@@ -315,6 +315,9 @@ async function authenticateNative(reason: string): Promise<boolean> {
   }
 }
 
+/** One native/WebAuthn sheet at a time — auto-prompt + Strict Mode must not stack dialogs. */
+let verifyLock: Promise<void> | null = null;
+
 async function createWebAuthnCredential(userId: string, email: string): Promise<string> {
   const userIdBytes = new TextEncoder().encode(userId).slice(0, 64);
   const cred = (await navigator.credentials.create({
@@ -409,22 +412,30 @@ export async function enrollBiometric(input: {
 }
 
 export async function verifyBiometric(reason: string): Promise<void> {
-  const cap = await getBiometricCapability();
-  if (!cap.available) throw new BiometricUnavailableError();
+  if (verifyLock) return verifyLock;
 
-  const state = getBiometricState();
+  verifyLock = (async () => {
+    const cap = await getBiometricCapability();
+    if (!cap.available) throw new BiometricUnavailableError();
 
-  if (cap.source === 'native') {
-    await authenticateNative(reason);
-    return;
-  }
+    const state = getBiometricState();
 
-  try {
-    await assertWebAuthnCredential(state?.credentialId);
-  } catch (err) {
-    if (isCancelError(err)) throw new BiometricCancelledError();
-    throw err;
-  }
+    if (cap.source === 'native') {
+      await authenticateNative(reason);
+      return;
+    }
+
+    try {
+      await assertWebAuthnCredential(state?.credentialId);
+    } catch (err) {
+      if (isCancelError(err)) throw new BiometricCancelledError();
+      throw err;
+    }
+  })().finally(() => {
+    verifyLock = null;
+  });
+
+  return verifyLock;
 }
 
 export async function unlockWithBiometric(reason: string): Promise<BiometricVault> {

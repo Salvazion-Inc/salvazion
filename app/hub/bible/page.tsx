@@ -60,6 +60,7 @@ export default function BiblePage() {
   /** Compact reading chrome — expanded by default; user collapses manually */
   const [chromeCollapsed, setChromeCollapsed] = useState(false);
   const [salvationScore, setSalvationScore] = useState(0);
+  const [autoStartPrayerSession, setAutoStartPrayerSession] = useState(false);
   const verseRefs = useRef<Map<number, HTMLParagraphElement>>(new Map());
   const prevBookIdxRef = useRef(0);
 
@@ -107,10 +108,12 @@ export default function BiblePage() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     try {
-      const tab = new URLSearchParams(window.location.search).get('tab');
+      const sp = new URLSearchParams(window.location.search);
+      const tab = sp.get('tab');
       if (tab === 'prayer') {
         setMainTab('prayer');
         setChromeCollapsed(false);
+        if (sp.get('session') === '1') setAutoStartPrayerSession(true);
       } else if (tab === 'bible' || tab === 'read') {
         setMainTab('bible');
         setBibleMode('read');
@@ -547,6 +550,7 @@ export default function BiblePage() {
         {mainTab === 'prayer' ? (
           <PrayerMotivesPanel
             lang={uiLang}
+            autoStartSession={autoStartPrayerSession}
             onPrayed={() => {
               logAction('pray_5min');
               setSalvationScore(computeScores().salvation);

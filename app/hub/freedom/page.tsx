@@ -15,6 +15,7 @@ import ChurchesMapPanel from '@/components/freedom/ChurchesMapPanel';
 import PillarHubHeader from '@/components/hub/PillarHubHeader';
 import InvitePhalanx from '@/components/invite/InvitePhalanx';
 import VoiceAgent from '@/components/coach/VoiceAgent';
+import DailyIntentionCard from '@/components/freedom/DailyIntentionCard';
 import Link from 'next/link';
 import BrandLoader from '@/components/ui/BrandLoader';
 
@@ -99,6 +100,16 @@ function FreedomPageInner() {
       </PillarHubHeader>
 
       <main className="flex-1 px-4 sm:px-5 pt-4 pb-32 overflow-y-auto max-w-lg mx-auto w-full">
+        <div className="mb-5">
+          <DailyIntentionCard
+            lang={
+              profile?.language === 'pt' || profile?.language === 'en'
+                ? profile.language
+                : 'es'
+            }
+            compact={activeTab !== 'contribute'}
+          />
+        </div>
         {activeTab === 'learn' && (
           <div className="space-y-5">
             <XArticlesFeed

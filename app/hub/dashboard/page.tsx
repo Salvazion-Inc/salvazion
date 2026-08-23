@@ -32,6 +32,7 @@ import { BadgesIcon } from '@/components/Icons';
 import ProgressCharts from '@/components/progress/ProgressCharts';
 import DailyAgenda from '@/components/calendar/DailyAgenda';
 import ActivationChecklist from '@/components/hub/ActivationChecklist';
+import TodayPrayerCard from '@/components/salvation/TodayPrayerCard';
 import { PILLAR_COLORS } from '@/lib/theme/pillars';
 import { useFlashToast } from '@/components/ui/FlashToast';
 import { runPassiveHealthSync } from '@/lib/health/wearables';
@@ -543,6 +544,10 @@ export default function DashboardPage() {
         {/* Daily agenda first — primary daily action */}
         <div className="w-full max-w-sm mb-5">
           <DailyAgenda onScored={() => refresh(profile || undefined)} />
+        </div>
+
+        <div className="w-full max-w-sm mb-5">
+          <TodayPrayerCard />
         </div>
 
         {/* Weekly discipline / score / body charts */}

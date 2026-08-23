@@ -54,6 +54,7 @@ import TodayFromDevices from '@/components/health/TodayFromDevices';
 import BodyCompositionPanel from '@/components/health/BodyCompositionPanel';
 import MealPhotoPanel from '@/components/health/MealPhotoPanel';
 import PillarHubHeader from '@/components/hub/PillarHubHeader';
+import SleepBreathPanel from '@/components/health/SleepBreathPanel';
 import { useI18n } from '@/components/I18nProvider';
 
 const HEALTH_ICONS = {
@@ -374,6 +375,14 @@ export default function HealthPage() {
             </button>
           </div>
         </section>
+
+        <SleepBreathPanel
+          lang={
+            profile?.language === 'en' || profile?.language === 'pt'
+              ? profile.language
+              : 'es'
+          }
+        />
 
         <BiomarkersPanel
           category="sleep"

@@ -1888,6 +1888,244 @@ select:-webkit-autofill {
   background: transparent;
 }
 
+/* —— Prayer sanctuary (Salvation) —— */
+.prayer-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-2xl);
+  padding: 1.15rem 1.15rem 1.2rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  background:
+    radial-gradient(120% 80% at 80% -10%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 55%),
+    linear-gradient(165deg, rgba(16, 22, 17, 0.96) 0%, rgba(6, 8, 7, 0.92) 100%);
+  box-shadow: var(--shadow-premium);
+}
+.prayer-hero-glow {
+  pointer-events: none;
+  position: absolute;
+  width: 9rem;
+  height: 9rem;
+  right: -1.5rem;
+  top: -2rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 35%, transparent), transparent 70%);
+  filter: blur(8px);
+  animation: prayer-flame 3.6s ease-in-out infinite;
+}
+.prayer-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  padding: 0.9rem 0.9rem 0.9rem 1rem;
+  border: 1px solid var(--border-soft);
+  background: linear-gradient(
+    165deg,
+    rgba(14, 18, 15, 0.94) 0%,
+    rgba(6, 8, 7, 0.9) 100%
+  );
+  box-shadow: var(--shadow-elevated);
+  transition:
+    border-color var(--duration-base) var(--ease-out-expo),
+    box-shadow var(--duration-base) var(--ease-out-expo),
+    transform 80ms linear;
+  touch-action: pan-y;
+}
+.prayer-card[data-priority="1"] {
+  border-color: color-mix(in srgb, var(--accent) 38%, transparent);
+  box-shadow: var(--shadow-glow);
+}
+.prayer-card-rail {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+}
+.prayer-card[data-priority="1"] .prayer-card-rail {
+  background: var(--accent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+.prayer-card-dragging {
+  z-index: 8;
+  opacity: 0.96;
+  box-shadow: var(--shadow-premium);
+  border-color: var(--border-strong);
+  cursor: grabbing;
+}
+.prayer-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 0.45rem;
+  color: var(--sage);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.prayer-handle:active {
+  cursor: grabbing;
+  color: var(--accent);
+  background: var(--surface-active);
+}
+.prayer-nudge {
+  width: 1.4rem;
+  height: 1.05rem;
+  border-radius: 0.35rem;
+  color: var(--sage);
+  font-size: 0.6rem;
+  line-height: 1;
+  opacity: 0.7;
+}
+.prayer-nudge:disabled {
+  opacity: 0.22;
+}
+.prayer-nudge:hover:not(:disabled) {
+  color: var(--accent);
+  background: var(--surface-active);
+}
+.prayer-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.7rem;
+  padding: 0.12rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #0a120c;
+  background: linear-gradient(180deg, #cfe9d3 0%, var(--accent-fill) 100%);
+}
+.prayer-empty {
+  text-align: center;
+  padding: 2.5rem 1rem 2rem;
+  border-radius: var(--radius-2xl);
+  border: 1px dashed var(--border-soft);
+  background: rgba(8, 12, 9, 0.4);
+}
+.prayer-empty-flame {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0 auto 0.85rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  opacity: 0.7;
+  animation: prayer-flame 2.8s ease-in-out infinite;
+}
+.prayer-session {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  padding: max(1rem, env(safe-area-inset-top)) 1.25rem 1.25rem;
+  background:
+    radial-gradient(90% 50% at 50% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 60%),
+    #040404;
+}
+.prayer-session-glow {
+  pointer-events: none;
+  position: absolute;
+  inset: 10% 15% auto;
+  height: 40%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%);
+  filter: blur(24px);
+}
+.prayer-session-flame {
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: 18%;
+  width: 6rem;
+  height: 6rem;
+  margin-left: -3rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 40%, transparent), transparent 68%);
+  animation: prayer-flame 2.4s ease-in-out infinite;
+}
+.prayer-session-ring {
+  position: relative;
+  width: 11.5rem;
+  height: 11.5rem;
+}
+.prayer-today-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  padding: 1rem 1.05rem 1.05rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+  background:
+    radial-gradient(120% 80% at 100% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 55%),
+    linear-gradient(165deg, rgba(14, 18, 15, 0.96) 0%, rgba(6, 8, 7, 0.9) 100%);
+  box-shadow: var(--shadow-elevated);
+}
+
+@keyframes prayer-flame {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.08);
+  }
+}
+
+/* Health wind-down breath */
+.breath-orb {
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.18), transparent 40%),
+    radial-gradient(circle, color-mix(in srgb, var(--pillar-health) 70%, #fff), color-mix(in srgb, var(--pillar-health) 25%, transparent));
+  box-shadow: 0 0 28px color-mix(in srgb, var(--pillar-health) 35%, transparent);
+  transition: transform 1s ease-in-out;
+}
+.breath-orb-live {
+  transition: transform 1s ease-in-out;
+}
+
+/* Freedom daily intention */
+.intention-card {
+  border-radius: var(--radius-xl);
+  padding: 1rem 1.05rem 1.05rem;
+  border: 1px solid color-mix(in srgb, var(--pillar-freedom) 28%, transparent);
+  background:
+    radial-gradient(120% 80% at 0% 0%, color-mix(in srgb, var(--pillar-freedom) 14%, transparent), transparent 55%),
+    linear-gradient(165deg, rgba(12, 18, 13, 0.96) 0%, rgba(6, 8, 7, 0.9) 100%);
+  box-shadow: var(--shadow-elevated);
+}
+.intention-card-compact {
+  padding: 0.9rem 1rem 0.95rem;
+}
+.intention-fast-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #0a120c;
+  background: var(--pillar-freedom);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prayer-hero-glow,
+  .prayer-empty-flame,
+  .prayer-session-flame {
+    animation: none;
+  }
+  .breath-orb {
+    transition: none;
+  }
+}
+
 /* Freedom · drone 360 map */
 .salv-drone-wrap {
   border-color: color-mix(in srgb, var(--pillar-freedom) 45%, transparent);

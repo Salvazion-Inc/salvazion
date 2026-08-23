@@ -105,11 +105,11 @@ export interface Devotional {
 }
 
 /**
- * El León Verde — Coach de Virtud y Desarrollo Integral
+ * Salvazion AI — Coach de Virtud y Desarrollo Integral
  * Característica central: virtud + desarrollo espiritual, físico y mental.
  */
 export interface GreenLionCoach {
-  name: 'León Verde';
+  name: 'Salvazion AI';
   role: 'Motivador · Coach · Disciplina';
   pillars: ['Espiritual', 'Físico', 'Mental'];
   motto: 'Virtud, constancia y excelencia para que Salvation, Health y Freedom crezcan cada día.';

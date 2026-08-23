@@ -194,7 +194,7 @@ export default function SalvazionLanding() {
             {/* Transparent black fill so hero green-smoke video shows through the mark */}
             <Image
               src="/logo-transparent.png"
-              alt="Salvazion Green Lion"
+              alt="Salvazion"
               width={200}
               height={200}
               className="lion-glow w-36 h-36 sm:w-48 sm:h-48 object-contain drop-shadow-[0_0_40px_rgba(143,217,154,0.25)]"
@@ -245,7 +245,7 @@ export default function SalvazionLanding() {
         </div>
       </section>
 
-      {/* One App + Purpose fused */}
+      {/* One Platform + Purpose fused */}
       <section id="app" className="section-pad border-t border-[var(--border-soft)]">
         <div className="max-w-6xl mx-auto px-5">
           <div className="text-center mb-12 max-w-3xl mx-auto">
@@ -260,7 +260,7 @@ export default function SalvazionLanding() {
             {t.app.areas.map((area) => (
               <div
                 key={area.name}
-                className="card-soft card-lift p-6 sm:p-7 flex flex-col min-h-[220px] border-t-2"
+                className="card-soft card-lift p-6 sm:p-7 flex flex-col min-h-[260px] border-t-2"
                 style={{ borderTopColor: area.accent }}
               >
                 <div
@@ -281,7 +281,10 @@ export default function SalvazionLanding() {
                 >
                   {area.name}
                 </h3>
-                <p className="mt-2 text-sm text-[#D8E1D9]/80 leading-relaxed flex-1">
+                <p className="mt-3 text-[13px] text-[var(--sage)] leading-snug text-pretty">
+                  {area.problem}
+                </p>
+                <p className="mt-2.5 text-sm text-[#D8E1D9]/88 leading-relaxed flex-1 text-pretty">
                   {textWithXLogo(area.body)}
                 </p>
                 <p className="mt-4 text-[11px] text-[var(--sage)] uppercase tracking-wider">
@@ -595,7 +598,7 @@ export default function SalvazionLanding() {
 const copy = {
   en: {
     nav: {
-      app: 'The App',
+      app: 'The Platform',
       blog: 'Blog',
       pricing: 'Pricing',
       token: 'Token',
@@ -620,29 +623,32 @@ const copy = {
       eyebrow: 'Massive Transformative Purpose',
       title: 'The platform that restores the human person',
       body:
-        'Our Purpose is Make Salvation, Health and Freedom Great Again — a Global Community that defends Western Christian Culture and BioConservatism in Spiritual Warfare. Exponential technologies and innovation at the service of people. We no longer split the mission: Salvation, Health, and Freedom live together in one App.',
-      cta: 'Open the App',
+        'Our Purpose is Make Salvation, Health and Freedom Great Again — a Global Community that defends Western Christian Culture and BioConservatism in Spiritual Warfare. Exponential technologies and innovation at the service of people.',
+      cta: 'Open the Platform',
       areas: [
         {
           name: 'Salvation',
           icon: '/icons/agenda/salvation.jpg',
           accent: '#F5F7F5',
-          body: 'Faith at the center. Full offline Bible, daily devotionals, prayer motives, discipline calendar and measurable spiritual scores.',
-          inApp: 'Bible · Devotional · Prayer · Salvazion',
+          problem: 'Prayer was replaced by mood. The Cross, by wellness.',
+          body: 'You get the Word first: offline Bible, prayer by priority, a daily devotion and a Salvation score that measures constancy — not vibes without a Cross.',
+          inApp: 'Bible · Devotional · Prayer · Score',
         },
         {
           name: 'Health',
           icon: '/icons/agenda/health.jpg',
           accent: '#4A9EFF',
-          body: 'The body is a temple. Sleep, hydration, meals, sports, phone sensors, Bluetooth HR and cloud wearables (Premium).',
-          inApp: 'Health · sensors · wearables · biomarkers',
+          problem: 'The body is ignored — or treated as a machine to upgrade.',
+          body: 'The body is a temple. Sleep, food, sun and training in one Health score, with sensors and wearables serving the person, not replacing them.',
+          inApp: 'Sleep · meals · movement · wearables',
         },
         {
           name: 'Freedom',
           icon: '/icons/agenda/freedom.jpg',
           accent: '#8FD99A',
-          body: 'Freedom with responsibility: curated books, X articles, YouTube channels, Phalanx community and economic sovereignty on Solana.',
-          inApp: 'Freedom · Community · $SALVAZION swap',
+          problem: 'Feeds capture your attention, your community and your money.',
+          body: 'You recover judgment, a real Phalanx and economic sovereignty on Solana — books, long-form and people, not another scroll.',
+          inApp: 'Library · Community · $SALVAZION',
         },
       ],
     },
@@ -693,7 +699,7 @@ const copy = {
       eyebrow: 'Founders',
       title: 'An ordinary family, but with “good genes”',
       intro:
-        'Cristian Cortés and Beatriz Isler are a married couple, who have worked together for 20+ years in different health, education, technology and innovation startups, who complement each other and share values (excellence, integrity and deep respect for the service of people), adapting constantly to achieve its purpose: Make Salvation, Health and Freedom great again!',
+        'Cristian Cortés and Beatriz Isler are a married couple, who have worked together for 20+ years in different health, education, technology and innovation startups, who complement each other and share values (excellence, integrity and deep respect for the service of people), adapting constantly.',
       cristianRole: 'CEO at Salvazion, Inc.',
       cristian:
         'Physical Therapist, Bachelor of Kinesiology. Master in Physical Therapy, Minor in Psychology and Diplomas in Rehabilitation, Exercise, Health and University Innovation. Sherpa and Instructor in “Evidence Based Entrepreneurship & Lean Innovation (EBELI)”. Former Singularity University Ambassador Santiago Chapter. “ExO Entrepreneur LATAM” for the ExO Community Award. “Fifty of the Most Influential Voices in Healthcare” for Medika Life, “Top 50 Global HealthTech Thought Leader and Influencers on Ecosystems” for Thinker 360 and “Top 200 Exponentialists in Digital Health”.',
@@ -709,7 +715,7 @@ const copy = {
   },
   es: {
     nav: {
-      app: 'La App',
+      app: 'La Plataforma',
       blog: 'Blog',
       pricing: 'Precios',
       token: 'Token',
@@ -734,29 +740,32 @@ const copy = {
       eyebrow: 'Propósito Transformador Masivo',
       title: 'La plataforma que restaura a la persona humana',
       body:
-        'Nuestro Propósito es Make Salvation, Health and Freedom Great Again — una Comunidad Global que defiende la Cultura Cristiana Occidental y el BioConservadurismo en Guerra Espiritual. Tecnologías exponenciales e innovación al servicio de las personas. Ya no separamos la misión: Salvación, Salud y Libertad viven juntas en una sola App.',
-      cta: 'Abrir la App',
+        'Nuestro Propósito es Make Salvation, Health and Freedom Great Again — una Comunidad Global que defiende la Cultura Cristiana Occidental y el BioConservadurismo en Guerra Espiritual. Tecnologías exponenciales e innovación al servicio de las personas.',
+      cta: 'Abrir la Plataforma',
       areas: [
         {
           name: 'Salvation',
           icon: '/icons/agenda/salvation.jpg',
           accent: '#F5F7F5',
-          body: 'La fe al centro. Biblia completa offline, devocional diario, motivos de oración, calendario de disciplina y scores espirituales medibles.',
-          inApp: 'Biblia · Devocional · Oración · Salvazion',
+          problem: 'La oración fue reemplazada por el ánimo. La Cruz, por el wellness.',
+          body: 'Recuperas la Palabra primero: Biblia offline, oración por prioridad, devocional diario y un score Salvation que mide constancia — no vibras sin Cruz.',
+          inApp: 'Biblia · Devocional · Oración · Score',
         },
         {
           name: 'Health',
           icon: '/icons/agenda/health.jpg',
           accent: '#4A9EFF',
-          body: 'El cuerpo es templo. Sueño, hidratación, comidas, deportes, sensores del celular, HR Bluetooth y wearables en la nube (Premium).',
-          inApp: 'Health · sensores · wearables · biomarcadores',
+          problem: 'El cuerpo se ignora — o se trata como una máquina que hay que mejorar.',
+          body: 'El cuerpo es templo. Sueño, comida, sol y entrenamiento en un solo score Health, con sensores y wearables al servicio de la persona, no en su lugar.',
+          inApp: 'Sueño · comidas · movimiento · wearables',
         },
         {
           name: 'Freedom',
           icon: '/icons/agenda/freedom.jpg',
           accent: '#8FD99A',
-          body: 'Libertad con responsabilidad: libros curados, artículos en X, canales de YouTube, comunidad Phalanx y soberanía económica en Solana.',
-          inApp: 'Freedom · Comunidad · Swap $SALVAZION',
+          problem: 'Los feeds capturan tu atención, tu comunidad y tu dinero.',
+          body: 'Recuperas criterio, una Phalanx real y soberanía económica en Solana — libros, long-form y personas, no otro scroll.',
+          inApp: 'Biblioteca · Comunidad · $SALVAZION',
         },
       ],
     },
@@ -807,7 +816,7 @@ const copy = {
       eyebrow: 'Fundadores',
       title: 'Una familia común, pero con “buenos genes”',
       intro:
-        'Cristian Cortés y Beatriz Isler son un matrimonio, quienes han trabajado juntos por +20 años en diferentes startups de salud, educación, tecnología e innovación, quienes se complementan y comparten valores (excelencia, integridad y respeto profundo al servicio de las personas), adaptándose constantemente para lograr su propósito: hacer Salvación, Salud y Libertad geniales otra vez!',
+        'Cristian Cortés y Beatriz Isler son un matrimonio, quienes han trabajado juntos por +20 años en diferentes startups de salud, educación, tecnología e innovación, quienes se complementan y comparten valores (excelencia, integridad y respeto profundo al servicio de las personas), adaptándose constantemente.',
       cristianRole: 'CEO de Salvazion, Inc.',
       cristian:
         'Kinesiólogo, Licenciado en Kinesiología. Magíster en Terapia Física, Minor en Psicología y Diplomados en Rehabilitación, Ejercicio, Salud e Innovación Universitaria. Sherpa e Instructor en “Evidence Based Entrepreneurship & Lean Innovation (EBELI)”. Ex Embajador del Capítulo de Santiago en Singularity University. “ExO Entrepreneur LATAM” por la ExO Community Award. “Fifty of the Most Influential Voices in Healthcare” por Medika Life, “Top 50 Global HealthTech Thought Leader and Influencers on Ecosystems” por Thinker 360 y “Top 200 Exponencialistas en Salud Digital”.',
@@ -823,7 +832,7 @@ const copy = {
   },
   pt: {
     nav: {
-      app: 'O App',
+      app: 'A Plataforma',
       blog: 'Blog',
       pricing: 'Preços',
       token: 'Token',
@@ -847,29 +856,32 @@ const copy = {
       eyebrow: 'Propósito Transformador Massivo',
       title: 'A plataforma que restaura a pessoa humana',
       body:
-        'Nosso Propósito é Make Salvation, Health and Freedom Great Again — uma Comunidade Global que defende a Cultura Cristã Ocidental e o BioConservadorismo em Guerra Espiritual. Tecnologias exponenciais e inovação a serviço das pessoas. Já não separamos a missão: Salvação, Saúde e Liberdade vivem juntas em um só App.',
-      cta: 'Abrir o App',
+        'Nosso Propósito é Make Salvation, Health and Freedom Great Again — uma Comunidade Global que defende a Cultura Cristã Ocidental e o BioConservadorismo em Guerra Espiritual. Tecnologias exponenciais e inovação a serviço das pessoas.',
+      cta: 'Abrir a Plataforma',
       areas: [
         {
           name: 'Salvation',
           icon: '/icons/agenda/salvation.jpg',
           accent: '#F5F7F5',
-          body: 'A fé no centro. Bíblia completa offline, devocional diário, motivos de oração, calendário de disciplina e scores espirituais mensuráveis.',
-          inApp: 'Bíblia · Devocional · Oração · Salvazion',
+          problem: 'A oração foi trocada pelo humor. A Cruz, pelo wellness.',
+          body: 'Você volta à Palavra primeiro: Bíblia offline, oração por prioridade, devocional diário e um score Salvation que mede constância — não vibrações sem Cruz.',
+          inApp: 'Bíblia · Devocional · Oração · Score',
         },
         {
           name: 'Health',
           icon: '/icons/agenda/health.jpg',
           accent: '#4A9EFF',
-          body: 'O corpo é templo. Sono, hidratação, refeições, esportes, sensores do celular, FC Bluetooth e wearables na nuvem (Premium).',
-          inApp: 'Health · sensores · wearables · biomarcadores',
+          problem: 'O corpo é ignorado — ou tratado como uma máquina a ser melhorada.',
+          body: 'O corpo é templo. Sono, comida, sol e treino em um só score Health, com sensores e wearables a serviço da pessoa, não no lugar dela.',
+          inApp: 'Sono · refeições · movimento · wearables',
         },
         {
           name: 'Freedom',
           icon: '/icons/agenda/freedom.jpg',
           accent: '#8FD99A',
-          body: 'Liberdade com responsabilidade: livros curados, artigos no X, canais do YouTube, comunidade Phalanx e soberania econômica na Solana.',
-          inApp: 'Freedom · Comunidade · Swap $SALVAZION',
+          problem: 'Os feeds capturam sua atenção, sua comunidade e seu dinheiro.',
+          body: 'Você recupera critério, uma Phalanx real e soberania econômica na Solana — livros, long-form e pessoas, não mais um scroll.',
+          inApp: 'Biblioteca · Comunidade · $SALVAZION',
         },
       ],
     },
@@ -920,7 +932,7 @@ const copy = {
       eyebrow: 'Fundadores',
       title: 'Uma família comum, mas com “bons genes”',
       intro:
-        'Cristian Cortés e Beatriz Isler são um casal que trabalha junto há mais de 20 anos em diferentes startups de saúde, educação, tecnologia e inovação, que se complementam e compartilham valores (excelência, integridade e respeito profundo ao serviço das pessoas), adaptando-se constantemente para cumprir seu propósito: tornar Salvação, Saúde e Liberdade grandiosas de novo!',
+        'Cristian Cortés e Beatriz Isler são um casal que trabalha junto há mais de 20 anos em diferentes startups de saúde, educação, tecnologia e inovação, que se complementam e compartilham valores (excelência, integridade e respeito profundo ao serviço das pessoas), adaptando-se constantemente.',
       cristianRole: 'CEO da Salvazion, Inc.',
       cristian:
         'Fisioterapeuta, Bacharel em Cinesiologia. Mestre em Terapia Física, Minor em Psicologia e Diplomados em Reabilitação, Exercício, Saúde e Inovação Universitária. Sherpa e Instrutor em “Evidence Based Entrepreneurship & Lean Innovation (EBELI)”. Ex-Embaixador do Capítulo de Santiago da Singularity University. “ExO Entrepreneur LATAM” pelo ExO Community Award. “Fifty of the Most Influential Voices in Healthcare” pela Medika Life, “Top 50 Global HealthTech Thought Leader and Influencers on Ecosystems” pela Thinker 360 e “Top 200 Exponentialists in Digital Health”.',

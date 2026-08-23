@@ -1,5 +1,5 @@
 /**
- * Central SEO / social metadata for the Salvazion app (salvazion.org).
+ * Central SEO / social metadata for the Salvazion platform (salvazion.org).
  */
 import { APP_URL, MARKETING_URL, SUPPORT_EMAIL, WELCOME_URL } from '@/lib/config/site';
 
@@ -19,21 +19,21 @@ export const SEO = {
    * Slightly longer copy for WhatsApp / iMessage / LinkedIn / X cards.
    */
   ogDescription:
-    'Make Salvation, Health and Freedom Great Again. One freemium App: offline Bible, devotionals, health & wearables, Freedom library, Phalanx community, Salvazion AI and $SALVAZION on Solana. Free to start.',
+    'Make Salvation, Health and Freedom Great Again. One freemium Platform: offline Bible, devotionals, health & wearables, Freedom library, Phalanx community, Salvazion AI and $SALVAZION on Solana. Free to start.',
   descriptionEs:
     'La plataforma que restaura a la persona humana. Biblia offline, salud y wearables, biblioteca Freedom, comunidad Phalanx, IA Salvazion y $SALVAZION en Solana.',
   ogDescriptionEs:
-    'Make Salvation, Health and Freedom Great Again. Una sola App freemium: Biblia offline, devocional, salud y wearables, biblioteca Freedom, comunidad Phalanx, IA Salvazion y $SALVAZION en Solana. Empieza gratis.',
+    'Make Salvation, Health and Freedom Great Again. Una sola Plataforma freemium: Biblia offline, devocional, salud y wearables, biblioteca Freedom, comunidad Phalanx, IA Salvazion y $SALVAZION en Solana. Empieza gratis.',
   descriptionPt:
     'A plataforma que restaura a pessoa humana. Bíblia offline, saúde e wearables, biblioteca Freedom, comunidade Phalanx, IA Salvazion e $SALVAZION na Solana.',
   ogDescriptionPt:
-    'Make Salvation, Health and Freedom Great Again. Um só App freemium: Bíblia offline, devocional, saúde e wearables, biblioteca Freedom, comunidade Phalanx, IA Salvazion e $SALVAZION na Solana. Comece grátis.',
+    'Make Salvation, Health and Freedom Great Again. Uma só Plataforma freemium: Bíblia offline, devocional, saúde e wearables, biblioteca Freedom, comunidade Phalanx, IA Salvazion e $SALVAZION na Solana. Comece grátis.',
   keywords: [
     'Salvazion',
-    'Salvazion app',
+    'Salvazion platform',
     'Make Salvation Health and Freedom Great Again',
-    'Christian lifestyle app',
-    'offline Bible app',
+    'Christian lifestyle platform',
+    'offline Bible platform',
     'faith health freedom',
     'BioConservatism',
     'Western Christian Culture',
@@ -41,9 +41,9 @@ export const SEO = {
     'SALVAZION token',
     'Salvazion AI',
     'Green Lion',
-    'app cristiana',
+    'plataforma cristiana',
     'Biblia offline',
-    'app cristã',
+    'plataforma cristã',
     'Bíblia offline',
     'Almeida Revista e Corrigida',
   ],
@@ -68,7 +68,7 @@ export const SEO = {
   imageFallback: '/salvazion-logo-green-lion.png',
   logo: '/logo.png',
   ogImageAlt:
-    'Salvazion Green Lion — Make Salvation, Health and Freedom Great Again. The platform that restores the human person.',
+    'Salvazion logo — Make Salvation, Health and Freedom Great Again. The platform that restores the human person.',
   twitterHandle: '@salvazion_',
   category: 'Lifestyle',
   address: {

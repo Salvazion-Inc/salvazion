@@ -274,7 +274,7 @@ export default function BadgesPage() {
           <div className="w-8 h-8 rounded-full border border-[var(--border-strong)] flex items-center justify-center flex-shrink-0 lion-glow overflow-hidden bg-[#040404]">
             <Image
               src="/logo-icon.png"
-              alt="León Verde"
+              alt="Salvazion"
               width={32}
               height={32}
               className="object-cover"

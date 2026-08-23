@@ -2,9 +2,9 @@ import { APP_URL, SUPPORT_EMAIL } from '@/lib/config/site';
 import type { Language } from '@/lib/types';
 import type { LegalDoc } from '@/lib/legal/terms';
 
-const UPDATED_EN = 'August 12, 2026';
-const UPDATED_ES = '12 de agosto de 2026';
-const UPDATED_PT = '12 de agosto de 2026';
+const UPDATED_EN = 'August 23, 2026';
+const UPDATED_ES = '23 de agosto de 2026';
+const UPDATED_PT = '23 de agosto de 2026';
 
 export const PRIVACY: Record<Language, LegalDoc> = {
   en: {
@@ -16,7 +16,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '',
         paragraphs: [
-          `Salvazion, Inc. (“Salvazion”, “we”) respects your privacy. This policy describes what data we process in the App (${APP_URL}), for what purposes, with whom we share it, and what rights you have. By using the App, you accept this policy together with our Terms of Service at /terms.`,
+          `Salvazion, Inc. (“Salvazion”, “we”) respects your privacy. This policy describes what data we process in the Platform (${APP_URL}), for what purposes, with whom we share it, and what rights you have. By using the Platform, you accept this policy together with our Terms of Service at /terms.`,
         ],
       },
       {
@@ -27,15 +27,15 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       },
       {
         heading: '2. Data we may collect',
-        intro: 'Depending on how you use the App, we may process:',
+        intro: 'Depending on how you use the Platform, we may process:',
         bullets: [
           'Account: email, name, language (English, Spanish, or Brazilian Portuguese), profile photo, onboarding preferences (purpose, city, country, date of birth, spiritual maturity, family, focus areas).',
           'Social sign-in: if you use Google or X, identifiers and profile data the provider shares (for example email, name, photo, X handle), subject to their settings and your consent.',
-          'App usage: Salvation / Health / Freedom scores, streaks, badges, Bible reading progress, completed devotionals, calendar and prayer-motive entries, Phalanx invitations you send or accept.',
+          'Platform usage: Salvation / Health / Freedom scores, streaks, badges, Bible reading progress, completed devotionals, calendar and prayer-motive entries, Phalanx invitations you send or accept.',
           'Health: sleep, hydration, meals, sports, fasting, women’s-health logs, clinical notes you enter, phone-sensor or Bluetooth heart-rate metrics, and wearable metrics you enable (Fitbit, Oura, WHOOP, Garmin, HealthKit, Health Connect).',
           'Photos you choose to upload for meal or body-composition estimates.',
           'Location, only if you grant permission (for example outdoor climate or the churches map).',
-          'AI conversations: messages you send to the Green Lion coach, and limited profile context needed to personalize devotionals or coaching.',
+          'AI conversations: messages you send to Salvazion AI, and limited profile context needed to personalize devotionals or coaching.',
           'Payments: if you subscribe to Premium, Stripe processes card or wallet details; we receive subscription status, customer id, and limited billing metadata — not your full card number.',
           'Web3 (optional): Solana wallet address if you connect one. We do not custody private keys.',
           'Technical: session cookies (Supabase Auth), device and browser data needed for security, PWA, and native-shell operation.',
@@ -58,7 +58,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '4. Legal bases',
         paragraphs: [
-          'We process data to perform the contract of App use (these Terms and the service you request), with your consent (for example sensors, camera, location, social login, wearables, and system permissions), and where applicable for legitimate interests in security and product improvement, or legal obligation. Health and photo data are collected only when you use those features.',
+          'We process data to perform the contract of Platform use (these Terms and the service you request), with your consent (for example sensors, camera, location, social login, wearables, and system permissions), and where applicable for legitimate interests in security and product improvement, or legal obligation. Health and photo data are collected only when you use those features.',
         ],
       },
       {
@@ -66,7 +66,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
         intro: 'We use providers that process data on our behalf, including:',
         bullets: [
           'Supabase — authentication, database, and storage (with Row Level Security: generally only you access your rows).',
-          'Vercel — App hosting.',
+          'Vercel — Platform hosting.',
           'Stripe — Premium checkout, invoices, and the customer portal, on behalf of Salvazion, Inc.',
           'xAI (Grok) — AI coach, AI devotionals, voice-related generation, and meal or body-photo estimates; necessary prompt and image content is sent to produce the result.',
           'Google / X — only if you choose to continue with Gmail or X; their use is also governed by their policies.',
@@ -79,7 +79,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '6. Health, photos, and other sensitive data',
         paragraphs: [
-          'Health logs, wearable metrics, women’s-health entries, clinical notes, and meal or body photos can be sensitive. They are collected only when you use those features. We do not use them to diagnose disease. Photo analysis is an educational estimate and can be wrong. You may stop sensors, revoke wearable connections, or delete local data via the App and the device. On native shells, HealthKit / Health Connect require your explicit system permission.',
+          'Health logs, wearable metrics, women’s-health entries, clinical notes, and meal or body photos can be sensitive. They are collected only when you use those features. We do not use them to diagnose disease. Photo analysis is an educational estimate and can be wrong. You may stop sensors, revoke wearable connections, or delete local data via the Platform and the device. On native shells, HealthKit / Health Connect require your explicit system permission.',
         ],
       },
       {
@@ -91,7 +91,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '8. Retention',
         paragraphs: [
-          `We retain data while you keep an account or as needed for the service, security, accounting, and legal obligations. You may request account deletion by contacting ${SUPPORT_EMAIL}. We will delete or anonymize personal data we control within a reasonable time, except records we must keep (for example invoices). Some cache may live on your device (localStorage) until you clear it or uninstall the App. Blockchain records we do not control cannot be erased.`,
+          `We retain data while you keep an account or as needed for the service, security, accounting, and legal obligations. You may request account deletion by contacting ${SUPPORT_EMAIL}. We will delete or anonymize personal data we control within a reasonable time, except records we must keep (for example invoices). Some cache may live on your device (localStorage) until you clear it or uninstall the Platform. Blockchain records we do not control cannot be erased.`,
         ],
       },
       {
@@ -109,7 +109,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '11. Children',
         paragraphs: [
-          'The App is not directed at children under 13, and we do not knowingly collect personal data from them. If a guardian believes a minor provided us data, contact us to review and delete it.',
+          'The Platform is not directed at children under 13, and we do not knowingly collect personal data from them. If a guardian believes a minor provided us data, contact us to review and delete it.',
         ],
       },
       {
@@ -121,7 +121,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '13. Cookies',
         paragraphs: [
-          'We use cookies or similar storage essential for authentication, security, language, text size, and theme. We do not rely on third-party ad networks for the core App.',
+          'We use cookies or similar storage essential for authentication, security, language, text size, and theme. We do not rely on third-party ad networks for the core Platform.',
         ],
       },
       {
@@ -147,7 +147,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '',
         paragraphs: [
-          `Salvazion, Inc. (“Salvazion”, “nosotros”) respeta tu privacidad. Esta política describe qué datos tratamos en la App (${APP_URL}), con qué fin, con quién los compartimos y qué derechos tienes. Al usar la App, aceptas esta política junto con los Términos de Servicio en /terms.`,
+          `Salvazion, Inc. (“Salvazion”, “nosotros”) respeta tu privacidad. Esta política describe qué datos tratamos en la Plataforma (${APP_URL}), con qué fin, con quién los compartimos y qué derechos tienes. Al usar la Plataforma, aceptas esta política junto con los Términos de Servicio en /terms.`,
         ],
       },
       {
@@ -158,15 +158,15 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       },
       {
         heading: '2. Datos que podemos recoger',
-        intro: 'Según cómo uses la App, podemos tratar:',
+        intro: 'Según cómo uses la Plataforma, podemos tratar:',
         bullets: [
           'Cuenta: email, nombre, idioma (inglés, español o portugués de Brasil), foto de perfil, preferencias de onboarding (propósito, ciudad, país, fecha de nacimiento, madurez espiritual, familia, focos).',
           'Inicio de sesión social: si usas Google o X, identificadores y datos de perfil que el proveedor comparta (por ejemplo email, nombre, foto, @ de X), según su configuración y tu consentimiento.',
-          'Uso de la App: scores Salvation / Health / Freedom, rachas, insignias, progreso de lectura bíblica, devocionales completados, entradas de calendario y motivos de oración, invitaciones Phalanx que envíes o aceptes.',
+          'Uso de la Plataforma: scores Salvation / Health / Freedom, rachas, insignias, progreso de lectura bíblica, devocionales completados, entradas de calendario y motivos de oración, invitaciones Phalanx que envíes o aceptes.',
           'Health: sueño, hidratación, comidas, deportes, ayuno, registros de salud femenina, notas clínicas que ingreses, métricas de sensores del teléfono o frecuencia cardíaca Bluetooth, y métricas de wearables que actives (Fitbit, Oura, WHOOP, Garmin, HealthKit, Health Connect).',
           'Fotos que elijas subir para estimaciones de comida o composición corporal.',
           'Ubicación, solo si concedes el permiso (por ejemplo clima exterior o el mapa de iglesias).',
-          'Conversaciones de IA: mensajes que envíes al coach León Verde, y un contexto limitado de perfil para personalizar devocionales o coaching.',
+          'Conversaciones de IA: mensajes que envíes a Salvazion AI, y un contexto limitado de perfil para personalizar devocionales o coaching.',
           'Pagos: si te suscribes a Premium, Stripe procesa los datos de tarjeta o billetera; nosotros recibimos estado de suscripción, id de cliente y metadatos limitados de facturación — no el número completo de la tarjeta.',
           'Web3 (opcional): dirección de billetera Solana si la conectas. No custodiamos claves privadas.',
           'Técnicos: cookies de sesión (Supabase Auth), datos de dispositivo y navegador necesarios para seguridad, PWA y el shell nativo.',
@@ -189,7 +189,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '4. Base legal',
         paragraphs: [
-          'Tratamos datos para ejecutar el contrato de uso de la App (estos Términos y el servicio que solicitas), con tu consentimiento (por ejemplo sensores, cámara, ubicación, login social, wearables y permisos del sistema) y, cuando aplique, por interés legítimo en seguridad y mejora del producto, o por obligación legal. Los datos de salud y fotos se recogen solo cuando usas esas funciones.',
+          'Tratamos datos para ejecutar el contrato de uso de la Plataforma (estos Términos y el servicio que solicitas), con tu consentimiento (por ejemplo sensores, cámara, ubicación, login social, wearables y permisos del sistema) y, cuando aplique, por interés legítimo en seguridad y mejora del producto, o por obligación legal. Los datos de salud y fotos se recogen solo cuando usas esas funciones.',
         ],
       },
       {
@@ -197,7 +197,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
         intro: 'Usamos proveedores que tratan datos en nuestro nombre, entre otros:',
         bullets: [
           'Supabase — autenticación, base de datos y almacenamiento (con Row Level Security: en general solo tú accedes a tus filas).',
-          'Vercel — alojamiento de la App.',
+          'Vercel — alojamiento de la Plataforma.',
           'Stripe — checkout Premium, facturas y el portal de cliente, en nombre de Salvazion, Inc.',
           'xAI (Grok) — coach con IA, devocionales IA, generación relacionada con voz y estimaciones de fotos de comida o cuerpo; se envía el prompt e imagen necesarios para producir el resultado.',
           'Google / X — solo si eliges continuar con Gmail o X; su uso se rige también por sus políticas.',
@@ -210,7 +210,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '6. Salud, fotos y otros datos sensibles',
         paragraphs: [
-          'Los registros de Health, métricas de wearables, salud femenina, notas clínicas y fotos de comida o cuerpo pueden ser sensibles. Solo se recogen cuando usas esas funciones. No los usamos para diagnosticar enfermedades. El análisis de fotos es una estimación educativa y puede equivocarse. Puedes detener sensores, revocar wearables o borrar datos locales desde la App y el dispositivo. En shell nativo, HealthKit / Health Connect requieren tu permiso explícito del sistema.',
+          'Los registros de Health, métricas de wearables, salud femenina, notas clínicas y fotos de comida o cuerpo pueden ser sensibles. Solo se recogen cuando usas esas funciones. No los usamos para diagnosticar enfermedades. El análisis de fotos es una estimación educativa y puede equivocarse. Puedes detener sensores, revocar wearables o borrar datos locales desde la Plataforma y el dispositivo. En shell nativo, HealthKit / Health Connect requieren tu permiso explícito del sistema.',
         ],
       },
       {
@@ -222,7 +222,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '8. Conservación',
         paragraphs: [
-          `Conservamos los datos mientras mantengas la cuenta o sea necesario para el servicio, la seguridad, la contabilidad y las obligaciones legales. Puedes solicitar la eliminación de la cuenta contactando a ${SUPPORT_EMAIL}. Eliminaremos o anonimizaremos los datos personales que controlamos en un plazo razonable, salvo registros que debamos conservar (por ejemplo facturas). Parte del caché puede vivir en tu dispositivo (localStorage) hasta que lo borres o desinstales la App. Los registros de blockchain que no controlamos no se pueden borrar.`,
+          `Conservamos los datos mientras mantengas la cuenta o sea necesario para el servicio, la seguridad, la contabilidad y las obligaciones legales. Puedes solicitar la eliminación de la cuenta contactando a ${SUPPORT_EMAIL}. Eliminaremos o anonimizaremos los datos personales que controlamos en un plazo razonable, salvo registros que debamos conservar (por ejemplo facturas). Parte del caché puede vivir en tu dispositivo (localStorage) hasta que lo borres o desinstales la Plataforma. Los registros de blockchain que no controlamos no se pueden borrar.`,
         ],
       },
       {
@@ -240,7 +240,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '11. Menores',
         paragraphs: [
-          'La App no está dirigida a menores de 13 años y no recabamos a sabiendas sus datos personales. Si un tutor cree que un menor nos ha facilitado datos, contáctanos para revisarlo y eliminarlos.',
+          'La Plataforma no está dirigida a menores de 13 años y no recabamos a sabiendas sus datos personales. Si un tutor cree que un menor nos ha facilitado datos, contáctanos para revisarlo y eliminarlos.',
         ],
       },
       {
@@ -252,7 +252,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '13. Cookies',
         paragraphs: [
-          'Usamos cookies o almacenamiento similar esenciales para autenticación, seguridad, idioma, tamaño de texto y tema. No dependemos de redes publicitarias de terceros para el núcleo de la App.',
+          'Usamos cookies o almacenamiento similar esenciales para autenticación, seguridad, idioma, tamaño de texto y tema. No dependemos de redes publicitarias de terceros para el núcleo de la Plataforma.',
         ],
       },
       {
@@ -278,7 +278,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '',
         paragraphs: [
-          `A Salvazion, Inc. (“Salvazion”, “nós”) respeita a sua privacidade. Esta política descreve quais dados tratamos no App (${APP_URL}), para quais fins, com quem os compartilhamos e quais direitos você tem. Ao usar o App, você aceita esta política juntamente com os Termos de Serviço em /terms.`,
+          `A Salvazion, Inc. (“Salvazion”, “nós”) respeita a sua privacidade. Esta política descreve quais dados tratamos na Plataforma (${APP_URL}), para quais fins, com quem os compartilhamos e quais direitos você tem. Ao usar a Plataforma, você aceita esta política juntamente com os Termos de Serviço em /terms.`,
         ],
       },
       {
@@ -289,15 +289,15 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       },
       {
         heading: '2. Dados que podemos coletar',
-        intro: 'Conforme o uso do App, podemos tratar:',
+        intro: 'Conforme o uso da Plataforma, podemos tratar:',
         bullets: [
           'Conta: email, nome, idioma (inglês, espanhol ou português do Brasil), foto de perfil, preferências de onboarding (propósito, cidade, país, data de nascimento, maturidade espiritual, família, focos).',
           'Login social: se você usa Google ou X, identificadores e dados de perfil que o provedor compartilhe (por exemplo email, nome, foto, @ do X), segundo a configuração dele e o seu consentimento.',
-          'Uso do App: scores Salvation / Health / Freedom, sequências, insígnias, progresso de leitura bíblica, devocionais concluídos, entradas de calendário e motivos de oração, convites Phalanx que você envie ou aceite.',
+          'Uso da Plataforma: scores Salvation / Health / Freedom, sequências, insígnias, progresso de leitura bíblica, devocionais concluídos, entradas de calendário e motivos de oração, convites Phalanx que você envie ou aceite.',
           'Health: sono, hidratação, refeições, esportes, jejum, registros de saúde feminina, notas clínicas que você inserir, métricas de sensores do telefone ou frequência cardíaca Bluetooth, e métricas de wearables que você ative (Fitbit, Oura, WHOOP, Garmin, HealthKit, Health Connect).',
           'Fotos que você escolher enviar para estimativas de refeição ou composição corporal.',
           'Localização, só se você conceder permissão (por exemplo clima externo ou o mapa de igrejas).',
-          'Conversas de IA: mensagens que você enviar ao coach Leão Verde, e um contexto limitado de perfil para personalizar devocionais ou coaching.',
+          'Conversas de IA: mensagens que você enviar à Salvazion AI, e um contexto limitado de perfil para personalizar devocionais ou coaching.',
           'Pagamentos: se você assinar o Premium, a Stripe processa os dados de cartão ou carteira; recebemos status da assinatura, id de cliente e metadados limitados de cobrança — não o número completo do cartão.',
           'Web3 (opcional): endereço de carteira Solana se você conectar uma. Não custodiamos chaves privadas.',
           'Técnicos: cookies de sessão (Supabase Auth), dados de dispositivo e navegador necessários para segurança, PWA e o shell nativo.',
@@ -320,7 +320,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '4. Bases legais',
         paragraphs: [
-          'Tratamos dados para executar o contrato de uso do App (estes Termos e o serviço que você solicita), com o seu consentimento (por exemplo sensores, câmera, localização, login social, wearables e permissões do sistema) e, quando aplicável, por interesse legítimo em segurança e melhoria do produto, ou por obrigação legal. Dados de saúde e fotos são coletados só quando você usa essas funções.',
+          'Tratamos dados para executar o contrato de uso da Plataforma (estes Termos e o serviço que você solicita), com o seu consentimento (por exemplo sensores, câmera, localização, login social, wearables e permissões do sistema) e, quando aplicável, por interesse legítimo em segurança e melhoria do produto, ou por obrigação legal. Dados de saúde e fotos são coletados só quando você usa essas funções.',
         ],
       },
       {
@@ -328,7 +328,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
         intro: 'Usamos provedores que tratam dados em nosso nome, entre outros:',
         bullets: [
           'Supabase — autenticação, banco de dados e armazenamento (com Row Level Security: em geral só você acessa suas linhas).',
-          'Vercel — hospedagem do App.',
+          'Vercel — hospedagem da Plataforma.',
           'Stripe — checkout Premium, faturas e o portal do cliente, em nome da Salvazion, Inc.',
           'xAI (Grok) — coach com IA, devocionais IA, geração relacionada à voz e estimativas de fotos de refeição ou corpo; envia-se o prompt e a imagem necessários para produzir o resultado.',
           'Google / X — só se você escolher continuar com Gmail ou X; o uso também se rege pelas políticas deles.',
@@ -341,7 +341,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '6. Saúde, fotos e outros dados sensíveis',
         paragraphs: [
-          'Registros de Health, métricas de wearables, saúde feminina, notas clínicas e fotos de refeição ou corpo podem ser sensíveis. Só são coletados quando você usa essas funções. Não os usamos para diagnosticar doenças. A análise de fotos é uma estimativa educativa e pode errar. Você pode parar sensores, revogar wearables ou apagar dados locais pelo App e pelo dispositivo. No shell nativo, HealthKit / Health Connect exigem sua permissão explícita do sistema.',
+          'Registros de Health, métricas de wearables, saúde feminina, notas clínicas e fotos de refeição ou corpo podem ser sensíveis. Só são coletados quando você usa essas funções. Não os usamos para diagnosticar doenças. A análise de fotos é uma estimativa educativa e pode errar. Você pode parar sensores, revogar wearables ou apagar dados locais pela Plataforma e pelo dispositivo. No shell nativo, HealthKit / Health Connect exigem sua permissão explícita do sistema.',
         ],
       },
       {
@@ -353,7 +353,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '8. Conservação',
         paragraphs: [
-          `Conservamos os dados enquanto você mantiver a conta ou for necessário para o serviço, a segurança, a contabilidade e as obrigações legais. Você pode pedir a exclusão da conta escrevendo para ${SUPPORT_EMAIL}. Excluiremos ou anonimizaremos os dados pessoais que controlamos em um prazo razoável, salvo registros que devemos conservar (por exemplo faturas). Parte do cache pode viver no seu dispositivo (localStorage) até você apagá-lo ou desinstalar o App. Registros de blockchain que não controlamos não podem ser apagados.`,
+          `Conservamos os dados enquanto você mantiver a conta ou for necessário para o serviço, a segurança, a contabilidade e as obrigações legais. Você pode pedir a exclusão da conta escrevendo para ${SUPPORT_EMAIL}. Excluiremos ou anonimizaremos os dados pessoais que controlamos em um prazo razoável, salvo registros que devemos conservar (por exemplo faturas). Parte do cache pode viver no seu dispositivo (localStorage) até você apagá-lo ou desinstalar a Plataforma. Registros de blockchain que não controlamos não podem ser apagados.`,
         ],
       },
       {
@@ -371,7 +371,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '11. Menores',
         paragraphs: [
-          'O App não é dirigido a menores de 13 anos e não coletamos de propósito os dados pessoais deles. Se um responsável acreditar que um menor nos forneceu dados, entre em contato para revisarmos e excluí-los.',
+          'A Plataforma não é dirigida a menores de 13 anos e não coletamos de propósito os dados pessoais deles. Se um responsável acreditar que um menor nos forneceu dados, entre em contato para revisarmos e excluí-los.',
         ],
       },
       {
@@ -383,7 +383,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '13. Cookies',
         paragraphs: [
-          'Usamos cookies ou armazenamento semelhante essenciais para autenticação, segurança, idioma, tamanho do texto e tema. Não dependemos de redes publicitárias de terceiros para o núcleo do App.',
+          'Usamos cookies ou armazenamento semelhante essenciais para autenticação, segurança, idioma, tamanho do texto e tema. Não dependemos de redes publicitárias de terceiros para o núcleo da Plataforma.',
         ],
       },
       {

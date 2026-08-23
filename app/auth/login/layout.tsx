@@ -4,7 +4,7 @@ import { SEO, absoluteUrl, ogImageMetadata } from '@/lib/seo/config';
 export const metadata: Metadata = {
   title: 'Sign in | Entrar al Hub',
   description:
-    'Sign in to Salvazion Hub — Salvation, Health and Freedom in one App. Gmail, X or email. Inicia sesión en el Hub de Salvazion.',
+    'Sign in to Salvazion Hub — Salvation, Health and Freedom in one Platform. Gmail, X or email. Inicia sesión en el Hub de Salvazion.',
   alternates: {
     canonical: absoluteUrl('/auth/login'),
   },

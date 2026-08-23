@@ -199,9 +199,9 @@ export function buildShareText(
   if (lang === 'en') {
     return `Join my Phalanx on Salvazion!
 
-I'm building Salvation, Health and Freedom with the Green Lion. I want you (${params.inviteeName}) in my circle as ${rel}.
+I'm building Salvation, Health and Freedom with the Green Lion Kings. I want you (${params.inviteeName}) in my circle as ${rel}.
 
-Open the app and grow with me in faith, family and virtue:
+Open the platform and grow with me in faith, family and virtue:
 
 ${params.inviteUrl}
 
@@ -210,9 +210,9 @@ ${params.inviteUrl}
   }
   return `¡Únete a mi Phalanx en Salvazion!
 
-Estoy construyendo Salvation, Health y Freedom con el León Verde. Quiero que ${params.inviteeName} formes parte de mi círculo como ${rel}.
+Estoy construyendo Salvation, Health y Freedom con los Green Lion Kings. Quiero que ${params.inviteeName} formes parte de mi círculo como ${rel}.
 
-Entra a la app y crezcamos juntos en fe, familia y virtud:
+Entra a la plataforma y crezcamos juntos en fe, familia y virtud:
 
 ${params.inviteUrl}
 

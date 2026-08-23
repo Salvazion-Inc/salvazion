@@ -34,7 +34,7 @@ export const dictionary = {
       spanish: 'Español',
       english: 'English',
       portuguese: 'Português',
-      chooseLanguage: 'Elige el idioma de la app',
+      chooseLanguage: 'Elige el idioma de la plataforma',
       languageHint: 'Cambia el idioma en toda la aplicación.',
     },
     nav: {
@@ -70,7 +70,7 @@ export const dictionary = {
       hasAccount: '¿Ya tienes cuenta?',
       signIn: 'Entrar',
       signupTitle: 'Únete a la Comunidad',
-      signupSubtitle: 'Únete a la falange · una sola App',
+      signupSubtitle: 'Únete a la falange · una sola Plataforma',
       name: 'Nombre',
       confirmPassword: 'Confirmar contraseña',
       minPassword: 'Contraseña (mín. 8)',
@@ -135,7 +135,7 @@ export const dictionary = {
         'Esto elimina permanentemente tu perfil, acciones y rachas de este navegador. No hay recuperación.',
       privacyTitle: 'Privacidad y datos',
       privacyBody:
-        'Tu perfil está protegido por Row Level Security de Supabase. Solo tú (auth.uid) puedes leer y escribir tus filas. El caché local acelera la app; la fuente de verdad es el servidor. Soberanía + sincronización.',
+        'Tu perfil está protegido por Row Level Security de Supabase. Solo tú (auth.uid) puedes leer y escribir tus filas. El caché local acelera la plataforma; la fuente de verdad es el servidor. Soberanía + sincronización.',
       phalanx: 'Tu Comunidad Personal',
       links: 'vínculos',
       noInvites: 'Aún no has invitado a nadie. La familia es el núcleo de la civilización occidental cristiana.',
@@ -172,24 +172,24 @@ export const dictionary = {
     textScale: {
       accessibility: 'Accesibilidad',
       title: 'Tamaño de letra',
-      hint: 'Aumenta el texto en toda la app. El diseño y los botones siguen siendo usables.',
+      hint: 'Aumenta el texto en toda la plataforma. El diseño y los botones siguen siendo usables.',
       preview: 'Vista previa',
       previewLine1: 'Make Salvation, Health and Freedom Great Again.',
       previewLine2: 'La Palabra de Dios ilumina el camino de la Comunidad.',
     },
     theme: {
       section: 'Estética',
-      title: 'Colores de la app',
+      title: 'Colores de la plataforma',
       hint: 'Elige una paleta sin perder la esencia Salvazion: oscuro, tech y resplandor suave.',
       preview: 'Vista previa',
       previewLine1: 'Make Salvation, Health and Freedom Great Again.',
-      previewLine2: 'La Comunidad brilla en la oscuridad con el León Verde.',
+      previewLine2: 'Los Green Lion Kings brillan en la oscuridad.',
     },
     valueJourney: {
       section: 'Propuesta de valor',
       benefit: 'Beneficio',
       skip: 'Saltar',
-      explore: 'Explorar en la app',
+      explore: 'Explorar en la plataforma',
       replay: 'Rever el viaje de Salvazion',
       replayHint: 'Salvation · Health · Freedom · Comunidad · León · Artículos · Insignias',
     },
@@ -496,10 +496,10 @@ export const dictionary = {
       nativeChecking: 'Detectando plataforma nativa…',
       syncNative: 'Sincronizar desde el sistema de salud',
       nativePluginMissing:
-        'La app nativa aún no tiene el plugin de salud. Usa OAuth o registro manual en web.',
+        'El shell nativo aún no tiene el plugin de salud. Usa OAuth o registro manual en web.',
       nativeDenied: 'Permiso de salud denegado',
       nativeWebOnly:
-        'HealthKit / Health Connect solo en la app nativa. En el navegador usa Cloud OAuth o registro manual.',
+        'HealthKit / Health Connect solo en el shell nativo. En el navegador usa Cloud OAuth o registro manual.',
       healthkitSynced: 'HealthKit sincronizado',
       healthConnectSynced: 'Health Connect sincronizado',
       modeHealthkit: 'HealthKit',
@@ -507,9 +507,9 @@ export const dictionary = {
     premium: {
       billing: 'Suscripción',
       freeTitle: 'Plan Free',
-      freeBody: 'La plataforma completa + IA Salvazion limitada (coach, devocionales, cineantropometría). Premium es ilimitado.',
+      freeBody: 'Toda la Plataforma + IA Salvazion con cupo. Premium quita el techo y profundiza Health, oración, Freedom y Phalanx.',
       activeTitle: 'Premium activo',
-      activeBody: 'Acceso completo + herramientas avanzadas en toda la App.',
+      activeBody: 'Acceso completo + herramientas avanzadas en toda la Plataforma.',
       status: 'Estado',
       plan: 'Plan',
       renews: 'Renueva',
@@ -578,7 +578,7 @@ export const dictionary = {
       detectable: 'Disponible para conectar',
       noneFound: 'No se encontraron wallets en este dispositivo.',
       modalFooter:
-        'No custodiamos tus llaves. Jupiter Mobile, Phantom, Solflare y otras wallets de Solana aparecen aquí — misma lista en home y en la App.',
+        'No custodiamos tus llaves. Jupiter Mobile, Phantom, Solflare y otras wallets de Solana aparecen aquí — misma lista en home y en la Plataforma.',
       amountLabel: 'Cantidad de $SALVAZION',
       amountHint: 'Saldo on-chain duplica tus cupos Free de IA',
       saveAmount: 'Guardar',
@@ -689,7 +689,7 @@ export const dictionary = {
     },
     settings: {
       section: 'Configuración',
-      title: 'Ajustes de la app',
+      title: 'Ajustes de la plataforma',
       subtitle: 'Colores, idioma, tamaño de letra y huella',
       open: 'Configuración',
       appearance: 'Apariencia',
@@ -703,7 +703,7 @@ export const dictionary = {
       biometricOn: 'Activado',
       biometricOff: 'Desactivado',
       biometricEnableHint: 'Activa el interruptor y confirma con tu huella.',
-      biometricEnabled: 'Ya puedes entrar a la app con tu huella.',
+      biometricEnabled: 'Ya puedes entrar a la plataforma con tu huella.',
       biometricDisabled: 'Entrada con huella desactivada.',
       biometricNeedLogin: 'Entra primero con email o Google para activar la huella.',
       biometricPromptTitle: '¿Entrar con tu pulgar?',
@@ -887,7 +887,7 @@ export const dictionary = {
     },
     onboarding: {
       welcome: 'Bienvenido a la Comunidad',
-      tagline: 'Únete a la falange. Salvación, Salud y Libertad en una sola App.',
+      tagline: 'Únete a la falange. Salvación, Salud y Libertad en una sola Plataforma.',
       taglineShort: 'Tres pasos. Luego vive el día con la agenda.',
       stepOf: 'Paso {n} de {total}',
       preparing: 'Cargando…',
@@ -924,7 +924,7 @@ export const dictionary = {
       sexMale: 'Hombre',
       sexFemale: 'Mujer',
       sexHint:
-        'Se usa en Health (p. ej. ciclo menstrual y biomarcadores). Se define aquí y la app ya no te lo vuelve a pedir.',
+        'Se usa en Health (p. ej. ciclo menstrual y biomarcadores). Se define aquí y la plataforma ya no te lo vuelve a pedir.',
       sexHintShort: 'Solo para Health (ciclo, biomarcadores). Una vez y listo.',
       focusTitle: 'Tu enfoque',
       focusSub: 'Elige lo que importa ahora. Puedes cambiarlo después.',
@@ -967,7 +967,7 @@ export const dictionary = {
       readyTitle: 'Listo para empezar',
       readySub: 'Tu agenda del día ya está preparada.',
       lionTitle: 'Conoce a tu',
-      lionName: 'León Verde',
+      lionName: 'Salvazion AI',
       lionSub: 'Tu coach de virtud y desarrollo integral',
       lionSpiritual: 'Espiritual',
       lionSpiritualBody: 'Biblia · Oración · Devocional',
@@ -980,7 +980,7 @@ export const dictionary = {
       lionPitch:
         'Te entrenaré en virtud, constancia y excelencia para que Salvation, Health y Freedom crezcan cada día.',
       lionPitchShort:
-        'El León te acompaña en Salvation, Health y Freedom. Tú marcas la agenda; el resto se llena solo.',
+        'Salvazion AI te acompaña en Salvation, Health y Freedom. Tú marcas la agenda; el resto se llena solo. Eres Green Lion King.',
       lionPrivacy:
         'Tu perfil se sincroniza de forma segura. Soberanía y disciplina primero.',
       afterStartHint:
@@ -991,7 +991,7 @@ export const dictionary = {
         'No se pudo sincronizar. Tus datos quedaron guardados en este dispositivo; entra de nuevo si el dashboard no abre.',
       shareTitle: 'Únete a mi Comunidad — Salvazion',
       shareBody:
-        '¡Únete a mi Comunidad en Salvazion!\n\nEstoy construyendo Salvation, Health y Freedom con el León Verde. Quiero que formes parte de mi círculo ({relation}).\n\nEntra a la app y crecemos juntos en fe, familia y virtud.\n\nhttps://salvazion.org\n\n#Salvazion #Comunidad',
+        '¡Únete a los Green Lion Kings en Salvazion!\n\nEstoy construyendo Salvation, Health y Freedom. Quiero que formes parte de mi círculo ({relation}).\n\nEntra a la plataforma y crecemos juntos en fe, familia y virtud.\n\nhttps://salvazion.org\n\n#Salvazion #GreenLionKings',
     },
     badges: {
       title: 'Insignias',
@@ -1057,7 +1057,7 @@ export const dictionary = {
       spanish: 'Español',
       english: 'English',
       portuguese: 'Português',
-      chooseLanguage: 'Choose app language',
+      chooseLanguage: 'Choose platform language',
       languageHint: 'Changes the language across the entire application.',
     },
     nav: {
@@ -1093,7 +1093,7 @@ export const dictionary = {
       hasAccount: 'Already have an account?',
       signIn: 'Sign in',
       signupTitle: 'Join the Community',
-      signupSubtitle: 'Join the phalanx · one App',
+      signupSubtitle: 'Join the phalanx · one Platform',
       name: 'Name',
       confirmPassword: 'Confirm password',
       minPassword: 'Password (min. 8)',
@@ -1158,7 +1158,7 @@ export const dictionary = {
         'This permanently deletes your profile, actions and streaks in this browser. No recovery.',
       privacyTitle: 'Privacy and data',
       privacyBody:
-        'Your profile is protected by Supabase Row Level Security. Only you (auth.uid) can read and write your rows. Local cache speeds up the app; the server is the source of truth.',
+        'Your profile is protected by Supabase Row Level Security. Only you (auth.uid) can read and write your rows. Local cache speeds up the platform; the server is the source of truth.',
       phalanx: 'Your Personal Community',
       links: 'links',
       noInvites: 'You have not invited anyone yet. Family is the core of Western Christian civilization.',
@@ -1195,24 +1195,24 @@ export const dictionary = {
     textScale: {
       accessibility: 'Accessibility',
       title: 'Text size',
-      hint: 'Increases text across the whole app. Layout and buttons stay usable.',
+      hint: 'Increases text across the whole platform. Layout and buttons stay usable.',
       preview: 'Preview',
       previewLine1: 'Make Salvation, Health and Freedom Great Again.',
       previewLine2: 'The Word of God lights the path of the Community.',
     },
     theme: {
       section: 'Aesthetics',
-      title: 'App colors',
+      title: 'Platform colors',
       hint: 'Pick a palette without losing Salvazion essence: dark, tech, soft glow.',
       preview: 'Preview',
       previewLine1: 'Make Salvation, Health and Freedom Great Again.',
-      previewLine2: 'The Community shines in the dark with the Green Lion.',
+      previewLine2: 'The Green Lion Kings shine in the dark.',
     },
     valueJourney: {
       section: 'Value proposition',
       benefit: 'Benefit',
       skip: 'Skip',
-      explore: 'Explore in the app',
+      explore: 'Explore in the platform',
       replay: 'Replay the Salvazion journey',
       replayHint: 'Salvation · Health · Freedom · Comunidad · Lion · Articles · Badges',
     },
@@ -1516,10 +1516,10 @@ export const dictionary = {
       nativeChecking: 'Detecting native platform…',
       syncNative: 'Sync from system health',
       nativePluginMissing:
-        'Native app is missing the health plugin. Use OAuth or manual entry on the web.',
+        'Native shell is missing the health plugin. Use OAuth or manual entry on the web.',
       nativeDenied: 'Health permission denied',
       nativeWebOnly:
-        'HealthKit / Health Connect only in the native app. In the browser use Cloud OAuth or manual entry.',
+        'HealthKit / Health Connect only in the native shell. In the browser use Cloud OAuth or manual entry.',
       healthkitSynced: 'HealthKit synced',
       healthConnectSynced: 'Health Connect synced',
       modeHealthkit: 'HealthKit',
@@ -1527,9 +1527,9 @@ export const dictionary = {
     premium: {
       billing: 'Subscription',
       freeTitle: 'Free plan',
-      freeBody: 'The full platform + limited Salvazion AI (coach, devotionals, cineanthropometry). Premium is unlimited.',
+      freeBody: 'The whole Platform + metered Salvazion AI. Premium removes the ceiling and goes deeper on Health, prayer, Freedom and Phalanx.',
       activeTitle: 'Premium active',
-      activeBody: 'Full access + advanced tools across the App.',
+      activeBody: 'Full access + advanced tools across the Platform.',
       status: 'Status',
       plan: 'Plan',
       renews: 'Renews',
@@ -1598,7 +1598,7 @@ export const dictionary = {
       detectable: 'Available to connect',
       noneFound: 'No wallets found on this device.',
       modalFooter:
-        'We never custody your keys. Jupiter Mobile, Phantom, Solflare and other Solana wallets appear here — same list on home and in the App.',
+        'We never custody your keys. Jupiter Mobile, Phantom, Solflare and other Solana wallets appear here — same list on home and in the Platform.',
       amountLabel: '$SALVAZION amount',
       amountHint: 'On-chain balance doubles your Free AI limits',
       saveAmount: 'Save',
@@ -1709,7 +1709,7 @@ export const dictionary = {
     },
     settings: {
       section: 'Settings',
-      title: 'App settings',
+      title: 'Platform settings',
       subtitle: 'Colors, language, text size, and fingerprint',
       open: 'Settings',
       appearance: 'Appearance',
@@ -1723,7 +1723,7 @@ export const dictionary = {
       biometricOn: 'On',
       biometricOff: 'Off',
       biometricEnableHint: 'Flip the switch and confirm with your fingerprint.',
-      biometricEnabled: 'You can now enter the app with your fingerprint.',
+      biometricEnabled: 'You can now enter the platform with your fingerprint.',
       biometricDisabled: 'Fingerprint unlock turned off.',
       biometricNeedLogin: 'Sign in with email or Google first to enable fingerprint.',
       biometricPromptTitle: 'Unlock with your thumb?',
@@ -1907,7 +1907,7 @@ export const dictionary = {
     },
     onboarding: {
       welcome: 'Welcome to the Community',
-      tagline: 'Join the phalanx. Salvation, Health and Freedom in one App.',
+      tagline: 'Join the phalanx. Salvation, Health and Freedom in one Platform.',
       taglineShort: 'Three steps. Then live the day with your agenda.',
       stepOf: 'Step {n} of {total}',
       preparing: 'Loading…',
@@ -1944,7 +1944,7 @@ export const dictionary = {
       sexMale: 'Male',
       sexFemale: 'Female',
       sexHint:
-        'Used in Health (e.g. cycle and biomarkers). Set once here; the app will not ask again.',
+        'Used in Health (e.g. cycle and biomarkers). Set once here; the platform will not ask again.',
       sexHintShort: 'Only for Health (cycle, biomarkers). Set once.',
       focusTitle: 'Your focus',
       focusSub: 'Pick what matters now. You can change it later.',
@@ -1987,7 +1987,7 @@ export const dictionary = {
       readyTitle: 'Ready to begin',
       readySub: 'Your daily agenda is already prepared.',
       lionTitle: 'Meet your',
-      lionName: 'Green Lion',
+      lionName: 'Salvazion AI',
       lionSub: 'Your coach for virtue and integral growth',
       lionSpiritual: 'Spiritual',
       lionSpiritualBody: 'Bible · Prayer · Devotional',
@@ -2000,7 +2000,7 @@ export const dictionary = {
       lionPitch:
         'I will train you in virtue, consistency, and excellence so Salvation, Health, and Freedom grow every day.',
       lionPitchShort:
-        'The Lion walks with you in Salvation, Health, and Freedom. Mark the agenda; the rest fills itself.',
+        'Salvazion AI walks with you in Salvation, Health, and Freedom. Mark the agenda; the rest fills itself. You are a Green Lion King.',
       lionPrivacy: 'Your profile syncs securely. Sovereignty and discipline first.',
       afterStartHint:
         'Mark Yes on today’s agenda. Read a chapter. That’s enough to start.',
@@ -2010,7 +2010,7 @@ export const dictionary = {
         'Could not sync. Your answers are saved on this device — try again if the dashboard does not open.',
       shareTitle: 'Join my Community — Salvazion',
       shareBody:
-        'Join my Community on Salvazion!\n\nI am building Salvation, Health, and Freedom with the Green Lion. I want you in my circle ({relation}).\n\nOpen the app and grow with me in faith, family, and virtue.\n\nhttps://salvazion.org\n\n#Salvazion #Community',
+        'Join the Green Lion Kings on Salvazion!\n\nI am building Salvation, Health, and Freedom. I want you in my circle ({relation}).\n\nOpen the platform and grow with me in faith, family, and virtue.\n\nhttps://salvazion.org\n\n#Salvazion #GreenLionKings',
     },
     badges: {
       title: 'Badges',

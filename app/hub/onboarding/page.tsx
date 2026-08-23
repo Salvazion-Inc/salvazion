@@ -516,7 +516,7 @@ export default function OnboardingPage() {
               <div className="w-28 h-28 rounded-full overflow-hidden lion-glow flex items-center justify-center bg-[var(--true-black)] border border-[var(--border-strong)]">
                 <Image
                   src="/logo-icon.png"
-                  alt={t('onboarding.lionName')}
+                  alt="Salvazion"
                   width={112}
                   height={112}
                   className="object-cover"

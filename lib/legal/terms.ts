@@ -15,9 +15,9 @@ export type LegalDoc = {
   sections: LegalSection[];
 };
 
-const UPDATED_EN = 'August 12, 2026';
-const UPDATED_ES = '12 de agosto de 2026';
-const UPDATED_PT = '12 de agosto de 2026';
+const UPDATED_EN = 'August 23, 2026';
+const UPDATED_ES = '23 de agosto de 2026';
+const UPDATED_PT = '23 de agosto de 2026';
 
 const ENTITY =
   'Salvazion, Inc., a Delaware corporation, with registered office at 131 Continental Dr, Suite 305, Newark, DE 19713, USA';
@@ -32,32 +32,32 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '',
         paragraphs: [
-          `These Terms of Service (“Terms”) are a contract between you and ${ENTITY} (“Salvazion”, “the App”, “we”). The App is available at ${APP_URL} as a website, progressive web app, and native iOS / Android shells. By creating an account, signing in, or using the App, you agree to these Terms and to our Privacy Policy at /privacy. If you do not agree, do not use the App.`,
+          `These Terms of Service (“Terms”) are a contract between you and ${ENTITY} (“Salvazion”, “the Platform”, “we”). The Platform is available at ${APP_URL} as a website, progressive web application (PWA), and native iOS / Android shells. By creating an account, signing in, or using the Platform, you agree to these Terms and to our Privacy Policy at /privacy. If you do not agree, do not use the Platform.`,
         ],
       },
       {
         heading: '1. Service description',
         paragraphs: [
-          'Salvazion is a freemium digital application organized around three pillars — Salvation, Health, and Freedom — to help you grow in faith, steward the body, and practice responsible liberty. The App is formative, motivational, and community-oriented. It does not replace professional medical, psychological, legal, financial, tax, or pastoral advice.',
-          'Depending on your plan and device, the App may include:',
+          'Salvazion is a freemium digital platform organized around three pillars — Salvation, Health, and Freedom — to help you grow in faith, steward the body, and practice responsible liberty. The Platform is formative, motivational, and community-oriented. It does not replace professional medical, psychological, legal, financial, tax, or pastoral advice.',
+          'Depending on your plan and device, the Platform may include:',
         ],
         bullets: [
           'Salvation: offline Bible (English King James, Spanish Reina Valera 1909, Portuguese Almeida historic text labeled ARC, plus Hebrew and Greek originals), daily devotionals, prayer motives, discipline calendar, and spiritual scores.',
           'Health: manual logs (sleep, hydration, meals, sports), phone sensors, Bluetooth heart rate, optional meal or body photos, women’s health and clinical-record tools, and optional wearable sync.',
           'Freedom: curated books, long-form articles on X, YouTube channels, a churches map, Phalanx community invitations, and optional Solana wallet tools including $SALVAZION swaps.',
-          'Salvazion AI (Green Lion coach), voice playback, and AI-assisted devotionals on Premium.',
+          'Salvazion AI coach, voice playback, and AI-assisted devotionals on Premium.',
           'Scores, streaks, badges, profile, and language (English, Spanish, Brazilian Portuguese).',
         ],
       },
       {
         heading: '2. Eligibility and account',
         bullets: [
-          'You must have legal capacity to accept these Terms (generally the age of majority in your jurisdiction). The App is not directed to children under 13. If you are between 13 and the age of majority, you may use the App only with a parent or guardian who accepts these Terms.',
+          'You must have legal capacity to accept these Terms (generally the age of majority in your jurisdiction). The Platform is not directed to children under 13. If you are between 13 and the age of majority, you may use the Platform only with a parent or guardian who accepts these Terms.',
           'You may register with email and password, a magic link, Google, or X, depending on enabled providers.',
           'You are responsible for the confidentiality of your account and for activity under it. Notify us at ' +
             SUPPORT_EMAIL +
             ' if you suspect unauthorized use.',
-          'You must provide truthful information to the extent the App requests it to personalize your experience.',
+          'You must provide truthful information to the extent the Platform requests it to personalize your experience.',
           'We may refuse, suspend, or close an account that is incomplete, abusive, or created to evade these Terms.',
         ],
       },
@@ -65,7 +65,7 @@ export const TERMS: Record<Language, LegalDoc> = {
         heading: '3. Acceptable use',
         intro: 'You agree not to:',
         bullets: [
-          'Use the App unlawfully, fraudulently, or in ways that violate third-party rights.',
+          'Use the Platform unlawfully, fraudulently, or in ways that violate third-party rights.',
           'Attempt to breach security, gain unauthorized access, scrape abusively, reverse engineer, or interfere with the service.',
           'Post or transmit offensive or defamatory content, or content that promotes violence or illegality, in community spaces.',
           'Impersonate others or abuse Phalanx invitations.',
@@ -96,9 +96,9 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '7. Plans, Premium, and payments',
         paragraphs: [
-          'The App is freemium. A Free plan lets you start. Salvazion Premium unlocks advanced tools (including the AI coach and voice, AI devotionals, cloud wearables, advanced health and calendar, full Freedom convenience, and unlimited Phalanx invites) as described in the App at the time of purchase.',
+          'The Platform is freemium. A Free plan lets you start. Salvazion Premium unlocks advanced tools (including the AI coach and voice, AI devotionals, cloud wearables, advanced health and calendar, full Freedom convenience, and unlimited Phalanx invites) as described in the Platform at the time of purchase.',
           'Current published prices are USD $49 per month or USD $468 per year (equivalent to $39 per month billed annually). Prices, features, and taxes may change; the amount charged is the price shown at checkout.',
-          'Payments are processed by Stripe on behalf of Salvazion, Inc. We do not store full card numbers. You authorize recurring charges until you cancel. You may cancel or change plans anytime in the Stripe customer portal from the App. Cancellation stops future renewals; fees already paid are generally not refunded except where required by law. If a payment fails, we may downgrade the account to Free.',
+          'Payments are processed by Stripe on behalf of Salvazion, Inc. We do not store full card numbers. You authorize recurring charges until you cancel. You may cancel or change plans anytime in the Stripe customer portal from the Platform. Cancellation stops future renewals; fees already paid are generally not refunded except where required by law. If a payment fails, we may downgrade the account to Free.',
         ],
       },
       {
@@ -110,26 +110,26 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '9. Intellectual property',
         paragraphs: [
-          'The Salvazion name, Green Lion brand, App design, logos, software, scores, and original editorial content belong to Salvazion, Inc. or are used under license. You receive a limited, revocable, non-transferable license to use the App for personal, non-commercial purposes.',
-          'Bible translations are used according to their rights: King James Version (public domain); Reina Valera 1909 (public domain — not Reina-Valera 1960, which we do not redistribute); Almeida historic text (public-domain Almeida lineage, presented in the App as ARC); Westminster Leningrad Codex (Hebrew) and Textus Receptus (Greek). You may not copy, resell, or exploit the App or its datasets beyond what those licenses and applicable law allow.',
+          'The Salvazion name and logo, the Green Lion Kings community identity, Platform design, software, scores, and original editorial content belong to Salvazion, Inc. or are used under license. You receive a limited, revocable, non-transferable license to use the Platform for personal, non-commercial purposes.',
+          'Bible translations are used according to their rights: King James Version (public domain); Reina Valera 1909 (public domain — not Reina-Valera 1960, which we do not redistribute); Almeida historic text (public-domain Almeida lineage, presented in the Platform as ARC); Westminster Leningrad Codex (Hebrew) and Textus Receptus (Greek). You may not copy, resell, or exploit the Platform or its datasets beyond what those licenses and applicable law allow.',
         ],
       },
       {
         heading: '10. Availability and changes',
         paragraphs: [
-          'We may modify, suspend, or discontinue App features, prices, or these Terms, effective when published on this page. Material changes will show a new “Last updated” date. Continued use after material changes constitutes acceptance. We do not guarantee uninterrupted availability, error-free operation, or that AI, sensors, or third-party services will remain available.',
+          'We may modify, suspend, or discontinue Platform features, prices, or these Terms, effective when published on this page. Material changes will show a new “Last updated” date. Continued use after material changes constitutes acceptance. We do not guarantee uninterrupted availability, error-free operation, or that AI, sensors, or third-party services will remain available.',
         ],
       },
       {
         heading: '11. Limitation of liability',
         paragraphs: [
-          'The App is provided “as is” and “as available”. To the fullest extent permitted by law, Salvazion, Inc. and its directors, officers, and collaborators are not liable for indirect, incidental, special, consequential, or punitive damages, lost profits, data loss, or damages arising from use or inability to use the App, including AI, health, location, photo, billing, or Web3 features. Our aggregate liability for claims relating to the App will not exceed the greater of (a) the amounts you paid us for Premium in the three months before the claim or (b) USD $50, except where liability cannot be limited.',
+          'The Platform is provided “as is” and “as available”. To the fullest extent permitted by law, Salvazion, Inc. and its directors, officers, and collaborators are not liable for indirect, incidental, special, consequential, or punitive damages, lost profits, data loss, or damages arising from use or inability to use the Platform, including AI, health, location, photo, billing, or Web3 features. Our aggregate liability for claims relating to the Platform will not exceed the greater of (a) the amounts you paid us for Premium in the three months before the claim or (b) USD $50, except where liability cannot be limited.',
         ],
       },
       {
         heading: '12. Termination',
         paragraphs: [
-          'You may stop using the App at any time and request account deletion as described in the Privacy Policy. We may suspend or close accounts that breach these Terms or put the service or other users at risk. Sections that by nature should survive (including intellectual property, Web3 risk, limitation of liability, and governing law) remain in force after termination.',
+          'You may stop using the Platform at any time and request account deletion as described in the Privacy Policy. We may suspend or close accounts that breach these Terms or put the service or other users at risk. Sections that by nature should survive (including intellectual property, Web3 risk, limitation of liability, and governing law) remain in force after termination.',
         ],
       },
       {
@@ -155,32 +155,32 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '',
         paragraphs: [
-          `Estos Términos de Servicio (“Términos”) son un contrato entre tú y Salvazion, Inc., una sociedad de Delaware, con domicilio registrado en 131 Continental Dr, Suite 305, Newark, DE 19713, EE. UU. (“Salvazion”, “la App”, “nosotros”). La App está disponible en ${APP_URL} como sitio web, aplicación web progresiva y shells nativos iOS / Android. Al crear una cuenta, iniciar sesión o usar la App, aceptas estos Términos y la Política de Privacidad en /privacy. Si no estás de acuerdo, no uses la App.`,
+          `Estos Términos de Servicio (“Términos”) son un contrato entre tú y Salvazion, Inc., una sociedad de Delaware, con domicilio registrado en 131 Continental Dr, Suite 305, Newark, DE 19713, EE. UU. (“Salvazion”, “la Plataforma”, “nosotros”). La Plataforma está disponible en ${APP_URL} como sitio web, aplicación web progresiva y shells nativos iOS / Android. Al crear una cuenta, iniciar sesión o usar la Plataforma, aceptas estos Términos y la Política de Privacidad en /privacy. Si no estás de acuerdo, no uses la Plataforma.`,
         ],
       },
       {
         heading: '1. Descripción del servicio',
         paragraphs: [
-          'Salvazion es una aplicación digital freemium organizada en tres pilares — Salvation, Health y Freedom — para crecer en la fe, cuidar el cuerpo y practicar una libertad responsable. La App es formativa, motivacional y comunitaria. No sustituye consejo médico, psicológico, legal, financiero, tributario ni pastoral profesional.',
-          'Según tu plan y dispositivo, la App puede incluir:',
+          'Salvazion es una plataforma digital freemium organizada en tres pilares — Salvation, Health y Freedom — para crecer en la fe, cuidar el cuerpo y practicar una libertad responsable. La Plataforma es formativa, motivacional y comunitaria. No sustituye consejo médico, psicológico, legal, financiero, tributario ni pastoral profesional.',
+          'Según tu plan y dispositivo, la Plataforma puede incluir:',
         ],
         bullets: [
           'Salvation: Biblia offline (King James en inglés, Reina Valera 1909 en español, texto histórico Almeida rotulado ARC en portugués, más originales en hebreo y griego), devocional diario, motivos de oración, calendario de disciplina y scores espirituales.',
           'Health: registros manuales (sueño, hidratación, comidas, deportes), sensores del teléfono, frecuencia cardíaca Bluetooth, fotos opcionales de comida o composición corporal, salud femenina y ficha clínica, y sincronización opcional con wearables.',
           'Freedom: libros curados, artículos long-form en X, canales de YouTube, mapa de iglesias, invitaciones a la comunidad Phalanx y herramientas opcionales de billetera Solana, incluido el swap de $SALVAZION.',
-          'Salvazion con IA (coach León Verde), voz y devocionales asistidos por IA en Premium.',
+          'Salvazion AI (coach), voz y devocionales asistidos por IA en Premium.',
           'Scores, rachas, insignias, perfil e idiomas (inglés, español y portugués de Brasil).',
         ],
       },
       {
         heading: '2. Elegibilidad y cuenta',
         bullets: [
-          'Debes tener capacidad legal para aceptar estos Términos (en general, mayoría de edad en tu jurisdicción). La App no está dirigida a menores de 13 años. Si tienes entre 13 años y la mayoría de edad, solo puedes usarla con un padre o tutor que acepte estos Términos.',
+          'Debes tener capacidad legal para aceptar estos Términos (en general, mayoría de edad en tu jurisdicción). La Plataforma no está dirigida a menores de 13 años. Si tienes entre 13 años y la mayoría de edad, solo puedes usarla con un padre o tutor que acepte estos Términos.',
           'Puedes registrarte con email y contraseña, enlace mágico, Google o X, según los proveedores habilitados.',
           'Eres responsable de la confidencialidad de tu cuenta y de la actividad realizada con ella. Avísanos en ' +
             SUPPORT_EMAIL +
             ' si sospechas un uso no autorizado.',
-          'Debes proporcionar información veraz en la medida en que la App la solicite para personalizar la experiencia.',
+          'Debes proporcionar información veraz en la medida en que la Plataforma la solicite para personalizar la experiencia.',
           'Podemos rechazar, suspender o cerrar una cuenta incompleta, abusiva o creada para evadir estos Términos.',
         ],
       },
@@ -188,7 +188,7 @@ export const TERMS: Record<Language, LegalDoc> = {
         heading: '3. Uso aceptable',
         intro: 'Te comprometes a no:',
         bullets: [
-          'Usar la App de forma ilegal, fraudulenta o que viole derechos de terceros.',
+          'Usar la Plataforma de forma ilegal, fraudulenta o que viole derechos de terceros.',
           'Intentar vulnerar la seguridad, obtener acceso no autorizado, hacer scraping abusivo, ingeniería inversa o interferir con el servicio.',
           'Publicar o transmitir contenido ofensivo, difamatorio, o que promueva violencia o ilegalidad en espacios de comunidad.',
           'Suplantar identidad o abusar de invitaciones Phalanx.',
@@ -219,9 +219,9 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '7. Planes, Premium y pagos',
         paragraphs: [
-          'La App es freemium. El plan Gratis te permite empezar. Salvazion Premium desbloquea herramientas avanzadas (incluido el coach con IA y voz, devocionales IA, wearables en la nube, salud y calendario avanzados, conveniencia completa de Freedom e invitaciones Phalanx ilimitadas), según se describa en la App al comprar.',
+          'La Plataforma es freemium. El plan Gratis te permite empezar. Salvazion Premium desbloquea herramientas avanzadas (incluido el coach con IA y voz, devocionales IA, wearables en la nube, salud y calendario avanzados, conveniencia completa de Freedom e invitaciones Phalanx ilimitadas), según se describa en la Plataforma al comprar.',
           'Los precios publicados actuales son USD $49 al mes o USD $468 al año (equivalente a $39 al mes facturado anualmente). Precios, funciones e impuestos pueden cambiar; el cargo es el precio mostrado en el checkout.',
-          'Los pagos los procesa Stripe en nombre de Salvazion, Inc. No almacenamos el número completo de la tarjeta. Autorizas cargos recurrentes hasta que canceles. Puedes cancelar o cambiar de plan cuando quieras en el portal de cliente de Stripe desde la App. La cancelación detiene las renovaciones futuras; los importes ya pagados no se reembolsan salvo cuando la ley lo exija. Si un pago falla, podemos bajar la cuenta a Gratis.',
+          'Los pagos los procesa Stripe en nombre de Salvazion, Inc. No almacenamos el número completo de la tarjeta. Autorizas cargos recurrentes hasta que canceles. Puedes cancelar o cambiar de plan cuando quieras en el portal de cliente de Stripe desde la Plataforma. La cancelación detiene las renovaciones futuras; los importes ya pagados no se reembolsan salvo cuando la ley lo exija. Si un pago falla, podemos bajar la cuenta a Gratis.',
         ],
       },
       {
@@ -233,8 +233,8 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '9. Propiedad intelectual',
         paragraphs: [
-          'El nombre Salvazion, la marca León Verde, el diseño de la App, logotipos, software, scores y el contenido editorial propio pertenecen a Salvazion, Inc. o se usan bajo licencia. Recibes una licencia limitada, revocable y no transferible para usar la App con fines personales y no comerciales.',
-          'Las traducciones bíblicas se usan conforme a sus derechos: King James Version (dominio público); Reina Valera 1909 (dominio público — no Reina-Valera 1960, que no redistribuimos); texto histórico Almeida (linaje de dominio público, presentado en la App como ARC); Westminster Leningrad Codex (hebreo) y Textus Receptus (griego). No puedes copiar, revender ni explotar la App o sus conjuntos de datos más allá de lo que esas licencias y la ley permitan.',
+          'El nombre y el logo Salvazion, la identidad de la comunidad Green Lion Kings, el diseño de la Plataforma, software, scores y el contenido editorial propio pertenecen a Salvazion, Inc. o se usan bajo licencia. Recibes una licencia limitada, revocable y no transferible para usar la Plataforma con fines personales y no comerciales.',
+          'Las traducciones bíblicas se usan conforme a sus derechos: King James Version (dominio público); Reina Valera 1909 (dominio público — no Reina-Valera 1960, que no redistribuimos); texto histórico Almeida (linaje de dominio público, presentado en la Plataforma como ARC); Westminster Leningrad Codex (hebreo) y Textus Receptus (griego). No puedes copiar, revender ni explotar la Plataforma o sus conjuntos de datos más allá de lo que esas licencias y la ley permitan.',
         ],
       },
       {
@@ -246,13 +246,13 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '11. Limitación de responsabilidad',
         paragraphs: [
-          'La App se ofrece “tal cual” y “según disponibilidad”. En la medida permitida por la ley, Salvazion, Inc. y sus directores, oficiales y colaboradores no serán responsables por daños indirectos, incidentales, especiales, consecuenciales o punitivos, lucros cesantes, pérdida de datos o daños derivados del uso o la imposibilidad de uso de la App, incluidas las funciones de IA, salud, ubicación, fotos, facturación o Web3. Nuestra responsabilidad agregada por reclamaciones relativas a la App no excederá el mayor entre (a) lo que nos pagaste por Premium en los tres meses anteriores a la reclamación o (b) USD $50, salvo donde la responsabilidad no pueda limitarse.',
+          'La Plataforma se ofrece “tal cual” y “según disponibilidad”. En la medida permitida por la ley, Salvazion, Inc. y sus directores, oficiales y colaboradores no serán responsables por daños indirectos, incidentales, especiales, consecuenciales o punitivos, lucros cesantes, pérdida de datos o daños derivados del uso o la imposibilidad de uso de la Plataforma, incluidas las funciones de IA, salud, ubicación, fotos, facturación o Web3. Nuestra responsabilidad agregada por reclamaciones relativas a la Plataforma no excederá el mayor entre (a) lo que nos pagaste por Premium en los tres meses anteriores a la reclamación o (b) USD $50, salvo donde la responsabilidad no pueda limitarse.',
         ],
       },
       {
         heading: '12. Terminación',
         paragraphs: [
-          'Puedes dejar de usar la App en cualquier momento y solicitar la eliminación de la cuenta según la Política de Privacidad. Podemos suspender o cerrar cuentas que incumplan estos Términos o pongan en riesgo el servicio u otros usuarios. Las cláusulas que por su naturaleza deban sobrevivir (incluida la propiedad intelectual, el riesgo Web3, la limitación de responsabilidad y la ley aplicable) siguen vigentes tras la terminación.',
+          'Puedes dejar de usar la Plataforma en cualquier momento y solicitar la eliminación de la cuenta según la Política de Privacidad. Podemos suspender o cerrar cuentas que incumplan estos Términos o pongan en riesgo el servicio u otros usuarios. Las cláusulas que por su naturaleza deban sobrevivir (incluida la propiedad intelectual, el riesgo Web3, la limitación de responsabilidad y la ley aplicable) siguen vigentes tras la terminación.',
         ],
       },
       {
@@ -278,32 +278,32 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '',
         paragraphs: [
-          `Estes Termos de Serviço (“Termos”) são um contrato entre você e a Salvazion, Inc., uma sociedade de Delaware, com sede registrada em 131 Continental Dr, Suite 305, Newark, DE 19713, EUA (“Salvazion”, “o App”, “nós”). O App está disponível em ${APP_URL} como site, aplicativo web progressivo e shells nativos iOS / Android. Ao criar uma conta, entrar ou usar o App, você aceita estes Termos e a Política de Privacidade em /privacy. Se não concordar, não use o App.`,
+          `Estes Termos de Serviço (“Termos”) são um contrato entre você e a Salvazion, Inc., uma sociedade de Delaware, com sede registrada em 131 Continental Dr, Suite 305, Newark, DE 19713, EUA (“Salvazion”, “a Plataforma”, “nós”). A Plataforma está disponível em ${APP_URL} como site, aplicativo web progressivo e shells nativos iOS / Android. Ao criar uma conta, entrar ou usar a Plataforma, você aceita estes Termos e a Política de Privacidade em /privacy. Se não concordar, não use a Plataforma.`,
         ],
       },
       {
         heading: '1. Descrição do serviço',
         paragraphs: [
-          'A Salvazion é um aplicativo digital freemium organizado em três pilares — Salvation, Health e Freedom — para crescer na fé, cuidar do corpo e praticar uma liberdade responsável. O App é formativo, motivacional e comunitário. Não substitui aconselhamento médico, psicológico, jurídico, financeiro, tributário nem pastoral profissional.',
-          'Conforme o seu plano e dispositivo, o App pode incluir:',
+          'A Salvazion é uma plataforma digital freemium organizada em três pilares — Salvation, Health e Freedom — para crescer na fé, cuidar do corpo e praticar uma liberdade responsável. A Plataforma é formativa, motivacional e comunitária. Não substitui aconselhamento médico, psicológico, jurídico, financeiro, tributário nem pastoral profissional.',
+          'Conforme o seu plano e dispositivo, a Plataforma pode incluir:',
         ],
         bullets: [
           'Salvation: Bíblia offline (King James em inglês, Reina Valera 1909 em espanhol, texto histórico Almeida rotulado ARC em português, mais originais em hebraico e grego), devocional diário, motivos de oração, calendário de disciplina e scores espirituais.',
           'Health: registros manuais (sono, hidratação, refeições, esportes), sensores do telefone, frequência cardíaca Bluetooth, fotos opcionais de refeição ou composição corporal, saúde feminina e ficha clínica, e sincronização opcional com wearables.',
           'Freedom: livros curados, artigos long-form no X, canais do YouTube, mapa de igrejas, convites da comunidade Phalanx e ferramentas opcionais de carteira Solana, inclusive swap de $SALVAZION.',
-          'Salvazion com IA (coach Leão Verde), voz e devocionais assistidos por IA no Premium.',
+          'Salvazion AI (coach), voz e devocionais assistidos por IA no Premium.',
           'Scores, sequências, insígnias, perfil e idiomas (inglês, espanhol e português do Brasil).',
         ],
       },
       {
         heading: '2. Elegibilidade e conta',
         bullets: [
-          'Você deve ter capacidade legal para aceitar estes Termos (em geral, maioridade na sua jurisdição). O App não é dirigido a menores de 13 anos. Se você tem entre 13 anos e a maioridade, só pode usá-lo com um pai ou responsável que aceite estes Termos.',
+          'Você deve ter capacidade legal para aceitar estes Termos (em geral, maioridade na sua jurisdição). A Plataforma não é dirigida a menores de 13 anos. Se você tem entre 13 anos e a maioridade, só pode usá-la com um pai ou responsável que aceite estes Termos.',
           'Você pode se registrar com email e senha, link mágico, Google ou X, conforme os provedores habilitados.',
           'Você é responsável pela confidencialidade da sua conta e pela atividade feita com ela. Avise-nos em ' +
             SUPPORT_EMAIL +
             ' se suspeitar de uso não autorizado.',
-          'Deve fornecer informações verdadeiras na medida em que o App as peça para personalizar a experiência.',
+          'Deve fornecer informações verdadeiras na medida em que a Plataforma as peça para personalizar a experiência.',
           'Podemos recusar, suspender ou encerrar uma conta incompleta, abusiva ou criada para contornar estes Termos.',
         ],
       },
@@ -311,7 +311,7 @@ export const TERMS: Record<Language, LegalDoc> = {
         heading: '3. Uso aceitável',
         intro: 'Você se compromete a não:',
         bullets: [
-          'Usar o App de forma ilegal, fraudulenta ou que viole direitos de terceiros.',
+          'Usar a Plataforma de forma ilegal, fraudulenta ou que viole direitos de terceiros.',
           'Tentar violar a segurança, obter acesso não autorizado, fazer scraping abusivo, engenharia reversa ou interferir no serviço.',
           'Publicar ou transmitir conteúdo ofensivo, difamatório, ou que promova violência ou ilegalidade em espaços da comunidade.',
           'Falsificar identidade ou abusar de convites Phalanx.',
@@ -342,9 +342,9 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '7. Planos, Premium e pagamentos',
         paragraphs: [
-          'O App é freemium. O plano Grátis permite começar. O Salvazion Premium desbloqueia ferramentas avançadas (incluindo o coach com IA e voz, devocionais IA, wearables na nuvem, saúde e calendário avançados, conveniência completa de Freedom e convites Phalanx ilimitados), conforme descrito no App no momento da compra.',
+          'A Plataforma é freemium. O plano Grátis permite começar. O Salvazion Premium desbloqueia ferramentas avançadas (incluindo o coach com IA e voz, devocionais IA, wearables na nuvem, saúde e calendário avançados, conveniência completa de Freedom e convites Phalanx ilimitados), conforme descrito na Plataforma no momento da compra.',
           'Os preços publicados atuais são USD $49 por mês ou USD $468 por ano (equivalente a $39 por mês cobrado anualmente). Preços, funções e impostos podem mudar; o valor cobrado é o preço mostrado no checkout.',
-          'Os pagamentos são processados pela Stripe em nome da Salvazion, Inc. Não armazenamos o número completo do cartão. Você autoriza cobranças recorrentes até cancelar. Pode cancelar ou mudar de plano a qualquer momento no portal do cliente da Stripe a partir do App. O cancelamento interrompe as renovações futuras; valores já pagos em geral não são reembolsados, salvo quando a lei exigir. Se um pagamento falhar, podemos rebaixar a conta para Grátis.',
+          'Os pagamentos são processados pela Stripe em nome da Salvazion, Inc. Não armazenamos o número completo do cartão. Você autoriza cobranças recorrentes até cancelar. Pode cancelar ou mudar de plano a qualquer momento no portal do cliente da Stripe a partir da Plataforma. O cancelamento interrompe as renovações futuras; valores já pagos em geral não são reembolsados, salvo quando a lei exigir. Se um pagamento falhar, podemos rebaixar a conta para Grátis.',
         ],
       },
       {
@@ -356,8 +356,8 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '9. Propriedade intelectual',
         paragraphs: [
-          'O nome Salvazion, a marca Leão Verde, o design do App, logotipos, software, scores e o conteúdo editorial próprio pertencem à Salvazion, Inc. ou são usados sob licença. Você recebe uma licença limitada, revogável e intransferível para usar o App para fins pessoais e não comerciais.',
-          'As traduções bíblicas são usadas conforme os respectivos direitos: King James Version (domínio público); Reina Valera 1909 (domínio público — não Reina-Valera 1960, que não redistribuímos); texto histórico Almeida (linhagem de domínio público, apresentado no App como ARC); Westminster Leningrad Codex (hebraico) e Textus Receptus (grego). Você não pode copiar, revender ou explorar o App ou seus conjuntos de dados além do que essas licenças e a lei permitirem.',
+          'O nome e o logo Salvazion, a identidade da comunidade Green Lion Kings, o design da Plataforma, software, scores e o conteúdo editorial próprio pertencem à Salvazion, Inc. ou são usados sob licença. Você recebe uma licença limitada, revogável e intransferível para usar a Plataforma para fins pessoais e não comerciais.',
+          'As traduções bíblicas são usadas conforme os respectivos direitos: King James Version (domínio público); Reina Valera 1909 (domínio público — não Reina-Valera 1960, que não redistribuímos); texto histórico Almeida (linhagem de domínio público, apresentado na Plataforma como ARC); Westminster Leningrad Codex (hebraico) e Textus Receptus (grego). Você não pode copiar, revender ou explorar a Plataforma ou seus conjuntos de dados além do que essas licenças e a lei permitirem.',
         ],
       },
       {
@@ -369,13 +369,13 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '11. Limitação de responsabilidade',
         paragraphs: [
-          'O App é oferecido “no estado em que se encontra” e “conforme disponibilidade”. Na medida permitida pela lei, a Salvazion, Inc. e seus diretores, oficiais e colaboradores não serão responsáveis por danos indiretos, incidentais, especiais, consequenciais ou punitivos, lucros cessantes, perda de dados ou danos decorrentes do uso ou da impossibilidade de uso do App, incluindo IA, saúde, localização, fotos, cobrança ou Web3. Nossa responsabilidade agregada por reclamações relativas ao App não excederá o maior entre (a) o que você nos pagou de Premium nos três meses anteriores à reclamação ou (b) USD $50, salvo onde a responsabilidade não possa ser limitada.',
+          'A Plataforma é oferecida “no estado em que se encontra” e “conforme disponibilidade”. Na medida permitida pela lei, a Salvazion, Inc. e seus diretores, oficiais e colaboradores não serão responsáveis por danos indiretos, incidentais, especiais, consequenciais ou punitivos, lucros cessantes, perda de dados ou danos decorrentes do uso ou da impossibilidade de uso da Plataforma, incluindo IA, saúde, localização, fotos, cobrança ou Web3. Nossa responsabilidade agregada por reclamações relativas à Plataforma não excederá o maior entre (a) o que você nos pagou de Premium nos três meses anteriores à reclamação ou (b) USD $50, salvo onde a responsabilidade não possa ser limitada.',
         ],
       },
       {
         heading: '12. Encerramento',
         paragraphs: [
-          'Você pode deixar de usar o App a qualquer momento e pedir a exclusão da conta conforme a Política de Privacidade. Podemos suspender ou encerrar contas que violem estes Termos ou coloquem o serviço ou outros usuários em risco. As cláusulas que por natureza devam sobreviver (incluindo propriedade intelectual, risco Web3, limitação de responsabilidade e lei aplicável) permanecem em vigor após o encerramento.',
+          'Você pode deixar de usar a Plataforma a qualquer momento e pedir a exclusão da conta conforme a Política de Privacidade. Podemos suspender ou encerrar contas que violem estes Termos ou coloquem o serviço ou outros usuários em risco. As cláusulas que por natureza devam sobreviver (incluindo propriedade intelectual, risco Web3, limitação de responsabilidade e lei aplicável) permanecem em vigor após o encerramento.',
         ],
       },
       {

@@ -24,11 +24,11 @@ export const X_COMMUNITIES: XCommunity[] = [
     brand: 'Salvazion · X Community',
     accent: '#8FD99A',
     blurbEn:
-      'Join the Green Lion Kings on X: faith, family, Western Christian culture, BioConservatism and Freedom. Connect with the Salvazion tribe.',
+      'Join the Green Lion Kings on X: faith, family, Western Christian culture, BioConservatism and Freedom. The community of Salvazion.',
     blurbEs:
-      'Únete a Green Lion Kings en X: fe, familia, cultura cristiano-occidental, BioConservadurismo y Freedom. Conecta con la tribu Salvazion.',
+      'Únete a Green Lion Kings en X: fe, familia, cultura cristiano-occidental, BioConservadurismo y Freedom. La comunidad de Salvazion.',
     blurbPt:
-      'Entre nos Green Lion Kings no X: fé, família, cultura cristã ocidental, BioConservadorismo e Freedom. Conecte-se com a tribo Salvazion.',
+      'Entre nos Green Lion Kings no X: fé, família, cultura cristã ocidental, BioConservadorismo e Freedom. A comunidade da Salvazion.',
   },
 ];
 

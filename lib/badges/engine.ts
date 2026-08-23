@@ -306,7 +306,7 @@ export const BADGE_CATALOG: BadgeDef[] = [
   b({
     id: 'lion_oath',
     name: 'Juramento del León',
-    description: 'Aceptaste al León Verde como coach.',
+    description: 'Aceptaste a Salvazion AI como coach.',
     icon: '🦁',
     category: 'special',
     requirement: 'Onboarding completado',

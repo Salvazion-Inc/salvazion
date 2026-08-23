@@ -41,11 +41,11 @@ export const VALUE_JOURNEY_STEPS: ValueJourneyStep[] = [
     titleEn: 'The platform that restores the human person',
     titlePt: 'A plataforma que restaura a pessoa humana',
     bodyEs:
-      'Salvazion es la plataforma que restaura a la persona humana. Salvación, Salud y Libertad viven juntas en una sola App: hábitos, scores, comunidad y soberanía económica en Solana.',
+      'Salvazion es la plataforma que restaura a la persona humana. Salvación, Salud y Libertad viven juntas en una sola Plataforma: hábitos, scores, comunidad y soberanía económica en Solana.',
     bodyEn:
-      'Salvazion is the platform that restores the human person. Salvation, Health and Freedom live together in one App: habits, scores, community and economic sovereignty on Solana.',
+      'Salvazion is the platform that restores the human person. Salvation, Health and Freedom live together in one Platform: habits, scores, community and economic sovereignty on Solana.',
     bodyPt:
-      'A Salvazion é a plataforma que restaura a pessoa humana. Salvação, Saúde e Liberdade vivem juntas em um só App: hábitos, scores, comunidade e soberania econômica na Solana.',
+      'A Salvazion é a plataforma que restaura a pessoa humana. Salvação, Saúde e Liberdade vivem juntas em uma só Plataforma: hábitos, scores, comunidade e soberania econômica na Solana.',
     benefitEs: 'Una sola plataforma · tres pilares · disciplina real',
     benefitEn: 'One platform · three pillars · real discipline',
     benefitPt: 'Uma só plataforma · três pilares · disciplina real',
@@ -129,17 +129,17 @@ export const VALUE_JOURNEY_STEPS: ValueJourneyStep[] = [
     benefitEs: 'Invitaciones · vínculos · crecimiento juntos',
     benefitEn: 'Invites · bonds · grow together',
     benefitPt: 'Convites · vínculos · crescimento juntos',
-    ctaEs: 'Siguiente: León Verde',
-    ctaEn: 'Next: Green Lion',
-    ctaPt: 'Próximo: Leão Verde',
+    ctaEs: 'Siguiente: Salvazion AI',
+    ctaEn: 'Next: Salvazion AI',
+    ctaPt: 'Próximo: Salvazion AI',
   },
   {
     id: 'lion',
     href: '/hub/coach',
     icon: '🦁',
-    titleEs: 'El León Verde — Coach de virtud',
-    titleEn: 'The Green Lion — Virtue coach',
-    titlePt: 'O Leão Verde — Coach de virtude',
+    titleEs: 'Salvazion AI — Coach de virtud',
+    titleEn: 'Salvazion AI — Virtue coach',
+    titlePt: 'Salvazion AI — Coach de virtude',
     bodyEs:
       'Tu coach de virtud y desarrollo integral. Te disciplina con firmeza y esperanza: no es un chatbot blando; es un llamado a ser Green Lion King.',
     bodyEn:
@@ -161,11 +161,11 @@ export const VALUE_JOURNEY_STEPS: ValueJourneyStep[] = [
     titleEn: '@salvazion_ Articles on X',
     titlePt: 'Artigos @salvazion_ no X',
     bodyEs:
-      'Long-form sobre fe, familia, libertad, tecnología y Cultura Occidental Cristiana. La app te muestra lo que aún no leíste, priorizado por tus intereses.',
+      'Long-form sobre fe, familia, libertad, tecnología y Cultura Occidental Cristiana. La plataforma te muestra lo que aún no leíste, priorizado por tus intereses.',
     bodyEn:
-      'Long-form on faith, family, freedom, technology and Western Christian Culture. The app shows what you have not read yet, ranked by your interests.',
+      'Long-form on faith, family, freedom, technology and Western Christian Culture. The platform shows what you have not read yet, ranked by your interests.',
     bodyPt:
-      'Long-form sobre fé, família, liberdade, tecnologia e Cultura Ocidental Cristã. O app mostra o que você ainda não leu, priorizado pelos seus interesses.',
+      'Long-form sobre fé, família, liberdade, tecnologia e Cultura Ocidental Cristã. A plataforma mostra o que você ainda não leu, priorizado pelos seus interesses.',
     benefitEs: 'Imagen + título · leer en X · Freedom al completar',
     benefitEn: 'Image + title · read on X · Freedom when completed',
     benefitPt: 'Imagem + título · ler no X · Freedom ao completar',

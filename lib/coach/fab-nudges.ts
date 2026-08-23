@@ -569,9 +569,9 @@ export function buildFabNudges(
     id: 'always-2',
     tone: 'motivate',
     text: tx(
-      `${name}, you're not a spectator. You're a Green Lion.`,
-      `${name}, no eres espectador. Eres León Verde.`,
-      `${name}, você não é espectador. Você é Leão Verde.`
+      `${name}, you're not a spectator. You're a Green Lion King.`,
+      `${name}, no eres espectador. Eres Green Lion King.`,
+      `${name}, você não é espectador. Você é Green Lion King.`
     ),
     href: coachHref,
     cta: tx('Talk now', 'Hablar ahora', 'Falar agora'),

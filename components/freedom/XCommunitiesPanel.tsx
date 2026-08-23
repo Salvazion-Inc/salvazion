@@ -60,9 +60,9 @@ export default function XCommunitiesPanel({
         <p className="text-[10px] text-[var(--sage)]/70 mt-0.5 leading-relaxed">
           {textWithXLogo(
             tx(
-              'Connect with the Salvazion tribe on X · Green Lion Kings',
-              'Conecta con la tribu Salvazion en X · Green Lion Kings',
-              'Conecte-se com a tribo Salvazion no X · Green Lion Kings'
+              'Connect with the Green Lion Kings on X',
+              'Conecta con los Green Lion Kings en X',
+              'Conecte-se com os Green Lion Kings no X'
             )
           )}
         </p>

@@ -85,19 +85,19 @@ export const FREE_FEATURE_LIST = [
 ] as const;
 
 /**
- * Pricing table copy — single source for landing + in-app Premium page.
- * Keep EN/ES lists in lockstep (same order and count).
+ * Pricing table copy — single source for landing + Platform Premium page.
+ * Keep EN/ES/PT lists in lockstep (same order and count).
  */
 export const PRICING_TABLE = {
   freeNote: {
-    en: 'Forever free — the full platform to start. Limited Salvazion AI + $SALVAZION holder bonus',
-    es: 'Gratis para siempre — la plataforma completa para empezar. IA Salvazion limitada + bonus si tienes $SALVAZION',
-    pt: 'Grátis para sempre — a plataforma completa para começar. IA Salvazion limitada + bônus se você tem $SALVAZION',
+    en: 'Ten keys of the Platform — spirit, body and liberty in one journey.',
+    es: 'Diez claves de la Plataforma — espíritu, cuerpo y libertad en un solo viaje.',
+    pt: 'Dez chaves da Plataforma — espírito, corpo e liberdade numa só jornada.',
   },
   premiumNote: {
-    en: 'Everything in Free, plus unlimited Salvazion AI and advanced tools',
-    es: 'Todo lo de Gratis, más IA Salvazion ilimitada y herramientas avanzadas',
-    pt: 'Tudo do Grátis, mais IA Salvazion ilimitada e ferramentas avançadas',
+    en: 'All 10 of Free, plus 9 Premium depths. $49 / month — less than one hour with a trainer, a dietitian or a spiritual director.',
+    es: 'Los 10 de Gratis, más 9 profundidades Premium. $49 / mes — menos que una hora con un entrenador, un nutricionista o un director espiritual.',
+    pt: 'Os 10 do Grátis, mais 9 profundidades Premium. $49 / mês — menos que uma hora com um treinador, um nutricionista ou um diretor espiritual.',
   },
   bestValue: {
     en: 'Best value yearly',
@@ -109,131 +109,127 @@ export const PRICING_TABLE = {
     es: 'Pagos seguros con Stripe (Salvazion, Inc.). Cancela o cambia de plan cuando quieras en el portal de cliente.',
     pt: 'Pagamentos seguros com Stripe (Salvazion, Inc.). Cancele ou mude de plano quando quiser no portal do cliente.',
   },
-  /** Free plan bullets (landing + app) */
+  /** Free plan bullets (landing + Platform). */
   freeItems: [
     {
-      en: 'Dashboard, daily scores and onboarding',
-      es: 'Dashboard, scores diarios y onboarding',
-      pt: 'Dashboard, scores diários e onboarding',
+      en: '3 Hubs with a global score to achieve your purpose.',
+      es: '3 Hubs con un score global para lograr tu propósito.',
+      pt: '3 Hubs com um score global para cumprir o teu propósito.',
     },
     {
-      en: 'Daily agenda — Salvation, Health and Freedom in one day',
-      es: 'Agenda diaria — Salvation, Health y Freedom en un solo día',
-      pt: 'Agenda diária — Salvation, Health e Freedom em um só dia',
+      en: 'Advanced agenda for integral development (Spiritual, Physical and Mental).',
+      es: 'Agenda avanzada para tu desarrollo integral (Espiritual, Físico y Mental).',
+      pt: 'Agenda avançada para o teu desenvolvimento integral (Espiritual, Físico e Mental).',
     },
     {
-      en: 'Full offline Bible (ES · EN · PT · originals) — read, search and concordance',
-      es: 'Biblia completa offline (ES · EN · PT · originales) — lectura, búsqueda y concordancia',
-      pt: 'Bíblia completa offline (ES · EN · PT · originais) — leitura, busca e concordância',
+      en: 'Offline Bible in English, Spanish, Portuguese and originals (Hebrew and Greek).',
+      es: 'Biblia offline en inglés, español, portugués y originales (hebreo y griego).',
+      pt: 'Bíblia offline em inglês, espanhol, português e originais (hebraico e grego).',
     },
     {
-      en: 'AI coach: 5 messages / day · AI devotionals: 1 / day',
-      es: 'Coach IA: 5 mensajes / día · Devocionales IA: 1 / día',
-      pt: 'Coach IA: 5 mensagens / dia · Devocionais IA: 1 / dia',
+      en: 'Prayer motives and personalized devotionals.',
+      es: 'Motivos de oración y devocionales personalizados.',
+      pt: 'Motivos de oração e devocionais personalizados.',
     },
     {
-      en: 'Cineanthropometry: 2 / week · meal photo AI: 3 / day',
-      es: 'Cineantropometría: 2 / semana · foto de comida IA: 3 / día',
-      pt: 'Cineantropometria: 2 / semana · foto de refeição IA: 3 / dia',
+      en: 'Body composition, food and sleep-quality analysis.',
+      es: 'Análisis de composición corporal, alimentos y calidad del sueño.',
+      pt: 'Análise de composição corporal, alimentos e qualidade do sono.',
     },
     {
-      en: 'Hold $SALVAZION on-chain → 2× Free AI limits',
-      es: 'Mantén $SALVAZION on-chain → 2× cupos Free de IA',
-      pt: 'Mantenha $SALVAZION on-chain → 2× limites Free de IA',
+      en: 'Sync with devices and wearables for biomarkers.',
+      es: 'Sincronización con dispositivos y wearables para biomarcadores.',
+      pt: 'Sincronização com dispositivos e wearables para biomarcadores.',
     },
     {
-      en: 'Manual health logs, phone sensors and BLE heart rate',
-      es: 'Salud manual, sensores del teléfono y HR Bluetooth',
-      pt: 'Saúde manual, sensores do telefone e FC Bluetooth',
+      en: 'Original content that defends Western Christian culture and BioConservatism.',
+      es: 'Contenido original que defiende la cultura cristiano-occidental y el BioConservadurismo.',
+      pt: 'Conteúdo original que defende a cultura cristã-ocidental e o BioConservadorismo.',
     },
     {
-      en: 'Freedom library — books, X articles, YouTube and churches map',
-      es: 'Biblioteca Freedom — libros, artículos en X, YouTube y mapa de iglesias',
-      pt: 'Biblioteca Freedom — livros, artigos no X, YouTube e mapa de igrejas',
+      en: 'Connect with a global community (Green Lion Kings) that defends these values.',
+      es: 'Conecta con una comunidad global (Green Lion Kings) que defiende estos valores.',
+      pt: 'Conecta com uma comunidade global (Green Lion Kings) que defende estes valores.',
     },
     {
-      en: 'Basic Phalanx invites for family and friends',
-      es: 'Invitaciones Phalanx básicas para familia y amigos',
-      pt: 'Convites Phalanx básicos para família e amigos',
+      en: '360° drone map of churches and Christian assemblies near your home.',
+      es: 'Mapa dron 360° con iglesias y asambleas cristianas cerca de tu hogar.',
+      pt: 'Mapa drone 360° com igrejas e assembleias cristãs perto da tua casa.',
     },
     {
-      en: 'Solana wallet connect (Jupiter Mobile, Phantom, Solflare)',
-      es: 'Billetera Solana (Jupiter Mobile, Phantom, Solflare)',
-      pt: 'Carteira Solana (Jupiter Mobile, Phantom, Solflare)',
-    },
-    {
-      en: '$SALVAZION swap via Jupiter — we never hold your keys',
-      es: 'Swap $SALVAZION con Jupiter — no custodiamos tus llaves',
-      pt: 'Swap $SALVAZION com Jupiter — não custodiamos suas chaves',
-    },
-    {
-      en: 'Profile and basic badges',
-      es: 'Perfil y badges básicos',
-      pt: 'Perfil e insígnias básicas',
+      en: 'Salvazion AI that motivates you and helps you on this journey.',
+      es: 'Salvazion AI que te motiva y te ayuda en este viaje.',
+      pt: 'Salvazion AI que te motiva e te ajuda nesta jornada.',
     },
   ],
 } as const;
 
-/** Premium-only capabilities (current product surface) — display copy matches landing */
+/** Premium display bullets (landing + Platform). Capability ids stay in PremiumFeature. */
 export const PREMIUM_FEATURE_LIST: {
-  id: PremiumFeature;
+  id: string;
   en: string;
   es: string;
   pt: string;
 }[] = [
   {
-    id: 'coach_ai',
-    en: 'Unlimited Salvazion AI coach',
-    es: 'Coach Salvazion IA ilimitado',
-    pt: 'Coach Salvazion IA ilimitado',
+    id: 'includes_free',
+    en: 'Everything in Free — all 10 keys of the Platform, without dropping a pillar.',
+    es: 'Todo lo de Gratis — las 10 claves de la Plataforma, sin soltar un pilar.',
+    pt: 'Tudo do Grátis — as 10 chaves da Plataforma, sem largar um pilar.',
   },
   {
-    id: 'coach_tts',
-    en: 'Unlimited Salvazion voice / TTS',
-    es: 'Voz de Salvazion / TTS ilimitada',
-    pt: 'Voz da Salvazion / TTS ilimitada',
+    id: 'coach_unlimited',
+    en: 'Unlimited Salvazion AI coach — a daily virtue mentor that does not clock out. One hour with a life coach costs more than a month here.',
+    es: 'Coach Salvazion AI ilimitado — un mentor de virtud cada día, que no cierra el consultorio. Una hora con un life coach vale más que un mes aquí.',
+    pt: 'Coach Salvazion AI ilimitado — um mentor de virtude todos os dias, que não fecha o consultório. Uma hora com um life coach vale mais que um mês aqui.',
   },
   {
-    id: 'devotional_ai',
-    en: 'Unlimited AI devotionals — Scripture, virtue and BioConservatism',
-    es: 'Devocionales IA ilimitados — Escritura, virtud y BioConservadurismo',
-    pt: 'Devocionais IA ilimitados — Escritura, virtude e BioConservadorismo',
+    id: 'voice_unlimited',
+    en: 'Unlimited Salvazion AI voice — listen, do not type your soul into a void.',
+    es: 'Voz Salvazion AI ilimitada — escucha; no escribas el alma en el vacío.',
+    pt: 'Voz Salvazion AI ilimitada — ouça; não escreva a alma no vazio.',
+  },
+  {
+    id: 'devotional_unlimited',
+    en: 'Unlimited AI devotionals — Scripture, virtue and BioConservatism every day, not a one-a-day taste.',
+    es: 'Devocionales IA ilimitados — Escritura, virtud y BioConservadurismo cada día, no una ración.',
+    pt: 'Devocionais IA ilimitados — Escritura, virtude e BioConservadorismo todos os dias, não uma ração.',
+  },
+  {
+    id: 'body_unlimited',
+    en: 'Unlimited body-composition analysis — measure the temple as often as you train, not twice a week.',
+    es: 'Composición corporal ilimitada — mide el templo tantas veces como entrenes, no dos veces por semana.',
+    pt: 'Composição corporal ilimitada — meça o templo tantas vezes quanto treinar, não duas vezes por semana.',
+  },
+  {
+    id: 'meal_unlimited',
+    en: 'Unlimited meal vision — every plate, not a three-photo ceiling. A dietitian visit is already more than $49.',
+    es: 'Visión de comida ilimitada — cada plato, no un tope de tres fotos. Una consulta de nutrición ya supera los $49.',
+    pt: 'Visão de refeição ilimitada — cada prato, não um teto de três fotos. Uma consulta de nutrição já supera os $49.',
   },
   {
     id: 'wearables_cloud',
-    en: 'Cloud wearables OAuth (Fitbit, Oura, WHOOP, Garmin)',
-    es: 'Wearables en la nube (Fitbit, Oura, WHOOP, Garmin)',
-    pt: 'Wearables na nuvem (Fitbit, Oura, WHOOP, Garmin)',
+    en: 'Cloud wearables (Fitbit, Oura, WHOOP, Garmin) in one Hub — those memberships alone can rival $49.',
+    es: 'Wearables en la nube (Fitbit, Oura, WHOOP, Garmin) en un solo Hub — esas membresías solas pueden igualar los $49.',
+    pt: 'Wearables na nuvem (Fitbit, Oura, WHOOP, Garmin) num só Hub — essas assinaturas sozinhas podem igualar os $49.',
   },
   {
-    id: 'health_advanced',
-    en: "Unlimited cineanthropometry + meal vision, biomarkers, clinical, women's health",
-    es: 'Cineantropometría y visión de comida ilimitadas, biomarcadores, clínico, salud femenina',
-    pt: 'Cineantropometria e visão de refeição ilimitadas, biomarcadores, clínico, saúde feminina',
+    id: 'health_clinical',
+    en: 'Biomarkers, clinical record and women’s health without a cap — depth another health app would charge extra for.',
+    es: 'Biomarcadores, ficha clínica y salud femenina sin tope — profundidad que otra app de salud cobraría aparte.',
+    pt: 'Biomarcadores, ficha clínica e saúde feminina sem teto — profundidade que outro app de saúde cobraria à parte.',
   },
   {
-    id: 'calendar_advanced',
-    en: 'Full calendar and discipline planner',
-    es: 'Calendario completo y planificador de disciplina',
-    pt: 'Calendário completo e planejador de disciplina',
+    id: 'calendar_prayer',
+    en: 'Full-year calendar plus advanced prayer (priority and session) — a spiritual director’s desk, without the hourly rate.',
+    es: 'Calendario de todo el año más oración avanzada (prioridad y sesión) — el escritorio de un director espiritual, sin tarifa por hora.',
+    pt: 'Calendário do ano todo mais oração avançada (prioridade e sessão) — a mesa de um diretor espiritual, sem tarifa por hora.',
   },
   {
-    id: 'prayer_advanced',
-    en: 'Advanced prayer motives tools',
-    es: 'Herramientas avanzadas de motivos de oración',
-    pt: 'Ferramentas avançadas de motivos de oração',
-  },
-  {
-    id: 'freedom_full',
-    en: 'Full Freedom library, communities and swap terminal',
-    es: 'Biblioteca Freedom completa, comunidades y terminal de swap',
-    pt: 'Biblioteca Freedom completa, comunidades e terminal de swap',
-  },
-  {
-    id: 'phalanx_unlimited',
-    en: 'Unlimited Phalanx invites and tracking',
-    es: 'Invitaciones Phalanx ilimitadas y seguimiento',
-    pt: 'Convites Phalanx ilimitados e acompanhamento',
+    id: 'freedom_phalanx',
+    en: 'Full Freedom library, communities, swap terminal and unlimited Phalanx — formation, sovereignty and a circle with no invite cap.',
+    es: 'Biblioteca Freedom completa, comunidades, terminal de swap y Phalanx ilimitada — formación, soberanía y un círculo sin tope de invitaciones.',
+    pt: 'Biblioteca Freedom completa, comunidades, terminal de swap e Phalanx ilimitada — formação, soberania e um círculo sem teto de convites.',
   },
 ];
 

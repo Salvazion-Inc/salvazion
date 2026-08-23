@@ -72,7 +72,7 @@ export default function JsonLd() {
       '@id': `${absoluteUrl()}/#website`,
       url: absoluteUrl(),
       name: SEO.siteName,
-      alternateName: ['Salvazion App', 'Salvazion Green Lion'],
+      alternateName: ['Salvazion Platform', 'Green Lion Kings'],
       description: SEO.description,
       publisher: { '@id': `${absoluteUrl()}/#organization` },
       inLanguage: ['en', 'es', 'pt'],

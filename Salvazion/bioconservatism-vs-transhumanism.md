@@ -66,7 +66,7 @@ In summary, bioconservatism is superior because it grounds society in biological
 
 While transhumanists envision a "better" future through transcendence, history and logic suggest such ambitions often lead to decline, making bioconservatism the wiser path for enduring human flourishing.
 
-In the App this is not an essay. It is how Health is built: sensors and wearables in service of the given body — never as a ladder out of it.
+In the Platform this is not an essay. It is how Health is built: sensors and wearables in service of the given body — never as a ladder out of it.
 
 {% hint style="success" %}
 **Practice it.** [The Platform](the-platform.md) · [Create your free account](https://salvazion.org/auth/signup) · [Go Premium](premium.md) for cloud wearables

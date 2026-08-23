@@ -3,7 +3,7 @@ icon: user-plus
 cover: .gitbook/assets/Banner $Salvazion 2026.png
 coverY: 0
 description: >-
-  Create your free Salvazion account, log in, and install the App as a PWA.
+  Create your free Salvazion account, log in, and install the Platform as a PWA.
   Email, Google or X. Then live Salvation, Health and Freedom.
 ---
 
@@ -26,7 +26,7 @@ The gates are open. A free account is enough to start the war for your own soul 
    * **X** — one tap with your [@salvazion\_](https://x.com/salvazion_) network identity.
 3. Accept the [Terms](https://salvazion.org/terms) and [Privacy Policy](https://salvazion.org/privacy).
 4. Finish a short onboarding: who you are, what you fight for, which pillar you need first.
-5. You land in the **Hub**. That is the App.
+5. You land in the **Hub**. That is the Platform.
 
 If someone invited you to their Phalanx, keep the invite link. Sign up with it so the bond is created on day one.
 
@@ -35,17 +35,17 @@ If someone invited you to their Phalanx, keep the invite link. Sign up with it s
 Salvazion is a Progressive Web App. You do not need a store to start.
 
 * **iPhone / iPad** — open [salvazion.org](https://salvazion.org) in Safari → Share → **Add to Home Screen**.
-* **Android** — open [salvazion.org](https://salvazion.org) in Chrome → menu → **Install app** / **Add to Home Screen**.
+* **Android** — open [salvazion.org](https://salvazion.org) in Chrome → menu → **Install** / **Add to Home Screen**.
 * **Desktop** — Chrome or Edge will offer **Install Salvazion** in the address bar.
 
-Once installed it opens like a native app: full screen, icon on your home screen, ready before the first coffee.
+Once installed it opens like a native product: full screen, Salvazion logo on your home screen, ready before the first coffee.
 
 ## First session — do these three things
 
 | Order | Action | Why |
 | ----- | ------ | --- |
 | 1 | Open the **daily agenda** on the dashboard | One day. Three pillars. No scattered apps. |
-| 2 | Read or pray — Bible chapter, 5 minutes of prayer, or today's devotional | Salvation first. The Word is not optional. |
+| 2 | Read or pray — Bible chapter, or **Salvation → Prayer** (edit, rank by priority, session) | Salvation first. The Word is not optional. Prayer is not on the Dashboard. |
 | 3 | Log one health act — walk, water, sun, or connect a sensor | The body is a temple, not a theory. |
 
 Then invite one person: spouse, sibling, friend, colleague. Civilization is defended at home and in network.

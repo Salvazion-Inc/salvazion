@@ -8,19 +8,15 @@ coverY: 73.63437057594211
 
 An ordinary family, but with “good genes”
 
-Cristian Cortés and Beatriz Isler are a married couple, who have worked together for 15+ years in different health, education, technology and innovation startups, who complement each other and share values (excellence, integrity and deep respect for the service of people), adapting constantly to achieve its purpose: Make Salvation, Health and Freedom great again!
+Cristian Cortés and Beatriz Isler are a married couple who have worked together for 20+ years in health, education, technology and innovation startups. They complement each other and share the same values — excellence, integrity and deep respect for serving people — adapting constantly.
 
 * Cristian Cortes
 
-CEO at Salvazion. Physical Therapist, Bachelor of Kinesiology. Master in Physical Therapy, Minor in Psychology and Diplomas in Rehabilitation, Exercise, Health and University Innovation. Sherpa and Instructor in “Evidence Based Entrepreneurship & Lean Innovation (EBELI)”.
-
-Former Singularity University Ambassador Santiago Chapter. “ExO Entrepreneur LATAM” for the ExO Community Award. “Fifty of the Most Influential Voices in Healthcare” for Medika Life, “Top 50 Global HealthTech Thought Leader and Influencers on Ecosystems” for Thinker 360 and “Top 200 Exponentialists in Digital Health”.
+CEO at Salvazion, Inc. Physical Therapist and kinesiologist. Master in Physical Therapy, Minor in Psychology, and diplomas in Rehabilitation, Exercise, Health and University Innovation. Sherpa and Instructor in EBELI. Former Singularity University Ambassador (Santiago) and ExO Entrepreneur LATAM. Named among Medika Life’s Fifty Most Influential Voices in Healthcare, Thinker 360’s Top 50 Global HealthTech leaders, and the Top 200 Exponentialists in Digital Health.
 
 * Beatriz Isler
 
-COO at Salvazion. Physical Therapist, Bachelor of Kinesiology. Master in Physical Therapy with Diplomas in Rehabilitation, Exercise and Health, with experience as a University Professor and Researcher in Human Functionality, Digital Health and Aquatic Therapy.
-
-She did an International Clinical Internship in Hydrotherapy. She coordinated the “Choose Living Healthy” program of the Ministry of Health; However, her greatest achievement is to form a beautiful family (husband and four children), balancing her life as an entrepreneur. In 2022, it was recognized as a "Digital Health Champion" by the IDB (Inter-American Development Bank).
+COO at Salvazion, Inc. Physical Therapist and kinesiologist. Master in Physical Therapy, with diplomas in Rehabilitation, Exercise and Health. University professor and researcher in Human Functionality, Digital Health and Aquatic Therapy, with an international internship in Hydrotherapy. She led Chile’s “Choose Living Healthy” program; her greatest work is her family — husband and four children — while building as an entrepreneur. IDB Digital Health Champion, 2022.
 
 The family built the Platform they live. You do not need their résumé. You need their Purpose in your own house.
 

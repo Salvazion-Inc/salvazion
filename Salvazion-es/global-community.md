@@ -12,8 +12,8 @@ Las comunidades globales con un propósito común importan: la acción colectiva
 
 ## Dónde vive esta comunidad
 
-* **X** — [@salvazion\_](https://x.com/salvazion_) y los artículos long-form en el pilar Freedom de la App.
-* **La App** — tu Phalanx: familia, hermanos en la fe, amigos, colegas.
+* **X** — [@salvazion\_](https://x.com/salvazion_) y la comunidad **Green Lion Kings**. Los artículos long-form viven en Freedom.
+* **La Plataforma** — tu Phalanx: familia, hermanos en la fe, amigos, colegas.
 * **Este Welcome** — el camino de formación antes del login.
 
 Una comunidad global que no se arrodilla ante el globalismo no es un Slack y un eslogan. Son hogares que oran, entrenan, leen y pagan las herramientas que los mantienen libres.

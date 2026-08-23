@@ -87,5 +87,5 @@ We are not on the defense. We are the counteroffensive.\
 Christus vincit. Christus regnat. Christus imperat. The war is real. The victory is certain. The time is now. Salvation calls. Will you answer?
 
 {% hint style="success" %}
-**Answer in the App, not only in theory.** [Create your free account](https://salvazion.org/auth/signup) · [How to use the App](how-to-use-the-app.md) · [Premium](premium.md)
+**Answer in the Platform, not only in theory.** [Create your free account](https://salvazion.org/auth/signup) · [How to use the Platform](how-to-use-the-app.md) · [Premium](premium.md)
 {% endhint %}

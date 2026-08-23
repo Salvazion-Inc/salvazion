@@ -13,14 +13,14 @@
 * [Fundadores com "bons genes"](founders.md)
 * [Comunidade global no 𝕏](global-community.md)
 
-## 2. Entre no App
+## 2. Entre na Plataforma
 
 * [A Plataforma Salvazion](the-platform.md)
 * [Crie sua conta](create-your-account.md)
 
 ## 3. Viva os três pilares
 
-* [Como usar o App](how-to-use-the-app.md)
+* [Como usar a Plataforma](how-to-use-the-app.md)
 
 ## 4. Assine o Premium
 

@@ -1,16 +1,16 @@
 ---
 icon: rings-wedding
-cover: ../.gitbook/assets/Cortes Isler Family Founders.png
+cover: .gitbook/assets/Cortes Isler Family Founders.png
 coverY: 73
 ---
 
 # Fundadores con "buenos genes"
 
-**Idioma:** [English](../README.md) · Español · [Português](../pt/README.md)
+**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://bem-vindo.salvazion.org/)
 
 Una familia ordinaria, pero con “buenos genes”.
 
-Cristian Cortés y Beatriz Isler son un matrimonio que ha trabajado junto más de 15 años en startups de salud, educación, tecnología e innovación. Se complementan y comparten valores: excelencia, integridad y respeto profundo al servicio de las personas. Su propósito: **Make Salvation, Health and Freedom Great Again**.
+Cristian Cortés y Beatriz Isler son un matrimonio que lleva +20 años trabajando juntos en startups de salud, educación, tecnología e innovación. Se complementan y comparten los mismos valores — excelencia, integridad y respeto profundo al servicio de las personas — adaptándose constantemente.
 
 * **Cristian Cortés** — CEO de Salvazion. Kinesiólogo, Magíster en Terapia Física, Minor en Psicología. Sherpa e instructor en EBELI. Ex embajador de Singularity University (Santiago). Reconocido entre las voces más influyentes en HealthTech.
 

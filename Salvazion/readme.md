@@ -4,7 +4,7 @@ cover: .gitbook/assets/Banner $Salvazion 2026.png
 coverY: 0
 description: >-
   Welcome to Salvazion. Learn why we exist, create your free account,
-  live Salvation, Health and Freedom in the App, then subscribe to Premium.
+  live Salvation, Health and Freedom in the Platform, then subscribe to Premium.
 ---
 
 # Welcome to Salvazion
@@ -29,8 +29,8 @@ This Welcome is not a brochure. It is the path from first conviction to a member
 | ---- | ----------- | ----- |
 | **1. Learn** | Why we fight: Purpose, Spiritual Warfare, Western Christian Culture, BioConservatism, Patriotism, the 12 Salvators | This GitBook — section 1 |
 | **2. Enter** | Create your free account. Log in. Install the PWA | [salvazion.org/auth/signup](https://salvazion.org/auth/signup) |
-| **3. Live** | Use the App: Hub, Bible, Health, Freedom, Phalanx, Green Lion | [salvazion.org/hub/dashboard](https://salvazion.org/hub/dashboard) |
-| **4. Commit** | Subscribe to Premium when you refuse to ration the Lion | [salvazion.org/hub/premium](https://salvazion.org/hub/premium) |
+| **3. Live** | Use the Platform: Hub, Bible, Health, Freedom, Phalanx, Salvazion AI | [salvazion.org/hub/dashboard](https://salvazion.org/hub/dashboard) |
+| **4. Commit** | Subscribe to Premium when you refuse to ration Salvazion AI | [salvazion.org/hub/premium](https://salvazion.org/hub/premium) |
 
 If you only read and never log in, you have studied a war you refused to join.
 
@@ -60,11 +60,11 @@ If you only read and never log in, you have studied a war you refused to join.
 * **Health** is the sacred body as temple, life as covenant, defended against the merchants of transhuman deceit and the architects of engineered decay.
 * **Freedom** is the birthright of the West, forged in the crucible of Christendom, now besieged by the chains of globalist tyranny and moral relativism.
 
-In the App they are not metaphors. They are a daily agenda, scores, a Bible, sensors, a Freedom library, and a coach that will not flatter you.
+In the Platform they are not metaphors. They are a daily agenda, scores, a Bible, sensors, a Freedom library, and Salvazion AI — a coach that will not flatter you.
 
 ## Who we are
 
-This is Salvazion: a global phalanx of the faithful, the fierce, the unyielding.
+This is Salvazion: a global phalanx of the faithful, the fierce, the unyielding. The community and its members are **Green Lion Kings**. The logo is Salvazion. The coach is **Salvazion AI**.
 
 We are the **Global Community** that defends **Western Christian Culture** not as nostalgia, but as the last bulwark of truth, beauty, and order. We are the vanguard of **BioConservatism**: guardians of the natural law written into blood and bone, rejecting the abomination of man playing God.
 
@@ -87,7 +87,7 @@ Health is not a privilege. It is a divine mandate. Freedom is not granted. It is
 Welcome, Green Lion King. The gates of Salvazion are open. The war for the soul of the West has begun.
 
 {% hint style="success" %}
-**The next click is not another page. It is the App.**
+**The next click is not another page. It is the Platform.**
 
 [Create your free account →](https://salvazion.org/auth/signup)
 {% endhint %}

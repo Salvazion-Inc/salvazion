@@ -18,15 +18,15 @@ $SALVAZION is the Patriotic Bitcoin of this phalanx. It is not a substitute for 
 | **Token** | $SALVAZION |
 | **Chain** | Solana |
 | **Mint (CA)** | `7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2` |
-| **Swap** | Jupiter, inside the App or at [jup.ag](https://jup.ag/swap?sell=So11111111111111111111111111111111111111112&buy=7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2) |
+| **Swap** | Jupiter, inside the Platform or at [jup.ag](https://jup.ag/swap?sell=So11111111111111111111111111111111111111112&buy=7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2) |
 | **Custody** | **None.** You connect Jupiter Mobile, Phantom or Solflare. We never hold your keys. |
 
 Buy it from the landing or from [salvazion.org/hub/swap](https://salvazion.org/hub/swap) after you log in.
 
-## Utility today (what the App actually does)
+## Utility today (what the Platform actually does)
 
 * **Holder bonus** — keep $SALVAZION on-chain in the wallet you link → **2× Free AI limits** (coach, voice, devotionals, meal vision, cineanthropometry).
-* **In-App swap** — Jupiter routing. You trade. The Platform does not custody.
+* **In-Platform swap** — Jupiter routing. You trade. The Platform does not custody.
 * **Signal** — you are not only a user. You are economically inside the same fight the Purpose names.
 
 Premium (Stripe, USD) and $SALVAZION are complementary:

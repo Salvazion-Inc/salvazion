@@ -13,14 +13,14 @@
 * [Founders with "Good Genes"](founders-with-good-genes.md)
 * [𝕏 Global Community](global-community.md)
 
-## 2. Enter the App
+## 2. Enter the Platform
 
 * [The Salvazion Platform](the-platform.md)
 * [Create your account](create-your-account.md)
 
 ## 3. Live the three pillars
 
-* [How to use the App](how-to-use-the-app.md)
+* [How to use the Platform](how-to-use-the-app.md)
 
 ## 4. Go Premium
 
@@ -46,7 +46,7 @@
 * [Comunidad global en 𝕏](es/global-community.md)
 * [La Plataforma Salvazion](es/the-platform.md)
 * [Crea tu cuenta](es/create-your-account.md)
-* [Cómo usar la App](es/how-to-use-the-app.md)
+* [Cómo usar la Plataforma](es/how-to-use-the-app.md)
 * [Salvazion Premium](es/premium.md)
 * [$SALVAZION: The Patriotic Bitcoin](es/usdsalvazion.md)
 * [Tokenomics](es/tokenomics.md)
@@ -66,7 +66,7 @@
 * [Comunidade global no 𝕏](pt/global-community.md)
 * [A Plataforma Salvazion](pt/the-platform.md)
 * [Crie sua conta](pt/create-your-account.md)
-* [Como usar o App](pt/how-to-use-the-app.md)
+* [Como usar a Plataforma](pt/how-to-use-the-app.md)
 * [Salvazion Premium](pt/premium.md)
 * [$SALVAZION: The Patriotic Bitcoin](pt/usdsalvazion.md)
 * [Tokenomics](pt/tokenomics.md)

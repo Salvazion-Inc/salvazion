@@ -39,7 +39,7 @@ Learn the fundamentals
         ↓
 Create your free account and log in
         ↓
-Use the App every day (PWA + Hub)
+Use the Platform every day (PWA + Hub)
         ↓
 Subscribe to Premium
         ↓

@@ -2,7 +2,7 @@
 icon: crown
 cover: .gitbook/assets/Banner $Salvazion 2026.png
 coverY: 0
-description: Salvazion Premium — coach de IA ilimitado, wearables en la nube. $49 / mes o $39 / mes anual.
+description: Salvazion Premium — las 10 claves de Gratis más 9 profundidades. $49 / mes o $39 / mes anual.
 ---
 
 # Salvazion Premium
@@ -21,23 +21,39 @@ Los cobros van por Stripe a nombre de **Salvazion, Inc.** Cancela o cambia de pl
 
 | Plan | Precio | Para quién |
 | ---- | ------ | ---------- |
-| **Gratis** | $0 | Biblia, agenda, scores, IA limitada, Freedom, billetera |
-| **Premium mensual** | **$49 / mes** | Toda la potencia, mes a mes |
+| **Gratis** | $0 | Las 10 claves de la Plataforma |
+| **Premium mensual** | **$49 / mes** | Todo lo de Gratis más 9 profundidades — menos que una hora con un entrenador, un nutricionista o un director espiritual |
 | **Premium anual** | **$39 / mes** equivalente (**$468 / año**) | Mejor valor |
 
 Si mantienes **$SALVAZION** on-chain en Gratis, tus cupos Free de IA se **duplican**. Eso no es Premium. Premium quita el techo.
 
-## Lo que abre Premium
+## Gratis — 10 claves
 
-* Coach Salvazion IA ilimitado
-* Voz / TTS ilimitada
-* Devocionales IA ilimitados
-* Wearables en la nube (Fitbit, Oura, WHOOP, Garmin)
-* Cineantropometría y visión de comida ilimitadas, biomarcadores, ficha clínica, salud femenina
-* Calendario completo y planificador de disciplina
-* Motivos de oración avanzados
-* Biblioteca Freedom completa
-* Invitaciones Phalanx ilimitadas y seguimiento
+1. 3 Hubs y un score global para lograr tu propósito
+2. Agenda avanzada para tu desarrollo integral (Espiritual, Físico y Mental)
+3. Biblia offline en inglés, español, portugués y originales (hebreo y griego)
+4. Motivos de oración y devocionales personalizados
+5. Análisis de composición corporal, alimentos y calidad del sueño
+6. Sincronización con dispositivos y wearables para biomarcadores
+7. Contenido original que defiende la cultura cristiano-occidental y el BioConservadurismo
+8. Comunidad global **Green Lion Kings**
+9. Mapa dron 360° de iglesias y asambleas cerca de tu hogar
+10. **Salvazion AI** que te motiva y te ayuda en este viaje
+
+## Premium — todo lo de Gratis, más 9 profundidades
+
+1. Todo lo de Gratis — las 10 claves, sin soltar un pilar
+2. Coach **Salvazion AI** ilimitado
+3. Voz Salvazion AI ilimitada
+4. Devocionales IA ilimitados
+5. Composición corporal ilimitada
+6. Visión de comida ilimitada
+7. Wearables en la nube (Fitbit, Oura, WHOOP, Garmin) en un Hub
+8. Biomarcadores, ficha clínica y salud femenina
+9. Calendario de todo el año más oración avanzada (prioridad y sesión)
+10. Biblioteca Freedom completa, swap y Phalanx ilimitada
+
+$49 / mes es menos que una hora con un entrenador, un nutricionista o un director espiritual.
 
 ## Cómo suscribirte
 

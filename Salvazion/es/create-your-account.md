@@ -1,13 +1,13 @@
 ---
 icon: user-plus
-cover: ../.gitbook/assets/Banner $Salvazion 2026.png
+cover: .gitbook/assets/Banner $Salvazion 2026.png
 coverY: 0
-description: Crea tu cuenta gratis en Salvazion, inicia sesión e instala la App como PWA.
+description: Crea tu cuenta gratis en Salvazion, inicia sesión e instala la Plataforma como PWA.
 ---
 
 # Crea tu cuenta
 
-**Idioma:** [English](../README.md) · Español · [Português](../pt/README.md)
+**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://bem-vindo.salvazion.org/)
 
 Las puertas están abiertas. Una cuenta gratis basta para empezar la guerra por tu propia alma — y para caminar con una Phalanx.
 
@@ -26,7 +26,7 @@ Las puertas están abiertas. Una cuenta gratis basta para empezar la guerra por 
    * **X** — un toque con tu identidad de la red de [@salvazion\_](https://x.com/salvazion_).
 3. Acepta los [Términos](https://salvazion.org/terms) y la [Política de privacidad](https://salvazion.org/privacy).
 4. Completa un onboarding corto: quién eres, por qué luchas, qué pilar necesitas primero.
-5. Llegas al **Hub**. Eso es la App.
+5. Llegas al **Hub**. Eso es la Plataforma.
 
 Si alguien te invitó a su Phalanx, no borres el enlace. Regístrate con él para que el vínculo se cree el día uno.
 

@@ -1,15 +1,15 @@
 ---
 icon: hand-wave
-cover: ../.gitbook/assets/Banner $Salvazion 2026.png
+cover: .gitbook/assets/Banner $Salvazion 2026.png
 coverY: 0
 description: >-
   Boas-vindas à Salvazion. Aprenda por que existimos, crie sua conta grátis,
-  use o App e assine o Premium.
+  use a Plataforma e assine o Premium.
 ---
 
 # Boas-vindas à Salvazion
 
-**Idioma:** [English](../README.md) · [Español](../es/README.md) · Português
+**Idioma:** [English](https://welcome.salvazion.org/) · [Español](https://bienvenida.salvazion.org/) · Português
 
 Bem-vindo, Green Lion King, à luta que não termina.
 
@@ -29,8 +29,8 @@ Este Welcome não é um folheto. É o caminho: da primeira convicção a um memb
 | ----- | -------------- | ---- |
 | **1. Aprenda** | Por que lutamos: Propósito, Guerra espiritual, Cultura Cristã Ocidental, BioConservadorismo, Patriotismo, os 12 Salvators | Este Welcome — seção 1 |
 | **2. Entre** | Crie sua conta grátis. Faça login. Instale o PWA | [salvazion.org/auth/signup](https://salvazion.org/auth/signup) |
-| **3. Viva** | Use o App: Hub, Bíblia, Saúde, Freedom, Phalanx, Leão Verde | [salvazion.org/hub/dashboard](https://salvazion.org/hub/dashboard) |
-| **4. Comprometa-se** | Assine o Premium quando não quiser racionar o Leão | [salvazion.org/hub/premium](https://salvazion.org/hub/premium) |
+| **3. Viva** | Use a Plataforma: Hub, Bíblia, Saúde, Freedom, Phalanx, Salvazion AI | [salvazion.org/hub/dashboard](https://salvazion.org/hub/dashboard) |
+| **4. Comprometa-se** | Assine o Premium quando não quiser racionar a Salvazion AI | [salvazion.org/hub/premium](https://salvazion.org/hub/premium)
 
 Se você só lê e nunca entra, estudou uma guerra à qual se recusou a se juntar.
 
@@ -60,11 +60,11 @@ Se você só lê e nunca entra, estudou uma guerra à qual se recusou a se junta
 * **Health** é o corpo sagrado como templo, a vida como pacto, defendida contra os mercadores do engano transumano e os arquitetos da decadência fabricada.
 * **Freedom** é a herança do Ocidente, forjada na cristandade, hoje sitiada pelas correntes do globalismo e do relativismo moral.
 
-No App não são metáforas. São uma agenda diária, scores, uma Bíblia, sensores, uma biblioteca Freedom e um coach que não te bajula.
+Na Plataforma não são metáforas. São uma agenda diária, scores, uma Bíblia, sensores, uma biblioteca Freedom e **Salvazion AI** — um coach que não te bajula.
 
 ## Quem somos
 
-A Salvazion é uma falange global dos fiéis, dos ferozes, dos que não cedem.
+A Salvazion é uma falange global dos fiéis, dos ferozes, dos que não cedem. A comunidade e seus membros são **Green Lion Kings**. O logo é Salvazion. O coach é **Salvazion AI**.
 
 Somos a **Comunidade Global** que defende a **Cultura Cristã Ocidental** não como nostalgia, mas como o último baluarte da verdade, da beleza e da ordem. Somos a vanguarda do **BioConservadorismo**: guardiões da lei natural escrita no sangue e no osso. Rejeitamos a abominação de o homem se fazer Deus.
 
@@ -107,7 +107,7 @@ Leia os fundamentos em ordem. Depois crie a conta. Depois viva o dia. Depois pag
 {% endcontent-ref %}
 
 {% hint style="success" %}
-**O próximo clique não é outra página. É o App.**
+**O próximo clique não é outra página. É a Plataforma.**
 
 [Crie sua conta grátis →](https://salvazion.org/auth/signup)
 {% endhint %}

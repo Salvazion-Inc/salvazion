@@ -337,8 +337,8 @@ export default function SalvazionLanding() {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="card-soft p-6 sm:p-8">
+          <div className="grid md:grid-cols-2 gap-4 items-stretch">
+            <div className="card-soft p-6 sm:p-8 h-full flex flex-col">
               <a
                 href={LINKEDIN_CRISTIAN}
                 target="_blank"
@@ -368,9 +368,9 @@ export default function SalvazionLanding() {
                   </p>
                 </div>
               </a>
-              <p className="text-sm text-[#D8E1D9]/80 leading-relaxed">{t.team.cristian}</p>
+              <p className="founder-bio text-sm text-[#D8E1D9]/80 leading-relaxed flex-1">{t.team.cristian}</p>
             </div>
-            <div className="card-soft p-6 sm:p-8">
+            <div className="card-soft p-6 sm:p-8 h-full flex flex-col">
               <a
                 href={LINKEDIN_BEATRIZ}
                 target="_blank"
@@ -400,7 +400,7 @@ export default function SalvazionLanding() {
                   </p>
                 </div>
               </a>
-              <p className="text-sm text-[#D8E1D9]/80 leading-relaxed">{t.team.beatriz}</p>
+              <p className="founder-bio text-sm text-[#D8E1D9]/80 leading-relaxed flex-1">{t.team.beatriz}</p>
             </div>
           </div>
         </div>
@@ -448,17 +448,17 @@ export default function SalvazionLanding() {
                 —
               </p>
 
-              <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.5rem]">
+              <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.75rem]">
                 {pickLang(lang, PRICING_TABLE.freeNote)}
               </p>
 
-              <ul className="mt-5 space-y-2 text-sm text-[#D8E1D9]/90 flex-1">
+              <ul className="pricing-points mt-5 text-sm text-[#D8E1D9]/90 flex-1">
                 {PRICING_TABLE.freeItems.map((item) => {
                   const label = pickLang(lang, item);
                   return (
-                    <li key={item.en} className="flex gap-2">
+                    <li key={item.en}>
                       <span className="text-[var(--accent)] shrink-0 w-4 text-center">·</span>
-                      <span>{textWithXLogo(label)}</span>
+                      <span className="leading-snug">{textWithXLogo(label)}</span>
                     </li>
                   );
                 })}
@@ -497,17 +497,17 @@ export default function SalvazionLanding() {
                 })}
               </p>
 
-              <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.5rem]">
+              <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.75rem]">
                 {pickLang(lang, PRICING_TABLE.premiumNote)}
               </p>
 
-              <ul className="mt-5 space-y-2 text-sm text-[#D8E1D9]/90 flex-1">
+              <ul className="pricing-points mt-5 text-sm text-[#D8E1D9]/90 flex-1">
                 {PREMIUM_FEATURE_LIST.map((item) => {
                   const label = pickLang(lang, item);
                   return (
-                    <li key={item.id} className="flex gap-2">
+                    <li key={item.id}>
                       <span className="text-[var(--accent)] shrink-0 w-4 text-center">·</span>
-                      <span>{textWithXLogo(label)}</span>
+                      <span className="leading-snug">{textWithXLogo(label)}</span>
                     </li>
                   );
                 })}
@@ -598,7 +598,7 @@ export default function SalvazionLanding() {
 const copy = {
   en: {
     nav: {
-      app: 'The Platform',
+      app: 'Platform',
       blog: 'Blog',
       pricing: 'Pricing',
       token: 'Token',
@@ -699,13 +699,13 @@ const copy = {
       eyebrow: 'Founders',
       title: 'An ordinary family, but with “good genes”',
       intro:
-        'Cristian Cortés and Beatriz Isler are a married couple, who have worked together for 20+ years in different health, education, technology and innovation startups, who complement each other and share values (excellence, integrity and deep respect for the service of people), adapting constantly.',
+        'Cristian Cortés and Beatriz Isler are a married couple who have worked together for 20+ years in health, education, technology and innovation startups. They complement each other and share the same values — excellence, integrity and deep respect for serving people — adapting constantly.',
       cristianRole: 'CEO at Salvazion, Inc.',
       cristian:
-        'Physical Therapist, Bachelor of Kinesiology. Master in Physical Therapy, Minor in Psychology and Diplomas in Rehabilitation, Exercise, Health and University Innovation. Sherpa and Instructor in “Evidence Based Entrepreneurship & Lean Innovation (EBELI)”. Former Singularity University Ambassador Santiago Chapter. “ExO Entrepreneur LATAM” for the ExO Community Award. “Fifty of the Most Influential Voices in Healthcare” for Medika Life, “Top 50 Global HealthTech Thought Leader and Influencers on Ecosystems” for Thinker 360 and “Top 200 Exponentialists in Digital Health”.',
+        'Physical Therapist and kinesiologist. Master in Physical Therapy, Minor in Psychology, and diplomas in Rehabilitation, Exercise, Health and University Innovation. Sherpa and Instructor in EBELI. Former Singularity University Ambassador (Santiago) and ExO Entrepreneur LATAM. Named among Medika Life’s Fifty Most Influential Voices in Healthcare, Thinker 360’s Top 50 Global HealthTech leaders, and the Top 200 Exponentialists in Digital Health.',
       beatrizRole: 'COO at Salvazion, Inc.',
       beatriz:
-        'Physical Therapist, Bachelor of Kinesiology. Master in Physical Therapy with Diplomas in Rehabilitation, Exercise and Health, with experience as a University Professor and Researcher in Human Functionality, Digital Health and Aquatic Therapy. She did an International Clinical Internship in Hydrotherapy. She coordinated the “Choose Living Healthy” program of the Ministry of Health; however, her greatest achievement is to form a beautiful family (husband and four children), balancing her life as an entrepreneur. In 2022, she was recognized as a “Digital Health Champion” by the IDB (Inter-American Development Bank).',
+        'Physical Therapist and kinesiologist. Master in Physical Therapy, with diplomas in Rehabilitation, Exercise and Health. University professor and researcher in Human Functionality, Digital Health and Aquatic Therapy, with an international internship in Hydrotherapy. She led Chile’s “Choose Living Healthy” program; her greatest work is her family — husband and four children — while building as an entrepreneur. IDB Digital Health Champion, 2022.',
     },
     footer: {
       copy: '© 2026 Salvazion, Inc. All rights reserved.',
@@ -715,7 +715,7 @@ const copy = {
   },
   es: {
     nav: {
-      app: 'La Plataforma',
+      app: 'Plataforma',
       blog: 'Blog',
       pricing: 'Precios',
       token: 'Token',
@@ -816,13 +816,13 @@ const copy = {
       eyebrow: 'Fundadores',
       title: 'Una familia común, pero con “buenos genes”',
       intro:
-        'Cristian Cortés y Beatriz Isler son un matrimonio, quienes han trabajado juntos por +20 años en diferentes startups de salud, educación, tecnología e innovación, quienes se complementan y comparten valores (excelencia, integridad y respeto profundo al servicio de las personas), adaptándose constantemente.',
+        'Cristian Cortés y Beatriz Isler son un matrimonio que lleva +20 años trabajando juntos en startups de salud, educación, tecnología e innovación. Se complementan y comparten los mismos valores — excelencia, integridad y respeto profundo al servicio de las personas — adaptándose constantemente.',
       cristianRole: 'CEO de Salvazion, Inc.',
       cristian:
-        'Kinesiólogo, Licenciado en Kinesiología. Magíster en Terapia Física, Minor en Psicología y Diplomados en Rehabilitación, Ejercicio, Salud e Innovación Universitaria. Sherpa e Instructor en “Evidence Based Entrepreneurship & Lean Innovation (EBELI)”. Ex Embajador del Capítulo de Santiago en Singularity University. “ExO Entrepreneur LATAM” por la ExO Community Award. “Fifty of the Most Influential Voices in Healthcare” por Medika Life, “Top 50 Global HealthTech Thought Leader and Influencers on Ecosystems” por Thinker 360 y “Top 200 Exponencialistas en Salud Digital”.',
+        'Kinesiólogo. Magíster en Terapia Física, Minor en Psicología y diplomados en Rehabilitación, Ejercicio, Salud e Innovación Universitaria. Sherpa e Instructor en EBELI. Ex embajador de Singularity University (Santiago) y ExO Entrepreneur LATAM. Reconocido entre las Fifty Most Influential Voices in Healthcare de Medika Life, Top 50 Global HealthTech de Thinker 360 y Top 200 Exponencialistas en Salud Digital.',
       beatrizRole: 'COO de Salvazion, Inc.',
       beatriz:
-        'Kinesióloga, Licenciada en Kinesiología. Magíster en Terapia Física con Diplomados en Rehabilitación, Ejercicio y Salud, con experiencia como Docente e Investigadora Universitaria en Funcionalidad Humana, Salud Digital y Terapia Acuática. Realizó una Pasantía Clínica Internacional en Hidroterapia. Coordinó el programa “Elige Vivir Sano” del Ministerio de Salud; sin embargo, su mayor logro es conformar una hermosa familia (esposo y cuatro hijos), balanceando su vida como emprendedora. En 2022, fue reconocida como “Campeona en Salud Digital” por el BID (Banco Interamericano de Desarrollo).',
+        'Kinesióloga. Magíster en Terapia Física y diplomados en Rehabilitación, Ejercicio y Salud. Docente e investigadora en Funcionalidad Humana, Salud Digital y Terapia Acuática, con pasantía internacional en Hidroterapia. Lideró “Elige Vivir Sano” del Ministerio de Salud; su mayor obra es su familia — esposo y cuatro hijos — mientras emprende. En 2022 el BID la nombró Campeona en Salud Digital.',
     },
     footer: {
       copy: '© 2026 Salvazion, Inc. Todos los derechos reservados.',
@@ -832,7 +832,7 @@ const copy = {
   },
   pt: {
     nav: {
-      app: 'A Plataforma',
+      app: 'Plataforma',
       blog: 'Blog',
       pricing: 'Preços',
       token: 'Token',
@@ -932,13 +932,13 @@ const copy = {
       eyebrow: 'Fundadores',
       title: 'Uma família comum, mas com “bons genes”',
       intro:
-        'Cristian Cortés e Beatriz Isler são um casal que trabalha junto há mais de 20 anos em diferentes startups de saúde, educação, tecnologia e inovação, que se complementam e compartilham valores (excelência, integridade e respeito profundo ao serviço das pessoas), adaptando-se constantemente.',
+        'Cristian Cortés e Beatriz Isler são um casal que trabalha junto há mais de 20 anos em startups de saúde, educação, tecnologia e inovação. Complementam-se e compartilham os mesmos valores — excelência, integridade e respeito profundo ao serviço das pessoas — adaptando-se constantemente.',
       cristianRole: 'CEO da Salvazion, Inc.',
       cristian:
-        'Fisioterapeuta, Bacharel em Cinesiologia. Mestre em Terapia Física, Minor em Psicologia e Diplomados em Reabilitação, Exercício, Saúde e Inovação Universitária. Sherpa e Instrutor em “Evidence Based Entrepreneurship & Lean Innovation (EBELI)”. Ex-Embaixador do Capítulo de Santiago da Singularity University. “ExO Entrepreneur LATAM” pelo ExO Community Award. “Fifty of the Most Influential Voices in Healthcare” pela Medika Life, “Top 50 Global HealthTech Thought Leader and Influencers on Ecosystems” pela Thinker 360 e “Top 200 Exponentialists in Digital Health”.',
+        'Fisioterapeuta e cinesiologista. Mestre em Terapia Física, Minor em Psicologia e diplomados em Reabilitação, Exercício, Saúde e Inovação Universitária. Sherpa e Instrutor em EBELI. Ex-embaixador da Singularity University (Santiago) e ExO Entrepreneur LATAM. Reconhecido entre as Fifty Most Influential Voices in Healthcare da Medika Life, Top 50 Global HealthTech da Thinker 360 e Top 200 Exponentialists in Digital Health.',
       beatrizRole: 'COO da Salvazion, Inc.',
       beatriz:
-        'Fisioterapeuta, Bacharel em Cinesiologia. Mestre em Terapia Física com Diplomados em Reabilitação, Exercício e Saúde, com experiência como Docente e Pesquisadora Universitária em Funcionalidade Humana, Saúde Digital e Terapia Aquática. Fez um Estágio Clínico Internacional em Hidroterapia. Coordenou o programa “Elige Vivir Sano” do Ministério da Saúde; no entanto, sua maior conquista é formar uma bela família (marido e quatro filhos), equilibrando a vida como empreendedora. Em 2022, foi reconhecida como “Campeã em Saúde Digital” pelo BID (Banco Interamericano de Desenvolvimento).',
+        'Fisioterapeuta e cinesiologista. Mestre em Terapia Física, com diplomados em Reabilitação, Exercício e Saúde. Docente e pesquisadora em Funcionalidade Humana, Saúde Digital e Terapia Aquática, com estágio internacional em Hidroterapia. Liderou o “Elige Vivir Sano” do Ministério da Saúde; sua maior obra é a família — marido e quatro filhos — enquanto empreende. Em 2022 o BID nomeou-a Campeã em Saúde Digital.',
     },
     footer: {
       copy: '© 2026 Salvazion, Inc. Todos os direitos reservados.',

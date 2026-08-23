@@ -1888,6 +1888,37 @@ select:-webkit-autofill {
   background: transparent;
 }
 
+.founder-bio {
+  min-height: 11.5rem;
+}
+@media (min-width: 768px) {
+  .founder-bio {
+    min-height: 12.25rem;
+  }
+}
+
+/* Pricing tables — 10 equal rows so Free and Premium points sit on the same level */
+.pricing-points {
+  display: grid;
+  grid-template-rows: repeat(10, minmax(3.55rem, auto));
+  gap: 0.5rem;
+  align-content: start;
+}
+.pricing-points > li {
+  min-height: 3.55rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+@media (min-width: 768px) {
+  .pricing-points {
+    grid-template-rows: repeat(10, minmax(3.15rem, auto));
+  }
+  .pricing-points > li {
+    min-height: 3.15rem;
+  }
+}
+
 /* —— Prayer sanctuary (Salvation) —— */
 .prayer-hero {
   position: relative;

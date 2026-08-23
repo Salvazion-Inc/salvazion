@@ -145,34 +145,36 @@ export default function PremiumPage() {
               —
             </p>
 
-            <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.5rem]">
+            <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.75rem]">
               {pickLang(lang, PRICING_TABLE.freeNote)}
             </p>
 
-            <ul className="mt-5 space-y-2 text-sm text-[#D8E1D9]/90 flex-1">
+            <ul className="pricing-points mt-5 text-sm text-[#D8E1D9]/90 flex-1">
               {PRICING_TABLE.freeItems.map((item) => {
                 const label = pickLang(lang, item);
                 return (
-                  <li key={item.en} className="flex gap-2">
+                  <li key={item.en}>
                     <span className="text-[var(--accent)] shrink-0 w-4 text-center">
                       ·
                     </span>
-                    <span>{textWithXLogo(label)}</span>
+                    <span className="leading-snug">{textWithXLogo(label)}</span>
                   </li>
                 );
               })}
             </ul>
 
-            {!isPremium ? (
-              <Link
-                href="/hub/dashboard"
-                className="btn-secondary font-display font-bold mt-6 w-full min-h-[3rem] !whitespace-normal text-center text-balance leading-snug"
-              >
-                {t('premium.continueFree')}
-              </Link>
-            ) : (
-              <div className="mt-6 min-h-[3rem]" aria-hidden />
-            )}
+            <div className="mt-6 min-h-[6.75rem] flex flex-col justify-end">
+              {!isPremium ? (
+                <Link
+                  href="/hub/dashboard"
+                  className="btn-secondary font-display font-bold w-full min-h-[3rem] !whitespace-normal text-center text-balance leading-snug"
+                >
+                  {t('premium.continueFree')}
+                </Link>
+              ) : (
+                <div className="min-h-[3rem]" aria-hidden />
+              )}
+            </div>
           </div>
 
           {/* Premium */}
@@ -200,57 +202,59 @@ export default function PremiumPage() {
               })}
             </p>
 
-            <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.5rem]">
+            <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.75rem]">
               {pickLang(lang, PRICING_TABLE.premiumNote)}
             </p>
 
-            <ul className="mt-5 space-y-2 text-sm text-[#D8E1D9]/90 flex-1">
+            <ul className="pricing-points mt-5 text-sm text-[#D8E1D9]/90 flex-1">
               {PREMIUM_FEATURE_LIST.map((item) => {
                 const label = pickLang(lang, item);
                 return (
-                  <li key={item.id} className="flex gap-2">
+                  <li key={item.id}>
                     <span className="text-[var(--accent)] shrink-0 w-4 text-center">
                       ·
                     </span>
-                    <span>{textWithXLogo(label)}</span>
+                    <span className="leading-snug">{textWithXLogo(label)}</span>
                   </li>
                 );
               })}
             </ul>
 
-            {!isPremium ? (
-              <div className="mt-6 grid gap-2">
+            <div className="mt-6 min-h-[6.75rem] flex flex-col justify-end">
+              {!isPremium ? (
+                <div className="grid gap-2">
+                  <button
+                    type="button"
+                    disabled={!!busy}
+                    onClick={() => void go(() => startCheckout('month'), 'month')}
+                    className="btn-primary font-display font-bold w-full min-h-[3rem] text-sm !whitespace-normal text-center text-balance leading-snug disabled:opacity-50"
+                  >
+                    {busy === 'month'
+                      ? t('premium.redirecting')
+                      : t('premium.ctaMonthly')}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={!!busy}
+                    onClick={() => void go(() => startCheckout('year'), 'year')}
+                    className="btn-secondary font-display font-bold w-full min-h-[3rem] text-sm !whitespace-normal text-center text-balance leading-snug border-[#8FD99A]/45 text-[#8FD99A] disabled:opacity-50"
+                  >
+                    {busy === 'year'
+                      ? t('premium.redirecting')
+                      : t('premium.ctaAnnual')}
+                  </button>
+                </div>
+              ) : (
                 <button
                   type="button"
                   disabled={!!busy}
-                  onClick={() => void go(() => startCheckout('month'), 'month')}
-                  className="btn-primary font-display font-bold w-full min-h-[3rem] text-sm !whitespace-normal text-center text-balance leading-snug disabled:opacity-50"
+                  onClick={() => void go(() => openBillingPortal(), 'portal')}
+                  className="btn-primary font-display font-bold w-full min-h-[3rem] text-sm disabled:opacity-50"
                 >
-                  {busy === 'month'
-                    ? t('premium.redirecting')
-                    : t('premium.ctaMonthly')}
+                  {busy === 'portal' ? t('premium.redirecting') : t('premium.manage')}
                 </button>
-                <button
-                  type="button"
-                  disabled={!!busy}
-                  onClick={() => void go(() => startCheckout('year'), 'year')}
-                  className="btn-secondary font-display font-bold w-full min-h-[3rem] text-sm !whitespace-normal text-center text-balance leading-snug border-[#8FD99A]/45 text-[#8FD99A] disabled:opacity-50"
-                >
-                  {busy === 'year'
-                    ? t('premium.redirecting')
-                    : t('premium.ctaAnnual')}
-                </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                disabled={!!busy}
-                onClick={() => void go(() => openBillingPortal(), 'portal')}
-                className="btn-primary font-display font-bold mt-6 w-full min-h-[3rem] text-sm disabled:opacity-50"
-              >
-                {busy === 'portal' ? t('premium.redirecting') : t('premium.manage')}
-              </button>
-            )}
+              )}
+            </div>
           </div>
         </div>
 

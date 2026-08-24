@@ -40,10 +40,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except static assets, images, PWA files.
-     */
-    '/((?!_next/static|_next/image|favicon.ico|sw\\.js|manifest\\.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
-  ],
+  // Only auth-sensitive routes. Running getUser() on the public site
+  // caused 504 MIDDLEWARE_INVOCATION_TIMEOUT when Supabase hung.
+  matcher: ['/hub/:path*', '/auth/:path*'],
 };

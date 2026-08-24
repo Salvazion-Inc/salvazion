@@ -121,7 +121,7 @@ export async function acceptPhalanxInvite(code: string): Promise<AcceptInviteRes
 
     const relation = (row.relation as LinkRelation) || 'friend';
     const inviterId = String(row.inviter_id || '');
-    const inviterName = String(row.inviter_name || 'Phalanx');
+    const inviterName = String(row.inviter_name || 'Community');
     const inviteId = String(row.invite_id || '');
     const inviteeName = String(row.invitee_name || '');
 
@@ -260,7 +260,7 @@ export async function syncConnectionsFromServer(): Promise<LinkedProfile[]> {
       const relation = (r.relation as LinkRelation) || 'friend';
       const link: LinkedProfile = {
         id: (r.invite_id as string) || `conn_${peerId}`,
-        name: peer?.name || 'Phalanx',
+        name: peer?.name || 'Community',
         relation,
         status: 'connected',
         peerUserId: peerId,

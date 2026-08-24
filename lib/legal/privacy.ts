@@ -2,9 +2,9 @@ import { APP_URL, SUPPORT_EMAIL } from '@/lib/config/site';
 import type { Language } from '@/lib/types';
 import type { LegalDoc } from '@/lib/legal/terms';
 
-const UPDATED_EN = 'August 23, 2026';
-const UPDATED_ES = '23 de agosto de 2026';
-const UPDATED_PT = '23 de agosto de 2026';
+const UPDATED_EN = 'August 24, 2026';
+const UPDATED_ES = '24 de agosto de 2026';
+const UPDATED_PT = '24 de agosto de 2026';
 
 export const PRIVACY: Record<Language, LegalDoc> = {
   en: {
@@ -31,7 +31,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
         bullets: [
           'Account: email, name, language (English, Spanish, or Brazilian Portuguese), profile photo, onboarding preferences (purpose, city, country, date of birth, spiritual maturity, family, focus areas).',
           'Social sign-in: if you use Google or X, identifiers and profile data the provider shares (for example email, name, photo, X handle), subject to their settings and your consent.',
-          'Platform usage: Salvation / Health / Freedom scores, streaks, badges, Bible reading progress, completed devotionals, calendar and prayer-motive entries, Phalanx invitations you send or accept.',
+          'Platform usage: Salvation / Health / Freedom scores, streaks, badges, Bible reading progress, completed devotionals, calendar and prayer-motive entries, Community invitations you send or accept.',
           'Health: sleep, hydration, meals, sports, fasting, women’s-health logs, clinical notes you enter, phone-sensor or Bluetooth heart-rate metrics, and wearable metrics you enable (Fitbit, Oura, WHOOP, Garmin, HealthKit, Health Connect).',
           'Photos you choose to upload for meal or body-composition estimates.',
           'Location, only if you grant permission (for example outdoor climate or the churches map).',
@@ -49,7 +49,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
           'Calculate scores, streaks, and badges for the three pillars.',
           'Provide Health features, photo estimates, and sensor or wearable sync only when you use them.',
           'Show nearby map or climate context if you enable location.',
-          'Manage Phalanx invitations and links.',
+          'Manage Community invitations and links.',
           'Process Premium subscriptions and prevent payment fraud.',
           'Improve security, prevent abuse, and operate the service (hosting, auth, AI, billing).',
           'Comply with legal obligations when applicable.',
@@ -162,7 +162,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
         bullets: [
           'Cuenta: email, nombre, idioma (inglés, español o portugués de Brasil), foto de perfil, preferencias de onboarding (propósito, ciudad, país, fecha de nacimiento, madurez espiritual, familia, focos).',
           'Inicio de sesión social: si usas Google o X, identificadores y datos de perfil que el proveedor comparta (por ejemplo email, nombre, foto, @ de X), según su configuración y tu consentimiento.',
-          'Uso de la Plataforma: scores Salvation / Health / Freedom, rachas, insignias, progreso de lectura bíblica, devocionales completados, entradas de calendario y motivos de oración, invitaciones Phalanx que envíes o aceptes.',
+          'Uso de la Plataforma: scores Salvation / Health / Freedom, rachas, insignias, progreso de lectura bíblica, devocionales completados, entradas de calendario y motivos de oración, invitaciones a la Comunidad que envíes o aceptes.',
           'Health: sueño, hidratación, comidas, deportes, ayuno, registros de salud femenina, notas clínicas que ingreses, métricas de sensores del teléfono o frecuencia cardíaca Bluetooth, y métricas de wearables que actives (Fitbit, Oura, WHOOP, Garmin, HealthKit, Health Connect).',
           'Fotos que elijas subir para estimaciones de comida o composición corporal.',
           'Ubicación, solo si concedes el permiso (por ejemplo clima exterior o el mapa de iglesias).',
@@ -180,7 +180,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
           'Calcular scores, rachas e insignias de los tres pilares.',
           'Ofrecer funciones de Health, estimaciones por foto y sincronización con sensores o wearables solo si las usas.',
           'Mostrar mapa o clima cercano si activas la ubicación.',
-          'Gestionar invitaciones y vínculos Phalanx.',
+          'Gestionar invitaciones y vínculos de la Comunidad.',
           'Procesar suscripciones Premium y prevenir fraude de pago.',
           'Mejorar seguridad, prevenir abuso y operar el servicio (hosting, auth, IA, facturación).',
           'Cumplir obligaciones legales cuando corresponda.',
@@ -293,7 +293,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
         bullets: [
           'Conta: email, nome, idioma (inglês, espanhol ou português do Brasil), foto de perfil, preferências de onboarding (propósito, cidade, país, data de nascimento, maturidade espiritual, família, focos).',
           'Login social: se você usa Google ou X, identificadores e dados de perfil que o provedor compartilhe (por exemplo email, nome, foto, @ do X), segundo a configuração dele e o seu consentimento.',
-          'Uso da Plataforma: scores Salvation / Health / Freedom, sequências, insígnias, progresso de leitura bíblica, devocionais concluídos, entradas de calendário e motivos de oração, convites Phalanx que você envie ou aceite.',
+          'Uso da Plataforma: scores Salvation / Health / Freedom, sequências, insígnias, progresso de leitura bíblica, devocionais concluídos, entradas de calendário e motivos de oração, convites da Comunidade que você envie ou aceite.',
           'Health: sono, hidratação, refeições, esportes, jejum, registros de saúde feminina, notas clínicas que você inserir, métricas de sensores do telefone ou frequência cardíaca Bluetooth, e métricas de wearables que você ative (Fitbit, Oura, WHOOP, Garmin, HealthKit, Health Connect).',
           'Fotos que você escolher enviar para estimativas de refeição ou composição corporal.',
           'Localização, só se você conceder permissão (por exemplo clima externo ou o mapa de igrejas).',
@@ -311,7 +311,7 @@ export const PRIVACY: Record<Language, LegalDoc> = {
           'Calcular scores, sequências e insígnias dos três pilares.',
           'Oferecer funções de Health, estimativas por foto e sincronização com sensores ou wearables só se você as usar.',
           'Mostrar mapa ou clima próximo se você ativar a localização.',
-          'Gerenciar convites e vínculos Phalanx.',
+          'Gerenciar convites e vínculos da Comunidade.',
           'Processar assinaturas Premium e prevenir fraude de pagamento.',
           'Melhorar a segurança, prevenir abuso e operar o serviço (hosting, auth, IA, cobrança).',
           'Cumprir obrigações legais quando corresponder.',

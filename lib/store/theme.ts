@@ -142,9 +142,9 @@ export const THEME_PRESETS: ThemePreset[] = [
     label: 'Reino',
     labelEn: 'Kingdom',
     labelPt: 'Reino',
-    hint: 'Oro real con acento verde León',
-    hintEn: 'Royal gold with Lion green accent',
-    hintPt: 'Ouro real com acento verde Leão',
+    hint: 'Oro real con acento verde Salvazion',
+    hintEn: 'Royal gold with Salvazion green accent',
+    hintPt: 'Ouro real com acento verde Salvazion',
     swatch: '#D4B86A',
     swatchSecondary: '#8FD99A',
     vars: {

@@ -32,7 +32,7 @@ Freemium app with **Premium** subscription on the **Salvazion, Inc.** Stripe acc
 - Manual health logging  
 - Freedom browse (base)  
 - Solana wallet connect + $SALVAZION swap (Jupiter)  
-- Basic Phalanx invites  
+- Basic Community invites  
 - Profile / theme / language  
 
 ### Premium
@@ -42,7 +42,7 @@ Freemium app with **Premium** subscription on the **Salvazion, Inc.** Stripe acc
 - Advanced health tools (biomarkers, clinical, women’s health modules)  
 - Full calendar & advanced prayer tools  
 - Full Freedom library + swap terminal convenience  
-- Unlimited Phalanx invites & tracking  
+- Unlimited Community invites & tracking  
 
 ## Env vars (Vercel + local)
 

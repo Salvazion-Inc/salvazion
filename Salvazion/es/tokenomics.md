@@ -8,7 +8,7 @@ coverY: 0
 
 **Idioma:** [English](../README.md) · Español · [Português](../pt/README.md)
 
-$SALVAZION es el Bitcoin Patriótico de esta falange. No sustituye el arrepentimiento, el sueño ni Premium. Es soberanía económica alineada con la Cultura Cristiana Occidental, el BioConservadurismo y el orden antiglobalista.
+$SALVAZION es el Bitcoin Patriótico de la Comunidad. No sustituye el arrepentimiento, el sueño ni Premium. Es soberanía económica alineada con la Cultura Cristiana Occidental, el BioConservadurismo y el orden antiglobalista.
 
 ## Contrato
 
@@ -30,7 +30,7 @@ $SALVAZION es el Bitcoin Patriótico de esta falange. No sustituye el arrepentim
 | --- | --- | --- | --- |
 | Plataforma | Sí | Sí | Sí |
 | IA Salvazion | Cupos | **2× cupos** | **Ilimitada** |
-| Wearables, salud avanzada, Phalanx ilimitada | No | No | **Sí** |
+| Wearables, salud avanzada, Community ilimitada | No | No | **Sí** |
 
 Lee la tesis: [$SALVAZION: The Patriotic Bitcoin](usdsalvazion.md).
 

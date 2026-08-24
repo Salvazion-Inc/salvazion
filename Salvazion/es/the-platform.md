@@ -27,9 +27,9 @@ El **logo** es Salvazion. La **comunidad** y sus miembros son **Green Lion Kings
 | ----- | --------- | ------ |
 | **Salvation** | La oración fue reemplazada por el ánimo. La Cruz, por el wellness. | La Palabra primero: Biblia offline, oración por prioridad, devocional y un score Salvation — no vibras sin Cruz. |
 | **Health** | El cuerpo se ignora — o se trata como una máquina a mejorar. | El cuerpo es templo: sueño, comida, sol, sensores y wearables al servicio de la persona, no en su lugar. |
-| **Freedom** | Los feeds capturan tu atención, tu comunidad y tu dinero. | Criterio, una Phalanx real y soberanía económica en Solana — libros, long-form y personas, no otro scroll. |
+| **Freedom** | Los feeds capturan tu atención, tu comunidad y tu dinero. | Criterio, la Comunidad y soberanía económica en Solana — libros, long-form y personas, no otro scroll. |
 
-**Salvazion AI** es tu coach de virtud: firme y con esperanza. No es un chatbot blando. Es un llamado a ser Green Lion King.
+**Salvazion AI** te ayuda a lograr el propósito que escribiste — o a encontrarlo si aún está en blanco. Te motiva a subir el Score Global y a sacar el máximo de la Plataforma. Firme y con esperanza. No es un chatbot blando. Es un llamado a ser Green Lion King.
 
 ## Lo que tienes el día uno (Gratis)
 
@@ -40,9 +40,9 @@ El **logo** es Salvazion. La **comunidad** y sus miembros son **Green Lion Kings
 5. Análisis de composición corporal, alimentos y calidad del sueño
 6. Sincronización con dispositivos y wearables para biomarcadores
 7. Contenido original que defiende la cultura cristiano-occidental y el BioConservadurismo
-8. Comunidad global **Green Lion Kings**
+8. La **Comunidad** (**Green Lion Kings**)
 9. Mapa dron 360° de iglesias y asambleas cerca de tu hogar
-10. **Salvazion AI** que te motiva y te ayuda en este viaje
+10. **Salvazion AI** que te ayuda a vivir tu propósito, subir el Score Global y sacar el máximo de la Plataforma
 
 Si mantienes **$SALVAZION** on-chain → los cupos Free de IA se **duplican**. Empieza gratis. [Pasa a Premium](premium.md) cuando quieras quitar el techo.
 

@@ -15,9 +15,9 @@ export type LegalDoc = {
   sections: LegalSection[];
 };
 
-const UPDATED_EN = 'August 23, 2026';
-const UPDATED_ES = '23 de agosto de 2026';
-const UPDATED_PT = '23 de agosto de 2026';
+const UPDATED_EN = 'August 24, 2026';
+const UPDATED_ES = '24 de agosto de 2026';
+const UPDATED_PT = '24 de agosto de 2026';
 
 const ENTITY =
   'Salvazion, Inc., a Delaware corporation, with registered office at 131 Continental Dr, Suite 305, Newark, DE 19713, USA';
@@ -44,7 +44,7 @@ export const TERMS: Record<Language, LegalDoc> = {
         bullets: [
           'Salvation: offline Bible (English King James, Spanish Reina Valera 1909, Portuguese Almeida historic text labeled ARC, plus Hebrew and Greek originals), daily devotionals, prayer motives, discipline calendar, and spiritual scores.',
           'Health: manual logs (sleep, hydration, meals, sports), phone sensors, Bluetooth heart rate, optional meal or body photos, women’s health and clinical-record tools, and optional wearable sync.',
-          'Freedom: curated books, long-form articles on X, YouTube channels, a churches map, Phalanx community invitations, and optional Solana wallet tools including $SALVAZION swaps.',
+          'Freedom: curated books, long-form articles on X, YouTube channels, a churches map, Community (Green Lion Kings) invitations, and optional Solana wallet tools including $SALVAZION swaps.',
           'Salvazion AI coach, voice playback, and AI-assisted devotionals on Premium.',
           'Scores, streaks, badges, profile, and language (English, Spanish, Brazilian Portuguese).',
         ],
@@ -68,7 +68,7 @@ export const TERMS: Record<Language, LegalDoc> = {
           'Use the Platform unlawfully, fraudulently, or in ways that violate third-party rights.',
           'Attempt to breach security, gain unauthorized access, scrape abusively, reverse engineer, or interfere with the service.',
           'Post or transmit offensive or defamatory content, or content that promotes violence or illegality, in community spaces.',
-          'Impersonate others or abuse Phalanx invitations.',
+          'Impersonate others or abuse Community invitations.',
           'Upload photos or health data of another person without their permission.',
           'Use AI features to generate unlawful, harassing, or deceptive content.',
         ],
@@ -96,7 +96,7 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '7. Plans, Premium, and payments',
         paragraphs: [
-          'The Platform is freemium. A Free plan lets you start. Salvazion Premium unlocks advanced tools (including the AI coach and voice, AI devotionals, cloud wearables, advanced health and calendar, full Freedom convenience, and unlimited Phalanx invites) as described in the Platform at the time of purchase.',
+          'The Platform is freemium. A Free plan lets you start. Salvazion Premium unlocks advanced tools (including Salvazion AI coach and voice, AI devotionals, cloud wearables, advanced health and calendar, full Freedom convenience, and unlimited Community invites) as described in the Platform at the time of purchase.',
           'Current published prices are USD $49 per month or USD $468 per year (equivalent to $39 per month billed annually). Prices, features, and taxes may change; the amount charged is the price shown at checkout.',
           'Payments are processed by Stripe on behalf of Salvazion, Inc. We do not store full card numbers. You authorize recurring charges until you cancel. You may cancel or change plans anytime in the Stripe customer portal from the Platform. Cancellation stops future renewals; fees already paid are generally not refunded except where required by law. If a payment fails, we may downgrade the account to Free.',
         ],
@@ -110,7 +110,7 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '9. Intellectual property',
         paragraphs: [
-          'The Salvazion name and logo, the Green Lion Kings community identity, Platform design, software, scores, and original editorial content belong to Salvazion, Inc. or are used under license. You receive a limited, revocable, non-transferable license to use the Platform for personal, non-commercial purposes.',
+          'The Salvazion name and logo, the Community and Green Lion Kings community identity, Platform design, software, scores, and original editorial content belong to Salvazion, Inc. or are used under license. You receive a limited, revocable, non-transferable license to use the Platform for personal, non-commercial purposes.',
           'Bible translations are used according to their rights: King James Version (public domain); Reina Valera 1909 (public domain — not Reina-Valera 1960, which we do not redistribute); Almeida historic text (public-domain Almeida lineage, presented in the Platform as ARC); Westminster Leningrad Codex (Hebrew) and Textus Receptus (Greek). You may not copy, resell, or exploit the Platform or its datasets beyond what those licenses and applicable law allow.',
         ],
       },
@@ -167,7 +167,7 @@ export const TERMS: Record<Language, LegalDoc> = {
         bullets: [
           'Salvation: Biblia offline (King James en inglés, Reina Valera 1909 en español, texto histórico Almeida rotulado ARC en portugués, más originales en hebreo y griego), devocional diario, motivos de oración, calendario de disciplina y scores espirituales.',
           'Health: registros manuales (sueño, hidratación, comidas, deportes), sensores del teléfono, frecuencia cardíaca Bluetooth, fotos opcionales de comida o composición corporal, salud femenina y ficha clínica, y sincronización opcional con wearables.',
-          'Freedom: libros curados, artículos long-form en X, canales de YouTube, mapa de iglesias, invitaciones a la comunidad Phalanx y herramientas opcionales de billetera Solana, incluido el swap de $SALVAZION.',
+          'Freedom: libros curados, artículos long-form en X, canales de YouTube, mapa de iglesias, invitaciones a la Comunidad (Green Lion Kings) y herramientas opcionales de billetera Solana, incluido el swap de $SALVAZION.',
           'Salvazion AI (coach), voz y devocionales asistidos por IA en Premium.',
           'Scores, rachas, insignias, perfil e idiomas (inglés, español y portugués de Brasil).',
         ],
@@ -191,7 +191,7 @@ export const TERMS: Record<Language, LegalDoc> = {
           'Usar la Plataforma de forma ilegal, fraudulenta o que viole derechos de terceros.',
           'Intentar vulnerar la seguridad, obtener acceso no autorizado, hacer scraping abusivo, ingeniería inversa o interferir con el servicio.',
           'Publicar o transmitir contenido ofensivo, difamatorio, o que promueva violencia o ilegalidad en espacios de comunidad.',
-          'Suplantar identidad o abusar de invitaciones Phalanx.',
+          'Suplantar identidad o abusar de invitaciones a la Comunidad.',
           'Subir fotos o datos de salud de otra persona sin su permiso.',
           'Usar las funciones de IA para generar contenido ilegal, acosador o engañoso.',
         ],
@@ -219,7 +219,7 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '7. Planes, Premium y pagos',
         paragraphs: [
-          'La Plataforma es freemium. El plan Gratis te permite empezar. Salvazion Premium desbloquea herramientas avanzadas (incluido el coach con IA y voz, devocionales IA, wearables en la nube, salud y calendario avanzados, conveniencia completa de Freedom e invitaciones Phalanx ilimitadas), según se describa en la Plataforma al comprar.',
+          'La Plataforma es freemium. El plan Gratis te permite empezar. Salvazion Premium desbloquea herramientas avanzadas (incluido el coach Salvazion AI y voz, devocionales IA, wearables en la nube, salud y calendario avanzados, conveniencia completa de Freedom e invitaciones ilimitadas a la Comunidad), según se describa en la Plataforma al comprar.',
           'Los precios publicados actuales son USD $49 al mes o USD $468 al año (equivalente a $39 al mes facturado anualmente). Precios, funciones e impuestos pueden cambiar; el cargo es el precio mostrado en el checkout.',
           'Los pagos los procesa Stripe en nombre de Salvazion, Inc. No almacenamos el número completo de la tarjeta. Autorizas cargos recurrentes hasta que canceles. Puedes cancelar o cambiar de plan cuando quieras en el portal de cliente de Stripe desde la Plataforma. La cancelación detiene las renovaciones futuras; los importes ya pagados no se reembolsan salvo cuando la ley lo exija. Si un pago falla, podemos bajar la cuenta a Gratis.',
         ],
@@ -233,7 +233,7 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '9. Propiedad intelectual',
         paragraphs: [
-          'El nombre y el logo Salvazion, la identidad de la comunidad Green Lion Kings, el diseño de la Plataforma, software, scores y el contenido editorial propio pertenecen a Salvazion, Inc. o se usan bajo licencia. Recibes una licencia limitada, revocable y no transferible para usar la Plataforma con fines personales y no comerciales.',
+          'El nombre y el logo Salvazion, la Comunidad y la identidad Green Lion Kings, el diseño de la Plataforma, software, scores y el contenido editorial propio pertenecen a Salvazion, Inc. o se usan bajo licencia. Recibes una licencia limitada, revocable y no transferible para usar la Plataforma con fines personales y no comerciales.',
           'Las traducciones bíblicas se usan conforme a sus derechos: King James Version (dominio público); Reina Valera 1909 (dominio público — no Reina-Valera 1960, que no redistribuimos); texto histórico Almeida (linaje de dominio público, presentado en la Plataforma como ARC); Westminster Leningrad Codex (hebreo) y Textus Receptus (griego). No puedes copiar, revender ni explotar la Plataforma o sus conjuntos de datos más allá de lo que esas licencias y la ley permitan.',
         ],
       },
@@ -290,7 +290,7 @@ export const TERMS: Record<Language, LegalDoc> = {
         bullets: [
           'Salvation: Bíblia offline (King James em inglês, Reina Valera 1909 em espanhol, texto histórico Almeida rotulado ARC em português, mais originais em hebraico e grego), devocional diário, motivos de oração, calendário de disciplina e scores espirituais.',
           'Health: registros manuais (sono, hidratação, refeições, esportes), sensores do telefone, frequência cardíaca Bluetooth, fotos opcionais de refeição ou composição corporal, saúde feminina e ficha clínica, e sincronização opcional com wearables.',
-          'Freedom: livros curados, artigos long-form no X, canais do YouTube, mapa de igrejas, convites da comunidade Phalanx e ferramentas opcionais de carteira Solana, inclusive swap de $SALVAZION.',
+          'Freedom: livros curados, artigos long-form no X, canais do YouTube, mapa de igrejas, convites da Comunidade (Green Lion Kings) e ferramentas opcionais de carteira Solana, inclusive swap de $SALVAZION.',
           'Salvazion AI (coach), voz e devocionais assistidos por IA no Premium.',
           'Scores, sequências, insígnias, perfil e idiomas (inglês, espanhol e português do Brasil).',
         ],
@@ -314,7 +314,7 @@ export const TERMS: Record<Language, LegalDoc> = {
           'Usar a Plataforma de forma ilegal, fraudulenta ou que viole direitos de terceiros.',
           'Tentar violar a segurança, obter acesso não autorizado, fazer scraping abusivo, engenharia reversa ou interferir no serviço.',
           'Publicar ou transmitir conteúdo ofensivo, difamatório, ou que promova violência ou ilegalidade em espaços da comunidade.',
-          'Falsificar identidade ou abusar de convites Phalanx.',
+          'Falsificar identidade ou abusar de convites da Comunidade.',
           'Enviar fotos ou dados de saúde de outra pessoa sem a permissão dela.',
           'Usar as funções de IA para gerar conteúdo ilegal, assediador ou enganoso.',
         ],
@@ -342,7 +342,7 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '7. Planos, Premium e pagamentos',
         paragraphs: [
-          'A Plataforma é freemium. O plano Grátis permite começar. O Salvazion Premium desbloqueia ferramentas avançadas (incluindo o coach com IA e voz, devocionais IA, wearables na nuvem, saúde e calendário avançados, conveniência completa de Freedom e convites Phalanx ilimitados), conforme descrito na Plataforma no momento da compra.',
+          'A Plataforma é freemium. O plano Grátis permite começar. O Salvazion Premium desbloqueia ferramentas avançadas (incluindo o coach Salvazion AI e voz, devocionais IA, wearables na nuvem, saúde e calendário avançados, conveniência completa de Freedom e convites ilimitados da Comunidade), conforme descrito na Plataforma no momento da compra.',
           'Os preços publicados atuais são USD $49 por mês ou USD $468 por ano (equivalente a $39 por mês cobrado anualmente). Preços, funções e impostos podem mudar; o valor cobrado é o preço mostrado no checkout.',
           'Os pagamentos são processados pela Stripe em nome da Salvazion, Inc. Não armazenamos o número completo do cartão. Você autoriza cobranças recorrentes até cancelar. Pode cancelar ou mudar de plano a qualquer momento no portal do cliente da Stripe a partir da Plataforma. O cancelamento interrompe as renovações futuras; valores já pagos em geral não são reembolsados, salvo quando a lei exigir. Se um pagamento falhar, podemos rebaixar a conta para Grátis.',
         ],
@@ -356,7 +356,7 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '9. Propriedade intelectual',
         paragraphs: [
-          'O nome e o logo Salvazion, a identidade da comunidade Green Lion Kings, o design da Plataforma, software, scores e o conteúdo editorial próprio pertencem à Salvazion, Inc. ou são usados sob licença. Você recebe uma licença limitada, revogável e intransferível para usar a Plataforma para fins pessoais e não comerciais.',
+          'O nome e o logo Salvazion, a Comunidade e a identidade Green Lion Kings, o design da Plataforma, software, scores e o conteúdo editorial próprio pertencem à Salvazion, Inc. ou são usados sob licença. Você recebe uma licença limitada, revogável e intransferível para usar a Plataforma para fins pessoais e não comerciais.',
           'As traduções bíblicas são usadas conforme os respectivos direitos: King James Version (domínio público); Reina Valera 1909 (domínio público — não Reina-Valera 1960, que não redistribuímos); texto histórico Almeida (linhagem de domínio público, apresentado na Plataforma como ARC); Westminster Leningrad Codex (hebraico) e Textus Receptus (grego). Você não pode copiar, revender ou explorar a Plataforma ou seus conjuntos de dados além do que essas licenças e a lei permitirem.',
         ],
       },

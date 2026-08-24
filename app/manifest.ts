@@ -9,7 +9,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'Salvazion — Salvation · Health · Freedom',
     short_name: 'Salvazion',
     description:
-      'The platform that restores the human person. Make Salvation, Health and Freedom Great Again. Offline Bible, devotionals, health & wearables, Freedom library, Phalanx community, Salvazion AI and $SALVAZION on Solana.',
+      'The platform that restores the human person. Make Salvation, Health and Freedom Great Again. Offline Bible, devotionals, health & wearables, Freedom library, Community (Green Lion Kings), Salvazion AI and $SALVAZION on Solana.',
     start_url: '/',
     scope: '/',
     id: '/',

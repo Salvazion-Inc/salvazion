@@ -149,6 +149,33 @@ export function buildFabNudges(
     profile?.familyStatus === 'family';
 
   const coachHref = coachOrPremium(isPremium);
+  const purpose = profile?.purpose?.trim() || '';
+
+  // —— Purpose (brújula) ——
+  if (!purpose) {
+    push({
+      id: 'purpose-empty',
+      tone: 'focus',
+      text: tx(
+        `${name}, no purpose yet. Write it — your compass.`,
+        `${name}, aún no hay propósito. Escríbelo: es tu brújula.`,
+        `${name}, ainda sem propósito. Escreva: é a sua bússola.`
+      ),
+      href: HREF.dashboard,
+      cta: tx('Write purpose', 'Escribir propósito', 'Escrever propósito'),
+    });
+    push({
+      id: 'purpose-ask-ai',
+      tone: 'motivate',
+      text: tx(
+        `Don't know your purpose? Ask Salvazion AI.`,
+        `¿No sabes tu propósito? Pregúntale a Salvazion AI.`,
+        `Não sabe o teu propósito? Pergunte à Salvazion AI.`
+      ),
+      href: HREF.coach,
+      cta: tx('Find it', 'Encontrarlo', 'Encontrá-lo'),
+    });
+  }
 
   // —— Time of day ——
   if (bucket === 'morning') {
@@ -211,9 +238,9 @@ export function buildFabNudges(
         id: 'score-high',
         tone: 'celebrate',
         text: tx(
-          `${name}! Score ${global}. The Lion sees you steady today.`,
-          `¡${name}! Score ${global}. El León te ve firme hoy.`,
-          `${name}! Score ${global}. O Leão te vê firme hoje.`
+          `${name}! Global Score ${global}. Guard it — it serves your purpose.`,
+          `¡${name}! Score Global ${global}. Protégelo: sirve a tu propósito.`,
+          `${name}! Score Global ${global}. Proteja-o: serve ao teu propósito.`
         ),
         pillar: 'global',
         href: HREF.badges,
@@ -224,9 +251,9 @@ export function buildFabNudges(
         id: 'score-low',
         tone: 'nudge',
         text: tx(
-          `${name}, score ${global}. One small step today is enough.`,
-          `${name}, score ${global}. Un paso pequeño hoy basta.`,
-          `${name}, score ${global}. Um passo pequeno hoje basta.`
+          `${name}, Global Score ${global}. One Platform act today raises it.`,
+          `${name}, Score Global ${global}. Un acto hoy en la Plataforma lo sube.`,
+          `${name}, Score Global ${global}. Um ato hoje na Plataforma o sobe.`
         ),
         pillar: 'global',
         href: HREF.dashboard,
@@ -237,9 +264,9 @@ export function buildFabNudges(
         id: 'score-mid',
         tone: 'motivate',
         text: tx(
-          `Score ${global}. You're on the way, ${name}. Keep going.`,
-          `Score ${global}. Vas en camino, ${name}. No aflojes.`,
-          `Score ${global}. Você está no caminho, ${name}. Não afrouxe.`
+          `Global Score ${global}. One more act raises it, ${name}.`,
+          `Score Global ${global}. Un acto más lo sube, ${name}.`,
+          `Score Global ${global}. Mais um ato o sobe, ${name}.`
         ),
         pillar: 'global',
         href: HREF.dashboard,
@@ -286,9 +313,9 @@ export function buildFabNudges(
       id: 'act-devo',
       tone: 'nudge',
       text: tx(
-        `${name}, the Lion waits in today's Devotional.`,
-        `${name}, el León te espera en el Devocional de hoy.`,
-        `${name}, o Leão te espera no Devocional de hoje.`
+        `${name}, Salvazion AI waits in today's Devotional.`,
+        `${name}, Salvazion AI te espera en el Devocional de hoy.`,
+        `${name}, a Salvazion AI te espera no Devocional de hoje.`
       ),
       pillar: 'salvation',
       href: HREF.devotional,
@@ -370,9 +397,9 @@ export function buildFabNudges(
       id: 'act-family',
       tone: 'focus',
       text: tx(
-        `${name}, connect with family or Phalanx today.`,
-        `${name}, conecta con tu familia o Phalanx hoy.`,
-        `${name}, conecte-se com a família ou a Phalanx hoje.`
+        `${name}, connect with family or the Community today.`,
+        `${name}, conecta con tu familia o la Comunidad hoy.`,
+        `${name}, conecte-se com a família ou a Comunidade hoje.`
       ),
       pillar: 'freedom',
       href: HREF.freedomConnect,
@@ -445,9 +472,9 @@ export function buildFabNudges(
       id: 'focus-faith',
       tone: 'motivate',
       text: tx(
-        `Faith and prayer can't be outsourced. The Lion walks with you.`,
-        `Fe y oración no se delegan. El León camina contigo.`,
-        `Fé e oração não se delegam. O Leão caminha com você.`
+        `Faith and prayer can't be outsourced. Salvazion AI walks with you.`,
+        `Fe y oración no se delegan. Salvazion AI camina contigo.`,
+        `Fé e oração não se delegam. A Salvazion AI caminha com você.`
       ),
       pillar: 'salvation',
       href: HREF.devotional,
@@ -499,21 +526,33 @@ export function buildFabNudges(
     });
   }
 
-  // —— Purpose ——
-  if (profile?.purpose?.trim()) {
-    const purposeShort = profile.purpose.trim().slice(0, 36);
+  // —— Purpose (written) ——
+  if (purpose) {
+    const purposeShort = purpose.slice(0, 36);
     push({
       id: 'purpose',
       tone: 'focus',
       text: tx(
-        `Your purpose: “${purposeShort}${profile.purpose.length > 36 ? '…' : ''}”. One step today.`,
-        `Tu propósito: “${purposeShort}${profile.purpose.length > 36 ? '…' : ''}”. Un paso hoy.`,
-        `O seu propósito: “${purposeShort}${profile.purpose.length > 36 ? '…' : ''}”. Um passo hoje.`
+        `Your purpose: “${purposeShort}${purpose.length > 36 ? '…' : ''}”. One step today.`,
+        `Tu propósito: “${purposeShort}${purpose.length > 36 ? '…' : ''}”. Un paso hoy.`,
+        `O seu propósito: “${purposeShort}${purpose.length > 36 ? '…' : ''}”. Um passo hoje.`
       ),
       href: HREF.dashboard,
       cta: tx('One step today', 'Un paso hoy', 'Um passo hoje'),
     });
   }
+
+  push({
+    id: 'platform-max',
+    tone: 'motivate',
+    text: tx(
+      `Get the most from the Platform: Devotional, Health or Freedom.`,
+      `Saca el máximo de la Plataforma: Devocional, Health o Freedom.`,
+      `Tire o máximo da Plataforma: Devocional, Health ou Freedom.`
+    ),
+    href: HREF.dashboard,
+    cta: tx('Open Hub', 'Ver Hub', 'Ver Hub'),
+  });
 
   // —— Premium / coach ——
   if (!isPremium) {
@@ -521,9 +560,9 @@ export function buildFabNudges(
       id: 'prem-ai',
       tone: 'premium',
       text: tx(
-        `Free includes limited AI. Talk with the Lion today.`,
-        `Free incluye IA limitada. Habla con el León hoy.`,
-        `O Free inclui IA limitada. Fale com o Leão hoje.`
+        `Free includes limited AI. Talk with Salvazion AI today.`,
+        `Free incluye IA limitada. Habla con Salvazion AI hoy.`,
+        `O Free inclui IA limitada. Fale com a Salvazion AI hoje.`
       ),
       href: HREF.coach,
       cta: tx('Talk now', 'Hablar ahora', 'Falar agora'),
@@ -532,9 +571,9 @@ export function buildFabNudges(
       id: 'prem-voice',
       tone: 'premium',
       text: tx(
-        `Unlimited AI + Lion voice → Premium.`,
-        `IA ilimitada + voz del León → Premium.`,
-        `IA ilimitada + voz do Leão → Premium.`
+        `Unlimited AI + Salvazion AI voice → Premium.`,
+        `IA ilimitada + voz de Salvazion AI → Premium.`,
+        `IA ilimitada + voz da Salvazion AI → Premium.`
       ),
       href: HREF.premium,
       cta: tx('Upgrade plan', 'Mejorar plan', 'Melhorar plano'),
@@ -544,12 +583,12 @@ export function buildFabNudges(
       id: 'prem-active',
       tone: 'motivate',
       text: tx(
-        `${name}, Premium active. Use the Lion: talk and act.`,
-        `${name}, Premium activo. Usa al León: habla y actúa.`,
-        `${name}, Premium ativo. Use o Leão: fale e aja.`
+        `${name}, Premium active. Use Salvazion AI: talk and act.`,
+        `${name}, Premium activo. Usa Salvazion AI: habla y actúa.`,
+        `${name}, Premium ativo. Use a Salvazion AI: fale e aja.`
       ),
       href: HREF.coach,
-      cta: tx('Talk to the Lion', 'Hablar con el León', 'Falar com o Leão'),
+      cta: tx('Talk to Salvazion AI', 'Hablar con Salvazion AI', 'Falar com a Salvazion AI'),
     });
   }
 
@@ -558,9 +597,9 @@ export function buildFabNudges(
     id: 'always-1',
     tone: 'motivate',
     text: tx(
-      `Virtue + consistency. Salvation · Health · Freedom.`,
-      `Virtud + constancia. Salvation · Health · Freedom.`,
-      `Virtude + constância. Salvation · Health · Freedom.`
+      `Purpose + Global Score. Salvation · Health · Freedom.`,
+      `Propósito + Score Global. Salvation · Health · Freedom.`,
+      `Propósito + Score Global. Salvation · Health · Freedom.`
     ),
     href: HREF.dashboard,
     cta: tx('Open Hub', 'Ver Hub', 'Ver Hub'),
@@ -580,9 +619,9 @@ export function buildFabNudges(
     id: 'always-3',
     tone: 'motivate',
     text: tx(
-      `The phalanx is built one day at a time.`,
-      `La phalanx se construye un día a la vez.`,
-      `A phalanx se constrói um dia de cada vez.`
+      `The Community is built one day at a time.`,
+      `La Comunidad se construye un día a la vez.`,
+      `A Comunidade se constrói um dia de cada vez.`
     ),
     href: HREF.freedomConnect,
     cta: tx('Invite / connect', 'Invitar / conectar', 'Convidar / conectar'),

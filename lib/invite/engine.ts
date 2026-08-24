@@ -197,27 +197,39 @@ export function buildShareText(
 ): string {
   const rel = relationLabel(params.relation, lang);
   if (lang === 'en') {
-    return `Join my Phalanx on Salvazion!
+    return `Join the Community on Salvazion!
 
-I'm building Salvation, Health and Freedom with the Green Lion Kings. I want you (${params.inviteeName}) in my circle as ${rel}.
+I'm building Salvation, Health and Freedom with the Green Lion Kings. I want you (${params.inviteeName}) in the Community as ${rel}.
 
 Open the platform and grow with me in faith, family and virtue:
 
 ${params.inviteUrl}
 
 — ${params.inviterName}
-#Salvazion #Phalanx #GreenLionKings`;
+#Salvazion #GreenLionKings`;
   }
-  return `¡Únete a mi Phalanx en Salvazion!
+  if (lang === 'pt') {
+    return `Junte-se à Comunidade na Salvazion!
 
-Estoy construyendo Salvation, Health y Freedom con los Green Lion Kings. Quiero que ${params.inviteeName} formes parte de mi círculo como ${rel}.
+Estou construindo Salvation, Health e Freedom com os Green Lion Kings. Quero você (${params.inviteeName}) na Comunidade como ${rel}.
+
+Entre na plataforma e cresçamos juntos em fé, família e virtude:
+
+${params.inviteUrl}
+
+— ${params.inviterName}
+#Salvazion #GreenLionKings`;
+  }
+  return `¡Únete a la Comunidad en Salvazion!
+
+Estoy construyendo Salvation, Health y Freedom con los Green Lion Kings. Quiero que ${params.inviteeName} formes parte de la Comunidad como ${rel}.
 
 Entra a la plataforma y crezcamos juntos en fe, familia y virtud:
 
 ${params.inviteUrl}
 
 — ${params.inviterName}
-#Salvazion #Phalanx #GreenLionKings`;
+#Salvazion #GreenLionKings`;
 }
 
 /**
@@ -408,7 +420,7 @@ export function parseInviteFromSearchParams(
   if (!code && !from) return null;
   return {
     code: code || 'link',
-    from: from || 'Phalanx',
+    from: from || 'Community',
     relation: ALL_RELATIONS.includes(relation) ? relation : 'friend',
     forName,
   };

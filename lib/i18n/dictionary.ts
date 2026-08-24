@@ -70,7 +70,7 @@ export const dictionary = {
       hasAccount: '¿Ya tienes cuenta?',
       signIn: 'Entrar',
       signupTitle: 'Únete a la Comunidad',
-      signupSubtitle: 'Únete a la falange · una sola Plataforma',
+      signupSubtitle: 'Únete a la Comunidad · una sola Plataforma',
       name: 'Nombre',
       confirmPassword: 'Confirmar contraseña',
       minPassword: 'Contraseña (mín. 8)',
@@ -136,7 +136,7 @@ export const dictionary = {
       privacyTitle: 'Privacidad y datos',
       privacyBody:
         'Tu perfil está protegido por Row Level Security de Supabase. Solo tú (auth.uid) puedes leer y escribir tus filas. El caché local acelera la plataforma; la fuente de verdad es el servidor. Soberanía + sincronización.',
-      phalanx: 'Tu Comunidad Personal',
+      phalanx: 'Comunidad',
       links: 'vínculos',
       noInvites: 'Aún no has invitado a nadie. La familia es el núcleo de la civilización occidental cristiana.',
       maturity: {
@@ -191,7 +191,7 @@ export const dictionary = {
       skip: 'Saltar',
       explore: 'Explorar en la plataforma',
       replay: 'Rever el viaje de Salvazion',
-      replayHint: 'Salvation · Health · Freedom · Comunidad · León · Artículos · Insignias',
+      replayHint: 'Salvation · Health · Freedom · Comunidad · Salvazion AI · Artículos · Insignias',
     },
     articles: {
       title: 'Artículos · @salvazion_',
@@ -268,7 +268,7 @@ export const dictionary = {
       purposeSaveError: 'No se pudo guardar. Intenta de nuevo.',
       pillars: 'Tus tres pilares',
       pillarsHint: 'Salvation · Health · Freedom — toca un pilar para entrar',
-      coachCta: 'Hablar con el León',
+      coachCta: 'Hablar con Salvazion AI',
       coachVoice: 'Agente de voz',
       swapTitle: 'Swap Jupiter · $SALVAZION',
       swapSub: 'Solana · libertad económica',
@@ -507,7 +507,7 @@ export const dictionary = {
     premium: {
       billing: 'Suscripción',
       freeTitle: 'Plan Free',
-      freeBody: 'Toda la Plataforma + IA Salvazion con cupo. Premium quita el techo y profundiza Health, oración, Freedom y Phalanx.',
+      freeBody: 'Toda la Plataforma + IA Salvazion con cupo. Premium quita el techo y profundiza Health, oración, Freedom y la Comunidad.',
       activeTitle: 'Premium activo',
       activeBody: 'Acceso completo + herramientas avanzadas en toda la Plataforma.',
       status: 'Estado',
@@ -591,7 +591,7 @@ export const dictionary = {
       holdings: 'Tus $SALVAZION',
     },
     invite: {
-      title: 'Invitar a tu Comunidad',
+      title: 'Invitar a la Comunidad',
       subtitle:
         'Trae a familia, hermanos, amigos y colegas. Crezcan juntos en fe, salud y libertad.',
       count: 'vínculos',
@@ -636,8 +636,8 @@ export const dictionary = {
     coach: {
       fabLabel: 'Salvazion',
       fabPremium: 'Salvazion · Premium',
-      talk: 'Hablar con Salvazion',
-      agentLabel: 'Salvazion',
+      talk: 'Hablar con Salvazion AI',
+      agentLabel: 'Salvazion AI',
     },
     charts: {
       section: 'Progreso',
@@ -887,7 +887,7 @@ export const dictionary = {
     },
     onboarding: {
       welcome: 'Bienvenido a la Comunidad',
-      tagline: 'Únete a la falange. Salvación, Salud y Libertad en una sola Plataforma.',
+      tagline: 'Únete a la Comunidad. Salvación, Salud y Libertad en una sola Plataforma.',
       taglineShort: 'Tres pasos. Luego vive el día con la agenda.',
       stepOf: 'Paso {n} de {total}',
       preparing: 'Cargando…',
@@ -901,7 +901,8 @@ export const dictionary = {
       birthHintShort: 'Personaliza Health y scores según tu etapa de vida.',
       purpose: 'Propósito de vida',
       purposePlaceholder: '¿Para qué estás en este mundo? ¿Qué legado quieres dejar?',
-      purposeOptionalHint: 'Puedes escribirlo o editarlo después en el Dashboard.',
+      purposeOptionalHint:
+        'Escríbelo ahora, o pídele a Salvazion AI que te ayude a encontrarlo. También lo editas en el Dashboard.',
       city: 'Ciudad',
       country: 'País',
       cityPlaceholder: 'Ciudad',
@@ -937,8 +938,8 @@ export const dictionary = {
       focusOracion: 'Oración',
       focusLiderazgo: 'Liderazgo',
       focusPerseverancia: 'Perseverancia',
-      phalanxTitle: 'Tu Comunidad Personal',
-      phalanxSub: 'Vincula a tu familia y amigos dentro de Salvazion. Juntos son más fuertes.',
+      phalanxTitle: 'Comunidad',
+      phalanxSub: 'La Comunidad — Green Lion Kings. Invita familia y amigos dentro de Salvazion.',
       phalanxDeferred:
         'Invita a familia y amigos cuando quieras desde Freedom → Conectar. No hace falta ahora.',
       invite: 'Invitar',
@@ -947,7 +948,7 @@ export const dictionary = {
       inviteModalTitle: 'Invitar',
       personName: 'Nombre de la persona',
       personPlaceholder: 'Ej: María, Juan…',
-      addToPhalanx: 'Agregar a mi Comunidad',
+      addToPhalanx: 'Agregar a la Comunidad',
       shareInvite: 'Compartir invitación',
       shareCopied: '✓ Mensaje copiado',
       inviteLocalNote:
@@ -968,7 +969,7 @@ export const dictionary = {
       readySub: 'Tu agenda del día ya está preparada.',
       lionTitle: 'Conoce a tu',
       lionName: 'Salvazion AI',
-      lionSub: 'Tu coach de virtud y desarrollo integral',
+      lionSub: 'Tu coach de propósito, Score Global y Plataforma',
       lionSpiritual: 'Espiritual',
       lionSpiritualBody: 'Biblia · Oración · Devocional',
       lionPhysical: 'Físico',
@@ -978,9 +979,9 @@ export const dictionary = {
       lionVirtue: 'Virtud',
       lionVirtueBody: 'Constancia · Excelencia',
       lionPitch:
-        'Te entrenaré en virtud, constancia y excelencia para que Salvation, Health y Freedom crezcan cada día.',
+        'Te ayudo a lograr tu propósito — o a encontrarlo. Subimos tu Score Global y sacamos el máximo de la Plataforma.',
       lionPitchShort:
-        'Salvazion AI te acompaña en Salvation, Health y Freedom. Tú marcas la agenda; el resto se llena solo. Eres Green Lion King.',
+        'Salvazion AI te ayuda a vivir tu propósito, subir el Score Global y usar al máximo la Plataforma. Eres Green Lion King.',
       lionPrivacy:
         'Tu perfil se sincroniza de forma segura. Soberanía y disciplina primero.',
       afterStartHint:
@@ -989,9 +990,9 @@ export const dictionary = {
       starting: 'Entrando…',
       saveError:
         'No se pudo sincronizar. Tus datos quedaron guardados en este dispositivo; entra de nuevo si el dashboard no abre.',
-      shareTitle: 'Únete a mi Comunidad — Salvazion',
+      shareTitle: 'Únete a la Comunidad — Salvazion',
       shareBody:
-        '¡Únete a los Green Lion Kings en Salvazion!\n\nEstoy construyendo Salvation, Health y Freedom. Quiero que formes parte de mi círculo ({relation}).\n\nEntra a la plataforma y crecemos juntos en fe, familia y virtud.\n\nhttps://salvazion.org\n\n#Salvazion #GreenLionKings',
+        '¡Únete a la Comunidad en Salvazion!\n\nLa Comunidad y sus miembros son Green Lion Kings. Estoy construyendo Salvation, Health y Freedom. Quiero que formes parte de mi círculo ({relation}).\n\nEntra a la plataforma y crecemos juntos en fe, familia y virtud.\n\nhttps://salvazion.org\n\n#Salvazion #GreenLionKings',
     },
     badges: {
       title: 'Insignias',
@@ -1022,7 +1023,7 @@ export const dictionary = {
     freedom: {
       title: 'Libertad',
       contributeHint:
-        'Tu aporte real se refleja al marcar Trabajo o Aportar en la agenda, o al conectar en Comunidad. Sin botones de puntos vacíos.',
+        'Tu aporte real se refleja al marcar Trabajo o Aportar en la agenda, o al conectar en la Comunidad. Sin botones de puntos vacíos.',
       contributeCta: 'Abrir agenda / calendario',
     },
     devotional: {
@@ -1093,7 +1094,7 @@ export const dictionary = {
       hasAccount: 'Already have an account?',
       signIn: 'Sign in',
       signupTitle: 'Join the Community',
-      signupSubtitle: 'Join the phalanx · one Platform',
+      signupSubtitle: 'Join the Community · one Platform',
       name: 'Name',
       confirmPassword: 'Confirm password',
       minPassword: 'Password (min. 8)',
@@ -1159,7 +1160,7 @@ export const dictionary = {
       privacyTitle: 'Privacy and data',
       privacyBody:
         'Your profile is protected by Supabase Row Level Security. Only you (auth.uid) can read and write your rows. Local cache speeds up the platform; the server is the source of truth.',
-      phalanx: 'Your Personal Community',
+      phalanx: 'Community',
       links: 'links',
       noInvites: 'You have not invited anyone yet. Family is the core of Western Christian civilization.',
       maturity: {
@@ -1214,7 +1215,7 @@ export const dictionary = {
       skip: 'Skip',
       explore: 'Explore in the platform',
       replay: 'Replay the Salvazion journey',
-      replayHint: 'Salvation · Health · Freedom · Comunidad · Lion · Articles · Badges',
+      replayHint: 'Salvation · Health · Freedom · Community · Salvazion AI · Articles · Badges',
     },
     articles: {
       title: 'Articles · @salvazion_',
@@ -1289,7 +1290,7 @@ export const dictionary = {
       purposeSaveError: 'Could not save. Try again.',
       pillars: 'Your three pillars',
       pillarsHint: 'Salvation · Health · Freedom — tap a pillar to enter',
-      coachCta: 'Talk to the Lion',
+      coachCta: 'Talk to Salvazion AI',
       coachVoice: 'Voice agent',
       swapTitle: 'Jupiter Swap · $SALVAZION',
       swapSub: 'Solana · economic freedom',
@@ -1527,7 +1528,7 @@ export const dictionary = {
     premium: {
       billing: 'Subscription',
       freeTitle: 'Free plan',
-      freeBody: 'The whole Platform + metered Salvazion AI. Premium removes the ceiling and goes deeper on Health, prayer, Freedom and Phalanx.',
+      freeBody: 'The whole Platform + metered Salvazion AI. Premium removes the ceiling and goes deeper on Health, prayer, Freedom and the Community.',
       activeTitle: 'Premium active',
       activeBody: 'Full access + advanced tools across the Platform.',
       status: 'Status',
@@ -1611,7 +1612,7 @@ export const dictionary = {
       holdings: 'Your $SALVAZION',
     },
     invite: {
-      title: 'Invite to your Community',
+      title: 'Invite to the Community',
       subtitle:
         'Bring family, siblings, friends and colleagues. Grow together in faith, health and freedom.',
       count: 'links',
@@ -1656,8 +1657,8 @@ export const dictionary = {
     coach: {
       fabLabel: 'Salvazion',
       fabPremium: 'Salvazion · Premium',
-      talk: 'Talk with Salvazion',
-      agentLabel: 'Salvazion',
+      talk: 'Talk with Salvazion AI',
+      agentLabel: 'Salvazion AI',
     },
     charts: {
       section: 'Progress',
@@ -1907,7 +1908,7 @@ export const dictionary = {
     },
     onboarding: {
       welcome: 'Welcome to the Community',
-      tagline: 'Join the phalanx. Salvation, Health and Freedom in one Platform.',
+      tagline: 'Join the Community. Salvation, Health and Freedom in one Platform.',
       taglineShort: 'Three steps. Then live the day with your agenda.',
       stepOf: 'Step {n} of {total}',
       preparing: 'Loading…',
@@ -1921,7 +1922,8 @@ export const dictionary = {
       birthHintShort: 'Personalizes Health and scores by life stage.',
       purpose: 'Life purpose',
       purposePlaceholder: 'Why are you here? What legacy do you want to leave?',
-      purposeOptionalHint: 'You can write or edit it later on the Dashboard.',
+      purposeOptionalHint:
+        'Write it now, or ask Salvazion AI to help you find it. You can also edit it on the Dashboard.',
       city: 'City',
       country: 'Country',
       cityPlaceholder: 'City',
@@ -1957,8 +1959,8 @@ export const dictionary = {
       focusOracion: 'Prayer',
       focusLiderazgo: 'Leadership',
       focusPerseverancia: 'Perseverance',
-      phalanxTitle: 'Your Personal Community',
-      phalanxSub: 'Link family and friends inside Salvazion. Stronger together.',
+      phalanxTitle: 'Community',
+      phalanxSub: 'The Community — Green Lion Kings. Invite family and friends inside Salvazion.',
       phalanxDeferred:
         'Invite family and friends anytime from Freedom → Connect. Not needed now.',
       invite: 'Invite',
@@ -1967,11 +1969,11 @@ export const dictionary = {
       inviteModalTitle: 'Invite',
       personName: 'Person’s name',
       personPlaceholder: 'e.g. Maria, John…',
-      addToPhalanx: 'Add to my Community',
+      addToPhalanx: 'Add to the Community',
       shareInvite: 'Share invitation',
       shareCopied: '✓ Message copied',
       inviteLocalNote:
-        'Links are saved on this device for now. Real multi-account connections are available via Community invites.',
+        'Links are saved on this device for now. Real multi-account connections are available via Comunidade invites.',
       relSpouse: 'Spouse',
       relChild: 'Children',
       relSibling: 'Siblings',
@@ -1988,7 +1990,7 @@ export const dictionary = {
       readySub: 'Your daily agenda is already prepared.',
       lionTitle: 'Meet your',
       lionName: 'Salvazion AI',
-      lionSub: 'Your coach for virtue and integral growth',
+      lionSub: 'Your coach for purpose, Global Score and the Platform',
       lionSpiritual: 'Spiritual',
       lionSpiritualBody: 'Bible · Prayer · Devotional',
       lionPhysical: 'Physical',
@@ -1998,9 +2000,9 @@ export const dictionary = {
       lionVirtue: 'Virtue',
       lionVirtueBody: 'Consistency · Excellence',
       lionPitch:
-        'I will train you in virtue, consistency, and excellence so Salvation, Health, and Freedom grow every day.',
+        'I help you achieve your purpose — or find it. We raise your Global Score and get the maximum from the Platform.',
       lionPitchShort:
-        'Salvazion AI walks with you in Salvation, Health, and Freedom. Mark the agenda; the rest fills itself. You are a Green Lion King.',
+        'Salvazion AI helps you live your purpose, raise the Global Score, and use the Platform at full potential. You are a Green Lion King.',
       lionPrivacy: 'Your profile syncs securely. Sovereignty and discipline first.',
       afterStartHint:
         'Mark Yes on today’s agenda. Read a chapter. That’s enough to start.',
@@ -2008,9 +2010,9 @@ export const dictionary = {
       starting: 'Entering…',
       saveError:
         'Could not sync. Your answers are saved on this device — try again if the dashboard does not open.',
-      shareTitle: 'Join my Community — Salvazion',
+      shareTitle: 'Join the Community — Salvazion',
       shareBody:
-        'Join the Green Lion Kings on Salvazion!\n\nI am building Salvation, Health, and Freedom. I want you in my circle ({relation}).\n\nOpen the platform and grow with me in faith, family, and virtue.\n\nhttps://salvazion.org\n\n#Salvazion #GreenLionKings',
+        'Join the Community on Salvazion!\n\nThe Community and its members are Green Lion Kings. I am building Salvation, Health, and Freedom. I want you in my circle ({relation}).\n\nOpen the platform and grow with me in faith, family, and virtue.\n\nhttps://salvazion.org\n\n#Salvazion #GreenLionKings',
     },
     badges: {
       title: 'Badges',
@@ -2042,7 +2044,7 @@ export const dictionary = {
     freedom: {
       title: 'Freedom',
       contributeHint:
-        'Real contribution shows when you mark Work or Contribute on the agenda, or connect in Community. No empty point buttons.',
+        'Real contribution shows when you mark Work or Contribute on the agenda, or connect in the Community. No empty point buttons.',
       contributeCta: 'Open agenda / calendar',
     },
     devotional: {

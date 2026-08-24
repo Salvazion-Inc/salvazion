@@ -9,7 +9,7 @@ description: Crie sua conta grátis na Salvazion, entre e instale a Plataforma c
 
 **Idioma:** [English](https://welcome.salvazion.org/) · [Español](https://bienvenida.salvazion.org/) · Português
 
-As portas estão abertas. Uma conta grátis basta para começar a guerra pela sua própria alma — e para caminhar com uma Phalanx.
+As portas estão abertas. Uma conta grátis basta para começar a guerra pela sua própria alma — e para caminhar com a Comunidade.
 
 {% hint style="success" %}
 **Crie sua conta grátis agora:** [https://salvazion.org/auth/signup](https://salvazion.org/auth/signup)
@@ -28,7 +28,7 @@ As portas estão abertas. Uma conta grátis basta para começar a guerra pela su
 4. Complete um onboarding curto: quem você é, por que luta, de qual pilar precisa primeiro.
 5. Você chega ao **Hub**. Isso é a Plataforma.
 
-Se alguém te convidou para a Phalanx, não apague o link. Cadastre-se com ele para o vínculo nascer no dia um.
+Se alguém te convidou para a Comunidade, não apague o link. Cadastre-se com ele para o vínculo nascer no dia um.
 
 ## Instale como PWA
 

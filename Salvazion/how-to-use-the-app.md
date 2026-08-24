@@ -4,12 +4,12 @@ cover: .gitbook/assets/Salvazion App the platform that restores the human person
 coverY: 0
 description: >-
   How to live Salvation, Health and Freedom inside the Salvazion Platform — Hub,
-  Bible, Health, Freedom, Phalanx, Salvazion AI and $SALVAZION.
+  Bible, Health, Freedom, Community, Salvazion AI and $SALVAZION.
 ---
 
 # How to use the Platform
 
-You have an account. Now live it: one pillar at a time, one day at a time, with your Phalanx and **Salvazion AI** beside you.
+You have an account. Now live it: one pillar at a time, one day at a time, with the **Community** and **Salvazion AI** beside you.
 
 Open the Hub: [https://salvazion.org/hub/dashboard](https://salvazion.org/hub/dashboard)
 
@@ -45,15 +45,14 @@ Open: [salvazion.org/hub/health](https://salvazion.org/hub/health)
 
 * **X Articles** by [@salvazion\_](https://x.com/salvazion_) — long-form on faith, family, freedom, technology and Western Christian Culture.
 * Books, YouTube channels and a **360° drone map** of churches near your home.
-* **Phalanx** — invite family, brothers in the faith, friends and colleagues. No one fights alone.
-* **Green Lion Kings** — the global community on X and inside the Platform.
+* **Community**. Invite family, brothers in the faith, friends and colleagues. Members are **Green Lion Kings**. No one fights alone.
 * **$SALVAZION** — connect a Solana wallet (Jupiter Mobile, Phantom, Solflare) and swap. We never custody your keys.
 
 Open: [salvazion.org/hub/freedom](https://salvazion.org/hub/freedom)
 
-## Salvazion AI — virtue coach
+## Salvazion AI — purpose, Score and Platform
 
-**Salvazion AI** disciplines with firmness and hope. Ask for a plan, a fast, a hard conversation, a training week, a reading path. It is the coach — not the logo, and not the name of the community.
+**Salvazion AI** helps you live the purpose you wrote — or find it if it is still blank. It motivates you to raise your Global Score and to use the Platform at full potential: Devotional, Bible, Health, Freedom, Community. Firm and hopeful. It is the coach — not the logo, and not the community.
 
 * Free: limited coach, voice and devotionals (hold $SALVAZION on-chain → those Free limits **double**)
 * Premium → **unlimited** coach, voice, devotionals and vision tools
@@ -67,10 +66,10 @@ Open: [salvazion.org/hub/coach](https://salvazion.org/hub/coach)
 | Sunday | Worship, family, longer Scripture | Bible + Prayer |
 | Mon–Fri | Agenda + one Salvation act + one Health act | Dashboard → Bible / Health |
 | Mid-week | Read one X Article you have not finished | Freedom |
-| Saturday | Invite one person to your Phalanx | Profile / Phalanx |
+| Saturday | Invite one person to the Community | Profile / Community |
 | Any day you hit a Free AI wall | Upgrade or hold $SALVAZION | [Premium](premium.md) |
 
-Badges are not dopamine trophies. Each one marks real consistency: devotionals, movement, connections, streaks, Phalanx excellence.
+Badges are not dopamine trophies. Each one marks real consistency: devotionals, movement, connections, streaks, Community excellence.
 
 {% hint style="success" %}
 When the Free limits start teaching you how much you use Salvazion AI, that is the signal. [Subscribe to Premium](premium.md) and stop rationing virtue.

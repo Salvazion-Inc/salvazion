@@ -9,7 +9,7 @@ description: Salvazion Premium — las 10 claves de Gratis más 9 profundidades.
 
 **Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://bem-vindo.salvazion.org/)
 
-Gratis es cómo entras a la falange. Premium es cómo dejas de racionar la lucha.
+Gratis es cómo entras a la Comunidad. Premium es cómo dejas de racionar la lucha.
 
 Los cobros van por Stripe a nombre de **Salvazion, Inc.** Cancela o cambia de plan cuando quieras.
 
@@ -36,14 +36,14 @@ Si mantienes **$SALVAZION** on-chain en Gratis, tus cupos Free de IA se **duplic
 5. Análisis de composición corporal, alimentos y calidad del sueño
 6. Sincronización con dispositivos y wearables para biomarcadores
 7. Contenido original que defiende la cultura cristiano-occidental y el BioConservadurismo
-8. Comunidad global **Green Lion Kings**
+8. La **Comunidad** (**Green Lion Kings**)
 9. Mapa dron 360° de iglesias y asambleas cerca de tu hogar
-10. **Salvazion AI** que te motiva y te ayuda en este viaje
+10. **Salvazion AI** que te ayuda a vivir tu propósito, subir el Score Global y sacar el máximo de la Plataforma
 
 ## Premium — todo lo de Gratis, más 9 profundidades
 
 1. Todo lo de Gratis — las 10 claves, sin soltar un pilar
-2. Coach **Salvazion AI** ilimitado
+2. Coach **Salvazion AI** ilimitado — propósito, Score Global y Plataforma
 3. Voz Salvazion AI ilimitada
 4. Devocionales IA ilimitados
 5. Composición corporal ilimitada
@@ -51,7 +51,7 @@ Si mantienes **$SALVAZION** on-chain en Gratis, tus cupos Free de IA se **duplic
 7. Wearables en la nube (Fitbit, Oura, WHOOP, Garmin) en un Hub
 8. Biomarcadores, ficha clínica y salud femenina
 9. Calendario de todo el año más oración avanzada (prioridad y sesión)
-10. Biblioteca Freedom completa, swap y Phalanx ilimitada
+10. Biblioteca Freedom completa, swap y Comunidad ilimitada
 
 $49 / mes es menos que una hora con un entrenador, un nutricionista o un director espiritual.
 

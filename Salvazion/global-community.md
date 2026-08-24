@@ -13,11 +13,11 @@ These communities enable people from diverse backgrounds to unite around goals l
 ## Where this community actually lives
 
 * **X** — [@salvazion\_](https://x.com/salvazion_) and the **Green Lion Kings** community. Long-form Articles live in the Freedom pillar of the Platform.
-* **The Platform** — your Phalanx: family, brothers in the faith, friends, colleagues. Invite them from your Profile after you log in.
+* **The Platform** — the Community: family, brothers in the faith, friends, colleagues. Invite them from your Profile after you log in.
 * **This Welcome** — the formation path before (and beside) the login screen.
 
 A global community that will not kneel to globalism is not a Slack and a slogan. It is households that pray, train, read, and pay for the tools that keep them free.
 
 {% hint style="success" %}
-**Enter the community by using it.** [Create your free account](https://salvazion.org/auth/signup) · then invite one person to your Phalanx.
+**Enter the community by using it.** [Create your free account](https://salvazion.org/auth/signup) · then invite one person to the Community.
 {% endhint %}

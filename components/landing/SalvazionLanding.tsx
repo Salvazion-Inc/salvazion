@@ -623,7 +623,7 @@ const copy = {
       eyebrow: 'Massive Transformative Purpose',
       title: 'The platform that restores the human person',
       body:
-        'Our Purpose is Make Salvation, Health and Freedom Great Again — a Global Community that defends Western Christian Culture and BioConservatism in Spiritual Warfare. Exponential technologies and innovation at the service of people.',
+        'Our Purpose is Make Salvation, Health and Freedom Great Again — a Community of Green Lion Kings that defends Western Christian Culture and BioConservatism in Spiritual Warfare. Exponential technologies and innovation at the service of people.',
       cta: 'Open the Platform',
       areas: [
         {
@@ -647,7 +647,7 @@ const copy = {
           icon: '/icons/agenda/freedom.jpg',
           accent: '#8FD99A',
           problem: 'Feeds capture your attention, your community and your money.',
-          body: 'You recover judgment, a real Phalanx and economic sovereignty on Solana — books, long-form and people, not another scroll.',
+          body: 'You recover judgment, the Community and economic sovereignty on Solana — books, long-form and people, not another scroll.',
           inApp: 'Library · Community · $SALVAZION',
         },
       ],
@@ -740,7 +740,7 @@ const copy = {
       eyebrow: 'Propósito Transformador Masivo',
       title: 'La plataforma que restaura a la persona humana',
       body:
-        'Nuestro Propósito es Make Salvation, Health and Freedom Great Again — una Comunidad Global que defiende la Cultura Cristiana Occidental y el BioConservadurismo en Guerra Espiritual. Tecnologías exponenciales e innovación al servicio de las personas.',
+        'Nuestro Propósito es Make Salvation, Health and Freedom Great Again — una Comunidad de Green Lion Kings que defiende la Cultura Cristiana Occidental y el BioConservadurismo en Guerra Espiritual. Tecnologías exponenciales e innovación al servicio de las personas.',
       cta: 'Abrir la Plataforma',
       areas: [
         {
@@ -764,8 +764,8 @@ const copy = {
           icon: '/icons/agenda/freedom.jpg',
           accent: '#8FD99A',
           problem: 'Los feeds capturan tu atención, tu comunidad y tu dinero.',
-          body: 'Recuperas criterio, una Phalanx real y soberanía económica en Solana — libros, long-form y personas, no otro scroll.',
-          inApp: 'Biblioteca · Comunidad · $SALVAZION',
+          body: 'Recuperas criterio, la Comunidad y soberanía económica en Solana — libros, long-form y personas, no otro scroll.',
+          inApp: 'Biblioteca · Community · $SALVAZION',
         },
       ],
     },
@@ -856,7 +856,7 @@ const copy = {
       eyebrow: 'Propósito Transformador Massivo',
       title: 'A plataforma que restaura a pessoa humana',
       body:
-        'Nosso Propósito é Make Salvation, Health and Freedom Great Again — uma Comunidade Global que defende a Cultura Cristã Ocidental e o BioConservadorismo em Guerra Espiritual. Tecnologias exponenciais e inovação a serviço das pessoas.',
+        'Nosso Propósito é Make Salvation, Health and Freedom Great Again — uma Comunidade de Green Lion Kings que defende a Cultura Cristã Ocidental e o BioConservadorismo em Guerra Espiritual. Tecnologias exponenciais e inovação a serviço das pessoas.',
       cta: 'Abrir a Plataforma',
       areas: [
         {
@@ -880,8 +880,8 @@ const copy = {
           icon: '/icons/agenda/freedom.jpg',
           accent: '#8FD99A',
           problem: 'Os feeds capturam sua atenção, sua comunidade e seu dinheiro.',
-          body: 'Você recupera critério, uma Phalanx real e soberania econômica na Solana — livros, long-form e pessoas, não mais um scroll.',
-          inApp: 'Biblioteca · Comunidade · $SALVAZION',
+          body: 'Você recupera critério, a Comunidade e soberania econômica na Solana — livros, long-form e pessoas, não mais um scroll.',
+          inApp: 'Biblioteca · Community · $SALVAZION',
         },
       ],
     },

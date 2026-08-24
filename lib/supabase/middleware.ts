@@ -1,6 +1,31 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
+/** Fail fast so Vercel middleware never hits the 25s invocation wall. */
+const GET_USER_TIMEOUT_MS = 2500;
+
+function hasSupabaseAuthCookie(request: NextRequest): boolean {
+  return request.cookies
+    .getAll()
+    .some((c) => c.name.includes('auth-token') || c.name.startsWith('sb-'));
+}
+
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('auth_timeout')), ms);
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (err) => {
+        clearTimeout(timer);
+        reject(err);
+      }
+    );
+  });
+}
+
 /**
  * Refreshes the auth session and returns the user (if any).
  * Used by the root middleware.
@@ -17,6 +42,12 @@ export async function updateSession(request: NextRequest) {
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!url || !key) {
+    return { supabase: null, user: null, supabaseResponse };
+  }
+
+  // Anonymous visitors: do not call Supabase. A hung getUser() is what
+  // produced MIDDLEWARE_INVOCATION_TIMEOUT (504) on the public site.
+  if (!hasSupabaseAuthCookie(request)) {
     return { supabase: null, user: null, supabaseResponse };
   }
 
@@ -37,10 +68,12 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
-  // IMPORTANT: do not run any logic between createServerClient and getUser()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  return { supabase, user, supabaseResponse };
+  try {
+    const {
+      data: { user },
+    } = await withTimeout(supabase.auth.getUser(), GET_USER_TIMEOUT_MS);
+    return { supabase, user, supabaseResponse };
+  } catch {
+    return { supabase, user: null, supabaseResponse };
+  }
 }

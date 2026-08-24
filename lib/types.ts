@@ -5,7 +5,7 @@ export type BibleVersion = 'rv1960' | 'kjv' | 'original' | 'arc';
 /** Sexo (Health: biomarcadores / ciclo). Se define en onboarding; no se re-pregunta en la app. */
 export type BiologicalSex = 'female' | 'male' | 'unspecified';
 
-/** Who you can invite into your Phalanx */
+/** Who you can invite into the Community */
 export type LinkRelation =
   | 'spouse'
   | 'child'
@@ -105,12 +105,11 @@ export interface Devotional {
 }
 
 /**
- * Salvazion AI — Coach de Virtud y Desarrollo Integral
- * Característica central: virtud + desarrollo espiritual, físico y mental.
+ * Salvazion AI — coach de propósito, Score Global y máximo uso de la Plataforma.
  */
 export interface GreenLionCoach {
   name: 'Salvazion AI';
-  role: 'Motivador · Coach · Disciplina';
+  role: 'Propósito · Score · Plataforma';
   pillars: ['Espiritual', 'Físico', 'Mental'];
-  motto: 'Virtud, constancia y excelencia para que Salvation, Health y Freedom crezcan cada día.';
+  motto: 'Logra tu propósito — o encuéntralo. Sube el Score Global. Saca el máximo de la Plataforma.';
 }

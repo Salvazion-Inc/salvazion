@@ -18,7 +18,7 @@ Por isso é preciso um **Bitcoin Patriótico** que defenda a Cultura Cristã Oci
 4. O globalismo usa o ativo como fachada de controle.
 5. Sem intervenção, o Bitcoin vira mais um proxy da elite.
 
-$SALVAZION existe para que esta falange tenha um instrumento monetário que **não é neutro**.
+$SALVAZION existe para que a Comunidade tenha um instrumento monetário que **não é neutro**.
 
 **Na prática:** [crie sua conta](create-your-account.md), abra o Hub, conecte uma carteira Solana e faça swap. Detalhes: [Tokenomics](tokenomics.md).
 

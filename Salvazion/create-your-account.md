@@ -9,7 +9,7 @@ description: >-
 
 # Create your account
 
-The gates are open. A free account is enough to start the war for your own soul — and to walk with a Phalanx.
+The gates are open. A free account is enough to start the war for your own soul — and to walk with the Community.
 
 {% hint style="success" %}
 **Create your free account now:** [https://salvazion.org/auth/signup](https://salvazion.org/auth/signup)
@@ -28,7 +28,7 @@ The gates are open. A free account is enough to start the war for your own soul 
 4. Finish a short onboarding: who you are, what you fight for, which pillar you need first.
 5. You land in the **Hub**. That is the Platform.
 
-If someone invited you to their Phalanx, keep the invite link. Sign up with it so the bond is created on day one.
+If someone invited you to the Community, keep the invite link. Sign up with it so the bond is created on day one.
 
 ## Install it as a PWA
 

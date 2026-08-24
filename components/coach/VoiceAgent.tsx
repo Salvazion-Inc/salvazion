@@ -5,6 +5,7 @@ import Image from 'next/image';
 import {
   COACH_SUGGESTED_PROMPTS_EN,
   COACH_SUGGESTED_PROMPTS_ES,
+  COACH_SUGGESTED_PROMPTS_PT,
   DEBATE_SUGGESTED_PROMPTS_EN,
   DEBATE_SUGGESTED_PROMPTS_ES,
   type CoachChatMessage,
@@ -58,10 +59,15 @@ export default function VoiceAgent({
     ? es
       ? DEBATE_SUGGESTED_PROMPTS_ES
       : DEBATE_SUGGESTED_PROMPTS_EN
-    : es
-      ? COACH_SUGGESTED_PROMPTS_ES
-      : COACH_SUGGESTED_PROMPTS_EN;
+    : lang === 'pt'
+      ? COACH_SUGGESTED_PROMPTS_PT
+      : es
+        ? COACH_SUGGESTED_PROMPTS_ES
+        : COACH_SUGGESTED_PROMPTS_EN;
   const name = profile?.name?.split(' ')[0] || tx('Friend', 'Hermano', 'Irmão');
+  const purpose = profile?.purpose?.trim() || '';
+  const globalScore =
+    typeof scores?.global === 'number' ? Math.round(scores.global) : null;
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' });
@@ -166,9 +172,11 @@ export default function VoiceAgent({
         }
         const reply =
           (typeof data.reply === 'string' && data.reply) ||
-          (es
-            ? 'El León te escucha. Intenta de nuevo.'
-            : 'The Lion hears you. Try again.');
+          tx(
+            'Salvazion AI hears you. Try again.',
+            'Salvazion AI te escucha. Intenta de nuevo.',
+            'A Salvazion AI te escuta. Tente de novo.'
+          );
         setMessages((m) => [...m, { role: 'assistant', content: reply }]);
         void refreshUsage();
         if (isDebate && !scoredDebate && nextMessages.filter((x) => x.role === 'user').length >= 1) {
@@ -259,19 +267,19 @@ export default function VoiceAgent({
         <div className="min-w-0 flex-1">
           <p className="text-[10px] uppercase tracking-wider text-[var(--accent)] font-medium">
             {isDebate
-              ? es
-                ? 'Debate · Salvazion'
-                : 'Debate · Salvazion'
-              : es
-                ? 'Coach · Voz'
-                : 'Coach · Voice'}
+              ? tx('Debate · Salvazion', 'Debate · Salvazion', 'Debate · Salvazion')
+              : tx('Coach · Purpose · Score', 'Coach · Propósito · Score', 'Coach · Propósito · Score')}
           </p>
           <p className="text-[11px] text-[var(--sage)]/85 truncate">
             {isDebate
-              ? es
-                ? 'Cultura cristiano-occidental · Bio-conservadurismo'
-                : 'Western Christian culture · Bio-conservatism'
-              : `${name} · Salvation · Health · Freedom`}
+              ? tx(
+                  'Western Christian culture · Bio-conservatism',
+                  'Cultura cristiano-occidental · Bio-conservadurismo',
+                  'Cultura cristã ocidental · Bio-conservadorismo'
+                )
+              : globalScore != null
+                ? `${name} · ${tx('Global', 'Global', 'Global')} ${globalScore}`
+                : `${name} · Salvation · Health · Freedom`}
           </p>
         </div>
         <button
@@ -301,12 +309,22 @@ export default function VoiceAgent({
           <div className="glass rounded-2xl p-4 border border-[var(--border-soft)]">
             <p className="text-sm text-[#D8E1D9]/90 leading-relaxed">
               {isDebate
-                ? es
-                  ? `Soy Salvazion. Debate conmigo: defiendo la cultura cristiano-occidental y el bio-conservadurismo. Rechazo el globalismo, la agenda woke, la ideología LGBTQ, el Deep State, las ideologías de izquierda y el transhumanismo. Plantea tu tesis — con voz o texto.`
-                  : `I am Salvazion. Debate with me: I defend Western Christian culture and bio-conservatism. I reject globalism, the woke agenda, LGBTQ ideology, the Deep State, leftist ideologies, and transhumanism. State your thesis — voice or text.`
-                : es
-                  ? `Soy Salvazion. Estoy aquí para motivarte en fe, salud y libertad ordenada. Háblame o escribe.`
-                  : `I am Salvazion. I am here to motivate you in faith, health, and ordered freedom. Speak or type.`}
+                ? tx(
+                    `I am Salvazion. Debate with me: I defend Western Christian culture and bio-conservatism. I reject globalism, the woke agenda, LGBTQ ideology, the Deep State, leftist ideologies, and transhumanism. State your thesis — voice or text.`,
+                    `Soy Salvazion. Debate conmigo: defiendo la cultura cristiano-occidental y el bio-conservadurismo. Rechazo el globalismo, la agenda woke, la ideología LGBTQ, el Deep State, las ideologías de izquierda y el transhumanismo. Plantea tu tesis — con voz o texto.`,
+                    `Sou a Salvazion. Debate comigo: defendo a cultura cristã ocidental e o bio-conservadorismo. Rejeito o globalismo, a agenda woke, a ideologia LGBTQ, o Deep State, as ideologias de esquerda e o transumanismo. Apresente sua tese — voz ou texto.`
+                  )
+                : purpose
+                  ? tx(
+                      `I am Salvazion AI. Your purpose is your compass. I help you live it, raise your Global Score${globalScore != null ? ` (${globalScore})` : ''} and get the maximum from the Platform.`,
+                      `Soy Salvazion AI. Tu propósito es tu brújula. Te ayudo a vivirlo, a subir tu Score Global${globalScore != null ? ` (${globalScore})` : ''} y a sacar el máximo de la Plataforma.`,
+                      `Sou a Salvazion AI. O teu propósito é a bússola. Ajudo você a vivê-lo, a subir o Score Global${globalScore != null ? ` (${globalScore})` : ''} e a tirar o máximo da Plataforma.`
+                    )
+                  : tx(
+                      `I am Salvazion AI. You have not written your purpose yet. I will help you find it, raise your Global Score${globalScore != null ? ` (${globalScore})` : ''} and get the maximum from the Platform.`,
+                      `Soy Salvazion AI. Aún no has escrito tu propósito. Te ayudo a encontrarlo, a subir tu Score Global${globalScore != null ? ` (${globalScore})` : ''} y a sacar el máximo de la Plataforma.`,
+                      `Sou a Salvazion AI. Você ainda não escreveu o teu propósito. Ajudo você a encontrá-lo, a subir o Score Global${globalScore != null ? ` (${globalScore})` : ''} e a tirar o máximo da Plataforma.`
+                    )}
             </p>
             <div className="flex flex-wrap gap-1.5 mt-3">
               {suggestions.map((s) => (
@@ -337,7 +355,7 @@ export default function VoiceAgent({
             >
               {m.role === 'assistant' && (
                 <p className="text-[9px] uppercase tracking-wider text-[var(--accent)] mb-1">
-                  Salvazion
+                  {isDebate ? 'Salvazion' : 'Salvazion AI'}
                 </p>
               )}
               <p className="whitespace-pre-wrap">{m.content}</p>
@@ -357,7 +375,7 @@ export default function VoiceAgent({
         {busy && (
           <div className="flex items-center gap-2 text-xs text-[var(--sage)]">
             <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
-            {tx('The Lion considers…', 'El León medita…', 'O Leão medita…')}
+            {tx('Salvazion AI considers…', 'Salvazion AI medita…', 'A Salvazion AI medita…')}
           </div>
         )}
       </div>
@@ -416,12 +434,12 @@ export default function VoiceAgent({
             className="text-[10px] text-[var(--sage)] w-full text-center"
           >
             {speakState === 'loading'
-              ? es
-                ? 'Preparando voz…'
-                : 'Preparing voice…'
-              : es
-                ? 'Detener voz del León'
-                : 'Stop Lion voice'}
+              ? tx('Preparing voice…', 'Preparando voz…', 'Preparando voz…')
+              : tx(
+                  'Stop Salvazion AI voice',
+                  'Detener voz de Salvazion AI',
+                  'Parar voz da Salvazion AI'
+                )}
           </button>
         )}
       </div>

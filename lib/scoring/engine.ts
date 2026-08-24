@@ -48,8 +48,8 @@ export const ACTION_CATALOG: Record<string, { pillar: Pillar; points: number; la
   debate_participate: { pillar: 'freedom', points: 12, label: 'Participar en debate estructurado' },
   connect_real: { pillar: 'freedom', points: 10, label: 'Conexión real (familia/iglesia)' },
   contribute_project: { pillar: 'freedom', points: 20, label: 'Aportar a proyecto o startup' },
-  /** Invitar o aceptar vínculo en la Phalanx. 1×/día. */
-  phalanx_connect: { pillar: 'freedom', points: 15, label: 'Conexión Phalanx (invitar / aceptar)' },
+  /** Invitar o aceptar vínculo en la Comunidad. 1×/día. */
+  phalanx_connect: { pillar: 'freedom', points: 15, label: 'Conexión Comunidad (invitar / aceptar)' },
 };
 
 /**

@@ -282,8 +282,10 @@ export default function BadgesPage() {
           </div>
           <p className="text-xs text-[#D8E1D9]/80 leading-relaxed">
             {lang === 'en'
-              ? 'Badges are not empty trophies. They are memory of faithful decisions. The Lion only recognizes what is lived with consistency.'
-              : 'Las insignias no son trofeos vacíos. Son memoria de decisiones fieles. El León solo reconoce lo que se vive con constancia.'}
+              ? 'Badges are not empty trophies. They are memory of faithful decisions. Salvazion AI only recognizes what is lived with consistency.'
+              : lang === 'pt'
+                ? 'As insígnias não são troféus vazios. São memória de decisões fiéis. A Salvazion AI só reconhece o que se vive com constância.'
+                : 'Las insignias no son trofeos vacíos. Son memoria de decisiones fieles. Salvazion AI solo reconoce lo que se vive con constancia.'}
           </p>
         </div>
 

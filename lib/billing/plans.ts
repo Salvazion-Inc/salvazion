@@ -227,9 +227,9 @@ export const PREMIUM_FEATURE_LIST: {
   },
   {
     id: 'freedom_phalanx',
-    en: 'Full Freedom library, swap terminal and unlimited Phalanx invites.',
-    es: 'Biblioteca Freedom completa, terminal de swap y Phalanx ilimitada.',
-    pt: 'Biblioteca Freedom completa, terminal de swap e Phalanx ilimitada.',
+    en: 'Full Freedom library, swap terminal and unlimited Community invites.',
+    es: 'Biblioteca Freedom completa, terminal de swap y Community ilimitada.',
+    pt: 'Biblioteca Freedom completa, terminal de swap e Community ilimitada.',
   },
 ];
 

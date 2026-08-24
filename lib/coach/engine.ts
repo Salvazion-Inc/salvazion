@@ -18,7 +18,7 @@ export interface CoachMessage {
 }
 
 /**
- * León Verde — Coach de Virtud y Desarrollo Integral
+ * Salvazion AI — propósito, Score Global y máximo uso de la Plataforma.
  * Personaliza mensajes y recomendaciones según edad / etapa de vida.
  *
  * Etapas:
@@ -52,6 +52,20 @@ export function generateCoachGuidance(
   const didBible = todayActions.some(a => a.type === 'bible_chapter' || a.type === 'bible_study_15min');
   const didMovement = todayActions.some(a => a.type === 'hit_15min' || a.type === 'outdoor_sun_20min');
   const didLearn = todayActions.some(a => a.type.startsWith('learn_') || a.type === 'debate_participate');
+  const purpose = profile.purpose?.trim() || '';
+
+  // ========== PURPOSE MISSING — brújula primero ==========
+  if (!purpose) {
+    const rec = recommendForPillar(weakest.key, stage, { didDevotional, didBible, didMovement, didLearn });
+    return {
+      id: 'purpose-missing',
+      tone: 'encourage',
+      title: purposeMissingTitle(name, stage),
+      body: purposeMissingBody(name, stage, global),
+      recommendedAction: rec,
+      pillarFocus: weakest.key,
+    };
+  }
 
   // ========== CELEBRATE ==========
   if (global >= 85 && strongest.streak >= 7) {
@@ -114,7 +128,7 @@ export function generateCoachGuidance(
   return {
     id: 'default-guide',
     tone: 'encourage',
-    title: `El León camina contigo, ${name}`,
+    title: `Salvazion AI camina contigo, ${name}`,
     body: defaultBody(stage, weakest.key, stageLabel),
     recommendedAction: rec,
     pillarFocus: weakest.key
@@ -124,31 +138,31 @@ export function generateCoachGuidance(
 // ─── Textos por etapa ───────────────────────────────────────────
 
 function celebrateTitle(name: string, stage: LifeStage): string {
-  if (stage === 'infancia') return `${name}, ¡el León está orgulloso!`;
+  if (stage === 'infancia') return `${name}, ¡Salvazion AI está orgulloso!`;
   if (stage === 'juventud') return `${name}, vas por buen camino`;
   if (stage === 'senior') return `${name}, tu constancia es legado`;
-  return `${name}, el León te ve firme`;
+  return `${name}, Salvazion AI te ve firme`;
 }
 
 function celebrateBody(name: string, stage: LifeStage, global: number, streak: number, pillar: Pillar): string {
   const p = labelPillar(pillar);
   if (stage === 'infancia') {
-    return `Score ${global}. Llevas ${streak} días siendo constante en ${p}. Dios se alegra cuando los niños caminan con Él. ¡Sigue así!`;
+    return `Score Global ${global}. Llevas ${streak} días constante en ${p}. Eso sirve a tu propósito. ¡Sigue así!`;
   }
   if (stage === 'juventud') {
-    return `Score ${global}. ${streak} días de constancia en ${p}. En la juventud se decide el rumbo de toda una vida. Estás eligiendo bien. No aflojes.`;
+    return `Score Global ${global}. ${streak} días de constancia en ${p}. Tu propósito se construye así. No aflojes.`;
   }
   if (stage === 'young_adult') {
-    return `Score ${global}. ${streak} días firmes en ${p}. Esta es la década donde se construye el carácter que te sostendrá. Sigue.`;
+    return `Score Global ${global}. ${streak} días firmes en ${p}. Cada acto en la Plataforma acerca tu propósito. Sigue.`;
   }
   if (stage === 'adult' || stage === 'mature') {
-    return `Score ${global}. ${streak} días de constancia en ${p}. Tu ejemplo está formando a tu familia y a quienes te observan. La phalanx se construye así.`;
+    return `Score Global ${global}. ${streak} días de constancia en ${p}. Tu propósito y tu ejemplo forman a quienes te observan.`;
   }
-  return `Score ${global}. ${streak} días de fidelidad en ${p}. Tu perseverancia es un testimonio vivo. El León te honra.`;
+  return `Score Global ${global}. ${streak} días de fidelidad en ${p}. Tu propósito se honra con constancia.`;
 }
 
 function disciplineTitle(name: string, stage: LifeStage): string {
-  if (stage === 'infancia') return `${name}, el León te llama a ordenarte`;
+  if (stage === 'infancia') return `${name}, Salvazion AI te llama a ordenarte`;
   if (stage === 'juventud') return `${name}, despierta ahora`;
   return `${name}, despierta`;
 }
@@ -156,35 +170,35 @@ function disciplineTitle(name: string, stage: LifeStage): string {
 function disciplineBody(name: string, stage: LifeStage, pillar: Pillar, value: number): string {
   const p = labelPillar(pillar);
   if (stage === 'infancia') {
-    return `Tu ${p} está bajo (${value}). El León te quiere fuerte y ordenado. Pide ayuda a tus padres o a un adulto de confianza y haz una sola cosa buena hoy.`;
+    return `Tu ${p} está bajo (${value}). Salvazion AI te quiere fuerte y ordenado. Pide ayuda a tus padres o a un adulto de confianza y haz una sola cosa buena hoy.`;
   }
   if (stage === 'juventud') {
-    return `Tu ${p} está en ${value}. En la juventud es fácil distraerse. El León no te suelta: elige hoy una acción y cúmplela. El carácter se forja ahora.`;
+    return `Tu ${p} está en ${value}. En la juventud es fácil distraerse. Salvazion AI no te suelta: elige hoy una acción y cúmplela. El carácter se forja ahora.`;
   }
   if (stage === 'senior') {
     return `Tu ${p} está en ${value}. La disciplina no se retira con los años. Una decisión sencilla hoy mantiene tu dignidad y tu testimonio.`;
   }
-  return `Tu ${p} está en ${value}. El León no adula: te confronta. La mediocridad es el enemigo silencioso. Hoy elige una sola acción y ejecútala.`;
+  return `Tu ${p} está en ${value}. Salvazion AI no adula: te confronta. La mediocridad es el enemigo silencioso. Hoy elige una sola acción y ejecútala.`;
 }
 
 function challengeTitle(name: string, stage: LifeStage): string {
-  if (stage === 'infancia') return `${name}, el León te reta con amor`;
+  if (stage === 'infancia') return `${name}, Salvazion AI te reta con amor`;
   if (stage === 'juventud') return `${name}, ¿aceptas el reto?`;
-  return `El León te reta, ${name}`;
+  return `Salvazion AI te reta, ${name}`;
 }
 
 function challengeBody(name: string, stage: LifeStage, global: number, pillar: Pillar): string {
   const p = labelPillar(pillar);
   if (stage === 'infancia') {
-    return `Vas bien (${global}). Todavía puedes crecer más en ${p}. El León cree en ti. ¿Haces una acción más hoy?`;
+    return `Score Global ${global}. Puedes subirlo hoy en ${p}. Un acto en la Plataforma basta. ¿Lo haces?`;
   }
   if (stage === 'juventud') {
-    return `Vas bien (${global}), pero tu ${p} puede subir. La juventud es el momento de entrenar la voluntad. Un acto de disciplina ahora cambia el día.`;
+    return `Score Global ${global}. Tu ${p} es el eslabón débil. Subirlo sirve a tu propósito. Un acto ahora cambia el día.`;
   }
   if (stage === 'young_adult') {
-    return `Vas bien (${global}). Tu ${p} es el eslabón más débil. Esta etapa define hábitos para décadas. ¿Aceptas el reto?`;
+    return `Score Global ${global}. Tu ${p} frena el Global. Usa la Plataforma hoy y sube el score que mide tu propósito.`;
   }
-  return `Vas bien (${global}), pero aún no estás en tu mejor versión. Tu ${p} necesita atención. Un solo acto de disciplina ahora cambia el día.`;
+  return `Score Global ${global}. Aún no estás en tu mejor versión. Tu ${p} necesita un acto concreto en la Plataforma.`;
 }
 
 function encourageTitle(name: string, stage: LifeStage): string {
@@ -195,29 +209,45 @@ function encourageTitle(name: string, stage: LifeStage): string {
 
 function encourageBody(name: string, stage: LifeStage): string {
   if (stage === 'infancia') {
-    return `Antes de jugar o estudiar: habla con Dios y lee un poquito de Su Palabra. El León te acompaña. Cuando pones a Dios primero, todo lo demás se ordena.`;
+    return `Antes de jugar o estudiar: habla con Dios y lee un poquito de Su Palabra. Salvazion AI te acompaña. Cuando pones a Dios primero, todo lo demás se ordena.`;
   }
   if (stage === 'juventud') {
-    return `Antes que las pantallas y las prisas: abre la Escritura y completa tu Devocional. En la juventud se decide a quién sirves. El León te espera en la Palabra.`;
+    return `Antes que las pantallas y las prisas: abre la Escritura y completa tu Devocional. En la juventud se decide a quién sirves. Salvazion AI te espera en la Palabra.`;
   }
   if (stage === 'young_adult') {
-    return `Antes de cualquier otra cosa: Devocional. En esta etapa se forja el carácter que llevarás décadas. El León te espera en la oración y en la Escritura.`;
+    return `Antes de cualquier otra cosa: Devocional. En esta etapa se forja el carácter que llevarás décadas. Salvazion AI te espera en la oración y en la Escritura.`;
   }
   if (stage === 'adult' || stage === 'mature') {
     return `Antes de cualquier otra cosa: Devocional. Tu ejemplo impacta a tu familia y a los que te siguen. El espíritu primero; después salud, propósito y libertad.`;
   }
-  return `Antes de cualquier otra cosa: Devocional. Tu sabiduría y constancia son un legado vivo. El León te espera en la Palabra.`;
+  return `Antes de cualquier otra cosa: Devocional. Tu sabiduría y constancia son un legado vivo. Salvazion AI te espera en la Palabra.`;
+}
+
+function purposeMissingTitle(name: string, stage: LifeStage): string {
+  if (stage === 'infancia') return `${name}, ¿para qué estás aquí?`;
+  if (stage === 'juventud') return `${name}, tu brújula aún está en blanco`;
+  return `${name}, primero el propósito`;
+}
+
+function purposeMissingBody(name: string, stage: LifeStage, global: number): string {
+  if (stage === 'infancia') {
+    return `Aún no hay un propósito escrito. Escríbelo en el Dashboard con ayuda de un adulto. Score Global ${global}: da un paso bueno hoy en la Plataforma.`;
+  }
+  if (stage === 'juventud') {
+    return `Sin propósito escrito no hay brújula. Escríbelo en el Dashboard — Salvazion AI te ayuda a encontrarlo. Score Global ${global}: un acto hoy lo sube.`;
+  }
+  return `Aún no definiste tu propósito. Es tu brújula en Salvazion: escríbelo en el Dashboard. Mientras tanto, Score Global ${global} — un acto en la Plataforma lo sube hoy.`;
 }
 
 function defaultBody(stage: LifeStage, pillar: Pillar, stageLabel: string): string {
   const p = labelPillar(pillar);
   if (stage === 'infancia') {
-    return `Hoy tu ${p} necesita un poco de atención. Da un paso pequeño y bueno. El León camina contigo.`;
+    return `Hoy tu ${p} necesita un paso pequeño. Eso sube el Score Global y sirve a tu propósito.`;
   }
   if (stage === 'juventud') {
-    return `Hoy tu ${p} necesita disciplina. La virtud se entrena como un músculo. Da el siguiente paso ahora.`;
+    return `Hoy tu ${p} necesita disciplina. Un acto en la Plataforma sube el Score Global y acerca tu propósito.`;
   }
-  return `Hoy tu ${p} necesita atención (${stageLabel}). La virtud no es un sentimiento: es una decisión repetida. Da el siguiente paso ahora.`;
+  return `Hoy tu ${p} necesita atención (${stageLabel}). Un acto concreto en la Plataforma sube el Score Global y sirve a tu propósito.`;
 }
 
 // ─── Recomendaciones adaptadas por edad ─────────────────────────
@@ -350,21 +380,21 @@ function labelPillar(p: Pillar): string {
   return map[p];
 }
 
-/** Mensaje corto del León */
+/** Mensaje corto de Salvazion AI */
 export function getLionShortNudge(pillar?: Pillar, stage?: LifeStage): string {
   if (stage === 'infancia') {
-    return 'El León te cuida. Pon a Dios primero hoy y sé obediente y alegre.';
+    return 'Salvazion AI te cuida. Pon a Dios primero hoy y sé obediente y alegre.';
   }
   if (stage === 'juventud') {
     return pillar === 'salvation'
-      ? 'En la juventud se decide el rumbo. El León te llama a la Palabra y a la oración.'
+      ? 'En la juventud se decide el rumbo. Salvazion AI te llama a la Palabra y a la oración.'
       : 'Virtud y disciplina ahora construyen la libertad de mañana.';
   }
   const nudges = {
-    salvation: 'El León te recuerda: sin Palabra y oración, todo lo demás se debilita.',
-    health: 'Tu cuerpo es templo. El León no acepta negligencia con el templo.',
-    freedom: 'La verdadera libertad se construye con aprendizaje y aporte, no con consumo pasivo.',
-    default: 'Virtud. Constancia. Excelencia. El León no negocia estos tres.'
+    salvation: 'Sin Palabra y oración el propósito se debilita. Un acto en Salvation sube el Score Global.',
+    health: 'Tu cuerpo es templo. Cuidarlo sube el Score Global y sirve a tu propósito.',
+    freedom: 'Libertad con virtud: aprende y aporta en la Plataforma. Eso sube el Score Global.',
+    default: 'Propósito. Score Global. Plataforma. Salvazion AI no negocia estos tres.'
   };
   return pillar ? nudges[pillar] : nudges.default;
 }

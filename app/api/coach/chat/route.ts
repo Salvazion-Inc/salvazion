@@ -89,10 +89,16 @@ export async function POST(req: NextRequest) {
               ? `${name}, defendo a cultura cristã ocidental e o bio-conservadorismo. Apresente sua tese — globalismo, agenda woke, LGBTQ, Deep State, esquerda ou transumanismo — e responderei com razão e fé.`
               : `${name}, defiendo la cultura cristiano-occidental y el bio-conservadurismo. Plantea tu tesis — globalismo, agenda woke, LGBTQ, Deep State, izquierda o transhumanismo — y responderé con razón y fe.`
           : lang === 'en'
-            ? `${name}, the Green Lion walks with you. Today: read one Bible chapter, move 15 minutes, and pray 5 minutes. Salvation · Health · Freedom.`
+            ? profile?.purpose?.trim()
+              ? `${name}, live your purpose today. Raise your Global Score: one Bible chapter, 15 minutes of movement, 5 minutes of prayer. Use the Platform.`
+              : `${name}, you have not written your purpose yet — I will help you find it. Meanwhile raise your Global Score: one Bible chapter, 15 minutes of movement, 5 minutes of prayer.`
             : lang === 'pt'
-              ? `${name}, o Leão Verde caminha com você. Hoje: leia um capítulo da Bíblia, mova-se 15 minutos e ore 5 minutos. Salvação · Saúde · Liberdade.`
-              : `${name}, el León Verde camina contigo. Hoy: lee un capítulo de la Biblia, muévete 15 minutos y ora 5 minutos. Salvación · Salud · Libertad.`;
+              ? profile?.purpose?.trim()
+                ? `${name}, viva o teu propósito hoje. Suba o Score Global: um capítulo da Bíblia, 15 minutos de movimento, 5 minutos de oração. Use a Plataforma.`
+                : `${name}, você ainda não escreveu o teu propósito — eu te ajudo a encontrá-lo. Enquanto isso, suba o Score Global: um capítulo da Bíblia, 15 minutos de movimento, 5 minutos de oração.`
+              : profile?.purpose?.trim()
+                ? `${name}, vive tu propósito hoy. Sube el Score Global: un capítulo de la Biblia, 15 minutos de movimiento, 5 minutos de oración. Usa la Plataforma.`
+                : `${name}, aún no has escrito tu propósito — te ayudo a encontrarlo. Mientras tanto sube el Score Global: un capítulo de la Biblia, 15 minutos de movimiento, 5 minutos de oración.`;
       if (reservedUserId) await refundAiQuota(reservedUserId, 'coach_chat');
       return NextResponse.json({
         reply: fallback,
@@ -146,7 +152,7 @@ export async function POST(req: NextRequest) {
       {
         error: e instanceof Error ? e.message : 'Coach error',
         reply:
-          'El León permanece firme. Hubo un fallo temporal; intenta de nuevo en un momento.',
+          'Salvazion AI permanece firme. Hubo un fallo temporal; intenta de nuevo en un momento.',
         source: 'error',
       },
       { status: 500 }

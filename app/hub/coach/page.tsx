@@ -44,8 +44,10 @@ export default function CoachPage() {
               </h1>
               <p className="text-[10px] text-[var(--sage)]/80 truncate">
                 {lang === 'en'
-                  ? 'Voice · Salvation · Health · Freedom'
-                  : 'Voz · Salvation · Health · Freedom'}
+                  ? 'Purpose · Global Score · Platform'
+                  : lang === 'pt'
+                    ? 'Propósito · Score Global · Plataforma'
+                    : 'Propósito · Score Global · Plataforma'}
               </p>
             </div>
           </div>

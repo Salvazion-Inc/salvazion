@@ -141,7 +141,7 @@ function LoginForm() {
       refreshVaultFromSession(data.session, data.session.user.email);
     }
 
-    // Accept Phalanx invite if present (real Supabase connection)
+    // Accept Community invite if present (real Supabase connection)
     try {
       await tryAcceptPendingInbound();
     } catch {

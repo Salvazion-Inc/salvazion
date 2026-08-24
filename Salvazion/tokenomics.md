@@ -9,7 +9,7 @@ description: >-
 
 # Tokenomics
 
-$SALVAZION is the Patriotic Bitcoin of this phalanx. It is not a substitute for repentance, sleep, or a paid Premium subscription. It is economic sovereignty aligned with Western Christian Culture, BioConservatism and anti-globalist order.
+$SALVAZION is the Patriotic Bitcoin of the Community. It is not a substitute for repentance, sleep, or a paid Premium subscription. It is economic sovereignty aligned with Western Christian Culture, BioConservatism and anti-globalist order.
 
 ## Contract
 
@@ -35,7 +35,7 @@ Premium (Stripe, USD) and $SALVAZION are complementary:
 | --- | --- | --- | --- |
 | Platform (Bible, agenda, scores, Freedom browse) | Yes | Yes | Yes |
 | Salvazion AI | Daily / weekly caps | **2× those caps** | **Unlimited** |
-| Cloud wearables, advanced health, full calendar, unlimited Phalanx | No | No | **Yes** |
+| Cloud wearables, advanced health, full calendar, unlimited Community | No | No | **Yes** |
 
 Hold the token if you want sovereignty and a bigger Free ceiling. Subscribe to [Premium](premium.md) if you want the ceiling gone.
 
@@ -46,5 +46,5 @@ Bitcoin’s original promise — peer-to-peer cash, no masters — has been capt
 Read the full thesis: [$SALVAZION: The Patriotic Bitcoin](usdsalvazion-the-patriotic-bitcoin.md).
 
 {% hint style="info" %}
-Token first or account first? **Account first.** [Create your free account](https://salvazion.org/auth/signup), open the Hub, then connect a wallet. Premium can wait until the Lion is part of your day.
+Token first or account first? **Account first.** [Create your free account](https://salvazion.org/auth/signup), open the Hub, then connect a wallet. Premium can wait until Salvazion AI is part of your day.
 {% endhint %}

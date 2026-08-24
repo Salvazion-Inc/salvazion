@@ -30,5 +30,5 @@ Este propósito convida a sonhar grande. Vale a pena perseguí-lo na sua vida? S
 4. **Comprometa-se** — [assine o Premium](premium.md).
 
 {% hint style="success" %}
-**Entre na falange agora.** [Crie sua conta grátis](https://salvazion.org/auth/signup) · [Entrar](https://salvazion.org/auth/login) · [Assine o Premium](https://salvazion.org/hub/premium)
+**Entre na Comunidade agora.** [Crie sua conta grátis](https://salvazion.org/auth/signup) · [Entrar](https://salvazion.org/auth/login) · [Assine o Premium](https://salvazion.org/hub/premium)
 {% endhint %}

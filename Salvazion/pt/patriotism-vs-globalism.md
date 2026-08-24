@@ -18,7 +18,7 @@ Por que o patriotismo é superior:
 4. **Segurança** — fronteiras que não são caridade suicida.
 5. **Economia e ética** — o globalismo divide por classes transfronteiriças e favorece as elites.
 
-Uma vida patriótica ainda precisa de uma regra diária: oração, saúde, formação, uma Phalanx doméstica e dinheiro que não seja do regime que você resiste.
+Uma vida patriótica ainda precisa de uma regra diária: oração, saúde, formação, a Comunidade e dinheiro que não seja do regime que você resiste.
 
 {% hint style="success" %}
 **Próximo.** [12 Salvators](12-salvators.md) · [Crie sua conta](https://salvazion.org/auth/signup)

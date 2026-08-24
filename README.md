@@ -1,6 +1,6 @@
 # Salvazion App
 
-Phalanx digital: **Salvation · Health · Freedom**.
+Plataforma: **Salvation · Health · Freedom**. Coach: **Salvazion AI**. Comunidad y miembros: **Green Lion Kings**.
 
 ## Dominios
 

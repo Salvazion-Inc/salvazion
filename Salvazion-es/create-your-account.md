@@ -9,7 +9,7 @@ description: Crea tu cuenta gratis en Salvazion, inicia sesión e instala la Pla
 
 **Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://bem-vindo.salvazion.org/)
 
-Las puertas están abiertas. Una cuenta gratis basta para empezar la guerra por tu propia alma — y para caminar con una Phalanx.
+Las puertas están abiertas. Una cuenta gratis basta para empezar la guerra por tu propia alma — y para caminar con la Comunidad.
 
 {% hint style="success" %}
 **Crea tu cuenta gratis ahora:** [https://salvazion.org/auth/signup](https://salvazion.org/auth/signup)
@@ -28,7 +28,7 @@ Las puertas están abiertas. Una cuenta gratis basta para empezar la guerra por 
 4. Completa un onboarding corto: quién eres, por qué luchas, qué pilar necesitas primero.
 5. Llegas al **Hub**. Eso es la Plataforma.
 
-Si alguien te invitó a su Phalanx, no borres el enlace. Regístrate con él para que el vínculo se cree el día uno.
+Si alguien te invitó a la Comunidad, no borres el enlace. Regístrate con él para que el vínculo se cree el día uno.
 
 ## Instálala como PWA
 

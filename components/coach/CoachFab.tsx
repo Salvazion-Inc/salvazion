@@ -160,8 +160,10 @@ export default function CoachFab() {
   const cloudHref = current?.href || fabHref;
   const closeLabel =
     locale === 'es'
-      ? 'Cerrar mensajes del León (esta sesión)'
-      : 'Close Lion messages (this session)';
+      ? 'Cerrar mensajes de Salvazion AI (esta sesión)'
+      : locale === 'pt'
+        ? 'Fechar mensagens da Salvazion AI (esta sessão)'
+        : 'Close Salvazion AI messages (this session)';
 
   return (
     <div className="fixed z-[45] right-4 bottom-[4.75rem] sm:bottom-24 flex flex-col items-end gap-2 pointer-events-none">

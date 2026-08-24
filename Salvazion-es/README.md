@@ -29,7 +29,7 @@ Este Welcome no es un folleto. Es el camino: de la primera convicción a un miem
 | ---- | --------- | ----- |
 | **1. Aprende** | Por qué luchamos: Propósito, Guerra espiritual, Cultura Cristiana Occidental, BioConservadurismo, Patriotismo, los 12 Salvators | Este Welcome — sección 1 |
 | **2. Entra** | Crea tu cuenta gratis. Inicia sesión. Instala la PWA | [salvazion.org/auth/signup](https://salvazion.org/auth/signup) |
-| **3. Vive** | Usa la Plataforma: Hub, Biblia, Salud, Freedom, Phalanx, Salvazion AI | [salvazion.org/hub/dashboard](https://salvazion.org/hub/dashboard) |
+| **3. Vive** | Usa la Plataforma: Hub, Biblia, Salud, Freedom, Comunidad, Salvazion AI | [salvazion.org/hub/dashboard](https://salvazion.org/hub/dashboard) |
 | **4. Comprométete** | Suscríbete a Premium cuando no quieras racionar Salvazion AI | [salvazion.org/hub/premium](https://salvazion.org/hub/premium) |
 
 Si solo lees y nunca inicias sesión, estudiaste una guerra a la que te negaste a entrar.
@@ -60,11 +60,11 @@ Si solo lees y nunca inicias sesión, estudiaste una guerra a la que te negaste 
 * **Health** es el cuerpo sagrado como templo, la vida como pacto, defendida contra los mercaderes del engaño transhumano y los arquitectos de la decadencia fabricada.
 * **Freedom** es la herencia de Occidente, forjada en la cristiandad, hoy sitiada por las cadenas del globalismo y el relativismo moral.
 
-En la Plataforma no son metáforas. Son una agenda diaria, scores, una Biblia, sensores, una biblioteca Freedom y **Salvazion AI** — un coach que no te adula.
+En la Plataforma no son metáforas. Son una agenda diaria, scores, una Biblia, sensores, una biblioteca Freedom y **Salvazion AI** — un coach que te ayuda a vivir tu propósito, subir el Score Global, y no te adula.
 
 ## Quiénes somos
 
-Salvazion es una falange global de los fieles, los feroces, los que no ceden. La comunidad y sus miembros son **Green Lion Kings**. El logo es Salvazion. El coach es **Salvazion AI**.
+Salvazion es la **Comunidad** de los fieles, los feroces, los que no ceden. La comunidad y sus miembros son **Green Lion Kings**. El logo es Salvazion. El coach es **Salvazion AI**.
 
 Somos la **Comunidad Global** que defiende la **Cultura Cristiana Occidental** no como nostalgia, sino como el último baluarte de la verdad, la belleza y el orden. Somos la vanguardia del **BioConservadurismo**: guardianes de la ley natural escrita en la sangre y en el hueso. Rechazamos la abominación de que el hombre se haga Dios.
 

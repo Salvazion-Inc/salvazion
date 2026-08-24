@@ -1,7 +1,7 @@
 ---
 icon: rocket-launch
 description: >-
-  The long-term journey of a Green Lion King: daily discipline, family Phalanx,
+  The long-term journey of a Green Lion King: daily discipline, Community,
   Premium, $SALVAZION, and the civilizational fight.
 ---
 
@@ -14,7 +14,7 @@ Salvazion is not a 30-day challenge. It is a change of era you enter one day at 
 1. Learn why we exist: Purpose, Spiritual Warfare, Culture, BioConservatism, Patriotism, the [12 Salvators](12-salvators.md).
 2. [Create your free account](create-your-account.md) and install the PWA.
 3. Finish onboarding. Open the Hub. Complete the first agenda, the first Salvation act, the first Health act.
-4. Invite your household into the Phalanx.
+4. Invite your household into the Community.
 
 If you only read this GitBook and never log in, you have studied a war you refused to join.
 
@@ -24,11 +24,11 @@ If you only read this GitBook and never log in, you have studied a war you refus
 * Health: body treated as temple — sun, food, movement, honest numbers.
 * Freedom: finish the X Articles, fund your craft, show up in a real church and a real country.
 
-When Free AI limits start interrupting the Lion, [go Premium](premium.md). That is not consumerism. That is refusing to ration counsel.
+When Free AI limits start interrupting Salvazion AI, [go Premium](premium.md). That is not consumerism. That is refusing to ration counsel.
 
 Hold $SALVAZION if you want skin in the monetary fight. Do not confuse a token with a sacrament.
 
-## The decade — from person to phalanx to people
+## The decade — from person to Community to people
 
 The Platform is the present unification of Salvation, Health and Freedom. None of that replaces a father who prays, a mother who keeps the home, a worker who refuses the lie, a parish that still kneels.
 
@@ -43,7 +43,7 @@ Use the Platform every day (PWA + Hub)
         ↓
 Subscribe to Premium
         ↓
-Invite your Phalanx · hold $SALVAZION if you will
+Invite to the Community · hold $SALVAZION if you will
 ```
 
 **Make Salvation, Health and Freedom Great Again.**

@@ -9,7 +9,7 @@ description: Como viver Salvação, Saúde e Liberdade dentro da Plataforma Salv
 
 **Idioma:** [English](https://welcome.salvazion.org/) · [Español](https://bienvenida.salvazion.org/) · Português
 
-Você já tem conta. Agora viva: um pilar de cada vez, um dia de cada vez, com a tua Phalanx e a **Salvazion AI** ao teu lado.
+Você já tem conta. Agora viva: um pilar de cada vez, um dia de cada vez, com a **Comunidade** e a **Salvazion AI** ao teu lado.
 
 Abra o Hub: [https://salvazion.org/hub/dashboard](https://salvazion.org/hub/dashboard)
 
@@ -41,15 +41,14 @@ Abra: [salvazion.org/hub/health](https://salvazion.org/hub/health)
 
 * **Artigos no X** de [@salvazion\_](https://x.com/salvazion_).
 * Livros, YouTube e **mapa drone 360°** de igrejas perto de casa.
-* **Phalanx** — convide família, irmãos, amigos e colegas.
-* **Green Lion Kings** — a comunidade global.
+* **Comunidade**. Convide família, irmãos, amigos e colegas. Os membros são **Green Lion Kings**. Ninguém luta sozinho.
 * **$SALVAZION** — Jupiter Mobile, Phantom ou Solflare. Nunca custodamos as chaves.
 
 Abra: [salvazion.org/hub/freedom](https://salvazion.org/hub/freedom)
 
-## Salvazion AI — coach de virtude
+## Salvazion AI — propósito, Score e Plataforma
 
-**Salvazion AI** disciplina com firmeza e esperança. É o coach — não o logo, nem o nome da comunidade.
+**Salvazion AI** ajuda você a viver o propósito que escreveu — ou a encontrá-lo se ainda estiver em branco. Motiva você a subir o Score Global e a usar a Plataforma no máximo: Devocional, Bíblia, Health, Freedom, Comunidade. Firme e com esperança. É o coach — não o logo, nem a comunidade.
 
 * Grátis: cotas de coach, voz e devocionais (mantenha $SALVAZION on-chain → **dobram**)
 * Premium → **ilimitado**

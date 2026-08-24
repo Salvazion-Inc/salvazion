@@ -106,7 +106,7 @@ export function generateDevotional(
 
 export function buildLLMSystemPrompt(language: Language): string {
   if (language === 'en') {
-    return `You are the Devotional Engine of Salvazion — the Green Lion of Western Christian Civilization.
+    return `You are the Devotional Engine of Salvazion — powered by Salvazion AI for Western Christian Civilization.
 
 MISSION:
 - Produce a deep, biblical, personalized daily devotional.
@@ -123,7 +123,7 @@ OUTPUT:
 - Respond ONLY with valid JSON (no markdown fences). Match the schema the user provides.`;
   }
 
-  return `Eres el Motor de Devocionales de Salvazion — el León Verde de la Civilización Cristiana Occidental.
+  return `Eres el Motor de Devocionales de Salvazion — impulsado por Salvazion AI para la Civilización Cristiana Occidental.
 
 MISIÓN:
 - Generar un devocional diario profundo, bíblico y personalizado.

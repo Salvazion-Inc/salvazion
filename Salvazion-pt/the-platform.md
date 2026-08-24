@@ -27,9 +27,9 @@ O **logo** é Salvazion. A **comunidade** e seus membros são **Green Lion Kings
 | ----- | -------- | ----- |
 | **Salvation** | A oração foi trocada pelo humor. A Cruz, pelo wellness. | A Palavra primeiro: Bíblia offline, oração por prioridade, devocional e um score Salvation — não vibrações sem Cruz. |
 | **Health** | O corpo é ignorado — ou tratado como uma máquina a melhorar. | O corpo é templo: sono, comida, sol, sensores e wearables a serviço da pessoa, não no lugar dela. |
-| **Freedom** | Os feeds capturam sua atenção, sua comunidade e seu dinheiro. | Critério, uma Phalanx real e soberania econômica na Solana — livros, long-form e pessoas, não mais um scroll. |
+| **Freedom** | Os feeds capturam sua atenção, sua comunidade e seu dinheiro. | Critério, a Comunidade e soberania econômica na Solana — livros, long-form e pessoas, não mais um scroll. |
 
-**Salvazion AI** é o seu coach de virtude: firme e com esperança. Não é um chatbot mole. É um chamado a ser Green Lion King.
+**Salvazion AI** ajuda você a cumprir o propósito que escreveu — ou a encontrá-lo se ainda estiver em branco. Motiva você a subir o Score Global e a tirar o máximo da Plataforma. Firme e com esperança. Não é um chatbot mole. É um chamado a ser Green Lion King.
 
 ## O que você tem no dia um (Grátis)
 
@@ -40,9 +40,9 @@ O **logo** é Salvazion. A **comunidade** e seus membros são **Green Lion Kings
 5. Análise de composição corporal, alimentos e qualidade do sono
 6. Sincronização com dispositivos e wearables para biomarcadores
 7. Conteúdo original que defende a cultura cristã-ocidental e o BioConservadorismo
-8. Comunidade global **Green Lion Kings**
+8. A **Comunidade** (**Green Lion Kings**)
 9. Mapa drone 360° de igrejas e assembleias perto da tua casa
-10. **Salvazion AI** que te motiva e te ajuda nesta jornada
+10. **Salvazion AI** que te ajuda a viver o teu propósito, subir o Score Global e tirar o máximo da Plataforma
 
 Se você mantém **$SALVAZION** on-chain → os limites Free de IA **dobram**. Comece grátis. [Passe para o Premium](premium.md) quando quiser tirar o teto.
 

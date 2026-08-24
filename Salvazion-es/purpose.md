@@ -30,5 +30,5 @@ Este propósito invita a soñar en grande. ¿Vale la pena perseguirlo en tu vida
 4. **Comprométete** — [suscríbete a Premium](premium.md).
 
 {% hint style="success" %}
-**Únete a la falange ahora.** [Crea tu cuenta gratis](https://salvazion.org/auth/signup) · [Inicia sesión](https://salvazion.org/auth/login) · [Pasa a Premium](https://salvazion.org/hub/premium)
+**Únete a la Comunidad ahora.** [Crea tu cuenta gratis](https://salvazion.org/auth/signup) · [Inicia sesión](https://salvazion.org/auth/login) · [Pasa a Premium](https://salvazion.org/hub/premium)
 {% endhint %}

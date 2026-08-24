@@ -79,13 +79,13 @@ export const DEVOTIONALS_LIBRARY: Omit<Devotional, 'id' | 'date' | 'personalized
     points: 18
   },
   {
-    title: 'La phalanx digital y espiritual',
+    title: 'La Comunidad y espiritual',
     scripture: {
       reference: 'Nehemías 4:14',
       text: 'No temáis delante de ellos; acordaos del Señor, grande y temible, y pelead por vuestros hermanos, por vuestros hijos, por vuestras mujeres y por vuestras casas.',
       version: 'Reina Valera 1909'
     },
-    reflection: 'No estás solo. Formas parte de una phalanx: hombres y mujeres que defienden la fe, la familia y la libertad en la era digital. Tu presencia en Salvazion no es casualidad. Es un llamado a pelear (espiritualmente) por lo que importa. Mantente firme junto a otros.',
+    reflection: 'No estás solo. Formas parte de la Comunidad: hombres y mujeres Green Lion Kings que defienden la fe, la familia y la libertad en la era digital. Tu presencia en Salvazion no es casualidad. Es un llamado a pelear (espiritualmente) por lo que importa. Mantente firme junto a otros.',
     prayer: 'Señor de los ejércitos, úneme a otros que pelean la misma batalla. Que no me aísle ni me rinda. Hazme un eslabón fuerte en la cadena.',
     action: 'Envía un mensaje de aliento a alguien de tu comunidad de fe o de Salvazion hoy.',
     tags: ['proposito', 'liderazgo', 'comunidad', 'fe'],
@@ -143,7 +143,7 @@ export const DEVOTIONALS_LIBRARY: Omit<Devotional, 'id' | 'date' | 'personalized
       text: 'Orad sin cesar.',
       version: 'Reina Valera 1909'
     },
-    reflection: 'La oración no es un ritual de emergencia. Es el oxígeno del espíritu. En la phalanx digital, la disciplina de orar diariamente es lo que mantiene el fuego. No esperes a tener ganas. Ora cuando no las tengas. Ahí se forja el carácter.',
+    reflection: 'La oración no es un ritual de emergencia. Es el oxígeno del espíritu. En la Comunidad, la disciplina de orar diariamente es lo que mantiene el fuego. No esperes a tener ganas. Ora cuando no las tengas. Ahí se forja el carácter.',
     prayer: 'Señor, enséñame a orar sin cesar. Que mi primer reflejo ante cualquier situación sea volverme a Ti. Haz de la oración mi arma y mi descanso.',
     action: 'Pon un timer de 7 minutos ahora mismo y ora sin distracciones por tu familia, tu propósito y tu nación.',
     tags: ['oracion', 'disciplina', 'fe'],

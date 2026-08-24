@@ -27,9 +27,9 @@ The **logo** is Salvazion. The **community** and its members are **Green Lion Ki
 | ------ | --------- | -------- |
 | **Salvation** | Prayer was replaced by mood. The Cross, by wellness. | The Word first: offline Bible, prayer by priority, daily devotion and a Salvation score — not vibes without a Cross. |
 | **Health** | The body is ignored — or treated as a machine to upgrade. | The body is a temple: sleep, food, sun, sensors and wearables serving the person, not replacing them. |
-| **Freedom** | Feeds capture your attention, your community and your money. | Judgment, a real Phalanx and economic sovereignty on Solana — books, long-form and people, not another scroll. |
+| **Freedom** | Feeds capture your attention, your community and your money. | Judgment, the Community and economic sovereignty on Solana — books, long-form and people, not another scroll. |
 
-**Salvazion AI** is your virtue coach — firm and hopeful. Not a soft chatbot. A call to become a Green Lion King.
+**Salvazion AI** helps you achieve the purpose you wrote — or find it if it is still blank. It motivates you to raise your Global Score and to use the Platform at full potential. Firm and hopeful. Not a soft chatbot. A call to become a Green Lion King.
 
 ## What you get on day one (Free)
 
@@ -40,15 +40,15 @@ The **logo** is Salvazion. The **community** and its members are **Green Lion Ki
 5. Body composition, food and sleep-quality analysis
 6. Sync with devices and wearables for biomarkers
 7. Original content that defends Western Christian culture and BioConservatism
-8. A global community — **Green Lion Kings** — that defends these values
+8. The **Community** of **Green Lion Kings** that defends these values
 9. 360° drone map of churches and Christian assemblies near your home
-10. **Salvazion AI** that motivates you and helps you walk this journey
+10. **Salvazion AI** that helps you live your purpose, raise your Global Score, and get the maximum from the Platform
 
 Hold **$SALVAZION** on-chain → Free AI limits **double**. Start free. [Go Premium](premium.md) when you want the ceiling removed.
 
 ## Why a Platform, not another app
 
-A man who prays but wrecks his body is not free. A woman who trains but starves her soul is not whole. A community that scrolls but never gathers is not a phalanx.
+A man who prays but wrecks his body is not free. A woman who trains but starves her soul is not whole. A community that scrolls but never gathers is not a Comunidade.
 
 Salvazion is **the platform that restores the human person**.
 

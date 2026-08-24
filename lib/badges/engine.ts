@@ -137,7 +137,7 @@ export const BADGE_CATALOG: BadgeDef[] = [
   }),
   b({
     id: 'athlete',
-    name: 'Atleta de la Phalanx',
+    name: 'Atleta de la Comunidad',
     description: '10 sesiones de deporte registradas.',
     icon: '🏟️',
     category: 'health',
@@ -195,11 +195,11 @@ export const BADGE_CATALOG: BadgeDef[] = [
   }),
   b({
     id: 'phalanx_builder',
-    name: 'Constructor de Phalanx',
-    description: 'Invitaste o aceptaste un vínculo en la Phalanx.',
+    name: 'Constructor de la Comunidad',
+    description: 'Invitaste o aceptaste un vínculo en la Comunidad.',
     icon: '🦁',
     category: 'freedom',
-    requirement: '1 conexión Phalanx',
+    requirement: '1 conexión Comunidad',
   }),
   b({
     id: 'freedom_50',
@@ -281,7 +281,7 @@ export const BADGE_CATALOG: BadgeDef[] = [
   }),
   b({
     id: 'global_90',
-    name: 'Excelencia de la Phalanx',
+    name: 'Excelencia de la Comunidad',
     description: 'Salvazion Score Global ≥ 90.',
     icon: '👑',
     category: 'special',
@@ -305,7 +305,7 @@ export const BADGE_CATALOG: BadgeDef[] = [
   }),
   b({
     id: 'lion_oath',
-    name: 'Juramento del León',
+    name: 'Juramento de Salvazion AI',
     description: 'Aceptaste a Salvazion AI como coach.',
     icon: '🦁',
     category: 'special',

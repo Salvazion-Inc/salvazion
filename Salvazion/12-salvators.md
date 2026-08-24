@@ -3,7 +3,7 @@ cover: .gitbook/assets/12-salvators.jpg
 coverY: 0
 icon: paw-claws
 description: >-
-  The 12 Salvators — the convictions that bind the Salvazion phalanx.
+  The 12 Salvators — the convictions that bind the Community.
   Glory to God, family, Western Christian Culture, BioConservatism and purpose.
 ---
 

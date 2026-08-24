@@ -65,7 +65,7 @@ Rellena con Project Settings → API:
 ### Vercel
 Project → Settings → Environment Variables → mismas dos keys (Production + Preview).
 
-## 5. Phalanx — invitaciones entre cuentas reales
+## 5. Community — invitaciones entre cuentas reales
 Ejecuta en SQL Editor el archivo **`supabase/phalanx.sql`** (una vez).
 
 Crea:
@@ -141,5 +141,5 @@ npm run dev
 
 ## Próximos pasos opcionales
 - Historial multi-día extendido desde `score_actions` (más de 7–30 días).
-- Leaderboard de la Phalanx (query agregada respetando RLS).
+- Leaderboard de la Comunidad (query agregada respetando RLS).
 - OAuth (Google / Apple) con el mismo `/auth/callback`.

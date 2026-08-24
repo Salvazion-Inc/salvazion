@@ -14,20 +14,20 @@ export const SEO = {
    * Meta description for Google (~155–160 chars).
    */
   description:
-    'The platform that restores the human person. Offline Bible, health & wearables, Freedom library, Phalanx community, Salvazion AI and $SALVAZION on Solana.',
+    'The platform that restores the human person. Offline Bible, health & wearables, Freedom library, Community, Salvazion AI and $SALVAZION on Solana.',
   /**
    * Slightly longer copy for WhatsApp / iMessage / LinkedIn / X cards.
    */
   ogDescription:
-    'Make Salvation, Health and Freedom Great Again. One freemium Platform: offline Bible, devotionals, health & wearables, Freedom library, Phalanx community, Salvazion AI and $SALVAZION on Solana. Free to start.',
+    'Make Salvation, Health and Freedom Great Again. One freemium Platform: offline Bible, devotionals, health & wearables, Freedom library, Community, Salvazion AI and $SALVAZION on Solana. Free to start.',
   descriptionEs:
-    'La plataforma que restaura a la persona humana. Biblia offline, salud y wearables, biblioteca Freedom, comunidad Phalanx, IA Salvazion y $SALVAZION en Solana.',
+    'La plataforma que restaura a la persona humana. Biblia offline, salud y wearables, biblioteca Freedom, Community, IA Salvazion y $SALVAZION en Solana.',
   ogDescriptionEs:
-    'Make Salvation, Health and Freedom Great Again. Una sola Plataforma freemium: Biblia offline, devocional, salud y wearables, biblioteca Freedom, comunidad Phalanx, IA Salvazion y $SALVAZION en Solana. Empieza gratis.',
+    'Make Salvation, Health and Freedom Great Again. Una sola Plataforma freemium: Biblia offline, devocional, salud y wearables, biblioteca Freedom, Community, IA Salvazion y $SALVAZION en Solana. Empieza gratis.',
   descriptionPt:
-    'A plataforma que restaura a pessoa humana. Bíblia offline, saúde e wearables, biblioteca Freedom, comunidade Phalanx, IA Salvazion e $SALVAZION na Solana.',
+    'A plataforma que restaura a pessoa humana. Bíblia offline, saúde e wearables, biblioteca Freedom, Community, IA Salvazion e $SALVAZION na Solana.',
   ogDescriptionPt:
-    'Make Salvation, Health and Freedom Great Again. Uma só Plataforma freemium: Bíblia offline, devocional, saúde e wearables, biblioteca Freedom, comunidade Phalanx, IA Salvazion e $SALVAZION na Solana. Comece grátis.',
+    'Make Salvation, Health and Freedom Great Again. Uma só Plataforma freemium: Bíblia offline, devocional, saúde e wearables, biblioteca Freedom, Community, IA Salvazion e $SALVAZION na Solana. Comece grátis.',
   keywords: [
     'Salvazion',
     'Salvazion platform',
@@ -37,10 +37,11 @@ export const SEO = {
     'faith health freedom',
     'BioConservatism',
     'Western Christian Culture',
-    'Phalanx community',
+    'Salvazion Community',
     'SALVAZION token',
     'Salvazion AI',
-    'Green Lion',
+    'Community',
+    'Green Lion Kings',
     'plataforma cristiana',
     'Biblia offline',
     'plataforma cristã',

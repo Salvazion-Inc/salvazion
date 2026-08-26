@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { useI18n } from '@/components/I18nProvider';
-import { mapAuthError } from '@/lib/auth/paths';
+import { destinationAfterAuth, mapAuthError } from '@/lib/auth/paths';
 import {
   BiometricCancelledError,
   persistBiometricVault,
@@ -74,7 +74,7 @@ export default function BiometricLoginButton({
       try {
         await ensureProfileForUser();
         const profile = await loadProfileAsync();
-        if (!profile?.onboardingCompleted) dest = '/hub/onboarding';
+        dest = destinationAfterAuth(next, Boolean(profile?.onboardingCompleted));
       } catch {
         /* keep next */
       }

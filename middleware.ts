@@ -28,12 +28,11 @@ export async function middleware(request: NextRequest) {
     return supabaseResponse;
   }
 
-  // If already logged in, skip login/signup (but not update-password / callback / confirm)
+  // If already logged in, skip login/signup (but not update-password / callback / confirm).
+  // Honor `next` so a Premium click can resume Checkout after auth.
   if (user && (path.startsWith('/auth/login') || path.startsWith('/auth/signup'))) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/hub/dashboard';
-    url.search = '';
-    return NextResponse.redirect(url);
+    const next = safeNextPath(request.nextUrl.searchParams.get('next'), '/hub/dashboard');
+    return NextResponse.redirect(new URL(next, request.nextUrl));
   }
 
   return supabaseResponse;

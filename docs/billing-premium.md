@@ -13,8 +13,11 @@ Freemium app with **Premium** subscription on the **Salvazion, Inc.** Stripe acc
 ### Stripe objects (live)
 
 - Product: `prod_UxwcMVMNlKeczI` — *Salvazion Premium*
-- Monthly price: `price_1U0WEWHOw5ZkjRlZHXRW0gAX` (`salvazion_premium_monthly_49`)
-- Annual price: `price_1U0WEXHOw5ZkjRlZOwkxysed` (`salvazion_premium_annual_39`)
+- Monthly price: `price_1U0WEWHOw5ZkjRlZHXRW0gAX` (`salvazion_premium_monthly_49`) → **$49**
+- Annual price: `price_1U0WEXHOw5ZkjRlZOwkxysed` (`salvazion_premium_annual_39`) → **$468**
+- Legacy $20 monthly `price_1Ty0isHOw5ZkjRlZ6t5TRGje` is still the product `default_price`. **Checkout never charges it.**
+
+Checkout (`/api/billing/checkout`) resolves line items by **lookup_key**, not `default_price` and not a stale `NEXT_PUBLIC_STRIPE_PRICE_*` env id. If an env price id is the $20 legacy price, it is ignored.
 
 ## Free vs Premium (current features)
 
@@ -50,6 +53,8 @@ Freemium app with **Premium** subscription on the **Salvazion, Inc.** Stripe acc
 STRIPE_SECRET_KEY=sk_live_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 SUPABASE_SERVICE_ROLE_KEY=...   # for webhook → subscriptions table
+# Display/KPI only. Checkout ignores these if they are the legacy $20 price
+# and always resolves lookup_keys salvazion_premium_monthly_49 / salvazion_premium_annual_39.
 NEXT_PUBLIC_STRIPE_PRICE_MONTHLY=price_1U0WEWHOw5ZkjRlZHXRW0gAX
 NEXT_PUBLIC_STRIPE_PRICE_ANNUAL=price_1U0WEXHOw5ZkjRlZOwkxysed
 ```
@@ -81,6 +86,7 @@ Full steps: [`docs/email.md`](./email.md)
 
 ## App routes
 
-- `/hub/premium` — plans & checkout  
+- `/hub/premium` — plans & checkout (`?checkout=month|year` resumes Stripe Checkout after login/signup)  
 - `/hub/profile` — `BillingCard` (subscribe / manage)  
+- Landing Premium CTAs start Checkout; logged-out users go through `/auth/signup` (or login) and resume the same interval  
 - APIs: `/api/billing/checkout`, `/portal`, `/status`, `/webhook`

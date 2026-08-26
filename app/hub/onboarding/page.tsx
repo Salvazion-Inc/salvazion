@@ -16,7 +16,21 @@ import {
 import { useI18n } from '@/components/I18nProvider';
 import { saveValueJourneyDone } from '@/lib/freedom/x-articles';
 import { defaultBibleVersion, isLanguage } from '@/lib/i18n/locale';
+import { safeNextPath } from '@/lib/auth/paths';
+import {
+  peekPendingCheckout,
+  premiumCheckoutPath,
+} from '@/lib/billing/checkout-intent';
 import BrandLoader from '@/components/ui/BrandLoader';
+
+function resumeAfterOnboarding(): string {
+  if (typeof window === 'undefined') return '/hub/dashboard';
+  const q = new URLSearchParams(window.location.search).get('next');
+  if (q) return safeNextPath(q, '/hub/dashboard');
+  const pending = peekPendingCheckout();
+  if (pending) return premiumCheckoutPath(pending);
+  return '/hub/dashboard';
+}
 
 /** Slim onboarding: identity → focus → start (was 5 steps). */
 type Step = 1 | 2 | 3;
@@ -89,7 +103,7 @@ export default function OnboardingPage() {
         const existing = await loadProfileAsync();
         if (cancelled) return;
         if (existing?.onboardingCompleted) {
-          router.replace('/hub/dashboard');
+          router.replace(resumeAfterOnboarding());
           return;
         }
         if (existing && Object.keys(existing).length > 0) {
@@ -191,7 +205,7 @@ export default function OnboardingPage() {
         await saveProfile({ ...payload, onboardingCompleted: true });
       }
       saveValueJourneyDone();
-      router.push('/hub/dashboard');
+      router.push(resumeAfterOnboarding());
     } catch {
       setSaveError(t('onboarding.saveError'));
       setSaving(false);

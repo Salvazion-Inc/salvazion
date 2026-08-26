@@ -3,6 +3,7 @@
  */
 
 const FALLBACK = '/hub/dashboard';
+const ONBOARDING = '/hub/onboarding';
 
 /** Only allow relative in-app paths under /hub or /auth. */
 export function safeNextPath(
@@ -17,6 +18,39 @@ export function safeNextPath(
   // Block nested protocol tricks like /hub/dashboard@evil.com
   if (/[\s@]/.test(trimmed)) return fallback;
   return trimmed;
+}
+
+/** Append a safe `next` query to login / signup so Premium checkout can resume. */
+export function withNextQuery(pathname: string, next: string | null | undefined): string {
+  const safe = safeNextPath(next, FALLBACK);
+  return `${pathname}?next=${encodeURIComponent(safe)}`;
+}
+
+function nestedNextParam(pathWithSearch: string): string | null {
+  const q = pathWithSearch.indexOf('?');
+  if (q < 0) return null;
+  return new URLSearchParams(pathWithSearch.slice(q + 1)).get('next');
+}
+
+/**
+ * After login/signup: finish onboarding first, then resume `next`
+ * (e.g. `/hub/premium?checkout=month`).
+ */
+export function destinationAfterAuth(
+  next: string | null | undefined,
+  onboardingCompleted: boolean
+): string {
+  const safe = safeNextPath(next, FALLBACK);
+  if (onboardingCompleted) {
+    if (safe.startsWith(ONBOARDING)) {
+      const nested = nestedNextParam(safe);
+      return nested ? safeNextPath(nested, FALLBACK) : FALLBACK;
+    }
+    return safe;
+  }
+  if (safe.startsWith(ONBOARDING)) return safe;
+  if (safe === FALLBACK) return ONBOARDING;
+  return `${ONBOARDING}?next=${encodeURIComponent(safe)}`;
 }
 
 /** Human-readable Spanish messages for common Supabase auth errors. */

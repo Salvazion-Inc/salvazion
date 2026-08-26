@@ -5,7 +5,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
-import { mapAuthError } from '@/lib/auth/paths';
+import {
+  destinationAfterAuth,
+  mapAuthError,
+  safeNextPath,
+  withNextQuery,
+} from '@/lib/auth/paths';
 import { ensureProfileForUser } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
 import LanguageControl from '@/components/settings/LanguageControl';
@@ -24,6 +29,7 @@ function SignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { t, lang } = useI18n();
+  const next = safeNextPath(searchParams.get('next'), '/hub/onboarding');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -86,7 +92,7 @@ function SignupForm() {
       password,
       options: {
         data: meta,
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent('/hub/onboarding')}`,
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
       },
     });
 
@@ -108,7 +114,7 @@ function SignupForm() {
     } catch {
       // non-blocking
     }
-    router.push('/hub/onboarding');
+    router.push(destinationAfterAuth(next, false));
     router.refresh();
   }
 
@@ -125,7 +131,7 @@ function SignupForm() {
             {t('auth.activateAndReturn')}
           </p>
           <Link
-            href="/auth/login"
+            href={withNextQuery('/auth/login', next)}
             className="inline-block mt-6 text-sm text-[var(--accent)] hover:underline"
           >
             {t('auth.goLogin')}
@@ -169,7 +175,7 @@ function SignupForm() {
             id="signup-accept-terms"
           />
           <SocialAuthButtons
-            next="/hub/onboarding"
+            next={next}
             onError={(msg) => setError(msg)}
             enabled={acceptedTerms}
           />
@@ -249,7 +255,10 @@ function SignupForm() {
 
         <p className="text-center text-sm text-[var(--sage)]/80 mt-6">
           {t('auth.hasAccount')}{' '}
-          <Link href="/auth/login" className="text-[var(--accent)] hover:underline">
+          <Link
+            href={withNextQuery('/auth/login', next)}
+            className="text-[var(--accent)] hover:underline"
+          >
             {t('auth.signIn')}
           </Link>
         </p>

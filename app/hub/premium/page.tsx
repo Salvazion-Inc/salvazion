@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -20,6 +20,15 @@ import {
   PRICING_TABLE,
 } from '@/lib/billing/plans';
 import { pickLang } from '@/lib/i18n/locale';
+import { safeNextPath } from '@/lib/auth/paths';
+import {
+  clearPendingCheckout,
+  parseBillingInterval,
+  premiumCheckoutPath,
+  readCheckoutIntervalFromLocation,
+  rememberPendingCheckout,
+  takePendingCheckout,
+} from '@/lib/billing/checkout-intent';
 
 export default function PremiumPage() {
   const router = useRouter();
@@ -28,16 +37,26 @@ export default function PremiumPage() {
   const [mounted, setMounted] = useState(false);
   const [busy, setBusy] = useState<'month' | 'year' | 'portal' | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [ready, setReady] = useState(false);
+  const autoStarted = useRef(false);
 
   useEffect(() => {
     setMounted(true);
     (async () => {
       const p = await loadProfileAsync();
+      const interval = readCheckoutIntervalFromLocation();
+      if (interval) rememberPendingCheckout(interval);
       if (!p?.onboardingCompleted) {
-        router.replace('/hub/onboarding');
+        const resume = interval
+          ? premiumCheckoutPath(interval)
+          : '/hub/premium';
+        router.replace(
+          `/hub/onboarding?next=${encodeURIComponent(safeNextPath(resume, '/hub/premium'))}`
+        );
         return;
       }
       await refresh();
+      setReady(true);
     })();
   }, [router, refresh]);
 
@@ -51,6 +70,23 @@ export default function PremiumPage() {
       setBusy(null);
     }
   };
+
+  useEffect(() => {
+    if (!ready || loading || autoStarted.current) return;
+    const params = new URLSearchParams(window.location.search);
+    const fromQuery = parseBillingInterval(params.get('checkout'));
+    if (fromQuery) router.replace('/hub/premium');
+    if (isPremium) {
+      clearPendingCheckout();
+      return;
+    }
+    const interval = fromQuery || takePendingCheckout();
+    if (!interval) return;
+    autoStarted.current = true;
+    void go(() => startCheckout(interval), interval);
+    // One-shot resume after auth; autoStarted guards repeats.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, loading, isPremium, router]);
 
   if (!mounted) {
     return <BrandLoader fullscreen />;

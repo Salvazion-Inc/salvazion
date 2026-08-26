@@ -5,7 +5,13 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
-import { mapAuthError, mapQueryAuthError, safeNextPath } from '@/lib/auth/paths';
+import {
+  destinationAfterAuth,
+  mapAuthError,
+  mapQueryAuthError,
+  safeNextPath,
+  withNextQuery,
+} from '@/lib/auth/paths';
 import { ensureProfileForUser, loadProfileAsync } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
 import LanguageControl from '@/components/settings/LanguageControl';
@@ -91,13 +97,10 @@ function LoginForm() {
     try {
       await ensureProfileForUser();
       const profile = await loadProfileAsync();
-      if (!profile?.onboardingCompleted) {
-        return '/hub/onboarding';
-      }
+      return destinationAfterAuth(next, Boolean(profile?.onboardingCompleted));
     } catch {
-      // fall through
+      return destinationAfterAuth(next, true);
     }
-    return next === '/hub/dashboard' ? '/hub/dashboard' : next;
   }
 
   function requireTerms(): boolean {
@@ -404,7 +407,10 @@ function LoginForm() {
 
         <p className="text-center text-sm text-[var(--sage)]/80 mt-6">
           {t('auth.noAccount')}{' '}
-          <Link href="/auth/signup" className="text-[var(--accent)] hover:underline">
+          <Link
+            href={withNextQuery('/auth/signup', next)}
+            className="text-[var(--accent)] hover:underline"
+          >
             {t('auth.createAccount')}
           </Link>
         </p>

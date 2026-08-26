@@ -6,7 +6,11 @@
 import type Stripe from 'stripe';
 import { getStripe, isStripeConfigured } from '@/lib/billing/stripe';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { PLAN_COPY, STRIPE_PRICE_ANNUAL, STRIPE_PRICE_MONTHLY } from '@/lib/billing/plans';
+import {
+  CANONICAL_PRICE_ANNUAL,
+  CANONICAL_PRICE_MONTHLY,
+  PLAN_COPY,
+} from '@/lib/billing/plans';
 import { fetchXBrandMetrics } from './x-metrics';
 import type { BusinessKpis, FunnelStep } from './types';
 
@@ -483,8 +487,8 @@ export async function computeBusinessKpis(opts?: {
       for (const sub of payingPool) {
         mrr += mrrFromSubscription(sub);
         const pid = priceIdOfSub(sub);
-        if (pid === STRIPE_PRICE_ANNUAL) annualSubs += 1;
-        else if (pid === STRIPE_PRICE_MONTHLY) monthlySubs += 1;
+        if (pid === CANONICAL_PRICE_ANNUAL) annualSubs += 1;
+        else if (pid === CANONICAL_PRICE_MONTHLY) monthlySubs += 1;
         else {
           const interval = sub.items.data[0]?.price?.recurring?.interval;
           if (interval === 'year') annualSubs += 1;

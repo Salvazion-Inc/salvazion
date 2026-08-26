@@ -10,6 +10,7 @@ import {
   PLAN_COPY,
   PREMIUM_FEATURE_LIST,
   PRICING_TABLE,
+  type BillingInterval,
 } from '@/lib/billing/plans';
 import LanguageFlagSwitch from '@/components/ui/LanguageFlagSwitch';
 import XLogo, { textWithXLogo } from '@/components/ui/XLogo';
@@ -17,6 +18,8 @@ import LandingBlog from '@/components/landing/LandingBlog';
 import { SALVAZION_MINT } from '@/lib/solana/config';
 import { welcomeUrlForLang } from '@/lib/config/site';
 import { pickLang } from '@/lib/i18n/locale';
+import { startCheckout } from '@/lib/billing/client';
+import { signupUrlForCheckout } from '@/lib/billing/checkout-intent';
 
 const MINT = SALVAZION_MINT;
 
@@ -87,6 +90,53 @@ function TokenMintCopy({
         {copied ? copiedLabel : copyLabel}
       </span>
     </button>
+  );
+}
+
+function LandingPremiumCtas() {
+  const { t } = useI18n();
+  const [busy, setBusy] = useState<BillingInterval | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const go = async (interval: BillingInterval) => {
+    setError(null);
+    setBusy(interval);
+    try {
+      await startCheckout(interval);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t('premium.error'));
+      setBusy(null);
+    }
+  };
+
+  return (
+    <div className="mt-6 grid gap-2">
+      <a
+        href={signupUrlForCheckout('month')}
+        className="btn-primary font-display font-bold w-full min-h-[3rem] !whitespace-normal text-center text-balance leading-snug inline-flex items-center justify-center"
+        onClick={(e) => {
+          e.preventDefault();
+          if (busy) return;
+          void go('month');
+        }}
+      >
+        {busy === 'month' ? t('premium.redirecting') : t('premium.ctaMonthly')}
+      </a>
+      <a
+        href={signupUrlForCheckout('year')}
+        className="btn-secondary font-display font-bold w-full min-h-[3rem] !whitespace-normal text-center text-balance leading-snug border-[#8FD99A]/45 text-[#8FD99A] inline-flex items-center justify-center"
+        onClick={(e) => {
+          e.preventDefault();
+          if (busy) return;
+          void go('year');
+        }}
+      >
+        {busy === 'year' ? t('premium.redirecting') : t('premium.ctaAnnual')}
+      </a>
+      {error ? (
+        <p className="text-xs text-red-400 text-center leading-snug">{error}</p>
+      ) : null}
+    </div>
   );
 }
 
@@ -513,12 +563,7 @@ export default function SalvazionLanding() {
                 })}
               </ul>
 
-              <Link
-                href="/auth/signup"
-                className="btn-primary font-display font-bold mt-6 w-full min-h-[3rem] !whitespace-normal text-center text-balance leading-snug"
-              >
-                {t.pricing.ctaPremium}
-              </Link>
+              <LandingPremiumCtas />
             </div>
           </div>
 

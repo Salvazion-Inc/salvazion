@@ -704,7 +704,7 @@ const copy = {
       ctaPremium: 'Join & upgrade to Premium',
     },
     token: {
-      subtitle: 'Buy $SALVAZION Patriot Bitcoin on Solana',
+      subtitle: 'Buy $SALVAZION on Solana',
       buy: 'Buy $SALVAZION',
       copyCa: 'Copy',
       copiedCa: 'Copied',
@@ -821,7 +821,7 @@ const copy = {
       ctaPremium: 'Unirme y pasar a Premium',
     },
     token: {
-      subtitle: 'Compra $SALVAZION Patriot Bitcoin en Solana',
+      subtitle: 'Compra $SALVAZION en Solana',
       buy: 'Comprar $SALVAZION',
       copyCa: 'Copiar',
       copiedCa: 'Copiado',
@@ -937,7 +937,7 @@ const copy = {
       ctaPremium: 'Entrar e passar para Premium',
     },
     token: {
-      subtitle: 'Compre $SALVAZION Patriot Bitcoin na Solana',
+      subtitle: 'Compre $SALVAZION na Solana',
       buy: 'Comprar $SALVAZION',
       copyCa: 'Copiar',
       copiedCa: 'Copiado',

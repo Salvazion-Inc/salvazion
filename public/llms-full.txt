@@ -36,7 +36,7 @@ Salvazion gathers a global community that defends Western Christian Culture and 
 - Premium: $49 USD / month or $468 USD / year ($39/month equivalent). Payments via Stripe on behalf of Salvazion, Inc. Cancel anytime in the customer portal.
 - Premium unlocks: Salvazion AI coach (and TTS), AI devotionals, cloud wearables, advanced health and calendar, advanced prayer tools, full Freedom library, unlimited Community invites
 - AI provider in-product: xAI (Salvazion AI)
-- Token: $SALVAZION is a Solana utility token. Mint: 7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2. It is not equity in Salvazion, Inc. and not a promise of profit. Swaps go through Jupiter; Salvazion does not custody keys.
+- Token: $SALVAZION is a Solana utility token. Mint: 2XALhxGKCr2zCADkMANBq3b6rV7Zv5QF6RVZokgEAfUM. It is not equity in Salvazion, Inc. and not a promise of profit. Swaps go through Jupiter; Salvazion does not custody keys.
 - Blog: long-form articles on X (https://x.com/salvazion_/articles), also indexed on the home page by pillar (Salvation, Health, Freedom)
 
 ## People

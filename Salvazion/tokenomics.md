@@ -17,8 +17,8 @@ $SALVAZION is the Patriotic Bitcoin of the Community. It is not a substitute for
 | --- | --- |
 | **Token** | $SALVAZION |
 | **Chain** | Solana |
-| **Mint (CA)** | `7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2` |
-| **Swap** | Jupiter, inside the Platform or at [jup.ag](https://jup.ag/swap?sell=So11111111111111111111111111111111111111112&buy=7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2) |
+| **Mint (CA)** | `2XALhxGKCr2zCADkMANBq3b6rV7Zv5QF6RVZokgEAfUM` |
+| **Swap** | Jupiter, inside the Platform or at [jup.ag](https://jup.ag/swap?sell=So11111111111111111111111111111111111111112&buy=2XALhxGKCr2zCADkMANBq3b6rV7Zv5QF6RVZokgEAfUM) |
 | **Custody** | **None.** You connect Jupiter Mobile, Phantom or Solflare. We never hold your keys. |
 
 Buy it from the landing or from [salvazion.org/hub/swap](https://salvazion.org/hub/swap) after you log in.

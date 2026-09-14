@@ -5,7 +5,7 @@
 
 export const SALVAZION_MINT =
   process.env.NEXT_PUBLIC_SALVAZION_MINT ||
-  '7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2';
+  '2XALhxGKCr2zCADkMANBq3b6rV7Zv5QF6RVZokgEAfUM';
 
 export const SOLANA_NETWORK =
   (process.env.NEXT_PUBLIC_SOLANA_NETWORK as 'mainnet-beta' | 'devnet' | 'testnet') ||

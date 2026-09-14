@@ -16,8 +16,8 @@ $SALVAZION é o Bitcoin Patriótico da Comunidade. Não substitui o arrependimen
 | --- | --- |
 | **Token** | $SALVAZION |
 | **Rede** | Solana |
-| **Mint (CA)** | `7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2` |
-| **Swap** | Jupiter, no App ou em [jup.ag](https://jup.ag/swap?sell=So11111111111111111111111111111111111111112\&buy=7EiMiAx4ZMCDBqm3XiLiVHZccfuUYzu2xpDjsVJpV6D2) |
+| **Mint (CA)** | `2XALhxGKCr2zCADkMANBq3b6rV7Zv5QF6RVZokgEAfUM` |
+| **Swap** | Jupiter, no App ou em [jup.ag](https://jup.ag/swap?sell=So11111111111111111111111111111111111111112\&buy=2XALhxGKCr2zCADkMANBq3b6rV7Zv5QF6RVZokgEAfUM) |
 | **Custódia** | **Nenhuma.** Nunca temos as suas chaves. |
 
 ## Utilidade hoje

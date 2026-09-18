@@ -1,6 +1,5 @@
 import type Stripe from 'stripe';
 import { getStripe, isStripeConfigured } from './stripe';
-import { isPremiumPriceId } from './plans';
 import { createAdminClient } from '@/lib/supabase/admin';
 import {
   emptyEntitlement,
@@ -19,7 +18,8 @@ function fromRow(row: Record<string, unknown>): Entitlement {
   const priceId = (row.price_id as string) || null;
   const billingInterval = (row.billing_interval as string) || (row.interval as string);
   return {
-    isPremium: isPremiumStatus(status) && isPremiumPriceId(priceId),
+    // Entitlement follows verified webhook/status write, not a client flag.
+    isPremium: isPremiumStatus(status),
     status,
     interval:
       billingInterval === 'year' || billingInterval === 'month'
@@ -47,7 +47,7 @@ function fromStripeSub(sub: Stripe.Subscription, customerId: string): Entitlemen
   // Stripe API 2025+: period end lives on subscription items
   const periodEnd = item?.current_period_end ?? null;
   return {
-    isPremium: isPremiumStatus(status) && isPremiumPriceId(priceId),
+    isPremium: isPremiumStatus(status),
     status,
     interval,
     priceId,

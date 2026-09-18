@@ -1,21 +1,16 @@
 /**
- * Salvazion freemium catalog.
- * Premium: full access + advanced tools via Stripe (Salvazion, Inc.).
+ * Salvazion freemium catalog (client-safe copy + lookup keys).
+ * Checkout resolves live Stripe prices by lookup_key on the server.
+ * Never import price_ / prod_ IDs here — see lib/billing/price-ids.ts.
  *
  * Pricing (USD):
  * - Monthly: $49 / month
  * - Annual:  $39 / month equivalent ($468 / year)
  */
 
-export const PREMIUM_PRODUCT_ID =
-  process.env.NEXT_PUBLIC_STRIPE_PRODUCT_ID || 'prod_UxwcMVMNlKeczI';
-
 /** Canonical live prices — Checkout resolves these via lookup_key, never default_price. */
 export const STRIPE_LOOKUP_MONTHLY = 'salvazion_premium_monthly_49';
 export const STRIPE_LOOKUP_ANNUAL = 'salvazion_premium_annual_39';
-
-export const CANONICAL_PRICE_MONTHLY = 'price_1U0WEWHOw5ZkjRlZHXRW0gAX';
-export const CANONICAL_PRICE_ANNUAL = 'price_1U0WEXHOw5ZkjRlZOwkxysed';
 
 /** $49 / month and $468 / year in cents. */
 export const CHECKOUT_UNIT_AMOUNT_CENTS = {
@@ -23,51 +18,10 @@ export const CHECKOUT_UNIT_AMOUNT_CENTS = {
   year: 46800,
 } as const;
 
-/**
- * Legacy $20 monthly — still product default_price on prod_UxwcMVMNlKeczI.
- * Must never be used as a Checkout line item.
- */
-export const LEGACY_PRICE_MONTHLY_20 = 'price_1Ty0isHOw5ZkjRlZ6t5TRGje';
-
-export const BLOCKED_CHECKOUT_PRICE_IDS = new Set<string>([
-  LEGACY_PRICE_MONTHLY_20,
-]);
-
-function envPriceId(names: string[], canonical: string): string {
-  for (const name of names) {
-    const raw = process.env[name]?.trim();
-    if (!raw) continue;
-    if (BLOCKED_CHECKOUT_PRICE_IDS.has(raw)) continue;
-    return raw;
-  }
-  return canonical;
-}
-
-export const STRIPE_PRICE_MONTHLY = envPriceId(
-  ['NEXT_PUBLIC_STRIPE_PRICE_MONTHLY', 'STRIPE_PRICE_MONTHLY'],
-  CANONICAL_PRICE_MONTHLY
-);
-
-export const STRIPE_PRICE_ANNUAL = envPriceId(
-  ['NEXT_PUBLIC_STRIPE_PRICE_ANNUAL', 'STRIPE_PRICE_ANNUAL'],
-  CANONICAL_PRICE_ANNUAL
-);
-
 export type BillingInterval = 'month' | 'year';
-
-export function isBlockedCheckoutPriceId(
-  priceId: string | null | undefined
-): boolean {
-  if (!priceId) return false;
-  return BLOCKED_CHECKOUT_PRICE_IDS.has(priceId);
-}
 
 export function lookupKeyForInterval(interval: BillingInterval): string {
   return interval === 'year' ? STRIPE_LOOKUP_ANNUAL : STRIPE_LOOKUP_MONTHLY;
-}
-
-export function canonicalPriceIdForInterval(interval: BillingInterval): string {
-  return interval === 'year' ? CANONICAL_PRICE_ANNUAL : CANONICAL_PRICE_MONTHLY;
 }
 
 export type PremiumFeature =
@@ -98,7 +52,6 @@ export const PLAN_COPY = {
     namePt: 'Premium Mensal',
     priceUsd: 49,
     interval: 'month' as BillingInterval,
-    priceId: STRIPE_PRICE_MONTHLY,
     priceLabel: '$49 / month',
     priceLabelEs: '$49 / mes',
     priceLabelPt: '$49 / mês',
@@ -111,7 +64,6 @@ export const PLAN_COPY = {
     priceUsd: 468,
     monthlyEquivalent: 39,
     interval: 'year' as BillingInterval,
-    priceId: STRIPE_PRICE_ANNUAL,
     priceLabel: '$39 / mo · billed yearly ($468)',
     priceLabelEs: '$39 / mes · facturado anual ($468)',
     priceLabelPt: '$39 / mês · cobrado anual ($468)',
@@ -281,26 +233,4 @@ export const PREMIUM_FEATURE_LIST: {
   },
 ];
 
-/** Display / KPI helper. Checkout must use resolveCheckoutPriceId() (lookup_key). */
-export function priceIdForInterval(interval: BillingInterval): string {
-  return canonicalPriceIdForInterval(interval);
-}
 
-/** Current + legacy Premium price IDs (Stripe prices are immutable). */
-const PREMIUM_PRICE_IDS = new Set(
-  [
-    CANONICAL_PRICE_MONTHLY,
-    CANONICAL_PRICE_ANNUAL,
-    STRIPE_PRICE_MONTHLY,
-    STRIPE_PRICE_ANNUAL,
-    // Previous $20 / $15 plans
-    'price_1Ty0iyHOw5ZkjRlZMsCZPQWY',
-    'price_1Ty0iyHOw5ZkjRlZQBQYbfQ7',
-    LEGACY_PRICE_MONTHLY_20,
-  ].filter(Boolean)
-);
-
-export function isPremiumPriceId(priceId: string | null | undefined): boolean {
-  if (!priceId) return false;
-  return PREMIUM_PRICE_IDS.has(priceId);
-}

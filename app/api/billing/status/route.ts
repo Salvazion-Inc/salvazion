@@ -1,9 +1,11 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { getEntitlementForUser } from '@/lib/billing/subscription';
 import {
-  emptyEntitlement,
-  getEntitlementForUser,
-} from '@/lib/billing/subscription';
+  emptyPublicEntitlement,
+  toPublicEntitlement,
+} from '@/lib/billing/types';
+import { billingLog } from '@/lib/billing/redact';
 
 export const runtime = 'nodejs';
 
@@ -14,12 +16,12 @@ export async function GET() {
       data: { user },
     } = await supabase.auth.getUser();
     if (!user) {
-      return NextResponse.json(emptyEntitlement(), { status: 200 });
+      return NextResponse.json(emptyPublicEntitlement(), { status: 200 });
     }
     const ent = await getEntitlementForUser(user.id, user.email);
-    return NextResponse.json(ent);
+    return NextResponse.json(toPublicEntitlement(ent, true));
   } catch (e) {
-    console.error('[billing/status]', e);
-    return NextResponse.json(emptyEntitlement());
+    billingLog('billing/status', e);
+    return NextResponse.json(emptyPublicEntitlement());
   }
 }

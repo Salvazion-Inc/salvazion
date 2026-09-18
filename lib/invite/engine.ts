@@ -342,6 +342,13 @@ export function countInvites(profile?: Partial<UserProfile>): number {
   return listAllLinks(profile).length;
 }
 
+/** Free Community invites. Premium is unlimited. */
+export const FREE_INVITE_LIMIT = 5;
+
+export function inviteCapReached(count: number, isPremium: boolean): boolean {
+  return !isPremium && count >= FREE_INVITE_LIMIT;
+}
+
 export async function removeLink(linkId: string): Promise<void> {
   const profile = loadProfile();
   await saveProfile({

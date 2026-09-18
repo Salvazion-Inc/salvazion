@@ -1,13 +1,23 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { getStripe, isStripeConfigured } from '@/lib/billing/stripe';
 import { getEntitlementForUser } from '@/lib/billing/subscription';
 import { getAppBaseUrl } from '@/lib/config/site';
+import {
+  PORTAL_RATE,
+  consumeRateLimit,
+  isAllowedBillingOrigin,
+} from '@/lib/billing/request-guard';
+import { billingLog } from '@/lib/billing/redact';
 
 export const runtime = 'nodejs';
 
-export async function POST() {
+export async function POST(req: NextRequest) {
   try {
+    if (!isAllowedBillingOrigin(req, 'POST')) {
+      return NextResponse.json({ error: 'Forbidden origin' }, { status: 403 });
+    }
+
     if (!isStripeConfigured()) {
       return NextResponse.json(
         { error: 'Stripe is not configured.' },
@@ -23,6 +33,19 @@ export async function POST() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    if (
+      !consumeRateLimit(
+        `portal:${user.id}`,
+        PORTAL_RATE.limit,
+        PORTAL_RATE.windowMs
+      )
+    ) {
+      return NextResponse.json(
+        { error: 'Too many portal attempts. Wait a few minutes.' },
+        { status: 429 }
+      );
+    }
+
     const ent = await getEntitlementForUser(user.id, user.email);
     if (!ent.customerId) {
       return NextResponse.json(
@@ -33,13 +56,12 @@ export async function POST() {
 
     const session = await getStripe().billingPortal.sessions.create({
       customer: ent.customerId,
-      return_url: `${getAppBaseUrl()}/hub/profile`,
+      return_url: `${getAppBaseUrl()}/hub/profile?billing=portal`,
     });
 
     return NextResponse.json({ url: session.url });
   } catch (e) {
-    const message = e instanceof Error ? e.message : 'Portal error';
-    console.error('[billing/portal]', message);
-    return NextResponse.json({ error: message }, { status: 500 });
+    billingLog('billing/portal', e);
+    return NextResponse.json({ error: 'Portal error' }, { status: 500 });
   }
 }

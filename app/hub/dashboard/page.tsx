@@ -36,10 +36,14 @@ import { PILLAR_COLORS } from '@/lib/theme/pillars';
 import { useFlashToast } from '@/components/ui/FlashToast';
 import { runPassiveHealthSync } from '@/lib/health/wearables';
 import { logAction } from '@/lib/scoring/engine';
+import PlanStatus from '@/components/billing/PlanStatus';
+import UpgradeCta from '@/components/billing/UpgradeCta';
+import { useEntitlement } from '@/lib/billing/client';
 
 export default function DashboardPage() {
   const router = useRouter();
   const { t, lang } = useI18n();
+  const { isPremium, loading: planLoading } = useEntitlement();
   const { flash, toast: saveToast } = useFlashToast();
   const [profile, setProfile] = useState<Partial<UserProfile> | null>(null);
   const [scores, setScores] = useState<ComputedScores | null>(null);
@@ -267,6 +271,11 @@ export default function DashboardPage() {
               ›
             </span>
           </Link>
+
+          <div className="relative z-[1] px-4 pb-3 space-y-2">
+            <PlanStatus compact showUpgrade={false} />
+            {!isPremium && !planLoading ? <UpgradeCta compact /> : null}
+          </div>
 
           {/* Purpose — compact when set */}
           <div className="relative z-[1] px-4 pb-2">

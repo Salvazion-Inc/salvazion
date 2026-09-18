@@ -2,10 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import type { User } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/server';
 import { getStripe, isStripeConfigured } from '@/lib/billing/stripe';
-import {
-  BLOCKED_CHECKOUT_PRICE_IDS,
-  type BillingInterval,
-} from '@/lib/billing/plans';
+import { type BillingInterval } from '@/lib/billing/plans';
+import { BLOCKED_CHECKOUT_PRICE_IDS } from '@/lib/billing/price-ids';
 import { resolveCheckoutPriceId } from '@/lib/billing/resolve-price';
 import {
   loginUrlForCheckout,
@@ -14,6 +12,12 @@ import {
 } from '@/lib/billing/checkout-intent';
 import { getAppBaseUrl } from '@/lib/config/site';
 import { getEntitlementForUser, upsertSubscriptionRow } from '@/lib/billing/subscription';
+import {
+  CHECKOUT_RATE,
+  consumeRateLimit,
+  isAllowedBillingOrigin,
+} from '@/lib/billing/request-guard';
+import { billingLog } from '@/lib/billing/redact';
 
 export const runtime = 'nodejs';
 
@@ -79,7 +83,7 @@ async function createCheckoutSession(user: User, interval: BillingInterval) {
     customer: customerId,
     client_reference_id: user.id,
     line_items: [{ price: priceId, quantity: 1 }],
-    success_url: `${base}/hub/profile?billing=success`,
+    success_url: `${base}/hub/premium/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${base}/hub/premium?billing=cancel`,
     allow_promotion_codes: true,
     custom_text: {
@@ -126,6 +130,10 @@ async function handleCheckout(
       );
     }
 
+    if (req.method === 'POST' && !isAllowedBillingOrigin(req, 'POST')) {
+      return NextResponse.json({ error: 'Forbidden origin' }, { status: 403 });
+    }
+
     const interval = intervalFromRequest(req, body);
     const supabase = await createClient();
     const {
@@ -133,6 +141,19 @@ async function handleCheckout(
     } = await supabase.auth.getUser();
     if (!user) {
       return authRequiredResponse(req, interval, redirect);
+    }
+
+    if (
+      !consumeRateLimit(
+        `checkout:${user.id}`,
+        CHECKOUT_RATE.limit,
+        CHECKOUT_RATE.windowMs
+      )
+    ) {
+      return NextResponse.json(
+        { error: 'Too many checkout attempts. Wait a few minutes.' },
+        { status: 429 }
+      );
     }
 
     const session = await createCheckoutSession(user, interval);
@@ -146,7 +167,7 @@ async function handleCheckout(
     return NextResponse.json({ url: session.url, id: session.id });
   } catch (e) {
     const message = e instanceof Error ? e.message : 'Checkout error';
-    console.error('[billing/checkout]', message);
-    return NextResponse.json({ error: message }, { status: 500 });
+    billingLog('billing/checkout', message);
+    return NextResponse.json({ error: 'Checkout error' }, { status: 500 });
   }
 }

@@ -576,7 +576,11 @@ export function buildFabNudges(
         `IA ilimitada + voz da Salvazion AI → Premium.`
       ),
       href: HREF.premium,
-      cta: tx('Upgrade plan', 'Mejorar plan', 'Melhorar plano'),
+      cta: tx(
+        'Upgrade to Premium — $49/mo',
+        'Mejorar a Premium — $49/mes',
+        'Passar para Premium — $49/mês'
+      ),
     });
   } else {
     push({

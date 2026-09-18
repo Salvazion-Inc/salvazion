@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { useEntitlement } from '@/lib/billing/client';
 import { useI18n } from '@/components/I18nProvider';
+import UpgradeCta from './UpgradeCta';
 
 type Props = {
   /** When true, children render only for Premium */
@@ -46,17 +46,7 @@ export default function PremiumGate({
       <p className="text-sm text-[var(--sage)] leading-relaxed mb-4">
         {description || t('premium.gateBody')}
       </p>
-      <div className="flex flex-wrap gap-2">
-        <Link href="/hub/premium" className="btn-primary text-sm px-4 py-2.5">
-          {t('premium.upgrade')}
-        </Link>
-        <Link
-          href="/hub/premium"
-          className="text-sm text-[#8FD99A] hover:underline px-2 py-2.5"
-        >
-          {t('premium.seePlans')}
-        </Link>
-      </div>
+      <UpgradeCta />
     </div>
   );
 

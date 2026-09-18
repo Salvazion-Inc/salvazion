@@ -15,6 +15,8 @@ import {
   type WearableMetricKey,
 } from '@/lib/health/wearables';
 import { useI18n } from '@/components/I18nProvider';
+import { useEntitlement } from '@/lib/billing/client';
+import PremiumGate from '@/components/billing/PremiumGate';
 
 type ProviderRow = {
   id: 'fitbit' | 'oura' | 'whoop' | 'garmin';
@@ -38,6 +40,7 @@ const OAUTH_BRAND: Record<string, WearableBrandId> = {
 
 export default function CloudNativeSyncPanel({ onAutoLog, onSleepSynced }: Props) {
   const { t, lang } = useI18n();
+  const { isPremium } = useEntitlement();
   const search = useSearchParams();
   const [providers, setProviders] = useState<ProviderRow[]>([]);
   const [native, setNative] = useState<NativeHealthAvailability | null>(null);
@@ -157,6 +160,7 @@ export default function CloudNativeSyncPanel({ onAutoLog, onSleepSynced }: Props
   };
 
   const connectOAuth = (id: string) => {
+    if (!isPremium) return;
     window.location.assign(
       `/api/wearables/oauth/${id}/start?returnTo=${encodeURIComponent('/hub/profile?settings=1&tab=wearables')}`
     );
@@ -252,9 +256,15 @@ export default function CloudNativeSyncPanel({ onAutoLog, onSleepSynced }: Props
       </div>
 
       <div className="card-soft p-4 space-y-4">
-        {/* OAuth providers */}
+        {/* OAuth providers — Premium (API also returns 402) */}
         <div className="space-y-2">
           <p className="text-xs font-medium text-[var(--sage)]">{t('wearables.oauthProviders')}</p>
+          {!isPremium ? (
+            <PremiumGate
+              title={t('premium.gateTitle')}
+              description={t('wearables.premiumRequired')}
+            />
+          ) : null}
           {providers.length === 0 && (
             <p className="text-[11px] text-[var(--sage)]/70">{t('wearables.oauthLoading')}</p>
           )}
@@ -274,7 +284,7 @@ export default function CloudNativeSyncPanel({ onAutoLog, onSleepSynced }: Props
                 </p>
               </div>
               <div className="flex flex-wrap gap-1.5">
-                {!p.connected && (
+                {!p.connected && isPremium && (
                   <button
                     type="button"
                     disabled={!p.configured || busy === p.id}

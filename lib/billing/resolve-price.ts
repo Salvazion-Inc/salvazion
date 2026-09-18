@@ -1,14 +1,16 @@
 import type Stripe from 'stripe';
 import { getStripe } from './stripe';
 import {
-  BLOCKED_CHECKOUT_PRICE_IDS,
-  CANONICAL_PRICE_ANNUAL,
-  CANONICAL_PRICE_MONTHLY,
   CHECKOUT_UNIT_AMOUNT_CENTS,
-  PREMIUM_PRODUCT_ID,
   lookupKeyForInterval,
   type BillingInterval,
 } from './plans';
+import {
+  BLOCKED_CHECKOUT_PRICE_IDS,
+  CANONICAL_PRICE_ANNUAL,
+  CANONICAL_PRICE_MONTHLY,
+  PREMIUM_PRODUCT_ID,
+} from './price-ids';
 
 const CACHE_TTL_MS = 10 * 60 * 1000;
 const cache = new Map<BillingInterval, { priceId: string; at: number }>();

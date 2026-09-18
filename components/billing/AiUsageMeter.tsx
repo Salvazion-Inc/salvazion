@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useI18n } from '@/components/I18nProvider';
 import { useAiUsage } from '@/lib/billing/ai-usage-client';
 import type { AiFeature } from '@/lib/billing/ai-quota';
+import UpgradeCta from './UpgradeCta';
 
 const FEATURE_KEY: Record<AiFeature, string> = {
   coach_chat: 'quota.coach',
@@ -79,22 +80,12 @@ export default function AiUsageMeter({
         <p className="text-xs text-[var(--sage)] leading-relaxed">
           {t('quota.exhaustedBody')}
         </p>
+        <UpgradeCta compact />
         {overview.holderBonus ? (
           <p className="text-[11px] text-[#8FD99A]">{t('quota.holderActive')}</p>
         ) : (
           <p className="text-[11px] text-[var(--sage)]">{t('quota.holderHint')}</p>
         )}
-        <div className="flex flex-wrap gap-2 pt-1">
-          <Link href="/hub/premium" className="btn-primary text-xs px-3 py-2">
-            {t('premium.upgrade')}
-          </Link>
-          <Link
-            href="/hub/profile"
-            className="text-xs text-[#8FD99A] hover:underline px-2 py-2"
-          >
-            {t('quota.connectToken')}
-          </Link>
-        </div>
       </div>
     );
   }

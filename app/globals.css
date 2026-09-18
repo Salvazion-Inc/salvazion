@@ -588,6 +588,34 @@ html[data-text-scale="xxl"] nav.fixed span {
   box-shadow: none;
 }
 
+/* Paywall: always-visible Upgrade CTA above hub bottom nav */
+.upgrade-sticky-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 35;
+  margin-top: 1rem;
+  padding: 0.85rem 0 calc(0.35rem + env(safe-area-inset-bottom));
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(4, 4, 4, 0.92) 28%,
+    #040404 100%
+  );
+}
+@media (max-width: 640px) {
+  .upgrade-sticky-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: calc(4.5rem + env(safe-area-inset-bottom));
+    margin: 0;
+    padding: 0.75rem 1.25rem 0.85rem;
+    border-top: 1px solid var(--border-soft);
+    background: rgba(4, 4, 4, 0.94);
+    backdrop-filter: blur(16px);
+  }
+}
+
 /* Inline variant — sits in a flex row (e.g. chat composer) without stretching */
 .btn-primary.btn-inline,
 .btn-secondary.btn-inline {

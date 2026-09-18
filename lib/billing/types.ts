@@ -20,6 +20,18 @@ export type Entitlement = {
   source: 'db' | 'stripe' | 'none';
 };
 
+/** Client-safe slice — no Stripe customer / subscription / price ids. */
+export type PublicEntitlement = {
+  signedIn: boolean;
+  isPremium: boolean;
+  status: SubscriptionStatus;
+  interval: 'month' | 'year' | null;
+  currentPeriodEnd: string | null;
+  cancelAtPeriodEnd: boolean;
+  canManage: boolean;
+  source: 'db' | 'stripe' | 'none';
+};
+
 export function emptyEntitlement(): Entitlement {
   return {
     isPremium: false,
@@ -32,6 +44,26 @@ export function emptyEntitlement(): Entitlement {
     subscriptionId: null,
     source: 'none',
   };
+}
+
+export function toPublicEntitlement(
+  ent: Entitlement,
+  signedIn = false
+): PublicEntitlement {
+  return {
+    signedIn,
+    isPremium: ent.isPremium,
+    status: ent.status,
+    interval: ent.interval,
+    currentPeriodEnd: ent.currentPeriodEnd,
+    cancelAtPeriodEnd: ent.cancelAtPeriodEnd,
+    canManage: Boolean(ent.customerId),
+    source: ent.source,
+  };
+}
+
+export function emptyPublicEntitlement(): PublicEntitlement {
+  return toPublicEntitlement(emptyEntitlement());
 }
 
 export function isPremiumStatus(status: string | null | undefined): boolean {

@@ -7,6 +7,8 @@ import {
   categoryHint,
   categoryLabel,
   createInvite,
+  FREE_INVITE_LIMIT,
+  inviteCapReached,
   listAllLinks,
   loadInboundInvite,
   relationLabel,
@@ -14,6 +16,8 @@ import {
   shareInviteText,
   type InviteCategory,
 } from '@/lib/invite/engine';
+import { useEntitlement } from '@/lib/billing/client';
+import PremiumGate from '@/components/billing/PremiumGate';
 import {
   acceptPhalanxInvite,
   fetchInvitePreview,
@@ -33,6 +37,7 @@ interface Props {
 
 export default function InvitePhalanx({ onChanged, className = '' }: Props) {
   const { t, lang } = useI18n();
+  const { isPremium } = useEntitlement();
   const [links, setLinks] = useState<LinkedProfile[]>([]);
   const [profileName, setProfileName] = useState('');
   const [category, setCategory] = useState<InviteCategory>('family');
@@ -106,7 +111,13 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
     return links.filter((l) => l.relation === rel || (filter === 'family' && ['spouse', 'child', 'family'].includes(l.relation)));
   }, [links, filter]);
 
+  const atCap = inviteCapReached(links.length, isPremium);
+
   const handleInvite = async () => {
+    if (inviteCapReached(links.length, isPremium)) {
+      setError(t('invite.freeCap', { limit: FREE_INVITE_LIMIT }));
+      return;
+    }
     setError(null);
     setSuccess(null);
     setBusy(true);
@@ -334,14 +345,21 @@ export default function InvitePhalanx({ onChanged, className = '' }: Props) {
           <p className="text-xs text-[#8FD99A] bg-[var(--surface-active)] rounded-lg px-3 py-2">{success}</p>
         )}
 
-        <button
-          type="button"
-          disabled={busy || !name.trim()}
-          onClick={handleInvite}
-          className="w-full py-3.5 rounded-xl bg-[#7BC98A] text-[#040404] font-semibold text-sm hover:bg-[#B7F7AC] transition disabled:opacity-50"
-        >
-          {busy ? t('invite.sending') : t('invite.send')}
-        </button>
+        {atCap ? (
+          <PremiumGate
+            title={t('invite.freeCapTitle')}
+            description={t('invite.freeCap', { limit: FREE_INVITE_LIMIT })}
+          />
+        ) : (
+          <button
+            type="button"
+            disabled={busy || !name.trim()}
+            onClick={handleInvite}
+            className="w-full py-3.5 rounded-xl bg-[#7BC98A] text-[#040404] font-semibold text-sm hover:bg-[#B7F7AC] transition disabled:opacity-50"
+          >
+            {busy ? t('invite.sending') : t('invite.send')}
+          </button>
+        )}
 
         {lastUrl && (
           <div className="flex gap-2">

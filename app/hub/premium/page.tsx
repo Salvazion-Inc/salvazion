@@ -9,26 +9,22 @@ import BrandLoader from '@/components/ui/BrandLoader';
 import { loadProfileAsync } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
 import { textWithXLogo } from '@/components/ui/XLogo';
-import {
-  openBillingPortal,
-  startCheckout,
-  useEntitlement,
-} from '@/lib/billing/client';
+import { startCheckout, useEntitlement } from '@/lib/billing/client';
 import {
   PLAN_COPY,
   PREMIUM_FEATURE_LIST,
   PRICING_TABLE,
 } from '@/lib/billing/plans';
 import { pickLang } from '@/lib/i18n/locale';
-import { safeNextPath } from '@/lib/auth/paths';
 import {
   clearPendingCheckout,
   parseBillingInterval,
-  premiumCheckoutPath,
   readCheckoutIntervalFromLocation,
   rememberPendingCheckout,
   takePendingCheckout,
 } from '@/lib/billing/checkout-intent';
+import PlanStatus from '@/components/billing/PlanStatus';
+import UpgradeCta from '@/components/billing/UpgradeCta';
 
 export default function PremiumPage() {
   const router = useRouter();
@@ -38,27 +34,34 @@ export default function PremiumPage() {
   const [busy, setBusy] = useState<'month' | 'year' | 'portal' | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
+  const [canceled, setCanceled] = useState(false);
   const autoStarted = useRef(false);
 
   useEffect(() => {
     setMounted(true);
     (async () => {
-      const p = await loadProfileAsync();
       const interval = readCheckoutIntervalFromLocation();
       if (interval) rememberPendingCheckout(interval);
-      if (!p?.onboardingCompleted) {
-        const resume = interval
-          ? premiumCheckoutPath(interval)
-          : '/hub/premium';
-        router.replace(
-          `/hub/onboarding?next=${encodeURIComponent(safeNextPath(resume, '/hub/premium'))}`
-        );
-        return;
+      try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('billing') === 'cancel') {
+          setCanceled(true);
+          params.delete('billing');
+          const qs = params.toString();
+          window.history.replaceState(
+            {},
+            '',
+            `${window.location.pathname}${qs ? `?${qs}` : ''}`
+          );
+        }
+      } catch {
+        // ignore
       }
+      await loadProfileAsync();
       await refresh();
       setReady(true);
     })();
-  }, [router, refresh]);
+  }, [refresh]);
 
   const go = async (fn: () => Promise<void>, key: typeof busy) => {
     setError(null);
@@ -117,7 +120,7 @@ export default function PremiumPage() {
         </div>
       </header>
 
-      <main className="flex-1 px-5 pt-4 pb-28 max-w-lg mx-auto w-full space-y-5">
+      <main className="flex-1 px-5 pt-4 pb-36 sm:pb-28 max-w-lg mx-auto w-full space-y-5">
         <div className="text-center max-w-md mx-auto">
           <p className="section-eyebrow mb-2">{t('premium.pageEyebrow')}</p>
           <h1 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight text-balance leading-tight">
@@ -126,19 +129,17 @@ export default function PremiumPage() {
           <p className="text-sm text-[var(--sage)] mt-2.5 leading-relaxed text-pretty">
             {t('premium.pageSubtitle')}
           </p>
-          {!loading && (
-            <p className="mt-3 text-xs">
-              <span
-                className={`inline-flex px-2.5 py-1 rounded-full border font-medium ${
-                  isPremium
-                    ? 'border-[var(--border-strong)] text-[var(--accent)] bg-[var(--accent)]/10'
-                    : 'border-[var(--border-soft)] text-[var(--sage)]'
-                }`}
-              >
-                {isPremium ? t('premium.youArePremium') : t('premium.youAreFree')}
-              </span>
-            </p>
-          )}
+          <div className="mt-4 flex justify-center">
+            <PlanStatus compact />
+          </div>
+          {canceled && !isPremium ? (
+            <div className="mt-4 rounded-xl border border-[var(--border-soft)] bg-[#040404]/50 px-4 py-3 text-left">
+              <p className="text-sm font-medium text-white">{t('premium.cancelTitle')}</p>
+              <p className="text-xs text-[var(--sage)] mt-1 leading-relaxed">
+                {t('premium.cancelBody')}
+              </p>
+            </div>
+          ) : null}
         </div>
 
         {/* Plans — same layout scale as landing #pricing */}
@@ -256,40 +257,8 @@ export default function PremiumPage() {
               })}
             </ul>
 
-            <div className="mt-6 min-h-[6.75rem] flex flex-col justify-end">
-              {!isPremium ? (
-                <div className="grid gap-2">
-                  <button
-                    type="button"
-                    disabled={!!busy}
-                    onClick={() => void go(() => startCheckout('month'), 'month')}
-                    className="btn-primary font-display font-bold w-full min-h-[3rem] text-sm !whitespace-normal text-center text-balance leading-snug disabled:opacity-50"
-                  >
-                    {busy === 'month'
-                      ? t('premium.redirecting')
-                      : t('premium.ctaMonthly')}
-                  </button>
-                  <button
-                    type="button"
-                    disabled={!!busy}
-                    onClick={() => void go(() => startCheckout('year'), 'year')}
-                    className="btn-secondary font-display font-bold w-full min-h-[3rem] text-sm !whitespace-normal text-center text-balance leading-snug border-[#8FD99A]/45 text-[#8FD99A] disabled:opacity-50"
-                  >
-                    {busy === 'year'
-                      ? t('premium.redirecting')
-                      : t('premium.ctaAnnual')}
-                  </button>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  disabled={!!busy}
-                  onClick={() => void go(() => openBillingPortal(), 'portal')}
-                  className="btn-primary font-display font-bold w-full min-h-[3rem] text-sm disabled:opacity-50"
-                >
-                  {busy === 'portal' ? t('premium.redirecting') : t('premium.manage')}
-                </button>
-              )}
+            <div className="mt-6 min-h-[6.75rem] flex-col justify-end hidden sm:flex">
+              <UpgradeCta showAnnual={!isPremium} />
             </div>
           </div>
         </div>
@@ -302,6 +271,12 @@ export default function PremiumPage() {
           {pickLang(lang, PRICING_TABLE.stripeNote)}
         </p>
       </main>
+
+      {!isPremium ? (
+        <div className="sm:hidden">
+          <UpgradeCta sticky />
+        </div>
+      ) : null}
 
       <BottomNav />
     </div>

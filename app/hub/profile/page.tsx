@@ -76,6 +76,10 @@ export default function ProfilePage() {
       setLinkedWallet(loadLinkedWallet());
       try {
         const sp = new URLSearchParams(window.location.search);
+        if (sp.get('billing') === 'success') {
+          router.replace('/hub/premium/success');
+          return;
+        }
         if (
           sp.has('wearable_connected') ||
           sp.has('wearable_error') ||

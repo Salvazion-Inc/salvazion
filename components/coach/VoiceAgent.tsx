@@ -15,6 +15,7 @@ import type { UserProfile } from '@/lib/types';
 import type { ComputedScores } from '@/lib/scoring/types';
 import { logAction } from '@/lib/scoring/engine';
 import AiUsageMeter from '@/components/billing/AiUsageMeter';
+import UpgradeCta from '@/components/billing/UpgradeCta';
 import { useAiUsage } from '@/lib/billing/ai-usage-client';
 
 type Props = {
@@ -47,6 +48,7 @@ export default function VoiceAgent({
   const [listening, setListening] = useState(false);
   const [speakState, setSpeakState] = useState<SpeakState>('idle');
   const [error, setError] = useState<string | null>(null);
+  const [quotaHit, setQuotaHit] = useState(false);
   /** Off by default — freemium browser TTS is poor; Premium uses xAI voice only */
   const [voiceOn, setVoiceOn] = useState(false);
   const [scoredDebate, setScoredDebate] = useState(false);
@@ -98,11 +100,12 @@ export default function VoiceAgent({
             setError(
               (errJson && typeof errJson.message === 'string' && errJson.message) ||
                 tx(
-                  'Free voice limit reached. Premium is unlimited.',
-                  'Cupo Free de voz agotado. Premium es ilimitado.',
-                  'Limite Free de voz atingido. Premium é ilimitado.'
+                  'Free voice limit reached. Upgrade to Premium — $49/mo.',
+                  'Cupo Free de voz agotado. Mejora a Premium — $49/mes.',
+                  'Limite Free de voz atingido. Passe para Premium — $49/mês.'
                 )
             );
+            setQuotaHit(true);
             void refreshUsage();
           }
           return;
@@ -136,6 +139,7 @@ export default function VoiceAgent({
       const content = text.trim();
       if (!content || busy) return;
       setError(null);
+      setQuotaHit(false);
       setInput('');
       const nextMessages: CoachChatMessage[] = [
         ...messages,
@@ -161,11 +165,12 @@ export default function VoiceAgent({
             (typeof data.reply === 'string' && data.reply) ||
             (typeof data.message === 'string' && data.message) ||
             tx(
-              'Free AI limit reached. Upgrade to Premium for unlimited.',
-              'Cupo Free de IA agotado. Pasa a Premium para ilimitado.',
-              'Limite Free de IA atingido. Passe para Premium para ilimitado.'
+              'Free AI limit reached. Upgrade to Premium — $49/mo for unlimited.',
+              'Cupo Free de IA agotado. Mejora a Premium — $49/mes para ilimitado.',
+              'Limite Free de IA atingido. Passe para Premium — $49/mês para ilimitado.'
             );
           setError(reply);
+          setQuotaHit(true);
           setMessages((m) => [...m, { role: 'assistant', content: reply }]);
           void refreshUsage();
           return;
@@ -381,7 +386,10 @@ export default function VoiceAgent({
       </div>
 
       {error && (
-        <p className="text-[11px] text-amber-300/90 mb-2 leading-relaxed">{error}</p>
+        <div className="mb-2 space-y-2">
+          <p className="text-[11px] text-amber-300/90 leading-relaxed">{error}</p>
+          {quotaHit ? <UpgradeCta compact /> : null}
+        </div>
       )}
 
       {/* Composer — fixed row: mic | input | send */}

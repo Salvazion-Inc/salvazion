@@ -1,24 +1,54 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import type { Entitlement } from './types';
-import { emptyEntitlement } from './types';
+import type { PublicEntitlement } from './types';
+import { emptyPublicEntitlement } from './types';
 import { rememberPendingCheckout, signupUrlForCheckout } from './checkout-intent';
 
 const CACHE_KEY = 'salvazion_entitlement';
 
-function loadCache(): Entitlement | null {
+function stripSecrets(raw: unknown): PublicEntitlement {
+  const empty = emptyPublicEntitlement();
+  if (!raw || typeof raw !== 'object') return empty;
+  const data = raw as Record<string, unknown>;
+  return {
+    signedIn: Boolean(data.signedIn),
+    isPremium: Boolean(data.isPremium),
+    status:
+      typeof data.status === 'string'
+        ? (data.status as PublicEntitlement['status'])
+        : 'none',
+    interval:
+      data.interval === 'year' || data.interval === 'month'
+        ? data.interval
+        : null,
+    currentPeriodEnd:
+      typeof data.currentPeriodEnd === 'string' ? data.currentPeriodEnd : null,
+    cancelAtPeriodEnd: Boolean(data.cancelAtPeriodEnd),
+    canManage: Boolean(data.canManage),
+    source:
+      data.source === 'db' || data.source === 'stripe' || data.source === 'none'
+        ? data.source
+        : 'none',
+  };
+}
+
+function loadCache(): PublicEntitlement | null {
   if (typeof window === 'undefined') return null;
   try {
     const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
-    return JSON.parse(raw) as Entitlement;
+    const parsed = JSON.parse(raw) as unknown;
+    const pub = stripSecrets(parsed);
+    // Drop legacy caches that stored Stripe customer ids.
+    saveCache(pub);
+    return pub;
   } catch {
     return null;
   }
 }
 
-function saveCache(ent: Entitlement) {
+function saveCache(ent: PublicEntitlement) {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify(ent));
@@ -28,8 +58,8 @@ function saveCache(ent: Entitlement) {
 }
 
 export function useEntitlement() {
-  const [entitlement, setEntitlement] = useState<Entitlement>(() => {
-    return loadCache() || emptyEntitlement();
+  const [entitlement, setEntitlement] = useState<PublicEntitlement>(() => {
+    return loadCache() || emptyPublicEntitlement();
   });
   const [loading, setLoading] = useState(true);
 
@@ -40,7 +70,7 @@ export function useEntitlement() {
         setLoading(false);
         return;
       }
-      const data = (await res.json()) as Entitlement;
+      const data = stripSecrets(await res.json());
       setEntitlement(data);
       saveCache(data);
     } catch {
@@ -54,7 +84,13 @@ export function useEntitlement() {
     void refresh();
   }, [refresh]);
 
-  return { entitlement, loading, refresh, isPremium: entitlement.isPremium };
+  return {
+    entitlement,
+    loading,
+    refresh,
+    isPremium: entitlement.isPremium,
+    canManage: entitlement.canManage,
+  };
 }
 
 export async function startCheckout(interval: 'month' | 'year'): Promise<void> {

@@ -6,11 +6,11 @@
 import type Stripe from 'stripe';
 import { getStripe, isStripeConfigured } from '@/lib/billing/stripe';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { PLAN_COPY } from '@/lib/billing/plans';
 import {
   CANONICAL_PRICE_ANNUAL,
   CANONICAL_PRICE_MONTHLY,
-  PLAN_COPY,
-} from '@/lib/billing/plans';
+} from '@/lib/billing/price-ids';
 import { fetchXBrandMetrics } from './x-metrics';
 import type { BusinessKpis, FunnelStep } from './types';
 

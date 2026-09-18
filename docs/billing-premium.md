@@ -64,7 +64,8 @@ NEXT_PUBLIC_STRIPE_PRICE_ANNUAL=price_1U0WEXHOw5ZkjRlZOwkxysed
 1. Stripe Dashboard → Developers → Webhooks  
 2. Endpoint: `https://app.salvazion.org/api/billing/webhook`  
 3. Events: `checkout.session.completed`, `customer.subscription.*`, `invoice.paid`, `invoice.payment_failed`  
-4. Copy signing secret → `STRIPE_WEBHOOK_SECRET`
+4. Copy signing secret → `STRIPE_WEBHOOK_SECRET`  
+   Unsigned payloads are rejected. There is no unsigned fallback.
 
 ## Supabase
 
@@ -86,7 +87,15 @@ Full steps: [`docs/email.md`](./email.md)
 
 ## App routes
 
-- `/hub/premium` — plans & checkout (`?checkout=month|year` resumes Stripe Checkout after login/signup)  
-- `/hub/profile` — `BillingCard` (subscribe / manage)  
-- Landing Premium CTAs start Checkout; logged-out users go through `/auth/signup` (or login) and resume the same interval  
-- APIs: `/api/billing/checkout`, `/portal`, `/status`, `/webhook`
+- `/hub/premium` — plans & checkout (`?checkout=month|year` resumes Stripe Checkout after login/signup; `?billing=cancel` after cancel)  
+- `/hub/premium/success` — thank-you after Stripe Checkout (`success_url`)  
+- `/hub/profile` — `BillingCard` (current plan, renewal, Upgrade / manage)  
+- Landing `#pricing` and dashboard show current plan + a single **Upgrade to Premium — $49/mo** CTA → Stripe Checkout  
+- Logged-out users: Checkout API returns `auth_required` → `/auth/signup?next=/hub/premium?checkout=month` then auto-starts Checkout (onboarding is not required to pay)  
+- APIs: `/api/billing/checkout` (CSRF origin + rate limit), `/portal`, `/status` (no Stripe customer ids), `/webhook` (signature required)
+
+## Security
+
+- Entitlements are written only after a verified Stripe webhook (`STRIPE_WEBHOOK_SECRET` + `stripe-signature`). Unsigned payloads are rejected.  
+- Client `/api/billing/status` returns a public slice (plan, renewal, `canManage`) — never `customerId` / `subscriptionId` / `priceId`.  
+- Checkout price IDs live in `lib/billing/price-ids.ts` (server). Client copy uses lookup keys and `$49` labels only.

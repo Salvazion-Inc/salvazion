@@ -22,26 +22,27 @@ export async function GET(
     return NextResponse.json({ error: 'Unknown provider' }, { status: 404 });
   }
 
-  // Premium: cloud wearable OAuth
+  // Premium: cloud wearable OAuth (never trust the client)
   try {
     const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    if (user) {
-      const ent = await getEntitlementForUser(user.id, user.email);
-      if (!ent.isPremium) {
-        return NextResponse.json(
-          {
-            error: 'premium_required',
-            message: 'Cloud wearables require Salvazion Premium.',
-          },
-          { status: 402 }
-        );
-      }
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    const ent = await getEntitlementForUser(user.id, user.email);
+    if (!ent.isPremium) {
+      return NextResponse.json(
+        {
+          error: 'premium_required',
+          message: 'Cloud wearables require Salvazion Premium.',
+        },
+        { status: 402 }
+      );
     }
   } catch {
-    // ignore auth errors in misconfigured env
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   if (!isProviderConfigured(provider)) {

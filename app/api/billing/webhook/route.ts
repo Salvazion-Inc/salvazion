@@ -6,7 +6,7 @@ import {
   upsertSubscriptionRow,
   findUserIdForCustomer,
 } from '@/lib/billing/subscription';
-import { isPremiumPriceId } from '@/lib/billing/plans';
+import { billingLog } from '@/lib/billing/redact';
 
 export const runtime = 'nodejs';
 
@@ -15,23 +15,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Stripe not configured' }, { status: 503 });
   }
 
-  const secret = process.env.STRIPE_WEBHOOK_SECRET;
+  const secret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
   const body = await req.text();
   const sig = req.headers.get('stripe-signature');
 
+  if (!secret || !sig) {
+    billingLog('billing/webhook', 'missing STRIPE_WEBHOOK_SECRET or stripe-signature');
+    return NextResponse.json({ error: 'Webhook signature required' }, { status: 400 });
+  }
+
   let event: Stripe.Event;
   try {
-    const stripe = getStripe();
-    if (secret && sig) {
-      event = stripe.webhooks.constructEvent(body, sig, secret);
-    } else {
-      // Local/dev without webhook secret (not for production)
-      event = JSON.parse(body) as Stripe.Event;
-    }
+    event = getStripe().webhooks.constructEvent(body, sig, secret);
   } catch (e) {
-    const message = e instanceof Error ? e.message : 'Invalid signature';
-    console.error('[billing/webhook] signature', message);
-    return NextResponse.json({ error: message }, { status: 400 });
+    billingLog('billing/webhook', e);
+    return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
   }
 
   try {
@@ -90,11 +88,9 @@ export async function POST(req: NextRequest) {
         break;
     }
   } catch (e) {
-    console.error('[billing/webhook] handler', e);
+    billingLog('billing/webhook', e);
     return NextResponse.json({ error: 'Handler failed' }, { status: 500 });
   }
-
-  void isPremiumPriceId;
 
   return NextResponse.json({ received: true });
 }

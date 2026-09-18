@@ -68,12 +68,12 @@ const STORAGE_VALUE_JOURNEY = 'salvazion_value_journey';
 
 /** Keyword → interest mapping for auto-tagging */
 const INTEREST_RULES: { interest: InterestFocus; keys: string[] }[] = [
-  { interest: 'fe', keys: ['faith', 'christ', 'christian', 'bible', 'lion', 'judah', 'prayer', 'god', 'islamic', 'west', 'spirit', 'salvazion', 'fe', 'oración', 'homeschool', 'gospel'] },
-  { interest: 'familia', keys: ['family', 'marriage', 'children', 'parent', 'familia', 'matrimonio', 'homeschool', 'parental', 'formación integral'] },
-  { interest: 'salud', keys: ['health', 'bio', 'body', 'food', 'sleep', 'salud', 'medical', 'fasting', 'nutrition'] },
-  { interest: 'libertad', keys: ['freedom', 'liberty', 'communism', 'immigration', 'deep state', 'nato', 'europe', 'milei', 'sovereignty', 'border', 'libertad', 'patriot', 'mega', 'mining', 'rare earth', 'chicago boys', 'chile', 'socialist'] },
-  { interest: 'liderazgo', keys: ['leader', 'musk', 'milei', 'orbán', 'orban', 'huang', 'nvidia', 'elon', 'project', 'elite', 'mkultra', 'epstein', 'chicago boys', 'grok'] },
-  { interest: 'proposito', keys: ['solana', 'bitcoin', 'salvazion', 'technology', 'ai', 'machine learning', 'exponencial', 'infrastructure', 'purpose', 'jupiter', 'web3', 'autonomous', 'grok', 'mining'] },
+  { interest: 'fe', keys: ['faith', 'christ', 'christian', 'bible', 'lion', 'judah', 'prayer', 'god', 'islamic', 'west', 'spirit', 'salvazion', 'fe', 'oración', 'homeschool', 'gospel', 'kirk', 'jehovah', 'mormon', 'guzmán', 'guzman'] },
+  { interest: 'familia', keys: ['family', 'marriage', 'children', 'parent', 'familia', 'matrimonio', 'homeschool', 'parental', 'formación integral', 'unicorn marriage'] },
+  { interest: 'salud', keys: ['health', 'bio', 'body', 'food', 'sleep', 'salud', 'medical', 'fasting', 'nutrition', 'longevity'] },
+  { interest: 'libertad', keys: ['freedom', 'liberty', 'communism', 'immigration', 'deep state', 'nato', 'europe', 'milei', 'sovereignty', 'border', 'libertad', 'patriot', 'mega', 'mining', 'rare earth', 'chicago boys', 'chile', 'socialist', 'kast', 'silicon', 'backpack', 'stonk', 'spcx'] },
+  { interest: 'liderazgo', keys: ['leader', 'musk', 'milei', 'orbán', 'orban', 'huang', 'nvidia', 'elon', 'project', 'elite', 'mkultra', 'epstein', 'chicago boys', 'grok', 'kast', 'kirk', 'trump'] },
+  { interest: 'proposito', keys: ['solana', 'bitcoin', 'salvazion', 'technology', 'ai', 'machine learning', 'exponencial', 'infrastructure', 'purpose', 'jupiter', 'web3', 'autonomous', 'grok', 'mining', 'holding people', 'shared values'] },
   { interest: 'oracion', keys: ['prayer', 'spirit', 'christ', 'devotion'] },
   { interest: 'perseverancia', keys: ['virtue', 'discipline', 'constancy', 'persever', 'formation'] },
 ];
@@ -238,7 +238,7 @@ export function inferPillar(
 
   // Salvation: faith · Christianity · family · conservatism
   if (
-    /homeschool|family and marriage|christian|bible|gospel|kingdom of god|spiritual gifts?|prayers? and\s+praises|billy graham|martin luther|vatican|crusades|monaster|how can i get to heaven|spiritual warfare|western christian|alerci|christmas|salvazion app|salvation, health and freedom|thomas aquinas|tradwife|traditional wife|teach our children|gender ideology|trans women|morphological freedom|procreative freedom|eugenics|abortion|euthanasia|population collapse|birth rate|anthropological war|bioconserv|bioethics|dei principles|roger scruton|traditions, institutions, and conservatism|all about conservatism|\bconservatism\b|progressivism \(woke\)|woke virus|lgbtq|feminism|postmodernism|relativism|adolescentism|hedonism|deconstructionist|christian masculinity|virtuous people|paganism/i.test(
+    /homeschool|family and marriage|christian|bible|gospel|kingdom of god|spiritual gifts?|prayers? and\s+praises|billy graham|martin luther|vatican|crusades|monaster|how can i get to heaven|spiritual warfare|western christian|alerci|christmas|salvazion app|salvation, health and freedom|thomas aquinas|tradwife|traditional wife|teach our children|gender ideology|trans women|morphological freedom|procreative freedom|eugenics|abortion|euthanasia|population collapse|birth rate|anthropological war|bioconserv|bioethics|dei principles|roger scruton|traditions, institutions, and conservatism|all about conservatism|\bconservatism\b|progressivism \(woke\)|woke virus|lgbtq|feminism|postmodernism|relativism|adolescentism|hedonism|deconstructionist|christian masculinity|virtuous people|paganism|west goes dark|denies christ|lasting marriage|marriage unicorn|charlie kirk|jehovah|mormons and catholics|jaime guzm[aá]n/i.test(
       title
     )
   ) {
@@ -247,7 +247,7 @@ export function inferPillar(
 
   // Freedom: speech · entrepreneurship · political ideas · technology
   if (
-    /\bhuman rights\b|fundamental rights|freedom of speech|great depression/i.test(
+    /\bhuman rights\b|fundamental rights|freedom of speech|great depression|holding people crosses|controls silicon|loop.*stonk|spcx|backpack|stonk fun|patriot bitcoin|trump ecosystem|ten leaders and the future|allies of civilization|jos[eé] antonio kast|leaders who defend the west|chile: model of freedom|autonomous grok|life purpose and companies/i.test(
       title
     )
   ) {
@@ -256,7 +256,7 @@ export function inferPillar(
 
   // Health: food · healthtech · exercise · sleep
   if (
-    /healthtech|healthcare|telehealth|telemedicine|ehealth|mhealth|biomarker|longevity and technology|mental health|diabetes|cancer|stroke|hypertension|insomnia|sleep disorder|exercise and|workout|nutrition|superfood|synthetic meat|eating bugs|ludopathy|digital health|nanomedicine|wearables in health|robotic prosthes|genetics in human|clinical trial|3d printing in health|digital therapeutics|internet of bodies|exoskeleton|fatphobia|laughter.*medicine|neurochemistry|beta-endorphin|create value in healthtech|synthetic biology|socio-health|lose weight|fat burner|lower back pain|machine learning.*healthcare|ai in healthcare|robotics.*health|metaverse in health|blockchain.*web3 in health|virtual, augmented|medical devices|standards and interoperability in digital health|depression\s+and\s+anxiety|health problems|intermittent fasting|healthy eating|about drugs|effects on health|on health|in medicine|in health\b|in healthcare|in healthtech/i.test(
+    /healthtech|healthcare|telehealth|telemedicine|ehealth|mhealth|biomarker|longevity and technology|mental health|diabetes|cancer|stroke|hypertension|insomnia|sleep disorder|exercise and|workout|nutrition|superfood|synthetic meat|eating bugs|ludopathy|digital health|nanomedicine|wearables in health|robotic prosthes|genetics in human|clinical trial|3d printing in health|digital therapeutics|internet of bodies|exoskeleton|fatphobia|laughter.*medicine|neurochemistry|beta-endorphin|create value in healthtech|synthetic biology|socio-health|lose weight|fat burner|lower back pain|machine learning.*healthcare|ai in healthcare|robotics.*health|metaverse in health|blockchain.*web3 in health|virtual, augmented|medical devices|standards and interoperability in digital health|depression\s+and\s+anxiety|health problems|intermittent fasting|healthy eating|about drugs|effects on health|on health|in medicine|in health\b|in healthcare|in healthtech|natural longevity|fasting and sleep/i.test(
       title
     )
   ) {

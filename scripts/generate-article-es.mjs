@@ -71,6 +71,70 @@ const TITLE_PHRASES = [
     /The Chicago Boys Forged Chile.?s Prosperity/gi,
     'Los Chicago Boys forjaron la prosperidad de Chile',
   ],
+  [/Only a Holding People Crosses a Billion/gi, 'Solo un pueblo que sostiene cruza mil millones'],
+  [
+    /Chile and America Can Become Allies of Civilization/gi,
+    'Chile y América pueden ser aliados de la civilización',
+  ],
+  [
+    /Who ever Controls Silicon Controls Civilization/gi,
+    'Quien controla el silicio controla la civilización',
+  ],
+  [
+    /The West Goes Dark When It Denies Christ and the Body/gi,
+    'Occidente se apaga cuando niega a Cristo y al cuerpo',
+  ],
+  [
+    /The \$LOOP–\$KNOTS–\$STONK Flywheel Does Not Replace Character/gi,
+    'El volante $LOOP–$KNOTS–$STONK no reemplaza el carácter',
+  ],
+  [/SPCX, SPCXx and Backpack Are Not the Same/gi, 'SPCX, SPCXx y Backpack no son lo mismo'],
+  [
+    /Why \$SALVAZION Paired With SPCXx on Stonk Fun/gi,
+    'Por qué $SALVAZION se emparejó con SPCXx en Stonk Fun',
+  ],
+  [
+    /Jos[eé] Antonio Kast and the Chile That Returns to Itself/gi,
+    'José Antonio Kast y el Chile que vuelve a sí mismo',
+  ],
+  [
+    /Charlie Kirk: Faith, Freedom, Unfinished Witness/gi,
+    'Charlie Kirk: fe, libertad, testimonio inconcluso',
+  ],
+  [/Lasting Marriage Holds Up Civilization/gi, 'El matrimonio duradero sostiene la civilización'],
+  [
+    /Patriot Bitcoin \$SALVAZION: Sovereignty With Purpose/gi,
+    'Bitcoin patriota $SALVAZION: soberanía con propósito',
+  ],
+  [/Leaders Who Defend the West with Deeds/gi, 'Líderes que defienden Occidente con hechos'],
+  [
+    /Backpack and Solana Deliver Real Stocks Around the Clock/gi,
+    'Backpack y Solana entregan acciones reales las 24 horas',
+  ],
+  [/Trump Ecosystem: Rails of Financial Freedom/gi, 'Ecosistema Trump: rieles de libertad financiera'],
+  [/Autonomous Grok and the Unicorn Marriage/gi, 'Grok autónomo y el matrimonio unicornio'],
+  [
+    /Chile: Model of Freedom and Faith in the Americas/gi,
+    'Chile: modelo de libertad y fe en las Américas',
+  ],
+  [
+    /Ten Leaders and the Future of Artificial Intelligence Models/gi,
+    'Diez líderes y el futuro de los modelos de inteligencia artificial',
+  ],
+  [/Natural Longevity: Strength, Fasting and Sleep/gi, 'Longevidad natural: fuerza, ayuno y sueño'],
+  [/Marriage Unicorn: Faith, Agents and Dominion/gi, 'Matrimonio unicornio: fe, agentes y dominio'],
+  [
+    /Life Purpose and Companies of Shared Values/gi,
+    'Propósito de vida y empresas de valores compartidos',
+  ],
+  [
+    /Why Jehovah.?s Witnesses, Mormons and Catholics Are Not Christians/gi,
+    'Por qué los testigos de Jehová, mormones y católicos no son cristianos',
+  ],
+  [
+    /Jaime Guzm[aá]n: Christian Architect of Chilean Freedom/gi,
+    'Jaime Guzmán: arquitecto cristiano de la libertad chilena',
+  ],
   [
     /Salvazion App: The platform that restores the human person/gi,
     'Salvazion App: la plataforma que restaura a la persona',

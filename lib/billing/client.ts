@@ -90,6 +90,7 @@ export function useEntitlement() {
     refresh,
     isPremium: entitlement.isPremium,
     canManage: entitlement.canManage,
+    signedIn: entitlement.signedIn,
   };
 }
 

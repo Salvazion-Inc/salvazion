@@ -18,6 +18,7 @@ import { SALVAZION_MINT } from '@/lib/solana/config';
 import { welcomeUrlForLang } from '@/lib/config/site';
 import { pickLang } from '@/lib/i18n/locale';
 import UpgradeCta from '@/components/billing/UpgradeCta';
+import { signupUrlForCheckout } from '@/lib/billing/checkout-intent';
 import PlanStatus from '@/components/billing/PlanStatus';
 import { useEntitlement } from '@/lib/billing/client';
 
@@ -94,7 +95,33 @@ function TokenMintCopy({
 }
 
 function LandingPremiumCtas() {
-  const { isPremium } = useEntitlement();
+  const { isPremium, signedIn, loading } = useEntitlement();
+  const { t } = useI18n();
+
+  // Anonymous visitors: link straight to signup with checkout intent.
+  // Avoids disabled-while-loading Premium buttons (measured funnel friction).
+  if (!loading && !signedIn && !isPremium) {
+    return (
+      <div className="mt-6 grid gap-2">
+        <Link
+          href={signupUrlForCheckout('month')}
+          className="btn-primary font-display font-bold w-full min-h-[3rem] text-sm !whitespace-normal text-center text-balance leading-snug"
+        >
+          {t('premium.upgradeCta')}
+        </Link>
+        <Link
+          href={signupUrlForCheckout('year')}
+          className="btn-secondary font-display font-bold w-full min-h-[2.75rem] text-sm !whitespace-normal text-center text-balance leading-snug border-[#8FD99A]/45 text-[#8FD99A]"
+        >
+          {t('premium.ctaAnnual')}
+        </Link>
+        <p className="text-[11px] text-[var(--sage)]/85 text-center leading-snug">
+          {t('premium.trustLine')}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="mt-6">
       <UpgradeCta showAnnual={!isPremium} />

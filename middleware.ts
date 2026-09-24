@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { updateSession } from '@/lib/supabase/middleware';
-import { safeNextPath } from '@/lib/auth/paths';
+import { isPremiumCheckoutNext, safeNextPath } from '@/lib/auth/paths';
 
 export async function middleware(request: NextRequest) {
   const { user, supabaseResponse } = await updateSession(request);
@@ -11,8 +11,10 @@ export async function middleware(request: NextRequest) {
   if (path.startsWith('/hub')) {
     if (!user) {
       const url = request.nextUrl.clone();
-      url.pathname = '/auth/login';
-      url.searchParams.set('next', safeNextPath(path + request.nextUrl.search, '/hub/dashboard'));
+      const next = safeNextPath(path + request.nextUrl.search, '/hub/dashboard');
+      // Checkout intent → signup (not login): fewer steps to first paid sub.
+      url.pathname = isPremiumCheckoutNext(next) ? '/auth/signup' : '/auth/login';
+      url.searchParams.set('next', next);
       return NextResponse.redirect(url);
     }
   }

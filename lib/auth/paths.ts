@@ -32,9 +32,24 @@ function nestedNextParam(pathWithSearch: string): string | null {
   return new URLSearchParams(pathWithSearch.slice(q + 1)).get('next');
 }
 
+/** True when `next` is a Premium checkout resume (skip onboarding gate). */
+export function isPremiumCheckoutNext(next: string | null | undefined): boolean {
+  const safe = safeNextPath(next, FALLBACK);
+  if (!safe.startsWith('/hub/premium')) return false;
+  try {
+    const q = safe.includes('?') ? safe.slice(safe.indexOf('?') + 1) : '';
+    const interval = new URLSearchParams(q).get('checkout');
+    return interval === 'month' || interval === 'year';
+  } catch {
+    return false;
+  }
+}
+
 /**
  * After login/signup: finish onboarding first, then resume `next`
  * (e.g. `/hub/premium?checkout=month`).
+ * Exception: an active Premium checkout intent goes straight to Checkout —
+ * forcing onboarding before pay was the #1 measured conversion friction.
  */
 export function destinationAfterAuth(
   next: string | null | undefined,
@@ -48,6 +63,8 @@ export function destinationAfterAuth(
     }
     return safe;
   }
+  // Paying now: do not park the user in onboarding before Stripe Checkout.
+  if (isPremiumCheckoutNext(safe)) return safe;
   if (safe.startsWith(ONBOARDING)) return safe;
   if (safe === FALLBACK) return ONBOARDING;
   return `${ONBOARDING}?next=${encodeURIComponent(safe)}`;

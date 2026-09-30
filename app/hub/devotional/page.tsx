@@ -12,6 +12,7 @@ import { useI18n } from '@/components/I18nProvider';
 import { pickLang } from '@/lib/i18n/locale';
 import AiUsageMeter from '@/components/billing/AiUsageMeter';
 import BrandLoader from '@/components/ui/BrandLoader';
+import SalvationTabs from '@/components/salvation/SalvationTabs';
 
 const CACHE_PREFIX = 'salvazion_devotional_';
 
@@ -189,6 +190,10 @@ export default function DevotionalPage() {
           </div>
         </div>
       </header>
+
+      <div className="px-4 max-w-2xl mx-auto w-full">
+        <SalvationTabs active="devotional" />
+      </div>
 
       <div className="flex-1 px-4 md:px-8 pb-28 overflow-y-auto">
         <div className="max-w-2xl mx-auto">

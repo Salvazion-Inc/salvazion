@@ -8,6 +8,7 @@ import BookCover from '@/components/bible/BookCover';
 import BookLibrary from '@/components/bible/BookLibrary';
 import BookCarousel from '@/components/bible/BookCarousel';
 import PrayerMotivesPanel from '@/components/salvation/PrayerMotivesPanel';
+import SalvationTabs from '@/components/salvation/SalvationTabs';
 import BrandLoader from '@/components/ui/BrandLoader';
 import {
   getBooks,
@@ -31,8 +32,8 @@ import { useI18n } from '@/components/I18nProvider';
 import PillarHubHeader from '@/components/hub/PillarHubHeader';
 import { useFlashToast } from '@/components/ui/FlashToast';
 
-/** Salvation hub: Bible (read + explore), Prayer, Devotional */
-type MainTab = 'bible' | 'prayer' | 'devotional';
+/** Salvation hub: Bible (read + explore) and Prayer. Devotional and Hymns are routes. */
+type MainTab = 'bible' | 'prayer';
 /** Tools inside Bible tab: chapter reader, book grid, search */
 type BibleMode = 'read' | 'library' | 'search';
 type BookAnimDir = 'left' | 'right' | 'fade';
@@ -118,8 +119,9 @@ export default function BiblePage() {
         setMainTab('bible');
         setBibleMode('read');
       } else if (tab === 'devotional') {
-        // Devotional lives on its own page
         window.location.replace('/hub/devotional');
+      } else if (tab === 'hymns') {
+        window.location.replace('/hub/hymns');
       }
     } catch {
       // ignore
@@ -300,46 +302,13 @@ export default function BiblePage() {
     : selectedBook;
 
   const mainTabs = (
-    <div
-      className="tabs-x mb-1 mt-2"
-      style={{ ['--tab-accent' as string]: 'var(--pillar-salvation)' }}
-      role="tablist"
-      aria-label={t('nav.salvation')}
-    >
-      {(
-        [
-          { id: 'bible' as MainTab, key: 'bible.title' },
-          { id: 'prayer' as MainTab, key: 'bible.prayer' },
-          { id: 'devotional' as MainTab, key: 'bible.devotional' },
-        ] as const
-      ).map((tab) =>
-        tab.id === 'devotional' ? (
-          <Link
-            key={tab.id}
-            href="/hub/devotional"
-            role="tab"
-            data-active={mainTab === 'devotional' ? 'true' : 'false'}
-            aria-selected={mainTab === 'devotional'}
-          >
-            {t(tab.key)}
-          </Link>
-        ) : (
-          <button
-            key={tab.id}
-            type="button"
-            role="tab"
-            data-active={mainTab === tab.id}
-            aria-selected={mainTab === tab.id}
-            onClick={() => {
-              setMainTab(tab.id);
-              if (tab.id !== 'bible') setChromeCollapsed(false);
-            }}
-          >
-            {t(tab.key)}
-          </button>
-        )
-      )}
-    </div>
+    <SalvationTabs
+      active={mainTab}
+      onSelect={(tab) => {
+        setMainTab(tab);
+        if (tab !== 'bible') setChromeCollapsed(false);
+      }}
+    />
   );
 
   return (

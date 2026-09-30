@@ -37,7 +37,7 @@ const PILLAR_NAV: NavItemConfig[] = [
     labelKey: 'nav.salvation',
     key: 'salvation',
     Icon: BibleIcon,
-    match: ['/hub/bible', '/hub/devotional'],
+    match: ['/hub/bible', '/hub/devotional', '/hub/hymns'],
     color: PILLAR_COLORS.salvation.solid,
   },
   {

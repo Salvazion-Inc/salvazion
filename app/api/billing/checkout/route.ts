@@ -6,6 +6,7 @@ import { type BillingInterval } from '@/lib/billing/plans';
 import { BLOCKED_CHECKOUT_PRICE_IDS } from '@/lib/billing/price-ids';
 import { resolveCheckoutPriceId } from '@/lib/billing/resolve-price';
 import {
+  guestCheckoutPath,
   loginUrlForCheckout,
   parseBillingInterval,
   signupUrlForCheckout,
@@ -37,8 +38,10 @@ function authRequiredResponse(
 ) {
   const signupUrl = signupUrlForCheckout(interval);
   const loginUrl = loginUrlForCheckout(interval);
+  const guestCheckoutUrl = guestCheckoutPath(interval);
   if (redirect) {
-    return NextResponse.redirect(new URL(signupUrl, req.nextUrl.origin));
+    // Logged-out GET → public guest Checkout (no signup / email confirm before paying).
+    return NextResponse.redirect(new URL(guestCheckoutUrl, req.nextUrl.origin));
   }
   return NextResponse.json(
     {
@@ -46,6 +49,7 @@ function authRequiredResponse(
       code: 'auth_required',
       signupUrl,
       loginUrl,
+      guestCheckoutUrl,
     },
     { status: 401 }
   );

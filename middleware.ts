@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { updateSession } from '@/lib/supabase/middleware';
 import { isPremiumCheckoutNext, safeNextPath } from '@/lib/auth/paths';
+import { guestCheckoutPath, parseBillingInterval } from '@/lib/billing/checkout-intent';
 
 export async function middleware(request: NextRequest) {
   const { user, supabaseResponse } = await updateSession(request);
@@ -12,8 +13,14 @@ export async function middleware(request: NextRequest) {
     if (!user) {
       const url = request.nextUrl.clone();
       const next = safeNextPath(path + request.nextUrl.search, '/hub/dashboard');
-      // Checkout intent → signup (not login): fewer steps to first paid sub.
-      url.pathname = isPremiumCheckoutNext(next) ? '/auth/signup' : '/auth/login';
+      // Checkout intent (e.g. email CTA /hub/premium?checkout=month) → public
+      // guest Checkout: pay first, account is provisioned after payment.
+      if (isPremiumCheckoutNext(next)) {
+        const interval =
+          parseBillingInterval(request.nextUrl.searchParams.get('checkout')) || 'month';
+        return NextResponse.redirect(new URL(guestCheckoutPath(interval), request.nextUrl));
+      }
+      url.pathname = '/auth/login';
       url.searchParams.set('next', next);
       return NextResponse.redirect(url);
     }

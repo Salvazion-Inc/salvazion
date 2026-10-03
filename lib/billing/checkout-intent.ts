@@ -13,6 +13,14 @@ export function premiumCheckoutPath(interval: BillingInterval): string {
   return `/hub/premium?${CHECKOUT_INTERVAL_QUERY}=${interval}`;
 }
 
+/**
+ * Public one-click Premium checkout (no account needed before paying).
+ * Use this in emails / ads: https://salvazion.org/premium/checkout?plan=month
+ */
+export function guestCheckoutPath(interval: BillingInterval): string {
+  return `/premium/checkout?plan=${interval}`;
+}
+
 export function signupUrlForCheckout(interval: BillingInterval): string {
   return `/auth/signup?next=${encodeURIComponent(premiumCheckoutPath(interval))}`;
 }

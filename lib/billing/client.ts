@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { PublicEntitlement } from './types';
 import { emptyPublicEntitlement } from './types';
-import { rememberPendingCheckout, signupUrlForCheckout } from './checkout-intent';
+import { guestCheckoutPath, rememberPendingCheckout } from './checkout-intent';
 
 const CACHE_KEY = 'salvazion_entitlement';
 
@@ -108,13 +108,15 @@ export async function startCheckout(interval: 'month' | 'year'): Promise<void> {
     code?: string;
     url?: string;
     signupUrl?: string;
+    guestCheckoutUrl?: string;
   };
 
   if (res.status === 401 || data.code === 'auth_required') {
+    // Logged out: straight to Stripe Checkout; the account is created after payment.
     const dest =
-      typeof data.signupUrl === 'string' && data.signupUrl.startsWith('/auth/')
-        ? data.signupUrl
-        : signupUrlForCheckout(interval);
+      typeof data.guestCheckoutUrl === 'string' && data.guestCheckoutUrl.startsWith('/premium/')
+        ? data.guestCheckoutUrl
+        : guestCheckoutPath(interval);
     window.location.assign(dest);
     return;
   }

@@ -175,14 +175,11 @@ export default function PremiumPage() {
             <p className="mt-2 text-sm text-[var(--sage)] leading-snug">
               {t('premium.perMonthFree')}
             </p>
-            <p
-              className="mt-1 text-sm leading-snug min-h-[1.25rem] text-transparent select-none"
-              aria-hidden
-            >
-              —
+            <p className="mt-1 text-sm text-[var(--sage)] leading-snug min-h-[1.25rem]">
+              {pickLang(lang, PRICING_TABLE.freeAside)}
             </p>
 
-            <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.75rem]">
+            <p className="mt-3 text-xs text-[var(--sage)] leading-snug">
               {pickLang(lang, PRICING_TABLE.freeNote)}
             </p>
 
@@ -191,8 +188,8 @@ export default function PremiumPage() {
                 const label = pickLang(lang, item);
                 return (
                   <li key={item.en}>
-                    <span className="text-[var(--accent)] shrink-0 w-4 text-center">
-                      ·
+                    <span className="text-[var(--accent)] shrink-0 w-4 text-center" aria-hidden>
+                      ✓
                     </span>
                     <span className="leading-snug">{textWithXLogo(label)}</span>
                   </li>
@@ -239,7 +236,7 @@ export default function PremiumPage() {
               })}
             </p>
 
-            <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.75rem]">
+            <p className="mt-3 text-xs text-[var(--sage)] leading-snug">
               {pickLang(lang, PRICING_TABLE.premiumNote)}
             </p>
 
@@ -248,8 +245,8 @@ export default function PremiumPage() {
                 const label = pickLang(lang, item);
                 return (
                   <li key={item.id}>
-                    <span className="text-[var(--accent)] shrink-0 w-4 text-center">
-                      ·
+                    <span className="text-[var(--accent)] shrink-0 w-4 text-center" aria-hidden>
+                      ✓
                     </span>
                     <span className="leading-snug">{textWithXLogo(label)}</span>
                   </li>
@@ -267,9 +264,6 @@ export default function PremiumPage() {
           <p className="text-sm text-red-400 text-center">{error}</p>
         )}
 
-        <p className="text-[11px] text-[var(--sage)]/80 text-center leading-relaxed max-w-md mx-auto px-1">
-          {pickLang(lang, PRICING_TABLE.stripeNote)}
-        </p>
       </main>
 
       {!isPremium ? (

@@ -453,6 +453,9 @@ export default function SalvazionLanding() {
             <h2 className="section-title text-3xl sm:text-4xl md:text-[2.65rem]">
               {t.pricing.title}
             </h2>
+            <p className="mt-4 text-sm sm:text-base text-[var(--sage)] leading-relaxed text-pretty">
+              {t.pricing.subtitle}
+            </p>
             <div className="mt-4 flex justify-center">
               <PlanStatus compact showUpgrade={false} />
             </div>
@@ -688,6 +691,8 @@ const copy = {
     pricing: {
       eyebrow: 'Plans',
       title: 'Start free. Go Premium when ready.',
+      subtitle:
+        'Free opens Salvation, Health and Freedom. Premium removes the daily limit and opens the full depth.',
       ctaFree: 'Create free account',
       ctaPremium: 'Join & upgrade to Premium',
     },
@@ -805,6 +810,8 @@ const copy = {
     pricing: {
       eyebrow: 'Planes',
       title: 'Empieza gratis. Pasa a Premium cuando quieras.',
+      subtitle:
+        'Gratis abre Salvation, Health y Freedom. Premium quita el límite diario y abre toda la profundidad.',
       ctaFree: 'Crear cuenta gratis',
       ctaPremium: 'Unirme y pasar a Premium',
     },
@@ -921,6 +928,8 @@ const copy = {
     pricing: {
       eyebrow: 'Planos',
       title: 'Comece grátis. Passe para Premium quando quiser.',
+      subtitle:
+        'Grátis abre Salvation, Health e Freedom. Premium tira o limite diário e abre toda a profundidade.',
       ctaFree: 'Criar conta grátis',
       ctaPremium: 'Entrar e passar para Premium',
     },

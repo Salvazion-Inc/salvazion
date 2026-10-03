@@ -485,12 +485,11 @@ export default function SalvazionLanding() {
                   pt: '/ mês · sempre grátis',
                 })}
               </p>
-              {/* Spacer matches Premium annual price line */}
-              <p className="mt-1 text-sm leading-snug min-h-[1.25rem] text-transparent select-none" aria-hidden>
-                —
+              <p className="mt-1 text-sm text-[var(--sage)] leading-snug min-h-[1.25rem]">
+                {pickLang(lang, PRICING_TABLE.freeAside)}
               </p>
 
-              <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.75rem]">
+              <p className="mt-3 text-xs text-[var(--sage)] leading-snug">
                 {pickLang(lang, PRICING_TABLE.freeNote)}
               </p>
 
@@ -499,7 +498,7 @@ export default function SalvazionLanding() {
                   const label = pickLang(lang, item);
                   return (
                     <li key={item.en}>
-                      <span className="text-[var(--accent)] shrink-0 w-4 text-center">·</span>
+                      <span className="text-[var(--accent)] shrink-0 w-4 text-center" aria-hidden>✓</span>
                       <span className="leading-snug">{textWithXLogo(label)}</span>
                     </li>
                   );
@@ -539,7 +538,7 @@ export default function SalvazionLanding() {
                 })}
               </p>
 
-              <p className="mt-3 text-xs text-[var(--sage)] leading-relaxed min-h-[2.75rem]">
+              <p className="mt-3 text-xs text-[var(--sage)] leading-snug">
                 {pickLang(lang, PRICING_TABLE.premiumNote)}
               </p>
 
@@ -548,7 +547,7 @@ export default function SalvazionLanding() {
                   const label = pickLang(lang, item);
                   return (
                     <li key={item.id}>
-                      <span className="text-[var(--accent)] shrink-0 w-4 text-center">·</span>
+                      <span className="text-[var(--accent)] shrink-0 w-4 text-center" aria-hidden>✓</span>
                       <span className="leading-snug">{textWithXLogo(label)}</span>
                     </li>
                   );
@@ -559,9 +558,6 @@ export default function SalvazionLanding() {
             </div>
           </div>
 
-          <p className="mt-6 text-center text-[11px] text-[var(--sage)]/80 leading-relaxed max-w-xl mx-auto">
-            {pickLang(lang, PRICING_TABLE.stripeNote)}
-          </p>
         </div>
       </section>
 
@@ -690,7 +686,7 @@ const copy = {
       ],
     },
     pricing: {
-      eyebrow: 'Freemium',
+      eyebrow: 'Plans',
       title: 'Start free. Go Premium when ready.',
       ctaFree: 'Create free account',
       ctaPremium: 'Join & upgrade to Premium',
@@ -807,7 +803,7 @@ const copy = {
       ],
     },
     pricing: {
-      eyebrow: 'Freemium',
+      eyebrow: 'Planes',
       title: 'Empieza gratis. Pasa a Premium cuando quieras.',
       ctaFree: 'Crear cuenta gratis',
       ctaPremium: 'Unirme y pasar a Premium',
@@ -923,7 +919,7 @@ const copy = {
       ],
     },
     pricing: {
-      eyebrow: 'Freemium',
+      eyebrow: 'Planos',
       title: 'Comece grátis. Passe para Premium quando quiser.',
       ctaFree: 'Criar conta grátis',
       ctaPremium: 'Entrar e passar para Premium',

@@ -98,7 +98,7 @@ export default function PremiumSuccessPage() {
             {t('premium.successUnlocked')}
           </p>
           <ul className="pricing-points text-sm text-[#D8E1D9]/90">
-            {PREMIUM_FEATURE_LIST.slice(0, 6).map((item) => (
+            {PREMIUM_FEATURE_LIST.map((item) => (
               <li key={item.id}>
                 <span className="text-[var(--accent)] shrink-0 w-4 text-center" aria-hidden>✓</span>
                 <span className="leading-snug">{textWithXLogo(pickLang(lang, item))}</span>

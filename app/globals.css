@@ -1925,10 +1925,10 @@ select:-webkit-autofill {
   }
 }
 
-/* Pricing bullets — one short line each, no reserved empty rows */
+/* Pricing bullets — explicit value lines, no reserved empty rows */
 .pricing-points {
   display: grid;
-  gap: 0.4rem;
+  gap: 0.55rem;
   align-content: start;
 }
 .pricing-points > li {

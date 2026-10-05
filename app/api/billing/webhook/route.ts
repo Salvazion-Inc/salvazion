@@ -7,6 +7,10 @@ import {
   findUserIdForCustomer,
 } from '@/lib/billing/subscription';
 import { billingLog } from '@/lib/billing/redact';
+import {
+  isGuestSalvazionSession,
+  provisionGuestCheckout,
+} from '@/lib/billing/provision-guest';
 
 export const runtime = 'nodejs';
 
@@ -36,6 +40,15 @@ export async function POST(req: NextRequest) {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
+        if (isGuestSalvazionSession(session)) {
+          // Paid without an account → find/create the Supabase user by email.
+          const result = await provisionGuestCheckout(session);
+          if (!result.ok) {
+            billingLog('billing/webhook', `guest provision failed: ${result.reason}`);
+            if (result.reason !== 'not_complete') throw new Error(result.reason);
+          }
+          break;
+        }
         if (session.mode === 'subscription' && session.subscription) {
           const subId =
             typeof session.subscription === 'string'

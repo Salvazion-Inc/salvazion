@@ -15,7 +15,7 @@ import type { UserProfile } from '@/lib/types';
 import type { ComputedScores } from '@/lib/scoring/types';
 import { logAction } from '@/lib/scoring/engine';
 import AiUsageMeter from '@/components/billing/AiUsageMeter';
-import UpgradeCta from '@/components/billing/UpgradeCta';
+import CapUpgradeOffer from '@/components/billing/CapUpgradeOffer';
 import { useAiUsage } from '@/lib/billing/ai-usage-client';
 
 type Props = {
@@ -52,7 +52,8 @@ export default function VoiceAgent({
   /** Off by default — freemium browser TTS is poor; Premium uses xAI voice only */
   const [voiceOn, setVoiceOn] = useState(false);
   const [scoredDebate, setScoredDebate] = useState(false);
-  const { refresh: refreshUsage } = useAiUsage();
+  const { overview: usage, refresh: refreshUsage } = useAiUsage();
+  const [quotaFeature, setQuotaFeature] = useState<'coach_chat' | 'coach_tts'>('coach_chat');
   const listRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
@@ -105,6 +106,7 @@ export default function VoiceAgent({
                   'Limite Free de voz atingido. Passe para Premium — $49/mês.'
                 )
             );
+            setQuotaFeature('coach_tts');
             setQuotaHit(true);
             void refreshUsage();
           }
@@ -170,6 +172,7 @@ export default function VoiceAgent({
               'Limite Free de IA atingido. Passe para Premium — $49/mês para ilimitado.'
             );
           setError(reply);
+          setQuotaFeature('coach_chat');
           setQuotaHit(true);
           setMessages((m) => [...m, { role: 'assistant', content: reply }]);
           void refreshUsage();
@@ -388,7 +391,9 @@ export default function VoiceAgent({
       {error && (
         <div className="mb-2 space-y-2">
           <p className="text-[11px] text-amber-300/90 leading-relaxed">{error}</p>
-          {quotaHit ? <UpgradeCta compact /> : null}
+          {quotaHit ? (
+            <CapUpgradeOffer feature={quotaFeature} holderBonus={usage.holderBonus} />
+          ) : null}
         </div>
       )}
 

@@ -24,6 +24,7 @@ import {
 import { UserProfile } from '@/lib/types';
 import { createClient } from '@/lib/supabase/client';
 import WalletConnectCard from '@/components/wallet/WalletConnectCard';
+import HolderVerifyCard from '@/components/wallet/HolderVerifyCard';
 import BillingCard from '@/components/billing/BillingCard';
 import ProfileAvatar from '@/components/profile/ProfileAvatar';
 import ClinicalRecordPanel from '@/components/health/ClinicalRecordPanel';
@@ -540,6 +541,8 @@ export default function ProfilePage() {
           <WalletConnectCard
             onSalvazionChange={() => setLinkedWallet(loadLinkedWallet())}
           />
+
+          <HolderVerifyCard />
 
           {/* Privacy note + legal */}
           <div className="card-soft p-4 text-xs text-[var(--sage)] leading-relaxed">

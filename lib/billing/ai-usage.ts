@@ -1,13 +1,11 @@
-import { Connection, PublicKey } from '@solana/web3.js';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
-import { fetchWalletBalances } from '@/lib/solana/balances';
-import { getSolanaRpcUrl } from '@/lib/solana/config';
+import { fetchHolderBalance, hasPositiveBalance } from '@/lib/solana/holder-balance';
+import { getHolderLink, updateHolderSnapshot, type HolderLink } from './holder-links';
 import { getEntitlementForUser } from './subscription';
 import {
   AI_FEATURES,
   FREE_AI_LIMITS,
-  SALVAZION_HOLDER_MIN,
   emptyQuotaState,
   freeLimitFor,
   periodResetUtc,
@@ -48,6 +46,18 @@ export async function getRequestUser(): Promise<{
   }
 }
 
+/** If the RPC is down, trust a verified snapshot this recent. */
+const SNAPSHOT_GRACE_MS = 24 * 60 * 60 * 1000;
+
+export function clearHolderCache(userId: string): void {
+  holderCache.delete(userId);
+}
+
+/**
+ * Holder bonus = a wallet VERIFIED by signature (wallet_holder_links,
+ * see /api/wallet/holder/verify) whose live $SALVAZION balance is > 0.
+ * The legacy unverified profiles.solana_wallet no longer grants the bonus.
+ */
 async function resolveHolder(userId: string): Promise<{
   holder: boolean;
   amount: number | null;
@@ -62,37 +72,36 @@ async function resolveHolder(userId: string): Promise<{
     };
   }
 
-  const admin = createAdminClient();
-  let wallet: string | null = null;
-  if (admin) {
-    try {
-      const { data } = await admin
-        .from('profiles')
-        .select('solana_wallet')
-        .eq('id', userId)
-        .maybeSingle();
-      const raw = data?.solana_wallet;
-      wallet = typeof raw === 'string' && raw.trim() ? raw.trim() : null;
-    } catch {
-      wallet = null;
-    }
+  let link: HolderLink | null = null;
+  try {
+    link = await getHolderLink(userId);
+  } catch {
+    link = null;
+  }
+  if (!link) {
+    holderCache.set(userId, { at: Date.now(), amount: null, holder: false, wallet: null });
+    return { holder: false, amount: null, wallet: null };
   }
 
   let amount: number | null = null;
-  if (wallet) {
-    try {
-      const owner = new PublicKey(wallet);
-      const connection = new Connection(getSolanaRpcUrl(), 'confirmed');
-      const balances = await fetchWalletBalances(connection, owner);
-      amount = balances.salvazion;
-    } catch {
-      amount = null;
+  let holder = false;
+  try {
+    const balance = await fetchHolderBalance(link.wallet);
+    amount = balance.ui;
+    holder = hasPositiveBalance(balance);
+    if (balance.raw !== link.balanceRaw || holder !== link.bonusActive) {
+      await updateHolderSnapshot(userId, balance, holder);
+    }
+  } catch {
+    const age = Date.now() - Date.parse(link.balanceCheckedAt);
+    if (Number.isFinite(age) && age < SNAPSHOT_GRACE_MS) {
+      amount = link.balanceUi;
+      holder = link.bonusActive && hasPositiveBalance({ raw: link.balanceRaw, ui: link.balanceUi });
     }
   }
 
-  const holder = typeof amount === 'number' && amount >= SALVAZION_HOLDER_MIN;
-  holderCache.set(userId, { at: Date.now(), amount, holder, wallet });
-  return { holder, amount, wallet };
+  holderCache.set(userId, { at: Date.now(), amount, holder, wallet: link.wallet });
+  return { holder, amount, wallet: link.wallet };
 }
 
 function buildState(

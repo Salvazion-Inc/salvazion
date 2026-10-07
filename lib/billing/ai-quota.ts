@@ -35,8 +35,11 @@ export const FREE_AI_LIMITS: Record<AiFeature, AiFeatureQuota> = {
   vision_meal: { period: 'day', limit: 3 },
 };
 
-/** Any verified on-chain $SALVAZION > 0 doubles Free AI limits. */
-export const SALVAZION_HOLDER_MIN = 1;
+/**
+ * Holder bonus ("bono Free AI-cap"): a signature-verified wallet with an
+ * on-chain $SALVAZION balance > 0 doubles every Free AI limit.
+ * Premium stays unlimited regardless.
+ */
 export const SALVAZION_HOLDER_MULTIPLIER = 2;
 
 export function isAiFeature(value: unknown): value is AiFeature {

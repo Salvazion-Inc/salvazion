@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useI18n } from '@/components/I18nProvider';
 import { useAiUsage } from '@/lib/billing/ai-usage-client';
 import type { AiFeature } from '@/lib/billing/ai-quota';
-import UpgradeCta from './UpgradeCta';
+import CapUpgradeOffer from './CapUpgradeOffer';
 
 const FEATURE_KEY: Record<AiFeature, string> = {
   coach_chat: 'quota.coach',
@@ -78,13 +78,15 @@ export default function AiUsageMeter({
         </p>
         <p className="text-sm text-white font-medium">{t('quota.exhausted')}</p>
         <p className="text-xs text-[var(--sage)] leading-relaxed">
-          {t('quota.exhaustedBody')}
+          {t(overview.holderBonus ? 'quota.exhaustedHolderBody' : 'quota.exhaustedBody')}
         </p>
-        <UpgradeCta compact />
+        <CapUpgradeOffer feature={feature} holderBonus={overview.holderBonus} />
         {overview.holderBonus ? (
           <p className="text-[11px] text-[#8FD99A]">{t('quota.holderActive')}</p>
         ) : (
-          <p className="text-[11px] text-[var(--sage)]">{t('quota.holderHint')}</p>
+          <Link href="/hub/profile#holder-bonus" className="block text-[11px] text-[var(--sage)] hover:text-[#8FD99A] hover:underline">
+            {t('quota.holderHint')}
+          </Link>
         )}
       </div>
     );
@@ -98,7 +100,7 @@ export default function AiUsageMeter({
       {overview.holderBonus ? (
         <span className="ml-1.5 text-[#8FD99A]">{t('quota.holderShort')}</span>
       ) : (
-        <Link href="/hub/profile" className="ml-1.5 text-[#8FD99A] hover:underline">
+        <Link href="/hub/profile#holder-bonus" className="ml-1.5 text-[#8FD99A] hover:underline">
           {t('quota.holderHintShort')}
         </Link>
       )}

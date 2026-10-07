@@ -71,7 +71,9 @@ NEXT_PUBLIC_STRIPE_PRICE_ANNUAL=price_1U0WEXHOw5ZkjRlZOwkxysed
 
 Run `supabase/subscriptions.sql` in the SQL editor so entitlements persist.
 
-Run `supabase/ai-usage.sql` so Free AI quotas persist (`ai_usage` table + `profiles.solana_wallet` for the $SALVAZION holder bonus).
+Run `supabase/ai-usage.sql` so Free AI quotas persist (`ai_usage` table).
+
+Run `supabase/holder-verify.sql` for the $SALVAZION holder bonus (verify-holdings v1): `wallet_holder_links` (signature-verified wallet, one wallet per account), `holder_verify_nonces` (replay protection) and `product_events` (`bono_activado`, `upgrade_click`). The bonus doubles every Free AI limit while the verified wallet holds > 0 $SALVAZION; the old unverified `profiles.solana_wallet` no longer grants it.
 
 ## Customer Portal
 

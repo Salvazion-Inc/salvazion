@@ -7,6 +7,7 @@ import {
   findUserIdForCustomer,
 } from '@/lib/billing/subscription';
 import { billingLog } from '@/lib/billing/redact';
+import { summarizeExpiredSession } from '@/lib/billing/checkout-params';
 import {
   isGuestSalvazionSession,
   provisionGuestCheckout,
@@ -63,6 +64,17 @@ export async function POST(req: NextRequest) {
           }
           await syncSubscriptionFromStripe(sub);
         }
+        break;
+      }
+      case 'checkout.session.expired': {
+        // Abandoned Premium checkout. Log only (no email, no PII, no send):
+        // whether a recovery URL exists and the promotions consent state.
+        // Any recovery email is a separate, explicitly approved flow.
+        const session = event.data.object as Stripe.Checkout.Session;
+        console.info(
+          '[billing/webhook] checkout.session.expired',
+          JSON.stringify(summarizeExpiredSession(session))
+        );
         break;
       }
       case 'customer.subscription.created':

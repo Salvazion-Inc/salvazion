@@ -75,6 +75,8 @@ Both Premium Checkout flows (guest `/premium/checkout` and signed-in `/api/billi
 - `after_expiration.recovery.enabled = true` (+ `allow_promotion_codes = true`, same as the live session) — an expired session (24 h default) carries a recovery URL valid 30 days.
 - `allow_promotion_codes = true` (unchanged).
 
+**Stripe-collected promotions consent is NOT used to contact anyone** (MTP: the API cannot tell a Stripe pre-checked box from one the customer ticked; `consent.promotions` is only the final `opt_in`/`opt_out`). Abandoned checkouts are only logged. Contacting anyone would need our own unchecked checkbox before redirecting to Checkout (future change, not built).
+
 `checkout.session.expired` is handled by the webhook with a PII-free log line only (consent state, whether a recovery URL exists). **No recovery or promotional email is sent by the app.** Any such email needs explicit approval, must go only to `consent.promotions = 'opt_in'`, and must carry sender info + unsubscribe. Stripe requires the privacy policy to disclose promotional-email use before sending any.
 
 To receive `checkout.session.expired`, the webhook endpoint must subscribe to that event (Dashboard → Webhooks). Not changed while salvazion.org is on the registrar hold.

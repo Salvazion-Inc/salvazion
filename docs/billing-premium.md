@@ -63,9 +63,21 @@ NEXT_PUBLIC_STRIPE_PRICE_ANNUAL=price_1U0WEXHOw5ZkjRlZOwkxysed
 
 1. Stripe Dashboard → Developers → Webhooks  
 2. Endpoint: `https://app.salvazion.org/api/billing/webhook`  
-3. Events: `checkout.session.completed`, `customer.subscription.*`, `invoice.paid`, `invoice.payment_failed`  
+3. Events: `checkout.session.completed`, `checkout.session.expired` (optional, log only), `customer.subscription.*`, `invoice.paid`, `invoice.payment_failed`  
 4. Copy signing secret → `STRIPE_WEBHOOK_SECRET`  
    Unsigned payloads are rejected. There is no unsigned fallback.
+
+## Checkout consent + abandoned-cart recovery
+
+Both Premium Checkout flows (guest `/premium/checkout` and signed-in `/api/billing/checkout`) build their params in `lib/billing/checkout-params.ts` and always send:
+
+- `consent_collection.promotions = 'auto'` — Stripe shows its own "Keep me updated with news and personalized offers" checkbox where allowed (US business + US customers only). Stripe picks the default state from the account jurisdiction and the customer IP; it is **unchecked** wherever affirmative consent is required, but for US account + US customer Stripe may default it to checked (US law allows opt-out). The choice is stored on `session.consent.promotions` (`opt_in` / `opt_out`).
+- `after_expiration.recovery.enabled = true` (+ `allow_promotion_codes = true`, same as the live session) — an expired session (24 h default) carries a recovery URL valid 30 days.
+- `allow_promotion_codes = true` (unchanged).
+
+`checkout.session.expired` is handled by the webhook with a PII-free log line only (consent state, whether a recovery URL exists). **No recovery or promotional email is sent by the app.** Any such email needs explicit approval, must go only to `consent.promotions = 'opt_in'`, and must carry sender info + unsubscribe. Stripe requires the privacy policy to disclose promotional-email use before sending any.
+
+To receive `checkout.session.expired`, the webhook endpoint must subscribe to that event (Dashboard → Webhooks). Not changed while salvazion.org is on the registrar hold.
 
 ## Supabase
 

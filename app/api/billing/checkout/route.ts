@@ -19,6 +19,7 @@ import {
   isAllowedBillingOrigin,
 } from '@/lib/billing/request-guard';
 import { billingLog } from '@/lib/billing/redact';
+import { buildHubCheckoutParams } from '@/lib/billing/checkout-params';
 
 export const runtime = 'nodejs';
 
@@ -82,34 +83,15 @@ async function createCheckoutSession(user: User, interval: BillingInterval) {
     });
   }
 
-  return stripe.checkout.sessions.create({
-    mode: 'subscription',
-    customer: customerId,
-    client_reference_id: user.id,
-    line_items: [{ price: priceId, quantity: 1 }],
-    success_url: `${base}/hub/premium/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${base}/hub/premium?billing=cancel`,
-    allow_promotion_codes: true,
-    custom_text: {
-      submit: {
-        message:
-          'By confirming you agree to Salvazion [Terms of Service](https://salvazion.org/terms) and [Privacy Policy](https://salvazion.org/privacy).',
-      },
-    },
-    subscription_data: {
-      metadata: {
-        supabase_user_id: user.id,
-        app: 'salvazion',
-        interval,
-      },
-    },
-    metadata: {
-      supabase_user_id: user.id,
-      app: 'salvazion',
+  return stripe.checkout.sessions.create(
+    buildHubCheckoutParams({
+      customerId,
+      userId: user.id,
+      priceId,
       interval,
-      price_id: priceId,
-    },
-  });
+      baseUrl: base,
+    })
+  );
 }
 
 export async function GET(req: NextRequest) {

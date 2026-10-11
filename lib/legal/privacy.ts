@@ -2,9 +2,9 @@ import { APP_URL, SUPPORT_EMAIL } from '@/lib/config/site';
 import type { Language } from '@/lib/types';
 import type { LegalDoc } from '@/lib/legal/terms';
 
-const UPDATED_EN = 'August 24, 2026';
-const UPDATED_ES = '24 de agosto de 2026';
-const UPDATED_PT = '24 de agosto de 2026';
+const UPDATED_EN = 'October 11, 2026';
+const UPDATED_ES = '11 de octubre de 2026';
+const UPDATED_PT = '11 de outubro de 2026';
 
 export const PRIVACY: Record<Language, LegalDoc> = {
   en: {
@@ -86,6 +86,15 @@ export const PRIVACY: Record<Language, LegalDoc> = {
         heading: '7. Payments',
         paragraphs: [
           'Premium payments are processed by Stripe. Stripe’s privacy policy applies to the payment data it collects. We keep records of plan, status, and renewal needed to deliver Premium and for accounting or tax obligations.',
+        ],
+      },
+      {
+        heading: '7.1 Optional promotional emails',
+        paragraphs: [
+          `When you join Premium (the Green Lion Kings membership), checkout is processed by Stripe on behalf of Salvazion, Inc. There you may choose to receive promotional emails from Salvazion, Inc. This is optional and separate from your membership: if you say no, your access does not change.`,
+          `If you opt in, we use your email only to send you those emails. If you opt in and leave a checkout incomplete, we may send you one reminder to complete it.`,
+          `You can withdraw your consent at any time through the unsubscribe link in each email or by writing to ${SUPPORT_EMAIL}.`,
+          `We do not sell or share your email for third-party marketing.`,
         ],
       },
       {
@@ -220,6 +229,15 @@ export const PRIVACY: Record<Language, LegalDoc> = {
         ],
       },
       {
+        heading: '7.1 Correos promocionales opcionales',
+        paragraphs: [
+          `Cuando te unes a Premium (la membresía Green Lion Kings), el pago lo procesa Stripe en nombre de Salvazion, Inc. Ahí puedes elegir recibir correos promocionales de Salvazion, Inc. Es opcional e independiente de tu membresía: si no aceptas, tu acceso no cambia.`,
+          `Si aceptas, usamos tu email solo para enviarte esos correos. Si aceptas y dejas un pago sin terminar, podemos enviarte un único recordatorio para completarlo.`,
+          `Puedes retirar tu consentimiento en cualquier momento con el enlace para darte de baja que trae cada correo o escribiendo a ${SUPPORT_EMAIL}.`,
+          `No vendemos ni compartimos tu email para marketing de terceros.`,
+        ],
+      },
+      {
         heading: '8. Conservación',
         paragraphs: [
           `Conservamos los datos mientras mantengas la cuenta o sea necesario para el servicio, la seguridad, la contabilidad y las obligaciones legales. Puedes solicitar la eliminación de la cuenta contactando a ${SUPPORT_EMAIL}. Eliminaremos o anonimizaremos los datos personales que controlamos en un plazo razonable, salvo registros que debamos conservar (por ejemplo facturas). Parte del caché puede vivir en tu dispositivo (localStorage) hasta que lo borres o desinstales la Plataforma. Los registros de blockchain que no controlamos no se pueden borrar.`,
@@ -348,6 +366,15 @@ export const PRIVACY: Record<Language, LegalDoc> = {
         heading: '7. Pagamentos',
         paragraphs: [
           'Os pagamentos Premium são processados pela Stripe. A política de privacidade da Stripe aplica-se aos dados de pagamento que ela coleta. Conservamos registros de plano, status e renovação necessários para entregar o Premium e para obrigações contábeis ou tributárias.',
+        ],
+      },
+      {
+        heading: '7.1 Emails promocionais opcionais',
+        paragraphs: [
+          `Quando você entra no Premium (a associação Green Lion Kings), o pagamento é processado pela Stripe em nome da Salvazion, Inc. Lá você pode escolher receber emails promocionais da Salvazion, Inc. É opcional e independente da sua associação: se você não aceitar, seu acesso não muda.`,
+          `Se você aceitar, usamos seu email apenas para enviar esses emails. Se você aceitar e deixar um pagamento sem concluir, podemos enviar um único lembrete para concluí-lo.`,
+          `Você pode retirar seu consentimento a qualquer momento pelo link de descadastro em cada email ou escrevendo para ${SUPPORT_EMAIL}.`,
+          `Não vendemos nem compartilhamos seu email para marketing de terceiros.`,
         ],
       },
       {

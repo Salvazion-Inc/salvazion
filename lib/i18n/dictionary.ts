@@ -601,6 +601,10 @@ export const dictionary = {
       errUnavailable: 'La verificación no está disponible todavía.',
       errGeneric: 'No se pudo verificar. Intenta de nuevo.',
       premiumNote: 'Premium ($49/mes) es IA ilimitada. El bono solo duplica el cupo Free.',
+      trialEligible: 'Con tu wallet $SALVAZION verificada, tu primer mes de Premium viene incluido. Después continúa al precio normal del plan que elijas, salvo que canceles antes.',
+      trialRule: 'El mes incluido requiere un saldo mínimo verificado de $SALVAZION, y el de tu wallet todavía no lo alcanza. Puedes seguir usando la plataforma gratis.',
+      trialUsed: 'El mes incluido ya se usó en esta cuenta o en esta wallet.',
+      trialUnavailable: 'Ahora no podemos confirmar el saldo de tu wallet, así que el pago sigue al precio normal.',
     },
     wallet: {
       title: 'Billetera Web3',
@@ -1702,6 +1706,10 @@ export const dictionary = {
       errUnavailable: 'Verification is not available yet.',
       errGeneric: 'Could not verify. Please try again.',
       premiumNote: 'Premium ($49/mo) is unlimited AI. The bonus only doubles the Free limits.',
+      trialEligible: 'With your verified $SALVAZION wallet, your first month of Premium is included. After that, it continues at the regular price of the plan you choose, unless you cancel before.',
+      trialRule: "The included month requires a minimum verified $SALVAZION balance, and your wallet doesn't reach it yet. You can keep using the platform for free.",
+      trialUsed: 'The included month has already been used on this account or this wallet.',
+      trialUnavailable: "We can't confirm your wallet balance right now, so checkout continues at the regular price.",
     },
     wallet: {
       title: 'Web3 Wallet',

@@ -59,6 +59,21 @@ NEXT_PUBLIC_STRIPE_PRICE_MONTHLY=price_1U0WEWHOw5ZkjRlZHXRW0gAX
 NEXT_PUBLIC_STRIPE_PRICE_ANNUAL=price_1U0WEXHOw5ZkjRlZOwkxysed
 ```
 
+## $SALVAZION holder access: first month included (DEC-20261011-27)
+
+Signed-in hub checkout only (`/api/billing/checkout`, monthly and annual). The guest `/premium/checkout` never gets a trial.
+
+At Checkout Session creation the server (`lib/billing/holder-trial-server.ts`, rules in `lib/billing/holder-trial.ts`) checks, failing closed on any doubt:
+1. Verified wallet in `wallet_holder_links` (signature flow verify-holdings v1).
+2. Fresh on-chain $SALVAZION balance (Token-2022, RPC `getTokenAccountsByOwner`).
+3. USD price from Jupiter Price API v3 (`usdPrice`), quote no older than `HOLDER_TRIAL_MAX_PRICE_AGE_SLOTS` (≈24 h) vs current slot; optional `HOLDER_TRIAL_MIN_LIQUIDITY_USD`. Unavailable/stale → no trial.
+4. `balance × price ≥ HOLDER_TRIAL_MIN_USD` (default 20).
+5. Never used: no prior subscription for the Stripe customer, and no subscription found by Stripe Search with `metadata['holder_trial_wallet']` = wallet hash or `metadata['supabase_user_id']` = user. Stripe error → no trial. No DB migration.
+
+If eligible: `subscription_data.trial_period_days = 30`, `payment_method_collection = 'always'`, metadata `holder_trial=true` + `holder_trial_wallet=<sha256 hash>`, earlier open holder-trial sessions of the customer are expired, and `product_events` gets `holder_trial_checkout`. After 30 days Stripe charges the normal price (US$49/mo or US$468/yr). No coupons, promotion codes or `discounts` (DEC-20261011-26). Not eligible → normal full-price checkout.
+
+`/hub/profile` (holder card) shows one informational line from `GET /api/billing/holder-trial` (no wallet, balance or USD value returned). Kill switch: `HOLDER_TRIAL_ENABLED=0`.
+
 ## Webhook
 
 1. Stripe Dashboard → Developers → Webhooks  

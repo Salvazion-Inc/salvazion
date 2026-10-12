@@ -20,6 +20,27 @@ type Status = {
 
 type Phase = 'idle' | 'signing' | 'checking';
 
+type TrialState = 'eligible' | 'used' | 'rule' | 'unavailable' | 'none';
+
+const TRIAL_KEYS: Record<Exclude<TrialState, 'none'>, string> = {
+  eligible: 'holder.trialEligible',
+  used: 'holder.trialUsed',
+  rule: 'holder.trialRule',
+  unavailable: 'holder.trialUnavailable',
+};
+
+/** $SALVAZION holder access line (DEC-20261011-27). Informational; checkout re-checks server-side. */
+async function fetchTrialState(): Promise<TrialState | null> {
+  try {
+    const res = await fetch('/api/billing/holder-trial', { credentials: 'include', cache: 'no-store' });
+    if (!res.ok) return null;
+    const j = (await res.json()) as { state?: TrialState };
+    return j.state ?? null;
+  } catch {
+    return null;
+  }
+}
+
 const ERROR_KEYS: Record<string, string> = {
   wallet_taken: 'holder.errTaken',
   rpc_unavailable: 'holder.errRpc',
@@ -49,6 +70,7 @@ export default function HolderVerifyCard({ className = '' }: { className?: strin
   const [phase, setPhase] = useState<Phase>('idle');
   const [error, setError] = useState<string | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [trial, setTrial] = useState<TrialState | null>(null);
 
   const loadStatus = useCallback(async () => {
     const next = await fetchHolderStatus();
@@ -64,6 +86,19 @@ export default function HolderVerifyCard({ className = '' }: { className?: strin
       alive = false;
     };
   }, []);
+
+  const linkedWallet = status?.linked ? status.wallet ?? null : null;
+  const balanceKey = status?.balance;
+  useEffect(() => {
+    if (!linkedWallet) return;
+    let alive = true;
+    void fetchTrialState().then((next) => {
+      if (alive) setTrial(next);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [linkedWallet, balanceKey]);
 
   const connectedAddress = connected && publicKey ? publicKey.toBase58() : null;
 
@@ -166,6 +201,11 @@ export default function HolderVerifyCard({ className = '' }: { className?: strin
           ) : (
             <p className="text-xs text-amber-300/90">{t('holder.noBalance')}</p>
           )}
+          {linked && trial && trial !== 'none' ? (
+            <p className="text-[11px] text-[var(--sage)] leading-relaxed" data-testid="holder-trial-line">
+              {t(TRIAL_KEYS[trial])}
+            </p>
+          ) : null}
         </div>
       ) : null}
 

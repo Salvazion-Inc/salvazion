@@ -20,6 +20,11 @@ import {
 } from '@/lib/billing/request-guard';
 import { billingLog } from '@/lib/billing/redact';
 import { buildHubCheckoutParams } from '@/lib/billing/checkout-params';
+import {
+  checkHolderTrial,
+  expireOpenHolderTrialSessions,
+} from '@/lib/billing/holder-trial-server';
+import { logProductEvent } from '@/lib/analytics/product-events';
 
 export const runtime = 'nodejs';
 
@@ -83,15 +88,31 @@ async function createCheckoutSession(user: User, interval: BillingInterval) {
     });
   }
 
-  return stripe.checkout.sessions.create(
+  // $SALVAZION holder access (DEC-20261011-27): server-side check at creation
+  // time; any doubt → no trial, normal full-price checkout.
+  const trial = await checkHolderTrial(stripe, user.id, customerId);
+  const holderTrial = trial.eligible && trial.walletHash ? { walletHash: trial.walletHash } : null;
+  if (holderTrial) await expireOpenHolderTrialSessions(stripe, customerId);
+
+  const session = await stripe.checkout.sessions.create(
     buildHubCheckoutParams({
       customerId,
       userId: user.id,
       priceId,
       interval,
       baseUrl: base,
+      holderTrial,
     })
   );
+  if (holderTrial) {
+    await logProductEvent('holder_trial_checkout', user.id, {
+      wallet_hash: holderTrial.walletHash,
+      interval,
+      usd_value: trial.usdValue,
+      session_id: session.id,
+    });
+  }
+  return session;
 }
 
 export async function GET(req: NextRequest) {

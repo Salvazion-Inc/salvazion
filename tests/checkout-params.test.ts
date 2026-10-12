@@ -13,11 +13,16 @@ const BASE = 'https://salvazion.org';
 
 function assertConsentAndRecovery(p: Record<string, unknown>) {
   assert.deepEqual(p.consent_collection, { promotions: 'auto' });
-  assert.deepEqual(p.after_expiration, {
-    recovery: { enabled: true, allow_promotion_codes: true },
-  });
-  // Unchanged from before: promotion codes allowed, and the same on recovery.
-  assert.equal(p.allow_promotion_codes, true);
+  assert.deepEqual(p.after_expiration, { recovery: { enabled: true } });
+  // DEC-20261011-26: Premium never uses promo codes or discounts. Not sent at
+  // all (Stripe default = false), on the session or on the recovery link.
+  assert.equal('allow_promotion_codes' in p, false);
+  assert.equal(
+    'allow_promotion_codes' in ((p.after_expiration as { recovery: object }).recovery),
+    false
+  );
+  assert.equal('discounts' in p, false);
+  assert.doesNotMatch(JSON.stringify(p), /promotion_code|coupon|discount/);
   // Never ask Stripe to require terms acceptance or pre-set consent here.
   assert.equal((p.consent_collection as Record<string, unknown>).terms_of_service, undefined);
 }

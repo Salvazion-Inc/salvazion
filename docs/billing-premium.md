@@ -72,8 +72,8 @@ NEXT_PUBLIC_STRIPE_PRICE_ANNUAL=price_1U0WEXHOw5ZkjRlZOwkxysed
 Both Premium Checkout flows (guest `/premium/checkout` and signed-in `/api/billing/checkout`) build their params in `lib/billing/checkout-params.ts` and always send:
 
 - `consent_collection.promotions = 'auto'` — Stripe shows its own "Keep me updated with news and personalized offers" checkbox where allowed (US business + US customers only). Stripe picks the default state from the account jurisdiction and the customer IP; it is **unchecked** wherever affirmative consent is required, but for US account + US customer Stripe may default it to checked (US law allows opt-out). The choice is stored on `session.consent.promotions` (`opt_in` / `opt_out`).
-- `after_expiration.recovery.enabled = true` (+ `allow_promotion_codes = true`, same as the live session) — an expired session (24 h default) carries a recovery URL valid 30 days.
-- `allow_promotion_codes = true` (unchanged).
+- `after_expiration.recovery.enabled = true` — an expired session (24 h default) carries a recovery URL valid 30 days. `recovery.allow_promotion_codes` is not sent (default false).
+- **No promotion codes or discounts** (DEC-20261011-26, SLV-NOPROMO-20261011-1): `allow_promotion_codes` is omitted (Stripe default `false`, so Checkout shows no "Add promotion code" field) and no `discounts` are passed. Premium never uses discounts or promo codes; re-enabling needs a new zone-A decision by Cristian. Any holder benefit (e.g. a free month, DEC-20261011-27, unconfirmed) must be designed without promo codes.
 
 **Stripe-collected promotions consent is NOT used to contact anyone** (MTP: the API cannot tell a Stripe pre-checked box from one the customer ticked; `consent.promotions` is only the final `opt_in`/`opt_out`). Abandoned checkouts are only logged. Contacting anyone would need our own unchecked checkbox before redirecting to Checkout (future change, not built).
 

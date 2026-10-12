@@ -1,5 +1,6 @@
 import type Stripe from 'stripe';
 import type { BillingInterval } from './plans';
+import { HOLDER_TRIAL_DAYS } from './holder-trial';
 
 /**
  * Pure builders for the Premium Stripe Checkout Session params (guest
@@ -76,12 +77,27 @@ export type HubCheckoutParamsInput = {
   priceId: string;
   interval: BillingInterval;
   baseUrl: string;
+  /**
+   * $SALVAZION holder access (DEC-20261011-27): set ONLY by the server after
+   * checkHolderTrial() said eligible. Adds a 30-day subscription trial, never
+   * a coupon or promotion code (DEC-20261011-26).
+   */
+  holderTrial?: { walletHash: string } | null;
 };
+
+export const HOLDER_TRIAL_SUBMIT_MESSAGE =
+  'With your verified $SALVAZION wallet, your first month of Premium is included. After that, it continues at the regular price unless you cancel before the month ends.';
 
 export function buildHubCheckoutParams(
   input: HubCheckoutParamsInput
 ): Stripe.Checkout.SessionCreateParams {
-  const { customerId, userId, priceId, interval, baseUrl } = input;
+  const { customerId, userId, priceId, interval, baseUrl, holderTrial } = input;
+  const trial = holderTrial
+    ? {
+        trial_period_days: HOLDER_TRIAL_DAYS,
+        meta: { holder_trial: 'true', holder_trial_wallet: holderTrial.walletHash },
+      }
+    : null;
   return {
     mode: 'subscription',
     customer: customerId,
@@ -90,14 +106,19 @@ export function buildHubCheckoutParams(
     success_url: `${baseUrl}/hub/premium/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${baseUrl}/hub/premium?billing=cancel`,
     ...premiumConsentAndRecoveryParams(),
+    ...(trial ? { payment_method_collection: 'always' as const } : {}),
     custom_text: {
-      submit: { message: LEGAL_SUBMIT_MESSAGE },
+      submit: {
+        message: trial ? `${HOLDER_TRIAL_SUBMIT_MESSAGE} ${LEGAL_SUBMIT_MESSAGE}` : LEGAL_SUBMIT_MESSAGE,
+      },
     },
     subscription_data: {
+      ...(trial ? { trial_period_days: trial.trial_period_days } : {}),
       metadata: {
         supabase_user_id: userId,
         app: 'salvazion',
         interval,
+        ...(trial ? trial.meta : {}),
       },
     },
     metadata: {
@@ -105,6 +126,7 @@ export function buildHubCheckoutParams(
       app: 'salvazion',
       interval,
       price_id: priceId,
+      ...(trial ? trial.meta : {}),
     },
   };
 }

@@ -595,6 +595,10 @@ export const dictionaryPt = {
     errUnavailable: 'A verificação ainda não está disponível.',
     errGeneric: 'Não foi possível verificar. Tente de novo.',
     premiumNote: 'Premium ($49/mês) é IA ilimitada. O bônus só dobra a cota Free.',
+    trialEligible: 'Com sua wallet $SALVAZION verificada, seu primeiro mês de Premium vem incluído. Depois continua ao preço normal do plano que você escolher, a menos que cancele antes.',
+    trialRule: 'O mês incluído exige um saldo mínimo verificado de $SALVAZION, e o da sua wallet ainda não chega a ele. Você pode continuar usando a plataforma de graça.',
+    trialUsed: 'O mês incluído já foi usado nesta conta ou nesta wallet.',
+    trialUnavailable: 'Agora não conseguimos confirmar o saldo da sua wallet, então o pagamento segue ao preço normal.',
   },
   wallet: {
     title: 'Carteira Web3',

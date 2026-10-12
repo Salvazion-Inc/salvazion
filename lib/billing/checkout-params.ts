@@ -18,11 +18,12 @@ import type { BillingInterval } from './plans';
  *   Nothing here sends email; any recovery email is a separate, approved flow
  *   and only for customers with consent.promotions === 'opt_in'.
  *
- * allow_promotion_codes stays as it was (true) and the recovered session keeps
- * the same setting.
+ * No promotion codes (DEC-20261011-26, SLV-NOPROMO-20261011-1): Premium never
+ * uses discounts or promo codes. allow_promotion_codes is NOT sent, neither on
+ * the session nor on after_expiration.recovery, so Stripe applies its default
+ * (false) and Checkout shows no "Add promotion code" field. No `discounts`
+ * either. Do not add them back without a new zone-A decision by Cristian.
  */
-
-export const PREMIUM_ALLOW_PROMOTION_CODES = true;
 
 export const TERMS_URL = 'https://salvazion.org/terms';
 export const PRIVACY_URL = 'https://salvazion.org/privacy';
@@ -31,16 +32,12 @@ const LEGAL_SUBMIT_MESSAGE = `By confirming you agree to Salvazion [Terms of Ser
 
 export function premiumConsentAndRecoveryParams(): Pick<
   Stripe.Checkout.SessionCreateParams,
-  'allow_promotion_codes' | 'consent_collection' | 'after_expiration'
+  'consent_collection' | 'after_expiration'
 > {
   return {
-    allow_promotion_codes: PREMIUM_ALLOW_PROMOTION_CODES,
     consent_collection: { promotions: 'auto' },
     after_expiration: {
-      recovery: {
-        enabled: true,
-        allow_promotion_codes: PREMIUM_ALLOW_PROMOTION_CODES,
-      },
+      recovery: { enabled: true },
     },
   };
 }

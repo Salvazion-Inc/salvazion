@@ -8,6 +8,18 @@ export async function middleware(request: NextRequest) {
 
   const path = request.nextUrl.pathname;
 
+  // Founder board. Session required; the page rejects every other account.
+  if (path === '/dashboard' || path.startsWith('/dashboard/')) {
+    if (!user) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/auth/login';
+      url.search = '';
+      url.searchParams.set('next', '/dashboard');
+      return NextResponse.redirect(url);
+    }
+    return supabaseResponse;
+  }
+
   // Protect the entire Hub
   if (path.startsWith('/hub')) {
     if (!user) {
@@ -50,5 +62,5 @@ export async function middleware(request: NextRequest) {
 export const config = {
   // Only auth-sensitive routes. Running getUser() on the public site
   // caused 504 MIDDLEWARE_INVOCATION_TIMEOUT when Supabase hung.
-  matcher: ['/hub/:path*', '/auth/:path*'],
+  matcher: ['/hub/:path*', '/auth/:path*', '/dashboard', '/dashboard/:path*'],
 };

@@ -9,6 +9,15 @@ Operator console for **real business metrics** (not app vanity).
 - **Only** `info@salvazion.org` (optional extras via `BUSINESS_ADMIN_EMAILS` comma-list)
 - Other signed-in users receive **403**; signed-out **401**
 
+## Group dashboard
+
+- Route: `/dashboard` — https://salvazion.org/dashboard
+- API: `GET /api/founders/dashboard`
+- Founders: `info@salvazion.org`, plus `BUSINESS_ADMIN_EMAILS` and optional `FOUNDER_EMAILS`
+- Live catalog from the Salvazion archive, public Kaenz and Mapucoin APIs, mindicador.cl, and DexScreener
+- Signed-out users go to login. Other accounts receive **403** with no catalog payload
+- The page polls about every 60 seconds. A failed source stays blank
+
 ## Sources of truth
 
 | Source | Metrics |

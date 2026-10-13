@@ -5,7 +5,11 @@
 const FALLBACK = '/hub/dashboard';
 const ONBOARDING = '/hub/onboarding';
 
-/** Only allow relative in-app paths under /hub or /auth. */
+function isFounderDashboard(path: string): boolean {
+  return path === '/dashboard' || path.startsWith('/dashboard?');
+}
+
+/** Only allow relative in-app paths under /hub, /auth, or the founder dashboard. */
 export function safeNextPath(
   next: string | null | undefined,
   fallback: string = FALLBACK
@@ -14,7 +18,15 @@ export function safeNextPath(
   const trimmed = next.trim();
   if (!trimmed.startsWith('/') || trimmed.startsWith('//')) return fallback;
   if (trimmed.includes('://') || trimmed.includes('\\')) return fallback;
-  if (!(trimmed.startsWith('/hub') || trimmed.startsWith('/auth'))) return fallback;
+  if (
+    !(
+      trimmed.startsWith('/hub') ||
+      trimmed.startsWith('/auth') ||
+      isFounderDashboard(trimmed)
+    )
+  ) {
+    return fallback;
+  }
   // Block nested protocol tricks like /hub/dashboard@evil.com
   if (/[\s@]/.test(trimmed)) return fallback;
   return trimmed;
@@ -56,6 +68,7 @@ export function destinationAfterAuth(
   onboardingCompleted: boolean
 ): string {
   const safe = safeNextPath(next, FALLBACK);
+  if (safe === '/dashboard' || safe.startsWith('/dashboard?')) return safe;
   if (onboardingCompleted) {
     if (safe.startsWith(ONBOARDING)) {
       const nested = nestedNextParam(safe);

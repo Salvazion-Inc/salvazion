@@ -21,6 +21,7 @@ const PUBLIC_ALLOW = [
 
 const PRIVATE_DISALLOW = [
   '/hub/',
+  '/dashboard',
   '/api/',
   '/auth/callback',
   '/auth/confirm',

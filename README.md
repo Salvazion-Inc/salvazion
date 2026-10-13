@@ -9,6 +9,7 @@ Plataforma: **Salvation · Health · Freedom**. Coach: **Salvazion AI**. Comunid
 | URL | Uso |
 |-----|-----|
 | [salvazion.org](https://salvazion.org) | **Esta app** (Vercel + Supabase) — dominio principal |
+| [salvazion.org/dashboard](https://salvazion.org/dashboard) | Tablero del grupo, solo fundadores |
 | [app.salvazion.org](https://app.salvazion.org) | Alias legacy → redirige a `salvazion.org` |
 
 Guía DNS / Vercel / Supabase: [`docs/domains.md`](docs/domains.md).  

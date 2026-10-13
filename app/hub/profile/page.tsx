@@ -48,6 +48,7 @@ import { formatSalvazion } from '@/lib/solana/balances';
 import { shortenAddress } from '@/lib/solana/config';
 import { logAction, computeScores } from '@/lib/scoring/engine';
 import { isBusinessAdminEmail } from '@/lib/business/access';
+import { isFounderEmail } from '@/lib/founders/access';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -654,6 +655,38 @@ export default function ProfilePage() {
                   : lang === 'pt'
                     ? 'Abrir consola →'
                     : 'Abrir consola →'}
+              </p>
+            </Link>
+          )}
+
+          {isFounderEmail(email) && (
+            <Link
+              href="/dashboard"
+              className="card-soft block p-4 border border-[var(--border-strong)] hover:border-[var(--accent)]/50 transition group mb-2"
+            >
+              <p className="text-[10px] uppercase tracking-wider text-[var(--accent)]">
+                Salvazion, Inc.
+              </p>
+              <p className="text-sm font-semibold text-white group-hover:text-[var(--accent)] transition mt-0.5">
+                {lang === 'en'
+                  ? 'Group dashboard'
+                  : lang === 'pt'
+                    ? 'Painel do grupo'
+                    : 'Tablero del grupo'}
+              </p>
+              <p className="text-[11px] text-[var(--sage)] mt-1 leading-relaxed">
+                {lang === 'en'
+                  ? 'Live catalog for Salvazion, Kaenz, and Mapucoin. Founders only.'
+                  : lang === 'pt'
+                    ? 'Catálogo ao vivo de Salvazion, Kaenz e Mapucoin. Só fundadores.'
+                    : 'Catálogo en vivo de Salvazion, Kaenz y Mapucoin. Solo fundadores.'}
+              </p>
+              <p className="text-[11px] text-[var(--accent)] mt-2 font-medium">
+                {lang === 'en'
+                  ? 'Open dashboard →'
+                  : lang === 'pt'
+                    ? 'Abrir painel →'
+                    : 'Abrir tablero →'}
               </p>
             </Link>
           )}

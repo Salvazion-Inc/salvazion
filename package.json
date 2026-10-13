@@ -41,6 +41,7 @@
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.8",
     "@vercel/analytics": "^2.0.1",
+    "bigint-buffer": "file:packages/bigint-buffer",
     "bs58": "^6.0.0",
     "maplibre-gl": "^6.4.0",
     "next": "16.2.10",
@@ -65,5 +66,8 @@
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
     "typescript": "^5"
+  },
+  "overrides": {
+    "bigint-buffer": "file:packages/bigint-buffer"
   }
 }

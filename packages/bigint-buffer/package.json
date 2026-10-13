@@ -1,0 +1,10 @@
+{
+  "name": "bigint-buffer",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Bounded pure-JavaScript replacement for the bigint-buffer native addon.",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "browser": "index.js",
+  "license": "Apache-2.0"
+}

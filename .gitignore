@@ -57,5 +57,23 @@ ios/App/App/public
 ios/DerivedData
 ios/App/output
 
-# Video build temp frames
+# Video build temp frames and local Welcome drafts
 tmp/
+tmp-en-README.md
+tmp-gitbook-aside/
+
+# Local research captures. Not product source.
+data/freedom/*-entity.json
+data/freedom/articles-body.txt
+data/freedom/articles-page.html
+data/freedom/articles-screenshot.png
+data/freedom/initial-state.json
+data/freedom/netlog.json
+data/freedom/sample-tweet.json
+data/freedom/usertweets-full.json
+data/freedom/x-articles-catalog-partial.json
+data/freedom/x-articles-full-raw.json
+data/x-articles-raw.json
+
+*.jks
+*.keystore

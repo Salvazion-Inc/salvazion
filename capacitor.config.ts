@@ -40,7 +40,7 @@ loadDotEnvLocal();
 const serverUrl = (
   process.env.CAPACITOR_SERVER_URL ||
   process.env.NEXT_PUBLIC_APP_URL ||
-  ''
+  'https://salvazion.org'
 ).replace(/\/$/, '');
 
 const config: CapacitorConfig = {
@@ -55,6 +55,15 @@ const config: CapacitorConfig = {
           cleartext: serverUrl.startsWith('http://'),
           androidScheme: 'https',
           iosScheme: 'https',
+          allowNavigation: [
+            'salvazion.org',
+            '*.salvazion.org',
+            '*.stripe.com',
+            'accounts.google.com',
+            '*.supabase.co',
+            'api.x.com',
+            'x.com',
+          ],
         },
       }
     : {

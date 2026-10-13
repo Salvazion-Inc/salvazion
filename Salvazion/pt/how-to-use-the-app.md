@@ -7,7 +7,7 @@ description: Como viver Salvação, Saúde e Liberdade dentro da Plataforma Salv
 
 # Como usar a Plataforma
 
-**Idioma:** [English](https://welcome.salvazion.org/) · [Español](https://bienvenida.salvazion.org/) · Português
+**Idioma:** [English](https://welcome.salvazion.org/) · [Español](https://welcome.salvazion.org/bienvenida/) · Português
 
 Você já tem conta. Agora viva: um pilar de cada vez, um dia de cada vez, com a **Comunidade** e a **Salvazion AI** ao teu lado.
 

@@ -7,7 +7,7 @@ description: Salvazion Premium — las 10 claves de Gratis más 9 profundidades.
 
 # Salvazion Premium
 
-**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://bem-vindo.salvazion.org/)
+**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://welcome.salvazion.org/bem-vindo/)
 
 Gratis es cómo entras a la Comunidad. Premium es cómo dejas de racionar la lucha.
 

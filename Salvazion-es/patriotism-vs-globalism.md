@@ -6,7 +6,7 @@ coverY: 0
 
 # Patriotismo vs. Globalismo
 
-**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://bem-vindo.salvazion.org/)
+**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://welcome.salvazion.org/bem-vindo/)
 
 El [patriotismo](https://x.com/salvazion_/status/1802075118102868393) es amor, orgullo y lealtad a la nación. El [globalismo](https://x.com/salvazion_/status/1802072149852598564) pone lo supranacional por encima de la soberanía.
 

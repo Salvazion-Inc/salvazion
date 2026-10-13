@@ -6,7 +6,7 @@ coverY: 0
 
 # Cultura Cristã Ocidental
 
-**Idioma:** [English](https://welcome.salvazion.org/) · [Español](https://bienvenida.salvazion.org/) · Português
+**Idioma:** [English](https://welcome.salvazion.org/) · [Español](https://welcome.salvazion.org/bienvenida/) · Português
 
 A [Cultura Cristã Ocidental](https://x.com/salvazion_/status/1807967743334809802) — ética judaico-cristã, filosofia clássica, família, Igreja e Estado de direito — forjou direitos humanos, ciência e instituições. Hoje enfrenta ameaças existenciais.
 

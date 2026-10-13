@@ -4,7 +4,7 @@ icon: rocket-launch
 
 # El viaje de largo plazo
 
-**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://bem-vindo.salvazion.org/)
+**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://welcome.salvazion.org/bem-vindo/)
 
 Salvazion no es un reto de 30 días. Es un cambio de era que se entra un día a la vez.
 

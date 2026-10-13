@@ -7,7 +7,7 @@ description: Crea tu cuenta gratis en Salvazion, inicia sesión e instala la Pla
 
 # Crea tu cuenta
 
-**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://bem-vindo.salvazion.org/)
+**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://welcome.salvazion.org/bem-vindo/)
 
 Las puertas están abiertas. Una cuenta gratis basta para empezar la guerra por tu propia alma — y para caminar con la Comunidad.
 

@@ -6,7 +6,7 @@ coverY: 0
 
 # Guerra espiritual
 
-**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://bem-vindo.salvazion.org/)
+**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://welcome.salvazion.org/bem-vindo/)
 
 Estamos en [Guerra espiritual](https://x.com/salvazion_/status/1814809328873816148) porque el conflicto antiguo entre el Reino de Dios y el reino de las tinieblas —anunciado en Génesis 3:15 y revelado en Efesios 6:12— ha llegado a un crescendo global, existencial y tecnológico. No es metáfora. Es la fase decisiva de la batalla por el alma del hombre, la familia, la nación y el orden creado.
 

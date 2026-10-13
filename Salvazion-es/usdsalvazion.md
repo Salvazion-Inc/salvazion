@@ -6,7 +6,7 @@ coverY: 0
 
 # $SALVAZION: The Patriotic Bitcoin
 
-**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://bem-vindo.salvazion.org/)
+**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://welcome.salvazion.org/bem-vindo/)
 
 Bitcoin nació como efectivo entre pares, sin amos. Los metacapitalistas globalistas —BlackRock y similares— lo capturaron con ETFs y participación en acumuladores corporativos. Eso rompe la soberanía y la descentralización.
 

@@ -7,7 +7,7 @@ description: Crie sua conta grátis na Salvazion, entre e instale a Plataforma c
 
 # Crie sua conta
 
-**Idioma:** [English](https://welcome.salvazion.org/) · [Español](https://bienvenida.salvazion.org/) · Português
+**Idioma:** [English](https://welcome.salvazion.org/) · [Español](https://welcome.salvazion.org/bienvenida/) · Português
 
 As portas estão abertas. Uma conta grátis basta para começar a guerra pela sua própria alma — e para caminhar com a Comunidade.
 

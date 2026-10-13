@@ -6,7 +6,7 @@ coverY: 73
 
 # Fundadores com "bons genes"
 
-**Idioma:** [English](https://welcome.salvazion.org/) · [Español](https://bienvenida.salvazion.org/) · Português
+**Idioma:** [English](https://welcome.salvazion.org/) · [Español](https://welcome.salvazion.org/bienvenida/) · Português
 
 Uma família ordinária, mas com “bons genes”.
 

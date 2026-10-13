@@ -6,7 +6,7 @@ coverY: 0
 
 # Cultura Cristiana Occidental
 
-**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://bem-vindo.salvazion.org/)
+**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://welcome.salvazion.org/bem-vindo/)
 
 La [Cultura Cristiana Occidental](https://x.com/salvazion_/status/1807967743334809802) — ética judeocristiana, filosofía clásica, familia, Iglesia y Estado de derecho — forjó derechos humanos, ciencia e instituciones. Hoy enfrenta amenazas existenciales.
 

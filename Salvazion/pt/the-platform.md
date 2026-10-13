@@ -7,7 +7,7 @@ description: Uma só Plataforma para Salvação, Saúde e Liberdade. Hábitos, s
 
 # A Plataforma Salvazion
 
-**Idioma:** [English](https://welcome.salvazion.org/) · [Español](https://bienvenida.salvazion.org/) · Português
+**Idioma:** [English](https://welcome.salvazion.org/) · [Español](https://welcome.salvazion.org/bienvenida/) · Português
 
 O mundo secular te parte em pedaços: a fé numa aba, o corpo noutra, as notícias numa terceira, o dinheiro numa quarta.
 

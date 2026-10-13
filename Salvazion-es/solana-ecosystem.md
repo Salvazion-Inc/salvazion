@@ -6,7 +6,7 @@ coverY: 0
 
 # Ecosistema Solana
 
-**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://bem-vindo.salvazion.org/)
+**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://welcome.salvazion.org/bem-vindo/)
 
 Solana es la cadena donde vive $SALVAZION. Bitcoin abrió el dinero soberano; Solana da velocidad y comisiones mínimas para usarlo todos los días.
 

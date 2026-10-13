@@ -6,7 +6,7 @@ coverY: 0
 
 # Comunidad global en 𝕏
 
-**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://bem-vindo.salvazion.org/)
+**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://welcome.salvazion.org/bem-vindo/)
 
 Las comunidades globales con un propósito común importan: la acción colectiva, anclada en principios que no caducan, avanza sin entregar la libertad de cada persona ni la identidad de cada nación.
 

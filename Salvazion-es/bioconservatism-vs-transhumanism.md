@@ -6,7 +6,7 @@ coverY: 0
 
 # BioConservadurismo vs Transhumanismo
 
-**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://bem-vindo.salvazion.org/)
+**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://welcome.salvazion.org/bem-vindo/)
 
 El BioConservadurismo pide cautela ante las biotecnologías: preservar la dignidad humana, la biología natural y los límites éticos.
 

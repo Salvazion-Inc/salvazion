@@ -4,7 +4,7 @@ icon: rocket-launch
 
 # A jornada de longo prazo
 
-**Idioma:** [English](https://welcome.salvazion.org/) · [Español](https://bienvenida.salvazion.org/) · Português
+**Idioma:** [English](https://welcome.salvazion.org/) · [Español](https://welcome.salvazion.org/bienvenida/) · Português
 
 A Salvazion não é um desafio de 30 dias. É uma mudança de era que se entra um dia de cada vez.
 

@@ -6,7 +6,7 @@ coverY: 0
 
 # Make Salvation, Health and Freedom Great Again
 
-**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://bem-vindo.salvazion.org/)
+**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://welcome.salvazion.org/bem-vindo/)
 
 Nuestro Propósito Transformador Masivo es **Make Salvation, Health and Freedom Great Again** con una Comunidad Global que defiende la Cultura Cristiana Occidental y el BioConservadurismo en Guerra Espiritual.
 

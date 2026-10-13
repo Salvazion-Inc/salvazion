@@ -8,7 +8,7 @@ icon: paw-claws
 
 ![12 Salvators](.gitbook/assets/12-salvators-es.jpg)
 
-**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://bem-vindo.salvazion.org/)
+**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://welcome.salvazion.org/bem-vindo/)
 
 No son eslóganes. Son las doce convicciones de un Green Lion King.
 

@@ -9,7 +9,7 @@ description: >-
 
 # Bienvenida a Salvazion
 
-**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://bem-vindo.salvazion.org/)
+**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://welcome.salvazion.org/bem-vindo/)
 
 Bienvenido, Green Lion King, a la lucha que no termina.
 

@@ -6,7 +6,7 @@ coverY: 0
 
 # Tokenomics
 
-**Idioma:** [English](https://welcome.salvazion.org/) · [Español](https://bienvenida.salvazion.org/) · Português
+**Idioma:** [English](https://welcome.salvazion.org/) · [Español](https://welcome.salvazion.org/bienvenida/) · Português
 
 $SALVAZION é o Bitcoin Patriótico da Comunidade. Não substitui o arrependimento, o sono nem o Premium. É soberania econômica alinhada à Cultura Cristã Ocidental, ao BioConservadorismo e à ordem antiglobalista.
 

@@ -3,35 +3,38 @@
  */
 import { APP_URL, MARKETING_URL, SUPPORT_EMAIL, WELCOME_URL } from '@/lib/config/site';
 
+/** Official purpose. Keep this sentence exact on the site, the Platform and Welcome. */
+export const PURPOSE =
+  'Restore Salvation, Health and Freedom to the Human Person created in the image of God';
+
 export const SEO = {
   siteName: 'Salvazion',
   legalName: 'Salvazion, Inc.',
-  tagline: 'Make Salvation, Health and Freedom Great Again',
-  /** Primary HTML title (root + OG) — keep slogan; under ~65 chars */
-  title: 'Salvazion | Make Salvation, Health and Freedom Great Again',
+  tagline: PURPOSE,
+  /** Browser tab and social title. Full purpose is `tagline`; stay under ~60 chars. */
+  title: 'Salvazion | Restore Salvation, Health and Freedom',
   titleTemplate: '%s | Salvazion',
   /**
    * Meta description for Google (~155–160 chars).
    */
-  description:
-    'The platform that restores the human person. Offline Bible, health & wearables, Freedom library, Community, Salvazion AI and $SALVAZION on Solana.',
+  description: `${PURPOSE}. Offline Bible, health and wearables, Freedom library and Community.`,
   /**
    * Slightly longer copy for WhatsApp / iMessage / LinkedIn / X cards.
    */
-  ogDescription:
-    'Make Salvation, Health and Freedom Great Again. One freemium Platform: offline Bible, devotionals, health & wearables, Freedom library, Community, Salvazion AI and $SALVAZION on Solana. Free to start.',
+  ogDescription: `${PURPOSE}. One freemium Platform: offline Bible, devotionals, health and wearables, Freedom library, Community, Salvazion AI and $SALVAZION on Solana. Free to start.`,
   descriptionEs:
-    'La plataforma que restaura a la persona humana. Biblia offline, salud y wearables, biblioteca Freedom, Community, IA Salvazion y $SALVAZION en Solana.',
+    'Restaurar la Salvación, la Salud y la Libertad a la Persona Humana creada a imagen de Dios. Biblia offline, salud, Freedom y Community.',
   ogDescriptionEs:
-    'Make Salvation, Health and Freedom Great Again. Una sola Plataforma freemium: Biblia offline, devocional, salud y wearables, biblioteca Freedom, Community, IA Salvazion y $SALVAZION en Solana. Empieza gratis.',
+    'Restaurar la Salvación, la Salud y la Libertad a la Persona Humana creada a imagen de Dios. Una sola Plataforma freemium: Biblia offline, devocional, salud y wearables, biblioteca Freedom, Community, IA Salvazion y $SALVAZION en Solana. Empieza gratis.',
   descriptionPt:
-    'A plataforma que restaura a pessoa humana. Bíblia offline, saúde e wearables, biblioteca Freedom, Community, IA Salvazion e $SALVAZION na Solana.',
+    'Restaurar a Salvação, a Saúde e a Liberdade à Pessoa Humana criada à imagem de Deus. Bíblia offline, saúde, Freedom e Community.',
   ogDescriptionPt:
-    'Make Salvation, Health and Freedom Great Again. Uma só Plataforma freemium: Bíblia offline, devocional, saúde e wearables, biblioteca Freedom, Community, IA Salvazion e $SALVAZION na Solana. Comece grátis.',
+    'Restaurar a Salvação, a Saúde e a Liberdade à Pessoa Humana criada à imagem de Deus. Uma só Plataforma freemium: Bíblia offline, devocional, saúde e wearables, biblioteca Freedom, Community, IA Salvazion e $SALVAZION na Solana. Comece grátis.',
   keywords: [
     'Salvazion',
     'Salvazion platform',
-    'Make Salvation Health and Freedom Great Again',
+    'Restore Salvation Health and Freedom',
+    'human person created in the image of God',
     'Christian lifestyle platform',
     'offline Bible platform',
     'faith health freedom',
@@ -69,7 +72,7 @@ export const SEO = {
   imageFallback: '/salvazion-logo-green-lion.png',
   logo: '/logo.png',
   ogImageAlt:
-    'Salvazion logo — Make Salvation, Health and Freedom Great Again. The platform that restores the human person.',
+    `${PURPOSE}. The platform that restores the human person.`,
   twitterHandle: '@salvazion_',
   category: 'Lifestyle',
   address: {

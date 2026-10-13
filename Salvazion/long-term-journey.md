@@ -46,7 +46,7 @@ Subscribe to Premium
 Invite to the Community · hold $SALVAZION if you will
 ```
 
-**Make Salvation, Health and Freedom Great Again.**
+**Restore Salvation, Health and Freedom to the Human Person created in the image of God.**
 
 {% hint style="success" %}
 Start the journey now: [https://salvazion.org/auth/signup](https://salvazion.org/auth/signup)

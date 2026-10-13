@@ -5,7 +5,7 @@ import { Devotional } from '@/lib/types';
  * - Cultura Cristiano-Occidental
  * - BioConservadurismo
  * - Fe, Familia, Propósito, Salud y Libertad
- * - Make Salvation, Health and Freedom Great Again
+ * - Restore Salvation, Health and Freedom to the Human Person created in the image of God
  */
 export const DEVOTIONALS_LIBRARY: Omit<Devotional, 'id' | 'date' | 'personalizedFor'>[] = [
   // === FE Y CONFIANZA ===

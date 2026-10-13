@@ -4,7 +4,7 @@
 
 ## 1. Learn the fundamentals
 
-* [Make Salvation, Health and Freedom Great Again](readme.md)
+* [Restore Salvation, Health and Freedom to the Human Person created in the image of God](readme.md)
 * [Spiritual Warfare](spiritual-warfare.md)
 * [Western Christian Culture](western-christian-culture.md)
 * [BioConservatism vs Transhumanism](bioconservatism-vs-transhumanism.md)
@@ -36,7 +36,7 @@
 ## Bienvenida
 
 * [Bienvenida a Salvazion](es/README.md)
-* [Make Salvation, Health and Freedom Great Again](es/purpose.md)
+* [Restore Salvation, Health and Freedom to the Human Person created in the image of God](es/purpose.md)
 * [Guerra espiritual](es/spiritual-warfare.md)
 * [Cultura Cristiana Occidental](es/western-christian-culture.md)
 * [BioConservadurismo vs Transhumanismo](es/bioconservatism-vs-transhumanism.md)
@@ -56,7 +56,7 @@
 ## Bem-vindo
 
 * [Boas-vindas à Salvazion](pt/README.md)
-* [Make Salvation, Health and Freedom Great Again](pt/purpose.md)
+* [Restore Salvation, Health and Freedom to the Human Person created in the image of God](pt/purpose.md)
 * [Guerra espiritual](pt/spiritual-warfare.md)
 * [Cultura Cristã Ocidental](pt/western-christian-culture.md)
 * [BioConservadorismo vs Transumanismo](pt/bioconservatism-vs-transhumanism.md)

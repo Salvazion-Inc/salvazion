@@ -15,7 +15,7 @@ Welcome, Green Lion King, to the eternal struggle.
 
 You have been called. Not by chance, but by divine providence — to stand in the breach where faith meets flesh, where spirit confronts the storm of a world unmoored.
 
-**Make Salvation, Health and Freedom Great Again.** This is our purpose and the reason we exist.
+**Restore Salvation, Health and Freedom to the Human Person created in the image of God.** This is our purpose and the reason we exist.
 
 This Welcome is not a brochure. It is the path from first conviction to a member who prays, trains, learns and sustains the Platform.
 

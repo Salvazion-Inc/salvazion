@@ -6,7 +6,7 @@ coverY: 0
 
 # AI Projects (Alerci, Zallud, Qolitica and Gepardo)
 
-To achieve our purpose: Make Salvation, Health and Freedom Great Again, we are implementing these 4 AI Projects:
+To achieve our purpose: Restore Salvation, Health and Freedom to the Human Person created in the image of God, we are implementing these 4 AI Projects:
 
 1. Alerci: Community of Christians around the World!
 

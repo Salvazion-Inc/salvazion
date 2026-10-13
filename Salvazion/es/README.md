@@ -15,7 +15,7 @@ Bienvenido, Green Lion King, a la lucha que no termina.
 
 No llegaste aquí por casualidad. Llegaste para ponerte en la brecha: donde la fe toca la carne, donde el espíritu enfrenta el vendaval de un mundo desamarrado.
 
-**Make Salvation, Health and Freedom Great Again.** Ese es nuestro propósito y la razón por la que existimos.
+**Restore Salvation, Health and Freedom to the Human Person created in the image of God.** Ese es nuestro propósito y la razón por la que existimos.
 
 Este Welcome no es un folleto. Es el camino: de la primera convicción a un miembro que ora, entrena, se forma y sostiene la Plataforma.
 

@@ -134,7 +134,11 @@ export default function ValueJourney({
         <div className="w-14 h-14 rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-active)] flex items-center justify-center text-2xl">
           {step.icon}
         </div>
-        <h2 className="font-display text-2xl font-bold text-white leading-tight">
+        <h2
+          className={`font-display font-bold text-white leading-tight text-balance ${
+            step.id === 'ready' ? 'text-xl sm:text-2xl' : 'text-2xl'
+          }`}
+        >
           {textWithXLogo(copy.title)}
         </h2>
         <p className="text-sm text-[var(--off-white)]/90 leading-relaxed">

@@ -4,7 +4,7 @@
 
 ## 1. Aprende los fundamentos
 
-* [Make Salvation, Health and Freedom Great Again](purpose.md)
+* [Restore Salvation, Health and Freedom to the Human Person created in the image of God](purpose.md)
 * [Guerra espiritual](spiritual-warfare.md)
 * [Cultura Cristiana Occidental](western-christian-culture.md)
 * [BioConservadurismo vs Transhumanismo](bioconservatism-vs-transhumanism.md)

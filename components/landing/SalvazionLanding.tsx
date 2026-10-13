@@ -19,6 +19,7 @@ import { welcomeUrlForLang } from '@/lib/config/site';
 import { pickLang } from '@/lib/i18n/locale';
 import UpgradeCta from '@/components/billing/UpgradeCta';
 import { signupUrlForCheckout } from '@/lib/billing/checkout-intent';
+import { PURPOSE } from '@/lib/seo/config';
 import PlanStatus from '@/components/billing/PlanStatus';
 import { useEntitlement } from '@/lib/billing/client';
 
@@ -243,16 +244,12 @@ export default function SalvazionLanding() {
 
           <h1
             id="hero-heading"
-            className="font-display font-bold leading-[0.95] tracking-tight text-[clamp(1.5rem,6.6vw,4.5rem)]"
+            className="font-display font-bold leading-[1.02] tracking-tight text-[clamp(1.45rem,5.6vw,3.75rem)] text-balance"
           >
-            {/* Exactly 3 lines on mobile — each line never wraps */}
-            <span className="block whitespace-nowrap neon-text">
-              {t.hero.titleLines[0]}
-            </span>
-            <span className="block whitespace-nowrap neon-text">
-              {t.hero.titleLines[1]}
-            </span>
-            <span className="block whitespace-nowrap text-[var(--accent)] drop-shadow-[0_0_24px_rgba(143,217,154,0.35)]">
+            {/* Three visual lines. Together they are PURPOSE. */}
+            <span className="block neon-text">{t.hero.titleLines[0]}</span>
+            <span className="block neon-text">{t.hero.titleLines[1]}</span>
+            <span className="mt-3 block text-[clamp(1rem,3.15vw,1.85rem)] font-medium leading-snug text-[var(--accent)] drop-shadow-[0_0_24px_rgba(143,217,154,0.35)] text-balance">
               {t.hero.titleLines[2]}
             </span>
           </h1>
@@ -644,11 +641,11 @@ const copy = {
       language: 'Language',
     },
     hero: {
-      /** Full motto in exactly three lines */
+      /** Official purpose, split so the hero stays readable on a phone. */
       titleLines: [
-        'MAKE SALVATION,',
-        'HEALTH AND FREEDOM',
-        'GREAT AGAIN',
+        'Restore Salvation,',
+        'Health and Freedom',
+        'to the Human Person created in the image of God.',
       ] as const,
       tagline: 'The secular world strips spirit, mind, body and soul.',
       tagline2: 'Salvazion gives them back — in one Platform.',
@@ -659,7 +656,7 @@ const copy = {
       eyebrow: 'Massive Transformative Purpose',
       title: 'The platform that restores the human person',
       body:
-        'Our Purpose is Make Salvation, Health and Freedom Great Again — a Community of Green Lion Kings that defends Western Christian Culture and BioConservatism in Spiritual Warfare. Exponential technologies and innovation at the service of people.',
+        `Our Purpose: ${PURPOSE}. A Community of Green Lion Kings that defends Western Christian Culture and BioConservatism in Spiritual Warfare. Exponential technologies and innovation at the service of people.`,
       cta: 'Open the Platform',
       areas: [
         {
@@ -763,11 +760,10 @@ const copy = {
       language: 'Idioma',
     },
     hero: {
-      /** Motto completo en exactamente tres líneas */
       titleLines: [
-        'MAKE SALVATION,',
-        'HEALTH AND FREEDOM',
-        'GREAT AGAIN',
+        'Restore Salvation,',
+        'Health and Freedom',
+        'to the Human Person created in the image of God.',
       ] as const,
       tagline: 'El mundo secular te quita el espíritu, mente, cuerpo y alma.',
       tagline2: 'Salvazion te los devuelve — en una sola Plataforma.',
@@ -778,7 +774,7 @@ const copy = {
       eyebrow: 'Propósito Transformador Masivo',
       title: 'La plataforma que restaura a la persona humana',
       body:
-        'Nuestro Propósito es Make Salvation, Health and Freedom Great Again — una Comunidad de Green Lion Kings que defiende la Cultura Cristiana Occidental y el BioConservadurismo en Guerra Espiritual. Tecnologías exponenciales e innovación al servicio de las personas.',
+        `Nuestro Propósito: ${PURPOSE}. Una Comunidad de Green Lion Kings que defiende la Cultura Cristiana Occidental y el BioConservadurismo en Guerra Espiritual. Tecnologías exponenciales e innovación al servicio de las personas.`,
       cta: 'Abrir la Plataforma',
       areas: [
         {
@@ -883,9 +879,9 @@ const copy = {
     },
     hero: {
       titleLines: [
-        'MAKE SALVATION,',
-        'HEALTH AND FREEDOM',
-        'GREAT AGAIN',
+        'Restore Salvation,',
+        'Health and Freedom',
+        'to the Human Person created in the image of God.',
       ] as const,
       tagline: 'O mundo secular tira espírito, mente, corpo e alma.',
       tagline2: 'A Salvazion os devolve — em uma só Plataforma.',
@@ -896,7 +892,7 @@ const copy = {
       eyebrow: 'Propósito Transformador Massivo',
       title: 'A plataforma que restaura a pessoa humana',
       body:
-        'Nosso Propósito é Make Salvation, Health and Freedom Great Again — uma Comunidade de Green Lion Kings que defende a Cultura Cristã Ocidental e o BioConservadorismo em Guerra Espiritual. Tecnologias exponenciais e inovação a serviço das pessoas.',
+        `Nosso Propósito: ${PURPOSE}. Uma Comunidade de Green Lion Kings que defende a Cultura Cristã Ocidental e o BioConservadorismo em Guerra Espiritual. Tecnologias exponenciais e inovação a serviço das pessoas.`,
       cta: 'Abrir a Plataforma',
       areas: [
         {

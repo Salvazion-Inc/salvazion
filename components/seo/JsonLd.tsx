@@ -150,6 +150,7 @@ export default function JsonLd() {
       ],
       publisher: { '@id': `${absoluteUrl()}/#organization` },
       featureList: [
+        SEO.tagline,
         'The platform that restores the human person',
         'Offline Bible (ES, EN, PT, originals)',
         'Daily devotionals',

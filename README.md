@@ -1,5 +1,7 @@
 # Salvazion App
 
+**Purpose:** Restore Salvation, Health and Freedom to the Human Person created in the image of God.
+
 Plataforma: **Salvation · Health · Freedom**. Coach: **Salvazion AI**. Comunidad y miembros: **Green Lion Kings**.
 
 ## Dominios

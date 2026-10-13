@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { PURPOSE } from '@/lib/seo/config';
 
 /**
  * Web App Manifest — icon + name shown when the user installs
@@ -9,7 +10,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'Salvazion — Salvation · Health · Freedom',
     short_name: 'Salvazion',
     description:
-      'The platform that restores the human person. Make Salvation, Health and Freedom Great Again. Offline Bible, devotionals, health & wearables, Freedom library, Community (Green Lion Kings), Salvazion AI and $SALVAZION on Solana.',
+      `${PURPOSE}. Offline Bible, devotionals, health and wearables, Freedom library, Community (Green Lion Kings), Salvazion AI and $SALVAZION on Solana.`,
     start_url: '/',
     scope: '/',
     id: '/',

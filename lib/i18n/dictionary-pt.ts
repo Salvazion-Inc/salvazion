@@ -1,4 +1,5 @@
 /** Brazilian Portuguese UI dictionary — same shape as ES/EN. */
+import { PURPOSE } from '@/lib/seo/config';
 export const dictionaryPt = {
   common: {
     save: 'Salvar',
@@ -169,7 +170,7 @@ export const dictionaryPt = {
     title: 'Tamanho da letra',
     hint: 'Aumenta o texto em toda a plataforma. O layout e os botões continuam usáveis.',
     preview: 'Prévia',
-    previewLine1: 'Make Salvation, Health and Freedom Great Again.',
+    previewLine1: `${PURPOSE}.`,
     previewLine2: 'A Palavra de Deus ilumina o caminho da Comunidade.',
   },
   theme: {
@@ -177,7 +178,7 @@ export const dictionaryPt = {
     title: 'Cores da plataforma',
     hint: 'Escolha uma paleta sem perder a essência Salvazion: escuro, tech e brilho suave.',
     preview: 'Prévia',
-    previewLine1: 'Make Salvation, Health and Freedom Great Again.',
+    previewLine1: `${PURPOSE}.`,
     previewLine2: 'Os Green Lion Kings brilham no escuro.',
   },
   valueJourney: {

@@ -3,7 +3,7 @@ import { updateSession } from '@/lib/supabase/middleware';
 import { isPremiumCheckoutNext, safeNextPath } from '@/lib/auth/paths';
 import { guestCheckoutPath, parseBillingInterval } from '@/lib/billing/checkout-intent';
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { user, supabaseResponse } = await updateSession(request);
 
   const path = request.nextUrl.pathname;

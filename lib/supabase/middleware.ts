@@ -28,7 +28,7 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
 
 /**
  * Refreshes the auth session and returns the user (if any).
- * Used by the root middleware.
+ * Used by the root proxy.
  *
  * If Supabase env vars are missing (e.g. build without secrets), pass through
  * without blocking the deploy — auth simply won't be available until configured.

@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 
 /**
  * Server Supabase client for Server Components, Route Handlers and Server Actions.
- * Cookie-based session so middleware and RSC stay in sync.
+ * Cookie-based session so the proxy and RSC stay in sync.
  */
 export async function createClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;

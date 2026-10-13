@@ -1,6 +1,22 @@
+import fs from "fs";
+import path from "path";
 import type { NextConfig } from "next";
 
+// This folder is a junction. Turbopack compares real paths, so the root has
+// to be the resolved directory or local packages fall outside the build.
+const root = fs.realpathSync(path.join(__dirname));
+
 const nextConfig: NextConfig = {
+  turbopack: {
+    root,
+    // node_modules links this package through the junction, which Turbopack
+    // treats as outside the project. Point at the built file directly.
+    resolveAlias: {
+      "@salvazion/capacitor-health":
+        "./native/capacitor/plugins/SalvazionHealth/dist/esm/index.js",
+    },
+  },
+  outputFileTracingRoot: root,
   typescript: {
     ignoreBuildErrors: true,
   },

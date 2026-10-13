@@ -86,11 +86,12 @@ If eligible: `subscription_data.trial_period_days = 30`, `payment_method_collect
 
 Both Premium Checkout flows (guest `/premium/checkout` and signed-in `/api/billing/checkout`) build their params in `lib/billing/checkout-params.ts` and always send:
 
-- `consent_collection.promotions = 'auto'` — Stripe shows its own "Keep me updated with news and personalized offers" checkbox where allowed (US business + US customers only). Stripe picks the default state from the account jurisdiction and the customer IP; it is **unchecked** wherever affirmative consent is required, but for US account + US customer Stripe may default it to checked (US law allows opt-out). The choice is stored on `session.consent.promotions` (`opt_in` / `opt_out`).
+- **`consent_collection` is not sent** (SLV-CHECKOUT-TOS-20261013-1, 13-oct-2026). With `consent_collection.promotions = 'auto'` Stripe rejected every Checkout Session (*"To set `consent_collection.promotions`, please visit https://dashboard.stripe.com/settings/checkout to agree to the Terms of Service."*) because the Checkout ToS were never accepted in the Dashboard. Stripe consent was never used to contact anyone (DEC-20261011-14), so it was removed. Re-adding it needs a zone-A decision by Cristian **and** accepting the Checkout ToS first.
+- **Privacy 7.1 (EN/ES/PT) still describes optional promotional emails chosen at Stripe checkout.** Stripe no longer collects that consent; the text is not wrong about what we send (nothing), but Cristian should decide whether to amend it. Not changed in this PR.
 - `after_expiration.recovery.enabled = true` — an expired session (24 h default) carries a recovery URL valid 30 days. `recovery.allow_promotion_codes` is not sent (default false).
 - **No promotion codes or discounts** (DEC-20261011-26, SLV-NOPROMO-20261011-1): `allow_promotion_codes` is omitted (Stripe default `false`, so Checkout shows no "Add promotion code" field) and no `discounts` are passed. Premium never uses discounts or promo codes; re-enabling needs a new zone-A decision by Cristian. Any holder benefit (e.g. a free month, DEC-20261011-27, unconfirmed) must be designed without promo codes.
 
-**Stripe-collected promotions consent is NOT used to contact anyone** (MTP: the API cannot tell a Stripe pre-checked box from one the customer ticked; `consent.promotions` is only the final `opt_in`/`opt_out`). Abandoned checkouts are only logged. Contacting anyone would need our own unchecked checkbox before redirecting to Checkout (future change, not built).
+**Stripe-collected promotions consent is NOT used to contact anyone** (MTP: the API cannot tell a Stripe pre-checked box from one the customer ticked; `consent.promotions` is only the final `opt_in`/`opt_out`). Abandoned checkouts are only logged (`promotions_consent` in the log is now always null). Contacting anyone would need our own unchecked checkbox before redirecting to Checkout (future change, not built).
 
 `checkout.session.expired` is handled by the webhook with a PII-free log line only (consent state, whether a recovery URL exists). **No recovery or promotional email is sent by the app.** Any such email needs explicit approval, must go only to `consent.promotions = 'opt_in'`, and must carry sender info + unsubscribe. Stripe requires the privacy policy to disclose promotional-email use before sending any.
 
@@ -130,3 +131,9 @@ Full steps: [`docs/email.md`](./email.md)
 - Entitlements are written only after a verified Stripe webhook (`STRIPE_WEBHOOK_SECRET` + `stripe-signature`). Unsigned payloads are rejected.  
 - Client `/api/billing/status` returns a public slice (plan, renewal, `canManage`) — never `customerId` / `subscriptionId` / `priceId`.  
 - Checkout price IDs live in `lib/billing/price-ids.ts` (server). Client copy uses lookup keys and `$49` labels only.
+
+## Post-deploy checkout smoke test
+
+`npm run smoke:checkout -- <deployment-url> [month|year]` (a GitHub Action template is in `docs/ci/smoke-checkout.yml`; copy it to `.github/workflows/` with a token that has `workflow` scope, on `deployment_status: success`) calls `GET /premium/checkout?plan=month&e2e=1`. The app runs the real guest code path, creates a Checkout Session with `metadata.e2e='true'`, no customer and no email, then **expires it immediately** (`checkout.sessions.expire`) and returns `{ok, session_id_prefix, url_host, status, e2e}`. Pass = 200, `url_host=checkout.stripe.com`, `status=expired`, `e2e=true`. Nothing is payable; Pulso/KPI/collect_logs exclude sessions with `metadata.e2e`.
+
+Allowed on Vercel preview deployments; in production only with header `x-salvazion-smoke` equal to env `SMOKE_CHECKOUT_TOKEN` (unset = smoke disabled in prod). Optional `VERCEL_AUTOMATION_BYPASS_SECRET` for protected previews.

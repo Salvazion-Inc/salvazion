@@ -33,7 +33,8 @@ export function isLikelyBot(userAgent: string | null | undefined): boolean {
  * default_price, never the legacy $20 price).
  */
 export async function createGuestCheckoutSession(
-  interval: BillingInterval
+  interval: BillingInterval,
+  opts: { e2e?: boolean } = {}
 ): Promise<Stripe.Checkout.Session> {
   const priceId = await resolveCheckoutPriceId(interval);
   if (BLOCKED_CHECKOUT_PRICE_IDS.has(priceId)) {
@@ -46,9 +47,46 @@ export async function createGuestCheckoutSession(
     flow: GUEST_CHECKOUT_FLOW,
     interval,
     price_id: priceId,
+    // Smoke tests: excluded from Pulso / KPI / founder dashboard by metadata.e2e.
+    ...(opts.e2e ? { e2e: 'true' } : {}),
   };
 
   return getStripe().checkout.sessions.create(
     buildGuestCheckoutParams({ priceId, interval, baseUrl: base, metadata })
   );
+}
+
+/**
+ * Post-deploy smoke mode (SLV-CHECKOUT-TOS-20261013-1). Allowed on Vercel
+ * preview deployments, or anywhere when the request carries the
+ * x-salvazion-smoke header equal to SMOKE_CHECKOUT_TOKEN.
+ */
+export function isSmokeRequestAllowed(headerToken: string | null): boolean {
+  if (process.env.VERCEL_ENV === 'preview') return true;
+  const expected = process.env.SMOKE_CHECKOUT_TOKEN;
+  return Boolean(expected && headerToken && headerToken === expected);
+}
+
+/**
+ * Creates a real guest Checkout Session through the exact production code
+ * path, tagged metadata.e2e='true', and expires it immediately so it can never
+ * be paid. Returns only non-sensitive facts.
+ */
+export async function runCheckoutSmoke(interval: BillingInterval): Promise<{
+  ok: boolean;
+  session_id_prefix: string;
+  url_host: string | null;
+  status: string | null;
+  e2e: string | null;
+}> {
+  const session = await createGuestCheckoutSession(interval, { e2e: true });
+  const expired = await getStripe().checkout.sessions.expire(session.id);
+  const urlHost = session.url ? new URL(session.url).host : null;
+  return {
+    ok: Boolean(session.url) && urlHost === 'checkout.stripe.com' && expired.status === 'expired',
+    session_id_prefix: session.id.slice(0, 12),
+    url_host: urlHost,
+    status: expired.status,
+    e2e: expired.metadata?.e2e ?? null,
+  };
 }

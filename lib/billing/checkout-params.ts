@@ -7,13 +7,12 @@ import { HOLDER_TRIAL_DAYS } from './holder-trial';
  * /premium/checkout and signed-in /api/billing/checkout). No Stripe client,
  * no env, no I/O — so the shape is unit-testable without a Stripe key.
  *
- * Consent + recovery (Orden CoS 11-oct, SLV-CHECKOUT-CONSENT-20261011-1):
- * - consent_collection.promotions = 'auto': Stripe Checkout shows its own
- *   "Keep me updated with news and personalized offers" checkbox where the
- *   feature is allowed (US business + US customers). Stripe picks the default
- *   checked/unchecked state from the account jurisdiction and the customer's
- *   IP; it is unchecked wherever affirmative consent is required. The result
- *   is recorded on session.consent.promotions ('opt_in' | 'opt_out').
+ * Recovery (Orden CoS 11-oct, SLV-CHECKOUT-CONSENT-20261011-1):
+ * - consent_collection is NOT sent (SLV-CHECKOUT-TOS-20261013-1). Sending
+ *   consent_collection.promotions made Stripe reject every Checkout Session
+ *   until the Checkout Terms of Service are accepted in the Dashboard, and
+ *   DEC-20261011-14 already says Stripe-collected consent is never used to
+ *   contact anyone. Do not add it back without a zone-A decision by Cristian.
  * - after_expiration.recovery.enabled = true: an expired session gets a
  *   recovery URL (valid 30 days) in the checkout.session.expired payload.
  *   Nothing here sends email; any recovery email is a separate, approved flow
@@ -31,12 +30,11 @@ export const PRIVACY_URL = 'https://salvazion.org/privacy';
 
 const LEGAL_SUBMIT_MESSAGE = `By confirming you agree to Salvazion [Terms of Service](${TERMS_URL}) and [Privacy Policy](${PRIVACY_URL}).`;
 
-export function premiumConsentAndRecoveryParams(): Pick<
+export function premiumRecoveryParams(): Pick<
   Stripe.Checkout.SessionCreateParams,
-  'consent_collection' | 'after_expiration'
+  'after_expiration'
 > {
   return {
-    consent_collection: { promotions: 'auto' },
     after_expiration: {
       recovery: { enabled: true },
     },
@@ -59,7 +57,7 @@ export function buildGuestCheckoutParams(
     line_items: [{ price: priceId, quantity: 1 }],
     success_url: `${baseUrl}/premium/welcome?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${baseUrl}/?billing=cancel#pricing`,
-    ...premiumConsentAndRecoveryParams(),
+    ...premiumRecoveryParams(),
     billing_address_collection: 'auto',
     custom_text: {
       submit: {
@@ -105,7 +103,7 @@ export function buildHubCheckoutParams(
     line_items: [{ price: priceId, quantity: 1 }],
     success_url: `${baseUrl}/hub/premium/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${baseUrl}/hub/premium?billing=cancel`,
-    ...premiumConsentAndRecoveryParams(),
+    ...premiumRecoveryParams(),
     ...(trial ? { payment_method_collection: 'always' as const } : {}),
     custom_text: {
       submit: {

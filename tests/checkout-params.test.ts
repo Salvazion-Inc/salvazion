@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
   buildGuestCheckoutParams,
   buildHubCheckoutParams,
-  premiumConsentAndRecoveryParams,
+  premiumRecoveryParams,
   summarizeExpiredSession,
 } from '../lib/billing/checkout-params';
 
@@ -12,7 +12,8 @@ const ANNUAL = 'price_1U0WEXHOw5ZkjRlZOwkxysed'; // $468/yr, salvazion_premium_a
 const BASE = 'https://salvazion.org';
 
 function assertConsentAndRecovery(p: Record<string, unknown>) {
-  assert.deepEqual(p.consent_collection, { promotions: 'auto' });
+  // SLV-CHECKOUT-TOS-20261013-1: consent_collection is never sent.
+  assert.equal('consent_collection' in p, false);
   assert.deepEqual(p.after_expiration, { recovery: { enabled: true } });
   // DEC-20261011-26: Premium never uses promo codes or discounts. Not sent at
   // all (Stripe default = false), on the session or on the recovery link.
@@ -23,15 +24,13 @@ function assertConsentAndRecovery(p: Record<string, unknown>) {
   );
   assert.equal('discounts' in p, false);
   assert.doesNotMatch(JSON.stringify(p), /promotion_code|coupon|discount/);
-  // Never ask Stripe to require terms acceptance or pre-set consent here.
-  assert.equal((p.consent_collection as Record<string, unknown>).terms_of_service, undefined);
 }
 
 for (const [interval, priceId] of [
   ['month', MONTHLY],
   ['year', ANNUAL],
 ] as const) {
-  test(`guest /premium/checkout (${interval}) has consent + recovery`, () => {
+  test(`guest /premium/checkout (${interval}) has recovery and no consent_collection`, () => {
     const metadata = { app: 'salvazion', flow: 'guest', interval, price_id: priceId };
     const p = buildGuestCheckoutParams({ priceId, interval, baseUrl: BASE, metadata });
     assertConsentAndRecovery(p as Record<string, unknown>);
@@ -47,7 +46,7 @@ for (const [interval, priceId] of [
     assert.match(JSON.stringify(p.custom_text), /account is created with this email/);
   });
 
-  test(`signed-in hub checkout (${interval}) has consent + recovery`, () => {
+  test(`signed-in hub checkout (${interval}) has recovery and no consent_collection`, () => {
     const p = buildHubCheckoutParams({
       customerId: 'cus_test123',
       userId: 'user-uuid',
@@ -76,8 +75,8 @@ for (const [interval, priceId] of [
 }
 
 test('shared params are a fresh object each call', () => {
-  const a = premiumConsentAndRecoveryParams();
-  const b = premiumConsentAndRecoveryParams();
+  const a = premiumRecoveryParams();
+  const b = premiumRecoveryParams();
   assert.notEqual(a, b);
   assert.deepEqual(a, b);
 });
@@ -114,4 +113,18 @@ test('expired-session summary carries no email, customer id or recovery URL', ()
   } as never);
   assert.equal(empty.recovery_enabled, false);
   assert.equal(empty.flow, 'hub');
+});
+
+test('smoke mode: preview allowed, prod only with matching token', async () => {
+  const { isSmokeRequestAllowed } = await import('../lib/billing/guest-checkout');
+  const env = { ...process.env };
+  process.env.VERCEL_ENV = 'preview';
+  delete process.env.SMOKE_CHECKOUT_TOKEN;
+  assert.equal(isSmokeRequestAllowed(null), true);
+  process.env.VERCEL_ENV = 'production';
+  assert.equal(isSmokeRequestAllowed('x'), false);
+  process.env.SMOKE_CHECKOUT_TOKEN = 'tok';
+  assert.equal(isSmokeRequestAllowed('nope'), false);
+  assert.equal(isSmokeRequestAllowed('tok'), true);
+  process.env = env;
 });

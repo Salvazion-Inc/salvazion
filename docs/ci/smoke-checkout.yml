@@ -1,0 +1,14 @@
+name: Checkout smoke (post-deploy)
+on: deployment_status
+jobs:
+  smoke:
+    if: github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node scripts/smoke-checkout.mjs "${{ github.event.deployment_status.environment_url }}" month
+        env:
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          SMOKE_CHECKOUT_TOKEN: ${{ secrets.SMOKE_CHECKOUT_TOKEN }}

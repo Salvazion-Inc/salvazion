@@ -148,8 +148,9 @@ for (const interval of ['month', 'year'] as const) {
     assert.equal('allow_promotion_codes' in p, false);
     assert.equal('discounts' in p, false);
     assert.doesNotMatch(JSON.stringify(p), /promotion_code|coupon|discount/);
-    // consent + recovery unchanged
-    assert.deepEqual(p.consent_collection, { promotions: 'auto' });
+    // recovery unchanged
+    // SLV-CHECKOUT-TOS-20261013-1: consent_collection is never sent.
+  assert.equal('consent_collection' in p, false);
     assert.deepEqual(p.after_expiration, { recovery: { enabled: true } });
     assert.match(JSON.stringify(p.custom_text), /first month of Premium is included/);
   });

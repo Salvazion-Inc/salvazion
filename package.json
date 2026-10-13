@@ -19,7 +19,8 @@
     "cap:open:ios": "npx cap open ios",
     "cap:run:android": "npx cap run android",
     "cap:run:ios": "npx cap run ios",
-    "cap:plugin:build": "tsc -p native/capacitor/plugins/SalvazionHealth/tsconfig.json"
+    "cap:plugin:build": "tsc -p native/capacitor/plugins/SalvazionHealth/tsconfig.json",
+    "smoke:checkout": "node scripts/smoke-checkout.mjs"
   },
   "dependencies": {
     "@aparajita/capacitor-biometric-auth": "^9.1.2",

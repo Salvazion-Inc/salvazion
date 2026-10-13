@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isStripeConfigured } from '@/lib/billing/stripe';
 import { parseBillingInterval, premiumCheckoutPath } from '@/lib/billing/checkout-intent';
-import { createGuestCheckoutSession, isLikelyBot } from '@/lib/billing/guest-checkout';
+import {
+  createGuestCheckoutSession,
+  isLikelyBot,
+  isSmokeRequestAllowed,
+  runCheckoutSmoke,
+} from '@/lib/billing/guest-checkout';
 import { consumeRateLimit } from '@/lib/billing/request-guard';
 import { billingLog } from '@/lib/billing/redact';
 
@@ -33,6 +38,24 @@ export async function GET(req: NextRequest) {
     parseBillingInterval(req.nextUrl.searchParams.get('plan')) ||
     parseBillingInterval(req.nextUrl.searchParams.get('checkout')) ||
     'month';
+
+  // Post-deploy smoke: create + immediately expire an e2e-tagged session.
+  if (req.nextUrl.searchParams.get('e2e') === '1') {
+    if (!isSmokeRequestAllowed(req.headers.get('x-salvazion-smoke'))) {
+      return noStore(NextResponse.json({ error: 'forbidden' }, { status: 403 }));
+    }
+    if (!isStripeConfigured()) {
+      return noStore(NextResponse.json({ ok: false, error: 'stripe_not_configured' }, { status: 500 }));
+    }
+    try {
+      const r = await runCheckoutSmoke(interval);
+      return noStore(NextResponse.json(r, { status: r.ok ? 200 : 500 }));
+    } catch (e) {
+      billingLog('premium/checkout smoke', e);
+      const message = e instanceof Error ? e.message : String(e);
+      return noStore(NextResponse.json({ ok: false, error: message }, { status: 500 }));
+    }
+  }
 
   if (hasSupabaseSessionCookie(req)) {
     return noStore(NextResponse.redirect(new URL(premiumCheckoutPath(interval), req.nextUrl.origin)));

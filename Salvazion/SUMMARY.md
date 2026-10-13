@@ -36,7 +36,7 @@
 ## Bienvenida
 
 * [Bienvenida a Salvazion](es/README.md)
-* [Restore Salvation, Health and Freedom to the Human Person created in the image of God](es/purpose.md)
+* [Restaurar Salvación, Salud y Libertad a la Persona Humana creada a imagen de Dios.](es/purpose.md)
 * [Guerra espiritual](es/spiritual-warfare.md)
 * [Cultura Cristiana Occidental](es/western-christian-culture.md)
 * [BioConservadurismo vs Transhumanismo](es/bioconservatism-vs-transhumanism.md)
@@ -56,7 +56,7 @@
 ## Bem-vindo
 
 * [Boas-vindas à Salvazion](pt/README.md)
-* [Restore Salvation, Health and Freedom to the Human Person created in the image of God](pt/purpose.md)
+* [Restaurar Salvação, Saúde e Liberdade à Pessoa Humana criada à imagem de Deus.](pt/purpose.md)
 * [Guerra espiritual](pt/spiritual-warfare.md)
 * [Cultura Cristã Ocidental](pt/western-christian-culture.md)
 * [BioConservadorismo vs Transumanismo](pt/bioconservatism-vs-transhumanism.md)

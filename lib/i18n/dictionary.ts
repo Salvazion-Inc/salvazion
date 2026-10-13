@@ -1,6 +1,6 @@
 import type { Language } from '@/lib/types';
 import { dictionaryPt } from '@/lib/i18n/dictionary-pt';
-import { PURPOSE } from '@/lib/seo/config';
+import { PURPOSE, PURPOSE_ES } from '@/lib/seo/config';
 
 /**
  * UI dictionary — Spanish (default) and English.
@@ -175,7 +175,7 @@ export const dictionary = {
       title: 'Tamaño de letra',
       hint: 'Aumenta el texto en toda la plataforma. El diseño y los botones siguen siendo usables.',
       preview: 'Vista previa',
-      previewLine1: `${PURPOSE}.`,
+      previewLine1: `${PURPOSE_ES}.`,
       previewLine2: 'La Palabra de Dios ilumina el camino de la Comunidad.',
     },
     theme: {
@@ -183,7 +183,7 @@ export const dictionary = {
       title: 'Colores de la plataforma',
       hint: 'Elige una paleta sin perder la esencia Salvazion: oscuro, tech y resplandor suave.',
       preview: 'Vista previa',
-      previewLine1: `${PURPOSE}.`,
+      previewLine1: `${PURPOSE_ES}.`,
       previewLine2: 'Los Green Lion Kings brillan en la oscuridad.',
     },
     valueJourney: {

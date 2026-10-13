@@ -4,11 +4,11 @@ cover: ../.gitbook/assets/Salvazion App the platform that restores the human per
 coverY: 0
 ---
 
-# Restore Salvation, Health and Freedom to the Human Person created in the image of God
+# Restaurar Salvação, Saúde e Liberdade à Pessoa Humana criada à imagem de Deus.
 
 **Idioma:** [English](../README.md) · [Español](../es/README.md) · Português
 
-Nosso Propósito Transformador Massivo é **Restore Salvation, Health and Freedom to the Human Person created in the image of God**, com uma Comunidade Global que defende a Cultura Cristã Ocidental e o BioConservadorismo em Guerra Espiritual.
+Nosso Propósito Transformador Massivo é **Restaurar Salvação, Saúde e Liberdade à Pessoa Humana criada à imagem de Deus**, com uma Comunidade Global que defende a Cultura Cristã Ocidental e o BioConservadorismo em Guerra Espiritual.
 
 É uma declaração enorme e ousada. Inspira os membros da nossa comunidade a olhar para frente, trabalhar com paixão e concentrar-se neste propósito: um futuro distinto mediante tecnologias exponenciais, inovação e projetos a serviço das pessoas.
 

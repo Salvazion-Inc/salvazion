@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import WalletConnectCard from '@/components/wallet/WalletConnectCard';
@@ -19,7 +19,7 @@ import { welcomeUrlForLang } from '@/lib/config/site';
 import { pickLang } from '@/lib/i18n/locale';
 import UpgradeCta from '@/components/billing/UpgradeCta';
 import { signupUrlForCheckout } from '@/lib/billing/checkout-intent';
-import { PURPOSE } from '@/lib/seo/config';
+import { homeDocumentTitle, purposeHeroLines, purposeSentence } from '@/lib/seo/config';
 import PlanStatus from '@/components/billing/PlanStatus';
 import { useEntitlement } from '@/lib/billing/client';
 
@@ -133,7 +133,12 @@ function LandingPremiumCtas() {
 export default function SalvazionLanding() {
   const { lang, setLang } = useI18n();
   const t = copy[lang];
+  const titleLines = purposeHeroLines(lang);
   const welcomeHref = welcomeUrlForLang(lang);
+
+  useEffect(() => {
+    document.title = homeDocumentTitle(lang);
+  }, [lang]);
 
   return (
     <div className="marketing-shell text-[var(--off-white)] selection:bg-[rgba(143,217,154,0.28)]">
@@ -246,11 +251,11 @@ export default function SalvazionLanding() {
             id="hero-heading"
             className="font-display font-bold leading-[1.02] tracking-tight text-[clamp(1.45rem,5.6vw,3.75rem)] text-balance"
           >
-            {/* Three visual lines. Together they are PURPOSE. */}
-            <span className="block neon-text">{t.hero.titleLines[0]}</span>
-            <span className="block neon-text">{t.hero.titleLines[1]}</span>
+            {/* Three visual lines. Together they are the official purpose in this language. */}
+            <span className="block neon-text">{titleLines[0]}</span>
+            <span className="block neon-text">{titleLines[1]}</span>
             <span className="mt-3 block text-[clamp(1rem,3.15vw,1.85rem)] font-medium leading-snug text-[var(--accent)] drop-shadow-[0_0_24px_rgba(143,217,154,0.35)] text-balance">
-              {t.hero.titleLines[2]}
+              {titleLines[2]}
             </span>
           </h1>
 
@@ -286,7 +291,9 @@ export default function SalvazionLanding() {
         <div className="max-w-6xl mx-auto px-5">
           <div className="text-center mb-12 max-w-3xl mx-auto">
             <p className="section-eyebrow mb-3">{t.app.eyebrow}</p>
-            <h2 className="section-title text-3xl sm:text-4xl md:text-[2.65rem]">{t.app.title}</h2>
+            <h2 className="section-title text-3xl sm:text-4xl md:text-[2.65rem] text-balance">
+              {purposeSentence(lang)}
+            </h2>
             <p className="mt-5 text-base sm:text-lg leading-relaxed text-[#D8E1D9]/88 text-pretty">
               {t.app.body}
             </p>
@@ -641,12 +648,6 @@ const copy = {
       language: 'Language',
     },
     hero: {
-      /** Official purpose, split so the hero stays readable on a phone. */
-      titleLines: [
-        'Restore Salvation,',
-        'Health and Freedom',
-        'to the Human Person created in the image of God.',
-      ] as const,
       tagline: 'The secular world strips spirit, mind, body and soul.',
       tagline2: 'Salvazion gives them back — in one Platform.',
       ctaPrimary: 'Create free account',
@@ -654,9 +655,8 @@ const copy = {
     },
     app: {
       eyebrow: 'Massive Transformative Purpose',
-      title: 'The platform that restores the human person',
       body:
-        `Our Purpose: ${PURPOSE}. A Community of Green Lion Kings that defends Western Christian Culture and BioConservatism in Spiritual Warfare. Exponential technologies and innovation at the service of people.`,
+        'A Community of Green Lion Kings that defends Western Christian Culture and BioConservatism in Spiritual Warfare. Exponential technologies and innovation at the service of people.',
       cta: 'Open the Platform',
       areas: [
         {
@@ -760,11 +760,6 @@ const copy = {
       language: 'Idioma',
     },
     hero: {
-      titleLines: [
-        'Restore Salvation,',
-        'Health and Freedom',
-        'to the Human Person created in the image of God.',
-      ] as const,
       tagline: 'El mundo secular te quita el espíritu, mente, cuerpo y alma.',
       tagline2: 'Salvazion te los devuelve — en una sola Plataforma.',
       ctaPrimary: 'Crear cuenta gratis',
@@ -772,9 +767,8 @@ const copy = {
     },
     app: {
       eyebrow: 'Propósito Transformador Masivo',
-      title: 'La plataforma que restaura a la persona humana',
       body:
-        `Nuestro Propósito: ${PURPOSE}. Una Comunidad de Green Lion Kings que defiende la Cultura Cristiana Occidental y el BioConservadurismo en Guerra Espiritual. Tecnologías exponenciales e innovación al servicio de las personas.`,
+        'Una Comunidad de Green Lion Kings que defiende la Cultura Cristiana Occidental y el BioConservadurismo en Guerra Espiritual. Tecnologías exponenciales e innovación al servicio de las personas.',
       cta: 'Abrir la Plataforma',
       areas: [
         {
@@ -878,11 +872,6 @@ const copy = {
       language: 'Idioma',
     },
     hero: {
-      titleLines: [
-        'Restore Salvation,',
-        'Health and Freedom',
-        'to the Human Person created in the image of God.',
-      ] as const,
       tagline: 'O mundo secular tira espírito, mente, corpo e alma.',
       tagline2: 'A Salvazion os devolve — em uma só Plataforma.',
       ctaPrimary: 'Criar conta grátis',
@@ -890,9 +879,8 @@ const copy = {
     },
     app: {
       eyebrow: 'Propósito Transformador Massivo',
-      title: 'A plataforma que restaura a pessoa humana',
       body:
-        `Nosso Propósito: ${PURPOSE}. Uma Comunidade de Green Lion Kings que defende a Cultura Cristã Ocidental e o BioConservadorismo em Guerra Espiritual. Tecnologias exponenciais e inovação a serviço das pessoas.`,
+        'Uma Comunidade de Green Lion Kings que defende a Cultura Cristã Ocidental e o BioConservadorismo em Guerra Espiritual. Tecnologias exponenciais e inovação a serviço das pessoas.',
       cta: 'Abrir a Plataforma',
       areas: [
         {

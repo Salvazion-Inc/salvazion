@@ -2,7 +2,7 @@
  * Salvazion value proposition journey — in-app onboarding messages.
  * Walks the user through benefits without losing brand DNA.
  */
-import { PURPOSE } from '@/lib/seo/config';
+import { PURPOSE, PURPOSE_ES, PURPOSE_PT } from '@/lib/seo/config';
 
 export type ValueJourneyStepId =
   | 'welcome'
@@ -42,11 +42,11 @@ export const VALUE_JOURNEY_STEPS: ValueJourneyStep[] = [
     titleEn: 'The platform that restores the human person',
     titlePt: 'A plataforma que restaura a pessoa humana',
     bodyEs:
-      `Salvazion existe para este propósito: ${PURPOSE}. Salvación, Salud y Libertad viven juntas en una sola Plataforma: hábitos, scores, comunidad y soberanía económica en Solana.`,
+      `Salvazion existe para este propósito: ${PURPOSE_ES}. Salvación, Salud y Libertad viven juntas en una sola Plataforma: hábitos, scores, comunidad y soberanía económica en Solana.`,
     bodyEn:
       `Salvazion exists for this purpose: ${PURPOSE}. Salvation, Health and Freedom live together in one Platform: habits, scores, community and economic sovereignty on Solana.`,
     bodyPt:
-      `A Salvazion existe para este propósito: ${PURPOSE}. Salvação, Saúde e Liberdade vivem juntas em uma só Plataforma: hábitos, scores, comunidade e soberania econômica na Solana.`,
+      `A Salvazion existe para este propósito: ${PURPOSE_PT}. Salvação, Saúde e Liberdade vivem juntas em uma só Plataforma: hábitos, scores, comunidade e soberania econômica na Solana.`,
     benefitEs: 'Una sola plataforma · tres pilares · disciplina real',
     benefitEn: 'One platform · three pillars · real discipline',
     benefitPt: 'Uma só plataforma · três pilares · disciplina real',
@@ -198,9 +198,9 @@ export const VALUE_JOURNEY_STEPS: ValueJourneyStep[] = [
     id: 'ready',
     href: '/hub/dashboard',
     icon: '✓',
-    titleEs: PURPOSE,
+    titleEs: PURPOSE_ES,
     titleEn: PURPOSE,
-    titlePt: PURPOSE,
+    titlePt: PURPOSE_PT,
     bodyEs:
       'Ya conoces la propuesta. Ahora toca vivirla: un pilar a la vez, un día a la vez, con la Comunidad y Salvazion AI a tu lado.',
     bodyEn:

@@ -91,10 +91,10 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '7.1 Optional promotional emails',
         paragraphs: [
-          `When you join Premium (the Green Lion Kings membership), checkout is processed by Stripe on behalf of Salvazion, Inc. There you may choose to receive promotional emails from Salvazion, Inc. This is optional and separate from your membership: if you say no, your access does not change.`,
-          `If you opt in, we use your email only to send you those emails. If you opt in and leave a checkout incomplete, we may send you one reminder to complete it.`,
-          `You can withdraw your consent at any time, for promotional emails and the reminder alike, through the unsubscribe link in each email or by writing to ${SUPPORT_EMAIL}.`,
-          `We never use your faith or health data (for example devotional, prayer, or health entries) for these emails or for the checkout reminder. We do not sell or share your email for third-party marketing.`,
+          `When you join Premium (the Green Lion Kings membership), checkout is processed by Stripe on behalf of Salvazion, Inc. Checkout does not ask you to sign up for promotional emails, and we do not currently send promotional emails or checkout reminders based on your checkout.`,
+          `If we offer promotional emails in the future, you will choose them yourself with our own box that is unchecked by default. It will be optional and separate from your membership: if you say no, your access does not change.`,
+          `You can withdraw any consent you give at any time, through the unsubscribe link in each email or by writing to ${SUPPORT_EMAIL}.`,
+          `We never use your faith or health data (for example devotional, prayer, or health entries) for promotional emails. We do not sell or share your email for third-party marketing.`,
         ],
       },
       {
@@ -231,10 +231,10 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '7.1 Correos promocionales opcionales',
         paragraphs: [
-          `Cuando te unes a Premium (la membresía Green Lion Kings), el pago lo procesa Stripe en nombre de Salvazion, Inc. Ahí puedes elegir recibir correos promocionales de Salvazion, Inc. Es opcional e independiente de tu membresía: si no aceptas, tu acceso no cambia.`,
-          `Si aceptas, usamos tu email solo para enviarte esos correos. Si aceptas y dejas un pago sin terminar, podemos enviarte un único recordatorio para completarlo.`,
-          `Puedes retirar tu consentimiento en cualquier momento, tanto para los correos promocionales como para el recordatorio, con el enlace para darte de baja que trae cada correo o escribiendo a ${SUPPORT_EMAIL}.`,
-          `Nunca usamos tus datos de fe o de salud (por ejemplo devocionales, oraciones o registros de salud) para estos correos ni para el recordatorio de pago. No vendemos ni compartimos tu email para marketing de terceros.`,
+          `Cuando te unes a Premium (la membresía Green Lion Kings), el pago lo procesa Stripe en nombre de Salvazion, Inc. El pago no te pide suscribirte a correos promocionales, y hoy no enviamos correos promocionales ni recordatorios de pago a partir de tu pago.`,
+          `Si en el futuro ofrecemos correos promocionales, los elegirás tú mismo con una casilla propia que vendrá sin marcar. Será opcional e independiente de tu membresía: si no aceptas, tu acceso no cambia.`,
+          `Puedes retirar cualquier consentimiento que des en cualquier momento, con el enlace para darte de baja que trae cada correo o escribiendo a ${SUPPORT_EMAIL}.`,
+          `Nunca usamos tus datos de fe o de salud (por ejemplo devocionales, oraciones o registros de salud) para correos promocionales. No vendemos ni compartimos tu email para marketing de terceros.`,
         ],
       },
       {
@@ -371,10 +371,10 @@ export const PRIVACY: Record<Language, LegalDoc> = {
       {
         heading: '7.1 Emails promocionais opcionais',
         paragraphs: [
-          `Quando você entra no Premium (a associação Green Lion Kings), o pagamento é processado pela Stripe em nome da Salvazion, Inc. Lá você pode escolher receber emails promocionais da Salvazion, Inc. É opcional e independente da sua associação: se você não aceitar, seu acesso não muda.`,
-          `Se você aceitar, usamos seu email apenas para enviar esses emails. Se você aceitar e deixar um pagamento sem concluir, podemos enviar um único lembrete para concluí-lo.`,
-          `Você pode retirar seu consentimento a qualquer momento, tanto para os emails promocionais quanto para o lembrete, pelo link de descadastro em cada email ou escrevendo para ${SUPPORT_EMAIL}.`,
-          `Nunca usamos seus dados de fé ou de saúde (por exemplo devocionais, orações ou registros de saúde) para esses emails nem para o lembrete de pagamento. Não vendemos nem compartilhamos seu email para marketing de terceiros.`,
+          `Quando você entra no Premium (a associação Green Lion Kings), o pagamento é processado pela Stripe em nome da Salvazion, Inc. O pagamento não pede que você se inscreva em emails promocionais, e hoje não enviamos emails promocionais nem lembretes de pagamento a partir do seu pagamento.`,
+          `Se no futuro oferecermos emails promocionais, você vai escolhê-los com uma caixa própria que vem desmarcada. Será opcional e independente da sua associação: se você não aceitar, seu acesso não muda.`,
+          `Você pode retirar qualquer consentimento que der a qualquer momento, pelo link de descadastro em cada email ou escrevendo para ${SUPPORT_EMAIL}.`,
+          `Nunca usamos seus dados de fé ou de saúde (por exemplo devocionais, orações ou registros de saúde) para emails promocionais. Não vendemos nem compartilhamos seu email para marketing de terceiros.`,
         ],
       },
       {

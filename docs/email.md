@@ -99,8 +99,9 @@ Por defecto Stripe envía desde `stripe.com`. Para enviar desde **tu dominio**:
 
 1. [Customer emails](https://dashboard.stripe.com/settings/emails) → **Add domain** → `salvazion.org`
 2. Añade los DNS que indique Stripe (TXT ownership, CNAMEs DKIM / Mail From)
-3. Publica DMARC (`_dmarc`) si aún no existe, p. ej.  
-   `v=DMARC1; p=none; rua=mailto:info@salvazion.org`
+3. DMARC ya está en la zona de Vercel:  
+   `v=DMARC1; p=none; rua=mailto:info@salvazion.org`  
+   Si Stripe pide otro registro, añádelo sin borrar ese.
 4. Cuando esté **Verified**, actívalo como sending domain
 
 **Importante:** Stripe no permite un único From arbitrario para todo. Tras el dominio custom usa direcciones fijas del estilo:

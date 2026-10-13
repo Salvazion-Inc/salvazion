@@ -10,54 +10,26 @@
 > Antes: `www.salvazion.org` / apex servían el marketing Canva.  
 > Ahora: el producto vive en el apex; Canva debe desconectarse del DNS.
 
-## 1) Quitar Canva y apuntar a Vercel (obligatorio)
+## 1) DNS en Vercel
 
-**Hoy (hasta que cambies DNS):**
+El registro sigue en Canva hasta el 2027-10-08. Los nameservers públicos son:
 
-| Host | Quién responde |
-|------|----------------|
-| `salvazion.org` / `www` | **Canva** (`A 103.169.142.0`, Cloudflare de Canva) |
-| `app.salvazion.org` | **Nuestra app** (Vercel) |
+- `ns1.vercel-dns.com`
+- `ns2.vercel-dns.com`
 
-Nameservers del dominio: `ns1/2/3.systemdns.com` (típico si el dominio se compró o se conectó vía **Canva**).
+La zona la sirve Vercel. Con esos nameservers, Canva ya no publica el DNS. No vuelvas a poner el A de Canva `103.169.142.0`.
 
-### A) En Canva — desconectar el sitio del dominio
+| Host | Registro |
+|------|----------|
+| `@` | ALIAS al proyecto `salvazion-app` |
+| `www`, `app` | Vercel, redirect 308 al ápice |
+| `www.app` | CNAME `cname.vercel-dns-017.com`, redirect 308 al ápice |
+| `welcome`, `bienvenida`, `bem-vindo` | CNAME `206369cabd-hosting.gitbook.io` |
+| `@` MX | `smtp.google.com` prioridad 1 |
+| `@` TXT | verificación de Google y `v=spf1 include:_spf.google.com ~all` |
+| `_dmarc` | `v=DMARC1; p=none; rua=mailto:info@salvazion.org` |
 
-1. Entra a [canva.com](https://www.canva.com) con la cuenta del dominio.  
-2. **Settings → Web Domains** (o **Configuración → Dominios web**).  
-3. Localiza `salvazion.org`.  
-4. **Remove / Disconnect / Desconectar** el dominio del website Canva.  
-   - Si el dominio lo gestiona Canva y hay “Connected to Canva”, desconéctalo para poder editar los registros A del apex.  
-5. Opcional: deja de publicar el website Canva en ese dominio (unpublish).
-
-Documentación Canva: [Manage and disconnect domains](https://www.canva.com/help/managing-domains/).
-
-### B) DNS — apuntar solo a Vercel (sin Canva)
-
-En el panel DNS (Canva **Web Domains → Manage DNS**, o el registrador):
-
-| Acción | Tipo | Host | Valor |
-|--------|------|------|--------|
-| **Borrar** | A | `@` / apex | `103.169.142.0` (Canva) |
-| **Borrar** | A | `www` | `103.169.142.0` (Canva) si existe |
-| **Crear/editar** | **A** | `@` | **`76.76.21.21`** (Vercel) |
-| **Crear/editar** | **CNAME** | `www` | **`cname.vercel-dns.com`** |
-| **Mantener** | **CNAME** | `app` | `cname.vercel-dns.com` (o el de Vercel que ya uses) |
-
-**No dejes** el A de Canva (`103.169.142.0`) en apex ni en `www`.  
-**No uses** Canva como hosting del sitio principal.
-
-Si Canva no te deja editar el A del apex, usa en Canva **Change nameservers** y apunta a los nameservers de tu registrador o a los de Vercel (solo si mueves el dominio a Vercel como registrar).
-
-Propagación: minutos a 48 h. Comprueba:
-
-```bash
-nslookup salvazion.org
-# DEBE ser 76.76.21.21 (Vercel), NUNCA 103.169.142.0 (Canva)
-```
-
-Cuando el apex ya sea Vercel, en el proyecto Vercel puedes reactivar redirect  
-`app.salvazion.org` → `salvazion.org` (308).
+`bienvenida.salvazion.org` y `bem-vindo.salvazion.org` resuelven, pero GitBook no tiene esos hostnames y HTTPS falla. Español y portugués están en `https://welcome.salvazion.org/bienvenida` y `https://welcome.salvazion.org/bem-vindo`.
 
 ## 2) Vercel (ya configurado en proyecto `salvazion-app`)
 

@@ -7,107 +7,53 @@ description: >-
   usa la Plataforma y suscríbete a Premium.
 ---
 
-# Bienvenida a Salvazion
+# Bienvenido a Salvazion
 
-**Idioma:** [English](https://welcome.salvazion.org/) · Español · [Português](https://welcome.salvazion.org/bem-vindo/)
+Bienvenido, Green Lion King, a la lucha eterna.
 
-Bienvenido, Green Lion King, a la lucha que no termina.
+Has sido llamado. No por azar, sino por providencia divina: para pararte en la brecha donde la fe se encuentra con la carne y el espíritu enfrenta la tormenta de un mundo a la deriva.
 
-No llegaste aquí por casualidad. Llegaste para ponerte en la brecha: donde la fe toca la carne, donde el espíritu enfrenta el vendaval de un mundo desamarrado.
+**Restaurar la Salvación, la Salud y la Libertad de la Persona Humana creada a imagen de Dios.** Este es nuestro propósito y la razón por la que existimos.
 
-**Restaurar Salvación, Salud y Libertad a la Persona Humana creada a imagen de Dios.** Ese es nuestro propósito y la razón por la que existimos.
+Esta bienvenida no es un folleto. Es el camino desde la primera convicción hasta ser un miembro que ora, entrena, aprende y sostiene la Plataforma.
 
-Este Welcome no es un folleto. Es el camino: de la primera convicción a un miembro que ora, entrena, se forma y sostiene la Plataforma.
-
-{% hint style="success" %}
 **Empieza ahora.** [Crea tu cuenta gratis](https://salvazion.org/auth/signup) · [Inicia sesión](https://salvazion.org/auth/login) · [Suscríbete a Premium](https://salvazion.org/hub/premium)
-{% endhint %}
 
 ## Tu camino
 
-| Paso | Qué haces | Dónde |
-| ---- | --------- | ----- |
-| **1. Aprende** | Por qué luchamos: Propósito, Guerra espiritual, Cultura Cristiana Occidental, BioConservadurismo, Patriotismo, los 12 Salvators | Este Welcome — sección 1 |
-| **2. Entra** | Crea tu cuenta gratis. Inicia sesión. Instala la PWA | [salvazion.org/auth/signup](https://salvazion.org/auth/signup) |
-| **3. Vive** | Usa la Plataforma: Hub, Biblia, Salud, Freedom, Comunidad, Salvazion AI | [salvazion.org/hub/dashboard](https://salvazion.org/hub/dashboard) |
-| **4. Comprométete** | Suscríbete a Premium cuando no quieras racionar Salvazion AI | [salvazion.org/hub/premium](https://salvazion.org/hub/premium) |
+1. **Aprende.** Por qué luchamos: Propósito, Guerra Espiritual, Cultura Cristiana Occidental, BioConservadurismo y Patriotismo.
+2. **Entra.** Salvazion es gratis: crea tu cuenta, inicia sesión e instala la app en el navegador de tu celular o computador.
+3. **Vive.** Usa cada día el Hub, la Biblia, Salud, Freedom, la Falange y Green Lion.
+4. **Comprométete.** Elige Premium cuando te niegues a racionar al León.
 
-Si solo lees y nunca inicias sesión, estudiaste una guerra a la que te negaste a entrar.
+## Gratis y Premium
 
-{% content-ref url="purpose.md" %}
-[purpose.md](purpose.md)
-{% endcontent-ref %}
+Tu cuenta de Salvazion es gratis y seguirá siéndolo. Premium abre el fuego completo: límites más amplios en el coach de IA, todas las herramientas de la Plataforma y la comunidad Green Lion completa.
 
-{% content-ref url="the-platform.md" %}
-[the-platform.md](the-platform.md)
-{% endcontent-ref %}
+**Primer mes de Premium incluido para quienes tienen $SALVAZION verificado.** Vincula tu wallet con una firma en tu cuenta; revisamos el saldo cuando empiezas Premium, una sola vez por persona. Después del primer mes, Premium sigue al precio normal salvo que canceles antes de que termine, y puedes cancelar cuando quieras desde tu cuenta.
 
-{% content-ref url="create-your-account.md" %}
-[create-your-account.md](create-your-account.md)
-{% endcontent-ref %}
+$SALVAZION es solo una llave de acceso a los servicios Premium y a la gobernanza de la comunidad. No es una inversión ni entrega retorno.
 
-{% content-ref url="how-to-use-the-app.md" %}
-[how-to-use-the-app.md](how-to-use-the-app.md)
-{% endcontent-ref %}
+## Nuestra North Star
 
-{% content-ref url="premium.md" %}
-[premium.md](premium.md)
-{% endcontent-ref %}
+Medimos una sola cosa: personas beneficiadas en su salvación espiritual, la sanidad de su cuerpo y la libertad en sus vidas. Se mide con consentimiento y nunca se vende.
+
+Pensamos en global y ejecutamos en local. La misión llega a todas las naciones y se gana en cada familia, cada asamblea y cada barrio. La libertad también se vive en el mar con Kaenz y conociendo Chile con Mapucoin.
 
 ## Los tres pilares
 
-* **Salvation** no es una reliquia. Es el fuego del presente: la promesa de la eternidad en el alma de quien se niega a inclinarse ante el espíritu de la época.
-* **Health** es el cuerpo sagrado como templo, la vida como pacto, defendida contra los mercaderes del engaño transhumano y los arquitectos de la decadencia fabricada.
-* **Freedom** es la herencia de Occidente, forjada en la cristiandad, hoy sitiada por las cadenas del globalismo y el relativismo moral.
+- **Salvación** es el fuego del presente y la promesa de eternidad en cada alma que se niega a inclinarse ante el espíritu de la época.
+- **Salud** es el cuerpo sagrado como templo, defendido del engaño de quienes quieren rediseñar al hombre y de la decadencia diseñada.
+- **Libertad** es la herencia de Occidente, forjada en la Cristiandad y asediada por la tiranía globalista y el relativismo moral.
 
-En la Plataforma no son metáforas. Son una agenda diaria, scores, una Biblia, sensores, una biblioteca Freedom y **Salvazion AI** — un coach que te ayuda a vivir tu propósito, subir el Score Global, y no te adula.
+En la app no son metáforas. Son una agenda diaria, puntajes, una Biblia, una biblioteca Freedom y un coach que no te adula.
 
 ## Quiénes somos
 
-Salvazion es la **Comunidad** de los fieles, los feroces, los que no ceden. La comunidad y sus miembros son **Green Lion Kings**. El logo es Salvazion. El coach es **Salvazion AI**.
+Somos la **Comunidad Global** que defiende la **Cultura Cristiana Occidental** como baluarte de la verdad, la belleza y el orden, y la vanguardia del **BioConservadurismo**: guardianes de la ley natural escrita en la sangre y los huesos, que rechazan al hombre que juega a ser Dios.
 
-Somos la **Comunidad Global** que defiende la **Cultura Cristiana Occidental** no como nostalgia, sino como el último baluarte de la verdad, la belleza y el orden. Somos la vanguardia del **BioConservadurismo**: guardianes de la ley natural escrita en la sangre y en el hueso. Rechazamos la abominación de que el hombre se haga Dios.
+Esto es **Guerra Espiritual**. Luchamos con la oración como espada, la verdad como escudo y la comunidad como fortaleza. Entrega tu alma a Cristo Rey, fortalece tu cuerpo y párate en la brecha: en línea, en las calles y en el lugar secreto de la oración.
 
-Esto es **Guerra espiritual**. El enemigo no es solo carne y sangre: son principados y potestades — ideologías de muerte disfrazadas de progreso, culturas de esterilidad vestidas de liberación.
+Bienvenido, Green Lion King. Las puertas de Salvazion están abiertas.
 
-Luchamos con la oración como espada, la verdad como escudo y la comunidad como fortaleza.
-
-No estás solo. Aquí te unes a quienes despertaron al llamado:
-
-* Restaurar el altar en un mundo que cambió la adoración de Dios por la adoración de sí mismo.
-* Defender la familia como cuna de la civilización frente al asedio de la ideología de género y el suicidio demográfico.
-* Recuperar Occidente de las fauces del marxismo cultural y el dominio tecnocrático.
-
-Tu misión empieza ahora. Entrega el alma a Cristo Rey. Fortalece el cuerpo como vaso de resistencia: puro, disciplinado, vivo. Ponte en la brecha: en línea, en la calle y en el secreto de la oración.
-
-La salvación no es un eslogan. Es un grito de guerra. Esto no es un meme: es un Avivamiento Espiritual y Cultural y un Cambio de Era.
-
-La salud no es un privilegio. Es un mandato divino. La libertad no se concede. Se conquista con la cruz y la espada del Espíritu.
-
-Bienvenido, Green Lion King. Las puertas de Salvazion están abiertas. La guerra por el alma de Occidente ya empezó.
-
-## Aprende, y después actúa
-
-Lee los fundamentos en orden. Después crea la cuenta. Después vive el día. Después paga el fuego completo.
-
-{% content-ref url="spiritual-warfare.md" %}
-[spiritual-warfare.md](spiritual-warfare.md)
-{% endcontent-ref %}
-
-{% content-ref url="western-christian-culture.md" %}
-[western-christian-culture.md](western-christian-culture.md)
-{% endcontent-ref %}
-
-{% content-ref url="bioconservatism-vs-transhumanism.md" %}
-[bioconservatism-vs-transhumanism.md](bioconservatism-vs-transhumanism.md)
-{% endcontent-ref %}
-
-{% content-ref url="12-salvators.md" %}
-[12-salvators.md](12-salvators.md)
-{% endcontent-ref %}
-
-{% hint style="success" %}
-**El siguiente clic no es otra página. Es la App.**
-
-[Crea tu cuenta gratis →](https://salvazion.org/auth/signup)
-{% endhint %}
+**El próximo clic no es otra página. Es la app.** [Crea tu cuenta gratis](https://salvazion.org/auth/signup)

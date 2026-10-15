@@ -1,0 +1,26 @@
+$schema: https://api.gitbook.com/gitbook-docs.yaml
+site:
+  title: Documentation
+  structure:
+    - type: space
+      key: welcome
+      title: Welcome
+      path: welcome
+      default: true
+      content:
+        directory: ./Salvazion
+        language: en
+    - type: space
+      key: bienvenida
+      title: Bienvenida
+      path: bienvenida
+      content:
+        directory: ./Salvazion-es
+        language: es
+    - type: space
+      key: bem-vindo
+      title: Bem-vindo
+      path: bem-vindo
+      content:
+        directory: ./Salvazion-pt
+        language: pt

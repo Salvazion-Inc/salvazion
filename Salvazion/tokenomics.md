@@ -25,7 +25,7 @@ Buy it from the landing or from [salvazion.org/hub/swap](https://salvazion.org/h
 
 ## Utility today (what the Platform actually does)
 
-* **Holder bonus** — keep $SALVAZION on-chain in the wallet you link → **2× Free AI limits** (coach, voice, devotionals, meal vision, cineanthropometry).
+* **Access key** — $SALVAZION on-chain in the wallet you link unlocks **2× Free AI limits** (coach, voice, devotionals, meal vision, cineanthropometry).
 * **In-Platform swap** — Jupiter routing. You trade. The Platform does not custody.
 * **Signal** — you are not only a user. You are economically inside the same fight the Purpose names.
 

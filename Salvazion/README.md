@@ -32,7 +32,7 @@ Your Salvazion account is free, and it stays free. Premium opens the full fire: 
 
 **First month of Premium included for verified $SALVAZION holders.** Link your wallet with a signature in your account; we check the balance when you start Premium, once per person. After the first month, Premium continues at the regular price unless you cancel before it ends, and you can cancel anytime from your account.
 
-$SALVAZION is only an access key to Premium services and to community governance. It is not an investment and it pays no return.
+$SALVAZION is only an access key to Premium services in Salvazion, Mapucoin and Kaenz. It is not an investment, and it pays no return, APY, reward or bonus.
 
 ## Our North Star
 

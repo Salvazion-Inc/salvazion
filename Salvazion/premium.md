@@ -27,7 +27,7 @@ Need an account first? [Create it free](https://salvazion.org/auth/signup), then
 | **Premium Monthly** | **$49 / month** | All of Free plus 9 depths — less than one hour with a trainer, dietitian or spiritual director |
 | **Premium Annual** | **$39 / month** equivalent (**$468 / year**) | Best value — the year of discipline |
 
-Hold **$SALVAZION** on-chain on the Free plan and your Free AI limits **double**. That is not Premium. It is a patriotic bonus. Premium removes the ceiling.
+Hold **$SALVAZION** on-chain on the Free plan and your Free AI limits **double**. That is not Premium, and it is not a bonus or reward: $SALVAZION is only an access key to Premium services in Salvazion, Mapucoin and Kaenz. Premium removes the ceiling.
 
 ## Free — 10 keys
 

@@ -32,7 +32,7 @@ Tu cuenta de Salvazion es gratis y seguirá siéndolo. Premium abre el fuego com
 
 **Primer mes de Premium incluido para quienes tienen $SALVAZION verificado.** Vincula tu wallet con una firma en tu cuenta; revisamos el saldo cuando empiezas Premium, una sola vez por persona. Después del primer mes, Premium sigue al precio normal salvo que canceles antes de que termine, y puedes cancelar cuando quieras desde tu cuenta.
 
-$SALVAZION es solo una llave de acceso a los servicios Premium y a la gobernanza de la comunidad. No es una inversión ni entrega retorno.
+$SALVAZION es solo una llave de acceso a los servicios Premium de Salvazion, Mapucoin y Kaenz. No es una inversión y no entrega retorno, APY, recompensa ni bono.
 
 ## Nuestra North Star
 

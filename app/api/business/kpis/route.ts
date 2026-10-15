@@ -19,7 +19,10 @@ export async function GET(req: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: 'auth_required' }, { status: 401 });
+    }
+    if (!user.email_confirmed_at && !user.confirmed_at) {
+      return NextResponse.json({ error: 'email_unverified' }, { status: 403 });
     }
 
     if (!isBusinessAdminEmail(user.email)) {

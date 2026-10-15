@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireVerifiedUser } from '@/lib/auth/api-guard';
 import { getProvider, type OAuthProviderId } from '@/lib/health/wearables/oauth/providers';
 import { fetchProviderMetrics } from '@/lib/health/wearables/oauth/fetch-metrics';
 import { loadOAuthTokens } from '@/lib/health/wearables/oauth/tokens';
@@ -7,6 +8,8 @@ export async function POST(
   req: NextRequest,
   ctx: { params: Promise<{ provider: string }> }
 ) {
+  const gate = await requireVerifiedUser();
+  if (!gate.ok) return gate.response;
   const { provider: raw } = await ctx.params;
   const provider = raw as OAuthProviderId;
   if (!getProvider(provider)) {

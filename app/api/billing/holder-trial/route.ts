@@ -17,6 +17,9 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   const user = await getRequestUser();
   if (!user) return NextResponse.json({ error: 'auth_required' }, { status: 401 });
+  if (!user.emailConfirmedAt) {
+    return NextResponse.json({ error: 'email_unverified' }, { status: 403 });
+  }
   const base = { minUsd: holderTrialConfig().minUsd, days: HOLDER_TRIAL_DAYS };
   if (!consumeRateLimit(`holder-trial:${user.id}`, 10, 10 * 60 * 1000)) {
     return NextResponse.json({ ...base, state: 'unavailable' });

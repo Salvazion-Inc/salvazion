@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { requireVerifiedUser } from '@/lib/auth/api-guard';
 import {
   SEARCH_RADIUS_M,
   churchesFromOverpassElements,
@@ -14,6 +15,8 @@ export const dynamic = 'force-dynamic';
  * Proxies Overpass + Nominatim with a proper User-Agent (browser cannot set it).
  */
 export async function POST(req: Request) {
+  const gate = await requireVerifiedUser();
+  if (!gate.ok) return gate.response;
   try {
     const body = (await req.json()) as {
       lat?: number;

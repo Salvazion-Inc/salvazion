@@ -30,9 +30,18 @@ export function isSupabasePublicConfigured(): boolean {
   );
 }
 
+/** auth.users ids only. Anonymous and synthetic keys must never create rows. */
+const TRACKABLE_USER_ID =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export function isTrackableUserId(userId: string): boolean {
+  return TRACKABLE_USER_ID.test(userId);
+}
+
 export async function getRequestUser(): Promise<{
   id: string;
   email?: string | null;
+  emailConfirmedAt?: string | null;
 } | null> {
   try {
     const supabase = await createClient();
@@ -40,7 +49,8 @@ export async function getRequestUser(): Promise<{
       data: { user },
     } = await supabase.auth.getUser();
     if (!user) return null;
-    return { id: user.id, email: user.email };
+    const emailConfirmedAt = user.email_confirmed_at || user.confirmed_at || null;
+    return { id: user.id, email: user.email, emailConfirmedAt };
   } catch {
     return null;
   }
@@ -254,6 +264,9 @@ async function incrementViaRpc(
   periodStart: string,
   limit: number
 ): Promise<{ allowed: boolean; used: number } | null> {
+  // Stop creating counters for anyone who is not a real account. Existing
+  // ai_usage rows stay as they are — this is not a migration.
+  if (!isTrackableUserId(userId)) return null;
   const admin = createAdminClient();
   if (!admin) return null;
   try {
@@ -281,6 +294,7 @@ async function incrementFallback(
   periodStart: string,
   limit: number
 ): Promise<{ allowed: boolean; used: number } | null> {
+  if (!isTrackableUserId(userId)) return null;
   const admin = createAdminClient();
   if (!admin) return null;
   try {
@@ -313,6 +327,19 @@ export async function consumeAiQuota(
   feature: AiFeature,
   email?: string | null
 ): Promise<ConsumeResult> {
+  if (!isTrackableUserId(userId)) {
+    return {
+      ...buildState(feature, {
+        isPremium: false,
+        holderBonus: false,
+        salvazionBalance: null,
+        used: 0,
+      }),
+      allowed: false,
+      tracked: false,
+    };
+  }
+
   const [ent, holder] = await Promise.all([
     getEntitlementForUser(userId, email),
     resolveHolder(userId),
@@ -370,6 +397,7 @@ export async function refundAiQuota(
   userId: string,
   feature: AiFeature
 ): Promise<void> {
+  if (!isTrackableUserId(userId)) return;
   const admin = createAdminClient();
   if (!admin) return;
   const spec = FREE_AI_LIMITS[feature];
@@ -390,11 +418,17 @@ export async function refundAiQuota(
 
 export type QuotaGate =
   | { ok: true; user: { id: string; email?: string | null }; quota: ConsumeResult }
-  | { ok: false; status: 401 | 429; error: 'auth_required' | 'quota_exceeded'; quota?: ConsumeResult };
+  | {
+      ok: false;
+      status: 401 | 403 | 429;
+      error: 'auth_required' | 'email_unverified' | 'quota_exceeded';
+      quota?: ConsumeResult;
+    };
 
 /**
- * Require a signed-in user and an available Free/Premium slot.
- * When Supabase public env is missing (local without backend), allow.
+ * Require a verified account and an available Free/Premium slot.
+ * A missing Supabase env allows a non-tracked local pass only outside
+ * production and Vercel. That pass does not write a counter.
  */
 export async function requireAiQuota(
   feature: AiFeature,
@@ -402,7 +436,13 @@ export async function requireAiQuota(
 ): Promise<QuotaGate> {
   const user = await getRequestUser();
   if (!user) {
-    if (!isSupabasePublicConfigured()) {
+    // Local dev without Supabase env only. Preview and production never
+    // invent a user, and this path does not write an AI counter.
+    const allowLocal =
+      !isSupabasePublicConfigured() &&
+      process.env.NODE_ENV !== 'production' &&
+      !process.env.VERCEL;
+    if (allowLocal) {
       return {
         ok: true,
         user: { id: 'local-dev' },
@@ -414,6 +454,9 @@ export async function requireAiQuota(
     }
     return { ok: false, status: 401, error: 'auth_required' };
   }
+  if (!user.emailConfirmedAt) {
+    return { ok: false, status: 403, error: 'email_unverified' };
+  }
   const quota = await consumeAiQuota(user.id, feature, user.email);
   if (!quota.allowed) {
     return { ok: false, status: 429, error: 'quota_exceeded', quota };
@@ -422,9 +465,24 @@ export async function requireAiQuota(
 }
 
 export function authRequiredMessage(lang: 'es' | 'en' | 'pt'): string {
-  if (lang === 'en') return 'Sign in to use Salvazion AI on the Free plan.';
-  if (lang === 'pt') return 'Entre na conta para usar a IA Salvazion no plano Free.';
-  return 'Inicia sesión para usar la IA de Salvazion en el plan Free.';
+  if (lang === 'en') return 'Sign in with a verified email to use Salvazion AI on the Free plan.';
+  if (lang === 'pt') return 'Entre com um email verificado para usar a IA Salvazion no plano Free.';
+  return 'Entra con un email verificado para usar la IA de Salvazion en el plan Free.';
+}
+
+export function emailUnverifiedMessage(lang: 'es' | 'en' | 'pt'): string {
+  if (lang === 'en') return 'Verify your email to use Salvazion. The Free plan is available after that.';
+  if (lang === 'pt') return 'Verifique seu email para usar a Salvazion. O plano Free fica disponível depois disso.';
+  return 'Verifica tu email para usar Salvazion. El plan Free queda disponible después.';
+}
+
+export function quotaGateMessage(
+  gate: Extract<QuotaGate, { ok: false }>,
+  lang: 'es' | 'en' | 'pt'
+): string {
+  if (gate.error === 'email_unverified') return emailUnverifiedMessage(lang);
+  if (gate.error === 'quota_exceeded' && gate.quota) return quotaUserMessage(gate.quota, lang);
+  return authRequiredMessage(lang);
 }
 
 export function quotaUserMessage(

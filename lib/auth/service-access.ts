@@ -9,6 +9,8 @@ import { safeNextPath } from '@/lib/auth/paths';
 
 export type ServiceUser = {
   id: string;
+  /** Null when the session has no address (for example Continue with X). */
+  email?: string | null;
   emailConfirmedAt?: string | null;
 };
 
@@ -35,6 +37,17 @@ export function isEmailVerified(
 ): boolean {
   if (!user) return false;
   return Boolean(user.email_confirmed_at || user.confirmed_at || user.emailConfirmedAt);
+}
+
+/** A usable account has a confirmed timestamp and a real email address. */
+export function canUseService(user: ServiceUser | null): boolean {
+  if (!isEmailVerified(user)) return false;
+  const email = user?.email?.trim() ?? '';
+  return email.includes('@');
+}
+
+function isWebhookRoute(pathname: string): boolean {
+  return /\/webhook$/.test(pathname);
 }
 
 function normalizePath(pathname: string): string {
@@ -110,8 +123,8 @@ function isAuthCallback(pathname: string): boolean {
 
 /**
  * Open on purpose:
- * home, /privacy, /terms, auth pages and callbacks, the Stripe webhook,
- * liveness probes, the smoke checkout (`?e2e=1`), HEAD on /premium/checkout
+ * home, /privacy, /terms, auth pages and callbacks, every /webhook route,
+ * the public confirmation resend, liveness probes, the smoke checkout (`?e2e=1`), HEAD on /premium/checkout
  * (must not create a Checkout Session), the Stripe success return
  * /premium/welcome (finishes an already-paid session; does not open the hub),
  * and the internal metrics read (its own bearer token, no user rows).
@@ -127,11 +140,12 @@ export function decideServiceAccess(input: {
   const search = input.search || '';
   const params = searchParams(search);
   const user = input.user;
-  const verified = isEmailVerified(user);
+  const verified = canUseService(user);
   const api = pathname.startsWith('/api/');
 
   if (OPEN_PAGES.has(pathname) || OPEN_HEALTH.has(pathname)) return { action: 'allow' };
-  if (pathname === '/api/billing/webhook') return { action: 'allow' };
+  if (isWebhookRoute(pathname)) return { action: 'allow' };
+  if (pathname === '/api/auth/resend-confirmation') return { action: 'allow' };
   if (pathname === '/api/internal/holder-metrics') return { action: 'allow' };
 
   // Stripe return for a Checkout that already happened. The page provisions
@@ -147,13 +161,13 @@ export function decideServiceAccess(input: {
   }
 
   if (pathname === '/auth/verify-email') {
-    if (!user) return { action: 'redirect', location: signupLocation('/hub/dashboard', '') };
     if (verified) {
       const dest = safeNextPath(params.get('next'), '/hub/dashboard');
       const cleaned =
         dest.startsWith('/auth/') ? '/hub/dashboard' : dest;
       return { action: 'redirect', location: cleaned };
     }
+    // No session: public resend form. Session without a verified email: stay.
     return { action: 'allow' };
   }
 

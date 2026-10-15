@@ -1,12 +1,25 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { decideServiceAccess, isEmailVerified, type ServiceUser } from '../lib/auth/service-access';
+import {
+  canUseService,
+  decideServiceAccess,
+  isEmailVerified,
+  type ServiceUser,
+} from '../lib/auth/service-access';
+import { isUnconfirmedEmailMessage } from '../lib/auth/paths';
+import { translate } from '../lib/i18n/dictionary';
 import { isTrackableUserId } from '../lib/billing/ai-usage';
 
 const anon = null;
 const unverified: ServiceUser = { id: '11111111-1111-4111-8111-111111111111', emailConfirmedAt: null };
 const verified: ServiceUser = {
   id: '22222222-2222-4222-8222-222222222222',
+  email: 'member@example.com',
+  emailConfirmedAt: '2026-01-01T00:00:00Z',
+};
+const oauthNoEmail: ServiceUser = {
+  id: '33333333-3333-4333-8333-333333333333',
+  email: null,
   emailConfirmedAt: '2026-01-01T00:00:00Z',
 };
 
@@ -43,6 +56,12 @@ test('public pages, auth callbacks, webhook, health, and smoke stay open', () =>
   assert.deepEqual(decide('/auth/login', anon), { action: 'allow' });
   assert.deepEqual(decide('/auth/signup', anon), { action: 'allow' });
   assert.deepEqual(decide('/api/billing/webhook', anon, { method: 'POST' }), { action: 'allow' });
+  assert.deepEqual(decide('/api/stripe/webhook', anon, { method: 'GET' }), { action: 'allow' });
+  assert.deepEqual(decide('/api/stripe/webhook', anon, { method: 'POST' }), { action: 'allow' });
+  assert.deepEqual(decide('/api/auth/resend-confirmation', anon, { method: 'POST' }), {
+    action: 'allow',
+  });
+  assert.deepEqual(decide('/auth/verify-email', anon), { action: 'allow' });
   assert.deepEqual(decide('/api/health', anon), { action: 'allow' });
   assert.deepEqual(decide('/api/healthz', anon), { action: 'allow' });
   assert.deepEqual(decide('/api/internal/holder-metrics', anon), { action: 'allow' });
@@ -135,11 +154,35 @@ test('verified users pass, and auth screens send them onward', () => {
   assert.deepEqual(decide('/premium/checkout', verified, { search: '?e2e=1' }), { action: 'allow' });
 });
 
-test('verify screen without a session goes to signup; password update needs a session', () => {
-  assert.deepEqual(decide('/auth/verify-email', anon), {
-    action: 'redirect',
-    location: '/auth/signup?next=' + encodeURIComponent('/hub/dashboard'),
+test('a confirmed session with no email stays on the verify screen', () => {
+  assert.equal(canUseService(oauthNoEmail), false);
+  assert.equal(canUseService(verified), true);
+  const page = decide('/hub/coach', oauthNoEmail);
+  assert.equal(page.action, 'redirect');
+  if (page.action === 'redirect') {
+    assert.match(page.location, /^\/auth\/verify-email\?next=/);
+  }
+  assert.deepEqual(decide('/api/coach/chat', oauthNoEmail, { method: 'POST' }), {
+    action: 'unverified',
   });
+});
+
+test('unconfirmed login copy is localized and the public verify page stays open', () => {
+  assert.equal(isUnconfirmedEmailMessage('Email not confirmed'), true);
+  assert.equal(isUnconfirmedEmailMessage('Invalid login credentials'), false);
+  const en = translate('en', 'auth.emailNotConfirmed');
+  const es = translate('es', 'auth.emailNotConfirmed');
+  const pt = translate('pt', 'auth.emailNotConfirmed');
+  assert.match(en, /Confirm your email/);
+  assert.match(es, /Confirma tu email/);
+  assert.match(pt, /Confirme seu email/);
+  assert.equal(en === es || en === pt, false);
+  for (const text of [en, es, pt, translate('en', 'auth.addEmailBody'), translate('en', 'auth.resendGeneric')]) {
+    assert.doesNotMatch(text, /investment|reward|bonus|governance/i);
+  }
+});
+
+test('password update needs a session', () => {
   assert.deepEqual(decide('/auth/update-password', anon), {
     action: 'redirect',
     location: '/auth/login?error=session_missing',

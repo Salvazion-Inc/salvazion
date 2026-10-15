@@ -83,6 +83,12 @@ export function destinationAfterAuth(
   return `${ONBOARDING}?next=${encodeURIComponent(safe)}`;
 }
 
+/** Supabase refuses password login until the signup email is confirmed. */
+export function isUnconfirmedEmailMessage(message: string | null | undefined): boolean {
+  const m = (message || '').toLowerCase();
+  return m.includes('email not confirmed') || m.includes('email_not_confirmed');
+}
+
 /** Human-readable Spanish messages for common Supabase auth errors. */
 export function mapAuthError(message: string | null | undefined): string {
   if (!message) return 'Ocurrió un error. Intenta de nuevo.';

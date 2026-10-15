@@ -119,6 +119,17 @@ export const dictionaryPt = {
     verifyStillPending: 'Este email ainda não está verificado. Abra o link e tente de novo.',
     verifySignOut: 'Usar outra conta',
     verifyMissingEmail: 'Esta conta não tem email. Saia e crie uma conta com um email.',
+    emailNotConfirmed: 'Confirme seu email antes de entrar. Confira sua caixa de entrada.',
+    resendGeneric:
+      'Se houver uma conta esperando confirmação, enviamos outro link para esse email.',
+    resendPrompt:
+      'Digite o email que você usou para criar a conta e enviaremos outro link de confirmação.',
+    resendWait: 'Espere um momento antes de pedir outro email.',
+    addEmailTitle: 'Adicione seu email',
+    addEmailBody:
+      'Este acesso não trouxe um email. Adicione um para usar a Salvazion. Enviaremos um link de confirmação e a conta continua fechada até você abri-lo.',
+    addEmailSubmit: 'Enviar link de confirmação',
+    addEmailSent: 'Enviamos o link de confirmação. A conta continua fechada até você abri-lo.',
   },
   profile: {
     title: 'Perfil',

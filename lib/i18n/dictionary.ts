@@ -125,6 +125,17 @@ export const dictionary = {
       verifyStillPending: 'Este email aún no está verificado. Abre el enlace y vuelve a intentar.',
       verifySignOut: 'Usar otra cuenta',
       verifyMissingEmail: 'Esta cuenta no tiene email. Cierra sesión y crea una cuenta con un email.',
+      emailNotConfirmed: 'Confirma tu email antes de entrar. Revisa tu bandeja de entrada.',
+      resendGeneric:
+        'Si hay una cuenta esperando confirmación, enviamos otro enlace a ese email.',
+      resendPrompt:
+        'Escribe el email con el que te registraste y enviaremos otro enlace de confirmación.',
+      resendWait: 'Espera un momento antes de pedir otro correo.',
+      addEmailTitle: 'Agrega tu email',
+      addEmailBody:
+        'Este acceso no trae un email. Agrégalo para usar Salvazion. Enviaremos un enlace de confirmación y la cuenta sigue cerrada hasta que lo abras.',
+      addEmailSubmit: 'Enviar enlace de confirmación',
+      addEmailSent: 'Enviamos el enlace de confirmación. La cuenta sigue cerrada hasta que lo abras.',
     },
     profile: {
       title: 'Perfil',
@@ -1245,6 +1256,16 @@ export const dictionary = {
       verifyStillPending: 'This email is not verified yet. Open the link, then try again.',
       verifySignOut: 'Use a different account',
       verifyMissingEmail: 'This account has no email address. Sign out and create an account with an email.',
+      emailNotConfirmed: 'Confirm your email before signing in. Check your inbox.',
+      resendGeneric:
+        'If an account is waiting for confirmation, we sent another link to that email.',
+      resendPrompt: 'Enter the email you used to sign up and we will send another confirmation link.',
+      resendWait: 'Wait a moment before asking for another email.',
+      addEmailTitle: 'Add your email',
+      addEmailBody:
+        'This sign-in did not include an email. Add one to use Salvazion. We will send a confirmation link, and the account stays closed until you open it.',
+      addEmailSubmit: 'Send confirmation link',
+      addEmailSent: 'We sent the confirmation link. The account stays closed until you open it.',
     },
     profile: {
       title: 'Profile',

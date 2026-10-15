@@ -7,11 +7,13 @@ import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 import {
   destinationAfterAuth,
+  isUnconfirmedEmailMessage,
   mapAuthError,
   mapQueryAuthError,
   safeNextPath,
   withNextQuery,
 } from '@/lib/auth/paths';
+import { requestConfirmationResend } from '@/lib/auth/resend-confirmation';
 import { ensureProfileForUser, loadProfileAsync } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
 import LanguageControl from '@/components/settings/LanguageControl';
@@ -39,6 +41,8 @@ function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
+  const [unconfirmed, setUnconfirmed] = useState(false);
+  const [resending, setResending] = useState(false);
   const [mode, setMode] = useState<Mode>('password');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [passwordFallback, setPasswordFallback] = useState(false);
@@ -62,27 +66,56 @@ function LoginForm() {
       }
     }
 
+    const prefill = searchParams.get('email');
+    if (prefill && prefill.includes('@')) setEmail(prefill.trim());
+
     const code = searchParams.get('error') || hashCode;
     const mapped = mapQueryAuthError(code);
     const detail = searchParams.get('detail') || hashDetail || '';
+    const detailUnconfirmed = isUnconfirmedEmailMessage(detail);
     // Prefer a specific provider/profile mapping over the generic callback message
-    const detailMapped = detail ? mapAuthError(detail) : '';
+    const detailMapped = detail
+      ? detailUnconfirmed
+        ? t('auth.emailNotConfirmed')
+        : mapAuthError(detail)
+      : '';
     const detailIsSpecific =
       Boolean(detail) && detailMapped !== detail && !detailMapped.includes(detail);
 
+    if (detailUnconfirmed) setUnconfirmed(true);
     if (detailIsSpecific) {
       setError(detailMapped);
     } else if (mapped && detail) {
-      setError(`${mapped} (${mapAuthError(detail)})`);
+      setError(`${mapped} (${detailMapped})`);
     } else if (mapped) {
       setError(mapped);
     } else if (detail) {
-      setError(mapAuthError(detail));
+      setError(detailMapped);
     }
 
     const inv = parseInviteFromSearchParams(searchParams);
     if (inv) saveInboundInvite(inv);
-  }, [searchParams]);
+  }, [searchParams, t]);
+
+  function showAuthError(raw: string) {
+    if (isUnconfirmedEmailMessage(raw)) {
+      setUnconfirmed(true);
+      setError(t('auth.emailNotConfirmed'));
+      return;
+    }
+    setUnconfirmed(false);
+    setError(mapAuthError(raw));
+  }
+
+  async function resendConfirmation() {
+    const address = email.trim();
+    if (!address || resending) return;
+    setResending(true);
+    setInfo(null);
+    const result = await requestConfirmationResend(address, next);
+    setResending(false);
+    setInfo(result === 'limited' ? t('auth.resendWait') : t('auth.resendGeneric'));
+  }
 
   function getSupabase() {
     try {
@@ -134,7 +167,7 @@ function LoginForm() {
     });
 
     if (err) {
-      setError(mapAuthError(err.message));
+      showAuthError(err.message);
       setLoading(false);
       return;
     }
@@ -344,12 +377,22 @@ function LoginForm() {
           )}
 
           {error && (
-            <p
-              role="alert"
-              className="text-sm text-red-400 bg-red-500/10 rounded-lg px-3 py-2"
-            >
-              {error}
-            </p>
+            <div role="alert" className="text-sm text-red-400 bg-red-500/10 rounded-lg px-3 py-2">
+              <p>{error}</p>
+              {unconfirmed && email.trim() ? (
+                <p className="mt-1 text-[var(--off-white)]">{email.trim()}</p>
+              ) : null}
+              {unconfirmed ? (
+                <button
+                  type="button"
+                  onClick={() => void resendConfirmation()}
+                  disabled={resending || !email.trim()}
+                  className="mt-2 text-[var(--accent)] hover:underline disabled:opacity-60"
+                >
+                  {resending ? t('auth.verifyResending') : t('auth.verifyResend')}
+                </button>
+              ) : null}
+            </div>
           )}
           {info && (
             <p

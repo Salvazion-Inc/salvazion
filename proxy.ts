@@ -14,6 +14,7 @@ export async function proxy(request: NextRequest) {
   const accessUser = user
     ? {
         id: user.id,
+        email: user.email ?? null,
         emailConfirmedAt: isEmailVerified(user) ? user.email_confirmed_at || user.confirmed_at || 'verified' : null,
       }
     : null;

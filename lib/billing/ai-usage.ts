@@ -49,8 +49,11 @@ export async function getRequestUser(): Promise<{
       data: { user },
     } = await supabase.auth.getUser();
     if (!user) return null;
-    const emailConfirmedAt = user.email_confirmed_at || user.confirmed_at || null;
-    return { id: user.id, email: user.email, emailConfirmedAt };
+    const email = user.email?.trim() || null;
+    const confirmed = user.email_confirmed_at || user.confirmed_at || null;
+    // No address (OAuth without email) stays gated until one is confirmed.
+    const emailConfirmedAt = email && email.includes('@') ? confirmed : null;
+    return { id: user.id, email, emailConfirmedAt };
   } catch {
     return null;
   }

@@ -51,6 +51,9 @@ export async function GET(request: Request) {
     return fail('missing_supabase_env');
   }
 
+  const sessionUserEmail = (value: string | null | undefined) =>
+    typeof value === 'string' && value.includes('@');
+
   let response = NextResponse.redirect(`${origin}${next}`);
   const cookieStore = await cookies();
 
@@ -181,6 +184,19 @@ export async function GET(request: Request) {
     }
   } catch (stampErr) {
     console.warn('[auth/callback] social profile stamp failed', stampErr);
+  }
+
+  const signedIn = data.session?.user;
+  const address = signedIn?.email;
+  const confirmed = Boolean(signedIn?.email_confirmed_at || signedIn?.confirmed_at);
+  if (!sessionUserEmail(address) || !confirmed) {
+    const verify = NextResponse.redirect(
+      `${origin}/auth/verify-email?next=${encodeURIComponent(next)}`
+    );
+    for (const cookie of response.cookies.getAll()) {
+      verify.cookies.set(cookie);
+    }
+    return verify;
   }
 
   return response;

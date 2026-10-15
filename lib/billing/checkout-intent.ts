@@ -14,8 +14,8 @@ export function premiumCheckoutPath(interval: BillingInterval): string {
 }
 
 /**
- * Public one-click Premium checkout (no account needed before paying).
- * Use this in emails / ads: https://salvazion.org/premium/checkout?plan=month
+ * Legacy guest Checkout URL. Unauthenticated requests are sent to signup;
+ * this path no longer creates a Stripe Session except the smoke test (`e2e=1`).
  */
 export function guestCheckoutPath(interval: BillingInterval): string {
   return `/premium/checkout?plan=${interval}`;

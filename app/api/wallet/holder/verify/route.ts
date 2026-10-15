@@ -39,6 +39,7 @@ export async function POST(req: NextRequest) {
   if (!isSameOrigin(req)) return err('forbidden', 403);
   const user = await getRequestUser();
   if (!user) return err('auth_required', 401);
+  if (!user.emailConfirmedAt) return err('email_unverified', 403);
   const secret = holderSecret();
   if (!secret) return err('not_configured', 503);
   if (!consumeRateLimit(`holder-verify:${user.id}`, 10, 10 * 60 * 1000)) {

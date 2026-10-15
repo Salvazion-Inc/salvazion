@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { requireVerifiedUser } from '@/lib/auth/api-guard';
 import { geocodePlace, reverseGeocode } from '@/lib/freedom/churches';
 
 export const runtime = 'nodejs';
@@ -9,6 +10,8 @@ export const dynamic = 'force-dynamic';
  * Server-side Nominatim with User-Agent.
  */
 export async function POST(req: Request) {
+  const gate = await requireVerifiedUser();
+  if (!gate.ok) return gate.response;
   try {
     const body = (await req.json()) as {
       q?: string;

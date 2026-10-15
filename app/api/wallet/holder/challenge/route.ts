@@ -20,6 +20,9 @@ export async function POST(req: NextRequest) {
   if (!isSameOrigin(req)) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
   const user = await getRequestUser();
   if (!user) return NextResponse.json({ error: 'auth_required' }, { status: 401 });
+  if (!user.emailConfirmedAt) {
+    return NextResponse.json({ error: 'email_unverified' }, { status: 403 });
+  }
   const secret = holderSecret();
   if (!secret) return NextResponse.json({ error: 'not_configured' }, { status: 503 });
   if (!consumeRateLimit(`holder-challenge:${user.id}`, 10, 10 * 60 * 1000)) {

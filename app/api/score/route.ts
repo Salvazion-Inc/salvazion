@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireVerifiedUser } from '@/lib/auth/api-guard';
 
 /**
- * Nota: El cálculo real de scores ocurre en el cliente (localStorage)
- * porque aún no hay backend/Supabase.
+ * Nota: El cálculo real de scores ocurre en el cliente (localStorage).
  * Esta ruta queda preparada para cuando migremos el motor al servidor.
+ * Requires a verified account — it is not a public probe.
  */
 export async function GET() {
+  const gate = await requireVerifiedUser();
+  if (!gate.ok) return gate.response;
   return NextResponse.json({
     message: 'Salvazion Score Engine',
     note: 'Cálculo client-side + sync Supabase (score_actions, user_streaks, user_badges).',
@@ -47,6 +50,8 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const gate = await requireVerifiedUser();
+  if (!gate.ok) return gate.response;
   try {
     const body = await req.json();
 

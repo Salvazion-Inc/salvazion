@@ -97,6 +97,17 @@ export default function VoiceAgent({
         if (!res.ok) {
           setSpeakState('idle');
           const errJson = await res.json().catch(() => null);
+          if (res.status === 403) {
+            setError(
+              (errJson && typeof errJson.message === 'string' && errJson.message) ||
+                tx(
+                  'Verify your email to use Salvazion.',
+                  'Verifica tu email para usar Salvazion.',
+                  'Verifique seu email para usar a Salvazion.'
+                )
+            );
+            return;
+          }
           if (res.status === 429 || res.status === 401) {
             setError(
               (errJson && typeof errJson.message === 'string' && errJson.message) ||
@@ -162,6 +173,19 @@ export default function VoiceAgent({
           }),
         });
         const data = await res.json();
+        if (res.status === 403) {
+          const reply =
+            (typeof data.reply === 'string' && data.reply) ||
+            (typeof data.message === 'string' && data.message) ||
+            tx(
+              'Verify your email to use Salvazion.',
+              'Verifica tu email para usar Salvazion.',
+              'Verifique seu email para usar a Salvazion.'
+            );
+          setError(reply);
+          setMessages((m) => [...m, { role: 'assistant', content: reply }]);
+          return;
+        }
         if (res.status === 401 || res.status === 429) {
           const reply =
             (typeof data.reply === 'string' && data.reply) ||

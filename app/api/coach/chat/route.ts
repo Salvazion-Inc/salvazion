@@ -9,8 +9,7 @@ import {
 import type { UserProfile } from '@/lib/types';
 import type { ComputedScores } from '@/lib/scoring/types';
 import {
-  authRequiredMessage,
-  quotaUserMessage,
+  quotaGateMessage,
   refundAiQuota,
   requireAiQuota,
 } from '@/lib/billing/ai-usage';
@@ -57,12 +56,7 @@ export async function POST(req: NextRequest) {
 
     const gate = await requireAiQuota('coach_chat', lang);
     if (!gate.ok) {
-      const reply =
-        gate.error === 'auth_required'
-          ? authRequiredMessage(lang)
-          : gate.quota
-            ? quotaUserMessage(gate.quota, lang)
-            : authRequiredMessage(lang);
+      const reply = quotaGateMessage(gate, lang);
       return NextResponse.json(
         {
           error: gate.error,

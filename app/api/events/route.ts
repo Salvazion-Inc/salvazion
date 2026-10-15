@@ -25,6 +25,9 @@ export async function POST(req: NextRequest) {
   if (!isSameOrigin(req)) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
   const user = await getRequestUser();
   if (!user) return NextResponse.json({ error: 'auth_required' }, { status: 401 });
+  if (!user.emailConfirmedAt) {
+    return NextResponse.json({ error: 'email_unverified' }, { status: 403 });
+  }
   const body = await readJson(req);
   if (typeof body.event !== 'string' || !CLIENT_EVENTS.has(body.event)) {
     return NextResponse.json({ error: 'unknown_event' }, { status: 400 });

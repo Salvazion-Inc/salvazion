@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import type { ChatCompletionContentPart } from 'openai/resources/chat/completions';
 import { getXaiClient, getXaiVisionModel, isXaiConfigured } from '@/lib/ai/xai';
 import {
-  authRequiredMessage,
-  quotaUserMessage,
+  quotaGateMessage,
   refundAiQuota,
   requireAiQuota,
 } from '@/lib/billing/ai-usage';
@@ -250,12 +249,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           error: gate.error,
-          message:
-            gate.error === 'auth_required'
-              ? authRequiredMessage(lang)
-              : gate.quota
-                ? quotaUserMessage(gate.quota, lang)
-                : authRequiredMessage(lang),
+          message: quotaGateMessage(gate, lang),
           usage: gate.quota ?? null,
         },
         { status: gate.status }

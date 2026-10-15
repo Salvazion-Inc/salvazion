@@ -21,6 +21,7 @@ import {
   type InboundInvite,
 } from '@/lib/invite/engine';
 import { tryAcceptPendingInbound } from '@/lib/invite/supabase';
+import { requestConfirmationResend } from '@/lib/auth/resend-confirmation';
 import SocialAuthButtons from '@/components/auth/SocialAuthButtons';
 import TermsAccept from '@/components/auth/TermsAccept';
 import BrandLoader from '@/components/ui/BrandLoader';
@@ -37,6 +38,8 @@ function SignupForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resent, setResent] = useState<string | null>(null);
   const [inbound, setInbound] = useState<InboundInvite | null>(null);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
@@ -75,7 +78,7 @@ function SignupForm() {
     try {
       supabase = createClient();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Supabase no está configurado.');
+      setError(err instanceof Error ? mapAuthError(err.message, lang) : t('auth.errSupabaseMissing'));
       setLoading(false);
       return;
     }
@@ -97,7 +100,7 @@ function SignupForm() {
     });
 
     if (err) {
-      setError(mapAuthError(err.message));
+      setError(mapAuthError(err.message, lang));
       setLoading(false);
       return;
     }
@@ -130,8 +133,28 @@ function SignupForm() {
             {t('auth.checkEmailBody')} <span className="text-[var(--off-white)]">{email.trim()}</span>.{' '}
             {t('auth.activateAndReturn')}
           </p>
+          {resent ? (
+            <p role="status" className="text-sm text-[var(--accent)] mt-4">
+              {resent}
+            </p>
+          ) : null}
+          <button
+            type="button"
+            disabled={resending || !email.trim()}
+            onClick={() => {
+              void (async () => {
+                setResending(true);
+                const result = await requestConfirmationResend(email.trim(), next);
+                setResending(false);
+                setResent(result === 'limited' ? t('auth.resendWait') : t('auth.resendGeneric'));
+              })();
+            }}
+            className="btn-primary mt-6"
+          >
+            {resending ? t('auth.verifyResending') : t('auth.verifyResend')}
+          </button>
           <Link
-            href={withNextQuery('/auth/login', next)}
+            href={`${withNextQuery('/auth/login', next)}&email=${encodeURIComponent(email.trim())}`}
             className="inline-block mt-6 text-sm text-[var(--accent)] hover:underline"
           >
             {t('auth.goLogin')}

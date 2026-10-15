@@ -24,10 +24,11 @@ export function isLikelyBot(userAgent: string | null | undefined): boolean {
 }
 
 /**
- * Stripe Checkout for a logged-out visitor: no Salvazion account, no email
- * confirmation before payment. Stripe collects the email and creates the
- * Customer (subscription mode always creates one). The account is provisioned
- * after payment by `provisionGuestCheckout` (webhook + welcome page).
+ * Stripe Checkout Session builder used by the smoke test (`e2e=1`), which
+ * creates a session and expires it immediately. The public
+ * `/premium/checkout` route no longer calls this for real visitors — they
+ * must sign up and verify their email first. In-flight sessions already
+ * created this way are still provisioned by the webhook and /premium/welcome.
  *
  * Price comes only from `resolveCheckoutPriceId` (lookup_key, never
  * default_price, never the legacy $20 price).

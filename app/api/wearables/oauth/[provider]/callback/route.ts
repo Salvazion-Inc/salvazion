@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getRequestUser } from '@/lib/billing/ai-usage';
 import { getAppBaseUrl, getProvider, type OAuthProviderId } from '@/lib/health/wearables/oauth/providers';
 import { exchangeCodeForTokens } from '@/lib/health/wearables/oauth/token-exchange';
 import { clearFlowState, loadFlowState, saveOAuthTokens } from '@/lib/health/wearables/oauth/tokens';
@@ -13,6 +14,17 @@ export async function GET(
   const base = getAppBaseUrl();
 
   const settingsFallback = '/hub/profile?settings=1&tab=wearables';
+  const user = await getRequestUser();
+  if (!user) {
+    const signup = new URL('/auth/signup', base);
+    signup.searchParams.set('next', settingsFallback);
+    return NextResponse.redirect(signup);
+  }
+  if (!user.emailConfirmedAt) {
+    const verify = new URL('/auth/verify-email', base);
+    verify.searchParams.set('next', settingsFallback);
+    return NextResponse.redirect(verify);
+  }
 
   if (!config) {
     return NextResponse.redirect(

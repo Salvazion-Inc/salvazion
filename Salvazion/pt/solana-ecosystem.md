@@ -15,7 +15,7 @@ A Solana é a cadeia onde vive $SALVAZION. O Bitcoin abriu o dinheiro soberano; 
 * **DeFi** — Jupiter (agregador), Raydium, Meteora: liquidez e swap sem custódia.
 * **Comunidade** — lançamentos abertos, memecoins e ativos culturais que atraem usuários e liquidez.
 
-$SALVAZION se constrói aqui para ser o Bitcoin Patriótico com utilidade diária: swap no App, bônus de holder e soberania sem entregar as chaves.
+$SALVAZION se constrói aqui como chave de acesso aos serviços Premium da Salvazion, Mapucoin e Kaenz, com swap no App e sem entregar suas chaves. Não é um investimento e não paga retorno, recompensa nem bônus.
 
 Depois de [criar sua conta](create-your-account.md), conecte uma carteira no Hub. Ver [Tokenomics](tokenomics.md).
 

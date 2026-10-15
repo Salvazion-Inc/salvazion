@@ -24,7 +24,7 @@ export default function XAuthButton({
   onError,
   disabled = false,
 }: Props) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [loading, setLoading] = useState(false);
 
   async function handleClick() {
@@ -35,7 +35,7 @@ export default function XAuthButton({
     setLoading(true);
     const { error } = await signInWithX({ next });
     if (error) {
-      const msg = mapAuthError(error);
+      const msg = mapAuthError(error, lang);
       onError?.(msg);
       setLoading(false);
       // OAuth redirects on success; only stop loading on error

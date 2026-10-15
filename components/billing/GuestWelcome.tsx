@@ -68,7 +68,7 @@ export default function GuestWelcome({
           emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(NEXT_AFTER_LOGIN)}`,
         },
       });
-      if (err) setError(mapAuthError(err.message));
+      if (err) setError(mapAuthError(err.message, lang));
       else setSent(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error');

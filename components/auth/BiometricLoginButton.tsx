@@ -31,7 +31,7 @@ export default function BiometricLoginButton({
   error,
   onUsePassword,
 }: Props) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const router = useRouter();
   const { email } = useBiometricGate();
   const [loading, setLoading] = useState(false);
@@ -83,7 +83,7 @@ export default function BiometricLoginButton({
     } catch (err) {
       if (!(err instanceof BiometricCancelledError)) {
         onError?.(
-          err instanceof Error ? mapAuthError(err.message) : t('auth.biometricFailed')
+          err instanceof Error ? mapAuthError(err.message, lang) : t('auth.biometricFailed')
         );
       }
     } finally {

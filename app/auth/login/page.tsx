@@ -33,7 +33,7 @@ type Mode = 'password' | 'magic' | 'forgot';
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const next = safeNextPath(searchParams.get('next'), '/hub/dashboard');
 
   const [email, setEmail] = useState('');
@@ -70,14 +70,14 @@ function LoginForm() {
     if (prefill && prefill.includes('@')) setEmail(prefill.trim());
 
     const code = searchParams.get('error') || hashCode;
-    const mapped = mapQueryAuthError(code);
+    const mapped = mapQueryAuthError(code, lang);
     const detail = searchParams.get('detail') || hashDetail || '';
     const detailUnconfirmed = isUnconfirmedEmailMessage(detail);
     // Prefer a specific provider/profile mapping over the generic callback message
     const detailMapped = detail
       ? detailUnconfirmed
         ? t('auth.emailNotConfirmed')
-        : mapAuthError(detail)
+        : mapAuthError(detail, lang)
       : '';
     const detailIsSpecific =
       Boolean(detail) && detailMapped !== detail && !detailMapped.includes(detail);
@@ -95,16 +95,11 @@ function LoginForm() {
 
     const inv = parseInviteFromSearchParams(searchParams);
     if (inv) saveInboundInvite(inv);
-  }, [searchParams, t]);
+  }, [searchParams, t, lang]);
 
   function showAuthError(raw: string) {
-    if (isUnconfirmedEmailMessage(raw)) {
-      setUnconfirmed(true);
-      setError(t('auth.emailNotConfirmed'));
-      return;
-    }
-    setUnconfirmed(false);
-    setError(mapAuthError(raw));
+    setUnconfirmed(isUnconfirmedEmailMessage(raw));
+    setError(mapAuthError(raw, lang));
   }
 
   async function resendConfirmation() {
@@ -121,7 +116,7 @@ function LoginForm() {
     try {
       return createClient();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Supabase no está configurado.');
+      setError(err instanceof Error ? mapAuthError(err.message, lang) : t('auth.errSupabaseMissing'));
       return null;
     }
   }
@@ -215,7 +210,7 @@ function LoginForm() {
     });
 
     if (err) {
-      setError(mapAuthError(err.message));
+      setError(mapAuthError(err.message, lang));
       setLoading(false);
       return;
     }
@@ -241,7 +236,7 @@ function LoginForm() {
     });
 
     if (err) {
-      setError(mapAuthError(err.message));
+      setError(mapAuthError(err.message, lang));
       setLoading(false);
       return;
     }

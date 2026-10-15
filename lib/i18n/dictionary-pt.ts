@@ -130,6 +130,26 @@ export const dictionaryPt = {
       'Este acesso não trouxe um email. Adicione um para usar a Salvazion. Enviaremos um link de confirmação e a conta continua fechada até você abri-lo.',
     addEmailSubmit: 'Enviar link de confirmação',
     addEmailSent: 'Enviamos o link de confirmação. A conta continua fechada até você abri-lo.',
+    errGeneric: 'Ocorreu um erro. Tente de novo.',
+    errInvalidCredentials: 'Email ou senha incorretos.',
+    errAlreadyRegistered: 'Esse email já tem uma conta. Entre ou recupere a senha.',
+    errPasswordWeak: 'A senha não cumpre os requisitos de segurança (mín. 8 caracteres).',
+    errSignupDisabled: 'O cadastro está temporariamente desativado.',
+    errRateLimited: 'Tentativas demais. Espere um momento e tente de novo.',
+    errNetwork: 'Sem conexão. Confira sua internet e tente de novo.',
+    errSupabaseMissing: 'O Supabase não está configurado.',
+    errGoogleDisabled:
+      'O Google não está ativado no Supabase. Authentication → Providers → Google → Enable e salve o Client ID e o secret do Google Cloud.',
+    errProviderDisabled:
+      'O provedor social não está ativado no Supabase. Authentication → Providers → ative Google e/ou X com as chaves e salve.',
+    errXNotEnrolled:
+      'O X recusou a leitura do perfil (client-not-enrolled). O app OAuth precisa estar em um Project, em Production, com um plano válido. Depois tente Continuar com X de novo.',
+    errXProfile:
+      'O X autorizou você, mas o perfil não pôde ser lido. Confira o Project do app no console do X e tente de novo, ou entre com email.',
+    errCallbackFailed:
+      'Não foi possível concluir o acesso com o provedor. Feche a janela, tente Continuar com X de novo ou use email.',
+    errConfirmFailed: 'Não foi possível confirmar o email. Peça um novo link.',
+    errSessionMissing: 'Sua sessão não está ativa. Entre de novo.',
   },
   profile: {
     title: 'Perfil',

@@ -78,7 +78,7 @@ function SignupForm() {
     try {
       supabase = createClient();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Supabase no está configurado.');
+      setError(err instanceof Error ? mapAuthError(err.message, lang) : t('auth.errSupabaseMissing'));
       setLoading(false);
       return;
     }
@@ -100,7 +100,7 @@ function SignupForm() {
     });
 
     if (err) {
-      setError(mapAuthError(err.message));
+      setError(mapAuthError(err.message, lang));
       setLoading(false);
       return;
     }

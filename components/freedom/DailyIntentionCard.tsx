@@ -79,7 +79,7 @@ export default function DailyIntentionCard({ lang = 'en', compact = false }: Pro
               {tx(
                 'One sentence that governs your yes and no. Attention is a form of liberty.',
                 'Una frase que gobierna tu sí y tu no. La atención es una forma de libertad.',
-                'Uma frase que governa o teu sim e o teu não. A atenção é uma forma de liberdade.'
+                'Uma frase que governa o seu sim e o seu não. A atenção é uma forma de liberdade.'
               )}
             </p>
           )}

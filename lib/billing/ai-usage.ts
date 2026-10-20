@@ -508,12 +508,12 @@ export function quotaUserMessage(
             ? 'hoje'
             : 'hoy';
     if (lang === 'en') {
-      return `Free AI limit reached ${when} (${state.limit}). Upgrade to Premium — $49/mo for unlimited. $SALVAZION only doubles the Free cap.`;
+      return `Free AI limit reached ${when} (${state.limit}). Upgrade to Premium — $49/mo for unlimited.`;
     }
     if (lang === 'pt') {
-      return `Limite Free de IA atingido ${when} (${state.limit}). Passe para Premium — $49/mês para ilimitado. $SALVAZION só dobra a cota Free.`;
+      return `Limite Free de IA atingido ${when} (${state.limit}). Passe para Premium — $49/mês para ilimitado.`;
     }
-    return `Cupo Free de IA agotado ${when} (${state.limit}). Mejora a Premium — $49/mes para ilimitado. $SALVAZION solo duplica el cupo Free.`;
+    return `Cupo Free de IA agotado ${when} (${state.limit}). Mejora a Premium — $49/mes para ilimitado.`;
   }
   const used = state.used;
   const limit = state.limit ?? 0;

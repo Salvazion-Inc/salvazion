@@ -259,7 +259,6 @@ export async function POST(req: NextRequest) {
       gate.quota.tracked && gate.user.id !== 'local-dev' ? gate.user.id : null;
 
     if (!isXaiConfigured()) {
-      if (reservedUserId) await refundAiQuota(reservedUserId, reservedFeature);
       return NextResponse.json(
         {
           error: 'xai_not_configured',
@@ -276,7 +275,6 @@ export async function POST(req: NextRequest) {
 
     const client = getXaiClient();
     if (!client) {
-      if (reservedUserId) await refundAiQuota(reservedUserId, reservedFeature);
       return NextResponse.json({ error: 'xai_unavailable' }, { status: 503 });
     }
 
@@ -391,7 +389,6 @@ export async function POST(req: NextRequest) {
     try {
       parsed = extractJsonObject(text);
     } catch {
-      if (reservedUserId) await refundAiQuota(reservedUserId, reservedFeature);
       return NextResponse.json(
         {
           error: 'parse_failed',
@@ -406,7 +403,6 @@ export async function POST(req: NextRequest) {
     }
 
     if (!parsed || typeof parsed !== 'object') {
-      if (reservedUserId) await refundAiQuota(reservedUserId, reservedFeature);
       return NextResponse.json({ error: 'invalid_analysis' }, { status: 502 });
     }
 
@@ -423,7 +419,6 @@ export async function POST(req: NextRequest) {
       usage: gate.quota,
     });
   } catch (e) {
-    if (reservedUserId) await refundAiQuota(reservedUserId, reservedFeature);
     console.error('[health/vision]', e);
     return NextResponse.json(
       {

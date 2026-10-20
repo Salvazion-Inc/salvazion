@@ -1,19 +1,30 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import BottomNav from '@/components/BottomNav';
 import VoiceAgent from '@/components/coach/VoiceAgent';
 import { loadProfile } from '@/lib/store/profile';
 import { computeScores } from '@/lib/scoring/engine';
+import type { UserProfile } from '@/lib/types';
+import type { ComputedScores } from '@/lib/scoring/types';
 import { useI18n } from '@/components/I18nProvider';
 
 export default function CoachPage() {
   const { t, lang } = useI18n();
-  // Client-only stores: read once per mount via useMemo (no effect setState)
-  const profile = useMemo(() => loadProfile(), []);
-  const scores = useMemo(() => computeScores(), []);
+  // localStorage differs from the server. Keep the first render empty so
+  // hydration matches, then fill the greeting before the browser paints.
+  const [snapshot, setSnapshot] = useState<{
+    profile: Partial<UserProfile>;
+    scores: ComputedScores;
+  } | null>(null);
+
+  useLayoutEffect(() => {
+    // localStorage is not available while the server renders this page.
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot hydrate before paint
+    setSnapshot({ profile: loadProfile(), scores: computeScores() });
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#040404] text-[#D8E1D9] flex flex-col">
@@ -57,8 +68,8 @@ export default function CoachPage() {
       <main className="flex-1 px-5 pt-2 pb-28 min-h-0 flex flex-col">
         <div className="max-w-lg mx-auto w-full flex-1 min-h-0 flex flex-col">
           <VoiceAgent
-            profile={profile}
-            scores={scores}
+            profile={snapshot?.profile ?? null}
+            scores={snapshot?.scores ?? null}
             lang={lang}
           />
         </div>

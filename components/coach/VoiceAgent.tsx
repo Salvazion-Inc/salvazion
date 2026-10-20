@@ -207,7 +207,7 @@ export default function VoiceAgent({
           tx(
             'Salvazion AI hears you. Try again.',
             'Salvazion AI te escucha. Intenta de nuevo.',
-            'A Salvazion AI te escuta. Tente de novo.'
+            'A Salvazion AI escuta você. Tente de novo.'
           );
         setMessages((m) => [...m, { role: 'assistant', content: reply }]);
         void refreshUsage();
@@ -350,12 +350,12 @@ export default function VoiceAgent({
                   ? tx(
                       `I am Salvazion AI. Your purpose is your compass. I help you live it, raise your Global Score${globalScore != null ? ` (${globalScore})` : ''} and get the maximum from the Platform.`,
                       `Soy Salvazion AI. Tu propósito es tu brújula. Te ayudo a vivirlo, a subir tu Score Global${globalScore != null ? ` (${globalScore})` : ''} y a sacar el máximo de la Plataforma.`,
-                      `Sou a Salvazion AI. O teu propósito é a bússola. Ajudo você a vivê-lo, a subir o Score Global${globalScore != null ? ` (${globalScore})` : ''} e a tirar o máximo da Plataforma.`
+                      `Sou a Salvazion AI. O seu propósito é a bússola. Ajudo você a vivê-lo, a subir o Score Global${globalScore != null ? ` (${globalScore})` : ''} e a tirar o máximo da Plataforma.`
                     )
                   : tx(
                       `I am Salvazion AI. You have not written your purpose yet. I will help you find it, raise your Global Score${globalScore != null ? ` (${globalScore})` : ''} and get the maximum from the Platform.`,
                       `Soy Salvazion AI. Aún no has escrito tu propósito. Te ayudo a encontrarlo, a subir tu Score Global${globalScore != null ? ` (${globalScore})` : ''} y a sacar el máximo de la Plataforma.`,
-                      `Sou a Salvazion AI. Você ainda não escreveu o teu propósito. Ajudo você a encontrá-lo, a subir o Score Global${globalScore != null ? ` (${globalScore})` : ''} e a tirar o máximo da Plataforma.`
+                      `Sou a Salvazion AI. Você ainda não escreveu o seu propósito. Ajudo você a encontrá-lo, a subir o Score Global${globalScore != null ? ` (${globalScore})` : ''} e a tirar o máximo da Plataforma.`
                     )}
             </p>
             <div className="flex flex-wrap gap-1.5 mt-3">

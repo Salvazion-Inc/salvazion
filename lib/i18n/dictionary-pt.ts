@@ -985,7 +985,7 @@ export const dictionaryPt = {
     purpose: 'Propósito de vida',
     purposePlaceholder: 'Para que você está neste mundo? Que legado quer deixar?',
     purposeOptionalHint:
-      'Escreva agora, ou peça à Salvazion AI que te ajude a encontrá-lo. Também edita no Dashboard.',
+      'Escreva agora, ou peça à Salvazion AI que ajude você a encontrá-lo. Também edita no Dashboard.',
     city: 'Cidade',
     country: 'País',
     cityPlaceholder: 'Cidade',
@@ -1062,9 +1062,9 @@ export const dictionaryPt = {
     lionVirtue: 'Virtude',
     lionVirtueBody: 'Constância · Excelência',
     lionPitch:
-      'Eu te ajudo a cumprir o teu propósito — ou a encontrá-lo. Subimos o Score Global e tiramos o máximo da Plataforma.',
+      'Eu ajudo você a cumprir o seu propósito — ou a encontrá-lo. Subimos o Score Global e tiramos o máximo da Plataforma.',
     lionPitchShort:
-      'A Salvazion AI te ajuda a viver o teu propósito, subir o Score Global e usar a Plataforma no máximo. Você é Green Lion King.',
+      'A Salvazion AI ajuda você a viver o seu propósito, subir o Score Global e usar a Plataforma no máximo. Você é Green Lion King.',
     lionPrivacy: 'Seu perfil sincroniza de forma segura. Soberania e disciplina primeiro.',
     afterStartHint: 'Marque Sim na agenda de hoje. Leia um capítulo. Isso basta para começar.',
     acceptCall: 'Começar o meu dia',

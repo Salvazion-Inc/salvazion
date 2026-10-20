@@ -9,7 +9,6 @@ import {
   consumeAiQuota,
   getRequestUser,
   peekAiQuota,
-  refundAiQuota,
 } from '@/lib/billing/ai-usage';
 import { authRequiredResponse, unverifiedEmailResponse } from '@/lib/auth/api-guard';
 
@@ -131,26 +130,16 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    try {
-      const { devotional, engine, note } = await generateDevotionalAsync(profile, date);
-      if (engine === 'salvazion-rules-v1' && usage.tracked && user) {
-        await refundAiQuota(user.id, 'devotional_ai');
-      }
-      return NextResponse.json({
-        success: true,
-        data: devotional,
-        engine,
-        note,
-        aiConfigured: isXaiConfigured(),
-        premium: usage.unlimited,
-        usage,
-      });
-    } catch (aiErr) {
-      if (usage.tracked && user) {
-        await refundAiQuota(user.id, 'devotional_ai');
-      }
-      throw aiErr;
-    }
+    const { devotional, engine, note } = await generateDevotionalAsync(profile, date);
+    return NextResponse.json({
+      success: true,
+      data: devotional,
+      engine,
+      note,
+      aiConfigured: isXaiConfigured(),
+      premium: usage.unlimited,
+      usage,
+    });
   } catch (error) {
     console.error('Devotional engine error:', error);
     return NextResponse.json(

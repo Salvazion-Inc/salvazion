@@ -625,7 +625,7 @@ function buildProfilePayload(
   return payload;
 }
 
-function applyUpsertFallbacks(
+export function applyUpsertFallbacks(
   payload: Record<string, unknown>,
   message: string
 ): boolean {
@@ -640,11 +640,6 @@ function applyUpsertFallbacks(
       delete payload.preferred_bible_version;
       changed = true;
     }
-  }
-
-  if (/language/i.test(msg) && payload.language === 'pt') {
-    payload.language = 'es';
-    changed = true;
   }
 
   for (const col of DROP_ON_ERROR) {

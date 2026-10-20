@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from "next";
+import { cookies } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import Providers from "@/components/Providers";
 import PwaRegister from "@/components/PwaRegister";
 import { getAppBaseUrl } from "@/lib/config/site";
+import { getLocaleBootScript, LOCALE_COOKIE, localeTag, parseLocaleCookie } from "@/lib/i18n/locale";
 import { SEO, ogImageMetadata } from "@/lib/seo/config";
 import { getThemeBootScript } from "@/lib/store/theme";
 import "./globals.css";
@@ -131,14 +133,18 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = await cookies();
+  const initialLang = parseLocaleCookie(cookieStore.get(LOCALE_COOKIE)?.value) ?? "en";
+
   return (
     <html
-      lang="en"
+      lang={localeTag(initialLang)}
+      data-ssr-locale={initialLang}
       className={`dark ${geistSans.variable} ${geistMono.variable}`}
       style={{ colorScheme: "dark" }}
       suppressHydrationWarning
@@ -149,10 +155,10 @@ export default function RootLayout({
           id="salvazion-boot-prefs"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var k='salvazion_text_scale';var s=localStorage.getItem(k);if(s==='md'||s==='lg'||s==='xl'||s==='xxl'){document.documentElement.dataset.textScale=s;var m={md:16,lg:18,xl:20,xxl:22};var px=m[s]||16;document.documentElement.style.fontSize=px+'px';document.documentElement.style.setProperty('--app-text-scale',String(px/16));}var L=localStorage.getItem('salvazion_locale');if(L==='es'||L==='en'||L==='pt'){document.documentElement.lang=L==='pt'?'pt-BR':L;document.documentElement.dataset.locale=L;}}catch(e){}})();${getThemeBootScript()}`,
+            __html: `(function(){try{var k='salvazion_text_scale';var s=localStorage.getItem(k);if(s==='md'||s==='lg'||s==='xl'||s==='xxl'){document.documentElement.dataset.textScale=s;var m={md:16,lg:18,xl:20,xxl:22};var px=m[s]||16;document.documentElement.style.fontSize=px+'px';document.documentElement.style.setProperty('--app-text-scale',String(px/16));}}catch(e){}})();${getLocaleBootScript()}${getThemeBootScript()}`,
           }}
         />
-        <Providers>
+        <Providers initialLang={initialLang}>
           <PwaRegister />
           {children}
         </Providers>

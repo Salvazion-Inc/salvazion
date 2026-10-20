@@ -6,6 +6,7 @@ import TextScaleProvider from '@/components/TextScaleProvider';
 import ThemeProvider from '@/components/ThemeProvider';
 import I18nProvider from '@/components/I18nProvider';
 import { AiUsageProvider } from '@/lib/billing/ai-usage-client';
+import { EntitlementProvider } from '@/lib/billing/client';
 import type { Language } from '@/lib/types';
 import { registerCapacitorShell } from '@/lib/native/register-capacitor';
 
@@ -25,13 +26,15 @@ export default function Providers({
 
   return (
     <I18nProvider initialLang={initialLang}>
-      <AiUsageProvider>
-        <ThemeProvider>
-          <TextScaleProvider>
-            <SolanaWalletProvider>{children}</SolanaWalletProvider>
-          </TextScaleProvider>
-        </ThemeProvider>
-      </AiUsageProvider>
+      <EntitlementProvider>
+        <AiUsageProvider>
+          <ThemeProvider>
+            <TextScaleProvider>
+              <SolanaWalletProvider>{children}</SolanaWalletProvider>
+            </TextScaleProvider>
+          </ThemeProvider>
+        </AiUsageProvider>
+      </EntitlementProvider>
     </I18nProvider>
   );
 }

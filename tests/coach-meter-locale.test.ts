@@ -12,7 +12,8 @@ import {
   parseLocaleCookie,
   resolveClientLocale,
 } from '../lib/i18n/locale';
-import { applyUpsertFallbacks } from '../lib/store/profile';
+import { applyUpsertFallbacks, profileSexForUpsert } from '../lib/store/profile';
+import { cookieHeaderHasSession } from '../lib/billing/client';
 
 function overview(used: number): AiUsageOverview {
   const coach = emptyQuotaState('coach_chat');
@@ -84,6 +85,26 @@ test('SSR locale follows the cookie and profile language wins over it', () => {
   assert.match(boot, /salvazion_profile/);
   assert.match(boot, /locale-pending/);
   assert.match(boot, /ssrLocale/);
+});
+
+test('profile upsert omits an empty sex and keeps a real one', () => {
+  assert.equal(profileSexForUpsert(undefined), undefined);
+  assert.equal(profileSexForUpsert(null), undefined);
+  assert.equal(profileSexForUpsert(''), undefined);
+  assert.equal(profileSexForUpsert('female'), 'female');
+});
+
+test('billing status is not requested when the browser has no session cookie', () => {
+  assert.equal(cookieHeaderHasSession(''), false);
+  assert.equal(cookieHeaderHasSession('theme=dark'), false);
+  assert.equal(
+    cookieHeaderHasSession('sb-kppylfrsclkdmtpobpxd-auth-token=abc'),
+    true
+  );
+  assert.equal(
+    cookieHeaderHasSession('sb-kppylfrsclkdmtpobpxd-auth-token.0=abc'),
+    true
+  );
 });
 
 test('a language constraint error does not rewrite Português to Español', () => {

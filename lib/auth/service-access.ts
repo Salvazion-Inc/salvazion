@@ -128,6 +128,9 @@ function isAuthCallback(pathname: string): boolean {
  * (must not create a Checkout Session), the Stripe success return
  * /premium/welcome (finishes an already-paid session; does not open the hub),
  * and the internal metrics read (its own bearer token, no user rows).
+ * GET /api/billing/status is open so a signed-in caller is not turned into a
+ * 401 when the proxy cannot refresh the session in time, and an anonymous
+ * caller receives signedIn:false instead of an error the UI retries.
  */
 export function decideServiceAccess(input: {
   pathname: string;
@@ -147,6 +150,9 @@ export function decideServiceAccess(input: {
   if (isWebhookRoute(pathname)) return { action: 'allow' };
   if (pathname === '/api/auth/resend-confirmation') return { action: 'allow' };
   if (pathname === '/api/internal/holder-metrics') return { action: 'allow' };
+  // Public read of the caller's own plan. Anonymous callers get signedIn:false
+  // from the route. A 401 here made the home page request it again and again.
+  if (pathname === '/api/billing/status' && method === 'GET') return { action: 'allow' };
 
   // Stripe return for a Checkout that already happened. The page provisions
   // (idempotent) and asks the person to sign in. It does not open the hub.

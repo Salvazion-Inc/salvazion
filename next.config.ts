@@ -17,6 +17,13 @@ const nextConfig: NextConfig = {
     },
   },
   outputFileTracingRoot: root,
+  async redirects() {
+    return [
+      { source: "/hub", destination: "/hub/dashboard", permanent: false },
+      { source: "/hub/settings", destination: "/hub/profile?settings=1", permanent: false },
+      { source: "/hub/account", destination: "/hub/profile", permanent: false },
+    ];
+  },
   typescript: {
     ignoreBuildErrors: true,
   },

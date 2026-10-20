@@ -23,7 +23,10 @@ export async function POST(request: Request) {
       error: authErr,
     } = await supabase.auth.getUser();
     if (authErr || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: 'auth_required' }, { status: 401 });
+    }
+    if (!user.email_confirmed_at && !user.confirmed_at) {
+      return NextResponse.json({ error: 'email_unverified' }, { status: 403 });
     }
 
     const admin = createAdminClient();

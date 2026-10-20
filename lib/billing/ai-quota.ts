@@ -1,7 +1,7 @@
 /**
  * Free vs Premium AI catalog (Grok / xAI).
  * Free = limited. Premium = unlimited.
- * Holding $SALVAZION (on-chain) doubles Free limits.
+ * DEC-20261014-01: holding $SALVAZION does not change Free limits.
  */
 
 export type AiFeature =
@@ -36,11 +36,11 @@ export const FREE_AI_LIMITS: Record<AiFeature, AiFeatureQuota> = {
 };
 
 /**
- * Holder bonus ("bono Free AI-cap"): a signature-verified wallet with an
- * on-chain $SALVAZION balance > 0 doubles every Free AI limit.
- * Premium stays unlimited regardless.
+ * DEC-20261014-01: a verified $SALVAZION balance does not raise Free limits.
+ * The wallet-verify response still reports this constant; it stays 1 so
+ * that response cannot advertise a doubled cap.
  */
-export const SALVAZION_HOLDER_MULTIPLIER = 2;
+export const SALVAZION_HOLDER_MULTIPLIER = 1;
 
 export function isAiFeature(value: unknown): value is AiFeature {
   return typeof value === 'string' && (AI_FEATURES as string[]).includes(value);
@@ -64,11 +64,9 @@ export function periodResetUtc(period: QuotaPeriod, start: string): string {
   return d.toISOString();
 }
 
-export function freeLimitFor(
-  feature: AiFeature,
-  holderBonus: boolean
-): number {
+export function freeLimitFor(feature: AiFeature, holderBonus = false): number {
   const base = FREE_AI_LIMITS[feature].limit;
+  // SALVAZION_HOLDER_MULTIPLIER is 1, so a verified balance cannot raise this.
   return holderBonus ? base * SALVAZION_HOLDER_MULTIPLIER : base;
 }
 
@@ -101,7 +99,8 @@ export function emptyQuotaState(
   opts?: { holderBonus?: boolean; isPremium?: boolean }
 ): AiQuotaState {
   const isPremium = Boolean(opts?.isPremium);
-  const holderBonus = Boolean(opts?.holderBonus);
+  // DEC-20261014-01: the holder flag never changes the Free number or the UI chip.
+  const holderBonus = false;
   const spec = FREE_AI_LIMITS[feature];
   const start = periodStartUtc(spec.period);
   if (isPremium) {

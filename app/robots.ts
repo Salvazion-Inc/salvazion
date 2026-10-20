@@ -26,7 +26,9 @@ const PRIVATE_DISALLOW = [
   '/auth/callback',
   '/auth/confirm',
   '/auth/update-password',
+  '/auth/verify-email',
   '/auth/callback/',
+  '/premium/',
 ];
 
 const AI_USER_AGENTS = [

@@ -426,7 +426,7 @@ export default function PrayerMotivesPanel({
           <div className="prayer-empty">
             <div className="prayer-empty-flame" aria-hidden />
             <p className="text-sm text-white font-medium">
-              {tx('Your altar is quiet.', 'Tu altar está en silencio.', 'O teu altar está em silêncio.')}
+              {tx('Your altar is quiet.', 'Tu altar está en silencio.', 'O seu altar está em silêncio.')}
             </p>
             <p className="text-[12px] text-[var(--sage)] mt-1.5 leading-relaxed max-w-xs mx-auto">
               {tx(

@@ -9,8 +9,8 @@ import {
   consumeAiQuota,
   getRequestUser,
   peekAiQuota,
-  refundAiQuota,
 } from '@/lib/billing/ai-usage';
+import { authRequiredResponse, unverifiedEmailResponse } from '@/lib/auth/api-guard';
 
 /** Basic sanitization for free-text fields */
 function sanitize(str: unknown, maxLen = 200): string {
@@ -19,6 +19,10 @@ function sanitize(str: unknown, maxLen = 200): string {
 }
 
 export async function POST(req: NextRequest) {
+  const user = await getRequestUser();
+  if (!user) return authRequiredResponse();
+  if (!user.emailConfirmedAt) return unverifiedEmailResponse();
+
   try {
     const body = await req.json();
 
@@ -26,14 +30,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Payload too large' }, { status: 413 });
     }
 
-    // Free: 1 AI devotional / day (2× with $SALVAZION). Premium: unlimited.
+    // Free: 1 AI devotional / day for everyone (DEC-20261014-01). Premium: unlimited.
     // Exhausted Free quota still gets the rules-based daily reading.
-    const user = await getRequestUser();
     let useAi = false;
     let quotaNote: string | null = null;
     let usage = null as Awaited<ReturnType<typeof consumeAiQuota>> | null;
 
-    if (user) {
+    {
       const peek = await peekAiQuota(user.id, 'devotional_ai', user.email);
       if (peek.unlimited || peek.allowed) {
         useAi = true;
@@ -105,13 +108,11 @@ export async function POST(req: NextRequest) {
               : 'Devocional diario por reglas. Inicia sesión para usar el cupo Free de IA — Premium es ilimitado.'),
         aiConfigured: isXaiConfigured(),
         premium: false,
-        usage: user
-          ? await peekAiQuota(user.id, 'devotional_ai', user.email)
-          : null,
+        usage: await peekAiQuota(user.id, 'devotional_ai', user.email),
       });
     }
 
-    usage = await consumeAiQuota(user!.id, 'devotional_ai', user!.email);
+    usage = await consumeAiQuota(user.id, 'devotional_ai', user.email);
     if (!usage.allowed && !usage.unlimited) {
       return NextResponse.json({
         success: true,
@@ -129,26 +130,16 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    try {
-      const { devotional, engine, note } = await generateDevotionalAsync(profile, date);
-      if (engine === 'salvazion-rules-v1' && usage.tracked && user) {
-        await refundAiQuota(user.id, 'devotional_ai');
-      }
-      return NextResponse.json({
-        success: true,
-        data: devotional,
-        engine,
-        note,
-        aiConfigured: isXaiConfigured(),
-        premium: usage.unlimited,
-        usage,
-      });
-    } catch (aiErr) {
-      if (usage.tracked && user) {
-        await refundAiQuota(user.id, 'devotional_ai');
-      }
-      throw aiErr;
-    }
+    const { devotional, engine, note } = await generateDevotionalAsync(profile, date);
+    return NextResponse.json({
+      success: true,
+      data: devotional,
+      engine,
+      note,
+      aiConfigured: isXaiConfigured(),
+      premium: usage.unlimited,
+      usage,
+    });
   } catch (error) {
     console.error('Devotional engine error:', error);
     return NextResponse.json(
@@ -159,6 +150,9 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
+  const user = await getRequestUser();
+  if (!user) return authRequiredResponse();
+  if (!user.emailConfirmedAt) return unverifiedEmailResponse();
   return NextResponse.json({
     message: 'Salvazion Devotional Engine',
     aiConfigured: isXaiConfigured(),

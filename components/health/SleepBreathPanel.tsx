@@ -73,7 +73,7 @@ export default function SleepBreathPanel({ lang = 'en' }: Props) {
           {tx(
             '4-7-8 downshift to fall asleep. It prepares the body God gave you — it does not replace prayer.',
             'Descenso 4-7-8 para dormir. Prepara el cuerpo que Dios te dio — no reemplaza la oración.',
-            'Descida 4-7-8 para dormir. Prepara o corpo que Deus te deu — não substitui a oração.'
+            'Descida 4-7-8 para dormir. Prepara o corpo que Deus deu a você — não substitui a oração.'
           )}
         </p>
 

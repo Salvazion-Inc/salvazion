@@ -6,7 +6,6 @@ import { type BillingInterval } from '@/lib/billing/plans';
 import { BLOCKED_CHECKOUT_PRICE_IDS } from '@/lib/billing/price-ids';
 import { resolveCheckoutPriceId } from '@/lib/billing/resolve-price';
 import {
-  guestCheckoutPath,
   loginUrlForCheckout,
   parseBillingInterval,
   signupUrlForCheckout,
@@ -37,25 +36,13 @@ function intervalFromRequest(
   return body.interval === 'year' ? 'year' : 'month';
 }
 
-function authRequiredResponse(
-  req: NextRequest,
-  interval: BillingInterval,
-  redirect: boolean
-) {
-  const signupUrl = signupUrlForCheckout(interval);
-  const loginUrl = loginUrlForCheckout(interval);
-  const guestCheckoutUrl = guestCheckoutPath(interval);
-  if (redirect) {
-    // Logged-out GET → public guest Checkout (no signup / email confirm before paying).
-    return NextResponse.redirect(new URL(guestCheckoutUrl, req.nextUrl.origin));
-  }
+function authRequiredResponse(interval: BillingInterval) {
   return NextResponse.json(
     {
       error: 'auth_required',
       code: 'auth_required',
-      signupUrl,
-      loginUrl,
-      guestCheckoutUrl,
+      signupUrl: signupUrlForCheckout(interval),
+      loginUrl: loginUrlForCheckout(interval),
     },
     { status: 401 }
   );
@@ -147,7 +134,10 @@ async function handleCheckout(
       data: { user },
     } = await supabase.auth.getUser();
     if (!user) {
-      return authRequiredResponse(req, interval, redirect);
+      return authRequiredResponse(interval);
+    }
+    if (!user.email_confirmed_at && !user.confirmed_at) {
+      return NextResponse.json({ error: 'email_unverified' }, { status: 403 });
     }
 
     if (

@@ -18,7 +18,10 @@ export async function GET() {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ error: 'unauthorized' }, { status: 401, headers: PRIVATE });
+      return NextResponse.json({ error: 'auth_required' }, { status: 401, headers: PRIVATE });
+    }
+    if (!user.email_confirmed_at && !user.confirmed_at) {
+      return NextResponse.json({ error: 'email_unverified' }, { status: 403, headers: PRIVATE });
     }
     if (!isFounderEmail(user.email)) {
       return NextResponse.json({ error: 'forbidden' }, { status: 403, headers: PRIVATE });

@@ -11,6 +11,9 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   const user = await getRequestUser();
   if (!user) return NextResponse.json({ error: 'auth_required' }, { status: 401 });
+  if (!user.emailConfirmedAt) {
+    return NextResponse.json({ error: 'email_unverified' }, { status: 403 });
+  }
   try {
     const link = await getHolderLink(user.id);
     if (!link) return NextResponse.json({ configured: true, linked: false });
@@ -34,6 +37,9 @@ export async function DELETE(req: NextRequest) {
   if (!isSameOrigin(req)) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
   const user = await getRequestUser();
   if (!user) return NextResponse.json({ error: 'auth_required' }, { status: 401 });
+  if (!user.emailConfirmedAt) {
+    return NextResponse.json({ error: 'email_unverified' }, { status: 403 });
+  }
   try {
     await deleteHolderLink(user.id);
     clearHolderCache(user.id);

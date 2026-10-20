@@ -170,7 +170,7 @@ export function buildFabNudges(
       text: tx(
         `Don't know your purpose? Ask Salvazion AI.`,
         `¿No sabes tu propósito? Pregúntale a Salvazion AI.`,
-        `Não sabe o teu propósito? Pergunte à Salvazion AI.`
+        `Não sabe o seu propósito? Pergunte à Salvazion AI.`
       ),
       href: HREF.coach,
       cta: tx('Find it', 'Encontrarlo', 'Encontrá-lo'),
@@ -240,7 +240,7 @@ export function buildFabNudges(
         text: tx(
           `${name}! Global Score ${global}. Guard it — it serves your purpose.`,
           `¡${name}! Score Global ${global}. Protégelo: sirve a tu propósito.`,
-          `${name}! Score Global ${global}. Proteja-o: serve ao teu propósito.`
+          `${name}! Score Global ${global}. Proteja-o: sirva ao seu propósito.`
         ),
         pillar: 'global',
         href: HREF.badges,
@@ -315,7 +315,7 @@ export function buildFabNudges(
       text: tx(
         `${name}, Salvazion AI waits in today's Devotional.`,
         `${name}, Salvazion AI te espera en el Devocional de hoy.`,
-        `${name}, a Salvazion AI te espera no Devocional de hoje.`
+        `${name}, a Salvazion AI espera você no Devocional de hoje.`
       ),
       pillar: 'salvation',
       href: HREF.devotional,

@@ -19,7 +19,7 @@ export default function GoogleAuthButton({
   onError,
   disabled = false,
 }: Props) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [loading, setLoading] = useState(false);
 
   async function handleClick() {
@@ -30,7 +30,7 @@ export default function GoogleAuthButton({
     setLoading(true);
     const { error } = await signInWithGoogle({ next });
     if (error) {
-      onError?.(mapAuthError(error));
+      onError?.(mapAuthError(error, lang));
       setLoading(false);
     }
   }

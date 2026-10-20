@@ -4,7 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -37,14 +37,16 @@ export function useI18n() {
 export default function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Language>('en');
 
-  useEffect(() => {
+  // Saved locale is client-only. Apply it before paint so the first frame
+  // is not a flash of English, and the server HTML stays the English default.
+  useLayoutEffect(() => {
     const fromStore = loadLocale();
-    // Prefer profile language if set
     const profile = loadProfile();
     const initial =
       profile.language === 'en' || profile.language === 'es' || profile.language === 'pt'
         ? profile.language
         : fromStore;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- locale is client-only; apply before paint
     setLangState(initial);
     applyDocumentLang(initial);
     saveLocale(initial);

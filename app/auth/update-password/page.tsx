@@ -14,7 +14,7 @@ import BrandLoader from '@/components/ui/BrandLoader';
  */
 export default function UpdatePasswordPage() {
   const router = useRouter();
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [loading, setLoading] = useState(false);
@@ -63,14 +63,14 @@ export default function UpdatePasswordPage() {
       const supabase = createClient();
       const { error: err } = await supabase.auth.updateUser({ password });
       if (err) {
-        setError(mapAuthError(err.message));
+        setError(mapAuthError(err.message, lang));
         setLoading(false);
         return;
       }
       router.replace('/hub/dashboard?password_updated=1');
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? mapAuthError(err.message) : t('auth.processing'));
+      setError(err instanceof Error ? mapAuthError(err.message, lang) : t('auth.processing'));
       setLoading(false);
     }
   }

@@ -67,9 +67,10 @@ export function clearHolderCache(userId: string): void {
 }
 
 /**
- * Holder bonus = a wallet VERIFIED by signature (wallet_holder_links,
- * see /api/wallet/holder/verify) whose live $SALVAZION balance is > 0.
- * The legacy unverified profiles.solana_wallet no longer grants the bonus.
+ * Verified wallet snapshot (wallet_holder_links, /api/wallet/holder/verify).
+ * DEC-20261014-01: a positive balance does not change Free AI limits.
+ * The link is still refreshed so the included Premium month can read it.
+ * The legacy unverified profiles.solana_wallet is not this link.
  */
 async function resolveHolder(userId: string): Promise<{
   holder: boolean;
@@ -121,20 +122,20 @@ function buildState(
   feature: AiFeature,
   opts: {
     isPremium: boolean;
-    holderBonus: boolean;
     salvazionBalance: number | null;
     used: number;
   }
 ): AiQuotaState {
   const spec = FREE_AI_LIMITS[feature];
   const start = periodStartUtc(spec.period);
+  // DEC-20261014-01: holder status never raises the Free cap or the UI flag.
   if (opts.isPremium) {
     return {
       feature,
       allowed: true,
       unlimited: true,
       isPremium: true,
-      holderBonus: opts.holderBonus,
+      holderBonus: false,
       salvazionBalance: opts.salvazionBalance,
       used: opts.used,
       limit: null,
@@ -144,7 +145,7 @@ function buildState(
       resetAt: null,
     };
   }
-  const limit = freeLimitFor(feature, opts.holderBonus);
+  const limit = freeLimitFor(feature);
   const used = Math.max(0, opts.used);
   const remaining = Math.max(0, limit - used);
   return {
@@ -152,7 +153,7 @@ function buildState(
     allowed: remaining > 0,
     unlimited: false,
     isPremium: false,
-    holderBonus: opts.holderBonus,
+    holderBonus: false,
     salvazionBalance: opts.salvazionBalance,
     used,
     limit,
@@ -203,7 +204,6 @@ export async function peekAiQuota(
   const used = (await readUsed(userId, feature, start)) ?? 0;
   return buildState(feature, {
     isPremium: ent.isPremium,
-    holderBonus: holder.holder,
     salvazionBalance: holder.amount,
     used,
   });
@@ -225,7 +225,6 @@ export async function getAiUsageOverview(
       const used = (await readUsed(userId, feature, start)) ?? 0;
       features[feature] = buildState(feature, {
         isPremium: ent.isPremium,
-        holderBonus: holder.holder,
         salvazionBalance: holder.amount,
         used,
       });
@@ -234,7 +233,7 @@ export async function getAiUsageOverview(
   return {
     signedIn: true,
     isPremium: ent.isPremium,
-    holderBonus: holder.holder,
+    holderBonus: false,
     salvazionBalance: holder.amount,
     wallet: holder.wallet,
     features,
@@ -334,7 +333,6 @@ export async function consumeAiQuota(
     return {
       ...buildState(feature, {
         isPremium: false,
-        holderBonus: false,
         salvazionBalance: null,
         used: 0,
       }),
@@ -352,7 +350,6 @@ export async function consumeAiQuota(
     return {
       ...buildState(feature, {
         isPremium: true,
-        holderBonus: holder.holder,
         salvazionBalance: holder.amount,
         used: 0,
       }),
@@ -362,7 +359,7 @@ export async function consumeAiQuota(
 
   const spec = FREE_AI_LIMITS[feature];
   const start = periodStartUtc(spec.period);
-  const limit = freeLimitFor(feature, holder.holder);
+  const limit = freeLimitFor(feature);
 
   const viaRpc = await incrementViaRpc(userId, feature, start, limit);
   const bumped = viaRpc ?? (await incrementFallback(userId, feature, start, limit));
@@ -376,7 +373,6 @@ export async function consumeAiQuota(
     return {
       ...buildState(feature, {
         isPremium: false,
-        holderBonus: holder.holder,
         salvazionBalance: holder.amount,
         used,
       }),
@@ -387,7 +383,6 @@ export async function consumeAiQuota(
   return {
     ...buildState(feature, {
       isPremium: false,
-      holderBonus: holder.holder,
       salvazionBalance: holder.amount,
       used: bumped.allowed ? bumped.used : limit,
     }),

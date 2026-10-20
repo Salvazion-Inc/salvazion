@@ -31,7 +31,7 @@ Checkout (`/api/billing/checkout`) resolves line items by **lookup_key**, not `d
   - AI devotionals: **1 / day** (then rules-based fallback)  
   - Cineanthropometry: **2 / week**  
   - Meal photo AI: **3 / day**  
-- Hold **$SALVAZION on-chain** (linked wallet) → **2× those Free limits**  
+- Holding **$SALVAZION** does not change those Free limits (DEC-20261014-01). A verified wallet can still qualify for the included first month of Premium, below.  
 - Manual health logging  
 - Freedom browse (base)  
 - Solana wallet connect + $SALVAZION swap (Jupiter)  
@@ -103,7 +103,7 @@ Run `supabase/subscriptions.sql` in the SQL editor so entitlements persist.
 
 Run `supabase/ai-usage.sql` so Free AI quotas persist (`ai_usage` table).
 
-Run `supabase/holder-verify.sql` for the $SALVAZION holder bonus (verify-holdings v1): `wallet_holder_links` (signature-verified wallet, one wallet per account), `holder_verify_nonces` (replay protection) and `product_events` (`bono_activado`, `upgrade_click`). The bonus doubles every Free AI limit while the verified wallet holds > 0 $SALVAZION; the old unverified `profiles.solana_wallet` no longer grants it.
+Run `supabase/holder-verify.sql` for verify-holdings v1: `wallet_holder_links` (signature-verified wallet, one wallet per account), `holder_verify_nonces` (replay protection) and `product_events` (`bono_activado`, `upgrade_click`). DEC-20261014-01: a verified balance does not change Free AI limits. The included first month is DEC-20261011-27, above. The old unverified `profiles.solana_wallet` is not used for that check.
 
 ## Customer Portal
 

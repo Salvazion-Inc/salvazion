@@ -62,6 +62,7 @@ test('message binds domain, account, wallet and nonce', () => {
     assert.ok(message.includes(v));
   }
   assert.match(message, /No es una transacción/);
+  assert.doesNotMatch(message, /bono|bônus|bonus/i);
 });
 
 test('challenge token round-trips and rejects tampering', () => {

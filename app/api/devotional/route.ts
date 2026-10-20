@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Payload too large' }, { status: 413 });
     }
 
-    // Free: 1 AI devotional / day (2× with $SALVAZION). Premium: unlimited.
+    // Free: 1 AI devotional / day for everyone (DEC-20261014-01). Premium: unlimited.
     // Exhausted Free quota still gets the rules-based daily reading.
     let useAi = false;
     let quotaNote: string | null = null;

@@ -1,5 +1,6 @@
 /**
- * $SALVAZION holder bonus — wallet ownership proof (pure, server-safe).
+ * $SALVAZION wallet ownership proof (pure, server-safe).
+ * DEC-20261014-01: the signature does not grant a Free AI bonus.
  *
  * Flow: the signed-in user asks for a challenge → the server returns a
  * human-readable message bound to (domain, user id, wallet, nonce, issuedAt)
@@ -47,15 +48,15 @@ export function newNonce(): string {
 
 const HEADERS: Record<HolderLang, [string, string]> = {
   es: [
-    'Salvazion: verificar wallet para el bono holder del plan Free (IA).',
+    'Salvazion: verificar que esta wallet es tuya.',
     'Esta firma solo prueba que la wallet es tuya. No es una transacción, no mueve fondos y no tiene costo.',
   ],
   en: [
-    'Salvazion: verify wallet for the Free plan holder bonus (AI).',
+    'Salvazion: verify that this wallet is yours.',
     'This signature only proves you own this wallet. It is not a transaction, moves no funds and costs nothing.',
   ],
   pt: [
-    'Salvazion: verificar wallet para o bônus holder do plano Free (IA).',
+    'Salvazion: verificar que esta wallet é sua.',
     'Esta assinatura só prova que a wallet é sua. Não é uma transação, não move fundos e não tem custo.',
   ],
 };

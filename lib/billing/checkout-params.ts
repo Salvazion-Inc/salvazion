@@ -18,11 +18,11 @@ import { HOLDER_TRIAL_DAYS } from './holder-trial';
  *   Nothing here sends email; any recovery email is a separate, approved flow
  *   and only for customers with consent.promotions === 'opt_in'.
  *
- * No promotion codes (DEC-20261011-26, SLV-NOPROMO-20261011-1): Premium never
- * uses discounts or promo codes. allow_promotion_codes is NOT sent, neither on
- * the session nor on after_expiration.recovery, so Stripe applies its default
- * (false) and Checkout shows no "Add promotion code" field. No `discounts`
- * either. Do not add them back without a new zone-A decision by Cristian.
+ * No promotion codes (DEC-20261011-26, DEC-20261021-01 (2)): Premium never
+ * uses discounts or promo codes. allow_promotion_codes is false on the session
+ * and on after_expiration.recovery, so a Dashboard default cannot turn the
+ * field on. No `discounts`, coupons, or promotion_code. Do not add them back
+ * without a new zone-A decision by Cristian.
  */
 
 export const TERMS_URL = 'https://salvazion.org/terms';
@@ -36,7 +36,7 @@ export function premiumRecoveryParams(): Pick<
 > {
   return {
     after_expiration: {
-      recovery: { enabled: true },
+      recovery: { enabled: true, allow_promotion_codes: false },
     },
   };
 }
@@ -54,6 +54,7 @@ export function buildGuestCheckoutParams(
   const { priceId, baseUrl, metadata } = input;
   return {
     mode: 'subscription',
+    allow_promotion_codes: false,
     line_items: [{ price: priceId, quantity: 1 }],
     success_url: `${baseUrl}/premium/welcome?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${baseUrl}/?billing=cancel#pricing`,
@@ -98,6 +99,7 @@ export function buildHubCheckoutParams(
     : null;
   return {
     mode: 'subscription',
+    allow_promotion_codes: false,
     customer: customerId,
     client_reference_id: userId,
     line_items: [{ price: priceId, quantity: 1 }],

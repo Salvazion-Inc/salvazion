@@ -25,7 +25,8 @@ const text = await res.text();
 let body;
 try { body = JSON.parse(text); } catch { body = { raw: text.slice(0, 300) }; }
 console.log(JSON.stringify({ status: res.status, ...body }));
+const promoOff = body.allow_promotion_codes === false || body.allow_promotion_codes === null;
 const pass = res.status === 200 && body.ok === true && body.url_host === 'checkout.stripe.com'
-  && body.status === 'expired' && body.e2e === 'true';
+  && body.status === 'expired' && body.e2e === 'true' && promoOff;
 console.log(pass ? 'SMOKE PASS' : 'SMOKE FAIL');
 process.exit(pass ? 0 : 1);

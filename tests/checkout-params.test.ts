@@ -14,16 +14,18 @@ const BASE = 'https://salvazion.org';
 function assertConsentAndRecovery(p: Record<string, unknown>) {
   // SLV-CHECKOUT-TOS-20261013-1: consent_collection is never sent.
   assert.equal('consent_collection' in p, false);
-  assert.deepEqual(p.after_expiration, { recovery: { enabled: true } });
-  // DEC-20261011-26: Premium never uses promo codes or discounts. Not sent at
-  // all (Stripe default = false), on the session or on the recovery link.
-  assert.equal('allow_promotion_codes' in p, false);
+  assert.deepEqual(p.after_expiration, {
+    recovery: { enabled: true, allow_promotion_codes: false },
+  });
+  // DEC-20261021-01 (2): promotion codes are off. No coupon, promotion_code, or discounts.
+  assert.equal(p.allow_promotion_codes, false);
   assert.equal(
-    'allow_promotion_codes' in ((p.after_expiration as { recovery: object }).recovery),
+    (p.after_expiration as { recovery: { allow_promotion_codes?: boolean } }).recovery
+      .allow_promotion_codes,
     false
   );
   assert.equal('discounts' in p, false);
-  assert.doesNotMatch(JSON.stringify(p), /promotion_code|coupon|discount/);
+  assert.doesNotMatch(JSON.stringify(p), /"coupon"|"promotion_code"|"discounts"/);
 }
 
 for (const [interval, priceId] of [
@@ -73,6 +75,29 @@ for (const [interval, priceId] of [
     assert.match(JSON.stringify(p.custom_text), /salvazion\.org\/privacy/);
   });
 }
+
+test('DEC-20261021-01 (2): Checkout Session is created without promotion codes', () => {
+  const guest = buildGuestCheckoutParams({
+    priceId: MONTHLY,
+    interval: 'month',
+    baseUrl: BASE,
+    metadata: { app: 'salvazion', flow: 'guest', interval: 'month', price_id: MONTHLY },
+  });
+  const hub = buildHubCheckoutParams({
+    customerId: 'cus_test123',
+    userId: 'user-uuid',
+    priceId: ANNUAL,
+    interval: 'year',
+    baseUrl: BASE,
+  });
+  for (const p of [guest, hub]) {
+    assert.equal(p.allow_promotion_codes, false);
+    assert.equal(p.discounts, undefined);
+    assert.equal(p.subscription_data?.discounts, undefined);
+    assert.equal(p.after_expiration?.recovery?.allow_promotion_codes, false);
+    assert.doesNotMatch(JSON.stringify(p), /"coupon"|"promotion_code"/);
+  }
+});
 
 test('shared params are a fresh object each call', () => {
   const a = premiumRecoveryParams();

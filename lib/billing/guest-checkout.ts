@@ -83,11 +83,17 @@ export async function runCheckoutSmoke(interval: BillingInterval): Promise<{
   const session = await createGuestCheckoutSession(interval, { e2e: true });
   const expired = await getStripe().checkout.sessions.expire(session.id);
   const urlHost = session.url ? new URL(session.url).host : null;
+  const allowPromotionCodes = session.allow_promotion_codes ?? null;
   return {
-    ok: Boolean(session.url) && urlHost === 'checkout.stripe.com' && expired.status === 'expired',
+    ok:
+      Boolean(session.url) &&
+      urlHost === 'checkout.stripe.com' &&
+      expired.status === 'expired' &&
+      (allowPromotionCodes === false || allowPromotionCodes === null),
     session_id_prefix: session.id.slice(0, 12),
     url_host: urlHost,
     status: expired.status,
     e2e: expired.metadata?.e2e ?? null,
+    allow_promotion_codes: allowPromotionCodes,
   };
 }

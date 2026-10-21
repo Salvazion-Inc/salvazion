@@ -1,5 +1,6 @@
 'use client';
 
+import { authEmailRedirectTo } from '@/lib/auth/email-redirect';
 import { useState, FormEvent, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -108,7 +109,7 @@ function SignupForm() {
       password,
       options: {
         data: meta,
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
+        emailRedirectTo: authEmailRedirectTo(next),
       },
     });
 

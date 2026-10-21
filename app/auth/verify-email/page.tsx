@@ -1,5 +1,6 @@
 'use client';
 
+import { authEmailRedirectTo } from '@/lib/auth/email-redirect';
 import { FormEvent, Suspense, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -85,7 +86,7 @@ function VerifyEmailForm() {
         type: 'signup',
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
+          emailRedirectTo: authEmailRedirectTo(next),
         },
       });
       if (err) setError(err.message);
@@ -124,7 +125,7 @@ function VerifyEmailForm() {
       const supabase = createClient();
       const { error: err } = await supabase.auth.updateUser(
         { email: address },
-        { emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}` }
+        { emailRedirectTo: authEmailRedirectTo(next) }
       );
       if (err) {
         setError(err.message);

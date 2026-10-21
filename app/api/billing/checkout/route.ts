@@ -15,6 +15,7 @@ import { getEntitlementForUser, upsertSubscriptionRow } from '@/lib/billing/subs
 import {
   CHECKOUT_RATE,
   consumeRateLimit,
+  checkoutBaseUrl,
   isAllowedBillingOrigin,
 } from '@/lib/billing/request-guard';
 import { billingLog } from '@/lib/billing/redact';
@@ -53,6 +54,7 @@ function authRequiredResponse(interval: BillingInterval) {
 async function createCheckoutSession(
   user: User,
   interval: BillingInterval,
+  base: string,
   utm: Awaited<ReturnType<typeof readProfileUtm>>
 ) {
   const priceId = await resolveCheckoutPriceId(interval);
@@ -61,7 +63,6 @@ async function createCheckoutSession(
   }
 
   const stripe = getStripe();
-  const base = getAppBaseUrl();
   const ent = await getEntitlementForUser(user.id, user.email);
 
   let customerId = ent.customerId;
@@ -163,7 +164,12 @@ async function handleCheckout(
     const utm =
       (await readProfileUtm(supabase, user.id)) ??
       parseUtmCookie(req.cookies.get(UTM_COOKIE)?.value);
-    const session = await createCheckoutSession(user, interval, utm);
+    const session = await createCheckoutSession(
+      user,
+      interval,
+      checkoutBaseUrl(req, getAppBaseUrl()),
+      utm
+    );
     if (!session.url) {
       throw new Error('Stripe did not return a Checkout URL.');
     }

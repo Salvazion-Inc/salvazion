@@ -74,3 +74,13 @@ export function readCheckoutIntervalFromLocation(): BillingInterval | null {
     return null;
   }
 }
+
+/** True when the URL is a return from Stripe Checkout (cancel_url / success). */
+export function isCheckoutReturn(search: string): boolean {
+  try {
+    const params = new URLSearchParams(search);
+    return params.has('billing') || params.has('session_id');
+  } catch {
+    return false;
+  }
+}

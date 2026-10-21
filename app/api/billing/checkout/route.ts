@@ -23,6 +23,8 @@ import {
   checkHolderTrial,
   expireOpenHolderTrialSessions,
 } from '@/lib/billing/holder-trial-server';
+import { readProfileUtm } from '@/lib/attribution/utm-server';
+import { parseUtmCookie, UTM_COOKIE } from '@/lib/attribution/utm';
 import { logProductEvent } from '@/lib/analytics/product-events';
 
 export const runtime = 'nodejs';
@@ -48,7 +50,11 @@ function authRequiredResponse(interval: BillingInterval) {
   );
 }
 
-async function createCheckoutSession(user: User, interval: BillingInterval) {
+async function createCheckoutSession(
+  user: User,
+  interval: BillingInterval,
+  utm: Awaited<ReturnType<typeof readProfileUtm>>
+) {
   const priceId = await resolveCheckoutPriceId(interval);
   if (BLOCKED_CHECKOUT_PRICE_IDS.has(priceId)) {
     throw new Error(`Refusing legacy $20 price ${priceId} for Checkout.`);
@@ -89,6 +95,7 @@ async function createCheckoutSession(user: User, interval: BillingInterval) {
       interval,
       baseUrl: base,
       holderTrial,
+      utm,
     })
   );
   if (holderTrial) {
@@ -153,7 +160,10 @@ async function handleCheckout(
       );
     }
 
-    const session = await createCheckoutSession(user, interval);
+    const utm =
+      (await readProfileUtm(supabase, user.id)) ??
+      parseUtmCookie(req.cookies.get(UTM_COOKIE)?.value);
+    const session = await createCheckoutSession(user, interval, utm);
     if (!session.url) {
       throw new Error('Stripe did not return a Checkout URL.');
     }

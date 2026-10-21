@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { updateSession } from '@/lib/supabase/middleware';
+import { UTM_COOKIE, UTM_COOKIE_MAX_AGE, serializeUtmCookie, utmFromSearchParams } from '@/lib/attribution/utm';
 import { decideServiceAccess, isEmailVerified } from '@/lib/auth/service-access';
 
 function withSessionCookies(from: NextResponse, to: NextResponse): NextResponse {
@@ -9,8 +10,23 @@ function withSessionCookies(from: NextResponse, to: NextResponse): NextResponse 
   return to;
 }
 
+// First-touch UTM (DEC-20261021-05): set once, 30 days, never overwritten.
+function captureUtm(request: NextRequest, response: NextResponse) {
+  if (request.cookies.get(UTM_COOKIE)) return;
+  const utm = utmFromSearchParams(request.nextUrl.searchParams);
+  if (!utm) return;
+  response.cookies.set(UTM_COOKIE, serializeUtmCookie(utm), {
+    path: '/',
+    maxAge: UTM_COOKIE_MAX_AGE,
+    sameSite: 'lax',
+    secure: request.nextUrl.protocol === 'https:',
+    httpOnly: false, // signup page copies it into user_metadata
+  });
+}
+
 export async function proxy(request: NextRequest) {
   const { user, supabaseResponse } = await updateSession(request);
+  captureUtm(request, supabaseResponse);
   const accessUser = user
     ? {
         id: user.id,

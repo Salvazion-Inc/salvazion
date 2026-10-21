@@ -1,6 +1,7 @@
 import type Stripe from 'stripe';
 import type { BillingInterval } from './plans';
 import { HOLDER_TRIAL_DAYS } from './holder-trial';
+import { utmToMetadata, type Utm } from '../attribution/utm';
 
 /**
  * Pure builders for the Premium Stripe Checkout Session params (guest
@@ -75,6 +76,8 @@ export type HubCheckoutParamsInput = {
   priceId: string;
   interval: BillingInterval;
   baseUrl: string;
+  /** First-touch UTM (DEC-20261021-05); only non-empty values reach Stripe. */
+  utm?: Utm | null;
   /**
    * $SALVAZION holder access (DEC-20261011-27): set ONLY by the server after
    * checkHolderTrial() said eligible. Adds a 30-day subscription trial, never
@@ -90,6 +93,7 @@ export function buildHubCheckoutParams(
   input: HubCheckoutParamsInput
 ): Stripe.Checkout.SessionCreateParams {
   const { customerId, userId, priceId, interval, baseUrl, holderTrial } = input;
+  const utm = utmToMetadata(input.utm);
   const trial = holderTrial
     ? {
         trial_period_days: HOLDER_TRIAL_DAYS,
@@ -117,6 +121,7 @@ export function buildHubCheckoutParams(
         app: 'salvazion',
         interval,
         ...(trial ? trial.meta : {}),
+        ...utm,
       },
     },
     metadata: {
@@ -125,6 +130,7 @@ export function buildHubCheckoutParams(
       interval,
       price_id: priceId,
       ...(trial ? trial.meta : {}),
+      ...utm,
     },
   };
 }

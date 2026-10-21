@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -9,7 +9,7 @@ import BrandLoader from '@/components/ui/BrandLoader';
 import { loadProfileAsync } from '@/lib/store/profile';
 import { useI18n } from '@/components/I18nProvider';
 import { textWithXLogo } from '@/components/ui/XLogo';
-import { startCheckout, useEntitlement } from '@/lib/billing/client';
+import { startCheckout, useEntitlement, usePageRestore } from '@/lib/billing/client';
 import {
   PLAN_COPY,
   PREMIUM_FEATURE_LIST,
@@ -18,6 +18,7 @@ import {
 import { pickLang } from '@/lib/i18n/locale';
 import {
   clearPendingCheckout,
+  isCheckoutReturn,
   parseBillingInterval,
   readCheckoutIntervalFromLocation,
   rememberPendingCheckout,
@@ -36,12 +37,24 @@ export default function PremiumPage() {
   const [ready, setReady] = useState(false);
   const [canceled, setCanceled] = useState(false);
   const autoStarted = useRef(false);
+  usePageRestore(
+    useCallback(() => {
+      setBusy(null);
+      clearPendingCheckout();
+    }, [])
+  );
 
   useEffect(() => {
     setMounted(true);
     (async () => {
-      const interval = readCheckoutIntervalFromLocation();
-      if (interval) rememberPendingCheckout(interval);
+      // Back from Stripe (cancel/success): never auto-reopen a plan; the
+      // user picks monthly or annual again (DEC-20261021-06).
+      if (isCheckoutReturn(window.location.search)) {
+        clearPendingCheckout();
+      } else {
+        const interval = readCheckoutIntervalFromLocation();
+        if (interval) rememberPendingCheckout(interval);
+      }
       try {
         const params = new URLSearchParams(window.location.search);
         if (params.get('billing') === 'cancel') {
@@ -268,7 +281,7 @@ export default function PremiumPage() {
 
       {!isPremium ? (
         <div className="sm:hidden">
-          <UpgradeCta sticky />
+          <UpgradeCta sticky showAnnual />
         </div>
       ) : null}
 

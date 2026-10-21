@@ -1,6 +1,18 @@
 import type { NextRequest } from 'next/server';
 import { APP_ALLOWED_HOSTS, getAppBaseUrl } from '@/lib/config/site';
 
+/** Team-scoped Vercel preview hosts, e.g. salvazion-abc123-salvazion.vercel.app */
+const PREVIEW_ORIGIN_RE = /^https:\/\/salvazion-[a-z0-9-]+-salvazion\.vercel\.app$/;
+
+/** Only when VERCEL_ENV === 'preview'; production behaviour is unchanged. */
+export function isAllowedPreviewOrigin(
+  url: URL,
+  vercelEnv: string | undefined = process.env.VERCEL_ENV
+): boolean {
+  if (vercelEnv !== 'preview') return false;
+  return PREVIEW_ORIGIN_RE.test(url.origin);
+}
+
 const buckets = new Map<string, { count: number; resetAt: number }>();
 
 function allowedHost(hostname: string): boolean {
@@ -35,6 +47,7 @@ export function isAllowedBillingOrigin(
     try {
       const url = new URL(raw);
       if (allowedHost(url.hostname)) return true;
+      if (isAllowedPreviewOrigin(url)) return true;
     } catch {
       // ignore malformed
     }

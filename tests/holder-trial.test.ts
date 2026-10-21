@@ -144,14 +144,16 @@ for (const interval of ['month', 'year'] as const) {
     assert.equal(p.subscription_data?.metadata?.supabase_user_id, 'user-uuid');
     assert.equal(p.metadata?.holder_trial, 'true');
     assert.deepEqual(p.line_items, [{ price: 'price_x', quantity: 1 }]);
-    // DEC-20261011-26: still no promo codes / discounts / coupons.
-    assert.equal('allow_promotion_codes' in p, false);
+    // DEC-20261021-01 (2): the included month is a trial, not a coupon.
+    assert.equal(p.allow_promotion_codes, false);
     assert.equal('discounts' in p, false);
-    assert.doesNotMatch(JSON.stringify(p), /promotion_code|coupon|discount/);
-    // recovery unchanged
+    assert.equal(p.subscription_data?.discounts, undefined);
+    assert.doesNotMatch(JSON.stringify(p), /"coupon"|"promotion_code"|"discounts"/);
     // SLV-CHECKOUT-TOS-20261013-1: consent_collection is never sent.
-  assert.equal('consent_collection' in p, false);
-    assert.deepEqual(p.after_expiration, { recovery: { enabled: true } });
+    assert.equal('consent_collection' in p, false);
+    assert.deepEqual(p.after_expiration, {
+      recovery: { enabled: true, allow_promotion_codes: false },
+    });
     assert.match(JSON.stringify(p.custom_text), /first month of Premium is included/);
   });
 }

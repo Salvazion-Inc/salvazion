@@ -1,5 +1,6 @@
 'use client';
 
+import { authEmailRedirectTo } from '@/lib/auth/email-redirect';
 import { useState, FormEvent, Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -205,7 +206,7 @@ function LoginForm() {
     const { error: err } = await supabase.auth.signInWithOtp({
       email: email.trim(),
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(dest)}`,
+        emailRedirectTo: authEmailRedirectTo(dest),
       },
     });
 
@@ -232,7 +233,7 @@ function LoginForm() {
     }
 
     const { error: err } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-      redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent('/auth/update-password')}`,
+      redirectTo: authEmailRedirectTo('/auth/update-password'),
     });
 
     if (err) {

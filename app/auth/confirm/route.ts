@@ -2,6 +2,9 @@ import { type EmailOtpType } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { safeNextPath } from '@/lib/auth/paths';
+import { cookies } from 'next/headers';
+import { UTM_COOKIE } from '@/lib/attribution/utm';
+import { stampProfileUtm } from '@/lib/attribution/utm-server';
 
 /**
  * Handles token_hash email links (confirm signup / recovery) when Supabase
@@ -19,8 +22,12 @@ export async function GET(request: Request) {
   if (token_hash && type) {
     try {
       const supabase = await createClient();
-      const { error } = await supabase.auth.verifyOtp({ type, token_hash });
+      const { data, error } = await supabase.auth.verifyOtp({ type, token_hash });
       if (!error) {
+        if (data.user && type !== 'recovery') {
+          const jar = await cookies();
+          await stampProfileUtm(supabase, data.user, jar.get(UTM_COOKIE)?.value);
+        }
         // Password recovery should land on the update form
         if (type === 'recovery') {
           return NextResponse.redirect(`${origin}/auth/update-password`);

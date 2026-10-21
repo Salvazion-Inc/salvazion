@@ -1,5 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { updateSession } from '@/lib/supabase/middleware';
+import { UTM_COOKIE, UTM_COOKIE_MAX_AGE, serializeUtmCookie, utmFromSearchParams } from '@/lib/attribution/utm';
+import { strayAuthCodeTarget } from '@/lib/auth/email-redirect';
 import { decideServiceAccess, isEmailVerified } from '@/lib/auth/service-access';
 
 function withSessionCookies(from: NextResponse, to: NextResponse): NextResponse {
@@ -9,8 +11,28 @@ function withSessionCookies(from: NextResponse, to: NextResponse): NextResponse 
   return to;
 }
 
+// First-touch UTM (DEC-20261021-05): set once, 30 days, never overwritten.
+function captureUtm(request: NextRequest, response: NextResponse) {
+  if (request.cookies.get(UTM_COOKIE)) return;
+  const utm = utmFromSearchParams(request.nextUrl.searchParams);
+  if (!utm) return;
+  response.cookies.set(UTM_COOKIE, serializeUtmCookie(utm), {
+    path: '/',
+    maxAge: UTM_COOKIE_MAX_AGE,
+    sameSite: 'lax',
+    secure: request.nextUrl.protocol === 'https:',
+    httpOnly: false, // signup page copies it into user_metadata
+  });
+}
+
 export async function proxy(request: NextRequest) {
+  // Supabase fell back to the Site URL ("/?code=…"): finish the exchange in
+  // /auth/callback instead of leaving the home page spinning.
+  const stray = strayAuthCodeTarget(request.nextUrl);
+  if (stray) return NextResponse.redirect(stray, 307);
+
   const { user, supabaseResponse } = await updateSession(request);
+  captureUtm(request, supabaseResponse);
   const accessUser = user
     ? {
         id: user.id,
@@ -47,6 +69,9 @@ export const config = {
   // public site caused 504 MIDDLEWARE_INVOCATION_TIMEOUT when Supabase hung.
   // Service routes (hub, founder board, premium, APIs, auth) are gated here.
   matcher: [
+    // Home only when it carries an auth code/error (no getUser on plain home).
+    { source: '/', has: [{ type: 'query', key: 'code' }] },
+    { source: '/', has: [{ type: 'query', key: 'error_description' }] },
     '/hub/:path*',
     '/auth/:path*',
     '/dashboard',

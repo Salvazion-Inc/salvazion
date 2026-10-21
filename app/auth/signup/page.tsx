@@ -1,8 +1,10 @@
 'use client';
 
+import { authEmailRedirectTo } from '@/lib/auth/email-redirect';
 import { useState, FormEvent, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { UTM_COOKIE, parseUtmCookie, utmFromSearchParams, utmToMetadata } from '@/lib/attribution/utm';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 import {
@@ -25,6 +27,15 @@ import { requestConfirmationResend } from '@/lib/auth/resend-confirmation';
 import SocialAuthButtons from '@/components/auth/SocialAuthButtons';
 import TermsAccept from '@/components/auth/TermsAccept';
 import BrandLoader from '@/components/ui/BrandLoader';
+
+function utmForSignup(sp: URLSearchParams): Record<string, string> {
+  if (typeof document !== 'undefined') {
+    const m = document.cookie.match(new RegExp(`(?:^|; )${UTM_COOKIE}=([^;]*)`));
+    const fromCookie = parseUtmCookie(m?.[1]);
+    if (fromCookie) return utmToMetadata(fromCookie);
+  }
+  return utmToMetadata(utmFromSearchParams(sp));
+}
 
 function SignupForm() {
   const router = useRouter();
@@ -83,7 +94,10 @@ function SignupForm() {
       return;
     }
 
-    const meta: Record<string, string> = { name: name.trim() };
+    const meta: Record<string, string> = {
+      name: name.trim(),
+      ...utmForSignup(new URLSearchParams(searchParams.toString())),
+    };
     if (inbound) {
       meta.invited_by = inbound.from;
       meta.invite_code = inbound.code;
@@ -95,7 +109,7 @@ function SignupForm() {
       password,
       options: {
         data: meta,
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
+        emailRedirectTo: authEmailRedirectTo(next),
       },
     });
 

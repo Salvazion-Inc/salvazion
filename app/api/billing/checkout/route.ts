@@ -24,6 +24,8 @@ import {
   checkHolderTrial,
   expireOpenHolderTrialSessions,
 } from '@/lib/billing/holder-trial-server';
+import { readProfileUtm } from '@/lib/attribution/utm-server';
+import { parseUtmCookie, UTM_COOKIE } from '@/lib/attribution/utm';
 import { logProductEvent } from '@/lib/analytics/product-events';
 
 export const runtime = 'nodejs';
@@ -52,7 +54,8 @@ function authRequiredResponse(interval: BillingInterval) {
 async function createCheckoutSession(
   user: User,
   interval: BillingInterval,
-  base: string
+  base: string,
+  utm: Awaited<ReturnType<typeof readProfileUtm>>
 ) {
   const priceId = await resolveCheckoutPriceId(interval);
   if (BLOCKED_CHECKOUT_PRICE_IDS.has(priceId)) {
@@ -93,6 +96,7 @@ async function createCheckoutSession(
       interval,
       baseUrl: base,
       holderTrial,
+      utm,
     })
   );
   if (holderTrial) {
@@ -157,10 +161,14 @@ async function handleCheckout(
       );
     }
 
+    const utm =
+      (await readProfileUtm(supabase, user.id)) ??
+      parseUtmCookie(req.cookies.get(UTM_COOKIE)?.value);
     const session = await createCheckoutSession(
       user,
       interval,
-      checkoutBaseUrl(req, getAppBaseUrl())
+      checkoutBaseUrl(req, getAppBaseUrl()),
+      utm
     );
     if (!session.url) {
       throw new Error('Stripe did not return a Checkout URL.');

@@ -1,5 +1,6 @@
 'use client';
 
+import { authEmailRedirectTo } from '@/lib/auth/email-redirect';
 import { FormEvent, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -65,7 +66,7 @@ export default function GuestWelcome({
         options: {
           // Account is normally created by provisioning; allow creation as a fallback.
           shouldCreateUser: !provisioned,
-          emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(NEXT_AFTER_LOGIN)}`,
+          emailRedirectTo: authEmailRedirectTo(NEXT_AFTER_LOGIN),
         },
       });
       if (err) setError(mapAuthError(err.message, lang));

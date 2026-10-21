@@ -3,6 +3,8 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { safeNextPath } from '@/lib/auth/paths';
 import { APP_URL } from '@/lib/config/site';
+import { UTM_COOKIE } from '@/lib/attribution/utm';
+import { stampProfileUtm } from '@/lib/attribution/utm-server';
 
 type CookieToSet = {
   name: string;
@@ -184,6 +186,10 @@ export async function GET(request: Request) {
     }
   } catch (stampErr) {
     console.warn('[auth/callback] social profile stamp failed', stampErr);
+  }
+
+  if (data.session?.user) {
+    await stampProfileUtm(supabase, data.session.user, cookieStore.get(UTM_COOKIE)?.value);
   }
 
   const signedIn = data.session?.user;

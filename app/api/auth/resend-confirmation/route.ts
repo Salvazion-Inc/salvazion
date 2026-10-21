@@ -1,3 +1,4 @@
+import { authEmailRedirectTo } from '@/lib/auth/email-redirect';
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { safeNextPath } from '@/lib/auth/paths';
@@ -68,8 +69,7 @@ export async function POST(req: NextRequest) {
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (url && key) {
     const next = safeNextPath(typeof body.next === 'string' ? body.next : null, '/hub/dashboard');
-    const origin = req.nextUrl.origin;
-    const redirectTo = `${origin}/auth/callback?next=${encodeURIComponent(next)}`;
+    const redirectTo = authEmailRedirectTo(next, req.nextUrl.origin, process.env.VERCEL_ENV);
     try {
       const supabase = createClient(url, key, {
         auth: { persistSession: false, autoRefreshToken: false },

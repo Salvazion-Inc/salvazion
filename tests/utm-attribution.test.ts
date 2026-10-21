@@ -25,6 +25,7 @@ test('sanitizes and length-limits', () => {
 test('cookie roundtrip and garbage tolerance', () => {
   const u = { utm_source: 'x', utm_term: 'faith health' };
   assert.deepEqual(parseUtmCookie(serializeUtmCookie(u)), u);
+  assert.deepEqual(parseUtmCookie(encodeURIComponent(serializeUtmCookie(u))), u);
   assert.equal(parseUtmCookie('%%%'), null);
   assert.equal(parseUtmCookie(undefined), null);
 });

@@ -43,11 +43,21 @@ export function serializeUtmCookie(utm: Utm): string {
 
 export function parseUtmCookie(value: string | undefined | null): Utm | null {
   if (!value) return null;
-  try {
-    return utmFromRecord(JSON.parse(decodeURIComponent(value)));
-  } catch {
-    return null;
+  // Next's cookies.set() percent-encodes again, so the raw browser value
+  // (document.cookie) is double-encoded while request.cookies is single.
+  let v = value;
+  for (let i = 0; i < 3; i++) {
+    try {
+      return utmFromRecord(JSON.parse(v));
+    } catch {
+      try {
+        v = decodeURIComponent(v);
+      } catch {
+        return null;
+      }
+    }
   }
+  return null;
 }
 
 /** Only non-empty values; safe for Stripe metadata (≤500 chars/value). */

@@ -38,6 +38,18 @@ const nextConfig: NextConfig = {
     "@capacitor/status-bar",
     "maplibre-gl",
   ],
+  // Short campaign links. Temporary (307) so the target can change per
+  // campaign. Runs before proxy.ts; /join is outside its matcher anyway.
+  async redirects() {
+    return [
+      {
+        source: "/join",
+        destination:
+          "/auth/signup?next=/hub/premium&utm_source=x&utm_medium=social&utm_campaign=signup_premium_oct26",
+        permanent: false,
+      },
+    ];
+  },
   // Security headers — baseline for a production-facing app
   async headers() {
     return [

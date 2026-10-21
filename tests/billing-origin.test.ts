@@ -9,6 +9,12 @@ test('preview origins allowed only when VERCEL_ENV=preview', () => {
   assert.equal(isAllowedPreviewOrigin(o, 'preview'), true);
   assert.equal(isAllowedPreviewOrigin(o, 'production'), false);
   assert.equal(isAllowedPreviewOrigin(o, undefined), false);
+  for (const h of [
+    'https://salvazion-3116hcozi-salvazion.vercel.app',
+    'https://salvazion-git-cursor-disable-promo-codes-09d2-salvazion.vercel.app',
+  ]) {
+    assert.equal(isAllowedPreviewOrigin(u(h), 'preview'), true, h);
+  }
 });
 
 test('rejects non-team or non-https hosts in preview', () => {
@@ -17,6 +23,8 @@ test('rejects non-team or non-https hosts in preview', () => {
     'https://evil-salvazion.vercel.app.evil.com',
     'https://evil-other.vercel.app',
     'https://salvazion.vercel.app',
+    'https://evil-salvazion.vercel.app',
+    'https://other-abc-salvazion.vercel.app',
     'https://x-salvazion.vercel.app:8443',
   ]) {
     assert.equal(isAllowedPreviewOrigin(u(s), 'preview'), false, s);

@@ -2,7 +2,7 @@ import type { NextRequest } from 'next/server';
 import { APP_ALLOWED_HOSTS, getAppBaseUrl } from '@/lib/config/site';
 
 /** Team-scoped Vercel preview hosts, e.g. salvazion-abc123-salvazion.vercel.app */
-const PREVIEW_ORIGIN_RE = /^https:\/\/[a-z0-9-]+-salvazion\.vercel\.app$/;
+const PREVIEW_ORIGIN_RE = /^https:\/\/salvazion-[a-z0-9-]+-salvazion\.vercel\.app$/;
 
 /** Only when VERCEL_ENV === 'preview'; production behaviour is unchanged. */
 export function isAllowedPreviewOrigin(

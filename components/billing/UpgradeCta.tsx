@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   openBillingPortal,
   startCheckout,
   useEntitlement,
+  usePageRestore,
 } from '@/lib/billing/client';
 import { useI18n } from '@/components/I18nProvider';
 import type { BillingInterval } from '@/lib/billing/plans';
@@ -30,6 +31,7 @@ export default function UpgradeCta({
   const { isPremium, canManage, loading } = useEntitlement();
   const [busy, setBusy] = useState<BillingInterval | 'portal' | null>(null);
   const [error, setError] = useState<string | null>(null);
+  usePageRestore(useCallback(() => setBusy(null), []));
 
   const go = async (fn: () => Promise<void>, key: typeof busy) => {
     if (busy) return;

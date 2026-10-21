@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import type { PublicEntitlement } from './types';
 import { emptyPublicEntitlement } from './types';
 import {
+  clearPendingCheckout,
   premiumCheckoutPath,
   rememberPendingCheckout,
   signupUrlForCheckout,
@@ -131,7 +132,26 @@ export async function startCheckout(interval: 'month' | 'year'): Promise<void> {
   }
 
   if (!res.ok) throw new Error(data.error || 'Checkout failed');
-  if (data.url) window.location.href = data.url;
+  if (data.url) {
+    // The intent is fulfilled: coming back from Stripe (cancel / back button)
+    // must not auto-reopen this interval (DEC-20261021-06).
+    clearPendingCheckout();
+    window.location.href = data.url;
+  }
+}
+
+/**
+ * Run `onRestore` when the page is shown from the back/forward cache
+ * (e.g. browser Back from Stripe Checkout), so busy buttons re-enable.
+ */
+export function usePageRestore(onRestore: () => void): void {
+  useEffect(() => {
+    const handler = (e: PageTransitionEvent) => {
+      if (e.persisted) onRestore();
+    };
+    window.addEventListener('pageshow', handler);
+    return () => window.removeEventListener('pageshow', handler);
+  }, [onRestore]);
 }
 
 export async function openBillingPortal(): Promise<void> {

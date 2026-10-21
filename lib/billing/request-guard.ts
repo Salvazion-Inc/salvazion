@@ -55,6 +55,41 @@ export function isAllowedBillingOrigin(
   return false;
 }
 
+/**
+ * Base URL for Stripe success_url / cancel_url (DEC-20261021-06): the first
+ * Origin/Referer that passes the same allowlist as isAllowedBillingOrigin,
+ * so a preview returns to its own host and production to salvazion.org.
+ * Anything else (no header, disallowed, malformed) falls back to `fallback`.
+ */
+export function checkoutBaseUrlFromHeaders(
+  origin: string | null,
+  referer: string | null,
+  fallback: string,
+  vercelEnv: string | undefined = process.env.VERCEL_ENV
+): string {
+  for (const raw of [origin, referer]) {
+    if (!raw) continue;
+    try {
+      const url = new URL(raw);
+      if (url.protocol !== 'https:' && url.protocol !== 'http:') continue;
+      if (allowedHost(url.hostname) || isAllowedPreviewOrigin(url, vercelEnv)) {
+        return url.origin;
+      }
+    } catch {
+      // ignore malformed
+    }
+  }
+  return fallback.replace(/\/$/, '');
+}
+
+export function checkoutBaseUrl(req: NextRequest, fallback: string): string {
+  return checkoutBaseUrlFromHeaders(
+    req.headers.get('origin'),
+    req.headers.get('referer'),
+    fallback
+  );
+}
+
 export function consumeRateLimit(
   key: string,
   limit: number,

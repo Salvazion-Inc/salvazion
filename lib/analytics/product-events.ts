@@ -7,7 +7,15 @@
 import { track } from '@vercel/analytics/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 
-export const PRODUCT_EVENTS = ['bono_activado', 'upgrade_click', 'holder_trial_checkout'] as const;
+export const PRODUCT_EVENTS = [
+  'bono_activado',
+  'upgrade_click',
+  'holder_trial_checkout',
+  'partner_view',
+  'partner_start',
+  'partner_submit',
+  'partner_verified',
+] as const;
 export type ProductEvent = (typeof PRODUCT_EVENTS)[number];
 
 export function isProductEvent(v: unknown): v is ProductEvent {

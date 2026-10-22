@@ -7,6 +7,7 @@ import { useI18n } from '@/components/I18nProvider';
 import { destinationAfterAuth, mapAuthError } from '@/lib/auth/paths';
 import {
   BiometricCancelledError,
+  disableBiometric,
   persistBiometricVault,
   unlockWithBiometric,
 } from '@/lib/auth/biometric';
@@ -58,7 +59,12 @@ export default function BiometricLoginButton({
       });
       if (sessionError || !data.session) {
         pendingPromptRef.current = false;
+        // The stored refresh token is dead (session revoked/expired server-side).
+        // Fingerprint can never succeed again with this vault, so drop it and
+        // send the user to email/Google instead of re-prompting the sensor forever.
+        disableBiometric();
         onError?.(t('auth.biometricExpired'));
+        onUsePassword?.();
         return;
       }
       pendingPromptRef.current = false;

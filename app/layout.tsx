@@ -44,17 +44,18 @@ export const metadata: Metadata = {
   generator: "Next.js",
   referrer: "origin-when-cross-origin",
   alternates: {
-    canonical: "/",
+    canonical: "./",
     languages: {
-      en: "/",
-      es: "/",
-      pt: "/",
-      "x-default": "/",
+      en: "./",
+      es: "./",
+      pt: "./",
+      "x-default": "./",
     },
     types: {
       "text/plain": [
         { url: "/llms.txt", title: "LLM brief" },
         { url: "/llms-full.txt", title: "LLM citation brief" },
+        { url: "/.well-known/ai.txt", title: "AI usage policy" },
       ],
     },
   },

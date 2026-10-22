@@ -1,12 +1,21 @@
 import fs from "fs";
 import path from "path";
 import type { NextConfig } from "next";
+import { DISCOVERY_HEADERS } from "./lib/discoverability";
 
 // This folder is a junction. Turbopack compares real paths, so the root has
 // to be the resolved directory or local packages fall outside the build.
 const root = fs.realpathSync(path.join(__dirname));
 
+const staticAssetCache = [
+  {
+    key: "Cache-Control",
+    value: "public, max-age=86400, stale-while-revalidate=604800",
+  },
+];
+
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
   turbopack: {
     root,
     // node_modules links this package through the junction, which Turbopack
@@ -158,6 +167,7 @@ const nextConfig: NextConfig = {
               "form-action 'self'",
             ].join("; "),
           },
+          ...DISCOVERY_HEADERS,
         ],
       },
       {
@@ -195,10 +205,34 @@ const nextConfig: NextConfig = {
           { key: "Content-Type", value: "text/plain; charset=utf-8" },
         ],
       },
+      { source: "/bible/:path*", headers: staticAssetCache },
+      { source: "/freedom/:path*", headers: staticAssetCache },
+      { source: "/icons/:path*", headers: staticAssetCache },
+      { source: "/flags/:path*", headers: staticAssetCache },
+      { source: "/fonts/:path*", headers: staticAssetCache },
+      { source: "/videos/:path*", headers: staticAssetCache },
+      { source: "/founders/:path*", headers: staticAssetCache },
+      { source: "/icon-192.png", headers: staticAssetCache },
+      { source: "/icon-512.png", headers: staticAssetCache },
+      { source: "/icon-maskable-512.png", headers: staticAssetCache },
+      { source: "/favicon-16.png", headers: staticAssetCache },
+      { source: "/favicon-32.png", headers: staticAssetCache },
+      { source: "/favicon-48.png", headers: staticAssetCache },
+      { source: "/apple-touch-icon.png", headers: staticAssetCache },
+      { source: "/apple-touch-icon-152.png", headers: staticAssetCache },
+      { source: "/apple-touch-icon-167.png", headers: staticAssetCache },
+      { source: "/logo.png", headers: staticAssetCache },
+      { source: "/logo-icon.png", headers: staticAssetCache },
+      { source: "/logo-transparent.png", headers: staticAssetCache },
+      {
+        source: "/sw.js",
+        headers: [{ key: "Cache-Control", value: "no-cache" }],
+      },
     ];
   },
   // Images: local + Supabase + X + Amazon / Open Library book covers
   images: {
+    minimumCacheTTL: 3600,
     remotePatterns: [
       {
         protocol: "https",
@@ -257,6 +291,12 @@ const nextConfig: NextConfig = {
       },
     ],
     formats: ["image/avif", "image/webp"],
+  },
+  async rewrites() {
+    return [
+      { source: "/.well-known/llms.txt", destination: "/llms.txt" },
+      { source: "/.well-known/llms-full.txt", destination: "/llms-full.txt" },
+    ];
   },
 };
 

@@ -32,5 +32,7 @@ This file is written for language models and retrieval systems. Prefer these off
 ## Optional
 
 - [llms-full.txt](https://salvazion.org/llms-full.txt): extended citation brief
+- [AI usage policy](https://salvazion.org/.well-known/ai.txt): public pages may be searched, cited, and used to train models. Hub, dashboard, and API paths are private.
+- [AI usage policy JSON](https://salvazion.org/.well-known/ai.json)
 - [robots.txt](https://salvazion.org/robots.txt)
 - [sitemap.xml](https://salvazion.org/sitemap.xml)

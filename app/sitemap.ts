@@ -6,7 +6,7 @@ import { absoluteUrl } from '@/lib/seo/config';
  * Auth, hub (app shell) and APIs are intentionally excluded.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
+  const now = new Date('2026-10-22');
 
   return [
     {
@@ -50,6 +50,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.4,
+    },
+    {
+      url: absoluteUrl('/.well-known/ai.txt'),
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.3,
+    },
+    {
+      url: absoluteUrl('/ai.txt'),
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.2,
     },
   ];
 }

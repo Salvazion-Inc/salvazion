@@ -67,6 +67,8 @@ function LoginForm() {
       }
     }
 
+    if (searchParams.get('mode') === 'forgot') setMode('forgot');
+
     const prefill = searchParams.get('email');
     if (prefill && prefill.includes('@')) setEmail(prefill.trim());
 

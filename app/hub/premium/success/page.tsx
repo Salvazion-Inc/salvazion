@@ -37,16 +37,29 @@ export default function PremiumSuccessPage() {
     } catch {
       // ignore
     }
-    void refresh();
+    let stopped = false;
     const started = Date.now();
-    const id = window.setInterval(() => {
+    let id = 0;
+    const tick = async () => {
+      if (stopped) return;
+      const result = await refresh();
+      if (result === 'anonymous' || result === 'unauthorized') {
+        stopped = true;
+        window.clearInterval(id);
+      }
+    };
+    id = window.setInterval(() => {
       if (Date.now() - started > POLL_FOR_MS) {
         window.clearInterval(id);
         return;
       }
-      void refresh();
+      void tick();
     }, POLL_MS);
-    return () => window.clearInterval(id);
+    void tick();
+    return () => {
+      stopped = true;
+      window.clearInterval(id);
+    };
   }, [refresh]);
 
   if (!mounted) {

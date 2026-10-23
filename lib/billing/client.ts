@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { createContext, createElement, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { PublicEntitlement } from './types';
 import { emptyPublicEntitlement } from './types';
 import {
@@ -62,24 +62,70 @@ function saveCache(ent: PublicEntitlement) {
   }
 }
 
-export function useEntitlement() {
+export type EntitlementRefreshResult = 'ok' | 'anonymous' | 'unauthorized' | 'error';
+
+/** True when the browser holds a Supabase auth cookie. Chunked cookies count. */
+export function cookieHeaderHasSession(header: string | null | undefined): boolean {
+  if (!header) return false;
+  return header.split(';').some((part) => {
+    const name = part.trim().split('=')[0] || '';
+    return name.startsWith('sb-') && name.includes('auth-token');
+  });
+}
+
+function browserHasSession(): boolean {
+  if (typeof document === 'undefined') return false;
+  return cookieHeaderHasSession(document.cookie);
+}
+
+type EntitlementContextValue = {
+  entitlement: PublicEntitlement;
+  loading: boolean;
+  refresh: () => Promise<EntitlementRefreshResult>;
+  isPremium: boolean;
+  canManage: boolean;
+  signedIn: boolean;
+};
+
+const EntitlementContext = createContext<EntitlementContextValue | null>(null);
+
+export function EntitlementProvider({ children }: { children: ReactNode }) {
   const [entitlement, setEntitlement] = useState<PublicEntitlement>(() => {
     return loadCache() || emptyPublicEntitlement();
   });
   const [loading, setLoading] = useState(true);
 
-  const refresh = useCallback(async () => {
+  const refresh = useCallback(async (): Promise<EntitlementRefreshResult> => {
+    // No session: do not call the API. A 401 used to be requested on every
+    // remount of the landing page and on the premium success poll.
+    if (!browserHasSession()) {
+      const empty = emptyPublicEntitlement();
+      setEntitlement(empty);
+      setLoading(false);
+      return 'anonymous';
+    }
     try {
-      const res = await fetch('/api/billing/status', { credentials: 'include' });
+      const res = await fetch('/api/billing/status', {
+        credentials: 'include',
+        cache: 'no-store',
+      });
+      if (res.status === 401 || res.status === 403) {
+        const empty = emptyPublicEntitlement();
+        setEntitlement(empty);
+        saveCache(empty);
+        setLoading(false);
+        return 'unauthorized';
+      }
       if (!res.ok) {
         setLoading(false);
-        return;
+        return 'error';
       }
       const data = stripSecrets(await res.json());
       setEntitlement(data);
       saveCache(data);
+      return 'ok';
     } catch {
-      // keep cache
+      return 'error';
     } finally {
       setLoading(false);
     }
@@ -89,14 +135,27 @@ export function useEntitlement() {
     void refresh();
   }, [refresh]);
 
-  return {
-    entitlement,
-    loading,
-    refresh,
-    isPremium: entitlement.isPremium,
-    canManage: entitlement.canManage,
-    signedIn: entitlement.signedIn,
-  };
+  const value = useMemo<EntitlementContextValue>(
+    () => ({
+      entitlement,
+      loading,
+      refresh,
+      isPremium: entitlement.isPremium,
+      canManage: entitlement.canManage,
+      signedIn: entitlement.signedIn,
+    }),
+    [entitlement, loading, refresh]
+  );
+
+  return createElement(EntitlementContext.Provider, { value }, children);
+}
+
+export function useEntitlement() {
+  const ctx = useContext(EntitlementContext);
+  if (!ctx) {
+    throw new Error('useEntitlement must be used within EntitlementProvider');
+  }
+  return ctx;
 }
 
 export async function startCheckout(interval: 'month' | 'year'): Promise<void> {

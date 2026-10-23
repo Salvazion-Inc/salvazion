@@ -11,7 +11,7 @@ import {
 } from 'react';
 import type { Language } from '@/lib/types';
 import { translate } from '@/lib/i18n/dictionary';
-import { applyDocumentLang, loadLocale, saveLocale } from '@/lib/i18n/locale';
+import { applyDocumentLang, LOCALE_STORAGE_KEY, resolveClientLocale, saveLocale } from '@/lib/i18n/locale';
 import { loadProfile, saveProfile } from '@/lib/store/profile';
 
 interface I18nContextValue {
@@ -32,25 +32,38 @@ export function useI18n() {
 
 /**
  * Global language (EN principal / ES / PT-BR).
- * Preference: localStorage → profile.language → browser → en.
+ * The server renders `initialLang` from the salvazion_locale cookie.
+ * Profile language still wins on the client, before paint.
  */
-export default function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Language>('en');
+export default function I18nProvider({
+  children,
+  initialLang = 'en',
+}: {
+  children: ReactNode;
+  initialLang?: Language;
+}) {
+  const [lang, setLangState] = useState<Language>(initialLang);
 
-  // Saved locale is client-only. Apply it before paint so the first frame
-  // is not a flash of English, and the server HTML stays the English default.
   useLayoutEffect(() => {
-    const fromStore = loadLocale();
     const profile = loadProfile();
-    const initial =
-      profile.language === 'en' || profile.language === 'es' || profile.language === 'pt'
-        ? profile.language
-        : fromStore;
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- locale is client-only; apply before paint
-    setLangState(initial);
-    applyDocumentLang(initial);
-    saveLocale(initial);
-  }, []);
+    let stored: string | null = null;
+    try {
+      stored = localStorage.getItem(LOCALE_STORAGE_KEY);
+    } catch {
+      stored = null;
+    }
+    const next = resolveClientLocale({
+      profileLanguage: profile.language,
+      storedLocale: stored,
+      navigatorLanguage: typeof navigator !== 'undefined' ? navigator.language : null,
+      fallback: initialLang,
+    });
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- apply the saved locale before paint
+    setLangState(next);
+    applyDocumentLang(next);
+    saveLocale(next);
+    document.documentElement.classList.remove('locale-pending');
+  }, [initialLang]);
 
   const setLang = useCallback((next: Language) => {
     setLangState(next);

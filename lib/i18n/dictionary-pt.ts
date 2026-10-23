@@ -119,6 +119,8 @@ export const dictionaryPt = {
     verifyStillPending: 'Este email ainda não está verificado. Abra o link e tente de novo.',
     verifySignOut: 'Usar outra conta',
     verifyMissingEmail: 'Esta conta não tem email. Saia e crie uma conta com um email.',
+    linkExpired:
+      'Este link expirou ou já foi usado. Se você já confirmou seu email, entre. Se não, peça um novo link.',
     emailNotConfirmed: 'Confirme seu email antes de entrar. Confira sua caixa de entrada.',
     resendGeneric:
       'Se houver uma conta esperando confirmação, enviamos outro link para esse email.',

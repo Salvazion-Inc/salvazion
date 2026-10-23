@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { safeNextPath } from '@/lib/auth/paths';
 import { ensureProfileForUser, applyXIdentityToProfile } from '@/lib/store/profile';
+import { isExpiredAuthLink } from '@/lib/auth/email-redirect';
 import BrandLoader from '@/components/ui/BrandLoader';
 
 /**
@@ -35,6 +36,10 @@ function RecoverInner() {
         const { error } = await supabase.auth.exchangeCodeForSession(code);
         if (error) {
           setMsg(error.message);
+          if (isExpiredAuthLink(error.message) || isExpiredAuthLink(prevErr)) {
+            router.replace('/auth/login?notice=link_expired');
+            return;
+          }
           router.replace(
             `/auth/login?error=auth_callback_failed&detail=${encodeURIComponent(error.message.slice(0, 200))}`
           );

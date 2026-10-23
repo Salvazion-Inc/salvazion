@@ -33,3 +33,8 @@ test('stray /?code= forwards to /auth/callback', () => {
   assert.equal(strayAuthCodeTarget(new URL('https://salvazion.org/api/wearables/oauth/x/callback?code=abc')), null);
   assert.equal(strayAuthCodeTarget(new URL('https://salvazion.org/')), null);
 });
+
+test('stray-code rescue never touches /auth/* (no login<->callback loop)', () => {
+  assert.equal(strayAuthCodeTarget(new URL('https://salvazion.org/auth/login?error=auth_callback_failed&detail=x')), null);
+  assert.equal(strayAuthCodeTarget(new URL('https://salvazion.org/auth/callback/recover?code=a&err=x')), null);
+});

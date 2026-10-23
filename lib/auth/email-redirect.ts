@@ -37,8 +37,15 @@ export function authEmailRedirectTo(
  * Supabase sent the user to "<site>/?code=…" (redirect_to rejected). Build the
  * /auth/callback URL that finishes the PKCE exchange. Null when not applicable.
  */
+/** Expired / already-used PKCE flow or email link. */
+export function isExpiredAuthLink(message: string | null | undefined): boolean {
+  return /flow state|expired|already been used|invalid.*(link|grant|code)|otp_expired/i.test(message || '');
+}
+
 export function strayAuthCodeTarget(url: URL): URL | null {
-  if (url.pathname.startsWith('/auth/callback') || url.pathname.startsWith('/api/')) return null;
+  // Only rescue stray codes outside /auth/* and /api/*. /auth/login?error=… must
+  // stay put, otherwise login -> callback -> login loops (ERR_TOO_MANY_REDIRECTS).
+  if (url.pathname.startsWith('/auth/') || url.pathname.startsWith('/api/')) return null;
   const code = url.searchParams.get('code');
   const err = url.searchParams.get('error_description') || url.searchParams.get('error');
   if (!code && !err) return null;

@@ -348,7 +348,7 @@ export default function LandingBlog({ lang, copy, data }: Props & { data: Landin
     <section
       ref={sectionRef}
       id="blog"
-      className="section-pad border-t border-[var(--border-soft)] bg-zinc-950/30"
+      className="cv-auto section-pad border-t border-[var(--border-soft)] bg-zinc-950/30"
       aria-labelledby="blog-heading"
       itemScope
       itemType="https://schema.org/Blog"

@@ -5,7 +5,7 @@ async function createClient() {
   const mod = await import('@/lib/supabase/client');
   return mod.createClient();
 }
-import { extractXIdentity } from '@/lib/auth/x-oauth';
+import { extractXIdentity } from '@/lib/auth/x-identity';
 
 const STORAGE_KEY = 'salvazion_profile';
 const STORAGE_VERSION = 2;

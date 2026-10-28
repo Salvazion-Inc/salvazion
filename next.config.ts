@@ -24,6 +24,9 @@ const longAssetCache = [
 ];
 
 const nextConfig: NextConfig = {
+  // Perf DEC (round 5): inline global CSS into the HTML (removes the 2 render-blocking
+  // stylesheet requests). Requires the webpack builder: Turbopack + next/font fails.
+  experimental: { inlineCss: true },
   poweredByHeader: false,
   turbopack: {
     root,

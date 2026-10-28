@@ -7,12 +7,30 @@ import { useI18n } from '@/components/I18nProvider';
 import { destinationAfterAuth, mapAuthError } from '@/lib/auth/paths';
 import {
   BiometricCancelledError,
+  disableBiometric,
   persistBiometricVault,
   unlockWithBiometric,
 } from '@/lib/auth/biometric';
 import { ensureProfileForUser, loadProfileAsync } from '@/lib/store/profile';
 import BiometricUnlockScreen from '@/components/auth/BiometricUnlockScreen';
 import { useAutoBiometricPrompt, useBiometricGate } from '@/components/auth/useBiometric';
+
+/** True only for auth rejections (invalid/expired token), never for network errors. */
+function isDeadSessionError(err: unknown): boolean {
+  if (!err || typeof err !== 'object') return false;
+  const e = err as { name?: string; status?: number; code?: string; message?: string };
+  if (e.name === 'AuthRetryableFetchError') return false;
+  if (e.status === 400 || e.status === 401 || e.status === 403) return true;
+  if (e.name === 'AuthApiError' || e.name === 'AuthSessionMissingError') return true;
+  const blob = `${e.code ?? ''} ${e.message ?? ''}`.toLowerCase();
+  return (
+    blob.includes('refresh_token') ||
+    blob.includes('refresh token') ||
+    blob.includes('invalid') ||
+    blob.includes('session_not_found') ||
+    blob.includes('jwt expired')
+  );
+}
 
 interface Props {
   next?: string;
@@ -58,7 +76,17 @@ export default function BiometricLoginButton({
       });
       if (sessionError || !data.session) {
         pendingPromptRef.current = false;
+        if (sessionError && !isDeadSessionError(sessionError)) {
+          // Network / transient failure: keep the vault so the next try can work.
+          onError?.(t('auth.biometricFailed'));
+          return;
+        }
+        // The stored refresh token is dead (revoked/expired server-side).
+        // Fingerprint can never succeed with this vault, so drop it and send
+        // the user to email/Google instead of re-prompting the sensor forever.
+        disableBiometric();
         onError?.(t('auth.biometricExpired'));
+        onUsePassword?.();
         return;
       }
       pendingPromptRef.current = false;

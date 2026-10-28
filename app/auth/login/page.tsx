@@ -67,6 +67,12 @@ function LoginForm() {
       }
     }
 
+    if (searchParams.get('mode') === 'forgot') setMode('forgot');
+    if (searchParams.get('notice') === 'link_expired') {
+      setInfo(t('auth.linkExpired'));
+      setUnconfirmed(true);
+    }
+
     const prefill = searchParams.get('email');
     if (prefill && prefill.includes('@')) setEmail(prefill.trim());
 

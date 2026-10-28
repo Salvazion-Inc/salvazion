@@ -51,6 +51,8 @@ const nextConfig: NextConfig = {
   // campaign. Runs before proxy.ts; /join is outside its matcher anyway.
   async redirects() {
     return [
+      { source: "/premium", destination: "/hub/premium", permanent: true },
+      { source: "/hub", destination: "/hub/dashboard", permanent: false },
       {
         source: "/join",
         destination:

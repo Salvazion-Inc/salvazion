@@ -6,7 +6,7 @@ import { X_ARTICLES, localizeArticle } from '@/lib/freedom/x-articles';
  */
 export default function BlogIndex({ lang = 'en' }: { lang?: 'en' | 'es' | 'pt' }) {
   return (
-    <ul>
+    <ul lang={lang}>
       {X_ARTICLES.map((a) => {
         const loc = localizeArticle(a, lang);
         return (

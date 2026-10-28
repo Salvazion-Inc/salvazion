@@ -47,6 +47,8 @@ export interface LandingBlogCopy {
   readOnX: string;
   showing: string;
   of: string;
+  /** Shown instead of 'N of total' until the full catalog JSON is loaded. */
+  loadingArticles: string;
   empty: string;
   emptySearch: string;
   viewAllOnX: string;
@@ -244,6 +246,7 @@ export default function LandingBlog({ lang, copy, data }: Props & { data: Landin
   }, [showAll]);
   const counts = data.counts;
   const [all, setAll] = useState<XArticle[] | null>(null);
+  const [loadFailed, setLoadFailed] = useState(false);
   // Fetch the full catalog (static JSON) once the carousel nears the viewport
   // or the visitor filters/searches.
   const needAll = showAll || filter !== 'all' || query.trim() !== '';
@@ -253,9 +256,13 @@ export default function LandingBlog({ lang, copy, data }: Props & { data: Landin
     fetch('/x-articles.json')
       .then((r) => (r.ok ? r.json() : null))
       .then((list: XArticle[] | null) => {
-        if (alive && Array.isArray(list)) setAll(list);
+        if (!alive) return;
+        if (Array.isArray(list)) setAll(list);
+        else setLoadFailed(true);
       })
-      .catch(() => {});
+      .catch(() => {
+        if (alive) setLoadFailed(true);
+      });
     return () => {
       alive = false;
     };
@@ -466,9 +473,16 @@ export default function LandingBlog({ lang, copy, data }: Props & { data: Landin
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mb-4">
           <p className="text-center text-[11px] text-[var(--sage)]/80">
-            {copy.showing}{' '}
-            <strong className="text-white font-medium">{filtered.length}</strong>{' '}
-            {copy.of} {data.total}
+            {all || loadFailed ? (
+              <>
+                {copy.showing}{' '}
+                <strong className="text-white font-medium">{filtered.length}</strong>{' '}
+                {/* On fetch failure, count only the cards actually loaded. */}
+                {copy.of} {all ? data.total : data.initial.length}
+              </>
+            ) : (
+              copy.loadingArticles
+            )}
             {query.trim() ? (
               <span className="text-[var(--accent)]/90">
                 {' '}

@@ -70,8 +70,8 @@ export function useEntitlement() {
 
   const refresh = useCallback(async () => {
     try {
-      const res = await fetch('/api/billing/status', { credentials: 'include' });
-      if (!res.ok) {
+      const res = await fetch('/api/billing/status?soft=1', { credentials: 'include' });
+      if (!res.ok || res.status === 204) {
         setLoading(false);
         return;
       }

@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 /**
  * Official Salvazion mark on a transparent field — no black square.
  * CSS HUD ring supplies motion; the lion stays still.
@@ -24,13 +26,14 @@ export default function BrandLoader({
         <span className="brand-loader-halo" aria-hidden />
         <span className="brand-loader-orbit brand-loader-orbit-a" aria-hidden />
         <span className="brand-loader-orbit brand-loader-orbit-b" aria-hidden />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src="/videos/logo-loader-poster.png"
           alt=""
           width={size}
           height={size}
           className="brand-loader-static"
+          sizes={`${size}px`}
+          priority
           aria-hidden
         />
       </span>

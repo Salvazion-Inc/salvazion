@@ -13,7 +13,7 @@ import {
 } from '@/lib/billing/plans';
 import LanguageFlagSwitch from '@/components/ui/LanguageFlagSwitch';
 import XLogo, { textWithXLogo } from '@/components/ui/XLogo';
-import LandingBlog from '@/components/landing/LandingBlog';
+import LandingBlog, { type LandingBlogData } from '@/components/landing/LandingBlog';
 import { SALVAZION_MINT } from '@/lib/solana/config';
 import { welcomeUrlForLang } from '@/lib/config/site';
 import { pickLang } from '@/lib/i18n/locale';
@@ -168,7 +168,7 @@ function HeroVideo() {
   );
 }
 
-export default function SalvazionLanding() {
+export default function SalvazionLanding({ blog }: { blog: LandingBlogData }) {
   const { lang, setLang } = useI18n();
   const t = copy[lang];
   const titleLines = purposeHeroLines(lang);
@@ -608,7 +608,7 @@ export default function SalvazionLanding() {
       </section>
 
       {/* Blog — @salvazion_ X Articles */}
-      <LandingBlog lang={lang} copy={t.blog} />
+      <LandingBlog lang={lang} copy={t.blog} data={blog} />
 
       {/* Token — last section */}
       <section id="token" className="cv-auto section-pad border-t border-[var(--border-soft)]">

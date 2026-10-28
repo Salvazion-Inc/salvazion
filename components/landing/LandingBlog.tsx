@@ -2,15 +2,22 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  X_ARTICLES,
-  X_ARTICLES_COUNT,
   formatArticleDate,
-  getBlogArticles,
-  getBlogPillarCounts,
   localizeArticle,
+  rankBlogArticles,
   type ArticlePillar,
   type XArticle,
-} from '@/lib/freedom/x-articles';
+} from '@/lib/freedom/x-articles-core';
+import type { ReactNode } from 'react';
+
+/** Server-provided blog data: only the first cards + counts; the rest is fetched. */
+export interface LandingBlogData {
+  initial: XArticle[];
+  counts: Record<ArticlePillar | 'all', number>;
+  total: number;
+  /** Server-rendered sr-only index of every article. */
+  index: ReactNode;
+}
 import { loadProfile } from '@/lib/store/profile';
 import { PILLAR_COLORS, type PillarId } from '@/lib/theme/pillars';
 import { textWithXLogo } from '@/components/ui/XLogo';
@@ -203,7 +210,7 @@ const FOCUS_LABELS: Record<'en' | 'es' | 'pt', Record<string, string>> = {
 /** Cards rendered on the server / first paint before the carousel nears view. */
 const INITIAL_CARDS = 12;
 
-export default function LandingBlog({ lang, copy }: Props) {
+export default function LandingBlog({ lang, copy, data }: Props & { data: LandingBlogData }) {
   const [filter, setFilter] = useState<BlogFilter>('all');
   const [query, setQuery] = useState('');
   const [sortMode, setSortMode] = useState<'forYou' | 'recent'>('forYou');
@@ -235,7 +242,24 @@ export default function LandingBlog({ lang, copy }: Props) {
     io.observe(el);
     return () => io.disconnect();
   }, [showAll]);
-  const counts = useMemo(() => getBlogPillarCounts(), []);
+  const counts = data.counts;
+  const [all, setAll] = useState<XArticle[] | null>(null);
+  // Fetch the full catalog (static JSON) once the carousel nears the viewport
+  // or the visitor filters/searches.
+  const needAll = showAll || filter !== 'all' || query.trim() !== '';
+  useEffect(() => {
+    if (!needAll || all) return;
+    let alive = true;
+    fetch('/x-articles.json')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((list: XArticle[] | null) => {
+        if (alive && Array.isArray(list)) setAll(list);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [needAll, all]);
 
   useEffect(() => {
     try {
@@ -255,14 +279,15 @@ export default function LandingBlog({ lang, copy }: Props) {
   );
   const filtered = useMemo(
     () =>
-      getBlogArticles(
+      rankBlogArticles(
+        all ?? data.initial,
         filter,
         query,
         sortMode === 'forYou' && focusList.length
           ? { focus: focusList }
           : undefined
       ),
-    [filter, query, sortMode, focusList]
+    [all, data.initial, filter, query, sortMode, focusList]
   );
 
   const visible = showAll ? filtered : filtered.slice(0, INITIAL_CARDS);
@@ -443,7 +468,7 @@ export default function LandingBlog({ lang, copy }: Props) {
           <p className="text-center text-[11px] text-[var(--sage)]/80">
             {copy.showing}{' '}
             <strong className="text-white font-medium">{filtered.length}</strong>{' '}
-            {copy.of} {X_ARTICLES_COUNT}
+            {copy.of} {data.total}
             {query.trim() ? (
               <span className="text-[var(--accent)]/90">
                 {' '}
@@ -562,34 +587,9 @@ export default function LandingBlog({ lang, copy }: Props) {
             pt: 'Índice completo de artigos Salvazion no X',
           })}
         >
-          <ul>
-            {X_ARTICLES.map((a) => {
-              const loc = localizeArticle(a, lang);
-              return (
-                <li key={`index-${a.id}`}>
-                  <a href={a.url} rel="noopener noreferrer">
-                    {loc.title} — {a.pillar}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
+          {data.index}
         </nav>
 
-        <noscript>
-          <ul>
-            {X_ARTICLES.map((a) => {
-              const loc = localizeArticle(a, lang);
-              return (
-                <li key={`ns-${a.id}`}>
-                  <a href={a.url}>
-                    {loc.title} ({a.pillar})
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </noscript>
 
         <div className="mt-10 flex justify-center">
           <a

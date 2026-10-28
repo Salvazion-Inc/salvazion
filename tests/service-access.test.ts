@@ -218,3 +218,22 @@ test('partner funnel events endpoint is reachable without a session', () => {
     { action: 'allow' }
   );
 });
+
+test('anon soft billing probe is allowed only as GET ?soft=1 without session', () => {
+  assert.deepEqual(
+    decideServiceAccess({ pathname: '/api/billing/status', method: 'GET', search: '?soft=1', user: anon }),
+    { action: 'allow' }
+  );
+  assert.notDeepEqual(
+    decideServiceAccess({ pathname: '/api/billing/status', method: 'GET', search: '', user: anon }),
+    { action: 'allow' }
+  );
+  assert.notDeepEqual(
+    decideServiceAccess({ pathname: '/api/billing/status', method: 'POST', search: '?soft=1', user: anon }),
+    { action: 'allow' }
+  );
+  assert.notDeepEqual(
+    decideServiceAccess({ pathname: '/api/billing/checkout', method: 'GET', search: '?soft=1', user: anon }),
+    { action: 'allow' }
+  );
+});

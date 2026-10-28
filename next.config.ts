@@ -14,6 +14,15 @@ const staticAssetCache = [
   },
 ];
 
+// Rarely-changing public media (fonts, hero videos): 1 year (DEC-20261028-34).
+// Changing one of these files requires a new filename.
+const longAssetCache = [
+  {
+    key: "Cache-Control",
+    value: "public, max-age=31536000, immutable",
+  },
+];
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   turbopack: {
@@ -211,8 +220,8 @@ const nextConfig: NextConfig = {
       { source: "/freedom/:path*", headers: staticAssetCache },
       { source: "/icons/:path*", headers: staticAssetCache },
       { source: "/flags/:path*", headers: staticAssetCache },
-      { source: "/fonts/:path*", headers: staticAssetCache },
-      { source: "/videos/:path*", headers: staticAssetCache },
+      { source: "/fonts/:path*", headers: longAssetCache },
+      { source: "/videos/:path*", headers: longAssetCache },
       { source: "/founders/:path*", headers: staticAssetCache },
       { source: "/icon-192.png", headers: staticAssetCache },
       { source: "/icon-512.png", headers: staticAssetCache },
@@ -235,7 +244,7 @@ const nextConfig: NextConfig = {
   // Images: local + Supabase + X + Amazon / Open Library book covers
   images: {
     formats: ["image/avif", "image/webp"],
-    minimumCacheTTL: 3600,
+    minimumCacheTTL: 2678400,
     remotePatterns: [
       {
         protocol: "https",
@@ -293,7 +302,6 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
-    formats: ["image/avif", "image/webp"],
   },
   async rewrites() {
     return [

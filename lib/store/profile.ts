@@ -1,5 +1,10 @@
 import { UserProfile } from '@/lib/types';
-import { createClient } from '@/lib/supabase/client';
+// Lazy: keeps supabase-js out of the initial bundle of pages that only read
+// the local profile (e.g. the landing via I18nProvider). Perf DEC-20261028-34.
+async function createClient() {
+  const mod = await import('@/lib/supabase/client');
+  return mod.createClient();
+}
 import { extractXIdentity } from '@/lib/auth/x-oauth';
 
 const STORAGE_KEY = 'salvazion_profile';
@@ -322,7 +327,7 @@ let lastOnboardingRepushAt = 0;
  */
 export async function applyXIdentityToProfile(): Promise<Partial<UserProfile> | null> {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -419,7 +424,7 @@ export async function applyXIdentityToProfile(): Promise<Partial<UserProfile> | 
 
 export async function ensureProfileForUser(preferredName?: string): Promise<void> {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -488,7 +493,7 @@ export async function ensureProfileForUser(preferredName?: string): Promise<void
 export async function loadProfileAsync(): Promise<Partial<UserProfile>> {
   const local = loadLocal();
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -662,7 +667,7 @@ async function persistProfileToServer(
   merged: Partial<UserProfile>
 ): Promise<{ ok: boolean; error?: string }> {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -721,7 +726,7 @@ export async function signOut() {
     disableBiometric();
   } catch {}
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     await supabase.auth.signOut();
   } catch {}
 }

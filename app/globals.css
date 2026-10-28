@@ -2301,3 +2301,11 @@ select:-webkit-autofill {
   content-visibility: auto;
   contain-intrinsic-size: auto 900px;
 }
+
+/* Anchor jumps land below the fixed nav (GOVERN P3, DEC-20261028-26). */
+#app,
+#team,
+#pricing,
+#token {
+  scroll-margin-top: 5rem;
+}

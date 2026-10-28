@@ -6,7 +6,7 @@ test('salvazion robots opens public pages to search and AI use', () => {
   const body = robotsTxt();
   const agents = body.match(/^User-agent: /gm) || [];
   const signals =
-    body.match(/^Content-Signal: search=yes, ai-input=yes, ai-train=yes$/gm) || [];
+    body.match(/^# Content-Signal: search=yes, ai-input=yes, ai-train=yes$/gm) || [];
   assert.equal(signals.length, agents.length);
   assert.ok(agents.length > 20);
   for (const token of [

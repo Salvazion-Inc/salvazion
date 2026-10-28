@@ -266,6 +266,7 @@ export default function SalvazionLanding() {
           fill
           priority
           sizes="100vw"
+          fetchPriority="high"
           className="object-cover -scale-x-100"
           aria-hidden
         />

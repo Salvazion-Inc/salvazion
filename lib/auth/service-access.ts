@@ -150,6 +150,17 @@ export function decideServiceAccess(input: {
   // enforces same-origin, rate limit, whitelist and partner_verified auth itself.
   if (pathname === '/api/partners/events') return { action: 'allow' };
   if (pathname === '/api/internal/holder-metrics') return { action: 'allow' };
+  // Anonymous plan probe from public pages (DEC-20261028-26): only GET with
+  // soft=1 and no session. The route answers 204 with no data; signed-in or
+  // other requests keep the normal gate.
+  if (
+    pathname === '/api/billing/status' &&
+    method === 'GET' &&
+    params.get('soft') === '1' &&
+    !user
+  ) {
+    return { action: 'allow' };
+  }
 
   // Stripe return for a Checkout that already happened. The page provisions
   // (idempotent) and asks the person to sign in. It does not open the hub.

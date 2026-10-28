@@ -77,7 +77,8 @@ export const DISCOVERY_HEADERS: { key: string; value: string }[] = [
 function group(agent: string, disallow: string[]): string {
   return [
     `User-agent: ${agent}`,
-    `Content-Signal: ${CONTENT_SIGNAL}`,
+    // Commented (DEC-20261028-21): Lighthouse flags it as an unknown directive.
+    `# Content-Signal: ${CONTENT_SIGNAL}`,
     'Allow: /',
     ...disallow.map((path) => `Disallow: ${path}`),
   ].join('\n');

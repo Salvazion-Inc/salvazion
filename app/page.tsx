@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import JsonLd from '@/components/seo/JsonLd';
 import SalvazionLanding from '@/components/landing/SalvazionLanding';
+import BlogIndex from '@/components/landing/BlogIndex';
+import { X_ARTICLES_COUNT, getBlogArticles, getBlogPillarCounts } from '@/lib/freedom/x-articles';
 import { SEO, absoluteUrl, ogImageMetadata } from '@/lib/seo/config';
 
 export const metadata: Metadata = {
@@ -59,7 +61,14 @@ export default function HomePage() {
   return (
     <>
       <JsonLd />
-      <SalvazionLanding />
+      <SalvazionLanding
+        blog={{
+          initial: getBlogArticles('all').slice(0, 12),
+          counts: getBlogPillarCounts(),
+          total: X_ARTICLES_COUNT,
+          index: <BlogIndex />,
+        }}
+      />
     </>
   );
 }

@@ -11,46 +11,24 @@
 import catalogJson from '@/data/freedom/x-articles-catalog.json';
 import esMapJson from '@/data/freedom/x-articles-es.json';
 import ptMapJson from '@/data/freedom/x-articles-pt.json';
+import {
+  articleMatchesQuery,
+  formatArticleDate,
+  interestScore,
+  localizeArticle,
+  normalizeArticleSearchQuery,
+  type ArticlePillar,
+  type InterestFocus,
+  type XArticle,
+} from './x-articles-core';
+export {
+  articleMatchesQuery,
+  formatArticleDate,
+  localizeArticle,
+  normalizeArticleSearchQuery,
+};
+export type { ArticlePillar, InterestFocus, XArticle };
 import type { PillarId } from '@/lib/theme/pillars';
-
-export type InterestFocus =
-  | 'fe'
-  | 'familia'
-  | 'proposito'
-  | 'salud'
-  | 'libertad'
-  | 'oracion'
-  | 'liderazgo'
-  | 'perseverancia';
-
-/** Primary Salvazion pillar for blog filters / SEO */
-export type ArticlePillar = PillarId;
-
-export interface XArticle {
-  id: string;
-  statusId?: string | null;
-  title: string;
-  /** Spanish title for marketing blog / i18n */
-  titleEs: string;
-  /** Brazilian Portuguese title for marketing blog / i18n */
-  titlePt: string;
-  preview: string;
-  /** Spanish preview for marketing blog / i18n */
-  previewEs: string;
-  /** Brazilian Portuguese preview for marketing blog / i18n */
-  previewPt: string;
-  image: string;
-  url: string;
-  createdAt?: string | null;
-  source: string;
-  verified: boolean;
-  /** Interest tags for ranking */
-  interests: InterestFocus[];
-  /** Primary pillar: salvation | health | freedom */
-  pillar: ArticlePillar;
-  tags: string[];
-  readMin: number;
-}
 
 type LocEntry = { titleEs?: string; previewEs?: string; titlePt?: string; previewPt?: string };
 const ES_MAP = esMapJson as Record<string, LocEntry>;
@@ -394,65 +372,12 @@ export const X_ARTICLES: XArticle[] = dedupeCatalog(
   catalogJson as Array<Parameters<typeof normalizeEntry>[0]>
 ).map(normalizeEntry);
 
-/** Localized title + preview for marketing blog and in-app feed. */
-export function localizeArticle(
-  article: XArticle,
-  lang: 'en' | 'es' | 'pt'
-): { title: string; preview: string } {
-  if (lang === 'es') {
-    return {
-      title: article.titleEs || article.title,
-      preview: article.previewEs || article.preview,
-    };
-  }
-  if (lang === 'pt') {
-    return {
-      title: article.titlePt || article.title,
-      preview: article.previewPt || article.preview,
-    };
-  }
-  return { title: article.title, preview: article.preview };
-}
 
 /** Total articles in the public catalog (verified marketing count) */
 export const X_ARTICLES_COUNT = X_ARTICLES.length;
 
-/** Normalize free-text into search tokens (accents stripped, min length 2). */
-export function normalizeArticleSearchQuery(query: string): string[] {
-  return query
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/\p{M}/gu, '')
-    .split(/[\s,;|/]+/)
-    .map((s) => s.trim())
-    .filter((s) => s.length >= 2);
-}
 
-function articleSearchHaystack(article: XArticle): string {
-  return [
-    article.title,
-    article.titleEs,
-    article.titlePt,
-    article.preview,
-    article.previewEs,
-    article.previewPt,
-    article.pillar,
-    ...(article.tags || []),
-    ...(article.interests || []),
-  ]
-    .join(' ')
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/\p{M}/gu, '');
-}
 
-/** True when every keyword token appears in title, preview, tags or pillar. */
-export function articleMatchesQuery(article: XArticle, query: string): boolean {
-  const tokens = normalizeArticleSearchQuery(query);
-  if (!tokens.length) return true;
-  const hay = articleSearchHaystack(article);
-  return tokens.every((t) => hay.includes(t));
-}
 
 export interface BlogArticleRank {
   /** profile.currentFocus — unread + interest + recency */
@@ -515,33 +440,6 @@ export function getBlogPillarCounts(): Record<ArticlePillar | 'all', number> {
   return counts;
 }
 
-export function formatArticleDate(
-  createdAt?: string | null,
-  lang: 'es' | 'en' | 'pt' = 'en'
-): string {
-  const locale = lang === 'pt' ? 'pt-BR' : lang === 'es' ? 'es-ES' : 'en-US';
-  if (!createdAt) return '';
-  const d = new Date(createdAt);
-  if (Number.isNaN(d.getTime())) {
-    // Twitter format: Wed Jul 24 22:54:55 +0000 2024
-    const t = Date.parse(createdAt);
-    if (Number.isNaN(t)) return '';
-    return new Date(t).toLocaleDateString(locale, {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      timeZone: 'UTC',
-    });
-  }
-  return d.toLocaleDateString(locale, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    // Deterministic on server (UTC) and every visitor's timezone: avoids
-    // React #418 hydration mismatch on the landing blog (DEC-20261028-29).
-    timeZone: 'UTC',
-  });
-}
 
 export function loadReadArticleIds(): string[] {
   if (typeof window === 'undefined') return [];
@@ -571,15 +469,6 @@ export function getArticleProgress(): { read: number; total: number } {
   return { read, total: X_ARTICLES.length };
 }
 
-function interestScore(article: XArticle, focus: string[]): number {
-  if (!focus.length) return 0;
-  let score = 0;
-  for (const f of focus) {
-    if (article.interests.includes(f as InterestFocus)) score += 3;
-    if (article.tags.some((t) => t.toLowerCase().includes(f.toLowerCase()))) score += 1;
-  }
-  return score;
-}
 
 export interface ArticleFeedOptions {
   focus?: string[];

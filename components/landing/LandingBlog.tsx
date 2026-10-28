@@ -200,6 +200,9 @@ const FOCUS_LABELS: Record<'en' | 'es' | 'pt', Record<string, string>> = {
  * Public marketing blog: all @salvazion_ X Articles, filterable by pillar.
  * Ranked by the visitor's saved focus when available.
  */
+/** Cards rendered on the server / first paint before the carousel nears view. */
+const INITIAL_CARDS = 12;
+
 export default function LandingBlog({ lang, copy }: Props) {
   const [filter, setFilter] = useState<BlogFilter>('all');
   const [query, setQuery] = useState('');
@@ -208,6 +211,30 @@ export default function LandingBlog({ lang, copy }: Props) {
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(false);
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  // Perf (DEC-20261028-32): server HTML carries only the first cards; the rest
+  // mount when the carousel nears the viewport (cards are appended to the right
+  // of a horizontal scroller, so there is no layout shift).
+  const [showAll, setShowAll] = useState(false);
+  useEffect(() => {
+    if (showAll) return;
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') {
+      setShowAll(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setShowAll(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: '800px 0px' }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [showAll]);
   const counts = useMemo(() => getBlogPillarCounts(), []);
 
   useEffect(() => {
@@ -238,6 +265,8 @@ export default function LandingBlog({ lang, copy }: Props) {
     [filter, query, sortMode, focusList]
   );
 
+  const visible = showAll ? filtered : filtered.slice(0, INITIAL_CARDS);
+
   const focusLabels = useMemo(
     () =>
       focusList
@@ -264,7 +293,7 @@ export default function LandingBlog({ lang, copy }: Props) {
       el.removeEventListener('scroll', updateScrollState);
       window.removeEventListener('resize', updateScrollState);
     };
-  }, [filtered, updateScrollState]);
+  }, [visible, updateScrollState]);
 
   useEffect(() => {
     const el = scrollerRef.current;
@@ -285,6 +314,7 @@ export default function LandingBlog({ lang, copy }: Props) {
 
   return (
     <section
+      ref={sectionRef}
       id="blog"
       className="section-pad border-t border-[var(--border-soft)] bg-zinc-950/30"
       aria-labelledby="blog-heading"
@@ -508,7 +538,7 @@ export default function LandingBlog({ lang, copy }: Props) {
                 }
               }}
             >
-              {filtered.map((article) => (
+              {visible.map((article) => (
                 <ArticleCard
                   key={article.id}
                   article={article}

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { isExpiredAuthLink } from '@/lib/auth/email-redirect';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { safeNextPath } from '@/lib/auth/paths';
@@ -30,6 +31,11 @@ export async function GET(request: Request) {
     : configured || requestUrl.origin;
 
   const fail = (detail: string) => {
+    if (isExpiredAuthLink(detail)) {
+      const url = new URL('/auth/login', origin);
+      url.searchParams.set('notice', 'link_expired');
+      return NextResponse.redirect(url);
+    }
     const url = new URL('/auth/login', origin);
     url.searchParams.set('error', 'auth_callback_failed');
     url.searchParams.set('detail', detail.slice(0, 220));
@@ -89,6 +95,7 @@ export async function GET(request: Request) {
 
   if (error) {
     console.error('[auth/callback] exchangeCodeForSession', error.message);
+    if (isExpiredAuthLink(error.message)) return fail(error.message);
     // Client-side recovery page can retry with browser cookies
     const recover = new URL('/auth/callback/recover', origin);
     recover.searchParams.set('code', code);

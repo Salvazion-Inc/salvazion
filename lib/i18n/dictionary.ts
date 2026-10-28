@@ -125,6 +125,8 @@ export const dictionary = {
       verifyStillPending: 'Este email aún no está verificado. Abre el enlace y vuelve a intentar.',
       verifySignOut: 'Usar otra cuenta',
       verifyMissingEmail: 'Esta cuenta no tiene email. Cierra sesión y crea una cuenta con un email.',
+      linkExpired:
+        'Este enlace venció o ya se usó. Si ya confirmaste tu email, inicia sesión. Si no, pide un enlace nuevo.',
       emailNotConfirmed: 'Confirma tu email antes de entrar. Revisa tu bandeja de entrada.',
       resendGeneric:
         'Si hay una cuenta esperando confirmación, enviamos otro enlace a ese email.',
@@ -1275,6 +1277,8 @@ export const dictionary = {
       verifyStillPending: 'This email is not verified yet. Open the link, then try again.',
       verifySignOut: 'Use a different account',
       verifyMissingEmail: 'This account has no email address. Sign out and create an account with an email.',
+      linkExpired:
+        'This link expired or was already used. If you already confirmed your email, sign in. If not, request a new link.',
       emailNotConfirmed: 'Confirm your email before signing in. Check your inbox.',
       resendGeneric:
         'If an account is waiting for confirmation, we sent another link to that email.',

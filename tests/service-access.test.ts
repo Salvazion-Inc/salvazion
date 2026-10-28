@@ -94,6 +94,15 @@ test('anonymous service pages go to signup with a return path', () => {
   }
 });
 
+test('GET /api/billing/status stays open so a session is not answered with 401', () => {
+  assert.deepEqual(decide('/api/billing/status', anon), { action: 'allow' });
+  assert.deepEqual(decide('/api/billing/status', unverified), { action: 'allow' });
+  assert.deepEqual(decide('/api/billing/status', verified), { action: 'allow' });
+  assert.deepEqual(decide('/api/billing/status', anon, { method: 'POST' }), {
+    action: 'unauthorized',
+  });
+});
+
 test('anonymous APIs are 401, including AI, quota, holder, and vision', () => {
   const paths = [
     '/api/coach/chat',

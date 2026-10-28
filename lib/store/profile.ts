@@ -162,6 +162,14 @@ function fromDb(row: ProfileDbRow | null | undefined): Partial<UserProfile> {
   };
 }
 
+/** Only a real value is written. Null used to 400 when the column was absent. */
+export function profileSexForUpsert(
+  sex: unknown
+): 'female' | 'male' | 'unspecified' | undefined {
+  if (sex === 'female' || sex === 'male' || sex === 'unspecified') return sex;
+  return undefined;
+}
+
 function toDb(profile: Partial<UserProfile>) {
   return {
     name: profile.name,
@@ -175,7 +183,8 @@ function toDb(profile: Partial<UserProfile>) {
     city: profile.city,
     country: profile.country,
     birth_date: profile.birthDate || null,
-    sex: profile.sex || null,
+    // Omit when unset. A null sex on a missing column was a PostgREST 400.
+    sex: profileSexForUpsert(profile.sex),
     // http(s) → DB; empty string → clear column; data: URLs stay local only
     avatar_url:
       profile.avatarUrl === ''
@@ -625,7 +634,7 @@ function buildProfilePayload(
   return payload;
 }
 
-function applyUpsertFallbacks(
+export function applyUpsertFallbacks(
   payload: Record<string, unknown>,
   message: string
 ): boolean {
@@ -640,11 +649,6 @@ function applyUpsertFallbacks(
       delete payload.preferred_bible_version;
       changed = true;
     }
-  }
-
-  if (/language/i.test(msg) && payload.language === 'pt') {
-    payload.language = 'es';
-    changed = true;
   }
 
   for (const col of DROP_ON_ERROR) {

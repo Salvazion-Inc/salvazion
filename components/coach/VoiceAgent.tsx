@@ -16,7 +16,7 @@ import type { ComputedScores } from '@/lib/scoring/types';
 import { logAction } from '@/lib/scoring/engine';
 import AiUsageMeter from '@/components/billing/AiUsageMeter';
 import CapUpgradeOffer from '@/components/billing/CapUpgradeOffer';
-import { useAiUsage } from '@/lib/billing/ai-usage-client';
+import { usagePatchFrom, useAiUsage } from '@/lib/billing/ai-usage-client';
 
 type Props = {
   profile: Partial<UserProfile> | null;
@@ -52,7 +52,11 @@ export default function VoiceAgent({
   /** Off by default — freemium browser TTS is poor; Premium uses xAI voice only */
   const [voiceOn, setVoiceOn] = useState(false);
   const [scoredDebate, setScoredDebate] = useState(false);
-  const { overview: usage, refresh: refreshUsage } = useAiUsage();
+  const { overview: usage, refresh: refreshUsage, apply: applyUsage } = useAiUsage();
+  const noteUsage = useCallback((payload: unknown) => {
+    applyUsage(usagePatchFrom(payload));
+    void refreshUsage();
+  }, [applyUsage, refreshUsage]);
   const [quotaFeature, setQuotaFeature] = useState<'coach_chat' | 'coach_tts'>('coach_chat');
   const listRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -97,6 +101,7 @@ export default function VoiceAgent({
         if (!res.ok) {
           setSpeakState('idle');
           const errJson = await res.json().catch(() => null);
+          noteUsage(errJson);
           if (res.status === 403) {
             setError(
               (errJson && typeof errJson.message === 'string' && errJson.message) ||
@@ -119,7 +124,6 @@ export default function VoiceAgent({
             );
             setQuotaFeature('coach_tts');
             setQuotaHit(true);
-            void refreshUsage();
           }
           return;
         }
@@ -144,7 +148,7 @@ export default function VoiceAgent({
         setSpeakState('idle');
       }
     },
-    [lang, voiceOn, es, tx, refreshUsage]
+    [lang, voiceOn, es, tx, noteUsage]
   );
 
   const send = useCallback(
@@ -173,6 +177,7 @@ export default function VoiceAgent({
           }),
         });
         const data = await res.json();
+        noteUsage(data);
         if (res.status === 403) {
           const reply =
             (typeof data.reply === 'string' && data.reply) ||
@@ -199,7 +204,6 @@ export default function VoiceAgent({
           setQuotaFeature('coach_chat');
           setQuotaHit(true);
           setMessages((m) => [...m, { role: 'assistant', content: reply }]);
-          void refreshUsage();
           return;
         }
         const reply =
@@ -210,7 +214,6 @@ export default function VoiceAgent({
             'A Salvazion AI escuta você. Tente de novo.'
           );
         setMessages((m) => [...m, { role: 'assistant', content: reply }]);
-        void refreshUsage();
         if (isDebate && !scoredDebate && nextMessages.filter((x) => x.role === 'user').length >= 1) {
           logAction('debate_participate');
           setScoredDebate(true);
@@ -223,7 +226,7 @@ export default function VoiceAgent({
         setBusy(false);
       }
     },
-    [busy, messages, profile, scores, lang, es, playTts, mode, isDebate, scoredDebate, onDebateScored, tx, refreshUsage]
+    [busy, messages, profile, scores, lang, es, playTts, mode, isDebate, scoredDebate, onDebateScored, tx, noteUsage]
   );
 
   const toggleListen = () => {

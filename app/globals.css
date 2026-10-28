@@ -20,6 +20,11 @@
   --font-display: "Cosmic Octo", var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
+/* First load after a language change: hide SSR text until the saved locale is applied. */
+html.locale-pending body {
+  visibility: hidden;
+}
+
 :root {
   /* Soft Salvazion palette — long dark-mode reading */
   --neon-primary: #6BCF78;

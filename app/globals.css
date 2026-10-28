@@ -2302,7 +2302,7 @@ select:-webkit-autofill {
   contain-intrinsic-size: auto 900px;
 }
 
-/* Anchor jumps land below the fixed nav (GOVERN P3, DEC-20261028-21). */
+/* Anchor jumps land below the fixed nav (GOVERN P3, DEC-20261028-23). */
 #app,
 #team,
 #pricing,

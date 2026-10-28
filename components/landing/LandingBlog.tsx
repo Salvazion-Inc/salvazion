@@ -489,7 +489,7 @@ export default function LandingBlog({ lang, copy }: Props) {
 
             <div
               ref={scrollerRef}
-              className="carousel-track px-1"
+              className="carousel-track px-1 scroll-px-1"
               role="region"
               aria-roledescription="carousel"
               aria-label={pickLang(lang, {

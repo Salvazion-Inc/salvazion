@@ -81,7 +81,6 @@ function TokenMintCopy({
       type="button"
       onClick={() => void onCopy()}
       className="group mx-auto mb-8 flex max-w-full items-center gap-2 rounded-xl border border-[var(--border-soft)] bg-[#0a0a0a] px-3 py-2.5 text-left transition hover:border-[var(--border-strong)] hover:bg-[var(--surface-active)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] active:scale-[0.99]"
-      aria-label={`CA: ${mint} — ${copied ? copiedLabel : copyLabel}`}
       title={copied ? copiedLabel : copyLabel}
     >
       <span className="min-w-0 flex-1 break-all font-mono text-[10px] sm:text-xs text-[var(--off-white)]/90">
@@ -284,6 +283,7 @@ export default function SalvazionLanding({ blog }: { blog: LandingBlogData }) {
               width={200}
               height={200}
               className="lion-glow w-36 h-36 sm:w-48 sm:h-48 object-contain drop-shadow-[0_0_40px_rgba(143,217,154,0.25)]"
+              sizes="(min-width: 640px) 192px, 144px"
               priority
             />
           </div>

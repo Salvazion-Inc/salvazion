@@ -133,6 +133,41 @@ function LandingPremiumCtas() {
   );
 }
 
+/** Starts the hero loop only after load + idle so it never competes with LCP. */
+function HeroVideo() {
+  const [src, setSrc] = useState<string | null>(null);
+  useEffect(() => {
+    let idleId: number | undefined;
+    let timer: number | undefined;
+    const start = () => {
+      const ric = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
+      if (ric) idleId = ric(() => setSrc('/videos/hero-home.mp4'), { timeout: 3000 });
+      else timer = window.setTimeout(() => setSrc('/videos/hero-home.mp4'), 1500);
+    };
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start, { once: true });
+    return () => {
+      window.removeEventListener('load', start);
+      if (timer) window.clearTimeout(timer);
+      const cic = (window as Window & { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback;
+      if (idleId !== undefined && cic) cic(idleId);
+    };
+  }, []);
+  if (!src) return null;
+  return (
+    <video
+      className="absolute inset-0 w-full h-full object-cover -scale-x-100"
+      src={src}
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="none"
+      aria-hidden
+    />
+  );
+}
+
 export default function SalvazionLanding() {
   const { lang, setLang } = useI18n();
   const t = copy[lang];
@@ -223,16 +258,18 @@ export default function SalvazionLanding() {
           Same Canva home asset (green smoke). On salvazion.org the fill is
           mirrored horizontally so the dense plume sits on the right — match that.
         */}
-        <video
-          className="absolute inset-0 w-full h-full object-cover -scale-x-100"
-          src="/videos/hero-home.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
+        {/* Poster = first frame of hero-home.mp4 (same framing) → LCP element.
+            The 2.4 MB video only loads after window load + idle (perf). */}
+        <Image
+          src="/videos/hero-home-poster.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover -scale-x-100"
           aria-hidden
         />
+        <HeroVideo />
         <div className="absolute inset-0 bg-[#040404]/50" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#040404]/55 via-transparent to-[#040404]" />
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#040404] to-transparent" />
@@ -290,7 +327,7 @@ export default function SalvazionLanding() {
       </section>
 
       {/* One Platform + Purpose fused */}
-      <section id="app" className="section-pad border-t border-[var(--border-soft)]">
+      <section id="app" className="cv-auto section-pad border-t border-[var(--border-soft)]">
         <div className="max-w-6xl mx-auto px-5">
           <div className="text-center mb-12 max-w-3xl mx-auto">
             <p className="section-eyebrow mb-3">{t.app.eyebrow}</p>
@@ -349,7 +386,7 @@ export default function SalvazionLanding() {
       </section>
 
       {/* Team — founders (before pricing) */}
-      <section id="team" className="section-pad border-t border-[var(--border-soft)] bg-zinc-950/35">
+      <section id="team" className="cv-auto section-pad border-t border-[var(--border-soft)] bg-zinc-950/35">
         <div className="max-w-5xl mx-auto px-5">
           <div className="text-center mb-12 max-w-3xl mx-auto">
             <p className="section-eyebrow mb-3">{t.team.eyebrow}</p>
@@ -451,7 +488,7 @@ export default function SalvazionLanding() {
       </section>
 
       {/* Pricing — freemium as built */}
-      <section id="pricing" className="section-pad border-t border-[var(--border-soft)] bg-zinc-950/40">
+      <section id="pricing" className="cv-auto section-pad border-t border-[var(--border-soft)] bg-zinc-950/40">
         <div className="max-w-5xl mx-auto px-5">
           <div className="text-center mb-12 max-w-2xl mx-auto">
             <p className="section-eyebrow mb-3">{t.pricing.eyebrow}</p>
@@ -573,7 +610,7 @@ export default function SalvazionLanding() {
       <LandingBlog lang={lang} copy={t.blog} />
 
       {/* Token — last section */}
-      <section id="token" className="section-pad border-t border-[var(--border-soft)]">
+      <section id="token" className="cv-auto section-pad border-t border-[var(--border-soft)]">
         <div className="max-w-3xl mx-auto px-5 text-center">
           <p className="section-eyebrow mb-3">Solana</p>
           <h2 className="section-title text-4xl sm:text-5xl tracking-tighter mb-3 text-[var(--accent)] neon-text">

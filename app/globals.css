@@ -2294,3 +2294,10 @@ select:-webkit-autofill {
     animation: none !important;
   }
 }
+
+/* Perf: skip rendering of below-the-fold landing sections until near the
+   viewport. contain-intrinsic-size "auto" remembers the real height → no CLS. */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}

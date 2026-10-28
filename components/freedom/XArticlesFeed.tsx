@@ -472,7 +472,7 @@ export default function XArticlesFeed({
 
           <div
             ref={scrollerRef}
-            className="carousel-track gap-2.5 px-0.5"
+            className="carousel-track gap-2.5 px-0.5 scroll-px-0.5"
             role="region"
             aria-roledescription="carousel"
             aria-label={t('articles.carouselAria')}

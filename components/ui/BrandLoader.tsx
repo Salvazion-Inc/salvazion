@@ -33,7 +33,6 @@ export default function BrandLoader({
           height={size}
           className="brand-loader-static"
           sizes={`${size}px`}
-          priority
           aria-hidden
         />
       </span>

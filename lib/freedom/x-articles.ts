@@ -530,12 +530,16 @@ export function formatArticleDate(
       year: 'numeric',
       month: 'short',
       day: 'numeric',
+      timeZone: 'UTC',
     });
   }
   return d.toLocaleDateString(locale, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+    // Deterministic on server (UTC) and every visitor's timezone: avoids
+    // React #418 hydration mismatch on the landing blog (DEC-20261028-29).
+    timeZone: 'UTC',
   });
 }
 

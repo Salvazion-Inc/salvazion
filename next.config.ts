@@ -234,6 +234,7 @@ const nextConfig: NextConfig = {
   },
   // Images: local + Supabase + X + Amazon / Open Library book covers
   images: {
+    formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 3600,
     remotePatterns: [
       {

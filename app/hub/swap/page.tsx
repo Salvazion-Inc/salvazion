@@ -7,6 +7,7 @@ import Image from 'next/image';
 import BottomNav from '@/components/BottomNav';
 import WalletConnectCard from '@/components/wallet/WalletConnectCard';
 import JupiterSwap from '@/components/wallet/JupiterSwap';
+import WalletScope from '@/components/wallet/WalletScope';
 import { loadProfileAsync } from '@/lib/store/profile';
 import { SALVAZION_MINT, shortenAddress } from '@/lib/solana/config';
 import { useI18n } from '@/components/I18nProvider';
@@ -65,6 +66,8 @@ export default function SwapPage() {
           </p>
         </div>
 
+        <WalletScope>
+        <div className="space-y-5">
         <WalletConnectCard />
 
         <div className="glass rounded-2xl p-3 sm:p-4">
@@ -78,6 +81,8 @@ export default function SwapPage() {
           </div>
           <JupiterSwap mode="integrated" />
         </div>
+        </div>
+        </WalletScope>
 
         <p className="text-[11px] text-[var(--sage)]/70 text-center leading-relaxed px-2">
           {t('swap.disclaimer')}

@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import WalletConnectCard from '@/components/wallet/WalletConnectCard';
-import JupiterSwap from '@/components/wallet/JupiterSwap';
+import dynamic from 'next/dynamic';
+import WalletScope from '@/components/wallet/WalletScope';
 import { useI18n } from '@/components/I18nProvider';
 import {
   PLAN_COPY,
@@ -22,6 +22,9 @@ import { signupUrlForCheckout } from '@/lib/billing/checkout-intent';
 import { homeDocumentTitle, purposeHeroLines, purposeSentence } from '@/lib/seo/config';
 import PlanStatus from '@/components/billing/PlanStatus';
 import { useEntitlement } from '@/lib/billing/client';
+
+const WalletConnectCard = dynamic(() => import('@/components/wallet/WalletConnectCard'), { ssr: false });
+const JupiterSwap = dynamic(() => import('@/components/wallet/JupiterSwap'), { ssr: false });
 
 const MINT = SALVAZION_MINT;
 
@@ -78,7 +81,7 @@ function TokenMintCopy({
       type="button"
       onClick={() => void onCopy()}
       className="group mx-auto mb-8 flex max-w-full items-center gap-2 rounded-xl border border-[var(--border-soft)] bg-[#0a0a0a] px-3 py-2.5 text-left transition hover:border-[var(--border-strong)] hover:bg-[var(--surface-active)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] active:scale-[0.99]"
-      aria-label={copied ? copiedLabel : copyLabel}
+      aria-label={`CA: ${mint} — ${copied ? copiedLabel : copyLabel}`}
       title={copied ? copiedLabel : copyLabel}
     >
       <span className="min-w-0 flex-1 break-all font-mono text-[10px] sm:text-xs text-[var(--off-white)]/90">
@@ -387,7 +390,6 @@ export default function SalvazionLanding() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-start gap-4 mb-4 group rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
-                aria-label="Cristian Cortés — LinkedIn"
               >
                 <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[var(--accent)]/40 shrink-0 bg-black ring-2 ring-[var(--border-soft)] transition group-hover:border-[var(--accent)]/70">
                   <Image
@@ -419,7 +421,6 @@ export default function SalvazionLanding() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-start gap-4 mb-4 group rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
-                aria-label="Beatriz Isler — LinkedIn"
               >
                 <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-[var(--accent)]/40 shrink-0 bg-black ring-2 ring-[var(--border-soft)] transition group-hover:border-[var(--accent)]/70">
                   <Image
@@ -585,6 +586,7 @@ export default function SalvazionLanding() {
             copiedLabel={t.token.copiedCa}
           />
 
+          <WalletScope lazy minHeight={320}>
           <div className="max-w-md mx-auto text-left space-y-4">
             <WalletConnectCard showJupiter={false} />
             <div className="card-soft p-3">
@@ -603,6 +605,7 @@ export default function SalvazionLanding() {
               />
             </div>
           </div>
+          </WalletScope>
         </div>
       </section>
 

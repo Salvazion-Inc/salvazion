@@ -538,7 +538,7 @@ export function formatArticleDate(
     month: 'short',
     day: 'numeric',
     // Deterministic on server (UTC) and every visitor's timezone: avoids
-    // React #418 hydration mismatch on the landing blog (DEC-20261028-28).
+    // React #418 hydration mismatch on the landing blog (DEC-20261028-29).
     timeZone: 'UTC',
   });
 }

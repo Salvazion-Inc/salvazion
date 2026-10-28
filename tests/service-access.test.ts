@@ -204,3 +204,17 @@ test('wearable OAuth callback is a browser return, not an anonymous API', () => 
     action: 'unauthorized',
   });
 });
+
+test('partner funnel events endpoint is reachable without a session', () => {
+  for (const user of [anon, unverified, verified]) {
+    assert.deepEqual(
+      decideServiceAccess({ pathname: '/api/partners/events', method: 'POST', search: '', user }),
+      { action: 'allow' }
+    );
+  }
+  // Neighbouring partner APIs stay gated.
+  assert.notDeepEqual(
+    decideServiceAccess({ pathname: '/api/partners/other', method: 'POST', search: '', user: anon }),
+    { action: 'allow' }
+  );
+});

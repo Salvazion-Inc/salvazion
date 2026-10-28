@@ -146,6 +146,9 @@ export function decideServiceAccess(input: {
   if (OPEN_PAGES.has(pathname) || OPEN_HEALTH.has(pathname)) return { action: 'allow' };
   if (isWebhookRoute(pathname)) return { action: 'allow' };
   if (pathname === '/api/auth/resend-confirmation') return { action: 'allow' };
+  // Partner funnel events (DEC-20261022-02): anon view/start/submit; the route
+  // enforces same-origin, rate limit, whitelist and partner_verified auth itself.
+  if (pathname === '/api/partners/events') return { action: 'allow' };
   if (pathname === '/api/internal/holder-metrics') return { action: 'allow' };
 
   // Stripe return for a Checkout that already happened. The page provisions

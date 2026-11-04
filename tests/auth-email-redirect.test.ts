@@ -38,3 +38,13 @@ test('stray-code rescue never touches /auth/* (no login<->callback loop)', () =>
   assert.equal(strayAuthCodeTarget(new URL('https://salvazion.org/auth/login?error=auth_callback_failed&detail=x')), null);
   assert.equal(strayAuthCodeTarget(new URL('https://salvazion.org/auth/callback/recover?code=a&err=x')), null);
 });
+
+test('signup flow tags redirect and maps expired link to confirmed notice', async () => {
+  const { expiredLinkNotice } = await import('../lib/auth/email-redirect');
+  assert.equal(
+    authEmailRedirectTo('/hub/onboarding', 'https://salvazion.org', 'production', 'signup'),
+    'https://salvazion.org/auth/callback?next=%2Fhub%2Fonboarding&flow=signup'
+  );
+  assert.equal(expiredLinkNotice('signup'), 'link_used_confirmed');
+  assert.equal(expiredLinkNotice(null), 'link_expired');
+});

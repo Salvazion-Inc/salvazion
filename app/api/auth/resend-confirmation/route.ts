@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (url && key) {
     const next = safeNextPath(typeof body.next === 'string' ? body.next : null, '/hub/dashboard');
-    const redirectTo = authEmailRedirectTo(next, req.nextUrl.origin, process.env.VERCEL_ENV);
+    const redirectTo = authEmailRedirectTo(next, req.nextUrl.origin, process.env.VERCEL_ENV, 'signup');
     try {
       const supabase = createClient(url, key, {
         auth: { persistSession: false, autoRefreshToken: false },

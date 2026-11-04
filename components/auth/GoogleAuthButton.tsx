@@ -1,7 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { signInWithGoogle } from '@/lib/auth/google-oauth';
+import { isGoogleGisEnabled, mountGoogleGisButton } from '@/lib/auth/google-gis';
+import { safeNextPath } from '@/lib/auth/paths';
 import { useI18n } from '@/components/I18nProvider';
 import { mapAuthError } from '@/lib/auth/paths';
 
@@ -12,8 +14,59 @@ interface Props {
   disabled?: boolean;
 }
 
-/** Login / sign-up with Gmail (Google) via Supabase OAuth */
-export default function GoogleAuthButton({
+/** Login / sign-up with Gmail (Google). Flag NEXT_PUBLIC_GOOGLE_GIS=1 → GIS + signInWithIdToken. */
+export default function GoogleAuthButton(props: Props) {
+  return isGoogleGisEnabled() ? <GoogleGisButton {...props} /> : <GoogleOAuthButton {...props} />;
+}
+
+/** GIS path: Google's official button; no "continue to …supabase.co" screen. */
+function GoogleGisButton({ next = '/hub/dashboard', className = '', onError, disabled = false }: Props) {
+  const { t, lang } = useI18n();
+  const ref = useRef<HTMLDivElement>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || disabled) return;
+    let cancelled = false;
+    el.innerHTML = '';
+    mountGoogleGisButton(el, {
+      locale: lang,
+      width: el.clientWidth,
+      onSignedIn: () => {
+        window.location.assign(safeNextPath(next, '/hub/dashboard'));
+      },
+      onError: (msg) => onError?.(mapAuthError(msg, lang)),
+    }).catch(() => {
+      if (!cancelled) setFailed(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [disabled, lang, next, onError]);
+
+  // Script blocked / failed to load → fall back to the current OAuth flow.
+  if (failed) return <GoogleOAuthButton next={next} className={className} onError={onError} disabled={disabled} />;
+
+  if (disabled) {
+    return (
+      <button
+        type="button"
+        onClick={() => onError?.(t('auth.acceptTermsRequired'))}
+        className={`w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-2xl border border-[var(--border-strong)] bg-white/[0.06] text-[#D8E1D9] text-sm font-semibold opacity-50 ${className}`}
+        aria-label={t('auth.continueWithGoogle')}
+      >
+        <GoogleLogo className="w-4 h-4 shrink-0" />
+        <span>{t('auth.continueWithGoogle')}</span>
+      </button>
+    );
+  }
+
+  return <div ref={ref} className={`w-full flex justify-center min-h-[44px] ${className}`} />;
+}
+
+/** Current path: Supabase OAuth redirect (default, flag off). */
+function GoogleOAuthButton({
   next = '/hub/dashboard',
   className = '',
   onError,

@@ -109,7 +109,7 @@ function SignupForm() {
       password,
       options: {
         data: meta,
-        emailRedirectTo: authEmailRedirectTo(next),
+        emailRedirectTo: authEmailRedirectTo(next, undefined, undefined, 'signup'),
       },
     });
 

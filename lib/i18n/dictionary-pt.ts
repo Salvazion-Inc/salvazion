@@ -121,6 +121,8 @@ export const dictionaryPt = {
     verifyMissingEmail: 'Esta conta não tem email. Saia e crie uma conta com um email.',
     linkExpired:
       'Este link expirou ou já foi usado. Se você já confirmou seu email, entre. Se não, peça um novo link.',
+    linkUsedConfirmed:
+      'Sua conta já está confirmada. Este link já tinha sido usado (às vezes o app de email o abre para verificá-lo). Entre com seu email e senha.',
     emailNotConfirmed: 'Confirme seu email antes de entrar. Confira sua caixa de entrada.',
     resendGeneric:
       'Se houver uma conta esperando confirmação, enviamos outro link para esse email.',
@@ -585,6 +587,8 @@ export const dictionaryPt = {
     pageHeadline: 'Comece grátis. Passe para Premium quando quiser.',
     pageSubtitle:
       'Grátis abre Salvation, Health e Freedom. Premium tira o limite diário e abre toda a profundidade.',
+    tokenAccessKey:
+      '$SALVAZION é apenas a chave de acesso ao Premium na Solana; não concede direitos de governança, não é participação na Salvazion, Inc. nem uma promessa de lucro.',
     youArePremium: 'Seu plano: Premium',
     youAreFree: 'Seu plano: Free',
     currentPlan: 'Seu plano',

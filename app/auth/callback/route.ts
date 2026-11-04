@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { isExpiredAuthLink } from '@/lib/auth/email-redirect';
+import { expiredLinkNotice, isExpiredAuthLink } from '@/lib/auth/email-redirect';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { safeNextPath } from '@/lib/auth/paths';
@@ -30,10 +30,14 @@ export async function GET(request: Request) {
     ? `${forwardedProto}://${forwardedHost}`
     : configured || requestUrl.origin;
 
+  const flow = requestUrl.searchParams.get('flow');
   const fail = (detail: string) => {
-    if (isExpiredAuthLink(detail)) {
+    // Signup link with no code: Supabase put otp_expired in the URL hash
+    // (prefetch already consumed it). The hash is not visible here.
+    const signupNoCode = flow === 'signup' && detail === 'missing_code';
+    if (isExpiredAuthLink(detail) || signupNoCode) {
       const url = new URL('/auth/login', origin);
-      url.searchParams.set('notice', 'link_expired');
+      url.searchParams.set('notice', expiredLinkNotice(flow));
       return NextResponse.redirect(url);
     }
     const url = new URL('/auth/login', origin);
@@ -100,6 +104,7 @@ export async function GET(request: Request) {
     const recover = new URL('/auth/callback/recover', origin);
     recover.searchParams.set('code', code);
     recover.searchParams.set('next', next);
+    if (flow) recover.searchParams.set('flow', flow);
     recover.searchParams.set('err', error.message.slice(0, 120));
     return NextResponse.redirect(recover);
   }

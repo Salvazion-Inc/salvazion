@@ -15,9 +15,9 @@ export type LegalDoc = {
   sections: LegalSection[];
 };
 
-const UPDATED_EN = 'August 24, 2026';
-const UPDATED_ES = '24 de agosto de 2026';
-const UPDATED_PT = '24 de agosto de 2026';
+const UPDATED_EN = 'November 4, 2026';
+const UPDATED_ES = '4 de noviembre de 2026';
+const UPDATED_PT = '4 de novembro de 2026';
 
 const ENTITY =
   'Salvazion, Inc., a Delaware corporation, with registered office at 131 Continental Dr, Suite 305, Newark, DE 19713, USA';
@@ -104,7 +104,7 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '8. Web3, Solana, and $SALVAZION',
         paragraphs: [
-          'If you connect a wallet (for example Jupiter Mobile, Phantom, or Solflare) or use swaps, you act under your own responsibility. Salvazion does not custody funds or private keys, is not an exchange or broker, and is not a financial, investment, or tax advisor. Blockchain transactions are public, irreversible, and involve risk of total loss. $SALVAZION is a utility token on Solana, not equity in Salvazion, Inc. and not a promise of profit. Comply with the laws of your jurisdiction regarding crypto assets.',
+          'If you connect a wallet (for example Jupiter Mobile, Phantom, or Solflare) or use swaps, you act under your own responsibility. Salvazion does not custody funds or private keys, is not an exchange or broker, and is not a financial, investment, or tax advisor. Blockchain transactions are public, irreversible, and involve risk of total loss. $SALVAZION is only the Premium access key on Solana; it grants no governance rights, is not equity in Salvazion, Inc., and is not a promise of profit. Comply with the laws of your jurisdiction regarding crypto assets.',
         ],
       },
       {
@@ -227,7 +227,7 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '8. Web3, Solana y $SALVAZION',
         paragraphs: [
-          'Si conectas una billetera (por ejemplo Jupiter Mobile, Phantom o Solflare) o usas swaps, actúas bajo tu propia responsabilidad. Salvazion no custodia fondos ni claves privadas, no es un exchange ni un bróker, y no es un asesor financiero, de inversión ni tributario. Las transacciones en blockchain son públicas, irreversibles y conllevan riesgo de pérdida total. $SALVAZION es un token de utilidad en Solana, no es capital de Salvazion, Inc. ni una promesa de ganancia. Cumple la normativa de tu jurisdicción respecto a criptoactivos.',
+          'Si conectas una billetera (por ejemplo Jupiter Mobile, Phantom o Solflare) o usas swaps, actúas bajo tu propia responsabilidad. Salvazion no custodia fondos ni claves privadas, no es un exchange ni un bróker, y no es un asesor financiero, de inversión ni tributario. Las transacciones en blockchain son públicas, irreversibles y conllevan riesgo de pérdida total. $SALVAZION es solo la llave de acceso a Premium en Solana; no otorga derechos de gobernanza, no es capital de Salvazion, Inc. ni una promesa de ganancia. Cumple la normativa de tu jurisdicción respecto a criptoactivos.',
         ],
       },
       {
@@ -350,7 +350,7 @@ export const TERMS: Record<Language, LegalDoc> = {
       {
         heading: '8. Web3, Solana e $SALVAZION',
         paragraphs: [
-          'Se você conectar uma carteira (por exemplo Jupiter Mobile, Phantom ou Solflare) ou usar swaps, age sob sua própria responsabilidade. A Salvazion não custodia fundos nem chaves privadas, não é uma exchange nem uma corretora, e não é uma assessora financeira, de investimento nem tributária. Transações em blockchain são públicas, irreversíveis e envolvem risco de perda total. $SALVAZION é um token de utilidade na Solana, não é participação na Salvazion, Inc. nem uma promessa de lucro. Cumpra a legislação da sua jurisdição sobre criptoativos.',
+          'Se você conectar uma carteira (por exemplo Jupiter Mobile, Phantom ou Solflare) ou usar swaps, age sob sua própria responsabilidade. A Salvazion não custodia fundos nem chaves privadas, não é uma exchange nem uma corretora, e não é uma assessora financeira, de investimento nem tributária. Transações em blockchain são públicas, irreversíveis e envolvem risco de perda total. $SALVAZION é apenas a chave de acesso ao Premium na Solana; não concede direitos de governança, não é participação na Salvazion, Inc. nem uma promessa de lucro. Cumpra a legislação da sua jurisdição sobre criptoativos.',
         ],
       },
       {

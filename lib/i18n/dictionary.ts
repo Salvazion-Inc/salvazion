@@ -127,6 +127,8 @@ export const dictionary = {
       verifyMissingEmail: 'Esta cuenta no tiene email. Cierra sesión y crea una cuenta con un email.',
       linkExpired:
         'Este enlace venció o ya se usó. Si ya confirmaste tu email, inicia sesión. Si no, pide un enlace nuevo.',
+      linkUsedConfirmed:
+        'Tu cuenta ya está confirmada. Este enlace ya se había usado (a veces el correo lo abre solo para revisarlo). Inicia sesión con tu email y contraseña.',
       emailNotConfirmed: 'Confirma tu email antes de entrar. Revisa tu bandeja de entrada.',
       resendGeneric:
         'Si hay una cuenta esperando confirmación, enviamos otro enlace a ese email.',
@@ -591,6 +593,8 @@ export const dictionary = {
       pageHeadline: 'Empieza gratis. Pasa a Premium cuando quieras.',
       pageSubtitle:
         'Gratis abre Salvation, Health y Freedom. Premium quita el límite diario y abre toda la profundidad.',
+      tokenAccessKey:
+        '$SALVAZION es solo la llave de acceso a Premium en Solana; no otorga derechos de gobernanza, no es capital de Salvazion, Inc. ni una promesa de ganancia.',
       youArePremium: 'Tu plan: Premium',
       youAreFree: 'Tu plan: Free',
       currentPlan: 'Tu plan',
@@ -1279,6 +1283,8 @@ export const dictionary = {
       verifyMissingEmail: 'This account has no email address. Sign out and create an account with an email.',
       linkExpired:
         'This link expired or was already used. If you already confirmed your email, sign in. If not, request a new link.',
+      linkUsedConfirmed:
+        'Your account is already confirmed. This link had already been used (sometimes your email app opens it to scan it). Sign in with your email and password.',
       emailNotConfirmed: 'Confirm your email before signing in. Check your inbox.',
       resendGeneric:
         'If an account is waiting for confirmation, we sent another link to that email.',
@@ -1739,6 +1745,8 @@ export const dictionary = {
       pageHeadline: 'Start free. Go Premium when ready.',
       pageSubtitle:
         'Free opens Salvation, Health and Freedom. Premium removes the daily limit and opens the full depth.',
+      tokenAccessKey:
+        '$SALVAZION is only the Premium access key on Solana; it grants no governance rights, is not equity in Salvazion, Inc., and is not a promise of profit.',
       youArePremium: 'Your plan: Premium',
       youAreFree: 'Your plan: Free',
       currentPlan: 'Your plan',

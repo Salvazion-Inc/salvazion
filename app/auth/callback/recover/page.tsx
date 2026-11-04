@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { safeNextPath } from '@/lib/auth/paths';
 import { ensureProfileForUser, applyXIdentityToProfile } from '@/lib/store/profile';
-import { isExpiredAuthLink } from '@/lib/auth/email-redirect';
+import { expiredLinkNotice, isExpiredAuthLink } from '@/lib/auth/email-redirect';
 import BrandLoader from '@/components/ui/BrandLoader';
 
 /**
@@ -37,7 +37,7 @@ function RecoverInner() {
         if (error) {
           setMsg(error.message);
           if (isExpiredAuthLink(error.message) || isExpiredAuthLink(prevErr)) {
-            router.replace('/auth/login?notice=link_expired');
+            router.replace(`/auth/login?notice=${expiredLinkNotice(params.get('flow'))}`);
             return;
           }
           router.replace(

@@ -94,8 +94,8 @@ const nextConfig: NextConfig = {
             value: [
               "default-src 'self'",
               // Jupiter Plugin (Ultra) — plugin.jup.ag; legacy terminal.jup.ag still allowed
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plugin.jup.ag https://terminal.jup.ag https://*.jup.ag https://cdn.jsdelivr.net",
-              "style-src 'self' 'unsafe-inline' https://plugin.jup.ag https://terminal.jup.ag https://*.jup.ag https://fonts.googleapis.com https://fonts.reown.com https://cdn.jsdelivr.net",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plugin.jup.ag https://terminal.jup.ag https://*.jup.ag https://cdn.jsdelivr.net https://accounts.google.com/gsi/client",
+              "style-src 'self' 'unsafe-inline' https://plugin.jup.ag https://terminal.jup.ag https://*.jup.ag https://fonts.googleapis.com https://fonts.reown.com https://cdn.jsdelivr.net https://accounts.google.com/gsi/style",
               "img-src 'self' data: blob: https: https://images-na.ssl-images-amazon.com https://m.media-amazon.com https://covers.openlibrary.org https://books.google.com https://ipfs.io https://*.ipfs.io",
               "font-src 'self' data: https://plugin.jup.ag https://terminal.jup.ag https://*.jup.ag https://fonts.gstatic.com https://fonts.reown.com",
               // Supabase + Solana RPC + wallets + Jupiter APIs
@@ -107,6 +107,8 @@ const nextConfig: NextConfig = {
                 "https://openlibrary.org",
                 "https://covers.openlibrary.org",
                 "https://www.googleapis.com",
+                // Google Identity Services (flag NEXT_PUBLIC_GOOGLE_GIS)
+                "https://accounts.google.com/gsi/",
                 // Jupiter Plugin fetches Google Fonts CSS via fetch() — must be in connect-src
                 // (without this, Plugin aborts style apply and modal renders height:0 empty)
                 "https://fonts.googleapis.com",
@@ -175,7 +177,7 @@ const nextConfig: NextConfig = {
               ].join(" "),
               "worker-src 'self' blob:",
               "child-src 'self' blob:",
-              "frame-src 'self' https://*.phantom.app https://*.solflare.com https://jup.ag https://*.jup.ag https://plugin.jup.ag https://terminal.jup.ag https://verify.walletconnect.com https://verify.walletconnect.org https://*.walletconnect.com https://*.walletconnect.org https://www.openstreetmap.org https://openstreetmap.org",
+              "frame-src 'self' https://accounts.google.com/gsi/ https://*.phantom.app https://*.solflare.com https://jup.ag https://*.jup.ag https://plugin.jup.ag https://terminal.jup.ag https://verify.walletconnect.com https://verify.walletconnect.org https://*.walletconnect.com https://*.walletconnect.org https://www.openstreetmap.org https://openstreetmap.org",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",

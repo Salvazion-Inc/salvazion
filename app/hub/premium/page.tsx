@@ -252,6 +252,9 @@ export default function PremiumPage() {
             <p className="mt-3 text-xs text-[var(--sage)] leading-snug">
               {pickLang(lang, PRICING_TABLE.premiumNote)}
             </p>
+            <p className="mt-2 text-xs text-[var(--sage)] leading-snug">
+              {t('premium.tokenAccessKey')}
+            </p>
 
             <ul className="pricing-points mt-5 text-sm text-[#D8E1D9]/90 flex-1">
               {PREMIUM_FEATURE_LIST.map((item) => {

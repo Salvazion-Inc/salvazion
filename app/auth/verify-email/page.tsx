@@ -86,7 +86,7 @@ function VerifyEmailForm() {
         type: 'signup',
         email,
         options: {
-          emailRedirectTo: authEmailRedirectTo(next),
+          emailRedirectTo: authEmailRedirectTo(next, undefined, undefined, 'signup'),
         },
       });
       if (err) setError(err.message);

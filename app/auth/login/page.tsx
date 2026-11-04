@@ -72,6 +72,9 @@ function LoginForm() {
       setInfo(t('auth.linkExpired'));
       setUnconfirmed(true);
     }
+    if (searchParams.get('notice') === 'link_used_confirmed') {
+      setInfo(t('auth.linkUsedConfirmed'));
+    }
 
     const prefill = searchParams.get('email');
     if (prefill && prefill.includes('@')) setEmail(prefill.trim());

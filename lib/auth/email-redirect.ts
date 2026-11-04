@@ -23,14 +23,26 @@ export function authRedirectOrigin(
 export function authEmailRedirectTo(
   next: string,
   currentOrigin?: string | null,
-  vercelEnv?: string
+  vercelEnv?: string,
+  flow?: 'signup'
 ): string {
   const origin = authRedirectOrigin(
     currentOrigin ?? (typeof window !== 'undefined' ? window.location.origin : null),
     vercelEnv
   );
   const path = next.startsWith('/') ? next : `/${next}`;
-  return `${origin}/auth/callback?next=${encodeURIComponent(path)}`;
+  const base = `${origin}/auth/callback?next=${encodeURIComponent(path)}`;
+  return flow === 'signup' ? `${base}&flow=signup` : base;
+}
+
+/**
+ * Login notice for a failed email link. Signup confirmation links are often
+ * opened first by mail scanners / link prefetch: Supabase confirms the account
+ * on that first GET, so the user's own click lands as "expired/used" even
+ * though the account IS confirmed. Tell them to sign in instead of alarming.
+ */
+export function expiredLinkNotice(flow: string | null | undefined): 'link_used_confirmed' | 'link_expired' {
+  return flow === 'signup' ? 'link_used_confirmed' : 'link_expired';
 }
 
 /**
